@@ -35,7 +35,8 @@
       <form id="loginForm">
 
         <div class="form-group login-role-group">
-          <label>نوع الحساب</label>
+          <fieldset class="login-role-fieldset">
+          <legend class="login-role-legend">نوع الحساب</legend>
           <div class="login-role-toggle">
             <label class="login-role-option">
               <input type="radio" name="loginRole" value="trainee" checked />
@@ -46,10 +47,11 @@
               <span>مدرب</span>
             </label>
           </div>
+          </fieldset>
         </div>
 
         <div class="form-group">
-          <label>الرقم القومى</label>
+          <label for="nationalIdLogin">الرقم القومى <span class="req-mark" aria-hidden="true">*</span></label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
@@ -71,18 +73,21 @@
             </span>
             <input
               type="text"
+              id="nationalIdLogin"
               name="nationalId"
               placeholder="أدخل الرقم القومي"
               inputmode="numeric"
               pattern="[0-9]*"
               autocomplete="username"
+              aria-describedby="nationalIdLoginError"
               required
             />
+            <p id="nationalIdLoginError" class="field-error sr-only" aria-live="polite"></p>
           </div>
         </div>
 
         <div class="form-group">
-          <label>البريد الإلكتروني</label>
+          <label for="loginEmail">البريد الإلكتروني <span class="req-mark" aria-hidden="true">*</span></label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
@@ -113,7 +118,7 @@
         </div>
 
         <div class="form-group">
-          <label>كلمة المرور</label>
+          <label for="loginPassword">كلمة المرور <span class="req-mark" aria-hidden="true">*</span></label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
@@ -157,13 +162,14 @@
           <span class="login-btn-loader" aria-hidden="true"></span>
         </button>
         <p class="login-register-link">
-          <a href="#" id="registerLink" class="login__register-link">إنشاء حساب جديد</a>
+          <a href="registration.html" id="registerLink" class="login__register-link">إنشاء حساب جديد</a>
         </p>
+      <div id="loginErrorMsg" role="alert" aria-live="assertive" class="field-error" style="display:none;"></div>
       </form>
     </div>
 
     <!-- Glassmorphic Role Selection Modal -->
-    <div id="roleModal" class="modal-overlay">
+    <div id="roleModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
       <div class="modal-content">
         <h3>إنشاء حساب جديد</h3>
         <p class="modal-desc">يرجى تحديد نوع الحساب للمتابعة في بوابة الأكاديمية الوطنية للتدريب</p>
