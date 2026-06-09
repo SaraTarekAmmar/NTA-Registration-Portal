@@ -75,12 +75,114 @@
     direction: rtl;
   }
   body.dark-mode .file-upload-hint { color: #94a3b8; }
+
+/* ===== Skip Link ===== */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent, #6366f1);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s;
+}
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+/* ===== Screen reader only ===== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== Required field marker ===== */
+.req-mark {
+    color: var(--color-error-soft, #f87171);
+    margin-right: 2px;
+    font-weight: 700;
+}
+
+/* ===== Fieldset reset for a11y groups ===== */
+.reg-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.reg-fieldset__legend {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    padding: 0;
+    width: 100%;
+}
+.reg-fieldset--inline {
+    width: 100%;
+}
+
+/* ===== Focus visible enhancement ===== */
+:focus-visible {
+    outline: 2px solid var(--accent, #6366f1);
+    outline-offset: 2px;
+}
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ===== Inline checkbox label ===== */
+.reg-inline-check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    user-select: none;
+    color: var(--text-muted, #94a3b8);
+}
+
+/* ===== Error state for inputs ===== */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--color-error, #ef4444) !important;
+    box-shadow: 0 0 0 1px var(--color-error, #ef4444);
+}
+
+.field-error {
+    color: var(--color-error-soft, #f87171);
+    font-size: 0.78rem;
+    margin-top: 4px;
+    display: none;
+}
+.field-error.visible {
+    display: block;
+}
+
 </style>
 </head>
 <body class="registration-page">
+<a href="#regForm" class="skip-link">الانتقال إلى نموذج التسجيل</a>
 <div class="reg-bg"></div>
 <div class="reg-logo">
-<img alt="" class="reg-header__logo-img reg-logo__img" src="images/logo2.png"/>
+<img alt="شعار الأكاديمية الوطنية للتدريب" class="reg-header__logo-img reg-logo__img" src="images/logo2.png"/>
 </div>
 <a class="reg-back-btn" href="index.html">
 <span class="reg-back-btn__icon">←</span>
@@ -88,12 +190,12 @@
 </a>
 <div class="reg-container">
 <div class="reg-main">
-<h1 class="reg-page-title">التسجيل في الأكاديمية الوطنية للتدريب</h1>
+<h1 class="reg-page-title" id="regPageTitle">التسجيل في الأكاديمية الوطنية للتدريب</h1>
 <div class="reg-stepper">
 <div class="reg-stepper__bar-wrap">
-<div class="reg-stepper__bar" style="--progress: 0%"></div>
+<div class="reg-stepper__bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="10" aria-label="تقدم التسجيل: الخطوة 1 من 10" style="--progress: 0%"></div>
 </div>
-<div class="reg-stepper__steps" style="--progress: 0%">
+<div class="reg-stepper__steps" role="group" aria-label="خطوات التسجيل" style="--progress: 0%">
 <div class="reg-stepper__item active" data-step="1">
 <span class="reg-stepper__num">1</span>
 <span class="reg-stepper__label">البيانات الشخصية</span>
@@ -138,7 +240,8 @@
 </div>
 <div class="reg-card">
 <div class="reg-content">
-<form class="reg-form" id="regForm">
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+<form class="reg-form" id="regForm" aria-label="نموذج التسجيل في الأكاديمية الوطنية للتدريب" novalidate>
 <!-- Premium Dynamic Role Alert Banner -->
 <div id="roleAlertBanner" class="role-alert-banner" style="display: none;">
   <div class="role-alert-icon" id="roleAlertIcon">💡</div>
@@ -149,25 +252,26 @@
 </div>
 <!-- Step 1: Personal Information -->
 <div class="reg-step active" data-step="1">
-<h2 class="reg-step__title">القسم الأول - البيانات الشخصية</h2>
+<h2 class="reg-step__title" id="step1Heading" tabindex="-1">القسم الأول - البيانات الشخصية</h2>
 <div class="form-group">
-<label>الاسم بالكامل (بالعربية أو الإنجليزية) (اجبارى)</label>
-<input name="fullName" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
+<label for="fullName">الاسم الكامل <span aria-hidden="true">(بالعربية أو الإنجليزية)</span> <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="fullName" name="fullName" autocomplete="name" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
 </div>
 <div class="form-group">
-<label>الاسم بالإنجليزية (كما في الوثائق) / Full name in English (اجبارى)</label>
-<input name="fullNameEn" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
+<label for="fullNameEn">الاسم بالإنجليزية <span aria-hidden="true">(Full name in English)</span> <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="fullNameEn" name="fullNameEn" autocomplete="name" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تاريخ الميلاد (اجبارى)</label>
+<label for="dob">تاريخ الميلاد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
 <input id="dob" name="dob" required="" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>النوع (اجبارى)</label>
+<fieldset class="reg-fieldset">
+<legend class="reg-fieldset__legend">النوع <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></legend>
 <div class="reg-radio-group">
 <label class="reg-radio">
 <input name="gender" required="" type="radio" value="male"/>
@@ -178,11 +282,12 @@
 <span>أنثى</span>
 </label>
 </div>
+</fieldset>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>دولة الإقامة (اجبارى)</label>
+<label for="countryOfStay">دولة الإقامة <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="countryOfStay" name="countryOfStay" required="">
@@ -191,7 +296,7 @@
 </div>
 </div>
 <div class="form-group">
-<label>المحافظة أو الولاية (اجبارى)</label>
+<label for="governmentOrState">المحافظة أو الولاية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="governmentOrState" name="governmentOrState" required="">
@@ -202,20 +307,20 @@
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>المدينة (اجبارى)</label>
-<input name="city" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
+<label for="city">المدينة <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="city" name="city" autocomplete="address-level2" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
 </div>
 <div class="form-group">
-<label>العنوان (اجبارى)</label>
-<input minlength="10" name="address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
+<label for="address">العنوان <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="address" minlength="10" name="address" autocomplete="street-address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>الحالة الاجتماعية (اجبارى)</label>
+<label for="maritalStatus">الحالة الاجتماعية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="maritalStatus" required="">
+<select id="maritalStatus" name="maritalStatus" required="">
 <option value="">اختر الحالة الاجتماعية</option>
 <option value="single">أعزب/آنية</option>
 <option value="married">متزوج/ة</option>
@@ -225,7 +330,7 @@
 </div>
 </div>
 <div class="form-group">
-<label>الموقف من التجنيد (اجبارى)</label>
+<label for="militaryStatus">الموقف من التجنيد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="militaryStatus" name="militaryStatus" required="">
@@ -241,11 +346,12 @@
 </div>
 </div>
 <div class="form-group" id="militaryReasonGroup" style="display: none">
-<label>سبب الموقف من التجنيد (اجبارى عند الاختيار)</label>
+<label for="militaryReason">سبب الموقف من التجنيد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب عند الاختيار</span></label>
 <input id="militaryReason" name="militaryReason" placeholder="اكتب سبب الموقف من التجنيد" type="text"/>
 </div>
 <div class="form-group identity-doc-group">
-<label>نوع وثيقة الهوية (اجبارى)</label>
+<fieldset class="reg-fieldset reg-fieldset--inline">
+<legend class="reg-fieldset__legend">نوع وثيقة الهوية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></legend>
 <div class="identity-doc-grid">
 <label class="identity-doc-option" for="identityDocNationalId">
 <input id="identityDocNationalId" name="identityDocType" required="" type="checkbox" value="national_id"/>
@@ -269,26 +375,27 @@
 </div>
 <div class="reg-form__row">
 <div class="form-group" id="nationalIdGroup" style="display: none">
-<label>رقم البطاقة الشخصية (الرقم القومي) (اجبارى)</label>
-<input id="nationalId" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
+<label for="nationalId">رقم البطاقة الشخصية (الرقم القومي) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="nationalId" autocomplete="off" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
 </div>
 <div class="form-group" id="passportNumberGroup" style="display: none">
-<label>رقم جواز السفر (اختيارى)</label>
-<input id="passportNumber" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
+<label for="passportNumber">رقم جواز السفر <span class="sr-only">(اختياري)</span></label>
+<input id="passportNumber" autocomplete="off" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
 </div>
 </div>
 <div class="form-group" id="identityDocScanGroup" style="display: none">
-<label>صورة وثيقة الهوية (البطاقة أو الجواز) (إرشادات الرفع: يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG لا يتعدى حجم الملف الواحد 5 ميجابايت) (اجبارى)</label>
+<label for="identityDocumentScan">صورة وثيقة الهوية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<small id="identityDocScanHint" class="file-upload-hint">يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG — الحجم الأقصى 5 ميجابايت لكل ملف.</small>
 <div style="display: flex; gap: 10px; align-items: center;">
-<input accept=".jpg,.jpeg,.png,.pdf" id="identityDocumentScan" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
+<input accept=".jpg,.jpeg,.png,.pdf" id="identityDocumentScan" aria-describedby="identityDocScanHint identityDocScanCount" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
 <button class="reg-btn reg-btn--outline" id="aiExtractBtn" style="white-space: nowrap; padding: 0 15px; height: 48px; border-radius: 10px;" type="button">استخراج البيانات بالذكاء الاصطناعي</button>
 </div>
 <small class="reg-step__desc">الحد الأقصى 3 ملفات (JPG, PNG, PDF).</small>
-<div id="aiExtractStatus" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
+<div id="aiExtractStatus" aria-live="polite" aria-atomic="true" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>عدد الجنسيات (اجبارى)</label>
+<label for="numberOfNationalities">عدد الجنسيات <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="numberOfNationalities" name="numberOfNationalities" required="">
@@ -300,10 +407,10 @@
 </div>
 </div>
 <div class="form-group">
-<label>الجنسية (اجبارى)</label>
+<label for="nationality">الجنسية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="nationality" required="">
+<select id="nationality" name="nationality" required="">
 <option value="">اختر الجنسية</option>
 </select>
 </div>
@@ -311,7 +418,7 @@
 </div>
 <div class="reg-form__row">
 <div class="form-group" id="secondNationalityGroup" style="display: none">
-<label>الجنسية الثانية (اختيارى)</label>
+<label for="secondNationality">الجنسية الثانية <span class="sr-only">(اختياري)</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="secondNationality" name="secondNationality">
@@ -328,7 +435,7 @@
 </div>
 </div>
 <div class="form-group" id="thirdNationalityGroup" style="display: none">
-<label>الجنسية الثالثة (اختيارى)</label>
+<label for="thirdNationality">الجنسية الثالثة <span class="sr-only">(اختياري)</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="thirdNationality" name="thirdNationality">
@@ -347,29 +454,29 @@
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>رقم الموبايل الأول (اجبارى)</label>
-<input name="mobileNumber1" placeholder="+201..." required="" type="tel"/>
+<label for="mobileNumber1">رقم الموبايل الأول <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="mobileNumber1" name="mobileNumber1" autocomplete="tel" placeholder="+201..." required="" type="tel"/>
 </div>
 <div class="form-group">
-<label>رقم الموبايل الثاني (اختيارى)</label>
-<input name="mobileNumber2" placeholder="+201..." type="tel"/>
+<label for="mobileNumber2">رقم الموبايل الثاني <span class="sr-only">(اختياري)</span></label>
+<input id="mobileNumber2" name="mobileNumber2" autocomplete="tel" placeholder="+201..." type="tel"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>رقم الواتساب (اجبارى)</label>
-<input name="whatsappNumber" id="whatsappNumber" placeholder="+201..." required="" type="tel"/>
-<label style="display: flex; align-items: center; gap: 5px; margin-top: 5px; cursor: pointer; font-size: 0.85rem; user-select: none;">
+<label for="whatsappNumber">رقم الواتساب <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input name="whatsappNumber" id="whatsappNumber" autocomplete="tel" placeholder="+201..." required="" type="tel"/>
+<label for="whatsappSameAsMobile" class="reg-inline-check">
 <input type="checkbox" id="whatsappSameAsMobile" style="width: auto; margin: 0;"/>
-هو نفس الموبايل
+هو نفس الموبايل الأول
 </label>
 </div>
 </div>
 <div class="form-group">
-<label>متوسط الدخل الشهري (اجبارى)</label>
+<label for="monthlyAverageIncome">متوسط الدخل الشهري <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="monthlyAverageIncome" required="">
+<select id="monthlyAverageIncome" name="monthlyAverageIncome" required="">
 <option value="">اختر متوسط الدخل</option>
 <option value="below_5000">أقل من 5,000</option>
 <option value="5000_10000">5,000 - 10,000</option>
@@ -385,16 +492,16 @@
 <h2 class="reg-step__title">القسم الثاني - بيانات الاتصال</h2>
 <div class="reg-form__row">
 <div class="form-group">
-<label>البريد الإلكتروني (اجبارى)</label>
-<input name="primaryEmail" placeholder="example@domain.com" required="" type="email"/>
+<label for="primaryEmail">البريد الإلكتروني <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="primaryEmail" name="primaryEmail" autocomplete="email" placeholder="example@domain.com" required="" type="email"/>
 </div>
 <div class="form-group">
-<label>البريد الإلكتروني الثانوي (اختيارى)</label>
-<input name="secondaryEmail" placeholder="example2@domain.com" type="email"/>
+<label for="secondaryEmail">البريد الإلكتروني الثانوي <span class="sr-only">(اختياري)</span></label>
+<input id="secondaryEmail" name="secondaryEmail" autocomplete="email" placeholder="example2@domain.com" type="email"/>
 </div>
 </div>
 <div class="form-group">
-<label>عدد جهات اتصال الطوارئ (اجبارى)</label>
+<label for="emergencyContactsCount">عدد جهات اتصال الطوارئ <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="emergencyContactsCount" name="emergencyContactsCount" required="">
@@ -406,22 +513,22 @@
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>جهة اتصال الطوارئ 1 - الاسم (اجبارى)</label>
-<input name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
+<label for="emergencyName1">جهة اتصال الطوارئ 1 - الاسم <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="emergencyName1" name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
 </div>
 <div class="form-group">
-<label>جهة اتصال الطوارئ 1 - الرقم (اجبارى)</label>
-<input name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
+<label for="emergencyPhone1">جهة اتصال الطوارئ 1 - الرقم <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="emergencyPhone1" name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>جهة اتصال الطوارئ 1 - العنوان (اجبارى)</label>
-<input name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
+<label for="emergencyAddress1">جهة اتصال الطوارئ 1 - العنوان <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<input id="emergencyAddress1" name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
 </div>
 <div class="form-group">
-<label>جهة اتصال الطوارئ 1 - رقم الهوية (اختيارى)</label>
-<input name="emergencyId1" placeholder="رقم الهوية (اختياري)" type="text"/>
+<label for="emergencyId1">جهة اتصال الطوارئ 1 - رقم الهوية <span class="sr-only">(اختياري)</span></label>
+<input id="emergencyId1" name="emergencyId1" placeholder="رقم الهوية (اختياري)" type="text"/>
 </div>
 </div>
 <div id="emergencyContact2Block" style="display: none">
@@ -561,8 +668,9 @@
 </div>
 </div>
 <div class="form-group">
-<label>صورة شهادة التخرج (إرشادات الرفع: يرجى رفع ملف شهادة التخرج بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اختيارى)</label>
-<input accept=".jpg,.jpeg,.png,.pdf" class="graduation-certificate-scan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
+<label>صورة شهادة التخرج <span class="sr-only">(اختياري)</span></label>
+<small class="file-upload-hint" id="gradCertHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت.</small>
+<input accept=".jpg,.jpeg,.png,.pdf" aria-describedby="gradCertHint" class="graduation-certificate-scan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
 
 </div>
 </div>
@@ -787,9 +895,9 @@
 </div>
 <div id="empHaveExperienceBlock" style="display: none">
 <div class="form-group" id="empCvUploadGroup">
-<label>تحميل السيرة الذاتية (PDF, DOC, DOCX) (اجبارى)
-</label>
-<input accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="employmentSectionCv" name="employmentSectionCv" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت — السيرة الذاتية الكاملة المحدّثة.</small>
+<label for="employmentSectionCv">تحميل السيرة الذاتية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<small class="file-upload-hint" id="empCvHint">الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت.</small>
+<input accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="empCvHint" id="employmentSectionCv" name="employmentSectionCv" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت — السيرة الذاتية الكاملة المحدّثة.</small>
 
 </div>
 <div id="employmentHistoryContainer">
@@ -1851,8 +1959,9 @@
 <input dir="auto" id="priorConvictionDescription" name="priorConvictionDescription" placeholder="وصف إلزامي للحكم" type="text"/>
 </div>
 <div class="form-group">
-<label>تحميل صحيفة الحالة الجنائية (الفيش والتشبيه) (إرشادات الرفع: يرجى رفع الفيش والتشبيه بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اجبارى)</label>
-<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" id="sectionSevenCriminalRecordCertificate" name="sectionSevenCriminalRecordCertificate" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
+<label for="sectionSevenCriminalRecordCertificate">صحيفة الحالة الجنائية (الفيش والتشبيه) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<small class="file-upload-hint" id="criminalCertHint7">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" aria-describedby="criminalCertHint7" id="sectionSevenCriminalRecordCertificate" name="sectionSevenCriminalRecordCertificate" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
 
 </div>
 </div>
@@ -1870,12 +1979,14 @@
 <!-- Upload documents -->
 <div class="reg-form__row">
 <div class="form-group">
-<label>السيرة الذاتية الشاملة (Comprehensive CV / Resume) (إرشادات الرفع: يرجى رفع السيرة الذاتية الشاملة بصيغة PDF أو Word بحجم أقصى 5 ميجابايت) (اجبارى)</label>
-<input accept=".pdf,.doc,.docx" name="cvResume" required="" type="file"/>
+<label for="cvResume">السيرة الذاتية الشاملة (CV / Resume) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<small class="file-upload-hint" id="cvResumeHint">الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت.</small>
+<input accept=".pdf,.doc,.docx" aria-describedby="cvResumeHint" id="cvResume" name="cvResume" required="" type="file"/>
 </div>
 <div class="form-group">
-  <label>خطابات التوصية (2) (Letters of Recommendation x2) (إرشادات الرفع: يمكنك رفع ملف أو أكثر من خطابات التوصية بصيغة PDF أو صور واضحة بحجم أقصى 5 ميجابايت) (اختيارى)</label>
-  <input accept=".pdf,.doc,.docx,.jpg,.png" multiple="" name="lettersOfRecommendation" type="file"/>
+  <label for="lettersOfRecommendation">خطابات التوصية (2) <span class="sr-only">(اختياري)</span></label>
+  <small class="file-upload-hint" id="lettersHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت لكل ملف.</small>
+  <input accept=".pdf,.doc,.docx,.jpg,.png" aria-describedby="lettersHint" id="lettersOfRecommendation" multiple="" name="lettersOfRecommendation" type="file"/>
   <small class="reg-step__desc">
                         يمكنك رفع أكثر من ملف في هذا الحقل (ويُفضل خطابَي توصية) أو
                         إرسالها لاحقًا عبر البريد الإلكتروني.
@@ -1885,8 +1996,9 @@
 
 <div class="reg-form__row">
 <div class="form-group" id="step8CriminalRecordGroup">
-<label>فيش جنائي / شهادة خلو سوابق (Criminal Record Certificate) (إرشادات الرفع: يرجى رفع الفيش الجنائي بصيغة PDF أو صورة واضحة بحجم أقصى 5 ميجابايت) (اجبارى)</label>
-<input accept=".pdf,.doc,.docx,.jpg,.png" id="criminalRecord" name="criminalRecord" required="" type="file"/>
+<label for="criminalRecord">فيش جنائي / شهادة خلو سوابق <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<small class="file-upload-hint" id="criminalRecordHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت.</small>
+<input accept=".pdf,.doc,.docx,.jpg,.png" aria-describedby="criminalRecordHint" id="criminalRecord" name="criminalRecord" required="" type="file"/>
 <small class="reg-step__desc" id="step8CriminalRecordPrefillHint" style="display: none">
                       سيتم استخدام الملف المرفوع في القسم السابع تلقائيًا، ولا حاجة
                       لإعادة رفعه هنا.
@@ -2177,7 +2289,7 @@
 </div>
 <h3>صورتك من الأمام (Photo - Front)</h3>
 <p>التحقق من الوجه من الأمام</p>
-<input accept="image/jpeg,image/png,image/jpg" class="photo-input" id="photoFront" name="photoFront" required="" type="file"/><small class="file-upload-hint">📸 صيغ الصور: JPG أو PNG — الحجم الأقصى: 2 ميجابايت — صورة شخصية واضحة من الأمام بخلفية بيضاء.</small>
+<input accept="image/jpeg,image/png,image/jpg" aria-describedby="photoFrontHint" class="photo-input" id="photoFront" name="photoFront" required="" type="file"/><small class="file-upload-hint" id="photoFrontHint">📸 صيغ الصور: JPG أو PNG — الحجم الأقصى: 2 ميجابايت — صورة شخصية واضحة من الأمام بخلفية بيضاء.</small>
 
 <label class="reg-btn reg-btn--primary photo-upload-btn" for="photoFront">التقاط / رفع</label>
 <p aria-live="polite" class="photo-upload-filename" hidden=""></p>
@@ -2193,23 +2305,23 @@
                 </p>
 <div id="socialVerifyUrlsBlock">
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformFacebook" style="display: none">
-<label>رابط حساب فيسبوك (Facebook Account Link) (اجبارى)</label>
+<label for="socialProfileFacebookUrl">رابط حساب فيسبوك <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileFacebookUrl" name="socialProfileFacebookUrl" placeholder="https://facebook.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformInstagram" style="display: none">
-<label>رابط حساب إنستجرام (Instagram Account Link) (اجبارى)</label>
+<label for="socialProfileInstagramUrl">رابط حساب إنستجرام <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileInstagramUrl" name="socialProfileInstagramUrl" placeholder="https://instagram.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformX" style="display: none">
-<label>رابط حساب إكس / تويتر (X Account Link) (اجبارى)</label>
+<label for="socialProfileXUrl">رابط حساب إكس / تويتر <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileXUrl" name="socialProfileXUrl" placeholder="https://x.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformLinkedIn" style="display: none">
-<label>رابط حساب لينكد إن (LinkedIn Account Link) (اجبارى)</label>
+<label for="socialProfileLinkedInUrl">رابط حساب لينكد إن <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileLinkedInUrl" name="socialProfileLinkedInUrl" placeholder="https://linkedin.com/in/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformTikTok" style="display: none">
-<label>رابط حساب تيك توك (TikTok Account Link) (اجبارى)</label>
+<label for="socialProfileTikTokUrl">رابط حساب تيك توك <span class="sr-only">(اختياري)</span></label>
 <input dir="ltr" id="socialProfileTikTokUrl" name="socialProfileTikTokUrl" placeholder="https://tiktok.com/@..." type="url"/>
 </div>
 </div>
@@ -2218,7 +2330,7 @@
                   الجزء الثاني: تأكيد البيانات والأحكام
                 </h3>
 <div class="form-group">
-<label class="reg-checkbox">
+<label class="reg-checkbox" for="dataAccuracyTermsConfirmed">
 <input id="dataAccuracyTermsConfirmed" name="dataAccuracyTermsConfirmed" required="" type="checkbox" value="1"/>
 <span>أقر بصحة جميع البيانات المدخلة وأوافق على كافة الشروط
                       والأحكام الخاصة بالبرنامج</span>
@@ -2230,11 +2342,11 @@
 </form>
 </div>
 <div class="reg-actions">
-<button class="reg-btn reg-btn--outline" disabled="" id="btnPrev" type="button">
+<button class="reg-btn reg-btn--outline" disabled="" id="btnPrev" type="button" aria-label="الخطوة السابقة">
 <span class="reg-btn__icon reg-btn__icon--prev">←</span>
 <span>السابق</span>
 </button>
-<button class="reg-btn reg-btn--primary" id="btnNext" type="button">
+<button class="reg-btn reg-btn--primary" id="btnNext" type="button" aria-label="الخطوة التالية">
 <span>التالي</span>
 <span class="reg-btn__icon reg-btn__icon--arrow">→</span>
 </button>
