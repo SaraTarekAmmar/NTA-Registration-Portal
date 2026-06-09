@@ -1,0 +1,191 @@
+[
+  {
+    "trainee_id": 68,
+    "name_ar": "باسم محمد الغزالي",
+    "name_en": "Bassem Mohamed El-Ghazaly",
+    "technical_skills": [
+      {
+        "name": "Financial Auditing",
+        "category": "audit",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Risk Assessment",
+        "category": "audit",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "ACL Analytics",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "IDEA",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "الدقة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "النزاهة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "الحيادية",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "مدير",
+        "startDate": "2021-01-01",
+        "department": "الجهاز المركزي للمحاسبات",
+        "organization": "Ministry of Higher Education"
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "جيد جداً",
+        "major": "مراجعة وضبط الجودة",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2012-01-01",
+        "institution": "جامعة عين شمس"
+      }
+    ],
+    "motivation": {}
+  },
+  {
+    "trainee_id": 69,
+    "name_ar": "لبنى حسين الشناوي",
+    "name_en": "Lobna Hussein El-Shinawi",
+    "technical_skills": [
+      {
+        "name": "Scientific Research",
+        "category": "science",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Nanotechnology",
+        "category": "science",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "MATLAB",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "LabVIEW",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "التفكير النقدي",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "الدقة العلمية",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "التعاون البحثي",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "مدير",
+        "startDate": "2021-01-01",
+        "department": "المركز القومي للبحوث",
+        "organization": "Ministry of Higher Education"
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "امتياز",
+        "major": "النانو تكنولوجي",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2021-01-01",
+        "institution": "جامعة القاهرة"
+      }
+    ],
+    "motivation": {}
+  },
+  {
+    "trainee_id": 70,
+    "name_ar": "كريم عصام الدين فهمي",
+    "name_en": "Karim Essam El-Din Fahmy",
+    "technical_skills": [
+      {
+        "name": "Agricultural Policy",
+        "category": "agriculture",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Food Security",
+        "category": "agriculture",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "FAOSTAT",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "GIS",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "الاستدامة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "الحوكمة الرشيدة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "القيادة التحويلية",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "مدير",
+        "startDate": "2021-01-01",
+        "department": "وزارة الزراعة",
+        "organization": "Ministry of Higher Education"
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "امتياز",
+        "major": "السياسات الغذائية",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2016-01-01",
+        "institution": "جامعة الإسكندرية"
+      }
+    ],
+    "motivation": {}
+  }
+]

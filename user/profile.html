@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css">
+    <link rel="stylesheet" href="header/header.css">
+    <link rel="stylesheet" href="chat/chat.css?v=3">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="trainee-app" data-page="profile">
+    <div class="trainee-bg"></div>
+
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main">
+        <h1>الملف الشخصي</h1>
+
+        <div class="profile-top">
+            <section class="profile-card" id="profileHeader">
+                <!-- Filled by JS -->
+            </section>
+
+        </div>
+
+        <section class="profile-section profile-section--stats">
+            <div class="profile-card profile-card--stats" id="profileStats">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <h2>بيانات التسجيل</h2>
+            <div class="profile-data profile-data--registration">
+                <div id="profileData"></div>
+                <div id="profileRegistrationFull" class="profile-registration-full"></div>
+            </div>
+        </section>
+
+        <section class="profile-section profile-section--charts">
+            <h2>ملخص التقدّم في الدورات</h2>
+            <div class="profile-charts" id="profileCharts">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+
+        <section class="profile-section profile-section--courses">
+            <h2>الدورات المسجلة</h2>
+            <div class="profile-courses" id="profileCourses">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Edit Profile Modal (full registration data) — z-index above header via edit-profile-modal-backdrop -->
+    <div class="courses-modal-backdrop edit-profile-modal-backdrop" id="editProfileModalBackdrop">
+        <div class="courses-modal edit-profile-modal">
+            <div class="courses-modal__header">
+                <h2 class="courses-modal__title">تعديل بيانات التسجيل</h2>
+                <button class="courses-modal__icon-btn" onclick="closeEditProfileModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="courses-modal__body edit-profile-modal__body">
+                <form id="editProfileForm">
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">الهوية والتواصل</h3>
+                        <div class="courses-modal__grid">
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">الاسم (عربي)</label>
+                                <input type="text" id="editFullName" class="courses-modal__input" required>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">الاسم (English)</label>
+                                <input type="text" id="editFullNameEn" class="courses-modal__input" required>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">البريد الإلكتروني</label>
+                                <input type="email" id="editEmail" class="courses-modal__input" required>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">البريد الثانوي</label>
+                                <input type="email" id="editSecondaryEmail" class="courses-modal__input">
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">تاريخ الميلاد</label>
+                                <input type="date" id="editDob" class="courses-modal__input" required>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">الجنس</label>
+                                <select id="editGender" class="courses-modal__select">
+                                    <option value="male">ذكر</option>
+                                    <option value="female">أنثى</option>
+                                </select>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">الحالة الاجتماعية</label>
+                                <select id="editMaritalStatus" class="courses-modal__select">
+                                    <option value="single">أعزب / عزباء</option>
+                                    <option value="married">متزوج / متزوجة</option>
+                                    <option value="divorced">مطلق / مطلقة</option>
+                                    <option value="widowed">أرمل / أرملة</option>
+                                </select>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">رقم الهوية (غير قابل للتعديل)</label>
+                                <input type="text" id="editNationalId" class="courses-modal__input" disabled>
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">هاتف 1</label>
+                                <input type="text" id="editPhone1" class="courses-modal__input" placeholder="+20...">
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">هاتف 2</label>
+                                <input type="text" id="editPhone2" class="courses-modal__input">
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">هاتف 3</label>
+                                <input type="text" id="editPhone3" class="courses-modal__input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">الطوارئ والعناوين</h3>
+                        <div class="courses-modal__grid">
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">اسم جهة الطوارئ</label>
+                                <input type="text" id="editEmergencyName" class="courses-modal__input">
+                            </div>
+                            <div class="courses-modal__field">
+                                <label class="courses-modal__label">هاتف الطوارئ</label>
+                                <input type="text" id="editEmergencyPhone" class="courses-modal__input">
+                            </div>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">العنوان الحالي</label>
+                            <textarea id="editCurrentAddress" class="courses-modal__textarea" rows="2"></textarea>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">العنوان الدائم</label>
+                            <textarea id="editPermanentAddress" class="courses-modal__textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">المهارات</h3>
+
+                        <!-- Technical Skills -->
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">المهارات التقنية</label>
+                            <div id="editTechSkillsContainer" class="edit-skills-container"></div>
+                            <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-skill-add-btn" data-container="editTechSkillsContainer" data-category-id="1" data-cat-placeholder="اختر الفئة" data-skill-placeholder="اختر المهارة" style="margin-top:0.5rem; font-size:0.82rem;">+ إضافة مهارة تقنية</button>
+                        </div>
+
+                        <!-- Computer Skills -->
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">مهارات الحاسب الآلي</label>
+                            <div id="editCompSkillsContainer" class="edit-skills-container"></div>
+                            <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-skill-add-btn" data-container="editCompSkillsContainer" data-category-id="2" data-cat-placeholder="اختر الفئة" data-skill-placeholder="اختر المهارة" style="margin-top:0.5rem; font-size:0.82rem;">+ إضافة مهارة حاسب</button>
+                        </div>
+
+                        <!-- Soft Skills -->
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">المهارات الشخصية</label>
+                            <div id="editSoftSkillsContainer" class="edit-skills-container"></div>
+                            <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-skill-add-btn" data-container="editSoftSkillsContainer" data-category-id="3" data-cat-placeholder="Skill Domain / فئة المهارة" data-skill-placeholder="Specific Competency / المهارة" style="margin-top:0.5rem; font-size:0.82rem;">+ إضافة مهارة شخصية</button>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">التعليم والخبرة والمراجع</h3>
+
+                        <div class="record-editor">
+                            <div class="record-editor__toolbar">
+                                <span class="record-editor__heading">السجل الأكاديمي</span>
+                                <button type="button" class="record-editor__add" id="addAcademicRow">+ إضافة مؤسسة</button>
+                            </div>
+                            <p class="edit-profile-hint record-editor__hint">حتى 5 مؤسسات — اترك الصفوف الفارغة أو احذفها.</p>
+                            <div id="editAcademicList" class="record-editor__list"></div>
+                        </div>
+
+                        <div class="record-editor">
+                            <div class="record-editor__toolbar">
+                                <span class="record-editor__heading">الخبرة المهنية</span>
+                                <button type="button" class="record-editor__add" id="addProfessionalRow">+ إضافة خبرة</button>
+                            </div>
+                            <p class="edit-profile-hint record-editor__hint">حتى 10 سجلات عمل.</p>
+                            <div id="editProfessionalList" class="record-editor__list"></div>
+                        </div>
+
+                        <div class="record-editor">
+                            <div class="record-editor__toolbar">
+                                <span class="record-editor__heading">المراجع</span>
+                                <button type="button" class="record-editor__add" id="addReferenceRow">+ إضافة مرجع</button>
+                            </div>
+                            <p class="edit-profile-hint record-editor__hint">حتى 5 مراجع — يُحفظ الصف عند إدخال الاسم.</p>
+                            <div id="editReferencesList" class="record-editor__list"></div>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">أهداف وروابط واحتياجات</h3>
+                        <div class="courses-modal__grid">
+                            <div class="courses-modal__field courses-modal__field--full">
+                                <label class="courses-modal__label">رابط Portfolio</label>
+                                <input type="url" id="editPortfolioUrl" class="courses-modal__input">
+                            </div>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">أهداف التعلّم</label>
+                            <textarea id="editLearningObjectives" class="courses-modal__textarea" rows="3"></textarea>
+                        </div>
+                        <div class="courses-modal__grid">
+                            <div class="courses-modal__field courses-modal__field--full">
+                                <label class="courses-modal__label">القيود الغذائية</label>
+                                <input type="text" id="editDietaryRestrictions" class="courses-modal__input">
+                            </div>
+                            <div class="courses-modal__field courses-modal__field--full">
+                                <label class="courses-modal__label">احتياجات إمكانية الوصول</label>
+                                <input type="text" id="editAccessibilityRequirements" class="courses-modal__input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section">
+                        <h3 class="edit-profile-section__title">بيانات إضافية (JSON)</h3>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">اختبار الإدراك (quizResults)</label>
+                            <textarea id="editQuizResults" class="courses-modal__textarea courses-modal__textarea--json" rows="4"></textarea>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">الملخص المهني (professionalSummary)</label>
+                            <textarea id="editProfessionalSummary" class="courses-modal__textarea courses-modal__textarea--json" rows="3"></textarea>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">الجوائز والأثر (awardsImpact)</label>
+                            <textarea id="editAwardsImpact" class="courses-modal__textarea courses-modal__textarea--json" rows="3"></textarea>
+                        </div>
+                        <div class="courses-modal__field courses-modal__field--full">
+                            <label class="courses-modal__label">المجتمع والأنشطة (communityExtracurricular)</label>
+                            <textarea id="editCommunityExtracurricular" class="courses-modal__textarea courses-modal__textarea--json" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="edit-profile-section edit-profile-section--documents" id="editDocumentsSection">
+                        <h3 class="edit-profile-section__title">المستندات والصور</h3>
+                        <p class="edit-profile-hint">ارفع الملفات أو عدّل المسارات. تظهر معاينة للصور. يُحفظ تلقائياً في النموذج.</p>
+
+                        <div class="doc-block">
+                            <div class="doc-block__title">صورة شخصية أمامية</div>
+                            <div class="doc-block__row">
+                                <input type="text" id="editPhotoFront" class="courses-modal__input doc-block__path" placeholder="مسار الملف بعد الرفع" dir="ltr">
+                                <div class="doc-block__actions">
+                                    <input type="file" id="editUploadPhotoFront" class="edit-profile-file doc-block__file" accept="image/jpeg,image/png,image/webp">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editUploadPhotoFront" data-folder="photos" data-target-input="editPhotoFront">رفع صورة</button>
+                                </div>
+                            </div>
+                            <div id="editPhotoFrontPreviewWrap" class="doc-preview-wrap" hidden>
+                                <img id="editPhotoFrontPreview" class="doc-preview-wrap__img" alt="معاينة">
+                                <a id="editPhotoFrontOpen" class="doc-preview-wrap__link" href="#" target="_blank" rel="noopener">فتح بالحجم الكامل</a>
+                            </div>
+                        </div>
+
+                        <div class="doc-grid">
+                            <div class="doc-card" data-key="cvResume">
+                                <div class="doc-card__label">السيرة الذاتية</div>
+                                <input type="text" id="editDoc_cvResume" class="courses-modal__input doc-card__path" placeholder="uploads/..." dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_cvResume" class="edit-profile-file" accept=".pdf,.doc,.docx,application/pdf">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_cvResume" data-folder="cvs" data-target-input="editDoc_cvResume">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_cvResume_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="organizationalChart">
+                                <div class="doc-card__label">الهيكل التنظيمي</div>
+                                <input type="text" id="editDoc_organizationalChart" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_organizationalChart" class="edit-profile-file" accept=".pdf,.doc,.docx,image/*">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_organizationalChart" data-folder="org_charts" data-target-input="editDoc_organizationalChart">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_organizationalChart_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="idScan">
+                                <div class="doc-card__label">مسح الهوية</div>
+                                <input type="text" id="editDoc_idScan" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_idScan" class="edit-profile-file" accept="image/jpeg,image/png,application/pdf">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_idScan" data-folder="ids" data-target-input="editDoc_idScan">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_idScan_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="criminalRecord">
+                                <div class="doc-card__label">السجل الجنائي</div>
+                                <input type="text" id="editDoc_criminalRecord" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_criminalRecord" class="edit-profile-file" accept=".pdf,image/*">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_criminalRecord" data-folder="certificates" data-target-input="editDoc_criminalRecord">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_criminalRecord_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="employerNoc">
+                                <div class="doc-card__label">موافقة جهة العمل</div>
+                                <input type="text" id="editDoc_employerNoc" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_employerNoc" class="edit-profile-file" accept=".pdf,.doc,.docx,image/*">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_employerNoc" data-folder="nocs" data-target-input="editDoc_employerNoc">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_employerNoc_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="scholarshipEssayFile">
+                                <div class="doc-card__label">ملف المقال / المنحة</div>
+                                <input type="text" id="editDoc_scholarshipEssayFile" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_scholarshipEssayFile" class="edit-profile-file" accept=".pdf,.doc,.docx">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_scholarshipEssayFile" data-folder="essays" data-target-input="editDoc_scholarshipEssayFile">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_scholarshipEssayFile_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                            <div class="doc-card" data-key="graduationCertificate">
+                                <div class="doc-card__label">شهادة التخرج</div>
+                                <input type="text" id="editDoc_graduationCertificate" class="courses-modal__input doc-card__path" dir="ltr">
+                                <div class="doc-card__foot">
+                                    <input type="file" id="editFile_graduationCertificate" class="edit-profile-file" accept=".pdf,image/*">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_graduationCertificate" data-folder="certificates" data-target-input="editDoc_graduationCertificate">رفع</button>
+                                    <a class="doc-card__open" id="editDoc_graduationCertificate_link" href="#" target="_blank" rel="noopener" hidden>فتح</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-block doc-block--id-photos">
+                            <div class="doc-block__title">صورة الهوية (أمامي)</div>
+                            <div class="doc-id-grid">
+                                <div class="doc-id-cell">
+                                    <span class="doc-id-cell__lbl">أمامي</span>
+                                    <input type="text" id="editId_front" class="courses-modal__input" dir="ltr">
+                                    <div class="doc-id-cell__actions">
+                                        <input type="file" id="editFile_id_front" class="edit-profile-file" accept="image/jpeg,image/png">
+                                        <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_id_front" data-folder="photos" data-target-input="editId_front">رفع</button>
+                                    </div>
+                                    <div class="doc-thumb-wrap" id="editThumb_front_wrap" hidden><img id="editThumb_front" alt=""></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-block">
+                            <div class="doc-block__title">خطابات التوصية (حتى 3)</div>
+                            <div class="doc-lor-grid">
+                                <div class="doc-lor-row">
+                                    <span class="doc-lor-row__n">1</span>
+                                    <input type="text" id="editLor_0" class="courses-modal__input" dir="ltr" placeholder="مسار الملف">
+                                    <input type="file" id="editFile_lor0" class="edit-profile-file">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_lor0" data-folder="recommendations" data-target-input="editLor_0">رفع</button>
+                                </div>
+                                <div class="doc-lor-row">
+                                    <span class="doc-lor-row__n">2</span>
+                                    <input type="text" id="editLor_1" class="courses-modal__input" dir="ltr">
+                                    <input type="file" id="editFile_lor1" class="edit-profile-file">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_lor1" data-folder="recommendations" data-target-input="editLor_1">رفع</button>
+                                </div>
+                                <div class="doc-lor-row">
+                                    <span class="doc-lor-row__n">3</span>
+                                    <input type="text" id="editLor_2" class="courses-modal__input" dir="ltr">
+                                    <input type="file" id="editFile_lor2" class="edit-profile-file">
+                                    <button type="button" class="courses-modal__btn courses-modal__btn--ghost edit-profile-upload-btn" data-file-input="editFile_lor2" data-folder="recommendations" data-target-input="editLor_2">رفع</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <details class="edit-docs-advanced">
+                            <summary class="edit-docs-advanced__summary">تعديل JSON الخام (متقدم)</summary>
+                            <textarea id="editDocuments" class="courses-modal__textarea courses-modal__textarea--json" rows="6" dir="ltr"></textarea>
+                        </details>
+                    </div>
+                    <div class="courses-modal__footer edit-profile-footer">
+                        <button type="button" class="courses-modal__btn courses-modal__btn--ghost"
+                            onclick="closeEditProfileModal()">إلغاء</button>
+                        <button type="submit" class="courses-modal__btn courses-modal__btn--primary">حفظ كل البيانات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="chatWidget"></div>
+
+    <script src="header/header.js"></script>
+    <script>
+        (function () {
+            var session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+            if (session.role !== 'trainee') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const userId = session.userId;
+            if (!userId) {
+                console.error("No userId found in session");
+                return;
+            }
+
+            var lastCompletionData = null;
+            var completionDonut, skillsRadar;
+
+            // Fetch live data from API
+            window.authenticatedFetch(`/api/trainee/profile/${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const user = data.user;
+                    const courses = data.courses || [];
+                    renderUI(user, courses);
+                })
+                .catch(err => console.error("Error fetching profile:", err));
+
+            function parseJsonMaybe(val) {
+                if (!val) return null;
+                if (typeof val !== 'string') return val;
+                try { return JSON.parse(val); } catch(e) { return val; }
+            }
+
+            function fmtGender(g) {
+                if (g === 'male') return 'ذكر';
+                if (g === 'female') return 'أنثى';
+                return g || '—';
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                var d = document.createElement('div');
+                d.textContent = text;
+                return d.innerHTML;
+            }
+
+            function renderRegistrationFull(user) {
+                var parts = [];
+                function fileHref(p) {
+                    if (!p) return null;
+                    return (p.startsWith('/') ? '' : '/') + p;
+                }
+                function renderSkillChips(list) {
+                    if (!Array.isArray(list) || !list.length) return '<p class="profile-reg__muted">—</p>';
+                    return '<div class="skill-chips-group">' +
+                        list.map(function (s) { 
+                            var name = (typeof s === 'string') ? s : (s.skill_name || s.name || '—');
+                            var prof = (typeof s === 'object' && s.proficiency) ? ' (' + s.proficiency + ')' : '';
+                            return '<span class="skill-chip">' + escapeHtml(name + prof) + '</span>'; 
+                        }).join('') +
+                        '</div>';
+                }
+
+                function skillSection(title, list) {
+                    if (!Array.isArray(list) || list.length === 0) {
+                        parts.push('<h3 class="profile-reg__h3">' + escapeHtml(title) + '</h3><p class="profile-reg__muted">—</p>');
+                        return;
+                    }
+                    parts.push('<h3 class="profile-reg__h3">' + escapeHtml(title) + '</h3>' + renderSkillChips(list));
+                }
+
+                parts.push('<h3 class="profile-reg__h3">العناوين والطوارئ</h3>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">العنوان الحالي</span><span class="profile-reg__v">' + escapeHtml(user.address || '—') + '</span></div>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">العنوان الدائم</span><span class="profile-reg__v">' + escapeHtml(user.permanent_address || '—') + '</span></div>');
+
+                var em = user.emergency_contacts;
+                if (typeof em === 'string') { try { em = JSON.parse(em); } catch(e) { em = {}; } }
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">اسم جهة الطوارئ</span><span class="profile-reg__v">' + escapeHtml((em && em.name) || '—') + '</span></div>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">هاتف الطوارئ</span><span class="profile-reg__v">' + escapeHtml((em && em.phone) || '—') + '</span></div>');
+
+                skillSection('المهارات التقنية', user.technical_skills);
+                skillSection('المهارات الشخصية', user.soft_skills);
+                skillSection('مهارات الحاسب', user.computer_skills);
+
+                var acad = user.academic_history;
+                if (Array.isArray(acad) && acad.length) {
+                    parts.push('<h3 class="profile-reg__h3">السجل الأكاديمي</h3>');
+                    parts.push('<table class="profile-reg__table"><thead><tr><th>المؤسسة</th><th>التخصص</th><th>الدرجة</th><th>المعدل</th><th>سنة التخرج</th><th>التصنيف</th></tr></thead><tbody>');
+                    acad.forEach(function (r) {
+                        parts.push('<tr><td>' + escapeHtml(r.institution || '—') + '</td><td>' + escapeHtml(r.major || '—') + '</td><td>' + escapeHtml(r.degree || '—') + '</td><td>' + escapeHtml(r.gpa || '—') + '</td><td>' + escapeHtml(r.gradYear || r.grad_year || '—') + '</td><td>' + escapeHtml(r.ranking || '—') + '</td></tr>');
+                    });
+                    parts.push('</tbody></table>');
+                } else {
+                    parts.push('<h3 class="profile-reg__h3">السجل الأكاديمي</h3><p class="profile-reg__muted">—</p>');
+                }
+
+                var prof = user.professional_history;
+                if (Array.isArray(prof) && prof.length) {
+                    parts.push('<h3 class="profile-reg__h3">الخبرة المهنية</h3>');
+                    parts.push('<table class="profile-reg__table"><thead><tr><th>الجهة</th><th>من</th><th>إلى</th><th>المسؤوليات</th><th>سبب المغادرة</th></tr></thead><tbody>');
+                    prof.forEach(function (r) {
+                        parts.push('<tr><td>' + escapeHtml(r.organization || '—') + '</td><td>' + escapeHtml(r.startDate || r.start_date || '—') + '</td><td>' + escapeHtml(r.endDate || r.end_date || '—') + '</td><td>' + escapeHtml(r.responsibilities || '—') + '</td><td>' + escapeHtml(r.reasonForLeaving || r.reason_for_leaving || '—') + '</td></tr>');
+                    });
+                    parts.push('</tbody></table>');
+                } else {
+                    parts.push('<h3 class="profile-reg__h3">الخبرة المهنية</h3><p class="profile-reg__muted">—</p>');
+                }
+
+                var refs = user.references;
+                if (Array.isArray(refs) && refs.length) {
+                    parts.push('<h3 class="profile-reg__h3">المراجع</h3>');
+                    parts.push('<table class="profile-reg__table"><thead><tr><th>الاسم</th><th>العلاقة</th><th>التواصل</th></tr></thead><tbody>');
+                    refs.forEach(function (r) {
+                        parts.push('<tr><td>' + escapeHtml(r.name || '—') + '</td><td>' + escapeHtml(r.relationship || '—') + '</td><td>' + escapeHtml(r.contact || '—') + '</td></tr>');
+                    });
+                    parts.push('</tbody></table>');
+                } else {
+                    parts.push('<h3 class="profile-reg__h3">المراجع</h3><p class="profile-reg__muted">—</p>');
+                }
+
+                // Languages
+                parts.push('<h3 class="profile-reg__h3">اللغات</h3>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">اللغة الأم</span><span class="profile-reg__v">' + escapeHtml(user.native_language || '—') + '</span></div>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">مستوى الإنجليزية</span><span class="profile-reg__v">' + escapeHtml(user.english_proficiency || '—') + '</span></div>');
+
+                parts.push('<h3 class="profile-reg__h3">الروابط والأهداف</h3>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">معرض الأعمال / Portfolio</span><span class="profile-reg__v">' +
+                    (user.portfolio_url ? '<a class="profile-reg__link" href="' + escapeHtml(user.portfolio_url) + '" target="_blank" rel="noopener">' + escapeHtml(user.portfolio_url) + '</a>' : '—') +
+                    '</span></div>');
+                parts.push('<div class="profile-reg__kv profile-reg__kv--block"><span class="profile-reg__k">أهداف التعلّم</span><div class="profile-reg__multiline">' + escapeHtml(user.learning_objectives || '—') + '</div></div>');
+
+                parts.push('<h3 class="profile-reg__h3">احتياجات إضافية</h3>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">القيود الغذائية</span><span class="profile-reg__v">' + escapeHtml(user.dietary_restrictions || '—') + '</span></div>');
+                parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">احتياجات إمكانية الوصول</span><span class="profile-reg__v">' + escapeHtml(user.accessibility_requirements || '—') + '</span></div>');
+
+                var socials = user.social_media;
+                if (Array.isArray(socials) && socials.length) {
+                    parts.push('<h3 class="profile-reg__h3">حسابات التواصل الاجتماعي</h3>');
+                    parts.push('<div class="social-links-group">');
+                    socials.forEach(function (s) {
+                        var url = s.profile_url || '';
+                        var plat = s.platform_name || 'Link';
+                        if (url) {
+                            parts.push('<a class="profile-reg__link social-link-chip" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">' + escapeHtml(plat) + '</a>');
+                        }
+                    });
+                    parts.push('</div>');
+                }
+
+                parts.push('<h3 class="profile-reg__h3">اختبار الإدراك</h3>');
+                var qr = user.quiz_results;
+                if (typeof qr === 'string') { try { qr = JSON.parse(qr); } catch(e) { qr = {}; } }
+                
+                // Handle nested "answers" from relational DB
+                var answers = (qr && qr.answers) ? qr.answers : qr;
+                
+                if (answers && Object.keys(answers).length) {
+                    parts.push('<div class="quiz-results-summary">');
+                    for (var qk in answers) {
+                        var val = answers[qk];
+                        if (typeof val === 'object' && val !== null) val = JSON.stringify(val);
+                        parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">' + escapeHtml(qk) + '</span><span class="profile-reg__v">' + escapeHtml(String(val)) + '</span></div>');
+                    }
+                    parts.push('</div>');
+                } else {
+                    parts.push('<p class="profile-reg__muted">لا توجد نتائج مسجلة.</p>');
+                }
+
+                var awards = user.awards_impact;
+                if (Array.isArray(awards) && awards.length) {
+                    parts.push('<h3 class="profile-reg__h3">الجوائز والأنشطة الإضافية</h3>');
+                    parts.push('<table class="profile-reg__table"><thead><tr><th>العنوان</th><th>الجهة المانحة</th><th>الإنجاز</th><th>التاريخ</th></tr></thead><tbody>');
+                    awards.forEach(function (r) {
+                        parts.push('<tr><td>' + escapeHtml(r.award_title || '—') + '</td><td>' + escapeHtml(r.issuing_body || '—') + '</td><td>' + escapeHtml(r.achievement || '—') + '</td><td>' + escapeHtml(r.date_received || '—') + '</td></tr>');
+                    });
+                    parts.push('</tbody></table>');
+                }
+
+                var docLabels = {
+                    photo_front_path: 'الصورة الشخصية',
+                    cv_resume_path: 'السيرة الذاتية',
+                    id_scan_path: 'مسح الهوية (عام)',
+                    id_card_front_path: 'الهوية - وجه',
+                    graduation_certificate_path: 'شهادة التخرج',
+                    organizational_chart_path: 'الهيكل التنظيمي',
+                    criminal_record_path: 'السجل الجنائي',
+                    employer_noc_path: 'موافقة جهة العمل',
+                    scholarship_essay_path: 'ملف المقال / المنحة'
+                };
+
+                parts.push('<h3 class="profile-reg__h3">المستندات المرفوعة</h3>');
+                Object.keys(docLabels).forEach(function (key) {
+                    var val = user[key];
+                    if (val) {
+                        var href = fileHref(val);
+                        parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">' + escapeHtml(docLabels[key]) + '</span><span class="profile-reg__v">' +
+                            '<a class="profile-reg__link" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">عرض الملف</a></span></div>');
+                    }
+                });
+
+                var lors = user.letters_of_recommendation;
+                if (typeof lors === 'string') { try { lors = JSON.parse(lors); } catch(e) { lors = []; } }
+                if (Array.isArray(lors) && lors.length) {
+                    lors.forEach(function (l, idx) {
+                        if (l) {
+                            parts.push('<div class="profile-reg__kv"><span class="profile-reg__k">خطاب توصية ' + (idx + 1) + '</span><span class="profile-reg__v">' +
+                                '<a class="profile-reg__link" href="' + escapeHtml(fileHref(l)) + '" target="_blank" rel="noopener">عرض الملف</a></span></div>');
+                        }
+                    });
+                }
+
+                if (user.professional_summary_text) {
+                    parts.push('<h3 class="profile-reg__h3">الملخص المهني</h3><div class="profile-reg__multiline">' + escapeHtml(user.professional_summary_text) + '</div>');
+                }
+
+                return parts.join('');
+            }
+
+            function renderUI(user, courses) {
+                var dobFormatted = user.dob ? new Date(user.dob + 'T00:00:00').toLocaleDateString('ar-EG') : '—';
+                var phones = parseJsonMaybe(user.phone_numbers);
+                var phoneStr = Array.isArray(phones) ? phones.join('، ') : (phones || '—');
+                var createdStr = user.created_at ? new Date(user.created_at).toLocaleString('ar-EG') : '—';
+                var pipeLine = user.pipeline_status ? (user.pipeline_status + (user.current_stage_id != null ? ' — مرحلة ' + user.current_stage_id : '')) : '—';
+
+                var dataRows = [
+                    { key: 'name', label: 'الاسم بالعربية', value: user.full_name_ar || '—' },
+                    { key: 'nameen', label: 'الاسم بالإنجليزية', value: user.full_name_en || '—' },
+                    { key: 'nid', label: 'رقم الهوية الوطنية', value: user.national_id || '—' },
+                    { key: 'email', label: 'البريد الإلكتروني', value: user.email || '—' },
+                    { key: 'email2', label: 'البريد الثانوي', value: user.secondary_email || '—' },
+                    { key: 'phone', label: 'أرقام الهاتف', value: phoneStr },
+                    { key: 'dob', label: 'تاريخ الميلاد', value: dobFormatted },
+                    { key: 'gender', label: 'الجنس', value: fmtGender(user.gender) },
+                    { key: 'marital', label: 'الحالة الاجتماعية', value: user.marital_status || '—' },
+                    { key: 'role', label: 'نوع الحساب', value: user.role || '—' },
+                    { key: 'pipe', label: 'حالة المسار التدريبي', value: pipeLine },
+                    { key: 'created', label: 'تاريخ إنشاء الحساب', value: createdStr }
+                ];
+
+                // Header card
+                var headerEl = document.getElementById('profileHeader');
+                if (headerEl) {
+                    var name = user.full_name_ar || '';
+                    var initials = name.trim().split(/\s+/).slice(0, 2).map(function (p) { return p.charAt(0); }).join('').toUpperCase() || 'ن ت';
+                    headerEl.innerHTML =
+                        '<div class="profile-card__main">' +
+                        '<div class="profile-avatar">' +
+                        '<span class="profile-avatar__initials">' + initials + '</span>' +
+                        '</div>' +
+                        '<div class="profile-card__info">' +
+                        '<div class="profile-card__name">' + (name || 'متدرب الأكاديمية') + '</div>' +
+                        '<div class="profile-card__meta-line">' +
+                        '<span class="profile-card__meta-tag">' + (user.national_id || 'هوية غير مسجلة') + '</span>' +
+                        '<span class="profile-card__meta-tag profile-card__meta-tag--muted">' + (user.email || 'بريد غير مسجل') + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+
+                // Stats card
+                var statsEl = document.getElementById('profileStats');
+                if (statsEl) {
+                    var total = courses.length;
+                    var completed = courses.filter(function (c) { return c.status === 'مكتمل' || c.status === 'approved'; }).length;
+                    var inProgress = courses.filter(function (c) { return c.status !== 'مكتمل' && c.status !== 'approved'; }).length;
+
+                    statsEl.innerHTML =
+                        '<div class="profile-stats">' +
+                        '<div class="profile-stats__item" style="cursor:pointer" onclick="window.location.href=\'courses.html?filter=my\'">' +
+                        '<div class="profile-stats__label">إجمالي الدورات</div>' +
+                        '<div class="profile-stats__value">' + total + '</div>' +
+                        '</div>' +
+                        '<div class="profile-stats__item" style="cursor:pointer" onclick="window.location.href=\'courses.html?filter=my\'">' +
+                        '<div class="profile-stats__label">المكتملة/المقبولة</div>' +
+                        '<div class="profile-stats__value profile-stats__value--success">' + completed + '</div>' +
+                        '</div>' +
+                        '<div class="profile-stats__item" style="cursor:pointer" onclick="window.location.href=\'courses.html?filter=my\'">' +
+                        '<div class="profile-stats__label">قيد المراجعة</div>' +
+                        '<div class="profile-stats__value profile-stats__value--accent">' + inProgress + '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+
+                // Personal Data Rows
+                var dataEl = document.getElementById('profileData');
+                if (dataEl) {
+                    dataEl.innerHTML = '';
+                    var fieldIcons = {
+                        name: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3 4-5 8-5s6.5 2 8 5"/></svg>',
+                        nameen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3 4-5 8-5s6.5 2 8 5"/></svg>',
+                        nid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h6M7 14h3"/></svg>',
+                        email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+                        email2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+                        phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+                        dob: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg>',
+                        gender: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+                        marital: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+                        role: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+                        pipe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+                        created: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
+                    };
+                    var defaultFieldIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+                    dataRows.forEach(function (r, index) {
+                        var row = document.createElement('div');
+                        row.className = 'profile-data__row';
+                        row.style.animationDelay = (index * 0.04) + 's';
+                        var iconSvg = fieldIcons[r.key] || defaultFieldIcon;
+                        row.innerHTML =
+                            '<div class="profile-data__icon">' + iconSvg + '</div>' +
+                            '<div class="profile-data__content">' +
+                            '<div class="profile-data__label">' + r.label + '</div>' +
+                            '<div class="profile-data__value">' + escapeHtml(String(r.value)) + '</div>' +
+                            '</div>';
+                        dataEl.appendChild(row);
+                    });
+                }
+
+                var regFullEl = document.getElementById('profileRegistrationFull');
+                if (regFullEl) {
+                    regFullEl.innerHTML = renderRegistrationFull(user);
+                }
+
+                // Course List
+                var coursesEl = document.getElementById('profileCourses');
+                if (coursesEl) {
+                    coursesEl.innerHTML = '';
+                    courses.forEach(function (c) {
+                        var statusLabel = c.status;
+                        if (c.status === 'waiting') statusLabel = 'قيد المراجعة';
+                        if (c.status === 'approved') statusLabel = 'تم القبول';
+                        if (c.status === 'rejected') statusLabel = 'مرفوض';
+
+                        var card = document.createElement('div');
+                        card.className = 'course-card profile-course-card';
+                        card.setAttribute('data-status', c.status);
+                        card.innerHTML = '<div class="course-card__title">' + c.title + '</div>' +
+                            '<div class="course-card__desc">' + (c.description || '') + '</div>' +
+                            '<span class="course-card__badge">' + statusLabel + '</span>';
+                        coursesEl.appendChild(card);
+                    });
+                    if (courses.length === 0) {
+                        coursesEl.innerHTML = '<p class="no-data">لم تقم بالتسجيل في أي دورات بعد.</p>';
+                    }
+                }
+
+
+                // Update Charts if ECharts loaded
+                if (typeof echarts !== 'undefined') {
+                    renderTraineeAnalytics();
+                }
+            }
+
+            // --- Edit Profile (full registration) ---
+            function jsonToTextarea(val) {
+                if (val == null || val === '') return '';
+                if (typeof val === 'string') {
+                    try {
+                        return JSON.stringify(JSON.parse(val), null, 2);
+                    } catch (e) {
+                        return val;
+                    }
+                }
+                return JSON.stringify(val, null, 2);
+            }
+
+            function parseJSONArray(id, label) {
+                var raw = document.getElementById(id).value.trim();
+                if (!raw) return [];
+                try {
+                    var v = JSON.parse(raw);
+                    if (!Array.isArray(v)) throw new Error();
+                    return v;
+                } catch (err) {
+                    throw new Error('حقل ' + label + ': يجب أن تكون القيمة مصفوفة JSON صالحة');
+                }
+            }
+
+            function parseJSONObject(id, label) {
+                var raw = document.getElementById(id).value.trim();
+                if (!raw) return {};
+                try {
+                    var v = JSON.parse(raw);
+                    if (typeof v !== 'object' || v === null || Array.isArray(v)) throw new Error();
+                    return v;
+                } catch (err) {
+                    throw new Error('حقل ' + label + ': يجب أن يكون كائن JSON صالحاً');
+                }
+            }
+
+            function parseJSONValue(id, label) {
+                var raw = document.getElementById(id).value.trim();
+                if (!raw) return null;
+                try {
+                    return JSON.parse(raw);
+                } catch (err) {
+                    throw new Error('حقل ' + label + ': JSON غير صالح');
+                }
+            }
+
+            function parseJSONOrEmptyObject(id, label) {
+                var raw = document.getElementById(id).value.trim();
+                if (!raw) return {};
+                try {
+                    return JSON.parse(raw);
+                } catch (err) {
+                    throw new Error('حقل ' + label + ': JSON غير صالح');
+                }
+            }
+
+            function parseJSONOrEmptyArray(id, label) {
+                var raw = document.getElementById(id).value.trim();
+                if (!raw) return [];
+                try {
+                    return JSON.parse(raw);
+                } catch (err) {
+                    throw new Error('حقل ' + label + ': JSON غير صالح');
+                }
+            }
+
+            function decodeHtmlEntities(str) {
+                if (!str) return '';
+                var d = document.createElement('div');
+                d.innerHTML = str;
+                return d.textContent || d.innerText || '';
+            }
+
+            var ACADEMIC_MAX = 5;
+            var PROFESSIONAL_MAX = 10;
+            var REFERENCES_MAX = 5;
+
+            function normalizeAcademicItem(raw) {
+                if (!raw || typeof raw !== 'object') return {};
+                return {
+                    institution: String(raw.institution || raw.school || '').trim(),
+                    gpa: String(raw.gpa || raw.grade || '').trim(),
+                    major: String(raw.major || '').trim(),
+                    degree: String(raw.degree || '').trim(),
+                    gradYear: String(raw.gradYear || raw.year || '').trim(),
+                    ranking: String(raw.ranking || '').trim()
+                };
+            }
+
+            function normalizeProfItem(raw) {
+                if (!raw || typeof raw !== 'object') return {};
+                return {
+                    organization: String(raw.organization || raw.company || '').trim(),
+                    startDate: String(raw.startDate || '').trim(),
+                    endDate: String(raw.endDate || '').trim(),
+                    responsibilities: String(raw.responsibilities || raw.title || raw.summary || '').trim(),
+                    reasonForLeaving: String(raw.reasonForLeaving || '').trim()
+                };
+            }
+
+            function normalizeRefItem(raw) {
+                if (!raw || typeof raw !== 'object') return {};
+                return {
+                    name: String(raw.name || '').trim(),
+                    relationship: String(raw.relationship || '').trim(),
+                    contact: String(raw.contact || '').trim()
+                };
+            }
+
+            function createAcademicCard(item) {
+                item = normalizeAcademicItem(item);
+                var card = document.createElement('div');
+                card.className = 'record-card';
+                var rm = document.createElement('button');
+                rm.type = 'button';
+                rm.className = 'record-card__remove';
+                rm.setAttribute('aria-label', 'حذف السجل');
+                rm.textContent = '×';
+                card.appendChild(rm);
+                var grid = document.createElement('div');
+                grid.className = 'record-card__grid';
+                [
+                    { k: 'institution', label: 'المؤسسة التعليمية' },
+                    { k: 'major', label: 'التخصص' },
+                    { k: 'degree', label: 'أعلى درجة علمية' },
+                    { k: 'gpa', label: 'المعدل / التقدير' },
+                    { k: 'gradYear', label: 'سنة التخرج' },
+                    { k: 'ranking', label: 'تصنيف الجامعة' }
+                ].forEach(function (f) {
+                    var wrap = document.createElement('div');
+                    wrap.className = 'courses-modal__field';
+                    var lab = document.createElement('label');
+                    lab.className = 'courses-modal__label';
+                    lab.textContent = f.label;
+                    var inp = document.createElement('input');
+                    inp.type = 'text';
+                    inp.className = 'courses-modal__input';
+                    inp.dataset.field = f.k;
+                    inp.value = item[f.k] || '';
+                    wrap.appendChild(lab);
+                    wrap.appendChild(inp);
+                    grid.appendChild(wrap);
+                });
+                card.appendChild(grid);
+                return card;
+            }
+
+            function createProfessionalCard(item) {
+                item = normalizeProfItem(item);
+                var card = document.createElement('div');
+                card.className = 'record-card';
+                var rm = document.createElement('button');
+                rm.type = 'button';
+                rm.className = 'record-card__remove';
+                rm.setAttribute('aria-label', 'حذف السجل');
+                rm.textContent = '×';
+                card.appendChild(rm);
+                var grid = document.createElement('div');
+                grid.className = 'record-card__grid';
+                [
+                    { k: 'organization', label: 'الجهة / الشركة' },
+                    { k: 'startDate', label: 'تاريخ البدء', type: 'date' },
+                    { k: 'endDate', label: 'تاريخ الانتهاء', type: 'date' },
+                    { k: 'reasonForLeaving', label: 'سبب المغادرة' }
+                ].forEach(function (f) {
+                    var wrap = document.createElement('div');
+                    wrap.className = 'courses-modal__field';
+                    var lab = document.createElement('label');
+                    lab.className = 'courses-modal__label';
+                    lab.textContent = f.label;
+                    var inp = document.createElement('input');
+                    inp.className = 'courses-modal__input';
+                    inp.dataset.field = f.k;
+                    if (f.type === 'date') inp.type = 'date';
+                    else inp.type = 'text';
+                    inp.value = item[f.k] || '';
+                    wrap.appendChild(lab);
+                    wrap.appendChild(inp);
+                    grid.appendChild(wrap);
+                });
+                var wrapR = document.createElement('div');
+                wrapR.className = 'courses-modal__field courses-modal__field--full';
+                var labR = document.createElement('label');
+                labR.className = 'courses-modal__label';
+                labR.textContent = 'المهام والمسؤوليات الرئيسية';
+                var ta = document.createElement('textarea');
+                ta.className = 'courses-modal__textarea';
+                ta.rows = 3;
+                ta.dataset.field = 'responsibilities';
+                ta.value = item.responsibilities || '';
+                wrapR.appendChild(labR);
+                wrapR.appendChild(ta);
+                grid.appendChild(wrapR);
+                card.appendChild(grid);
+                return card;
+            }
+
+            function createReferenceCard(item) {
+                item = normalizeRefItem(item);
+                var card = document.createElement('div');
+                card.className = 'record-card record-card--ref';
+                var rm = document.createElement('button');
+                rm.type = 'button';
+                rm.className = 'record-card__remove';
+                rm.setAttribute('aria-label', 'حذف المرجع');
+                rm.textContent = '×';
+                card.appendChild(rm);
+                var grid = document.createElement('div');
+                grid.className = 'record-card__grid';
+                [
+                    { k: 'name', label: 'اسم المرجع' },
+                    { k: 'relationship', label: 'العلاقة' },
+                    { k: 'contact', label: 'وسيلة التواصل' }
+                ].forEach(function (f) {
+                    var wrap = document.createElement('div');
+                    wrap.className = 'courses-modal__field';
+                    var lab = document.createElement('label');
+                    lab.className = 'courses-modal__label';
+                    lab.textContent = f.label;
+                    var inp = document.createElement('input');
+                    inp.type = 'text';
+                    inp.className = 'courses-modal__input';
+                    inp.dataset.field = f.k;
+                    inp.value = item[f.k] || '';
+                    wrap.appendChild(lab);
+                    wrap.appendChild(inp);
+                    grid.appendChild(wrap);
+                });
+                card.appendChild(grid);
+                return card;
+            }
+
+            function populateAcademicEditor(list) {
+                var container = document.getElementById('editAcademicList');
+                if (!container) return;
+                container.innerHTML = '';
+                var arr = Array.isArray(list) ? list.slice() : [];
+                if (!arr.length) arr = [{}];
+                arr.forEach(function (row) {
+                    container.appendChild(createAcademicCard(row));
+                });
+                var btn = document.getElementById('addAcademicRow');
+                if (btn) btn.disabled = container.querySelectorAll('.record-card').length >= ACADEMIC_MAX;
+            }
+
+            function populateProfessionalEditor(list) {
+                var container = document.getElementById('editProfessionalList');
+                if (!container) return;
+                container.innerHTML = '';
+                var arr = Array.isArray(list) ? list.slice() : [];
+                if (!arr.length) arr = [{}];
+                arr.forEach(function (row) {
+                    container.appendChild(createProfessionalCard(row));
+                });
+                var btn = document.getElementById('addProfessionalRow');
+                if (btn) btn.disabled = container.querySelectorAll('.record-card').length >= PROFESSIONAL_MAX;
+            }
+
+            function populateReferencesEditor(list) {
+                var container = document.getElementById('editReferencesList');
+                if (!container) return;
+                container.innerHTML = '';
+                var arr = Array.isArray(list) ? list.slice() : [];
+                if (!arr.length) arr = [{}];
+                arr.forEach(function (row) {
+                    container.appendChild(createReferenceCard(row));
+                });
+                var btn = document.getElementById('addReferenceRow');
+                if (btn) btn.disabled = container.querySelectorAll('.record-card').length >= REFERENCES_MAX;
+            }
+
+            function collectAcademicHistory() {
+                var container = document.getElementById('editAcademicList');
+                if (!container) return [];
+                var out = [];
+                container.querySelectorAll('.record-card').forEach(function (card) {
+                    var o = {};
+                    card.querySelectorAll('[data-field]').forEach(function (inp) {
+                        o[inp.dataset.field] = inp.value.trim();
+                    });
+                    if (o.institution) out.push(o);
+                });
+                return out;
+            }
+
+            function collectProfessionalHistory() {
+                var container = document.getElementById('editProfessionalList');
+                if (!container) return [];
+                var out = [];
+                container.querySelectorAll('.record-card').forEach(function (card) {
+                    var o = {};
+                    card.querySelectorAll('[data-field]').forEach(function (inp) {
+                        o[inp.dataset.field] = inp.value.trim();
+                    });
+                    if (o.organization) out.push(o);
+                });
+                return out;
+            }
+
+            function collectReferences() {
+                var container = document.getElementById('editReferencesList');
+                if (!container) return [];
+                var out = [];
+                container.querySelectorAll('.record-card').forEach(function (card) {
+                    var o = {};
+                    card.querySelectorAll('[data-field]').forEach(function (inp) {
+                        o[inp.dataset.field] = inp.value.trim();
+                    });
+                    if (o.name) out.push(o);
+                });
+                return out;
+            }
+
+            function wireRecordList(listId, addBtnId, max, factory) {
+                var list = document.getElementById(listId);
+                var addBtn = document.getElementById(addBtnId);
+                if (!list || !addBtn) return;
+                addBtn.addEventListener('click', function () {
+                    if (list.querySelectorAll('.record-card').length >= max) return;
+                    list.appendChild(factory({}));
+                    addBtn.disabled = list.querySelectorAll('.record-card').length >= max;
+                });
+                list.addEventListener('click', function (e) {
+                    if (!e.target.classList.contains('record-card__remove')) return;
+                    var card = e.target.closest('.record-card');
+                    if (!card) return;
+                    card.remove();
+                    if (!list.querySelectorAll('.record-card').length) {
+                        list.appendChild(factory({}));
+                    }
+                    addBtn.disabled = list.querySelectorAll('.record-card').length >= max;
+                });
+            }
+
+            function wireRecordEditors() {
+                wireRecordList('editAcademicList', 'addAcademicRow', ACADEMIC_MAX, createAcademicCard);
+                wireRecordList('editProfessionalList', 'addProfessionalRow', PROFESSIONAL_MAX, createProfessionalCard);
+                wireRecordList('editReferencesList', 'addReferenceRow', REFERENCES_MAX, createReferenceCard);
+            }
+
+            wireRecordEditors();
+
+            // ===== Skills dropdown engine (mirrors registration.js) =====
+            var editSkillsTree = [];
+
+            function initEditSkills() {
+                fetch('/api/skills/tree')
+                    .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+                    .then(function(tree){
+                        editSkillsTree = tree;
+                        // populate subcategories for any rows already in DOM
+                        ['editTechSkillsContainer','editCompSkillsContainer','editSoftSkillsContainer'].forEach(function(cid){
+                            var c = document.getElementById(cid);
+                            if (!c) return;
+                            c.querySelectorAll('.edit-skill-row .edit-skill-cat').forEach(function(sel){
+                                var catId = parseInt(sel.closest('.edit-skill-row').dataset.sectionCatId);
+                                populateEditSubcategories(sel, catId);
+                            });
+                        });
+                    })
+                    .catch(function(){ console.warn('Could not load skills tree for edit modal'); });
+            }
+
+            function populateEditSubcategories(catSel, sectionCatId) {
+                var cur = catSel.value;
+                var categoryData = editSkillsTree.find(function(c){ return c.id === sectionCatId; });
+                if (!categoryData) return;
+                catSel.innerHTML = '<option value="">اختر الفئة</option>';
+                categoryData.subcategories.forEach(function(sub){
+                    var o = document.createElement('option');
+                    o.value = sub.id;
+                    o.textContent = sub.name_ar;
+                    catSel.appendChild(o);
+                });
+                if (cur) catSel.value = cur;
+            }
+
+            function populateEditSkillNames(skillSel, sectionCatId, subcatId) {
+                var cur = skillSel.value;
+                skillSel.innerHTML = '<option value="">اختر المهارة</option>';
+                if (!subcatId) return;
+                var catData = editSkillsTree.find(function(c){ return c.id === sectionCatId; });
+                if (!catData) return;
+                var subData = catData.subcategories.find(function(s){ return s.id === parseInt(subcatId); });
+                if (!subData) return;
+                subData.skills.forEach(function(sk){
+                    var o = document.createElement('option');
+                    o.value = sk.id;
+                    o.textContent = sk.name_ar;
+                    skillSel.appendChild(o);
+                });
+                if (cur) skillSel.value = cur;
+            }
+
+            function createEditSkillRow(sectionCatId, catVal, skillVal) {
+                var row = document.createElement('div');
+                row.className = 'edit-skill-row skill-row-inline';
+                row.dataset.sectionCatId = sectionCatId;
+                row.innerHTML =
+                    '<select class="edit-skill-cat skill-category courses-modal__select"></select>' +
+                    '<select class="edit-skill-name skill-name courses-modal__select"></select>' +
+                    '<button type="button" class="edit-skill-remove record-card__remove" title="حذف">×</button>';
+                var catSel  = row.querySelector('.edit-skill-cat');
+                var nameSel = row.querySelector('.edit-skill-name');
+                populateEditSubcategories(catSel, sectionCatId);
+                if (catVal) {
+                    catSel.value = catVal;
+                    populateEditSkillNames(nameSel, sectionCatId, catVal);
+                    if (skillVal) nameSel.value = skillVal;
+                }
+                catSel.addEventListener('change', function(){
+                    populateEditSkillNames(nameSel, sectionCatId, catSel.value);
+                });
+                row.querySelector('.edit-skill-remove').addEventListener('click', function(){
+                    row.remove();
+                });
+                return row;
+            }
+
+            function populateSkillEditor(containerId, skillsArray, sectionCatId) {
+                var container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = '';
+                var arr = Array.isArray(skillsArray) ? skillsArray : [];
+                if (!arr.length) {
+                    container.appendChild(createEditSkillRow(sectionCatId, '', ''));
+                    return;
+                }
+                arr.forEach(function(sk){
+                    var catVal  = (sk && (sk.category || sk.subcategory_id)) || '';
+                    var skillVal = (sk && (sk.name || sk.skill_id)) || '';
+                    container.appendChild(createEditSkillRow(sectionCatId, String(catVal), String(skillVal)));
+                });
+            }
+
+            function collectSkills(containerId) {
+                var container = document.getElementById(containerId);
+                if (!container) return [];
+                var out = [];
+                container.querySelectorAll('.edit-skill-row').forEach(function(row){
+                    var cat  = row.querySelector('.edit-skill-cat');
+                    var name = row.querySelector('.edit-skill-name');
+                    if (cat && name && name.value) {
+                        out.push({ category: cat.value, name: name.value });
+                    }
+                });
+                return out;
+            }
+
+            // Wire "add" buttons for each skills section
+            document.querySelectorAll('.edit-skill-add-btn').forEach(function(btn){
+                btn.addEventListener('click', function(){
+                    var containerId = btn.getAttribute('data-container');
+                    var sectionCatId = parseInt(btn.getAttribute('data-category-id'));
+                    var container = document.getElementById(containerId);
+                    if (!container) return;
+                    if (container.querySelectorAll('.edit-skill-row').length >= 20) {
+                        alert('الحد الأقصى 20 مهارة');
+                        return;
+                    }
+                    container.appendChild(createEditSkillRow(sectionCatId, '', ''));
+                });
+            });
+
+            // Initialize skills tree
+            initEditSkills();
+
+            function syncDocumentsFromFields() {
+                var o = {};
+                var simpleKeys = ['cvResume', 'organizationalChart', 'idScan', 'criminalRecord', 'employerNoc', 'scholarshipEssayFile', 'graduationCertificate'];
+                simpleKeys.forEach(function (key) {
+                    var el = document.getElementById('editDoc_' + key);
+                    if (el) {
+                        var v = el.value.trim();
+                        if (v) o[key] = v;
+                    }
+                });
+                var idp = {};
+                ['front', 'back', 'sideRight', 'sideLeft'].forEach(function (sk) {
+                    var el = document.getElementById('editId_' + sk);
+                    if (el) {
+                        var v = el.value.trim();
+                        if (v) idp[sk] = v;
+                    }
+                });
+                if (Object.keys(idp).length) o.identityPhotos = idp;
+                var lors = [];
+                for (var i = 0; i < 3; i++) {
+                    var el = document.getElementById('editLor_' + i);
+                    if (el && el.value.trim()) lors.push(el.value.trim());
+                }
+                if (lors.length) o.lettersOfRecommendation = lors;
+                var ta = document.getElementById('editDocuments');
+                if (ta) ta.value = JSON.stringify(o, null, 2);
+                
+                if (typeof refreshDocUi === 'function') {
+                    refreshDocUi();
+                }
+            }
+
+            function loadDocumentsIntoFields(docs) {
+                docs = docs || {};
+                if (typeof docs === 'string') {
+                    try { docs = JSON.parse(docs); } catch (e) { docs = {}; }
+                }
+                var simpleKeys = ['cvResume', 'organizationalChart', 'idScan', 'criminalRecord', 'employerNoc', 'scholarshipEssayFile', 'graduationCertificate'];
+                simpleKeys.forEach(function (key) {
+                    var el = document.getElementById('editDoc_' + key);
+                    if (el) el.value = docs[key] || '';
+                });
+                var idp = docs.identityPhotos || {};
+                if (typeof idp === 'string') {
+                    try { idp = JSON.parse(idp); } catch (e) { idp = {}; }
+                }
+                if (!idp || typeof idp !== 'object') idp = {};
+                ['front', 'back', 'sideRight', 'sideLeft'].forEach(function (sk) {
+                    var el = document.getElementById('editId_' + sk);
+                    if (el) el.value = idp[sk] || '';
+                });
+                var lors = docs.lettersOfRecommendation || [];
+                if (!Array.isArray(lors)) lors = [];
+                for (var j = 0; j < 3; j++) {
+                    var le = document.getElementById('editLor_' + j);
+                    if (le) le.value = lors[j] || '';
+                }
+                
+                if (typeof syncDocumentsFromFields === 'function') {
+                    syncDocumentsFromFields();
+                }
+            }
+
+            function refreshDocUi() {
+                var pf = document.getElementById('editPhotoFront');
+                var path = pf ? pf.value.trim() : null;
+                var wrap = document.getElementById('editPhotoFrontPreviewWrap');
+                var img = document.getElementById('editPhotoFrontPreview');
+                var link = document.getElementById('editPhotoFrontOpen');
+                
+                if (wrap && img && link) {
+                    if (path && /\.(png|jpe?g|webp)$/i.test(path)) {
+                        var href = fileHref(path);
+                        img.src = href;
+                        link.href = href;
+                        wrap.hidden = false;
+                    } else {
+                        wrap.hidden = true;
+                        img.removeAttribute('src');
+                    }
+                }
+                
+                ['cvResume', 'organizationalChart', 'idScan', 'criminalRecord', 'employerNoc', 'scholarshipEssayFile', 'graduationCertificate'].forEach(function (key) {
+                    var el = document.getElementById('editDoc_' + key);
+                    var a = document.getElementById('editDoc_' + key + '_link');
+                    if (!el || !a) return;
+                    var p = el.value.trim();
+                    if (p) {
+                        a.href = fileHref(p);
+                        a.hidden = false;
+                    } else {
+                        a.hidden = true;
+                    }
+                });
+                
+                var thumbs = [
+                    { input: 'editId_front', img: 'editThumb_front', wrap: 'editThumb_front_wrap' },
+                    { input: 'editId_back', img: 'editThumb_back', wrap: 'editThumb_back_wrap' },
+                    { input: 'editId_sideRight', img: 'editThumb_sideRight', wrap: 'editThumb_sideRight_wrap' },
+                    { input: 'editId_sideLeft', img: 'editThumb_sideLeft', wrap: 'editThumb_sideLeft_wrap' }
+                ];
+                thumbs.forEach(function (T) {
+                    var inp = document.getElementById(T.input);
+                    var im = document.getElementById(T.img);
+                    var wr = document.getElementById(T.wrap);
+                    if (!inp || !im || !wr) return;
+                    var p = inp.value.trim();
+                    if (p && /\.(png|jpe?g|webp)$/i.test(p)) {
+                        im.src = fileHref(p);
+                        wr.hidden = false;
+                    } else {
+                        wr.hidden = true;
+                        im.removeAttribute('src');
+                    }
+                });
+            }
+
+            function uploadTraineeFile(fileInput, folder) {
+                var f = fileInput.files && fileInput.files[0];
+                if (!f) {
+                    alert('اختر ملفاً أولاً');
+                    return Promise.reject();
+                }
+                var session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+                var fd = new FormData();
+                fd.append('file', f);
+                return fetch('/api/trainee/upload?folder=' + encodeURIComponent(folder), {
+                    method: 'POST',
+                    headers: session.token ? { 'Authorization': 'Bearer ' + session.token } : {},
+                    body: fd
+                }).then(function (res) {
+                    if (res.status === 401) {
+                        sessionStorage.removeItem('ntaTrainee');
+                        window.location.href = 'index.html';
+                        return Promise.reject();
+                    }
+                    if (!res.ok) return res.json().then(function (j) { throw new Error(j.detail || 'فشل الرفع'); });
+                    return res.json();
+                });
+            }
+
+            document.querySelectorAll('.edit-profile-upload-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var finId = btn.getAttribute('data-file-input');
+                    var folder = btn.getAttribute('data-folder');
+                    var targetInput = btn.getAttribute('data-target-input');
+                    var fin = document.getElementById(finId);
+                    if (!fin || !folder) return;
+                    uploadTraineeFile(fin, folder).then(function (data) {
+                        var path = data.file_path || data.filePath;
+                        if (!path) return;
+                        if (targetInput) {
+                            var tel = document.getElementById(targetInput);
+                            if (tel) tel.value = path;
+                        }
+                        syncDocumentsFromFields();
+                        refreshDocUi();
+                        alert('تم الرفع بنجاح');
+                    }).catch(function (err) {
+                        if (err && err.message) alert(err.message);
+                    });
+                });
+            });
+
+            var editDocsSection = document.getElementById('editDocumentsSection');
+            if (editDocsSection) {
+                editDocsSection.addEventListener('input', function (e) {
+                    var t = e.target;
+                    if (!t || !t.id) return;
+                    if (t.id === 'editPhotoFront') {
+                        refreshDocUi();
+                        return;
+                    }
+                    if (t.classList.contains('doc-card__path') || /^editId_/.test(t.id) || /^editLor_/.test(t.id)) {
+                        syncDocumentsFromFields();
+                    }
+                });
+            }
+
+            var editDocumentsTa = document.getElementById('editDocuments');
+            if (editDocumentsTa) {
+                editDocumentsTa.addEventListener('change', function () {
+                    try {
+                        loadDocumentsIntoFields(JSON.parse(this.value.trim() || '{}'));
+                    } catch (err) {
+                        alert('JSON غير صالح في المستندات');
+                    }
+                });
+            }
+
+            window.openEditProfileModal = function () {
+                var backdrop = document.getElementById('editProfileModalBackdrop');
+                backdrop.style.display = 'flex';
+                setTimeout(function () { backdrop.classList.add('courses-modal-backdrop--visible'); }, 10);
+
+                window.authenticatedFetch('/api/trainee/profile/' + userId)
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        var u = data.user;
+                        var phones = u.phone_numbers || [];
+                        if (typeof phones === 'string') { try { phones = JSON.parse(phones); } catch(e) { phones = []; } }
+
+                        document.getElementById('editFullName').value = u.full_name_ar || '';
+                        document.getElementById('editFullNameEn').value = u.full_name_en || '';
+                        document.getElementById('editEmail').value = u.email || '';
+                        document.getElementById('editSecondaryEmail').value = u.secondary_email || '';
+                        document.getElementById('editDob').value = (u.dob || '').toString().slice(0, 10);
+                        document.getElementById('editGender').value = u.gender || 'male';
+                        document.getElementById('editMaritalStatus').value = u.marital_status || 'single';
+                        document.getElementById('editNationalId').value = u.national_id || '';
+                        document.getElementById('editPhone1').value = phones[0] || '';
+                        document.getElementById('editPhone2').value = phones[1] || '';
+                        document.getElementById('editPhone3').value = phones[2] || '';
+
+                        var em = u.emergency_contacts || {};
+                        if (typeof em === 'string') { try { em = JSON.parse(em); } catch(e) { em = {}; } }
+                        document.getElementById('editEmergencyName').value = em.name || '';
+                        document.getElementById('editEmergencyPhone').value = em.phone || '';
+
+                        document.getElementById('editCurrentAddress').value = decodeHtmlEntities(u.address || '');
+                        document.getElementById('editPermanentAddress').value = u.permanent_address || '';
+
+                        document.getElementById('editPortfolioUrl').value = u.portfolio_url || '';
+                        document.getElementById('editLearningObjectives').value = u.learning_objectives || '';
+                        document.getElementById('editDietaryRestrictions').value = u.dietary_restrictions || '';
+                        document.getElementById('editAccessibilityRequirements').value = u.accessibility_requirements || '';
+
+                        document.getElementById('editQuizResults').value = jsonToTextarea(u.quiz_results || {});
+                        document.getElementById('editProfessionalSummary').value = u.professional_summary_text || '';
+                        
+                        document.getElementById('editDoc_cvResume').value = u.cv_resume_path || '';
+                        document.getElementById('editDoc_idScan').value = u.id_scan_path || '';
+                        document.getElementById('editDoc_organizationalChart').value = u.organizational_chart_path || '';
+                        document.getElementById('editDoc_criminalRecord').value = u.criminal_record_path || '';
+                        document.getElementById('editDoc_employerNoc').value = u.employer_noc_path || '';
+                        document.getElementById('editDoc_scholarshipEssayFile').value = u.scholarship_essay_file || u.scholarship_essay_path || '';
+                        document.getElementById('editDoc_graduationCertificate').value = u.graduation_certificate_path || '';
+                        
+                        document.getElementById('editId_front').value = u.id_card_front_path || '';
+
+                        populateSkillEditor('editTechSkillsContainer', u.technical_skills, 1);
+                        populateSkillEditor('editCompSkillsContainer', u.computer_skills, 2);
+                        populateSkillEditor('editSoftSkillsContainer', u.soft_skills, 3);
+                        populateAcademicEditor(u.academic_history);
+                        populateProfessionalEditor(u.professional_history);
+                        populateReferencesEditor(u.references || []);
+                        
+                        refreshDocUi();
+                    })
+                    .catch(function (err) { console.error('Error fetching profile for edit:', err); });
+            };
+
+            window.closeEditProfileModal = function () {
+                var backdrop = document.getElementById('editProfileModalBackdrop');
+                backdrop.classList.remove('courses-modal-backdrop--visible');
+                setTimeout(function () { backdrop.style.display = 'none'; }, 300);
+            };
+
+            document.getElementById('editProfileForm').onsubmit = function (e) {
+                e.preventDefault();
+                syncDocumentsFromFields();
+                var secEmailRaw = document.getElementById('editSecondaryEmail').value.trim();
+                var payload;
+                try {
+                    payload = {
+                        fullName: document.getElementById('editFullName').value.trim(),
+                        fullNameEn: document.getElementById('editFullNameEn').value.trim(),
+                        email: document.getElementById('editEmail').value.trim(),
+                        secondaryEmail: secEmailRaw ? secEmailRaw : null,
+                        dob: document.getElementById('editDob').value,
+                        gender: document.getElementById('editGender').value,
+                        maritalStatus: document.getElementById('editMaritalStatus').value,
+                        phoneNumbers: [
+                            document.getElementById('editPhone1').value.trim(),
+                            document.getElementById('editPhone2').value.trim(),
+                            document.getElementById('editPhone3').value.trim()
+                        ].filter(function (p) { return p.length > 0; }),
+                        emergencyName: document.getElementById('editEmergencyName').value.trim(),
+                        emergencyPhone: document.getElementById('editEmergencyPhone').value.trim(),
+                        currentAddress: document.getElementById('editCurrentAddress').value,
+                        permanentAddress: document.getElementById('editPermanentAddress').value.trim(),
+                        technicalSkills: collectSkills('editTechSkillsContainer'),
+                        softSkills: collectSkills('editSoftSkillsContainer'),
+                        computerSkills: collectSkills('editCompSkillsContainer'),
+                        academicHistory: collectAcademicHistory(),
+                        professionalHistory: collectProfessionalHistory(),
+                        references: collectReferences(),
+                        portfolioUrl: document.getElementById('editPortfolioUrl').value.trim(),
+                        learningObjectives: document.getElementById('editLearningObjectives').value,
+                        dietaryRestrictions: document.getElementById('editDietaryRestrictions').value,
+                        accessibilityRequirements: document.getElementById('editAccessibilityRequirements').value,
+                        photoFront: document.getElementById('editPhotoFront') ? document.getElementById('editPhotoFront').value.trim() : null,
+                        quizResults: parseJSONOrEmptyObject('editQuizResults', 'اختبار الإدراك'),
+                        objective: document.getElementById('editProfessionalSummary').value.trim(),
+                        cvResume: document.getElementById('editDoc_cvResume').value.trim(),
+                        idScan: document.getElementById('editDoc_idScan').value.trim(),
+                        organizationalChart: document.getElementById('editDoc_organizationalChart').value.trim(),
+                        criminalRecord: document.getElementById('editDoc_criminalRecord').value.trim(),
+                        employerNoc: document.getElementById('editDoc_employerNoc').value.trim(),
+                        scholarshipEssayFile: document.getElementById('editDoc_scholarshipEssayFile').value.trim(),
+                        graduationCertificate: document.getElementById('editDoc_graduationCertificate').value.trim(),
+                        idCardFront: document.getElementById('editId_front').value.trim(),
+                        lettersOfRecommendation: [
+                            document.getElementById('editLor_0').value.trim(),
+                            document.getElementById('editLor_1').value.trim(),
+                            document.getElementById('editLor_2').value.trim()
+                        ].filter(function(x){ return x !== ""; })
+                    };
+                } catch (err) {
+                    alert(err.message || String(err));
+                    return;
+                }
+
+                window.authenticatedFetch('/api/trainee/profile/' + userId, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                })
+                    .then(function (res) {
+                        if (!res.ok) {
+                            return res.json().then(function (j) {
+                                var d = j.detail;
+                                if (Array.isArray(d)) {
+                                    d = d.map(function (x) {
+                                        if (typeof x === 'string') return x;
+                                        var loc = x.loc ? x.loc.join('.') : '';
+                                        return (loc ? loc + ': ' : '') + (x.msg || JSON.stringify(x));
+                                    }).join('\n');
+                                }
+                                throw new Error(typeof d === 'string' ? d : JSON.stringify(j));
+                            });
+                        }
+                        return res.json();
+                    })
+                    .then(function () {
+                        alert('تم تحديث الملف الشخصي بنجاح');
+                        closeEditProfileModal();
+                        window.location.reload();
+                    })
+                    .catch(function (err) {
+                        alert('خطأ: ' + (err && err.message ? err.message : err));
+                    });
+            };
+
+            function getThemeColor(varName, fallback) {
+                var val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+                return val || fallback;
+            }
+
+            function drawTraineeCharts(data) {
+                var donutEl = document.getElementById('completionDonutChart');
+                var radarEl = document.getElementById('skillsRadarChart');
+                if (!donutEl || !radarEl) return;
+
+                if (completionDonut && typeof completionDonut.dispose === 'function') {
+                    try { completionDonut.dispose(); } catch(e) {}
+                }
+                if (skillsRadar && typeof skillsRadar.dispose === 'function') {
+                    try { skillsRadar.dispose(); } catch(e) {}
+                }
+
+                var accentColor = getThemeColor('--accent', '#6366f1');
+                var glassStrong = getThemeColor('--surface-glass-strong', 'rgba(255, 255, 255, 0.08)');
+                var textMuted = getThemeColor('--text-muted', '#64748b');
+                var borderColor = getThemeColor('--border-color', 'rgba(255, 255, 255, 0.2)');
+                var successColor = getThemeColor('--color-success', '#10b981');
+                var successBg = getThemeColor('--color-success-bg', 'rgba(16, 185, 129, 0.2)');
+
+                // Donut Chart
+                completionDonut = echarts.init(donutEl);
+                completionDonut.setOption({
+                    series: [{
+                        type: 'pie',
+                        radius: ['60%', '80%'],
+                        avoidLabelOverlap: false,
+                        label: { show: false },
+                        data: [
+                            { value: data.overall_completion, itemStyle: { color: accentColor } },
+                            { value: 100 - data.overall_completion, itemStyle: { color: glassStrong } }
+                        ]
+                    }]
+                });
+
+                // Radar Chart
+                skillsRadar = echarts.init(radarEl);
+                skillsRadar.setOption({
+                    radar: {
+                        indicator: [
+                            { name: 'التقني', max: 100 },
+                            { name: 'الناعم', max: 100 },
+                            { name: 'اللغوي', max: 100 },
+                            { name: 'القيادي', max: 100 },
+                            { name: 'التحليلي', max: 100 }
+                        ],
+                        splitArea: { show: false },
+                        axisLine: { lineStyle: { color: borderColor } },
+                        name: {
+                            textStyle: {
+                                color: textMuted,
+                                fontFamily: 'Tajawal',
+                                fontSize: 11
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'radar',
+                        data: [{
+                            value: data.skills_radar || [0, 0, 0, 0, 0],
+                            itemStyle: { color: successColor },
+                            areaStyle: { color: successBg }
+                        }]
+                    }]
+                });
+            }
+
+            function renderTraineeAnalytics() {
+                var chartsEl = document.getElementById('profileCharts');
+                if (!chartsEl) return;
+
+                if (lastCompletionData) {
+                    drawTraineeCharts(lastCompletionData);
+                    return;
+                }
+
+                window.authenticatedFetch('/api/trainee/completion')
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        lastCompletionData = data;
+                        var html = '<div class="profile-analytics-grid">' +
+                            '<div class="profile-analytics-card">' +
+                            '<h3>إجمالي الإنجاز</h3>' +
+                            '<div id="completionDonutChart" style="height: 250px;"></div>' +
+                            '<div class="analytics-stat"><span>' + data.overall_completion + '%</span></div>' +
+                            '</div>' +
+                            '<div class="profile-analytics-card">' +
+                            '<h3>تطور المهارات</h3>' +
+                            '<div id="skillsRadarChart" style="height: 250px;"></div>' +
+                            '</div>' +
+                            '</div>';
+                        chartsEl.innerHTML = html;
+                        drawTraineeCharts(data);
+                    })
+                    .catch(function (err) {
+                        console.error('Error fetching completion stats:', err);
+                        chartsEl.innerHTML = '<p class="no-data">لا توجد بيانات تحليلية متاحة حالياً.</p>';
+                    });
+            }
+
+            window.addEventListener('resize', function () {
+                if (completionDonut) completionDonut.resize();
+                if (skillsRadar) skillsRadar.resize();
+            });
+
+            window.addEventListener('nta-theme-changed', function () {
+                if (lastCompletionData) {
+                    drawTraineeCharts(lastCompletionData);
+                }
+            });
+        })();
+    </script>
+    <script src="chat/chat.js"></script>
+</body>
+
+</html>

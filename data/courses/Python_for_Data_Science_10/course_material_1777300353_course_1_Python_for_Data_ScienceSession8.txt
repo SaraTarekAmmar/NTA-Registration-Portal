@@ -1,0 +1,107 @@
+Session 8: Midterm Project Launch
+
+Congratulations on reaching the midpoint of the course! You have mastered Python fundamentals, NumPy arrays, and the core functionality of Pandas. Now, it is time to put those skills to the test with a real-world challenge.
+
+1. Project Objective
+
+The goal of this project is to perform a complete Exploratory Data Analysis (EDA) on a "dirty" dataset. You will act as a Data Analyst at a major metropolitan agency tasked with finding actionable insights from raw data.
+
+Core Requirements:
+
+Data Wrangling: Clean missing values, fix data types, and handle duplicates.
+
+Statistical Analysis: Calculate key metrics and identify correlations.
+
+Insight Generation: Uncover five non-obvious trends or patterns.
+
+2. The Dataset: NYC Taxi & Limousine Commission (Modified)
+
+For this project, you will work with a sample of NYC Taxi trip data. Note that this dataset has been intentionally "muddied" for educational purposes.
+
+Columns included:
+
+VendorID: TPEP provider code.
+
+tpep_pickup_datetime: Date and time of pickup.
+
+passenger_count: Number of passengers (contains errors/missing values).
+
+trip_distance: Distance in miles.
+
+fare_amount: Total fare charged.
+
+payment_type: Payment method (1=Credit, 2=Cash).
+
+3. Project Tasks
+
+Phase 1: Data Audit & Cleaning
+
+Load the dataset and identify the percentage of missing values per column.
+
+Handle missing passenger_count values using an appropriate imputation strategy (mean/median).
+
+Identify and remove "impossible" data (e.g., negative fare_amount or trip_distance of 0).
+
+Convert datetime columns from strings to actual Python datetime objects.
+
+Phase 2: Statistical Exploration
+
+Calculate the average fare per passenger count.
+
+Determine the correlation between trip_distance and fare_amount.
+
+Identify any outliers in the fare_amount column using the IQR method discussed in Session 7.
+
+Phase 3: Insight Discovery
+
+Answer the following questions:
+
+Which hour of the day is the busiest for taxi pickups?
+
+Does the payment type (Cash vs. Credit) correlate with the total fare amount?
+
+What is the average "Fare per Mile" for each vendor?
+
+4. Deliverables
+
+You are required to submit a Technical Report (Markdown or Jupyter Notebook) that includes:
+
+Cleaned Dataset: A link or description of the final state of your data.
+
+Visuals/Tables: Summaries of your findings (Pivot Tables from Session 6).
+
+The "Big Five": A list of 5 specific insights found during your analysis.
+
+5. Evaluation Criteria
+
+Criteria
+
+Weight
+
+Data Cleaning
+
+30%
+
+Code Efficiency
+
+20%
+
+Statistical Accuracy
+
+20%
+
+Insight Quality
+
+30%
+
+Midterm Project Checklist
+
+[ ] Have I handled all NaN values?
+
+[ ] Is my code readable and well-commented?
+
+[ ] Did I double-check the correlation values?
+
+[ ] Are my 5 insights supported by data evidence?
+
+Good luck! You have one week to complete the analysis and submit your findings.

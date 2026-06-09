@@ -1,0 +1,166 @@
+{
+  "title": "Standardized English Proficiency Exam",
+  "durationMinutes": 30,
+  "passingScore": 60,
+  "questions": [
+    {
+      "number": 1,
+      "type": "choose",
+      "question": "Which of the following is the correct past tense of 'go'?",
+      "options": ["Goed", "Went", "Gone", "Going"],
+      "correct_answer": "Went",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A1", "Topic": "Verb Tenses" }
+    },
+    {
+      "number": 2,
+      "type": "choose",
+      "question": "Choose the correct plural form of 'child'.",
+      "options": ["Childs", "Children", "Childrens", "Childes"],
+      "correct_answer": "Children",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A1", "Topic": "Plural Nouns" }
+    },
+    {
+      "number": 3,
+      "type": "choose",
+      "question": "Which sentence is grammatically correct?",
+      "options": ["She don't like apples.", "She doesn't likes apples.", "She doesn't like apples.", "She not like apples."],
+      "correct_answer": "She doesn't like apples.",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Subject-Verb Agreement" }
+    },
+    {
+      "number": 4,
+      "type": "choose",
+      "question": "Select the correctly spelled word:",
+      "options": ["Accomodate", "Acommodate", "Accommodate", "Accomoddat"],
+      "correct_answer": "Accommodate",
+      "metadata": { "Pillar": "Orthography", "CEFR_Level": "B2", "Topic": "Spelling" }
+    },
+    {
+      "number": 5,
+      "type": "choose",
+      "question": "What is a synonym for 'diligent'?",
+      "options": ["Lazy", "Hardworking", "Quiet", "Careless"],
+      "correct_answer": "Hardworking",
+      "metadata": { "Pillar": "Vocabulary", "CEFR_Level": "B1", "Topic": "Synonyms" }
+    },
+    {
+      "number": 6,
+      "type": "choose",
+      "question": "Identify the part of speech for 'quickly' in 'He ran quickly'.",
+      "options": ["Noun", "Verb", "Adjective", "Adverb"],
+      "correct_answer": "Adverb",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Parts of Speech" }
+    },
+    {
+      "number": 7,
+      "type": "choose",
+      "question": "What is the opposite of 'generous'?",
+      "options": ["Kind", "Selfish", "Happy", "Strong"],
+      "correct_answer": "Selfish",
+      "metadata": { "Pillar": "Vocabulary", "CEFR_Level": "A2", "Topic": "Antonyms" }
+    },
+    {
+      "number": 8,
+      "type": "choose",
+      "question": "Choose the correct prefix to make 'happy' negative.",
+      "options": ["In-", "Un-", "Dis-", "Ir-"],
+      "correct_answer": "Un-",
+      "metadata": { "Pillar": "Morphology", "CEFR_Level": "A1", "Topic": "Prefixes" }
+    },
+    {
+      "number": 9,
+      "type": "choose",
+      "question": "Which of these is a conditional sentence?",
+      "options": ["I am going to the store.", "If it rains, we will stay home.", "She was reading a book.", "They have finished their work."],
+      "correct_answer": "If it rains, we will stay home.",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "B1", "Topic": "Conditionals" }
+    },
+    {
+      "number": 10,
+      "type": "choose",
+      "question": "What does the idiom 'break a leg' mean?",
+      "options": ["To get injured", "Good luck", "To work hard", "To fail"],
+      "correct_answer": "Good luck",
+      "metadata": { "Pillar": "Vocabulary", "CEFR_Level": "B2", "Topic": "Idioms" }
+    },
+    {
+      "number": 11,
+      "type": "choose",
+      "question": "Which punctuation is used to show possession?",
+      "options": ["Comma", "Semicolon", "Apostrophe", "Hyphen"],
+      "correct_answer": "Apostrophe",
+      "metadata": { "Pillar": "Orthography", "CEFR_Level": "A1", "Topic": "Punctuation" }
+    },
+    {
+      "number": 12,
+      "type": "choose",
+      "question": "Choose the correct comparative form of 'good'.",
+      "options": ["Gooder", "Better", "Best", "More good"],
+      "correct_answer": "Better",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Comparatives" }
+    },
+    {
+      "number": 13,
+      "type": "choose",
+      "question": "What is the suffix in the word 'happiness'?",
+      "options": ["Hap-", "-piness", "-ness", "-ss"],
+      "correct_answer": "-ness",
+      "metadata": { "Pillar": "Morphology", "CEFR_Level": "A2", "Topic": "Suffixes" }
+    },
+    {
+      "number": 14,
+      "type": "choose",
+      "question": "Which of these is an active voice sentence?",
+      "options": ["The cake was eaten by the dog.", "The dog ate the cake.", "The cake is being eaten.", "The cake had been eaten."],
+      "correct_answer": "The dog ate the cake.",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "B1", "Topic": "Active/Passive Voice" }
+    },
+    {
+      "number": 15,
+      "type": "true or false",
+      "question": "The word 'desert' can be both a noun and a verb.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "metadata": { "Pillar": "Vocabulary", "CEFR_Level": "B2", "Topic": "Homographs" }
+    },
+    {
+      "number": 16,
+      "type": "true or false",
+      "question": "A preposition usually comes before a noun or pronoun.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Prepositions" }
+    },
+    {
+      "number": 17,
+      "type": "true or false",
+      "question": "The past participle of 'write' is 'wrote'.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Irregular Verbs" }
+    },
+    {
+      "number": 18,
+      "type": "true or false",
+      "question": "A 'conjunction' is used to connect words or phrases.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A2", "Topic": "Conjunctions" }
+    },
+    {
+      "number": 19,
+      "type": "true or false",
+      "question": "In English, the adjective usually comes after the noun.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "metadata": { "Pillar": "Grammar", "CEFR_Level": "A1", "Topic": "Adjective Placement" }
+    },
+    {
+      "number": 20,
+      "type": "text",
+      "question": "Write a short paragraph (30-50 words) about your favorite hobby and why you enjoy it.",
+      "correct_answer": "N/A",
+      "metadata": { "Pillar": "Reading/Writing", "CEFR_Level": "B1", "Topic": "Composition" }
+    }
+  ]
+}

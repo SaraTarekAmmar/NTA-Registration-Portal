@@ -1,0 +1,52 @@
+{
+  "course": {
+    "id": 10,
+    "title": "Python for Data Science",
+    "title_ar": null,
+    "short_name": null,
+    "classification": null,
+    "stages_json": null,
+    "batch_data_json": null,
+    "description": "Python for Data Science Masterclass",
+    "image_url": "images/python_ds.jpg",
+    "duration_weeks": 8,
+    "total_sessions": 16,
+    "skill_level": "Intermediate",
+    "status": "Upcoming",
+    "has_active_quiz": 1,
+    "quiz_json": "{\"title\": \"اختبار تقييمي: Python for Data Science\", \"examNum\": \"AI Generated\", \"questions\": [{\"id\": 1, \"text\": \"List comprehensions provide a more concise way to create lists compared to traditional for-loops.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The text states that list comprehensions provide a concise way to create lists.\"}, {\"id\": 2, \"text\": \"Lambda functions are defined using the 'def' keyword.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"Lambda functions are defined using the 'lambda' keyword, not 'def'.\"}, {\"id\": 3, \"text\": \"Decorators allow a developer to modify a function's behavior without altering its original source code.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The lecture defines decorators as a way to modify behavior without changing the source code.\"}, {\"id\": 4, \"text\": \"The map() function is used to filter elements of a sequence based on a boolean condition.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The filter() function handles boolean conditions; map() applies a function to all items.\"}, {\"id\": 5, \"text\": \"In a list comprehension, it is possible to include an 'if' condition to filter which items are included in the new list.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The syntax [expression for item in iterable if condition] explicitly allows for a condition.\"}, {\"id\": 6, \"text\": \"Lambda functions are primarily used as standalone complex functions rather than arguments to other functions.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"They are most useful when passed as arguments to functions like map(), filter(), or .apply().\"}, {\"id\": 7, \"text\": \"The filter() function returns a result that can be converted into a list to keep only elements that meet a specific criteria.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example shows using list(filter(lambda x: x > 3, numbers)) to keep specific numbers.\"}, {\"id\": 8, \"text\": \"Decorators are commonly used in data science for tasks such as timing execution or logging.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The text mentions logging, timing execution, and authentication as common uses for decorators.\"}, {\"id\": 9, \"text\": \"The syntax for a list comprehension is [item for expression in iterable].\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The correct syntax is [expression for item in iterable if condition].\"}, {\"id\": 10, \"text\": \"A lambda function can be used as a key in the sort() method to sort a list of tuples by a specific element.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example shows data.sort(key=lambda x: x[1]) to sort by the second element of tuples.\"}, {\"id\": 11, \"text\": \"The map() function only works with lambda functions and cannot be used with built-in functions like str().\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example explicitly shows map(str, numbers), using the built-in str function.\"}, {\"id\": 12, \"text\": \"The wrapper function inside a decorator is used to execute the original function while adding additional logic around it.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The timer_decorator example uses a wrapper to record time before and after the original function call.\"}, {\"id\": 13, \"text\": \"In the provided data cleaning simulation, the filter function would be the appropriate tool to remove users under the age of 18.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The task specifies using filter to only include users who are 18 or older.\"}, {\"id\": 14, \"text\": \"List comprehensions are exclusively used for cleaning strings and cannot be used for mathematical transformations.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example shows using a list comprehension to calculate squares (x**2).\"}, {\"id\": 15, \"text\": \"The @ symbol is used as a shorthand to apply a decorator to a function.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example uses @timer_decorator above the heavy_computation function.\"}, {\"id\": 16, \"text\": \"The map() function modifies the original input list in place.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The example shows the result being assigned to a new variable (str_nums = list(map(...))).\"}, {\"id\": 17, \"text\": \"Functional programming tools like map, filter, and reduce are described as essential for data transformation.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The text explicitly states these tools are essential for data transformation.\"}, {\"id\": 18, \"text\": \"A lambda function can only take one argument.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"While the examples show one argument, the text does not state that they are limited to only one.\"}, {\"id\": 19, \"text\": \"The purpose of the 'if' part of a list comprehension is to transform the data expression.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The 'if' part is used as a condition to filter items, not to transform the expression.\"}, {\"id\": 20, \"text\": \"The next session after the Python review will focus on using NumPy for numerical arrays.\", \"type\": \"tf\", \"points\": 1, \"options\": [{\"text\": \"صح\", \"label\": \"T\"}, {\"text\": \"خطأ\", \"label\": \"F\"}], \"key_points\": [], \"explanation\": \"The summary states: 'Next Session: We move into the world of NumPy to handle numerical arrays!'\"}], \"courseName\": \"Python for Data Science\", \"passingScore\": 60, \"durationMinutes\": 20}",
+    "is_public": 1
+  },
+  "trainers": [
+    {
+      "id": 90,
+      "full_name_ar": "غادة عبد اللطيف",
+      "national_id": "29404252103456",
+      "technical_skills": null,
+      "professional_summary": null
+    }
+  ],
+  "trainees": [
+    {
+      "id": 65,
+      "full_name_ar": "رانيا يوسف البيطار",
+      "dob": "1995-01-30",
+      "technical_skills": "[\"Python\", \"Flask\", \"SQL\", \"Data Analysis\", \"NumPy\"]",
+      "soft_skills": "[\"Communication\", \"Problem Solving\", \"Teamwork\"]"
+    },
+    {
+      "id": 66,
+      "full_name_ar": "طارق سيد الباز",
+      "dob": "1992-07-05",
+      "technical_skills": "[\"JavaScript\", \"React\", \"Node.js\", \"Express\", \"MongoDB\"]",
+      "soft_skills": "[\"Leadership\", \"Agile Methodology\", \"Public Speaking\"]"
+    },
+    {
+      "id": 67,
+      "full_name_ar": "منى عاطف زهران",
+      "dob": "1996-04-22",
+      "technical_skills": "[\"Java\", \"Spring Boot\", \"Docker\", \"Kubernetes\", \"AWS\"]",
+      "soft_skills": "[\"Critical Thinking\", \"Mentoring\", \"Time Management\"]"
+    }
+  ]
+}

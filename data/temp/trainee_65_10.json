@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "رانيا يوسف البيطار",
+      "full_name_en": "Rania Youssef El-Baytar",
+      "national_id": "29501301000013"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Hospital Administration",
+          "category": "health_management",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Health Policy",
+          "category": "health_management",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "HIS Systems",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "SAP",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "القيادة بالقدوة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الأزمات",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "التواصل",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "Computer Engineering",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2020-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير عمليات",
+          "startDate": "2021-01-01",
+          "department": "مستشفى القصر العيني",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 4,
+        "objective": "تطوير إدارة المنظومة الصحية الحكومية"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

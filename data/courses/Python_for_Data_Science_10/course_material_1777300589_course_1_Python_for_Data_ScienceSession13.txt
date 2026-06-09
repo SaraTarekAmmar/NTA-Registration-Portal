@@ -1,0 +1,97 @@
+Session 13: The Machine Learning Workflow
+
+Welcome to Week 7! We have officially entered the final phase of the course: Machine Learning (ML). Until now, we have focused on understanding the past (Descriptive Analytics). In this session, we begin learning how to predict the future (Predictive Analytics) using Scikit-Learn, the industry-standard library for machine learning in Python.
+
+1. Introduction to the ML Workflow
+
+Machine learning is not just about running an algorithm; it is a multi-step process. In this session, we focus on the Pre-processing and Splitting phases.
+
+Data Cleaning: (Covered in Week 3)
+
+Feature Engineering: Preparing your columns for the model.
+
+Data Splitting: Separating data into "Training" and "Testing" sets.
+
+Model Selection: Choosing an algorithm (Session 14 & 15).
+
+Evaluation: Checking how well the model performed.
+
+2. Features ($X$) and Labels ($y$)
+
+In Supervised Learning, we define:
+
+Features ($X$): The input variables (independent variables) used to make a prediction. This is usually a 2D matrix or DataFrame.
+
+Label ($y$): The output variable (target/dependent variable) we want to predict. This is usually a 1D Series or Array.
+
+# Example
+X = df[['trip_distance', 'passenger_count']] # Features
+y = df['fare_amount']                       # Label
+
+
+3. Feature Engineering: Scaling
+
+Most ML algorithms (like K-Nearest Neighbors or Support Vector Machines) are sensitive to the scale of your data. If one column is "Age" (0–100) and another is "Income" (0–1,000,000), the model will think Income is more important just because the numbers are bigger.
+
+StandardScaler transforms your data so it has a mean of 0 and a standard deviation of 1.
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+# Fit computes the mean/std; Transform applies the formula
+X_scaled = scaler.fit_transform(X)
+
+
+4. The Golden Rule: Data Splitting
+
+You must never test your model on the same data you used to train it. If you do, the model will simply "memorize" the answers (Overfitting). We use train_test_split to create a "hold-out" set.
+
+from sklearn.model_selection import train_test_split
+
+# Splitting 80% for training and 20% for testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print(f"Training rows: {len(X_train)}")
+print(f"Testing rows: {len(X_test)}")
+
+
+5. Categorical Encoding
+
+Models only understand numbers. If you have a "City" column (NY, LA, CHI), you must convert it to numbers using One-Hot Encoding.
+
+# Quick way using Pandas
+X_encoded = pd.get_dummies(X, columns=['City'])
+
+
+Hands-on Exercise: Preparing the Titanic Dataset
+
+Task:
+
+Create a simplified Titanic DataFrame:
+
+data = {
+    'Fare': [7.25, 71.28, 7.92, 53.10, 8.05],
+    'Age': [22, 38, 26, 35, 35],
+    'Survived': [0, 1, 1, 1, 0]
+}
+df_titanic = pd.DataFrame(data)
+
+
+Define your Features ($X$) as Fare and Age, and your Label ($y$) as Survived.
+
+Use StandardScaler to scale your features.
+
+Split the data into 70% Training and 30% Testing.
+
+Bonus: Check the shape of X_train and X_test to confirm the split was successful.
+
+Summary Checklist
+
+[ ] Can you distinguish between Features ($X$) and Labels ($y$)?
+
+[ ] Do you understand why we must scale numerical data?
+
+[ ] Can you explain why we never use the Test set during training?
+
+Next Session: We build our first predictive models: Linear and Logistic Regression!

@@ -1,0 +1,109 @@
+Session 2: Numerical Computing with NumPy
+
+Welcome to Session 2! Today we move beyond standard Python lists and into the world of NumPy (Numerical Python). NumPy is the fundamental package for scientific computing in Python. It provides a high-performance multidimensional array object and tools for working with these arrays.
+
+1. Why NumPy?
+
+While Python lists are flexible, they are slow for large-scale mathematical operations because they store pointers to objects rather than the data itself. NumPy arrays are:
+
+Faster: Implemented in C and use contiguous memory.
+
+Efficient: Use much less memory than lists.
+
+Vectorized: Allow you to perform operations on whole arrays without writing explicit for loops.
+
+2. Creating Arrays
+
+You can create arrays from Python lists or using built-in NumPy functions.
+
+import numpy as np
+
+# From a list
+arr = np.array([1, 2, 3, 4, 5])
+
+# Arrays of zeros or ones
+zeros = np.zeros((3, 4))  # 3 rows, 4 columns
+ones = np.ones(5)
+
+# Ranges
+range_arr = np.arange(0, 10, 2)  # [0, 2, 4, 6, 8]
+linspace_arr = np.linspace(0, 1, 5) # 5 evenly spaced numbers between 0 and 1
+
+
+3. Array Shape and Reshaping
+
+The shape attribute is the most important property to check when working with data.
+
+data = np.arange(12)
+print(data.shape)  # (12,)
+
+# Reshape to 3x4
+reshaped_data = data.reshape(3, 4)
+print(reshaped_data.shape)  # (3, 4)
+
+
+4. Vectorization and Broadcasting
+
+Vectorization is the process of performing an operation on an entire array at once. Broadcasting allows NumPy to work with arrays of different shapes during arithmetic operations.
+
+# Vectorization: Adding 10 to every element
+a = np.array([1, 2, 3])
+print(a + 10)  # [11, 12, 13]
+
+# Broadcasting: Adding a 1D array to a 2D array
+matrix = np.array([[1, 2, 3], [4, 5, 6]])
+row_add = np.array([10, 20, 30])
+print(matrix + row_add)
+# Result: [[11, 22, 33], [14, 25, 36]]
+
+
+5. Slicing and Indexing
+
+NumPy slicing is similar to Python lists but extends to multiple dimensions.
+
+arr_2d = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+# Get the first row
+print(arr_2d[0, :])
+
+# Get the second column
+print(arr_2d[:, 1])
+
+# Get a sub-matrix (top-left 2x2)
+print(arr_2d[:2, :2])
+
+
+6. Statistical Functions
+
+NumPy provides powerful built-in methods for data analysis.
+
+prices = np.array([100, 150, 200, 120, 180])
+
+print(f"Mean: {np.mean(prices)}")
+print(f"Standard Deviation: {np.std(prices)}")
+print(f"Max Index: {np.argmax(prices)}") # Index of the highest price
+
+
+Hands-on Exercise: Normalizing a Dataset
+
+In Data Science, "Normalization" is a common step where we scale data to have a mean of 0 and a standard deviation of 1.
+
+Task:
+
+Create a random array of 100 values using np.random.randn(100).
+
+Calculate the mean and standard deviation of this array.
+
+Apply the normalization formula: $z = \frac{x - \mu}{\sigma}$ (where $\mu$ is mean and $\sigma$ is std).
+
+Verify that the new array has a mean of approximately 0 and a std of 1.
+
+Summary Checklist
+
+[ ] Do you understand why we use NumPy over Python lists?
+
+[ ] Can you explain what "Broadcasting" does in your own words?
+
+[ ] Are you comfortable indexing a 2D array to extract a specific column?
+
+Next Session: We dive into Pandas, the "Excel of Python"!

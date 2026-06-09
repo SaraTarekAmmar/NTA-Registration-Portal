@@ -1,0 +1,833 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملف المتدرب - NTA</title>
+  <link rel="stylesheet" href="../trainee.css">
+  <link rel="stylesheet" href="../header/header.css">
+  <script src="../chart.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nta-bg:#030712;--nta-card:rgba(15,23,42,0.6);--nta-border:rgba(255,255,255,0.08);
+      --nta-accent:#c1121f;--nta-indigo:#6366f1;--nta-green:#10b981;
+      --nta-text:#f1f5f9;--nta-muted:#94a3b8;
+    }
+    
+    /* ── Analytics (Stone-Wall) ── */
+    .ana-card { background-color:#1e293b; border:1px solid rgba(255,255,255,0.08); border-radius:1.25rem; padding:1.5rem; height:380px !important; max-height:380px !important; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 25px -5px rgba(0,0,0,0.3); }
+    .ana-grid { display:grid; grid-template-columns:repeat(12, 1fr); gap:1.5rem; margin-top:2rem; }
+    .ana-col-4 { grid-column:span 4; }
+    .ana-col-6 { grid-column:span 6; }
+    .ana-col-8 { grid-column:span 8; }
+    .ana-title { font-size:1rem; font-weight:700; color:#f1f5f9; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem; }
+    .ana-gauge-svg { transform:rotate(-90deg); filter:drop-shadow(0 0 10px rgba(99,102,241,0.3)); }
+    .ana-gauge-bg { fill:none; stroke:rgba(255,255,255,0.05); stroke-width:12; }
+    .ana-gauge-fill { fill:none; stroke:#6366f1; stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset 1s ease-out; }
+    .ana-assign-row { display:flex; align-items:center; justify-content:space-between; padding:0.85rem; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,255,255,0.03); margin-bottom:0.75rem; }
+    .ana-status-badge { padding:0.35rem 0.75rem; border-radius:999px; font-size:0.75rem; font-weight:600; }
+    .ana-status-success { background:rgba(16,185,129,0.1); color:#34d399; }
+    .ana-status-warning { background:rgba(245,158,11,0.1); color:#fbbf24; }
+
+    body.trainee-app { color:var(--nta-text); font-family:'Tajawal',sans-serif; }
+
+    /* ── Hero ── */
+    .tp-hero { padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; border-bottom:1px solid var(--nta-border); }
+    .tp-hero__name { font-size:1.8rem; font-weight:800; margin:0; background:linear-gradient(135deg,#fff,#94a3b8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
+    .tp-hero__sub { color:var(--nta-muted); font-size:0.9rem; margin-top:4px; }
+    .tp-back { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:10px; border:1px solid var(--nta-border); color:var(--nta-muted); text-decoration:none; font-size:0.85rem; font-weight:600; transition:.2s; }
+    .tp-back:hover { color:#fff; border-color:rgba(255,255,255,0.2); }
+
+    /* ── Main container ── */
+    .tp-main { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+
+    /* ── Analytics Integration Section ── */
+    #analyticsSection { position: relative; z-index: 10; }
+
+    /* ── Tabs ── */
+    .admin-profile__tabs { display:flex; flex-wrap:wrap; gap:0.45rem; padding:0.85rem 1rem; border-radius:14px; background:rgba(8,12,32,0.5); backdrop-filter:blur(14px); border:1px solid rgba(51,65,85,0.5); margin-bottom:1.25rem; }
+    .admin-profile__tab { display:inline-flex; align-items:center; gap:0.4rem; padding:0.42rem 0.85rem; border-radius:999px; border:1px solid rgba(51,65,85,0.65); background:rgba(15,23,42,0.8); color:#64748b; font-size:0.78rem; font-weight:600; font-family:inherit; cursor:pointer; transition:all 0.2s; }
+    .admin-profile__tab svg { width:14px; height:14px; flex-shrink:0; }
+    
+    #registrationContent { transition: opacity 0.3s ease; }
+    .admin-profile__tab:hover,.admin-profile__tab--active { border-color:var(--tab-c,rgba(99,102,241,0.65)); background:var(--tab-bg,rgba(99,102,241,0.18)); color:var(--tab-txt,#c7d2fe); box-shadow:0 0 14px var(--tab-c,rgba(99,102,241,0.2)); }
+    .admin-profile__tab[data-tab="personal"]:hover,.admin-profile__tab[data-tab="personal"].admin-profile__tab--active { --tab-c:rgba(99,102,241,0.65);--tab-bg:rgba(99,102,241,0.18);--tab-txt:#c7d2fe; }
+    .admin-profile__tab[data-tab="contact"]:hover,.admin-profile__tab[data-tab="contact"].admin-profile__tab--active { --tab-c:rgba(6,182,212,0.6);--tab-bg:rgba(6,182,212,0.12);--tab-txt:#67e8f9; }
+    .admin-profile__tab[data-tab="skills"]:hover,.admin-profile__tab[data-tab="skills"].admin-profile__tab--active { --tab-c:rgba(234,179,8,0.6);--tab-bg:rgba(234,179,8,0.1);--tab-txt:#fde047; }
+    .admin-profile__tab[data-tab="academic"]:hover,.admin-profile__tab[data-tab="academic"].admin-profile__tab--active { --tab-c:rgba(59,130,246,0.6);--tab-bg:rgba(59,130,246,0.12);--tab-txt:#93c5fd; }
+    .admin-profile__tab[data-tab="professional"]:hover,.admin-profile__tab[data-tab="professional"].admin-profile__tab--active { --tab-c:rgba(16,185,129,0.6);--tab-bg:rgba(16,185,129,0.1);--tab-txt:#6ee7b7; }
+    .admin-profile__tab[data-tab="impact"]:hover,.admin-profile__tab[data-tab="impact"].admin-profile__tab--active { --tab-c:rgba(239,68,68,0.55);--tab-bg:rgba(239,68,68,0.1);--tab-txt:#fca5a5; }
+    .admin-profile__tab[data-tab="cognition"]:hover,.admin-profile__tab[data-tab="cognition"].admin-profile__tab--active { --tab-c:rgba(168,85,247,0.6);--tab-bg:rgba(168,85,247,0.1);--tab-txt:#d8b4fe; }
+    .admin-profile__tab[data-tab="documents"]:hover,.admin-profile__tab[data-tab="documents"].admin-profile__tab--active { --tab-c:rgba(245,158,11,0.6);--tab-bg:rgba(245,158,11,0.1);--tab-txt:#fcd34d; }
+    .admin-profile__tab[data-tab="completion"]:hover,.admin-profile__tab[data-tab="completion"].admin-profile__tab--active { --tab-c:rgba(16,185,129,0.65);--tab-bg:rgba(16,185,129,0.14);--tab-txt:#6ee7b7; }
+
+    #analyticsSection { display: block !important; visibility: visible !important; opacity: 1 !important; margin-bottom: 3rem; }
+
+    /* ── Completion section ── */
+    .cpl-grid { display:grid; grid-template-columns:220px 1fr; gap:1.25rem; align-items:start; }
+    @media(max-width:700px){.cpl-grid{grid-template-columns:1fr;}}
+    .cpl-radial-wrap { display:flex; flex-direction:column; align-items:center; gap:0.75rem; padding:1.25rem; border-radius:18px; background:rgba(8,12,32,0.55); border:1px solid rgba(51,65,85,0.5); }
+    .cpl-radial { position:relative; width:140px; height:140px; }
+    .cpl-radial svg { width:140px; height:140px; transform:rotate(-90deg); }
+    .cpl-radial__bg { fill:none; stroke:rgba(30,41,59,0.8); stroke-width:12; }
+    .cpl-radial__fill { fill:none; stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
+    .cpl-radial__val { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .cpl-radial__pct { font-size:2rem; font-weight:800; color:#f1f5f9; line-height:1; }
+    .cpl-radial__lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#475569; margin-top:2px; }
+    .cpl-radial-title { font-size:0.78rem; font-weight:700; color:#94a3b8; text-align:center; }
+    .cpl-kpi-col { display:grid; grid-template-columns:repeat(3,1fr); gap:0.65rem; }
+    @media(max-width:550px){.cpl-kpi-col{grid-template-columns:1fr 1fr;}}
+    .cpl-kpi { padding:0.85rem; border-radius:14px; background:rgba(8,12,32,0.55); border:1px solid rgba(51,65,85,0.5); text-align:center; }
+    .cpl-kpi__val { font-size:1.5rem; font-weight:800; }
+    .cpl-kpi__lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#475569; margin-top:4px; }
+    .cpl-kpi--green { border-color:rgba(16,185,129,0.3); } .cpl-kpi--green .cpl-kpi__val{color:#4ade80;}
+    .cpl-kpi--cyan { border-color:rgba(6,182,212,0.3); } .cpl-kpi--cyan .cpl-kpi__val{color:#67e8f9;}
+    .cpl-kpi--amber { border-color:rgba(245,158,11,0.3); } .cpl-kpi--amber .cpl-kpi__val{color:#fbbf24;}
+    .cpl-assign-list { display:flex; flex-direction:column; gap:0.55rem; margin-top:1rem; }
+    .cpl-assign-row { display:grid; grid-template-columns:1fr auto auto; gap:0.75rem; align-items:center; padding:0.7rem 0.9rem; border-radius:12px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.45); transition:border-color .2s; }
+    .cpl-assign-row:hover { border-color:rgba(99,102,241,0.3); }
+    .cpl-assign-title { font-size:0.82rem; font-weight:700; color:#e2e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .cpl-assign-sub { font-size:0.68rem; color:#475569; margin-top:2px; }
+    .cpl-grade-bar-wrap { display:flex; align-items:center; gap:0.5rem; min-width:90px; }
+    .cpl-grade-bar { flex:1; height:5px; border-radius:999px; background:rgba(30,41,59,0.8); overflow:hidden; }
+    .cpl-grade-bar__fill { height:100%; border-radius:999px; transition:width 0.8s ease; }
+    .cpl-grade-val { font-size:0.72rem; font-weight:700; color:#94a3b8; min-width:28px; text-align:left; }
+    .cpl-status-badge { display:inline-flex; align-items:center; gap:0.2rem; padding:0.18rem 0.55rem; border-radius:999px; font-size:0.64rem; font-weight:700; white-space:nowrap; }
+    .cpl-status--graded { background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#4ade80; }
+    .cpl-status--submitted { background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.25); color:#67e8f9; }
+    .cpl-status--pending { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.25); color:#fbbf24; }
+
+    /* ── Admin-style analytics CSS ── */
+    .ap-scores { display:grid; grid-template-columns:repeat(4,1fr); gap:0.65rem; }
+    @media(max-width:600px){.ap-scores{grid-template-columns:repeat(2,1fr);}}
+    .ap-score-chip { padding:0.85rem 1rem; border-radius:14px; background:rgba(8,12,32,0.55); border:1px solid rgba(51,65,85,0.5); text-align:center; }
+    .ap-score-chip__lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#475569; margin-bottom:0.3rem; }
+    .ap-score-chip__val { font-size:1.4rem; font-weight:800; line-height:1; }
+    .ap-score-chip--indigo { border-color:rgba(99,102,241,0.3); } .ap-score-chip--indigo .ap-score-chip__val{color:#a5b4fc;}
+    .ap-score-chip--cyan   { border-color:rgba(6,182,212,0.3);  } .ap-score-chip--cyan .ap-score-chip__val{color:#67e8f9;}
+    .ap-score-chip--green  { border-color:rgba(16,185,129,0.3); } .ap-score-chip--green .ap-score-chip__val{color:#4ade80;}
+    .ap-score-chip--amber  { border-color:rgba(245,158,11,0.3); } .ap-score-chip--amber .ap-score-chip__val{color:#fbbf24;}
+    .ap-panel { padding:1rem 1.1rem; border-radius:16px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.5); }
+    .ap-panel__title { display:flex; align-items:center; gap:0.5rem; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem; }
+    .ap-panel__title svg { width:15px; height:15px; flex-shrink:0; }
+    .ap-panel__title--indigo { color:#a5b4fc; } .ap-panel__title--red { color:#f87171; } .ap-panel__title--amber { color:#fbbf24; } .ap-panel__title--cyan { color:#67e8f9; } .ap-panel__title--green { color:#4ade80; }
+    .ap-row2 { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+    @media(max-width:600px){.ap-row2{grid-template-columns:1fr;}}
+    .ap-ai-note { font-size:0.82rem; color:#94a3b8; line-height:1.7; margin:0; }
+    .ap-flags-list { margin:0; padding-right:1.1rem; font-size:0.82rem; color:#94a3b8; line-height:1.9; }
+    .ap-flags-none { font-size:0.82rem; color:#4ade80; }
+    .ap-charts-row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+    @media(max-width:600px){.ap-charts-row{grid-template-columns:1fr;}}
+    .ap-chart-box { padding:1rem; border-radius:16px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.5); }
+    .ap-chart-box h4 { font-size:0.72rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.05em; margin:0 0 0.75rem; }
+    .ap-skills { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .ap-skill-chip { padding:0.22rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); color:#a5b4fc; }
+
+    /* ── Panels ── */
+    .admin-profile__panel { display:none; }
+    .admin-profile__panel--active { display:block; }
+
+    /* ── Field cards ── */
+    .ap-panel-section { margin-bottom:1.25rem; }
+    .ap-section-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#475569; margin:0 0 0.6rem; display:flex; align-items:center; gap:0.4rem; padding-bottom:0.4rem; border-bottom:1px solid rgba(51,65,85,0.4); }
+    .ap-section-label::before { content:""; width:3px; height:12px; border-radius:999px; background:linear-gradient(180deg,#6366f1,#3b82f6); flex-shrink:0; }
+    .ap-fields-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.55rem; }
+    .ap-field { padding:0.65rem 0.85rem; border-radius:12px; background:rgba(8,12,32,0.5); backdrop-filter:blur(10px); border:1px solid rgba(51,65,85,0.45); transition:border-color .2s,box-shadow .2s; }
+    .ap-field:hover { border-color:rgba(99,102,241,0.3); box-shadow:0 0 10px rgba(99,102,241,0.07); }
+    .ap-field__label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#475569; margin-bottom:0.25rem; }
+    .ap-field__value { font-size:0.88rem; font-weight:600; color:#e2e8f0; line-height:1.4; word-break:break-word; }
+    .ap-field--full { grid-column:1/-1; }
+    .ap-field--accent { border-color:rgba(99,102,241,0.3); }
+    .ap-field--accent .ap-field__value { color:#a5b4fc; }
+    .ap-field--green .ap-field__value { color:#4ade80; }
+    .ap-field--cyan .ap-field__value { color:#67e8f9; }
+    .ap-field--amber .ap-field__value { color:#fbbf24; }
+    .ap-field--red .ap-field__value { color:#f87171; }
+
+    /* ── Chips ── */
+    .ap-chip { display:inline-flex; align-items:center; gap:0.25rem; padding:0.22rem 0.65rem; border-radius:999px; margin:0.15rem; font-size:0.72rem; font-weight:700; }
+    .ap-chip--indigo { background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); color:#a5b4fc; }
+    .ap-chip--cyan { background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); color:#67e8f9; }
+    .ap-chip--amber { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#fbbf24; }
+    .ap-chip--green { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); color:#4ade80; }
+    .ap-chip--purple { background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); color:#d8b4fe; }
+    .ap-chip--red { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
+
+    /* ── History cards ── */
+    .ap-history-card { padding:1rem 1.1rem 1rem 1.25rem; border-radius:14px; background:rgba(8,12,32,0.55); border:1px solid rgba(51,65,85,0.5); margin-bottom:0.75rem; position:relative; overflow:hidden; animation:admCardIn 0.35s ease-out backwards; }
+    .ap-history-card::before { content:""; position:absolute; top:0; right:0; bottom:0; width:3px; background:var(--ap-card-accent,linear-gradient(180deg,#6366f1,#3b82f6)); }
+    .ap-history-card__title { font-size:0.92rem; font-weight:700; color:#f1f5f9; margin:0 0 0.15rem; }
+    .ap-history-card__sub { font-size:0.78rem; color:#64748b; margin:0 0 0.5rem; }
+    .ap-history-card__body { font-size:0.8rem; color:#94a3b8; line-height:1.6; }
+    .ap-history-card__meta { display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.5rem; }
+    @keyframes admCardIn { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+
+    /* ── Doc link ── */
+    .ap-doc-link { display:inline-flex; align-items:center; gap:0.4rem; padding:0.35rem 0.8rem; border-radius:8px; background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.3); color:#a5b4fc; font-size:0.78rem; font-weight:700; text-decoration:none; transition:all .2s; }
+    .ap-doc-link:hover { background:rgba(99,102,241,0.2); border-color:rgba(99,102,241,0.55); }
+    .ap-doc-link svg { width:13px; height:13px; }
+
+    /* ── Score bar ── */
+    .ap-score-bar-wrap { display:flex; align-items:center; gap:0.6rem; }
+    .ap-score-bar { flex:1; height:6px; border-radius:999px; background:rgba(30,41,59,0.8); overflow:hidden; }
+    .ap-score-bar__fill { height:100%; border-radius:999px; transition:width 0.7s ease; }
+    .ap-score-bar__val { font-size:0.78rem; font-weight:700; color:#94a3b8; min-width:34px; text-align:left; }
+
+    /* ── Analysis section ── */
+    .ap-analysis { display:flex; flex-direction:column; gap:1.25rem; padding:0.25rem 0; }
+    .ap-scores { display:grid; grid-template-columns:repeat(4,1fr); gap:0.65rem; }
+    @media(max-width:600px){.ap-scores{grid-template-columns:repeat(2,1fr);}}
+    .ap-score-chip { padding:0.85rem; border-radius:14px; text-align:center; background:rgba(8,12,32,0.6); border:1px solid rgba(51,65,85,0.5); }
+    .ap-score-chip__lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.35rem; }
+    .ap-score-chip__val { font-size:1.5rem; font-weight:800; color:#f1f5f9; }
+    .ap-score-chip--indigo { border-color:rgba(99,102,241,0.3); } .ap-score-chip--indigo .ap-score-chip__lbl{color:#818cf8;} .ap-score-chip--indigo .ap-score-chip__val{color:#a5b4fc;}
+    .ap-score-chip--cyan { border-color:rgba(6,182,212,0.3); } .ap-score-chip--cyan .ap-score-chip__lbl{color:#67e8f9;} .ap-score-chip--cyan .ap-score-chip__val{color:#67e8f9;}
+    .ap-score-chip--green { border-color:rgba(34,197,94,0.3); } .ap-score-chip--green .ap-score-chip__lbl{color:#4ade80;} .ap-score-chip--green .ap-score-chip__val{color:#4ade80;}
+    .ap-score-chip--amber { border-color:rgba(245,158,11,0.3); } .ap-score-chip--amber .ap-score-chip__lbl{color:#fbbf24;} .ap-score-chip--amber .ap-score-chip__val{color:#fbbf24;}
+    .ap-row2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:700px){.ap-row2{grid-template-columns:1fr;}}
+    .ap-panel { padding:1.1rem 1.25rem; border-radius:16px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.45); }
+    .ap-panel__title { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin:0 0 0.85rem; display:flex; align-items:center; gap:0.45rem; }
+    .ap-panel__title svg { width:14px; height:14px; }
+    .ap-panel__title--indigo{color:#818cf8;} .ap-panel__title--green{color:#4ade80;} .ap-panel__title--red{color:#f87171;} .ap-panel__title--cyan{color:#67e8f9;} .ap-panel__title--amber{color:#fbbf24;}
+    .ap-charts-row { display:grid; grid-template-columns:1.2fr 0.8fr; gap:1rem; }
+    @media(max-width:700px){.ap-charts-row{grid-template-columns:1fr;}}
+    .ap-chart-box { padding:1rem; border-radius:14px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.45); }
+    .ap-chart-box h4 { font-size:0.72rem; font-weight:700; color:#64748b; margin:0 0 0.75rem; text-transform:uppercase; }
+    .ap-ai-note { font-size:0.84rem; color:#94a3b8; font-style:italic; line-height:1.7; margin:0; }
+    .ap-flags-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.3rem; }
+    .ap-flags-list li { font-size:0.78rem; color:#fca5a5; padding:0.35rem 0.6rem; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); display:flex; align-items:center; gap:0.4rem; }
+    .ap-flags-list li::before { content:"⚠"; font-size:0.68rem; }
+    .ap-flags-none { font-size:0.78rem; color:#4ade80; padding:0.35rem 0.6rem; border-radius:8px; background:rgba(74,222,128,0.07); border:1px solid rgba(74,222,128,0.2); }
+    .ap-skills { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .ap-skill-chip { padding:0.3rem 0.75rem; border-radius:999px; font-size:0.75rem; font-weight:700; background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.28); color:#a5b4fc; }
+
+    /* ── Attendance ── */
+    .ap-att-summary { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.85rem; padding:0.75rem; border-radius:12px; background:rgba(15,23,42,0.5); border:1px solid rgba(51,65,85,0.4); }
+    .ap-att-bar { flex:1; height:8px; border-radius:999px; background:rgba(30,41,59,0.8); overflow:hidden; }
+    .ap-att-fill { height:100%; border-radius:999px; transition:width 0.7s ease; }
+    .ap-att-val { font-size:1rem; font-weight:800; color:#4ade80; min-width:44px; }
+    .ap-att-lbl { font-size:0.72rem; color:#475569; }
+    .ap-sess-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.75rem; margin-top:0.65rem; }
+    .ap-sess-card { border-radius:14px; overflow:hidden; border:1px solid rgba(51,65,85,0.5); background:rgba(8,12,32,0.55); animation:admCardIn 0.35s ease-out backwards; }
+    .ap-sess-card--present{border-color:rgba(34,197,94,0.2);} .ap-sess-card--absent{border-color:rgba(239,68,68,0.2);} .ap-sess-card--excused{border-color:rgba(245,158,11,0.2);}
+    .ap-sess-card__head { padding:0.6rem 0.85rem; display:flex; align-items:center; justify-content:space-between; gap:0.5rem; border-bottom:1px solid rgba(51,65,85,0.35); background:rgba(15,23,42,0.45); }
+    .ap-sess-card__name { font-size:0.8rem; font-weight:700; color:#e2e8f0; }
+    .ap-sess-card__right { display:flex; align-items:center; gap:0.5rem; }
+    .ap-sess-card__date { font-size:0.7rem; font-weight:600; padding:0.15rem 0.55rem; border-radius:999px; background:rgba(51,65,85,0.4); color:#94a3b8; }
+    .ap-sess-badge { display:inline-flex; align-items:center; gap:0.25rem; padding:0.18rem 0.6rem; border-radius:999px; font-size:0.68rem; font-weight:700; }
+    .ap-sess-badge--present{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#4ade80;}
+    .ap-sess-badge--absent{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;}
+    .ap-sess-badge--excused{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#fbbf24;}
+    .ap-sess-card__body { padding:0.65rem 0.85rem; }
+    .ap-sess-photos { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+    .ap-sess-photo { border-radius:10px; overflow:hidden; position:relative; border:1px solid rgba(51,65,85,0.4); cursor:pointer; background:rgba(15,23,42,0.6); }
+    .ap-sess-photo img { width:100%; height:85px; object-fit:cover; display:block; }
+    .ap-sess-photo__label { position:absolute; bottom:0; left:0; right:0; padding:0.25rem 0.5rem; background:linear-gradient(0deg,rgba(8,12,32,0.95),transparent); font-size:0.64rem; font-weight:700; display:flex; align-items:center; justify-content:space-between; color:#94a3b8; }
+    .ap-sess-photo__time { color:#60a5fa; font-size:0.65rem; font-weight:700; }
+    .ap-sess-reason { font-size:0.78rem; color:#94a3b8; font-style:italic; line-height:1.6; padding:0.45rem 0.65rem; border-radius:10px; }
+    .ap-sess-reason--excused{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);}
+    .ap-sess-reason--absent{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.18);}
+
+    /* ── Profile strength / recs ── */
+    .ap-analysis-header { display:flex; align-items:center; gap:0.5rem; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#475569; margin:0 0 0.75rem; }
+    .ap-analysis-header::before { content:""; width:3px; height:13px; border-radius:999px; background:linear-gradient(180deg,#6366f1,#3b82f6); }
+    .ap-profile-strength { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:0.55rem; margin-bottom:1.25rem; }
+    .ap-strength-item { padding:0.65rem 0.85rem; border-radius:12px; background:rgba(8,12,32,0.5); border:1px solid rgba(51,65,85,0.45); }
+    .ap-strength-item__lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#475569; margin-bottom:0.3rem; }
+    .ap-strength-bar { height:5px; border-radius:999px; background:rgba(30,41,59,0.8); overflow:hidden; margin-bottom:0.3rem; }
+    .ap-strength-bar__fill { height:100%; border-radius:999px; transition:width 0.8s ease; }
+    .ap-strength-val { font-size:0.75rem; font-weight:700; color:#94a3b8; }
+    .ap-recs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.75rem; margin-top:0.65rem; }
+    .ap-rec-card { padding:1rem 1.1rem; border-radius:16px; background:rgba(8,12,32,0.55); border:1px solid rgba(51,65,85,0.5); position:relative; overflow:hidden; animation:admCardIn 0.35s ease-out backwards; transition:border-color .25s,box-shadow .25s,transform .25s; }
+    .ap-rec-card::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background:var(--rc-accent,linear-gradient(90deg,#6366f1,#06b6d4)); }
+    .ap-rec-card:hover { transform:translateY(-3px); border-color:rgba(99,102,241,0.35); }
+    .ap-rec-card__badge { display:inline-flex; align-items:center; gap:0.3rem; padding:0.18rem 0.6rem; border-radius:999px; font-size:0.65rem; font-weight:700; margin-bottom:0.6rem; }
+    .ap-rec-card__title { font-size:0.9rem; font-weight:700; color:#f1f5f9; margin:0 0 0.35rem; }
+    .ap-rec-card__reason { font-size:0.78rem; color:#64748b; line-height:1.65; margin:0 0 0.65rem; }
+    .ap-rec-card__chips { display:flex; flex-wrap:wrap; gap:0.35rem; }
+
+    /* ── Metrics section ── */
+    .tp-metrics { margin-top:2rem; background:rgba(8,12,32,0.5); border-radius:20px; border:1px solid rgba(51,65,85,0.5); padding:1.5rem; }
+    .tp-metrics__header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
+    .tp-metrics__title { font-size:1.1rem; font-weight:700; color:#e2e8f0; margin:0; }
+
+    /* ── Analytics Section ── */
+    .tp-analytics { margin-top:2.5rem; border-top:1px solid var(--nta-border); padding-top:2rem; }
+    .tp-analytics__title { font-size:1.4rem; font-weight:800; color:var(--nta-indigo); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
+    .tp-analytics__title svg { width:24px; height:24px; }
+    
+    .ana-grid { display:grid; grid-template-columns:repeat(12, 1fr); gap:1.25rem; }
+    .ana-card { background:var(--nta-card); border:1px solid var(--nta-border); border-radius:18px; padding:1.5rem; }
+    .ana-card__title { font-size:0.95rem; font-weight:700; color:var(--nta-muted); margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem; }
+    
+    .ana-kpi-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; margin-bottom:1.25rem; }
+    .ana-kpi { text-align:center; padding:1rem; background:rgba(255,255,255,0.02); border-radius:14px; border:1px solid var(--nta-border); }
+    .ana-kpi__val { font-size:1.6rem; font-weight:800; display:block; color:#fff; }
+    .ana-kpi__lbl { font-size:0.65rem; font-weight:700; color:var(--nta-muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px; }
+
+    .ana-gauge-container { position:relative; width:150px; height:150px; margin:0 auto; }
+    .ana-gauge-svg { transform:rotate(-90deg); width:150px; height:150px; }
+    .ana-gauge-bg { fill:none; stroke:rgba(255,255,255,0.05); stroke-width:10; }
+    .ana-gauge-fill { fill:none; stroke:var(--nta-green); stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset 1.5s ease; }
+    .ana-gauge-text { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; }
+    .ana-gauge-val { font-size:1.75rem; font-weight:800; display:block; }
+
+    .ana-sess-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1rem; }
+    .ana-sess-card { padding:1rem; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid var(--nta-border); }
+    .ana-sess-badge { font-size:0.65rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:999px; }
+    .ana-sess-badge--present { background:rgba(16,185,129,0.1); color:var(--nta-green); }
+    .ana-sess-badge--absent { background:rgba(239,68,68,0.1); color:#f87171; }
+    
+    .ana-recs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:1rem; }
+    @media(max-width:800px){.ana-recs{grid-template-columns:1fr;}}
+    .ana-rec-card { padding:1.25rem; border-radius:16px; background:linear-gradient(145deg, rgba(30,41,59,0.4), rgba(15,23,42,0.6)); border:1px solid var(--nta-border); border-right:4px solid var(--nta-indigo); }
+    .ana-rec-tag { font-size:0.65rem; font-weight:800; color:var(--nta-indigo); text-transform:uppercase; margin-bottom:0.5rem; display:block; }
+    .ana-rec-title { font-size:0.9rem; font-weight:700; margin-bottom:0.4rem; }
+    .ana-rec-desc { font-size:0.78rem; color:var(--nta-muted); line-height:1.5; }
+
+    .col-4 { grid-column: span 4; }
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-12 { grid-column: span 12; }
+    @media(max-width:900px){ 
+        .col-4, .col-8, .col-6, .ana-col-4, .ana-col-6, .ana-col-8 { grid-column: span 12; } 
+    }
+
+    /* ── Loading ── */
+    .tp-loading { display:flex; align-items:center; justify-content:center; gap:0.75rem; padding:3rem; color:#475569; font-size:0.9rem; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .spin { animation:spin 1s linear infinite; }
+  </style>
+</head>
+<body class="trainee-app has-header" id="profileBody">
+  <div class="trainee-bg"></div>
+  <div id="ntaHeader"></div>
+  <div class="tp-main">
+    <!-- Hero -->
+    <div class="tp-hero">
+      <div>
+        <h1 class="tp-hero__name" id="profileName">جاري التحميل...</h1>
+        <p class="tp-hero__sub" id="profileSub">ملف المتدرب</p>
+      </div>
+      <a href="javascript:history.back()" class="tp-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+        العودة للقائمة
+      </a>
+    </div>
+
+    <!-- Loading state -->
+    <div class="tp-loading" id="tpLoading">
+      <svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      جاري تحميل بيانات المتدرب...
+    </div>
+
+    <div id="tpContent" style="display:none">
+
+
+      <!-- ── Analytics Section (Global Layer - AT TOP) ── -->
+      <div id="analyticsSection" style="margin-bottom: 3rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem;">
+            <div>
+                <h2 style="font-size:1.8rem; font-weight:800; color:#fff; margin:0;">لوحة تحليلات الأداء والذكاء الاصطناعي</h2>
+                <p style="color:var(--nta-muted); margin-top:0.5rem;">رؤية شاملة لمستوى التقدم المهني والمهارات المكتسبة</p>
+            </div>
+            <div id="anaCompletionBadge" style="padding:0.75rem 1.5rem; background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.3); border-radius:12px; color:#c7d2fe; font-weight:800;">
+                جاري تحليل البيانات...
+            </div>
+        </div>
+
+        <div class="ana-grid">
+            <div class="ana-card ana-col-4">
+                <h3 class="ana-title">نسبة الإنجاز الكلية</h3>
+                <div style="flex:1; display:flex; align-items:center; justify-content:center; position:relative;">
+                    <svg class="ana-gauge-svg" width="160" height="160">
+                        <circle class="ana-gauge-bg" cx="80" cy="80" r="70"/>
+                        <circle id="anaCompletionFill" class="ana-gauge-fill" cx="80" cy="80" r="70" stroke-dasharray="439.8" stroke-dashoffset="439.8"/>
+                    </svg>
+                    <div style="position:absolute; text-align:center;">
+                        <span id="anaCompletionText" style="display:block; font-size:2rem; font-weight:800; color:#fff;">0%</span>
+                        <span style="font-size:0.7rem; color:var(--nta-muted);">مكتمل</span>
+                    </div>
+                </div>
+                <p id="anaEvalNote" style="font-size:0.85rem; color:var(--nta-muted); text-align:center; margin-top:1rem;">جاري توليد التقييم...</p>
+            </div>
+
+            <div class="ana-card ana-col-8">
+                <h3 class="ana-title">التكليفات والمهام</h3>
+                <div id="anaAssignList" style="overflow-y:auto; flex:1; padding-right:0.5rem;"></div>
+            </div>
+
+            <div class="ana-card ana-col-6">
+                <h3 class="ana-title">منحنى التطور المهاراتي</h3>
+                <div style="position: relative; width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="anaSkillChart"></canvas>
+                </div>
+            </div>
+
+            <div class="ana-card ana-col-6">
+                <h3 class="ana-title">توازن المهارات</h3>
+                <div style="position: relative; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="anaRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+      <!-- AI Summary Box (shown when AI matching result exists) -->
+      <div id="anaAISummary" style="display:none; margin-top:2rem; margin-bottom:1rem; padding:1.5rem 2rem; background:rgba(30, 41, 59, 0.4); border:1px solid rgba(99,102,241,0.2); border-radius:18px; border-right:4px solid #6366f1; direction:rtl; box-shadow:0 10px 25px -5px rgba(0,0,0,0.2);"></div>
+
+      <!-- Analytics Section -->
+        <h3 style="margin-top:3rem; margin-bottom:1.5rem; font-weight:800; color:#fff;">توصيات المسار التعليمي</h3>
+        <div id="anaRecsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; margin-bottom:4rem;">
+            <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Registration Data Section -->
+      <div id="registrationContent" style="margin-top:2rem; border-top:1px solid var(--nta-border); padding-top:2rem;">
+        <h2 style="font-size:1.4rem; font-weight:800; color:#fff; margin-bottom:1.5rem;">بيانات التسجيل الأساسية</h2>
+        <!-- Tabs -->
+        <div class="admin-profile__tabs" id="profileTabs">
+        <button type="button" class="admin-profile__tab admin-profile__tab--active" data-tab="personal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <span>البيانات الشخصية</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 5.1 2 2 0 0 1 4.06 3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 11a16 16 0 0 0 6 6l1.36-1.22a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <span>بيانات التواصل</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="skills">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
+          <span>المهارات واللغات</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="academic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 7-10-5L2 7l10 5 10-5Z"/><path d="M6 10v6c0 1.1 2.7 2 6 2s6-.9 6-2v-6"/></svg>
+          <span>البيانات الأكاديمية</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="professional">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M12 12v4"/></svg>
+          <span>الخبرات المهنية</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 8v4l2 2"/></svg>
+          <span>الأثر والأهداف</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="cognition">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6v2.5A3.5 3.5 0 0 0 9.5 15H10v2a4 4 0 0 0 8 0v-5a9 9 0 0 0-6-9Z"/></svg>
+          <span>اختبار القدرات</span>
+        </button>
+        <button type="button" class="admin-profile__tab" data-tab="documents">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>المستندات</span>
+        </button>
+
+      </div>
+
+      <!-- Panels -->
+      <div class="admin-profile__body">
+        <section class="admin-profile__panel admin-profile__panel--active" data-panel="personal" id="panelPersonal"></section>
+        <section class="admin-profile__panel" data-panel="contact" id="panelContact"></section>
+        <section class="admin-profile__panel" data-panel="skills" id="panelSkills"></section>
+        <section class="admin-profile__panel" data-panel="academic" id="panelAcademic"></section>
+        <section class="admin-profile__panel" data-panel="professional" id="panelProfessional"></section>
+        <section class="admin-profile__panel" data-panel="impact" id="panelImpact"></section>
+        <section class="admin-profile__panel" data-panel="cognition" id="panelCognition"></section>
+        <section class="admin-profile__panel" data-panel="documents" id="panelDocuments"></section>
+      </div>
+
+
+      </div>
+    </div> <!-- End of registration content card -->
+
+  </div> <!-- End of tp-main -->
+
+  <script src="../header/header.js"></script>
+  <script>
+  (function(){
+    var session = JSON.parse(sessionStorage.getItem('ntaTrainee')||'{}');
+    if(session.role !== 'trainer'){ window.location.href='../index.html'; return; }
+
+    var params = new URLSearchParams(window.location.search);
+    var traineeId = parseInt(params.get('trainee_id')||'0',10);
+    var courseId = params.get('course_id');
+    if(!traineeId){ alert('خطأ: لم يتم تحديد المتدرب'); history.back(); return; }
+
+    var traineeData = null;
+    var COLORS = ['#6366f1','#06b6d4','#10b981','#f59e0b','#ec4899'];
+
+    /* ── helpers ── */
+    function getLabel(s){
+      if(!s) return '';
+      if(typeof s==='string') return s;
+      return s.skill_name||s.name||s.title||s.label||s.category||JSON.stringify(s);
+    }
+    function chips(arr,cls){
+      cls=cls||'ap-chip--indigo';
+      if(!arr||!arr.length) return '<span style="color:#475569;font-size:0.8rem">—</span>';
+      return arr.map(function(s){
+        return '<span class="ap-chip '+cls+'">'+getLabel(s)+'</span>';
+      }).join('');
+    }
+    function field(label,value,cls){
+      return '<div class="ap-field'+(cls?' '+cls:'')+'">'
+        +'<div class="ap-field__label">'+label+'</div>'
+        +'<div class="ap-field__value">'+(value||'—')+'</div>'
+        +'</div>';
+    }
+    function section(title,html){
+      return '<div class="ap-panel-section">'
+        +(title?'<div class="ap-section-label">'+title+'</div>':'')
+        +html+'</div>';
+    }
+    var LDR='<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:2rem;color:#475569"><svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>جاري التحميل...</div>';
+
+    /* ── fetch ── */
+    function fetchProfile(){
+      window.authenticatedFetch('/api/trainer/trainees/'+traineeId)
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          if(data.detail){ alert('خطأ: '+data.detail); history.back(); return; }
+          traineeData = data;
+          
+          document.getElementById('tpLoading').style.display='none';
+          document.getElementById('tpContent').style.display='block';
+          
+          try { renderHeader(data.user, data.application); } catch(e){ console.error("Header Error:", e); }
+          try { renderPanels(data.user, data.application); } catch(e){ console.error("Panels Error:", e); }
+        })
+        .catch(function(err){
+          console.error(err);
+          document.getElementById('tpLoading').innerHTML='<span style="color:#f87171">تعذر تحميل بيانات المتدرب.</span>';
+        });
+    }
+
+    function renderHeader(user, app){
+      document.getElementById('profileName').textContent = user.full_name_ar || user.full_name || '—';
+      document.getElementById('profileSub').textContent = (app&&app.course_title?'دورة: '+app.course_title+' • ':'')+' ملف المتدرب (قراءة فقط)';
+    }
+
+    /* ── renderPanels ── */
+    function renderPanels(user, app){
+      app=app||{};
+
+      /* 1. شخصية */
+      document.getElementById('panelPersonal').innerHTML=
+        section('البيانات الأساسية','<div class="ap-fields-grid">'
+          +field('الاسم بالعربية',user.full_name_ar)
+          +field('الاسم بالإنجليزية',user.full_name_en)
+          +field('الرقم القومي',user.national_id,'ap-field--accent')
+          +field('تاريخ الميلاد',user.dob)
+          +field('الجنس',user.gender==='male'?'ذكر':user.gender==='female'?'أنثى':'—')
+          +field('الحالة الاجتماعية',user.marital_status)
+          +field('الجنسية',user.nationality)
+          +field('الموقف من التجنيد',user.military_status)
+          +'</div>')
+        +section('العنوان والوضع المالي','<div class="ap-fields-grid">'
+          +field('دولة الإقامة',user.country)
+          +field('المحافظة',user.governorate)
+          +field('المدينة',user.city)
+          +field('العنوان التفصيلي',user.address,'ap-field--full')
+          +field('العنوان الدائم',user.permanent_address,'ap-field--full')
+          +field('متوسط الدخل الشهري',user.monthly_income)
+          +field('مصدر التمويل',user.funding_source)
+          +'</div>');
+
+      /* 2. تواصل */
+      var phones = user.phone_numbers || [];
+      if (typeof phones === "string") { try { phones = JSON.parse(phones); } catch(e) { phones = []; } }
+      var phonesStr = phones.join(" / ") || "—";
+      
+      var ec = user.emergency_contacts || {};
+      if (typeof ec === "string") { try { ec = JSON.parse(ec); } catch(e) { ec = {}; } }
+      var ecText = ec.name ? ec.name + " — " + ec.phone : "—";
+
+      document.getElementById('panelContact').innerHTML=
+        section('البريد والهاتف','<div class="ap-fields-grid">'
+          +field('البريد الإلكتروني',user.email,'ap-field--accent')
+          +field('البريد الثانوي',user.secondary_email)
+          +field('أرقام الهاتف',phonesStr)
+          +field('واتساب',user.whatsapp_number)
+          +'</div>')
+        +section('جهات الطوارئ','<div class="ap-field ap-field--full"><div class="ap-field__label">جهات الاتصال</div><div class="ap-field__value" style="line-height:1.8">'+ecText+'</div></div>')
+        +section('الموقع الإلكتروني','<div class="ap-field ap-field--full"><div class="ap-field__label">Portfolio / Website</div><div class="ap-field__value">'
+          +(user.portfolio_url ? '<a href="' + user.portfolio_url + '" target="_blank">' + user.portfolio_url + '</a>' : '—')
+          +'</div></div>');
+
+      /* 3. مهارات */
+      var techSkills = user.technical_skills || [];
+      var softSkills = user.soft_skills || [];
+      var compSkills = user.computer_skills || [];
+
+      document.getElementById('panelSkills').innerHTML=
+        section('المهارات','<div class="ap-field ap-field--full"><div class="ap-field__label">المهارات التقنية</div><div class="ap-field__value">'+chips(techSkills,'ap-chip--indigo')+'</div></div>'
+          +'<div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">المهارات الشخصية</div><div class="ap-field__value">'+chips(softSkills,'ap-chip--cyan')+'</div></div>'
+          +'<div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">مهارات الحاسوب</div><div class="ap-field__value">'+chips(compSkills,'ap-chip--purple')+'</div></div>')
+        +section('اللغات','<div class="ap-fields-grid">'
+          +field('اللغة الأم',user.native_language,'ap-field--amber')
+          +field('مستوى الإنجليزية',user.english_proficiency,'ap-field--green')
+          +'</div>');
+
+      /* 4. أكاديمي */
+      var academic=Array.isArray(user.academic_history)?user.academic_history:[];
+      document.getElementById('panelAcademic').innerHTML=academic.length
+        ?academic.map(function(edu,i){
+            var col=COLORS[i%COLORS.length];
+            return '<div class="ap-history-card" style="--ap-card-accent:linear-gradient(180deg,'+col+','+col+'88);animation-delay:'+i*0.08+'s">'
+              +'<div class="ap-history-card__title">'+(edu.institution||'—')+'</div>'
+              +'<div class="ap-history-card__sub">'+(edu.degree||'—')+' · '+(edu.major||'—')+'</div>'
+              +'<div class="ap-history-card__meta">'
+              +'<span class="ap-chip ap-chip--amber">سنة التخرج: '+(edu.gradYear||edu.grad_year||'—')+'</span>'
+              +'<span class="ap-chip ap-chip--green">التقدير: '+(edu.gpa||'—')+'</span>'
+              +'</div></div>';
+          }).join('')
+        :'<div style="color:#334155;text-align:center;padding:2rem;font-size:0.85rem">لا توجد بيانات أكاديمية</div>';
+
+      /* 5. مهني */
+      var professional=Array.isArray(user.professional_history)?user.professional_history:[];
+      var summaryText = user.professional_summary_text || "";
+
+      document.getElementById('panelProfessional').innerHTML=(professional.length
+        ?professional.map(function(job,i){
+            var col=COLORS[i%COLORS.length];
+            var dur=(job.startDate||job.start_date||'')+(job.endDate||job.end_date?' — '+(job.endDate||job.end_date):'');
+            return '<div class="ap-history-card" style="--ap-card-accent:linear-gradient(180deg,'+col+','+col+'88);animation-delay:'+i*0.08+'s">'
+              +'<div class="ap-history-card__title">'+(job.role||job.jobTitle||'—')+'</div>'
+              +'<div class="ap-history-card__sub">'+(job.company||job.organization||'—')+'</div>'
+              +'<div class="ap-history-card__meta">'
+              +(dur?'<span class="ap-chip ap-chip--cyan">'+dur+'</span>':'')
+              +'</div>'
+              +(job.responsibilities||job.summary?'<div class="ap-history-card__body">'+(job.responsibilities||job.summary)+'</div>':'')
+              +'</div>';
+          }).join('')
+        :'<div style="color:#334155;text-align:center;padding:2rem;font-size:0.85rem">لا توجد بيانات مهنية</div>')
+        +(summaryText ? section('ملخص مهني','<div class="ap-field ap-field--full"><div class="ap-field__value" style="white-space:pre-wrap">'+summaryText+'</div></div>') : '');
+
+      /* 6. أثر وأهداف */
+      var awards=Array.isArray(user.awards_impact)?user.awards_impact:[];
+      var community=Array.isArray(user.community_extracurricular)?user.community_extracurricular:[];
+      var refs = Array.isArray(user.references) ? user.references : [];
+
+      document.getElementById('panelImpact').innerHTML=
+        section('الأهداف والدوافع','<div class="ap-fields-grid">'
+          +field('أهداف التعلّم',user.learning_objectives,'ap-field--full')
+          +'</div>')
+        +section('الجوائز والأثر','<div class="ap-field ap-field--full"><div class="ap-field__label">الجوائز</div><div class="ap-field__value">'
+          +(awards.length?awards.map(function(a){return '<span class="ap-chip ap-chip--amber">'+(typeof a==='string'?a:(a.skill_name||a.title||'—'))+'</span>';}).join(''):'—')
+          +'</div></div><div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">النشاط التطوعي</div><div class="ap-field__value">'
+          +(community.length?community.map(function(c){return '<span class="ap-chip ap-chip--green">'+(typeof c==='string'?c:(c.skill_name||c.role||'—'))+'</span>';}).join(''):'—')
+          +'</div></div>')
+        +(refs.length ? section('المراجع', refs.map(function(r, i){
+            return '<div class="ap-history-card" style="animation-delay:'+i*0.06+'s">'
+              +'<div class="ap-history-card__title">'+(r.name||'—')+'</div>'
+              +'<div class="ap-history-card__meta">'
+              +'<span class="ap-chip ap-chip--cyan">'+(r.relationship||'—')+'</span>'
+              +'<span class="ap-chip ap-chip--purple">'+(r.contact||'—')+'</span>'
+              +'</div></div>';
+          }).join('')) : '');
+
+      /* 7. معرفي */
+      var quiz=user.quiz_results||{};
+      function scoreBar(val,color){
+        return '<div class="ap-score-bar-wrap"><div class="ap-score-bar"><div class="ap-score-bar__fill" style="width:'+val+'%;background:'+color+'"></div></div><span class="ap-score-bar__val">'+val+'%</span></div>';
+      }
+      document.getElementById('panelCognition').innerHTML=
+        section('نتائج الاختبار','<div class="ap-fields-grid">'
+          +'<div class="ap-field"><div class="ap-field__label">التحليل المنطقي</div><div class="ap-field__value">'+scoreBar(quiz.analytical||0,'linear-gradient(90deg,#6366f1,#818cf8)')+'</div></div>'
+          +'<div class="ap-field"><div class="ap-field__label">التفكير الإبداعي</div><div class="ap-field__value">'+scoreBar(quiz.creative||0,'linear-gradient(90deg,#06b6d4,#67e8f9)')+'</div></div>'
+          +'<div class="ap-field"><div class="ap-field__label">التفكير الاستراتيجي</div><div class="ap-field__value">'+scoreBar(quiz.strategic||0,'linear-gradient(90deg,#10b981,#4ade80)')+'</div></div>'
+          +'</div>');
+
+      /* 8. مستندات */
+      var docDefs=[
+        {key:'cv_resume_path',label:'السيرة الذاتية',icon:'📄'},
+        {key:'id_scan_path',label:'صورة الهوية',icon:'🪪'},
+        {key:'criminal_record_path',label:'الفيش الجنائي',icon:'📋'},
+        {key:'employer_noc_path',label:'خطاب عدم ممانعة',icon:'📝'},
+        {key:'organizational_chart_path',label:'الهيكل التنظيمي',icon:'🗂'},
+        {key:'scholarship_essay_file',label:'مقال المنحة',icon:'✍️'}
+      ];
+      var docsGrid=docDefs.map(function(d){
+        var path = user[d.key];
+        if(!path) return '';
+        var href = (path.startsWith('/') ? '' : '/') + path;
+        return '<div class="ap-field"><div class="ap-field__label">'+d.icon+' '+d.label+'</div>'
+          +'<div class="ap-field__value"><a href="'+href+'" target="_blank" class="ap-doc-link">عرض المستند '
+          +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a></div></div>';
+      }).join('');
+
+      document.getElementById('panelDocuments').innerHTML=docsGrid
+        ?section('المستندات المرفقة','<div class="ap-fields-grid">'+docsGrid+'</div>')
+        :'<div style="color:#334155;text-align:center;padding:2rem;font-size:0.85rem">لا توجد مستندات مرفقة</div>';
+    }
+
+    /* ── Tab switching ── */
+    document.querySelectorAll('.admin-profile__tab').forEach(function(tab){
+      tab.onclick=function(){
+        var target=tab.dataset.tab;
+        document.querySelectorAll('.admin-profile__tab').forEach(function(t){ t.classList.remove('admin-profile__tab--active'); });
+        tab.classList.add('admin-profile__tab--active');
+        document.querySelectorAll('.admin-profile__panel').forEach(function(p){ p.classList.remove('admin-profile__panel--active'); });
+        document.querySelector('[data-panel="'+target+'"]').classList.add('admin-profile__panel--active');
+      };
+    });
+
+    var traineeCompletionData = null;
+
+    // ── Analytics Integration Logic ──
+    let anaCharts = {};
+
+    async function fetchAnalytics() {
+        try {
+            const url = courseId 
+                ? `/api/trainer/trainees/${traineeId}/analytics?course_id=${courseId}`
+                : `/api/trainer/trainees/${traineeId}/analytics`;
+            const response = await window.authenticatedFetch(url);
+            if(!response.ok) return;
+            const data = await response.json();
+            renderAnalytics(data);
+        } catch(e) { console.error("Analytics Load Error:", e); }
+    }
+
+    function renderAnalytics(data) {
+        // 0. AI Summary box (shown at top if available)
+        const aiSummaryBox = document.getElementById('anaAISummary');
+        if (aiSummaryBox) {
+            if (data.ai_summary) {
+                const scoreBadge = data.ai_match_score != null
+                    ? `<span style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.8rem;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.4);border-radius:999px;font-size:0.8rem;font-weight:800;color:#a5b4fc;margin-bottom:0.85rem;">✦ نسبة المطابقة: ${Math.round(data.ai_match_score)}%</span>`
+                    : '';
+                aiSummaryBox.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;">
+                            <span style="font-size:1.4rem;">🤖</span>
+                            <span style="font-size:0.9rem;font-weight:800;color:#fff;">تحليل الذكاء الاصطناعي للمهارات</span>
+                        </div>
+                        ${scoreBadge}
+                    </div>
+                    <p style="font-size:0.95rem;line-height:1.8;color:#cbd5e1;margin:0;font-style:normal;text-align:justify;text-justify:inter-word;">${data.ai_summary}</p>`;
+                aiSummaryBox.style.display = 'block';
+            } else {
+                aiSummaryBox.style.display = 'none';
+            }
+        }
+
+        // 1. Completion Gauge
+        const pct = data.overall_completion || 0;
+        const circle = document.getElementById('anaCompletionFill');
+        const text = document.getElementById('anaCompletionText');
+        const badge = document.getElementById('anaCompletionBadge');
+        if(circle) {
+            const circumference = 2 * Math.PI * 70;
+            const offset = circumference - (pct / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+        if(text) text.textContent = pct + '%';
+        if(badge) badge.textContent = `نسبة الإنجاز: ${pct}%`;
+
+        // 2. Evaluation Note
+        const evalNote = document.getElementById('anaEvalNote');
+        if(evalNote) evalNote.textContent = data.evaluation || "لا يوجد تقييم متاح حالياً.";
+
+        // 3. Assignments List
+        const assignList = document.getElementById('anaAssignList');
+        if(assignList && data.assignments) {
+            assignList.innerHTML = data.assignments.length ? data.assignments.map(a => {
+                const statusClass = a.status === 'graded' ? 'ana-status-success' : 'ana-status-warning';
+                const statusText = a.status === 'graded' ? `مقيّم: ${a.grade}%` : 'قيد المراجعة';
+                return `
+                <div class="ana-assign-row">
+                    <div>
+                        <div style="font-weight:700; font-size:0.9rem;">${a.title}</div>
+                        <div style="font-size:0.75rem; color:var(--nta-muted);">${a.submitted_at ? new Date(a.submitted_at).toLocaleDateString('ar-EG') : 'لم يُسلَّم'}</div>
+                    </div>
+                    <span class="ana-status-badge ${statusClass}">${statusText}</span>
+                </div>`;
+            }).join('') : '<div style="color:#475569;padding:1rem;text-align:center;font-size:0.85rem;">لا توجد تكليفات مرتبطة بعد.</div>';
+        }
+
+        // 4. Charts — use real radar data from AI if available, else fallback
+        const hasRealRadar = data.radar && data.radar.labels && data.radar.labels.length > 0;
+        const radarLabels = hasRealRadar ? data.radar.labels : ['التقني', 'التحليلي', 'الشخصي', 'الإبداعي', 'الاستراتيجي'];
+        const radarScores = hasRealRadar ? data.radar.scores : [
+            data.skills.technical || 70,
+            data.skills.analytical || 65,
+            data.skills.soft || 75,
+            70, 65
+        ];
+        initAnaCharts(data.skills.technical || 70, radarLabels, radarScores);
+
+        // 5. Recommendations
+        const recsGrid = document.getElementById('anaRecsGrid');
+        if(recsGrid && data.recommendations) {
+            recsGrid.innerHTML = data.recommendations.map(r => `
+                <div style="background:#1e293b; border:1px solid var(--nta-border); border-radius:1rem; padding:1.5rem; border-left:4px solid var(--nta-indigo);">
+                    <div style="font-size:0.7rem; color:var(--nta-indigo); font-weight:800; text-transform:uppercase; margin-bottom:0.5rem;">${r.tag || 'توصية'}</div>
+                    <div style="font-weight:700; color:#fff; margin-bottom:0.5rem;">${r.title}</div>
+                    <div style="font-size:0.85rem; color:var(--nta-muted);">${r.desc}</div>
+                </div>
+            `).join('');
+        }
+    }
+
+    function initAnaCharts(tech, radarLabels, radarScores) {
+        if(anaCharts.skill) anaCharts.skill.destroy();
+        if(anaCharts.radar) anaCharts.radar.destroy();
+
+        const skillCtx = document.getElementById('anaSkillChart').getContext('2d');
+        anaCharts.skill = new Chart(skillCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                datasets: [{
+                    label: 'Progress',
+                    data: [45, 52, 68, 75, tech],
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    fill: true, tension: 0.4, responsive: false
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        const radarCtx = document.getElementById('anaRadarChart').getContext('2d');
+        anaCharts.radar = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    data: radarScores,
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: '#6366f1',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#6366f1',
+                    pointRadius: 4
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        ticks: { display: false, stepSize: 20 },
+                        pointLabels: { color: '#94a3b8', font: { family: 'Tajawal', size: 11, weight: '600' } },
+                        grid: { color: 'rgba(51,65,85,0.5)' },
+                        angleLines: { color: 'rgba(51,65,85,0.5)' },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+    }
+
+    fetchProfile();
+    fetchAnalytics();
+  })();
+  </script>
+</body>
+</html>

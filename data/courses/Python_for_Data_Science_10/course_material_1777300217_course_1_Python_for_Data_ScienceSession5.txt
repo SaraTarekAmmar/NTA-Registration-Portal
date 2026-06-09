@@ -1,0 +1,120 @@
+Session 5: Handling Missing Data and Data Cleaning Techniques
+
+Welcome to Week 3! In the previous sessions, we worked with "perfect" datasets. In the real world, data is messy: it has missing values, duplicates, and incorrect types. Today, we learn the essential art of Data Cleaning.
+
+1. Detecting Missing Data
+
+Pandas primarily uses NaN (Not a Number) to represent missing data. We use isnull() or isna() to find them.
+
+import pandas as pd
+import numpy as np
+
+# Create a messy DataFrame
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie', 'Dave', None],
+    'Age': [25, np.nan, 35, 40, 28],
+    'Score': [85, 90, np.nan, 70, 88]
+}
+df = pd.DataFrame(data)
+
+# Check for nulls in each column
+print(df.isnull().sum())
+
+# View rows with any missing values
+print(df[df.isnull().any(axis=1)])
+
+
+2. Dealing with Missing Values
+
+You generally have three choices when encountering missing data:
+
+Option A: Drop them
+
+Use dropna() if the missing data is sparse and won't significantly bias your results.
+
+# Drop any row containing a NaN
+df_cleaned = df.dropna()
+
+# Drop rows only if 'Score' is missing
+df_subset = df.dropna(subset=['Score'])
+
+
+Option B: Fill them (Imputation)
+
+Use fillna() to replace NaN with a specific value, like the mean, median, or a placeholder.
+
+# Fill missing ages with the average age
+mean_age = df['Age'].mean()
+df['Age'] = df['Age'].fillna(mean_age)
+
+# Fill categorical missing values with 'Unknown'
+df['Name'] = df['Name'].fillna('Unknown User')
+
+
+3. Handling Duplicates
+
+Duplicate records can skew your analysis.
+
+# Find duplicate rows
+print(df.duplicated())
+
+# Remove duplicates
+df = df.drop_duplicates()
+
+
+4. Data Type Conversion
+
+Sometimes data is loaded as the wrong type (e.g., a number loaded as a string).
+
+# Convert a column to numeric (handling errors)
+# df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
+
+# Convert to datetime
+# df['Date'] = pd.to_datetime(df['Date'])
+
+
+5. Renaming and Replacing
+
+# Rename columns
+df = df.rename(columns={'Name': 'Full_Name', 'Score': 'Final_Grade'})
+
+# Replace specific values
+df['Full_Name'] = df['Full_Name'].replace('Alice', 'Alicia')
+
+
+Hands-on Exercise: The Messy Sales Report
+
+Task:
+
+Create the following DataFrame:
+
+raw_data = {
+    'Date': ['2023-01-01', '2023-01-01', '2023-01-02', '2023-01-03', None],
+    'Product': ['Apple', 'Apple', 'Banana', None, 'Orange'],
+    'Sales': [100, 100, np.nan, 150, 200],
+    'Price': ['1.2', '1.2', '0.5', '0.8', 'NaN']
+}
+df_sales = pd.DataFrame(raw_data)
+
+
+Remove Duplicates: Identify and drop the duplicate 'Apple' row.
+
+Handle Nulls: - Fill the missing Product with "Unknown".
+
+Fill the missing Sales value with the median of the Sales column.
+
+Drop the row where Date is missing.
+
+Data Types: Convert the Price column to a numeric float type.
+
+Bonus: Create a new column Revenue by multiplying Sales and Price.
+
+Summary Checklist
+
+[ ] Can you identify which columns have the most missing values?
+
+[ ] Do you know when to dropna() versus fillna()?
+
+[ ] Can you convert a string column to a float?
+
+Next Session: We will learn how to summarize data using GroupBy operations and Pivot Tables!

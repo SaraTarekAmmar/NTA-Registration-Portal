@@ -1,0 +1,34 @@
+{
+  "match_score": 82.0,
+  "evidence": "أظهر المتدرب كفاءة تقنية عالية بنسبة مطابقة إجمالية بلغت 82%، حيث برز تميزه الاستثنائي في الحوسبة العددية باستخدام NumPy بنسبة إتقان كاملة. وبالرغم من مهاراته القوية في لغة بايثون، إلا أنه يحتاج إلى تطوير بسيط في جانب \"المزخرفات\" (Decorators) لتعزيز قدراته البرمجية.",
+  "analysis_json": {
+    "requirement_matches": [
+      {
+        "score": 80,
+        "evidence": "Trainee possesses general Python skills which typically encompass core list manipulation techniques.",
+        "requirement": "List Comprehensions"
+      },
+      {
+        "score": 80,
+        "evidence": "Proficiency in Python and Data Analysis implies familiarity with anonymous functions for data transformation.",
+        "requirement": "Lambda Functions"
+      },
+      {
+        "score": 70,
+        "evidence": "Experience with Flask strongly suggests knowledge of decorators as they are fundamental to Flask routing.",
+        "requirement": "Decorators"
+      },
+      {
+        "score": 80,
+        "evidence": "Data Analysis skill set generally requires mastery of functional programming tools for dataset cleaning.",
+        "requirement": "Map, Filter, and Reduce"
+      },
+      {
+        "score": 100,
+        "evidence": "NumPy is explicitly listed as a core skill in the trainee's profile.",
+        "requirement": "Numerical Computing with NumPy"
+      }
+    ],
+    "overall_match_percentage": 82
+  }
+}

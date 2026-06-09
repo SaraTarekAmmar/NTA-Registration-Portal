@@ -1,0 +1,11 @@
+Welcome to your first assignment in Python for Data Science!
+
+Task:
+1. Create a Python script that calculates the average of a list of numbers.
+2. The script should handle potential errors (like non-numeric values in the list).
+3. Save your script as `average_calculator.py`.
+
+Submission:
+Please upload your `.py` file to the portal before the deadline.
+
+Good luck!

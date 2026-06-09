@@ -1,0 +1,1628 @@
+{
+    "Admin_Portal_Core": [
+        {
+            "file": "admin\\admin-attendance.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-courses.html",
+            "function": "Catalog Manager",
+            "description": "Administrative course catalog view.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-permissions.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-profile.html",
+            "function": "Review Hub",
+            "description": "Candidate profile view and review tabs.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-stage-review.html",
+            "function": "Audit UI",
+            "description": "Detailed multi-stage review interface.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-trainees.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin-users.html",
+            "function": "Applicant Monitor",
+            "description": "Filterable trainee list (Cards/Table).",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\admin.css",
+            "function": "Visual Design",
+            "description": "Dashboard and table-specific styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "admin\\admin.html",
+            "function": "Dashboard Framework",
+            "description": "Main administrative dashboard structure.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\apply_default_credentials.py",
+            "function": "Provisioning Tool",
+            "description": "Staff credential initialization tool.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "admin\\check_users.py",
+            "function": "Audit Tool",
+            "description": "User account verification utility.",
+            "importance": "Medium",
+            "type": "Utility"
+        },
+        {
+            "file": "admin\\index.html",
+            "function": "Auth Portal",
+            "description": "Login page using 'Native-First' role selection for maximum stability.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\recommendations.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\RUN_ADMIN.bat",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\set_admin_password.py",
+            "function": "Security CLI",
+            "description": "CLI tool for staff password hashing.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "admin\\styles.css",
+            "function": "Visual Design",
+            "description": "General portal styling and login UI enhancements.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "admin\\trainee.css",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\__init__.py",
+            "function": "Namespace",
+            "description": "Python package initializer.",
+            "importance": "Low",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\chat\\chat.css",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\chat\\chat.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\chat\\chat.js",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\database\\db_init.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\database\\nta_portal.db",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\database\\verify_skills.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\database\\source_data\\Categories.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "admin\\database\\source_data\\Skill Level.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "admin\\database\\source_data\\Sub Cat 1.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "admin\\header\\header.css",
+            "function": "Navbar Style",
+            "description": "Header styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "admin\\header\\header.html",
+            "function": "Navbar Shell",
+            "description": "Reusable administrative header.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\header\\header.js",
+            "function": "Navbar Logic",
+            "description": "Header logic and authenticatedFetch wrapper.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "admin\\images\\analytical-background.png",
+            "function": "Asset",
+            "description": "UI background graphic.",
+            "importance": "Low",
+            "type": "Media"
+        },
+        {
+            "file": "admin\\images\\How-to-create-an-online-course.jpg.webp",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\images\\how-to-sell-online-learning-courses-.jpg",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\images\\images (1).jpg",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\images\\logo2.png",
+            "function": "Asset",
+            "description": "Secondary logo asset.",
+            "importance": "Low",
+            "type": "Media"
+        },
+        {
+            "file": "admin\\images\\NTA-Logo1.png",
+            "function": "Asset",
+            "description": "Primary NTA branding asset.",
+            "importance": "Low",
+            "type": "Media"
+        }
+    ],
+    "Admin_Backend": [
+        {
+            "file": "admin\\backend\\.env",
+            "function": "Environment",
+            "description": "Environment variables (DB/Security).",
+            "importance": "Critical",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\backend\\main.py",
+            "function": "API Entry",
+            "description": "FastAPI entry point.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\requirements.txt",
+            "function": "Dependencies",
+            "description": "Python dependency manifest.",
+            "importance": "High",
+            "type": "Config"
+        },
+        {
+            "file": "admin\\backend\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\auth.py",
+            "function": "Security Core",
+            "description": "JWT and security provider.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\chat_engine.py",
+            "function": "LLM Engine",
+            "description": "AI assistant role orchestrator.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\database.py",
+            "function": "DB Engine",
+            "description": "SQLAlchemy engine and session provider.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\logger_util.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\notifications.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\security.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\upload_manager.py",
+            "function": "Storage Core",
+            "description": "Physical file storage handler.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\admin.py",
+            "function": "Pipeline API",
+            "description": "Endpoints for applicant review.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\ai_services.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\chat.py",
+            "function": "AI API",
+            "description": "Staff chatbot endpoints.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\courses.py",
+            "function": "Course API",
+            "description": "Endpoints for course CRUD.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\schemas\\admin.py",
+            "function": "Data Validation",
+            "description": "Pydantic review models.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\schemas\\ai_integration.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\schemas\\auth.py",
+            "function": "Data Validation",
+            "description": "Pydantic security models.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\schemas\\course.py",
+            "function": "Data Validation",
+            "description": "Pydantic course models.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\schemas\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\core\\exam_analyzer.py",
+            "function": "Analytical Engine",
+            "description": "Calculates skill density and CEFR levels from exam results.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\backend\\routers\\exams.py",
+            "function": "Exams API",
+            "description": "Secure endpoints for exam retrieval and submission.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "admin\\database\\schema.sql",
+            "function": "DB Schema",
+            "description": "MySQL definition including Stage 4 exam tables.",
+            "importance": "Critical",
+            "type": "Data"
+        }
+    ],
+    "User_Portal_Core": [
+        {
+            "file": "user\\check_user_data.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\courses.html",
+            "function": "Catalog UI",
+            "description": "Trainee course catalog and enrollment.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\enrich_user_data.py",
+            "function": "Seeding script",
+            "description": "Trainee profile seeder.",
+            "importance": "Medium",
+            "type": "Utility"
+        },
+        {
+            "file": "user\\stage 4 exams.html",
+            "function": "Stage 4 Exam UI",
+            "description": "Dynamic portal for General Knowledge and Language exams.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\index.html",
+            "function": "Entry Portal",
+            "description": "Trainee login page with icons.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\profile.html",
+            "function": "Self-Service UI",
+            "description": "Trainee profile view with integrated 'Edit Profile' modal.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\registration.css",
+            "function": "Visual Design",
+            "description": "Stepper and form-group styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "user\\registration.html",
+            "function": "Onboarding UI",
+            "description": "11-step interactive registration form.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\registration.js",
+            "function": "Form Engine",
+            "description": "Registration logic, validation, and uploads.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\RUN_USER.bat",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "user\\styles.css",
+            "function": "Visual Design",
+            "description": "Base portal styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "user\\test_db_issue.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\trainee-permissions.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\trainee.css",
+            "function": "Visual Design",
+            "description": "Trainee-specific layout and theme.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "user\\trainer-dashboard.html",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\__init__.py",
+            "function": "Namespace",
+            "description": "Python package initializer.",
+            "importance": "Low",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\chat\\chat.css",
+            "function": "AI Style",
+            "description": "AI Assistant UI styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "user\\chat\\chat.html",
+            "function": "AI UI",
+            "description": "AI Assistant interface.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\chat\\chat.js",
+            "function": "AI Logic",
+            "description": "AI Assistant messaging logic.",
+            "importance": "Medium",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\header\\header.css",
+            "function": "Navbar Style",
+            "description": "Trainee header styling.",
+            "importance": "Medium",
+            "type": "Styling"
+        },
+        {
+            "file": "user\\header\\header.html",
+            "function": "Navbar Shell",
+            "description": "Reusable trainee header.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\header\\header.js",
+            "function": "Navbar Logic",
+            "description": "Trainee header logic.",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "user\\images\\analytical-background.png",
+            "function": "Asset",
+            "description": "UI background.",
+            "importance": "Low",
+            "type": "Media"
+        },
+        {
+            "file": "user\\images\\How-to-create-an-online-course.jpg.webp",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "user\\images\\how-to-sell-online-learning-courses-.jpg",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "user\\images\\images (1).jpg",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "user\\images\\logo2.png",
+            "function": "Asset",
+            "description": "Branding asset.",
+            "importance": "Low",
+            "type": "Media"
+        },
+        {
+            "file": "user\\images\\NTA-Logo1.png",
+            "function": "Asset",
+            "description": "Branding asset.",
+            "importance": "Low",
+            "type": "Media"
+        }
+    ],
+    "User_Backend": [
+        {
+            "file": "user\\backend\\.env",
+            "function": "Environment",
+            "description": "Environment variables.",
+            "importance": "Critical",
+            "type": "Config"
+        },
+        {
+            "file": "user\\backend\\check_models.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\list_clean.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\list_models_detailed.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\list_simple.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\main.py",
+            "function": "API Entry",
+            "description": "FastAPI entry point.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\models_list.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "user\\backend\\requirements.txt",
+            "function": "Dependencies",
+            "description": "Dependency manifest.",
+            "importance": "High",
+            "type": "Config"
+        },
+        {
+            "file": "user\\backend\\test_gemini.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\test_guest_chat.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\test_security.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\auth.py",
+            "function": "Security Core",
+            "description": "JWT security logic.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\chat_engine.py",
+            "function": "LLM Engine",
+            "description": "Trainee AI logic.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\database.py",
+            "function": "DB Engine",
+            "description": "DB connection logic.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\logger_util.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\upload_manager.py",
+            "function": "Storage Core",
+            "description": "Document storage logic.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\core\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\ai_services.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\chat.py",
+            "function": "AI API",
+            "description": "Trainee AI endpoints.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\courses.py",
+            "function": "Enrollment API",
+            "description": "Enrollment endpoints.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\exams.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\lookups.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\permissions.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\skills.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\trainees.py",
+            "function": "Onboarding API",
+            "description": "Endpoints for registration and secure profile merging.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\routers\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\ai_integration.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\auth.py",
+            "function": "Data Validation",
+            "description": "Security Pydantic models.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\course.py",
+            "function": "Data Validation",
+            "description": "Course Pydantic models.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\permission.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\trainee.py",
+            "function": "Data Validation",
+            "description": "Pydantic models with CID, Age (16-60), and Phone validation.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "user\\backend\\schemas\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        }
+    ],
+    "Test_Data_Repository": [
+        {
+            "file": "user\\database\\fake_data\\trainee_01.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 01.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_02.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 02.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_03.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 03.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_04.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 04.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_05.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 05.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_06.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 06.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_07.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 07.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_08.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 08.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_09.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 09.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_10.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 10.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_11.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 11.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_12.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 12.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_13.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 13.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_14.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 14.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_15.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 15.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_16.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 16.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_17.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 17.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_18.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 18.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_19.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 19.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_20.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 20.",
+            "importance": "Low",
+            "type": "Data"
+        },
+        {
+            "file": "user\\database\\fake_data\\trainee_21.json",
+            "function": "Mock Profile",
+            "description": "Test candidate 21.",
+            "importance": "Low",
+            "type": "Data"
+        }
+    ],
+    "Deployment_Utilities": [
+        {
+            "file": "deploy\\check_db.py",
+            "function": "Count Audit",
+            "description": "Database count verification.",
+            "importance": "Medium",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\check_encoding.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\clear_test_user.py",
+            "function": "Reset Script",
+            "description": "Fresh-start utility for test account.",
+            "importance": "Low",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\credentials.txt",
+            "function": "Reference Manual",
+            "description": "Startup reference and accounts.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "deploy\\debug_editor.py",
+            "function": "Maintenance CLI",
+            "description": "Access issue diagnostic tool.",
+            "importance": "Low",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\drop_db.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\enrich_user_data.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\fix_all_passwords.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\fix_duplicates.py",
+            "function": "Maintenance CLI",
+            "description": "Database cleansing utility.",
+            "importance": "Low",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\fix_editor_national_id.py",
+            "function": "Maintenance CLI",
+            "description": "Staff ID correction utility.",
+            "importance": "Low",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\fix_editor_password.py",
+            "function": "Maintenance CLI",
+            "description": "Staff password recovery tool.",
+            "importance": "Medium",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\init_db.py",
+            "function": "DB Provisioner",
+            "description": "Database and schema initialisation.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\install_trainees.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\make_urls_dynamic.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\requirements.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "deploy\\RUN_SYSTEM.bat",
+            "function": "Master Wrapper",
+            "description": "One-click Windows launcher wrapper.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\run_system.py",
+            "function": "Master Logic",
+            "description": "Master cross-platform launcher logic.",
+            "importance": "Critical",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\run_system.sh",
+            "function": "Shell Script",
+            "description": "Linux/Mac shell launcher.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\seed_dropdown_data.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "deploy\\seed_fake_data.py",
+            "function": "Seeding Engine",
+            "description": "Dashboard test data injector.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\setup_tools.bat",
+            "function": "Environment Tool",
+            "description": "Automated dependency installer.",
+            "importance": "High",
+            "type": "Utility"
+        },
+        {
+            "file": "deploy\\trainee_accounts.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "deploy\\update_credentials.py",
+            "function": "Maintenance CLI",
+            "description": "Global credential management.",
+            "importance": "Low",
+            "type": "Utility"
+        }
+    ],
+    "System_Documentation": [
+        {
+            "file": "documentation\\admin_implementation_plan.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\chatbot_system_message.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\credentials.txt",
+            "function": "Access Doc",
+            "description": "Staff and Test account storage.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\database_access.md",
+            "function": "SQL Doc",
+            "description": "SQL verification queries manual.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\database_structure.txt",
+            "function": "Schema Doc",
+            "description": "Schema and JSON table guide.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\data_fields_schema.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\file_dictionary.json",
+            "function": "Inventory Doc",
+            "description": "Continuous 1:1 mirror of the filesystem.",
+            "importance": "Critical",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\frontend_guide.md",
+            "function": "Frontend Doc",
+            "description": "Frontend UI and API mapping guide.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\full_database_export.sql",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\full_schema.sql",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\Project_Documentation.txt",
+            "function": "Master Doc",
+            "description": "Master execution guide.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\registration_fields_schema.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\registration_field_requirements.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\sample_trainees.csv",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\sample_trainers.csv",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "documentation\\User-implementation_plan.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflows.md",
+            "function": "Business Doc",
+            "description": "Role-based business workflows.",
+            "importance": "High",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflow_admin.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflow_editor.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflow_super_admin.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflow_trainee.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "documentation\\workflow_trainer.md",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        }
+    ],
+    "Super_Admin_AI_Proxy": [
+        {
+            "file": "superadmin\\RUN_SUPERADMIN.bat",
+            "function": "Component Launcher",
+            "description": "Isolated startup utility for the Super Admin ecosystem.",
+            "importance": "Medium",
+            "type": "Utility"
+        },
+        {
+            "file": "superadmin\\backend\\.env",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "superadmin\\backend\\fix_pydantic.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\main.py",
+            "function": "Gateway Entry",
+            "description": "FastAPI entry point. Serves the dashboard at root and orchestrates AI service requests.",
+            "importance": "Critical",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\python",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "superadmin\\backend\\requirements.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "superadmin\\backend\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\core\\database.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\core\\security.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\core\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\routers\\ai_proxy.py",
+            "function": "Dispatch Core",
+            "description": "Active proxy for forwarding payloads to AI microservices (Ports 2341-2345).",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\routers\\attendance.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\routers\\auth.py",
+            "function": "Security Gateway",
+            "description": "Role-based authentication for Super Admin access.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\routers\\stats.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\backend\\routers\\__init__.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "superadmin\\database\\schema.sql",
+            "function": "Table Reference",
+            "description": "Reference DDL for AI-specific tables (attendance, cohorts, etc.).",
+            "importance": "Medium",
+            "type": "Data"
+        },
+        {
+            "file": "superadmin\\frontend\\index.html",
+            "function": "Control UI",
+            "description": "Integrated AI Control Center dashboard (Glassmorphism design).",
+            "importance": "High",
+            "type": "Frontend"
+        },
+        {
+            "file": "superadmin\\frontend\\css\\superadmin.css",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "superadmin\\frontend\\js\\superadmin.js",
+            "function": "Orchestration Logic",
+            "description": "Dynamic dispatcher logic and service health monitoring.",
+            "importance": "High",
+            "type": "Frontend"
+        }
+    ],
+    "AI_Microservices_Registry": [
+        {
+            "file": "AI Services\\User ID Review README.md",
+            "function": "Documentation",
+            "description": "Documentation for the National ID OCR verification service.",
+            "importance": "Medium",
+            "type": "Doc"
+        }
+    ],
+    "Auto_Generated_and_Environment": [],
+    "New_Files_Audit": [
+        {
+            "file": "cleanup_dict.py",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Backend"
+        },
+        {
+            "file": "create_logging_table.sql",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "seed_extension.sql",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "update_schema.sql",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "AI Services\\Electronic Sorting\\electronic_sorting.py",
+            "function": "4-Phase Auditor",
+            "description": "Core Admission AI logic.",
+            "importance": "High",
+            "type": "Backend"
+        },
+        {
+            "file": "AI Services\\global_configuration.md",
+            "function": "Master Registry",
+            "description": "Central AI service configuration.",
+            "importance": "Critical",
+            "type": "Doc"
+        },
+        {
+            "file": "AI Services\\API Schemas\\ai_service_payloads.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "data\\matching_course_10\\course.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "data\\matching_course_10\\trainees.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "data\\matching_course_10\\trainers.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "data\\matching_course_8\\course.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        },
+        {
+            "file": "data\\matching_course_8\\trainees.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "data\\matching_course_8\\trainers.json",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "Ghada Abdullatif\\ghada_certificate.png",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "Ghada Abdullatif\\ghada_cv.pdf",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "Ghada Abdullatif\\ghada_front_photo.png",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "Ghada Abdullatif\\ghada_id.png",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Config"
+        },
+        {
+            "file": "Ghada Abdullatif\\trainer_1_Ghada_Abdullatif.txt",
+            "function": "New Component",
+            "description": "Newly added system file.",
+            "importance": "Medium",
+            "type": "Doc"
+        }
+    ],
+    "Standardized_Exams": [
+        {
+            "file": "data\\standard_exams\\arabic.json",
+            "function": "Exam Content",
+            "description": "Arabic language exam with linguistic pillars.",
+            "importance": "Medium",
+            "type": "Data"
+        },
+        {
+            "file": "data\\standard_exams\\english.json",
+            "function": "Exam Content",
+            "description": "English language exam with CEFR mapping.",
+            "importance": "Medium",
+            "type": "Data"
+        },
+        {
+            "file": "data\\standard_exams\\public_knowledge.json",
+            "function": "Exam Content",
+            "description": "General knowledge and culture exam.",
+            "importance": "Medium",
+            "type": "Data"
+        }
+    ]
+}

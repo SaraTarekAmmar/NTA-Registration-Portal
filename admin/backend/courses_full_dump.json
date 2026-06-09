@@ -1,0 +1,230 @@
+[
+  {
+    "id": 8,
+    "title": "التحول الرقمي في المؤسسات",
+    "title_ar": null,
+    "short_name": null,
+    "classification": null,
+    "stages_json": null,
+    "batch_data_json": null,
+    "description": "فهم أساسيات التحول الرقمي وكيفية تطبيقه في القطاع الحكومي.",
+    "image_url": "images/course2.jpg",
+    "duration_weeks": 8,
+    "total_sessions": 16,
+    "skill_level": "Beginner",
+    "status": "Upcoming",
+    "has_active_quiz": 0,
+    "quiz_json": null,
+    "is_public": 1,
+    "sessions": [],
+    "trainers": [],
+    "applications": [
+      {
+        "id": 78,
+        "user_id": 68,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "باسم محمد الغزالي",
+        "full_name_en": "Bassem Mohamed El-Ghazaly",
+        "national_id": "29008171000016"
+      },
+      {
+        "id": 79,
+        "user_id": 69,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "لبنى حسين الشناوي",
+        "full_name_en": "Lobna Hussein El-Shinawi",
+        "national_id": "29403071000017"
+      },
+      {
+        "id": 80,
+        "user_id": 70,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "كريم عصام الدين فهمي",
+        "full_name_en": "Karim Essam El-Din Fahmy",
+        "national_id": "29109141000018"
+      }
+    ],
+    "private_assignments": [],
+    "cohorts": [],
+    "topic_priorities": [],
+    "quizzes": []
+  },
+  {
+    "id": 10,
+    "title": "Python for Data Science",
+    "title_ar": null,
+    "short_name": null,
+    "classification": null,
+    "stages_json": null,
+    "batch_data_json": null,
+    "description": "Python for Data Science Masterclass",
+    "image_url": "images/python_ds.jpg",
+    "duration_weeks": 8,
+    "total_sessions": 16,
+    "skill_level": "Intermediate",
+    "status": "Upcoming",
+    "has_active_quiz": 0,
+    "quiz_json": null,
+    "is_public": 1,
+    "sessions": [
+      {
+        "id": 1,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 1: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777299848_course_1_Python_for_Data_ScienceSession1.txt\"}"
+      },
+      {
+        "id": 2,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 2: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777299888_course_1_Python_for_Data_ScienceSession2.txt\"}"
+      },
+      {
+        "id": 3,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 3: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777299931_course_1_Python_for_Data_ScienceSession3.txt\"}"
+      },
+      {
+        "id": 4,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 4: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300023_course_1_Python_for_Data_ScienceSession4.txt\"}"
+      },
+      {
+        "id": 5,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 5: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300217_course_1_Python_for_Data_ScienceSession5.txt\"}"
+      },
+      {
+        "id": 6,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 6: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300264_course_1_Python_for_Data_ScienceSession6.txt\"}"
+      },
+      {
+        "id": 7,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 7: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300312_course_1_Python_for_Data_ScienceSession7.txt\"}"
+      },
+      {
+        "id": 8,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 8: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300353_course_1_Python_for_Data_ScienceSession8.txt\"}"
+      },
+      {
+        "id": 9,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 9: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300390_course_1_Python_for_Data_ScienceSession9.txt\"}"
+      },
+      {
+        "id": 10,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 10: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300432_course_1_Python_for_Data_ScienceSession10.txt\"}"
+      },
+      {
+        "id": 11,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 11: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300475_course_1_Python_for_Data_ScienceSession11.txt\"}"
+      },
+      {
+        "id": 12,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 12: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300548_course_1_Python_for_Data_ScienceSession12.txt\"}"
+      },
+      {
+        "id": 13,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 13: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300589_course_1_Python_for_Data_ScienceSession13.txt\"}"
+      },
+      {
+        "id": 14,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 14: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300630_course_1_Python_for_Data_ScienceSession14.txt\"}"
+      },
+      {
+        "id": 15,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 15: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300716_course_1_Python_for_Data_ScienceSession15.txt\"}"
+      },
+      {
+        "id": 16,
+        "course_id": 10,
+        "session_date": null,
+        "topic": "Session 16: course_1_Python_for_Data_Science",
+        "materials": "{\"file_path\": \"data/courses/Python_for_Data_Science_10/course_material_1777300768_course_1_Python_for_Data_ScienceSession16.txt\"}"
+      }
+    ],
+    "trainers": [
+      {
+        "id": 1,
+        "course_id": 10,
+        "trainer_national_id": "29404252103456",
+        "full_name_ar": "غادة عبد اللطيف",
+        "full_name_en": "Ghada Abdullatif",
+        "email": "ghada.abdullatif@example.com"
+      }
+    ],
+    "applications": [
+      {
+        "id": 75,
+        "user_id": 65,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "رانيا يوسف البيطار",
+        "full_name_en": "Rania Youssef El-Baytar",
+        "national_id": "29501301000013"
+      },
+      {
+        "id": 76,
+        "user_id": 66,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "طارق سيد الباز",
+        "full_name_en": "Tarek Sayed El-Baz",
+        "national_id": "29207051000014"
+      },
+      {
+        "id": 77,
+        "user_id": 67,
+        "status": "approved",
+        "applied_at": "2026-04-28T11:54:35",
+        "full_name_ar": "منى عاطف زهران",
+        "full_name_en": "Mona Atef Zahran",
+        "national_id": "29604221000015"
+      }
+    ],
+    "private_assignments": [],
+    "cohorts": [],
+    "topic_priorities": [],
+    "quizzes": []
+  }
+]

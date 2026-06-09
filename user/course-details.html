@@ -1,0 +1,964 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>عرض الدورة - الأكاديمية الوطنية للتدريب</title>
+    <meta
+      name="description"
+      content="عرض تفاصيل الدورة التدريبية ومحتوياتها ومواعيدها في الأكاديمية الوطنية للتدريب"
+    />
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="course-details.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="trainee-app">
+    <div class="trainee-bg"></div>
+
+    <div id="ntaHeader"></div>
+
+    <main class="cd-main">
+      <!-- ── Back Link ── -->
+      <a href="courses.html?filter=my" class="cd-back-link">
+        <i data-lucide="arrow-right"></i>
+        العودة إلى دوراتي
+      </a>
+
+      <!-- ── Page Header ── -->
+      <div class="cd-page-header">
+        <div class="cd-page-header__meta">
+          <nav class="cd-breadcrumb" aria-label="مسار التنقل">
+            <span>الرئيسية</span>
+            <i data-lucide="chevron-left" class="cd-breadcrumb__sep"></i>
+            <span>دوراتي</span>
+            <i data-lucide="chevron-left" class="cd-breadcrumb__sep"></i>
+            <span class="cd-breadcrumb__active" id="breadcrumbActive"
+              >عرض الدورة</span
+            >
+          </nav>
+          <h1 class="cd-page-title" id="courseTitle">جاري تحميل الدورة...</h1>
+        </div>
+        <div class="cd-page-header__actions">
+          <button
+            type="button"
+            class="cd-action-btn cd-action-btn--perm"
+            id="permissionsBtn"
+            title="عرض أذونات الدورة"
+          >
+            <i data-lucide="shield-check"></i>
+            <span>الأذونات</span>
+          </button>
+          <button
+            type="button"
+            class="cd-action-btn cd-action-btn--quiz"
+            id="quizBtn"
+            title="بدء الاختبار"
+          >
+            <i data-lucide="file-edit"></i>
+            <span>الاختبارات</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Progress Banner ── -->
+      <div class="cd-progress-banner">
+        <div class="cd-progress-banner__icon">
+          <i data-lucide="trending-up"></i>
+        </div>
+        <div class="cd-progress-banner__info">
+          <p class="cd-progress-banner__label">مستوى التقدم الكلي</p>
+          <h4 class="cd-progress-banner__value" id="progressValue">65%</h4>
+        </div>
+        <div class="cd-progress-banner__bar-wrap">
+          <div class="cd-progress-bar">
+            <div
+              class="cd-progress-bar__fill"
+              id="progressFill"
+              style="width: 65%"
+            ></div>
+          </div>
+          <p class="cd-progress-banner__bar-label" id="progressLabel">
+            تم إنجاز 16 من أصل 24 وحدة تعليمية
+          </p>
+        </div>
+        <div class="cd-progress-banner__stats">
+          <div class="cd-stat-pill">
+            <i data-lucide="calendar"></i>
+            <span id="statWeeks">—</span>
+          </div>
+          <div class="cd-stat-pill">
+            <i data-lucide="layers"></i>
+            <span id="statSessions">—</span>
+          </div>
+          <div class="cd-stat-pill cd-stat-pill--level">
+            <i data-lucide="bar-chart-2"></i>
+            <span id="statLevel">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Main Grid ── -->
+      <div class="cd-grid">
+        <!-- ══ Main Column ══ -->
+        <div class="cd-col-main">
+          <!-- Announcements -->
+          <section class="cd-card" id="announcementsSection">
+            <div class="cd-card__header">
+              <div class="cd-card__icon cd-card__icon--blue">
+                <i data-lucide="megaphone"></i>
+              </div>
+              <h2 class="cd-card__title">آخر الإعلانات والتنبيهات</h2>
+            </div>
+
+            <div class="cd-announcements" id="announcementsList">
+              <!-- Announcement Item -->
+              <div class="cd-announcement">
+                <div class="cd-announcement__top">
+                  <h4 class="cd-announcement__title">
+                    تعديل موعد تسليم المشروع النهائي
+                  </h4>
+                  <span class="cd-badge cd-badge--new">تحديث هام</span>
+                </div>
+                <p class="cd-announcement__body">
+                  يرجى العلم أنه تم تمديد فترة تسليم المشاريع النهائية لمدة 48
+                  ساعة إضافية. الموعد النهائي الجديد هو يوم الخميس القادم الساعة
+                  11:59 مساءً.
+                </p>
+                <div class="cd-announcement__footer">
+                  <i data-lucide="clock"></i>
+                  <span>منذ 45 دقيقة</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="cd-sessions-section" id="mat-root">
+            <!-- ── Scoped styles ── -->
+            <style>
+              /* ── Reset inside scope ── */
+              #mat-root *,
+              #mat-root *::before,
+              #mat-root *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+              }
+
+              /* ── Section header ── */
+              #mat-root .ms-header {
+                display: flex;
+                align-items: center;
+                gap: 0.85rem;
+                margin-bottom: 2rem;
+                padding-bottom: 1.25rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+              }
+
+              #mat-root .ms-header__icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                background: rgba(16, 185, 129, 0.14);
+                color: #34d399;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+              }
+              #mat-root .ms-header__icon svg {
+                width: 20px;
+                height: 20px;
+              }
+
+              #mat-root .ms-header__text {
+                flex: 1;
+              }
+              #mat-root .ms-header__title {
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: #f1f5f9;
+                line-height: 1.2;
+              }
+              #mat-root .ms-header__sub {
+                font-size: 0.75rem;
+                color: #64748b;
+                margin-top: 2px;
+              }
+
+              /* ── Overall progress bar ── */
+              #mat-root .ms-overall {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                background: rgba(99, 102, 241, 0.07);
+                border: 1px solid rgba(99, 102, 241, 0.16);
+                border-radius: 14px;
+                padding: 1rem 1.25rem;
+                margin-bottom: 2rem;
+              }
+
+              #mat-root .ms-overall__labels {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                flex-shrink: 0;
+                min-width: 72px;
+              }
+              #mat-root .ms-overall__pct {
+                font-size: 1.6rem;
+                font-weight: 800;
+                color: #f1f5f9;
+                line-height: 1;
+              }
+              #mat-root .ms-overall__caption {
+                font-size: 0.7rem;
+                color: #64748b;
+              }
+
+              #mat-root .ms-overall__bar-wrap {
+                flex: 1;
+              }
+              #mat-root .ms-overall__bar-track {
+                height: 6px;
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 99px;
+                overflow: hidden;
+                margin-bottom: 0.4rem;
+              }
+              #mat-root .ms-overall__bar-fill {
+                height: 100%;
+                border-radius: 99px;
+                background: #6366f1;
+                transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+              }
+              #mat-root .ms-overall__stats {
+                display: flex;
+                gap: 1rem;
+              }
+              #mat-root .ms-stat {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 0.72rem;
+                color: #94a3b8;
+              }
+              #mat-root .ms-stat__dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                flex-shrink: 0;
+              }
+
+              /* ── Week sections ── */
+              #mat-root .week-block {
+                margin-bottom: 2.25rem;
+              }
+              #mat-root .week-block:last-child {
+                margin-bottom: 0;
+              }
+
+              #mat-root .week-head {
+                display: flex;
+                align-items: center;
+                gap: 0.7rem;
+                margin-bottom: 0.85rem;
+              }
+
+              #mat-root .week-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 28px;
+                height: 22px;
+                padding: 0 8px;
+                border-radius: 99px;
+                font-size: 0.65rem;
+                font-weight: 800;
+                letter-spacing: 0.05em;
+                background: rgba(99, 102, 241, 0.14);
+                border: 1px solid rgba(99, 102, 241, 0.28);
+                color: #a5b4fc;
+                flex-shrink: 0;
+              }
+
+              #mat-root .week-title {
+                font-size: 0.9rem;
+                font-weight: 700;
+                color: #f1f5f9;
+                flex: 1;
+              }
+
+              #mat-root .week-frac {
+                font-size: 0.72rem;
+                color: #64748b;
+                flex-shrink: 0;
+              }
+
+              #mat-root .week-bar-row {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                margin-bottom: 1rem;
+              }
+              #mat-root .week-bar-track {
+                flex: 1;
+                height: 3px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 99px;
+                overflow: hidden;
+              }
+              #mat-root .week-bar-fill {
+                height: 100%;
+                border-radius: 99px;
+                background: #34d399;
+                transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+              }
+              #mat-root .week-bar-pct {
+                font-size: 0.68rem;
+                font-weight: 700;
+                color: #34d399;
+                min-width: 26px;
+                text-align: left;
+              }
+
+              /* ── Timeline track ── */
+              #mat-root .week-timeline {
+                display: grid;
+                grid-template-columns: 18px 1fr;
+                gap: 0 16px;
+              }
+
+              #mat-root .tl-spine {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+
+              #mat-root .tl-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 2px solid rgba(255, 255, 255, 0.15);
+                background: #0f172a;
+                flex-shrink: 0;
+                margin-top: 14px;
+                transition:
+                  background 0.3s,
+                  border-color 0.3s,
+                  box-shadow 0.3s;
+                position: relative;
+                z-index: 1;
+              }
+              #mat-root .tl-dot.is-done {
+                background: #34d399;
+                border-color: #34d399;
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+              }
+              #mat-root .tl-dot.is-active {
+                background: #6366f1;
+                border-color: #6366f1;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+              }
+              #mat-root .tl-dot.is-locked {
+                border-color: rgba(255, 255, 255, 0.08);
+                background: rgba(255, 255, 255, 0.03);
+              }
+
+              #mat-root .tl-line {
+                flex: 1;
+                width: 2px;
+                background: rgba(255, 255, 255, 0.06);
+                min-height: 10px;
+                margin: 3px 0;
+                border-radius: 2px;
+                transition: background 0.4s;
+              }
+              #mat-root .tl-line.is-done {
+                background: rgba(16, 185, 129, 0.35);
+              }
+
+              #mat-root .tl-row {
+                padding-bottom: 10px;
+              }
+              #mat-root .tl-row:last-child {
+                padding-bottom: 0;
+              }
+
+              /* ── Material card ── */
+              #mat-root .mat-card {
+                display: flex;
+                flex-direction: column;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.07);
+                background: rgba(15, 23, 42, 0.5);
+                overflow: hidden;
+                cursor: pointer;
+                transition:
+                  border-color 0.2s,
+                  background 0.2s,
+                  transform 0.18s;
+                position: relative;
+              }
+              #mat-root .mat-card:hover {
+                border-color: rgba(255, 255, 255, 0.14);
+                background: rgba(15, 23, 42, 0.75);
+                transform: translateY(-1px);
+              }
+              #mat-root .mat-card.is-done {
+                border-color: rgba(16, 185, 129, 0.3);
+                background: rgba(16, 185, 129, 0.04);
+              }
+              #mat-root .mat-card.is-done:hover {
+                border-color: rgba(16, 185, 129, 0.55);
+              }
+              #mat-root .mat-card.is-expanded {
+                border-color: rgba(99, 102, 241, 0.45);
+                border-radius: 14px 14px 0 0;
+                border-bottom-color: transparent;
+                transform: none;
+              }
+              #mat-root .mat-card.is-locked {
+                opacity: 0.42;
+                cursor: not-allowed;
+                pointer-events: none;
+              }
+
+              /* done left-edge accent */
+              #mat-root .mat-card.is-done::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 3px;
+                height: 100%;
+                background: #34d399;
+                border-radius: 0 14px 14px 0;
+              }
+
+              /* ── Card body ── */
+              #mat-root .mat-body {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 14px 16px;
+              }
+
+              #mat-root .mat-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 11px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                transition: transform 0.2s;
+              }
+              #mat-root .mat-card:hover .mat-icon {
+                transform: scale(1.06);
+              }
+              #mat-root .mat-icon svg {
+                width: 18px;
+                height: 18px;
+              }
+              #mat-root .mi-pdf {
+                background: rgba(239, 68, 68, 0.12);
+                color: #f87171;
+              }
+              #mat-root .mi-video {
+                background: rgba(168, 85, 247, 0.12);
+                color: #c084fc;
+              }
+              #mat-root .mi-code {
+                background: rgba(59, 130, 246, 0.12);
+                color: #3b82f6;
+              }
+              #mat-root .mi-quiz {
+                background: rgba(249, 115, 22, 0.12);
+                color: #f97316;
+              }
+
+              #mat-root .mat-info {
+                flex: 1;
+                min-width: 0;
+              }
+              #mat-root .mat-name {
+                font-size: 0.875rem;
+                font-weight: 700;
+                color: #f1f5f9;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 3px;
+              }
+              #mat-root .mat-meta {
+                font-size: 0.72rem;
+                color: #64748b;
+              }
+
+              #mat-root .mat-tags {
+                display: flex;
+                gap: 5px;
+                margin-top: 6px;
+                flex-wrap: wrap;
+              }
+              #mat-root .mat-tag {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 99px;
+                font-size: 0.62rem;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+              }
+              #mat-root .tag-type {
+                background: rgba(99, 102, 241, 0.12);
+                border: 1px solid rgba(99, 102, 241, 0.25);
+                color: #a5b4fc;
+              }
+              #mat-root .tag-dur {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                color: #94a3b8;
+              }
+              #mat-root .tag-done {
+                background: rgba(16, 185, 129, 0.12);
+                border: 1px solid rgba(16, 185, 129, 0.28);
+                color: #6ee7b7;
+              }
+
+              #mat-root .mat-right {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+              }
+
+              #mat-root .mat-status {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              #mat-root .mat-status svg {
+                width: 13px;
+                height: 13px;
+                display: block;
+              }
+              #mat-root .ms-done {
+                background: rgba(16, 185, 129, 0.15);
+                color: #10b981;
+              }
+              #mat-root .ms-idle {
+                background: rgba(255, 255, 255, 0.05);
+                color: #475569;
+              }
+              #mat-root .ms-locked {
+                background: rgba(255, 255, 255, 0.04);
+                color: #334155;
+              }
+
+              #mat-root .mat-chevron {
+                color: #475569;
+                transition:
+                  transform 0.22s,
+                  color 0.2s;
+              }
+              #mat-root .mat-chevron svg {
+                width: 15px;
+                height: 15px;
+                display: block;
+              }
+              #mat-root .mat-chevron.open {
+                transform: rotate(180deg);
+                color: #6366f1;
+              }
+
+              /* ── Expand panel ── */
+              #mat-root .mat-panel {
+                border: 1px solid rgba(99, 102, 241, 0.3);
+                border-top: none;
+                border-radius: 0 0 14px 14px;
+                background: rgba(99, 102, 241, 0.04);
+                overflow: hidden;
+                max-height: 0;
+                transition:
+                  max-height 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+                  padding 0.25s;
+              }
+              #mat-root .mat-panel.open {
+                max-height: 200px;
+              }
+
+              #mat-root .mat-panel-inner {
+                padding: 14px 16px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+              }
+
+              #mat-root .mat-detail {
+                font-size: 0.8rem;
+                color: #94a3b8;
+                line-height: 1.7;
+                border-right: 2px solid rgba(99, 102, 241, 0.35);
+                padding-right: 10px;
+              }
+
+              #mat-root .mat-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+              }
+
+              /* action buttons */
+              #mat-root .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border-radius: 9px;
+                font-size: 0.78rem;
+                font-weight: 700;
+                font-family: inherit;
+                cursor: pointer;
+                border: 1px solid transparent;
+                transition: all 0.16s;
+                text-decoration: none;
+                white-space: nowrap;
+              }
+              #mat-root .btn svg {
+                width: 14px;
+                height: 14px;
+                display: block;
+              }
+
+              #mat-root .btn-pdf {
+                background: rgba(239, 68, 68, 0.1);
+                border-color: rgba(239, 68, 68, 0.3);
+                color: #fca5a5;
+              }
+              #mat-root .btn-pdf:hover {
+                background: rgba(239, 68, 68, 0.2);
+                border-color: rgba(239, 68, 68, 0.6);
+              }
+              #mat-root .btn-video {
+                background: rgba(168, 85, 247, 0.1);
+                border-color: rgba(168, 85, 247, 0.3);
+                color: #d8b4fe;
+              }
+              #mat-root .btn-video:hover {
+                background: rgba(168, 85, 247, 0.2);
+                border-color: rgba(168, 85, 247, 0.6);
+              }
+              #mat-root .btn-code {
+                background: rgba(59, 130, 246, 0.1);
+                border-color: rgba(59, 130, 246, 0.3);
+                color: #93c5fd;
+              }
+              #mat-root .btn-code:hover {
+                background: rgba(59, 130, 246, 0.2);
+                border-color: rgba(59, 130, 246, 0.6);
+              }
+              #mat-root .btn-quiz {
+                background: rgba(249, 115, 22, 0.1);
+                border-color: rgba(249, 115, 22, 0.3);
+                color: #fdba74;
+              }
+              #mat-root .btn-quiz:hover {
+                background: rgba(249, 115, 22, 0.2);
+                border-color: rgba(249, 115, 22, 0.6);
+              }
+
+              #mat-root .btn-mark {
+                background: transparent;
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #64748b;
+              }
+              #mat-root .btn-mark:hover {
+                background: rgba(16, 185, 129, 0.1);
+                border-color: rgba(16, 185, 129, 0.4);
+                color: #6ee7b7;
+              }
+              #mat-root .btn-mark.marked {
+                background: rgba(16, 185, 129, 0.1);
+                border-color: rgba(16, 185, 129, 0.35);
+                color: #6ee7b7;
+                cursor: default;
+                pointer-events: none;
+              }
+
+              /* ── Confetti ── */
+              #mat-root .cf-wrap {
+                position: relative;
+                pointer-events: none;
+                height: 0;
+                overflow: visible;
+              }
+              #mat-root .cf-piece {
+                position: absolute;
+                width: 7px;
+                height: 7px;
+                border-radius: 2px;
+                opacity: 0;
+                animation: cfFall 0.9s ease-out forwards;
+              }
+              @keyframes cfFall {
+                0% {
+                  opacity: 1;
+                  transform: translateY(-8px) rotate(0deg);
+                }
+                100% {
+                  opacity: 0;
+                  transform: translateY(70px) rotate(400deg);
+                }
+              }
+
+              /* ── Empty / locked state ── */
+              #mat-root .lock-notice {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.75rem;
+                color: #475569;
+                padding: 6px 0;
+              }
+              #mat-root .lock-notice svg {
+                width: 13px;
+                height: 13px;
+                flex-shrink: 0;
+              }
+            </style>
+
+            <!-- ── Markup ── -->
+            <div class="cd-card__header" style="margin-bottom: 0">
+              <div class="cd-card__icon cd-card__icon--green">
+                <i data-lucide="book-open"></i>
+              </div>
+              <h2 class="cd-card__title">منهج الدورة التدريبي</h2>
+            </div>
+
+            <div id="mat-root-inner"></div>
+
+            <!-- ── Script ── -->
+            <!-- Content will be rendered by course-details.js -->
+          </section>
+
+          <section class="cd-sessions-section" id="assignments-section">
+            <div class="cd-card__header" style="margin-bottom: 20px">
+              <div class="cd-card__icon cd-card__icon--orange">
+                <i data-lucide="file-text"></i>
+              </div>
+              <h2 class="cd-card__title">التكليفات والمهام المطلوبة</h2>
+            </div>
+            <div id="assignments-list" class="cd-assignments-grid">
+              <p style="color: #64748b; font-size: 0.85rem; text-align: center; padding: 20px;">جاري تحميل التكليفات...</p>
+            </div>
+            <style>
+              .cd-assignments-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+              }
+              .assignment-card {
+                background: var(--assign-card-bg);
+                border: 1px solid var(--assign-card-border);
+                border-radius: 12px;
+                padding: 16px;
+                transition: transform 0.2s;
+              }
+              .assignment-card:hover {
+                background: var(--assign-card-hover-bg);
+                border-color: var(--border-accent);
+              }
+              .assign-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+              }
+              .assign-title {
+                color: var(--text-main);
+                font-weight: 700;
+                font-size: 0.95rem;
+                margin-bottom: 4px;
+              }
+              .assign-deadline {
+                font-size: 0.75rem;
+                color: var(--color-error-soft);
+              }
+              .assign-status {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+                border-radius: 99px;
+                font-weight: 700;
+              }
+              .status-pending { background: var(--color-warning-bg); color: var(--color-warning); }
+              .status-submitted { background: var(--color-info-bg); color: var(--color-info); }
+              .status-graded { background: var(--color-success-bg); color: var(--color-success); }
+              .assign-status--overdue { background: var(--color-error-bg); color: var(--color-error); }
+              
+              .assign-actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 15px;
+                border-top: 1px solid var(--assign-actions-border);
+                padding-top: 15px;
+              }
+              .btn-assign {
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 0.8rem;
+                cursor: pointer;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-weight: 600;
+              }
+              .btn-download { background: var(--assign-btn-ghost-bg); color: var(--text-main); border: 1px solid var(--assign-btn-ghost-border); }
+              .btn-upload { background: var(--assign-upload-bg); color: var(--text-on-brand); border: none; }
+              .grade-badge { font-weight: 800; color: var(--color-success); }
+            </style>
+          </section>
+        </div>
+
+        <!-- ══ Sidebar Column ══ -->
+        <aside class="cd-col-sidebar">
+          <!-- Upcoming Deadlines / Timeline -->
+          <section class="cd-card">
+            <div class="cd-card__header">
+              <div class="cd-card__icon cd-card__icon--orange">
+                <i data-lucide="clock"></i>
+              </div>
+              <h2 class="cd-card__title">المواعيد القادمة</h2>
+            </div>
+
+            <div class="cd-timeline">
+              <div class="cd-timeline-item">
+                <div class="cd-timeline-dot cd-timeline-dot--urgent"></div>
+                <div class="cd-timeline-content">
+                  <p class="cd-timeline-date cd-timeline-date--urgent">
+                    غداً - 11:59 مساءً
+                  </p>
+                  <h4 class="cd-timeline-title">الواجب التطبيقي الثاني</h4>
+                  <p class="cd-timeline-sub">بناء هيكلية البيانات</p>
+                </div>
+              </div>
+              <div class="cd-timeline-item">
+                <div class="cd-timeline-dot"></div>
+                <div class="cd-timeline-content">
+                  <p class="cd-timeline-date">12 مايو - 10:00 صباحاً</p>
+                  <h4 class="cd-timeline-title">المحاضرة التفاعلية المباشرة</h4>
+                  <p class="cd-timeline-sub">رابط Zoom في البريد الإلكتروني</p>
+                </div>
+              </div>
+              <div class="cd-timeline-item cd-timeline-item--dim">
+                <div class="cd-timeline-dot cd-timeline-dot--dim"></div>
+                <div class="cd-timeline-content">
+                  <p class="cd-timeline-date">20 مايو</p>
+                  <h4 class="cd-timeline-title">تسليم المشروع الختامي</h4>
+                  <p class="cd-timeline-sub">الأسبوع الثالث</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calendar -->
+          <section class="cd-card">
+            <div class="cd-calendar-header">
+              <h2 class="cd-calendar-month" id="calMonthLabel">مايو 2026</h2>
+              <div class="cd-calendar-nav">
+                <button
+                  class="cd-cal-nav-btn"
+                  id="calPrevBtn"
+                  title="الشهر السابق"
+                >
+                  <i data-lucide="chevron-right"></i>
+                </button>
+                <button
+                  class="cd-cal-nav-btn"
+                  id="calNextBtn"
+                  title="الشهر التالي"
+                >
+                  <i data-lucide="chevron-left"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="cd-calendar-weekdays">
+              <span>ح</span><span>ن</span><span>ث</span><span>ر</span
+              ><span>خ</span><span>ج</span><span>س</span>
+            </div>
+
+            <div class="cd-calendar-days" id="calDays">
+              <!-- Filled by JS -->
+            </div>
+
+            <div class="cd-calendar-legend">
+              <div class="cd-cal-legend-item">
+                <span class="cd-cal-legend-dot cd-cal-legend-dot--today"></span>
+                <span>اليوم</span>
+              </div>
+              <div class="cd-cal-legend-item">
+                <span class="cd-cal-legend-dot cd-cal-legend-dot--event"></span>
+                <span>جلسة قادمة</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Course Info Card -->
+          <section class="cd-card cd-course-info-card">
+            <div class="cd-card__header">
+              <div class="cd-card__icon cd-card__icon--indigo">
+                <i data-lucide="info"></i>
+              </div>
+              <h2 class="cd-card__title">معلومات الدورة</h2>
+            </div>
+            <ul class="cd-info-list" id="courseInfoList">
+              <li class="cd-info-item">
+                <span class="cd-info-item__label"
+                  ><i data-lucide="bar-chart-2"></i> المستوى</span
+                >
+                <span class="cd-info-item__val" id="infoLevel">—</span>
+              </li>
+              <li class="cd-info-item">
+                <span class="cd-info-item__label"
+                  ><i data-lucide="calendar"></i> المدة</span
+                >
+                <span class="cd-info-item__val" id="infoDuration">—</span>
+              </li>
+              <li class="cd-info-item">
+                <span class="cd-info-item__label"
+                  ><i data-lucide="layers"></i> الجلسات</span
+                >
+                <span class="cd-info-item__val" id="infoSessions">—</span>
+              </li>
+              <li class="cd-info-item">
+                <span class="cd-info-item__label"
+                  ><i data-lucide="activity"></i> الحالة</span
+                >
+                <span class="cd-info-item__val cd-status-badge" id="infoStatus"
+                  >—</span
+                >
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="header/header.js?v=2"></script>
+    <script src="course-details.js"></script>
+  </body>
+</html>

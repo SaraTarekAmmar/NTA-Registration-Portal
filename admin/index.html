@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NTA - إعادة توجيه</title>
+    <script>
+      // Redirect based on existing tokens, otherwise go to admin login
+      (function () {
+        var adminToken = sessionStorage.getItem("admin_token");
+        var editorToken = sessionStorage.getItem("editor_token");
+        if (adminToken) {
+          window.location.replace("admin.html");
+        } else if (editorToken) {
+          window.location.replace("/editor/editor-dashboard.html");
+        } else {
+          window.location.replace("admin-login.html");
+        }
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

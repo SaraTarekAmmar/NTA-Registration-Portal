@@ -1,0 +1,827 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="../common/js/theme.js"></script>
+    <link rel="stylesheet" href="../common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة المدرب - NTA</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --nta-bg: var(--bg-main, #030712);
+        --nta-card: var(--bg-card, rgba(15, 23, 42, 0.6));
+        --nta-border: var(--border-main, rgba(255, 255, 255, 0.08));
+        --nta-accent: #c1121f;
+        --nta-indigo: var(--accent, #6366f1);
+        --nta-green: #10b981;
+        --nta-text: var(--text-main, #f1f5f9);
+        --nta-muted: var(--text-muted, #94a3b8);
+        --nta-orange: #f59e0b;
+      }
+
+      html.light-mode .dashboard-container {
+        box-shadow: var(--shadow-card, 0 10px 40px -15px rgba(15, 23, 42, 0.12));
+      }
+
+      body.trainee-app {
+        color: var(--nta-text);
+        font-family: "Tajawal", sans-serif;
+      }
+
+      .dashboard-container {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
+        margin: 100px auto;
+        padding: 40px;
+        background: var(--nta-card);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--nta-border);
+        border-radius: 24px;
+        text-align: center;
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .welcome-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(193, 18, 31, 0.15);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        color: var(--nta-accent);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      html.light-mode .dashboard-container h1 {
+        background: none;
+        -webkit-background-clip: unset;
+        background-clip: unset;
+        -webkit-text-fill-color: var(--text-main);
+        color: var(--text-main);
+      }
+
+      .welcome-text {
+        color: var(--nta-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 30px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 20px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--nta-green);
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      /* Courses Grid */
+      #trainerCourses {
+        margin-top: 50px;
+        text-align: right;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--nta-border);
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--nta-text);
+      }
+
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        margin-top: 30px;
+      }
+
+      .course-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--nta-border);
+        border-radius: 20px;
+        padding: 22px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        text-align: right;
+      }
+
+      .course-card:hover {
+        transform: translateY(-8px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+ 
+
+
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+
+.btn-outline:hover {
+    background: var(--nta-indigo);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); 
+}
+
+.btn:hover i {
+    transform: scale(1.1) rotate(-5deg); 
+    transition: transform 0.3s ease;
+}
+
+
+.btn:hover::after {
+    left: 100%;
+}
+      .course-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 15px 0 10px;
+      }
+
+      .course-meta {
+        display: flex;
+        gap: 16px;
+        font-size: 0.85rem;
+        color: var(--nta-muted);
+        margin-bottom: 25px;
+      }
+
+ 
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .card-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: auto;
+      }
+
+      .btn-full {
+        grid-column: span 2;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: #0f172a;
+        border: 1px solid var(--nta-border);
+        padding: 32px;
+        border-radius: 24px;
+        width: 90%;
+        max-width: 700px;
+        max-height: 85vh;
+        overflow-y: auto;
+        text-align: right;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--nta-border);
+        padding-bottom: 16px;
+      }
+
+      .modal-title {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .close-btn {
+        cursor: pointer;
+        color: var(--nta-muted);
+        transition: color 0.2s;
+      }
+      .close-btn:hover {
+        color: #fff;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--nta-subtle);
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--nta-border);
+        border-radius: 12px;
+        color: #fff;
+        font-family: inherit;
+      }
+      .form-group input:focus {
+        border-color: var(--nta-indigo);
+        outline: none;
+      }
+
+      .assignment-item {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--nta-border);
+        border-radius: 16px;
+        margin-bottom: 16px;
+        transition: all 0.2s;
+      }
+      .assignment-item:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .btn {
+        padding: 10px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: inherit;
+        transition: 0.2s;
+      }
+      .btn-primary {
+        background: var(--nta-accent);
+        color: white;
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+      .btn-success {
+        background: var(--nta-green);
+        color: white;
+      }
+      .btn-blue {
+        background: var(--nta-indigo);
+        color: white;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--nta-indigo);
+        color: var(--nta-indigo);
+      }
+  
+
+      .submission-status {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-weight: 700;
+      }
+      .status-graded {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--nta-green);
+      }
+      .status-pending {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+      }
+
+      #delayMessage {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        color: var(--nta-muted);
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-primary {
+        background: var(--nta-accent);
+        color: white;
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+      .btn-success {
+        background: var(--nta-green);
+        color: white;
+      }
+      .btn-blue {
+        background: var(--nta-indigo);
+        color: white;
+      }
+      .course-description {
+        font-size: 0.875rem;
+        color: var(--nta-muted);
+        margin: 10px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
+  </head>
+  <body class="trainee-app has-header">
+    <div class="trainee-bg" aria-hidden="true"></div>
+    <div id="ntaHeader"></div>
+
+    <div class="dashboard-container">
+      <div class="welcome-icon">
+        <i data-lucide="graduation-cap" size="40"></i>
+      </div>
+      <h1>مرحباً بك، <span id="trainerName">...</span></h1>
+      <p class="welcome-text">
+        أهلاً بك في لوحة تحكم المدربين. يمكنك من هنا إدارة دوراتك التدريبية
+        والتواصل مع المتدربين ومتابعة تكليفاتهم.
+      </p>
+
+      <div id="delayMessage">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+          "
+        >
+          <i data-lucide="loader-2" class="animate-spin"></i>
+          <span>جاري تحميل الدورات المسندة إليك...</span>
+        </div>
+      </div>
+
+      <div id="trainerCourses" style="display: none">
+        <div class="section-header">
+          <div
+            class="welcome-icon"
+            style="width: 32px; height: 32px; margin: 0"
+          >
+            <i data-lucide="book-open" size="18"></i>
+          </div>
+          <h2 class="section-title">دوراتي المسندة</h2>
+        </div>
+        <div id="coursesGrid" class="courses-grid">
+          <!-- Courses will be injected here -->
+        </div>
+      </div>
+
+      <div style="margin-top: 40px">
+        <div class="status-badge">
+          <i data-lucide="check-circle" size="16"></i>
+          الحساب نشط
+        </div>
+      </div>
+    </div>
+
+    <!-- Assignment Modal -->
+    <div id="assignmentModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle" class="modal-title">إدارة التكليفات</h2>
+          <i data-lucide="x" class="close-btn" onclick="closeModal()"></i>
+        </div>
+
+        <div id="assignmentListSection">
+          <button
+            class="btn btn-success"
+            onclick="showCreateForm()"
+            style="margin-bottom: 20px"
+          >
+            <i data-lucide="plus"></i> إضافة تكليف جديد
+          </button>
+          <div id="assignmentList"></div>
+        </div>
+
+        <div id="createAssignmentForm" style="display: none">
+          <form id="newAssignmentForm">
+            <input type="hidden" id="targetCourseId" />
+            <div class="form-group">
+              <label>عنوان التكليف</label>
+              <input
+                type="text"
+                id="assignTitle"
+                placeholder="مثال: الواجب الأول - أساسيات بايثون"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>الوصف</label>
+              <textarea
+                id="assignDesc"
+                rows="4"
+                placeholder="اكتب تفاصيل التكليف هنا..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>الموعد النهائي</label>
+              <input type="datetime-local" id="assignDeadline" required />
+            </div>
+            <div class="form-group">
+              <label>الدرجة القصوى</label>
+              <input type="number" id="assignMaxGrade" value="10" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label>ملف التعليمات (اختياري)</label>
+              <input type="file" id="assignFile" />
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 30px">
+              <button type="submit" class="btn btn-primary">
+                <i data-lucide="save"></i> حفظ التكليف
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="showList()"
+              >
+                إلغاء
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="submissionsSection" style="display: none">
+          <button
+            class="btn btn-secondary"
+            onclick="showList()"
+            style="margin-bottom: 20px"
+          >
+            <i data-lucide="arrow-right"></i> عودة للقائمة
+          </button>
+          <div id="submissionsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="header/header.js"></script>
+    <script>
+      let currentCourseId = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (window.lucide) window.lucide.createIcons();
+
+        const sessionRaw = sessionStorage.getItem("ntaTrainee");
+        if (!sessionRaw) {
+          window.location.href = "index.html";
+          return;
+        }
+        const session = JSON.parse(sessionRaw);
+        if (session.role !== "trainer") {
+          window.location.href = "index.html";
+          return;
+        }
+        document.getElementById("trainerName").textContent =
+          session.fullName || "المدرب";
+
+        // 3 second delay for better UX feel
+      // Load courses immediately if session is ready
+      if (session && session.nationalId) {
+          fetchTrainerCourses(session.nationalId);
+      } else {
+          // Fallback delay if session is being initialized
+          setTimeout(function () {
+            if (session.nationalId) fetchTrainerCourses(session.nationalId);
+          }, 500);
+      }
+
+      });
+
+      function fetchTrainerCourses(nationalId) {
+        window.authenticatedFetch("/api/courses/trainer/" + nationalId)
+          .then((res) => res.json())
+          .then((courses) => {
+            const grid = document.getElementById("coursesGrid");
+            const delayMessage = document.getElementById("delayMessage");
+            if (delayMessage) delayMessage.style.display = "none";
+            
+            document.getElementById("trainerCourses").style.display = "block";
+            grid.innerHTML = "";
+            
+            if (Array.isArray(courses) && courses.length > 0) {
+              grid.innerHTML = courses.map(c => `
+                <div class="course-card">
+                  <h3 class="course-title">${c.title}</h3>
+                  <div class="course-meta">
+                    <div class="meta-item"><i data-lucide="calendar" size="14"></i><span>${c.duration_weeks} أسابيع</span></div>
+                    <div class="meta-item"><i data-lucide="layers" size="14"></i><span>${c.total_sessions} جلسة</span></div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="btn btn-secondary" onclick="viewTrainees(${c.id}, '${c.title}')"><i data-lucide="users" size="16"></i> المتدربين</button>
+                    <button class="btn btn-secondary" onclick="openAssignmentModal(${c.id}, '${c.title}')"><i data-lucide="clipboard-list" size="16"></i> التكليفات</button>
+                    <button class="btn btn-outline btn-full" onclick="generateQuiz(${c.id}, '${c.title}')"><i data-lucide="brain-circuit" size="16"></i> إنشاء اختبار ذكي (AI)</button>
+                  </div>
+                </div>
+              `).join("");
+            } else {
+              grid.innerHTML = '<div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">لم يتم العثور على دورات مسندة حالياً.</div>';
+            }
+            grid.style.display = "grid";
+            if (window.lucide) window.lucide.createIcons();
+          })
+          .catch((err) => {
+            console.error("Error fetching courses:", err);
+            const delayMessage = document.getElementById("delayMessage");
+            if (delayMessage) delayMessage.style.display = "none";
+          });
+      }
+
+
+      function generateQuiz(courseId, courseTitle) {
+        window.location.href = `generate%20quiz/generate-quiz.html?course_id=${courseId}&course_name=${encodeURIComponent(courseTitle)}`;
+      }
+
+      function viewTrainees(courseId, courseTitle) {
+        window.location.href = `view%20trainees/view-trainees.html?course_id=${courseId}&course_name=${encodeURIComponent(courseTitle)}`;
+      }
+
+      function openAssignmentModal(courseId, courseTitle) {
+        currentCourseId = courseId;
+        document.getElementById("modalTitle").textContent =
+          `التكليفات: ${courseTitle}`;
+        document.getElementById("assignmentModal").style.display = "flex";
+        showList();
+        loadAssignments();
+      }
+
+      function closeModal() {
+        document.getElementById("assignmentModal").style.display = "none";
+      }
+
+      function showCreateForm() {
+        document.getElementById("assignmentListSection").style.display = "none";
+        document.getElementById("submissionsSection").style.display = "none";
+        document.getElementById("createAssignmentForm").style.display = "block";
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      function showList() {
+        document.getElementById("assignmentListSection").style.display =
+          "block";
+        document.getElementById("createAssignmentForm").style.display = "none";
+        document.getElementById("submissionsSection").style.display = "none";
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      function loadAssignments() {
+        fetch(`/api/assignments/course/${currentCourseId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            const list = document.getElementById("assignmentList");
+            if (data.length === 0) {
+              list.innerHTML =
+                '<div style="padding: 40px; text-align: center; color: var(--nta-muted);"><i data-lucide="file-x-2" size="40" style="margin-bottom: 15px;"></i><p>لا توجد تكليفات مضافة بعد.</p></div>';
+              if (window.lucide) window.lucide.createIcons();
+              return;
+            }
+            list.innerHTML = data
+              .map(
+                (a) => `
+                        <div class="assignment-item">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <strong style="color: #fff; font-size: 1.1rem;">${a.title}</strong>
+                                    <div style="font-size: 0.8rem; color: var(--nta-muted); margin-top: 5px; display: flex; align-items: center; gap: 5px;">
+                                        <i data-lucide="clock" size="12"></i>
+                                        الموعد: ${new Date(a.deadline).toLocaleString("ar-EG")}
+                                    </div>
+                                </div>
+                                <button class="btn btn-blue" onclick="viewSubmissions(${a.id}, '${a.title}')">
+                                    <i data-lucide="users" size="14"></i>
+                                    رؤية التسليمات
+                                </button>
+                            </div>
+                        </div>
+                    `,
+              )
+              .join("");
+            if (window.lucide) window.lucide.createIcons();
+          });
+      }
+
+      document.getElementById("newAssignmentForm").onsubmit = function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("course_id", currentCourseId);
+        formData.append("title", document.getElementById("assignTitle").value);
+        formData.append(
+          "description",
+          document.getElementById("assignDesc").value,
+        );
+        formData.append(
+          "deadline",
+          document.getElementById("assignDeadline").value,
+        );
+        formData.append(
+          "max_grade",
+          document.getElementById("assignMaxGrade").value,
+        );
+        const fileInput = document.getElementById("assignFile");
+        if (fileInput.files[0]) formData.append("file", fileInput.files[0]);
+
+        fetch("/api/assignments/create", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert("تمت إضافة التكليف بنجاح");
+            showList();
+            loadAssignments();
+            document.getElementById("newAssignmentForm").reset();
+          })
+          .catch((err) => alert("فشل حفظ التكليف"));
+      };
+
+      function viewSubmissions(assignId, title) {
+        document.getElementById("modalTitle").textContent = `تسليمات: ${title}`;
+        document.getElementById("assignmentListSection").style.display = "none";
+        document.getElementById("submissionsSection").style.display = "block";
+
+        fetch(`/api/assignments/${assignId}/submissions`)
+          .then((res) => res.json())
+          .then((data) => {
+            const list = document.getElementById("submissionsList");
+            if (data.length === 0) {
+              list.innerHTML =
+                '<div style="padding: 40px; text-align: center; color: var(--nta-muted);"><i data-lucide="inbox" size="40" style="margin-bottom: 15px;"></i><p>لا توجد تسليمات بعد.</p></div>';
+              if (window.lucide) window.lucide.createIcons();
+              return;
+            }
+            list.innerHTML = data
+              .map(
+                (s) => `
+                        <div class="assignment-item" style="border-right: 4px solid ${s.status === "graded" ? "var(--nta-green)" : "#f59e0b"};">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong style="color: #fff;">${s.trainee_name}</strong>
+                                    <div style="font-size: 0.75rem; color: var(--nta-muted); margin-top: 4px;">
+                                        <i data-lucide="calendar" size="12"></i>
+                                        ${new Date(s.submitted_at).toLocaleString("ar-EG")}
+                                    </div>
+                                </div>
+                                <span class="submission-status ${s.status === "graded" ? "status-graded" : "status-pending"}">
+                                    ${s.status === "graded" ? "مقيم" : "في انتظار التقييم"}
+                                </span>
+                            </div>
+                            
+                            <div style="margin-top: 15px; display: flex; gap: 12px; align-items: center;">
+                                <a href="/${s.file_path}" target="_blank" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
+                                    <i data-lucide="download" size="14"></i> تحميل الملف
+                                </a>
+                                
+                                ${
+                                  s.status === "graded"
+                                    ? `
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--nta-border);">
+                                        <span style="font-size: 0.85rem; font-weight: 800; color: var(--nta-green);">الدرجة: ${s.grade}</span>
+                                    </div>
+                                `
+                                    : `
+                                    <button class="btn btn-success" onclick="showGradeForm(${s.id})" style="font-size: 0.8rem; padding: 6px 12px;">
+                                        <i data-lucide="check-square" size="14"></i> رصد درجة
+                                    </button>
+                                `
+                                }
+                            </div>
+
+                            <div id="gradeForm_${s.id}" style="display: none; margin-top: 20px; border-top: 1px solid var(--nta-border); padding-top: 20px; animation: fadeIn 0.3s ease;">
+                                <div style="display: flex; gap: 10px; align-items: flex-start;">
+                                    <div style="flex: 0 0 100px;">
+                                        <label style="font-size: 0.8rem; color: var(--nta-muted); margin-bottom: 5px; display: block;">الدرجة</label>
+                                        <input type="number" id="grade_${s.id}" placeholder="0.0" style="padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid var(--nta-border); color: #fff; width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label style="font-size: 0.8rem; color: var(--nta-muted); margin-bottom: 5px; display: block;">ملاحظات</label>
+                                        <input type="text" id="feedback_${s.id}" placeholder="أضف تعليقاً..." style="padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid var(--nta-border); color: #fff; width: 100%;">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="submitGrade(${s.id}, ${assignId})" style="margin-top: 25px; padding: 8px 16px;">
+                                        حفظ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+              )
+              .join("");
+            if (window.lucide) window.lucide.createIcons();
+          });
+      }
+
+      function showGradeForm(subId) {
+        document.getElementById(`gradeForm_${subId}`).style.display = "block";
+      }
+
+      function submitGrade(subId, assignId) {
+        const grade = document.getElementById(`grade_${subId}`).value;
+        const feedback = document.getElementById(`feedback_${subId}`).value;
+
+        const formData = new FormData();
+        formData.append("grade", grade);
+        formData.append("feedback", feedback);
+
+        fetch(`/api/assignments/submissions/${subId}/grade`, {
+          method: "PATCH",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then(() => {
+            alert("تم رصد الدرجة بنجاح");
+            viewSubmissions(assignId, ""); // Refresh list
+          });
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("assignmentModal")) {
+          closeModal();
+        }
+      };
+    </script>
+  </body>
+</html>

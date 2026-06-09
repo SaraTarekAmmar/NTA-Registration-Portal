@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نموذج الدورة - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="courses">
+    <div id="editorSidebar"></div>
+
+    <main class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title" id="formTitle">إنشاء دورة جديدة</h1>
+        <p class="editor-page-header__sub">أدخل تفاصيل الدورة خطوة بخطوة</p>
+      </div>
+
+      <!-- Step Progress -->
+      <div class="editor-steps" id="stepsBar">
+        <div class="editor-step active" data-step="1">
+          <div class="editor-step__num">1</div>
+          <span>المعلومات الأساسية</span>
+        </div>
+        <div class="editor-step__connector"></div>
+        <div class="editor-step" data-step="2">
+          <div class="editor-step__num">2</div>
+          <span>الجلسات</span>
+        </div>
+        <div class="editor-step__connector"></div>
+        <div class="editor-step" data-step="3">
+          <div class="editor-step__num">3</div>
+          <span>المواد</span>
+        </div>
+        <div class="editor-step__connector"></div>
+        <div class="editor-step" data-step="4">
+          <div class="editor-step__num">4</div>
+          <span>الاختبار</span>
+        </div>
+        <div class="editor-step__connector"></div>
+        <div class="editor-step" data-step="5">
+          <div class="editor-step__num">5</div>
+          <span>معاينة</span>
+        </div>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+      </div>
+
+      <!-- Step 1: Basic Info -->
+      <div id="step1" class="step-panel">
+        <form id="basicInfoForm" novalidate>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="form-two-col">
+            <div class="editor-form-group">
+              <label for="titleAr">اسم الدورة (عربي) <span class="required">*</span></label>
+              <input type="text" id="titleAr" class="editor-input" placeholder="أدخل اسم الدورة بالعربية" aria-describedby="titleArError" />
+              <p id="titleArError" class="inline-error" style="display:none;">اسم الدورة مطلوب.</p>
+            </div>
+            <div class="editor-form-group">
+              <label for="titleEn">اسم الدورة (إنجليزي)</label>
+              <input type="text" id="titleEn" class="editor-input" placeholder="Course title in English" />
+            </div>
+          </div>
+
+          <div class="editor-form-group">
+            <label for="description">الوصف <span class="required">*</span></label>
+            <textarea id="description" class="editor-textarea" rows="4" placeholder="اكتب وصفاً واضحاً للدورة..." aria-describedby="descriptionError"></textarea>
+            <p id="descriptionError" class="inline-error" style="display:none;">الوصف مطلوب.</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;" class="form-three-col">
+            <div class="editor-form-group">
+              <label for="durationWeeks">المدة (أسابيع) <span class="required">*</span></label>
+              <input type="number" id="durationWeeks" class="editor-input" min="1" placeholder="8" aria-describedby="durationError" />
+              <p id="durationError" class="inline-error" style="display:none;">المدة مطلوبة ويجب أن تكون رقماً موجباً.</p>
+            </div>
+            <div class="editor-form-group">
+              <label for="totalSessions">عدد الجلسات</label>
+              <input type="number" id="totalSessions" class="editor-input" min="0" placeholder="20" />
+            </div>
+            <div class="editor-form-group">
+              <label for="courseStatus">الحالة</label>
+              <select id="courseStatus" class="editor-select">
+                <option value="draft">مسودة</option>
+                <option value="published">منشورة</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="form-two-col">
+            <div class="editor-form-group">
+              <label for="startDate">تاريخ البدء</label>
+              <input type="date" id="startDate" class="editor-input" />
+            </div>
+            <div class="editor-form-group">
+              <label for="endDate">تاريخ الانتهاء</label>
+              <input type="date" id="endDate" class="editor-input" aria-describedby="dateRangeError" />
+              <p id="dateRangeError" class="inline-error" style="display:none;">تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+            <a href="editor-courses.html" class="btn btn--secondary">إلغاء</a>
+            <button type="button" class="btn btn--secondary" id="saveDraftBtn1" onclick="saveDraft()">حفظ مسودة</button>
+            <button type="submit" class="btn btn--primary" id="continueBtn1">المتابعة ←</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Sessions -->
+      <div id="step2" class="step-panel" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+          <h2 style="margin:0;font-size:1.05rem;font-weight:700;">الجلسات</h2>
+          <button type="button" class="btn btn--secondary btn--sm" onclick="addSession()">+ إضافة جلسة</button>
+        </div>
+
+        <div id="sessionsList"></div>
+
+        <div id="noSessionsMsg" style="text-align:center;padding:2rem;color:var(--text-subtle);font-size:0.88rem;">
+          لم تتم إضافة جلسات بعد. اضغط "إضافة جلسة" للبدء.
+        </div>
+
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+          <button type="button" class="btn btn--secondary" onclick="goStep(1)">← رجوع</button>
+          <button type="button" class="btn btn--secondary" onclick="saveDraft()">حفظ مسودة</button>
+          <button type="button" class="btn btn--primary" onclick="goStep(3)">المتابعة ←</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Materials -->
+      <div id="step3" class="step-panel" style="display:none;">
+        <div class="editor-upload-area" id="uploadArea">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40" style="margin-bottom:0.75rem;opacity:0.6;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          <p style="margin:0 0 0.5rem;font-weight:700;">اسحب الملفات هنا أو</p>
+          <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('fileInput').click()">اختر ملفات</button>
+          <p style="margin:0.5rem 0 0;font-size:0.75rem;opacity:0.7;">PDF، Word، Video — حجم أقصى 50MB</p>
+          <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.mp4,.ppt,.pptx" style="display:none;" onchange="handleFiles(this.files)" />
+        </div>
+
+        <div id="materialsList" style="margin-top:1.25rem;"></div>
+
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+          <button type="button" class="btn btn--secondary" onclick="goStep(2)">← رجوع</button>
+          <button type="button" class="btn btn--secondary" onclick="saveDraft()">حفظ مسودة</button>
+          <button type="button" class="btn btn--primary" onclick="goStep(4)">المتابعة ←</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Exam -->
+      <div id="step4" class="step-panel" style="display:none;">
+        <p style="color:var(--text-subtle);font-size:0.88rem;margin-bottom:1.5rem;">أضف اختباراً اختيارياً للدورة. يمكن إضافته لاحقاً من صفحة الاختبارات.</p>
+        <div class="editor-form-group">
+          <label for="examTitle">عنوان الاختبار</label>
+          <input type="text" id="examTitle" class="editor-input" placeholder="اختبار نهاية الدورة" />
+        </div>
+        <div class="editor-form-group">
+          <label for="examDuration">مدة الاختبار (دقيقة)</label>
+          <input type="number" id="examDuration" class="editor-input" min="5" placeholder="60" />
+        </div>
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+          <button type="button" class="btn btn--secondary" onclick="goStep(3)">← رجوع</button>
+          <button type="button" class="btn btn--secondary" onclick="saveDraft()">حفظ مسودة</button>
+          <button type="button" class="btn btn--primary" onclick="goStep(5)">المتابعة ←</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Preview -->
+      <div id="step5" class="step-panel" style="display:none;">
+        <div style="background:rgba(8,12,32,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
+          <h2 style="font-size:1.2rem;font-weight:800;margin:0 0 1rem;color:var(--text-main);">ملخص الدورة</h2>
+          <div id="previewSummary" style="font-size:0.88rem;color:var(--text-subtle);line-height:1.8;"></div>
+        </div>
+
+        <div id="publishBlockMsg" class="editor-banner editor-banner--error" style="display:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18A9 9 0 0112 3z"/></svg>
+          <span id="publishBlockText"></span>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;flex-wrap:wrap;">
+          <button type="button" class="btn btn--secondary" onclick="goStep(4)">← رجوع للتعديل</button>
+          <button type="button" class="btn btn--secondary" id="saveDraftBtn5" onclick="saveDraft()">حفظ مسودة</button>
+          <button type="button" class="btn btn--primary" id="publishBtn" onclick="publishCourse()">نشر الدورة</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var currentStep = 1;
+      var courseId = null;
+      var sessions = [];
+      var materials = [];
+
+      // Read ?id= from URL
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        courseId = params.get("id");
+        if (courseId) {
+          document.getElementById("formTitle").textContent = "تعديل الدورة";
+          loadCourseData(courseId);
+        }
+      })();
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      function loadCourseData(id) {
+        authFetch("/api/courses/" + id)
+          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(c) {
+            document.getElementById("titleAr").value = c.title_ar || "";
+            document.getElementById("titleEn").value = c.title || "";
+            document.getElementById("description").value = c.description || "";
+            document.getElementById("durationWeeks").value = c.duration_weeks || "";
+            document.getElementById("totalSessions").value = c.total_sessions || "";
+            document.getElementById("courseStatus").value = c.status || "draft";
+          })
+          .catch(function() { showBanner("تعذّر تحميل بيانات الدورة."); });
+      }
+
+      function goStep(n) {
+        document.getElementById("step" + currentStep).style.display = "none";
+        currentStep = n;
+        document.getElementById("step" + n).style.display = "block";
+        // Update step indicators
+        document.querySelectorAll(".editor-step").forEach(function(el) {
+          var s = parseInt(el.getAttribute("data-step"));
+          el.classList.remove("active","done");
+          if (s === n) el.classList.add("active");
+          else if (s < n) el.classList.add("done");
+        });
+        if (n === 5) buildPreview();
+        window.scrollTo(0,0);
+      }
+
+      function validateStep1() {
+        var ok = true;
+        var titleAr = document.getElementById("titleAr").value.trim();
+        var desc = document.getElementById("description").value.trim();
+        var dur = document.getElementById("durationWeeks").value;
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+
+        var hideAll = function() {
+          ["titleArError","descriptionError","durationError","dateRangeError"].forEach(function(id) {
+            var el = document.getElementById(id); if(el) el.style.display = "none";
+          });
+        };
+        hideAll();
+
+        if (!titleAr) { document.getElementById("titleArError").style.display = "block"; ok = false; }
+        if (!desc) { document.getElementById("descriptionError").style.display = "block"; ok = false; }
+        if (!dur || isNaN(+dur) || +dur < 1) { document.getElementById("durationError").style.display = "block"; ok = false; }
+        if (startDate && endDate && endDate <= startDate) { document.getElementById("dateRangeError").style.display = "block"; ok = false; }
+        return ok;
+      }
+
+      document.getElementById("basicInfoForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        if (validateStep1()) goStep(2);
+      });
+
+      function addSession() {
+        var idx = sessions.length;
+        sessions.push({ title: "", date: "" });
+        renderSessions();
+      }
+
+      function renderSessions() {
+        var list = document.getElementById("sessionsList");
+        var noMsg = document.getElementById("noSessionsMsg");
+        if (!sessions.length) { list.innerHTML = ""; noMsg.style.display = "block"; return; }
+        noMsg.style.display = "none";
+        var html = "";
+        sessions.forEach(function(s, i) {
+          html += '<div style="display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.75rem;background:rgba(8,12,32,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.85rem;">';
+          html += '<span style="width:26px;height:26px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#6ee7b7;flex-shrink:0;">'+(i+1)+'</span>';
+          html += '<input type="text" class="editor-input" style="flex:1;" placeholder="عنوان الجلسة" value="'+s.title+'" oninput="sessions['+i+'].title=this.value" />';
+          html += '<input type="date" class="editor-input" style="width:160px;" value="'+s.date+'" onchange="sessions['+i+'].date=this.value" />';
+          html += '<button type="button" class="btn btn--danger btn--sm" onclick="removeSession('+i+')">حذف</button>';
+          html += '</div>';
+        });
+        list.innerHTML = html;
+      }
+
+      function removeSession(idx) {
+        sessions.splice(idx, 1);
+        renderSessions();
+      }
+
+      function handleFiles(files) {
+        Array.from(files).forEach(function(file) {
+          var allowed = ["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document","video/mp4","application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation"];
+          if (!allowed.includes(file.type) && file.type !== "") {
+            showEditorToast("نوع الملف غير مدعوم: " + file.name, "error"); return;
+          }
+          if (file.size > 50 * 1024 * 1024) {
+            showEditorToast("حجم الملف يتجاوز 50MB: " + file.name, "error"); return;
+          }
+          materials.push({ name: file.name, size: formatSize(file.size), type: file.type, file: file });
+          renderMaterials();
+        });
+      }
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + " KB";
+        return (bytes/1024/1024).toFixed(1) + " MB";
+      }
+
+      function renderMaterials() {
+        var list = document.getElementById("materialsList");
+        if (!materials.length) { list.innerHTML = ""; return; }
+        var html = "";
+        materials.forEach(function(m, i) {
+          html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:rgba(8,12,32,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:0.5rem;">';
+          html += '<span style="font-size:1.4rem;">📄</span>';
+          html += '<div style="flex:1;min-width:0;"><div style="font-size:0.88rem;font-weight:600;color:var(--text-main);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+m.name+'</div>';
+          html += '<div style="font-size:0.75rem;color:var(--text-subtle);">'+m.size+'</div></div>';
+          html += '<button type="button" class="btn btn--danger btn--sm" onclick="removeMaterial('+i+')">حذف</button>';
+          html += '</div>';
+        });
+        list.innerHTML = html;
+      }
+
+      function removeMaterial(idx) {
+        editorConfirm({ title:"حذف المادة؟", body:"هل تريد حذف <strong>"+materials[idx].name+"</strong>؟ لا يمكن التراجع عن هذا الإجراء.", okLabel:"حذف المادة", cancelLabel:"إلغاء", danger:true })
+          .then(function(ok) { if(ok) { materials.splice(idx,1); renderMaterials(); } });
+      }
+
+      function buildPreview() {
+        var title = document.getElementById("titleAr").value.trim();
+        var desc = document.getElementById("description").value.trim();
+        var dur = document.getElementById("durationWeeks").value;
+        var total = document.getElementById("totalSessions").value;
+        var status = document.getElementById("courseStatus").value;
+
+        var html = "";
+        html += '<table style="width:100%;border-collapse:collapse;">';
+        var rows = [
+          ["اسم الدورة", title || '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["الوصف", desc || '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["المدة", dur ? dur + " أسابيع" : '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["عدد الجلسات المدخلة", sessions.length + " جلسات"],
+          ["المواد المرفقة", materials.length + " ملفات"],
+          ["الحالة", status === "published" ? '<span style="color:#6ee7b7;">منشورة</span>' : '<span style="color:#fde68a;">مسودة</span>']
+        ];
+        rows.forEach(function(r) {
+          html += '<tr><td style="padding:0.4rem 0;font-weight:700;width:160px;vertical-align:top;">'+r[0]+'</td><td style="padding:0.4rem 0;">'+r[1]+'</td></tr>';
+        });
+        html += '</table>';
+        document.getElementById("previewSummary").innerHTML = html;
+
+        // Check publish readiness
+        var missing = [];
+        if (!title) missing.push("اسم الدورة");
+        if (!desc) missing.push("الوصف");
+        if (!dur) missing.push("مدة الدورة");
+        if (!sessions.length) missing.push("جلسة واحدة على الأقل");
+
+        var publishBtn = document.getElementById("publishBtn");
+        var blockMsg = document.getElementById("publishBlockMsg");
+        if (missing.length) {
+          publishBtn.disabled = true;
+          publishBtn.title = "تحتاج إلى استكمال البيانات قبل النشر";
+          blockMsg.style.display = "flex";
+          document.getElementById("publishBlockText").textContent = "لا يمكن النشر. البيانات الناقصة: " + missing.join("، ") + ".";
+        } else {
+          publishBtn.disabled = false;
+          blockMsg.style.display = "none";
+        }
+      }
+
+      function saveDraft() {
+        var titleAr = document.getElementById("titleAr").value.trim();
+        if (!titleAr) { showEditorToast("أدخل اسم الدورة أولاً لحفظ المسودة.", "error"); return; }
+        submitCourse("draft");
+      }
+
+      function publishCourse() {
+        editorConfirm({
+          title: "نشر الدورة؟",
+          body: "ستصبح الدورة مرئية للمتدربين بعد النشر. هل تريد المتابعة؟",
+          okLabel: "نشر الدورة",
+          cancelLabel: "إلغاء"
+        }).then(function(ok) { if(ok) submitCourse("published"); });
+      }
+
+      function submitCourse(status) {
+        var payload = {
+          title: document.getElementById("titleEn").value.trim() || document.getElementById("titleAr").value.trim(),
+          title_ar: document.getElementById("titleAr").value.trim(),
+          description: document.getElementById("description").value.trim(),
+          duration_weeks: parseInt(document.getElementById("durationWeeks").value) || null,
+          total_sessions: parseInt(document.getElementById("totalSessions").value) || null,
+          status: status,
+          short_name: "",
+          classification: "",
+          image_url: null,
+          skill_level: null,
+          is_public: true,
+          stages_json: null,
+          batch_data_json: null
+        };
+
+        var method = courseId ? "PUT" : "POST";
+        var url = courseId ? "/api/courses/" + courseId : "/api/courses";
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+
+        fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify(payload)
+        })
+          .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
+          .then(function(data) {
+            courseId = data.id;
+            var dest = status === "published" ? "editor-final.html?action=published&id="+courseId : "editor-final.html?action=draft&id="+courseId;
+            window.location.replace(dest);
+          })
+          .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
+      }
+
+      function showBanner(msg) {
+        document.getElementById("pageBanner").style.display = "flex";
+        document.getElementById("pageBannerText").textContent = msg;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "باسم محمد الغزالي",
+      "full_name_en": "Bassem Mohamed El-Ghazaly",
+      "national_id": "29008171000016"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Financial Auditing",
+          "category": "audit",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Risk Assessment",
+          "category": "audit",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ACL Analytics",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "IDEA",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الدقة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "النزاهة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الحيادية",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "جيد جداً",
+          "major": "مراجعة وضبط الجودة",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2012-01-01",
+          "institution": "جامعة عين شمس"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "الجهاز المركزي للمحاسبات",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 9,
+        "objective": "قيادة منظومة الرقابة المالية الحكومية"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

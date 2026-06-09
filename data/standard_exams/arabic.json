@@ -1,0 +1,166 @@
+{
+  "title": "Standardized Arabic Proficiency Exam",
+  "durationMinutes": 30,
+  "passingScore": 60,
+  "questions": [
+    {
+      "number": 1,
+      "type": "choose",
+      "question": "ما هو الفعل الماضي المناسب للضمير 'هم' من الفعل 'كتب'؟",
+      "options": ["كتبوا", "كتبت", "كتبنا", "يكتبون"],
+      "correct_answer": "كتبوا",
+      "metadata": { "Pillar": "Sarf", "CEFR_Level": "A1", "Topic": "Verb Conjugation" }
+    },
+    {
+      "number": 2,
+      "type": "choose",
+      "question": "أي من الكلمات التالية هي 'جمع تكسير'؟",
+      "options": ["معلمون", "طالبات", "كتب", "مهندسين"],
+      "correct_answer": "كتب",
+      "metadata": { "Pillar": "Sarf", "CEFR_Level": "A2", "Topic": "Broken Plurals" }
+    },
+    {
+      "number": 3,
+      "type": "choose",
+      "question": "ما إعراب كلمة 'التلميذُ' في جملة: 'قرأ التلميذُ القصةَ'؟",
+      "options": ["مفعول به منصوب", "فاعل مرفوع", "مبتدأ مرفوع", "مضاف إليه"],
+      "correct_answer": "فاعل مرفوع",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A1", "Topic": "Case Endings" }
+    },
+    {
+      "number": 4,
+      "type": "choose",
+      "question": "اختر الكلمة التي كتبت إملائياً بشكل صحيح:",
+      "options": ["سماءاً", "سماءن", "سماءً", "سماأً"],
+      "correct_answer": "سماءً",
+      "metadata": { "Pillar": "Orthography", "CEFR_Level": "A1", "Topic": "Tanween" }
+    },
+    {
+      "number": 5,
+      "type": "choose",
+      "question": "ما مرادف كلمة 'هجر'؟",
+      "options": ["عاد", "ترك", "أقبل", "بنى"],
+      "correct_answer": "ترك",
+      "metadata": { "Pillar": "Mufradat", "CEFR_Level": "B1", "Topic": "Synonyms" }
+    },
+    {
+      "number": 6,
+      "type": "choose",
+      "question": "أكمل الفراغ: 'إنّ الشمسَ ........'",
+      "options": ["مشرقةٌ", "مشرقةً", "مشرقةِ", "مشرقُ"],
+      "correct_answer": "مشرقةٌ",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A2", "Topic": "Case Endings" }
+    },
+    {
+      "number": 7,
+      "type": "choose",
+      "question": "ما هو وزن كلمة 'استغفر'؟",
+      "options": ["استفعل", "انفعل", "افتعل", "تفاعل"],
+      "correct_answer": "استفعل",
+      "metadata": { "Pillar": "Sarf", "CEFR_Level": "B1", "Topic": "Root Patterns" }
+    },
+    {
+      "number": 8,
+      "type": "choose",
+      "question": "أي الجمل التالية تحتوي على 'ظرف زمان'؟",
+      "options": ["البيتُ كبيرٌ", "سافرتُ ليلاً", "الكتابُ فوقَ المكتبِ", "دخلَ الرجلُ المسجدَ"],
+      "correct_answer": "سافرتُ ليلاً",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A2", "Topic": "Adverbs" }
+    },
+    {
+      "number": 9,
+      "type": "choose",
+      "question": "ما ضد كلمة 'شجاع'؟",
+      "options": ["قوي", "جبان", "سريع", "حكيم"],
+      "correct_answer": "جبان",
+      "metadata": { "Pillar": "Mufradat", "CEFR_Level": "A1", "Topic": "Antonyms" }
+    },
+    {
+      "number": 10,
+      "type": "choose",
+      "question": "أي من هذه الأدوات تجزم فعلاً مضارعاً واحداً؟",
+      "options": ["لم", "أن", "لن", "كي"],
+      "correct_answer": "لم",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "B1", "Topic": "Verb Jazam" }
+    },
+    {
+      "number": 11,
+      "type": "choose",
+      "question": "ما هي 'التاء' المناسبة لنهاية كلمة 'بيت'؟",
+      "options": ["تاء مربوطة (ة)", "تاء مفتوحة (ت)", "هاء (ه)", "ألف مقصورة (ى)"],
+      "correct_answer": "تاء مفتوحة (ت)",
+      "metadata": { "Pillar": "Orthography", "CEFR_Level": "A1", "Topic": "Taa Forms" }
+    },
+    {
+      "number": 12,
+      "type": "choose",
+      "question": "أين يقع المبتدأ عادة في الجملة الاسمية؟",
+      "options": ["في نهايتها", "بعد الخبر", "في بدايتها", "بعد الفعل"],
+      "correct_answer": "في بدايتها",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A1", "Topic": "Sentence Structure" }
+    },
+    {
+      "number": 13,
+      "type": "choose",
+      "question": "ما نوع الأسلوب في 'لا تكذبْ'؟",
+      "options": ["أسلوب أمر", "أسلوب نهي", "أسلوب نداء", "أسلوب تعجب"],
+      "correct_answer": "أسلوب نهي",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A1", "Topic": "Linguistic Styles" }
+    },
+    {
+      "number": 14,
+      "type": "choose",
+      "question": "أي من الأسماء التالية هو 'اسم موصول'؟",
+      "options": ["هذا", "الذي", "أنت", "هو"],
+      "correct_answer": "الذي",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A1", "Topic": "Relative Pronouns" }
+    },
+    {
+      "number": 15,
+      "type": "true or false",
+      "question": "تعتبر 'كان' وأخواتها حروفاً ناسخة تدخل على الجملة الاسمية.",
+      "options": ["صح", "خطأ"],
+      "correct_answer": "خطأ",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A2", "Topic": "Kana and Sisters" }
+    },
+    {
+      "number": 16,
+      "type": "true or false",
+      "question": "المثنى يرفع بالألف وينصب ويجر بالياء.",
+      "options": ["صح", "خطأ"],
+      "correct_answer": "صح",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "A2", "Topic": "Case Endings" }
+    },
+    {
+      "number": 17,
+      "type": "true or false",
+      "question": "همزة الوصل تنطق في بداية الكلام وتسقط عند وصله.",
+      "options": ["صح", "خطأ"],
+      "correct_answer": "صح",
+      "metadata": { "Pillar": "Orthography", "CEFR_Level": "A2", "Topic": "Hamzat al-Wasl" }
+    },
+    {
+      "number": 18,
+      "type": "true or false",
+      "question": "الفعل المضارع دائماً يكون مبنياً.",
+      "options": ["صح", "خطأ"],
+      "correct_answer": "خطأ",
+      "metadata": { "Pillar": "Nahw", "CEFR_Level": "B1", "Topic": "Verb Moods" }
+    },
+    {
+      "number": 19,
+      "type": "true or false",
+      "question": "كلمة 'مدرسة' هي اسم مشتق من الفعل 'درس' على وزن 'مفعلة'.",
+      "options": ["صح", "خطأ"],
+      "correct_answer": "صح",
+      "metadata": { "Pillar": "Sarf", "CEFR_Level": "B1", "Topic": "Derived Nouns" }
+    },
+    {
+      "number": 20,
+      "type": "text",
+      "question": "اكتب فقرة قصيرة تتحدث فيها عن أهمية تعلم اللغة العربية في العصر الحديث.",
+      "correct_answer": "N/A",
+      "metadata": { "Pillar": "Fahm", "CEFR_Level": "B2", "Topic": "Creative Writing" }
+    }
+  ]
+}

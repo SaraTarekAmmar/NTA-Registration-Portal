@@ -1,0 +1,98 @@
+Session 12: Web Scraping and API Integration
+
+Welcome to the second session of Week 6! So far, we have worked with local files and simulated data. Today, we learn how to "hunt" for data in the wild. We will cover two primary methods for acquiring data from the web: APIs (the clean, structured way) and Web Scraping (the messy, but powerful way).
+
+1. Acquiring Data via APIs
+
+An API (Application Programming Interface) is a formal way for two programs to talk to each other. For data scientists, APIs are the gold standard because they provide structured data (usually in JSON format).
+
+The requests Library
+
+The requests library is the industry standard for making HTTP calls in Python.
+
+import requests
+
+# Example: Fetching data from a public API
+url = "[https://api.exchangerate-api.com/v4/latest/USD](https://api.exchangerate-api.com/v4/latest/USD)"
+response = requests.get(url)
+
+if response.status_code == 200:
+    data = response.json()
+    print(f"Base Currency: {data['base']}")
+    print(f"Rate for EUR: {data['rates']['EUR']}")
+else:
+    print("Failed to retrieve data")
+
+
+2. Web Scraping with BeautifulSoup
+
+When an API doesn't exist, we must extract data directly from the HTML code of a website. This is called Web Scraping.
+
+The HTML Structure
+
+Websites are built with tags like <div>, <h1>, <a>, and <table>. We use BeautifulSoup to "parse" these tags and pull out the text or links we need.
+
+from bs4 import BeautifulSoup
+import requests
+
+url = "[https://example.com](https://example.com)"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Find the main heading
+heading = soup.find('h1').text
+print(f"Page Title: {heading}")
+
+# Find all links
+links = soup.find_all('a')
+for link in links:
+    print(link.get('href'))
+
+
+3. Ethical Scraping and robots.txt
+
+Before scraping any website, you must check its rules.
+
+robots.txt: Visit website.com/robots.txt to see what parts of the site are off-limits to bots.
+
+Rate Limiting: Don't hammer a server with thousands of requests per second. Use time.sleep().
+
+Terms of Service: Always respect the legal boundaries of the data owner.
+
+4. Converting Web Data to Pandas
+
+The ultimate goal is to get this data into a DataFrame for analysis.
+
+import pandas as pd
+
+# Scraping a table directly with Pandas (if the site allows it)
+# url = "[https://en.wikipedia.org/wiki/List_of_largest_companies_by_revenue](https://en.wikipedia.org/wiki/List_of_largest_companies_by_revenue)"
+# tables = pd.read_html(url)
+# df_companies = tables[0]
+
+
+Hands-on Exercise: News Headlines Scraper
+
+Task:
+
+Use the requests library to fetch the HTML from a practice news site (or a simple blog).
+
+Use BeautifulSoup to find all article headlines (usually wrapped in <h2> or <h3> tags).
+
+Store these headlines in a Python list.
+
+Convert that list into a Pandas DataFrame with a column named Headline.
+
+Bonus: Use the .str methods from Session 4 to count how many headlines contain the word "Python" or "Data".
+
+Summary Checklist
+
+[ ] Can you explain the difference between an API and Web Scraping?
+
+[ ] Do you know how to convert a JSON response into a Python dictionary?
+
+[ ] Are you comfortable using .find() and .find_all() in BeautifulSoup?
+
+[ ] Have you checked the robots.txt of a site before scraping?
+
+Next Week (Week 7): We enter the final phase of the course—Machine Learning with Scikit-Learn!

@@ -1,0 +1,49 @@
+import sys
+import os
+from pathlib import Path
+
+# Add backend to path
+sys.path.append(str(Path(__file__).parent.parent / "user" / "backend"))
+
+from core.database import get_db_connection
+from core.auth import get_password_hash
+
+def fix_user_password(national_id, raw_password):
+    new_hash = get_password_hash(raw_password)
+    
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT id, national_id, password_hash, role FROM users WHERE national_id = %s", (national_id,))
+        user = cursor.fetchone()
+        
+        if not user:
+            print(f"User {national_id} NOT FOUND!")
+            return
+
+        print(f"Found User ID: {user['id']}, Role: {user['role']}")
+        print(f"Old Hash: {user['password_hash']}")
+        print(f"New Hash: {new_hash}")
+        
+        cursor.execute("UPDATE users SET password_hash = %s WHERE id = %s", (new_hash, user['id']))
+        db.commit()
+        print("Password updated successfully!")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        db.close()
+
+if __name__ == "__main__":
+    # Fix Admin
+    print("Fixing Admin...")
+    fix_user_password("29001011234567", "NTA@Admin2026")
+    
+    # Fix Editor
+    print("\nFixing Editor...")
+    fix_user_password("29505051234567", "NTA@Editor2026")
+    
+    # Fix Trainee
+    print("\nFixing Trainee...")
+    fix_user_password("29808081234567", "NTA@Trainee2026")

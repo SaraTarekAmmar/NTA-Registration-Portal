@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تأكيد العملية - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+    <style>
+      .final-card {
+        max-width: 520px;
+        margin: 5rem auto;
+        background: rgba(8,12,32,0.65);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        backdrop-filter: blur(20px);
+      }
+      .final-icon {
+        width: 72px; height: 72px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+      }
+      .final-icon--success { background: rgba(16,185,129,0.15); border: 2px solid rgba(16,185,129,0.35); }
+      .final-icon--draft   { background: rgba(234,179,8,0.15);  border: 2px solid rgba(234,179,8,0.35); }
+      .final-icon--archive { background: rgba(100,116,139,0.15);border: 2px solid rgba(100,116,139,0.35); }
+      .final-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.6rem; }
+      .final-sub   { font-size: 0.92rem; color: var(--text-subtle); margin: 0 0 2rem; line-height: 1.65; }
+      .final-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    </style>
+  </head>
+  <body data-page="courses">
+    <div id="editorSidebar"></div>
+    <main class="editor-main">
+      <div id="finalCard" class="final-card">
+        <div class="final-icon" id="finalIcon">✅</div>
+        <h1 class="final-title" id="finalTitle">تمت العملية بنجاح</h1>
+        <p class="final-sub" id="finalSub"></p>
+        <div class="final-actions" id="finalActions"></div>
+      </div>
+    </main>
+
+    <script src="js/editor-layout.js"></script>
+    <script>
+      (function(){
+        var p = new URLSearchParams(window.location.search);
+        var action = p.get("action") || "draft";
+        var courseId = p.get("id");
+
+        var icon = document.getElementById("finalIcon");
+        var title = document.getElementById("finalTitle");
+        var sub = document.getElementById("finalSub");
+        var actions = document.getElementById("finalActions");
+
+        function makeBtn(href, label, cls) {
+          return '<a href="'+href+'" class="btn '+cls+'">'+label+'</a>';
+        }
+
+        if (action === "published") {
+          icon.className = "final-icon final-icon--success";
+          icon.textContent = "🎉";
+          title.textContent = "تم نشر الدورة بنجاح";
+          sub.textContent = "الدورة الآن مرئية للمتدربين ويمكنهم الاطلاع عليها.";
+          actions.innerHTML =
+            makeBtn("editor-preview.html?id="+courseId,  "عرض الدورة",        "btn--secondary") +
+            makeBtn("editor-courses.html",               "العودة للدورات",     "btn--secondary") +
+            makeBtn("editor-course-form.html",           "إنشاء دورة جديدة",  "btn--primary");
+
+        } else if (action === "draft") {
+          icon.className = "final-icon final-icon--draft";
+          icon.textContent = "💾";
+          title.textContent = "تم حفظ المسودة بنجاح";
+          sub.textContent = "تم حفظ الدورة كمسودة. يمكنك الاستمرار في التعديل ونشرها لاحقاً.";
+          actions.innerHTML =
+            makeBtn("editor-course-form.html?id="+courseId, "متابعة التعديل",  "btn--primary") +
+            makeBtn("editor-courses.html",                  "العودة للدورات",  "btn--secondary");
+
+        } else if (action === "archived") {
+          icon.className = "final-icon final-icon--archive";
+          icon.textContent = "📦";
+          title.textContent = "تم أرشفة الدورة";
+          sub.textContent = "الدورة لم تعد نشطة. يمكنك إلغاء الأرشفة في أي وقت.";
+          actions.innerHTML =
+            makeBtn("editor-courses.html", "العودة للدورات", "btn--secondary");
+
+        } else {
+          title.textContent = "تمت العملية بنجاح";
+          sub.textContent = "";
+          actions.innerHTML = makeBtn("editor-courses.html", "العودة للدورات", "btn--secondary");
+        }
+      })();
+    </script>
+  </body>
+</html>

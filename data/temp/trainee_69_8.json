@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "لبنى حسين الشناوي",
+      "full_name_en": "Lobna Hussein El-Shinawi",
+      "national_id": "29403071000017"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Scientific Research",
+          "category": "science",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Nanotechnology",
+          "category": "science",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "MATLAB",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "LabVIEW",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "التفكير النقدي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الدقة العلمية",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "التعاون البحثي",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "النانو تكنولوجي",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2021-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "المركز القومي للبحوث",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 3,
+        "objective": "ربط البحث العلمي بالسياسات الحكومية"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

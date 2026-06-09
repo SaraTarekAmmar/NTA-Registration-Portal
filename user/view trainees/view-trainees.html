@@ -1,0 +1,521 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متدربي الدورة - NTA</title>
+    <link rel="stylesheet" href="../trainee.css">
+    <link rel="stylesheet" href="../header/header.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nta-bg: #030712;
+            --nta-card: rgba(15, 23, 42, 0.6);
+            --nta-border: rgba(255, 255, 255, 0.08);
+            --nta-accent: #c1121f;
+            --nta-indigo: #6366f1;
+            --nta-green: #10b981;
+            --nta-text: #f1f5f9;
+            --nta-muted: #94a3b8;
+        }
+
+        body.trainee-app {
+            color: var(--nta-text);
+            font-family: 'Tajawal', sans-serif;
+            background: var(--nta-bg);
+        }
+
+        .dashboard-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 40px;
+            background: var(--nta-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--nta-border);
+            border-radius: 24px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--nta-border);
+            padding-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* KPIs */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nta-border);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .kpi-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--nta-indigo);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .kpi-label {
+            color: var(--nta-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Search & Actions */
+        .actions-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nta-border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--nta-muted);
+        }
+
+        .btn-wand {
+            padding: 0 20px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: #a5b4fc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-wand.active {
+            background: var(--nta-indigo);
+            color: #fff;
+        }
+
+        /* Cards Grid */
+        .trainee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .trainee-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nta-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .trainee-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .card-img-wrap {
+            height: 160px;
+            position: relative;
+            background: #1e293b;
+        }
+
+        .trainee-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #c7d2fe;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(59, 130, 246, 0.15));
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .trainee-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 5px;
+            color: #fff;
+        }
+
+        .trainee-meta {
+            font-size: 0.8rem;
+            color: var(--nta-muted);
+            margin-bottom: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .stat-row {
+            margin-bottom: 12px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--nta-muted);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--nta-indigo);
+        }
+
+        .att-fill {
+            background: var(--nta-green);
+        }
+
+        .btn-profile {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--nta-border);
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-profile:hover {
+            background: var(--nta-indigo);
+            border-color: var(--nta-indigo);
+        }
+
+        .skeleton-card {
+            height: 350px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--nta-border);
+            border-radius: 24px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 60px;
+            text-align: center;
+            color: var(--nta-muted);
+        }
+    </style>
+</head>
+<body class="trainee-app has-header">
+    <div class="trainee-bg" aria-hidden="true"></div>
+    <div id="ntaHeader"></div>
+
+    <div class="dashboard-container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title" id="courseTitle">متدربي الدورة</h1>
+                <p style="color: var(--nta-muted); margin-top: 5px;">إدارة ومتابعة أداء المتدربين في دورتك.</p>
+            </div>
+            <button class="btn-profile" onclick="history.back()" style="width: auto; padding: 10px 20px;">
+                <i data-lucide="arrow-right" style="width: 16px; vertical-align: middle; margin-left: 5px;"></i> عودة
+            </button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <span class="kpi-val" id="kpiTotal">—</span>
+                <span class="kpi-label">إجمالي المتدربين</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-val" id="kpiAtt">—</span>
+                <span class="kpi-label">متوسط الحضور</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-val" id="kpiProg">—</span>
+                <span class="kpi-label">متوسط الإنجاز</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-val" id="kpiTop">—</span>
+                <span class="kpi-label">أعلى درجة</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-bar">
+            <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="traineeSearch" placeholder="بحث باسم المتدرب...">
+            </div>
+            <button class="btn-wand" id="wandBtn" title="ترتيب حسب مطابقة الذكاء الاصطناعي">
+                <i data-lucide="sparkles"></i> ترتيب بالذكاء الاصطناعي
+            </button>
+        </div>
+
+        <!-- Grid -->
+        <div id="traineeGrid" class="trainee-grid">
+            <!-- Skeletons -->
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </div>
+
+    <script src="../header/header.js"></script>
+    <script>
+        let allTrainees = [];
+        let filteredTrainees = [];
+        let sortByAI = false;
+        let courseId = new URLSearchParams(window.location.search).get('course_id');
+        let courseName = new URLSearchParams(window.location.search).get('course_name');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) window.lucide.createIcons();
+            
+            if (courseName) document.getElementById('courseTitle').textContent = `متدربي: ${courseName}`;
+            
+            if (!courseId) {
+                alert('عذراً، لم يتم تحديد الدورة');
+                window.location.href = '../trainer-dashboard.html';
+                return;
+            }
+
+            fetchTrainees();
+
+            document.getElementById('traineeSearch').addEventListener('input', applyFilters);
+            document.getElementById('wandBtn').addEventListener('click', toggleAISort);
+        });
+
+        function fetchTrainees() {
+            window.authenticatedFetch(`/api/trainer/courses/${courseId}/trainees`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch');
+                    return res.json();
+                })
+
+                .then(data => {
+                    allTrainees = data.map(t => ({
+                        ...t,
+                        progress: Math.floor(Math.random() * 30) + 70, // Mocked for now
+                        attRate: Math.floor(Math.random() * 20) + 80   // Mocked for now
+                    }));
+                    applyFilters();
+                    calculateKPIs();
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('traineeGrid').innerHTML = `
+                        <div class="empty-state">
+                            <i data-lucide="alert-circle" size="48" style="color: var(--nta-accent); margin-bottom: 20px;"></i>
+                            <h3>فشل تحميل البيانات</h3>
+                            <p>يرجى التأكد من أنك تملك صلاحية الوصول لهذه الدورة.</p>
+                        </div>
+                    `;
+                    if (window.lucide) window.lucide.createIcons();
+                });
+        }
+
+        function calculateKPIs() {
+            if (allTrainees.length === 0) return;
+            
+            const total = allTrainees.length;
+            const avgAtt = Math.round(allTrainees.reduce((a, b) => a + b.attRate, 0) / total);
+            const avgProg = Math.round(allTrainees.reduce((a, b) => a + b.progress, 0) / total);
+            const top = Math.max(...allTrainees.map(t => t.progress));
+
+            document.getElementById('kpiTotal').textContent = total;
+            document.getElementById('kpiAtt').textContent = `${avgAtt}%`;
+            document.getElementById('kpiProg').textContent = `${avgProg}%`;
+            document.getElementById('kpiTop').textContent = `${top}%`;
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('traineeSearch').value.toLowerCase();
+            filteredTrainees = allTrainees.filter(t => t.name.toLowerCase().includes(query));
+            
+            if (sortByAI) {
+                filteredTrainees.sort((a, b) => (b.ai_match_score || 0) - (a.ai_match_score || 0));
+            }
+
+            renderTrainees();
+        }
+
+        function toggleAISort() {
+            sortByAI = !sortByAI;
+            document.getElementById('wandBtn').classList.toggle('active', sortByAI);
+            applyFilters();
+        }
+
+        function fixPath(path) {
+            if (!path) return '';
+            if (path.startsWith('http') || path.startsWith('/')) return path;
+            return '../' + path;
+        }
+
+        function renderTrainees() {
+            const grid = document.getElementById('traineeGrid');
+            if (filteredTrainees.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><h3>لا يوجد متدربون مطابقون للبحث</h3></div>';
+                return;
+            }
+
+            grid.innerHTML = filteredTrainees.map(t => {
+                const initials = t.name.split(' ').slice(0, 2).map(n => n[0]).join('');
+                return `
+                    <div class="trainee-card" onclick="viewProfile(${t.id})">
+                        <div class="card-img-wrap">
+                            ${t.ai_match_score ? `
+                                <div class="ai-badge">
+                                    <i data-lucide="sparkles" size="12"></i>
+                                    ${t.ai_match_score}% مطابقة
+                                </div>
+                            ` : ''}
+                            <img src="${fixPath(t.image_url)}" class="trainee-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                            <div class="img-placeholder" style="display:none">${initials}</div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="trainee-name">${t.name}</h3>
+                            <div class="trainee-meta">
+                                <span>${t.category || 'متدرب'}</span>
+                                <span>•</span>
+                                <span>${t.gender === 'male' ? 'ذكر' : 'أنثى'}</span>
+                            </div>
+
+                            <div class="stat-row">
+                                <div class="stat-header">
+                                    <span>الحضور</span>
+                                    <span>${t.attRate}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill att-fill" style="width: ${t.attRate}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-row">
+                                <div class="stat-header">
+                                    <span>الإنجاز</span>
+                                    <span>${t.progress}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${t.progress}%"></div>
+                                </div>
+                            </div>
+
+                            <button class="btn-profile" onclick="viewProfile(${t.id})">الملف الشخصي والتحليل</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function viewProfile(id) {
+            const courseId = new URLSearchParams(window.location.search).get('course_id');
+            const session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+            
+            // Open Unified Profile (which now includes Analytics) in CURRENT TAB
+            window.location.href = `trainee-profile.html?trainee_id=${id}&course_id=${courseId}`;
+        }
+
+    </script>
+</body>
+</html>

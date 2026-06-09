@@ -1,0 +1,135 @@
+================================================================================
+FILE UPLOAD AUDIT — inputs missing format/instruction hints
+================================================================================
+
+================================================================================
+LABEL MARKER AUDIT — labels missing (اجبارى) or (اختيارى)
+================================================================================
+
+Step 3 — 15 label(s) missing marker:
+    • الدرجة (ماجستير - دكتوراه)
+    • اسم الجهة المانحة للدرجة
+    • التخصص الرئيسي للدرجة
+    • التخصص الفرعي
+    • تاريخ البدء
+    • تاريخ الانتهاء
+    • تمويل شخصي أم جهة خارجية
+    • اسم الجهة التي رشحتك
+    • اسم جهة المنحة
+    • الاختبارات والشهادات المعيارية
+    • اسم الاختبار (Test Name)
+    • درجة الاختبار (Test Score)
+    • جهة الإصدار (Issuing Authority)
+    • تاريخ الحصول (Date Obtained)
+    • Attach Document
+
+Step 4 — 34 label(s) missing marker:
+    • هل لديك خبرة عملية؟
+    • تحميل السيرة الذاتية (PDF, DOC, DOCX)
+    • نوع الوظيفة
+    • طبيعة الوظيفة
+    • الوزارة
+    • الجهة التابعة للوزارة
+    • تاريخ الالتحاق بالعمل
+    • ما زلت أعمل في هذه الوظيفة
+    • تاريخ الانتهاء من العمل
+    • المسمى الوظيفي
+    • المستوى الوظيفي / الأقدمية
+    • القسم / الإدارة
+    • التخصص المهني
+    • وصف الوظيفة والمسؤوليات
+    • عنوان جهة العمل
+    • مجال العمل / طبيعة النشاط (أول)
+    • مجال العمل (ثانٍ — اختياري، حتى مجالين)
+    • اسم المرجع
+    • رقم هاتف المرجع
+    • البريد الإلكتروني للمرجع
+    • مكان العمل المشترك
+    • السجل المهني (Professional History)
+    • المنظمة / جهة العمل والقطاع (Organization &amp;
+
+                          Indus
+    • تاريخ البدء (Start Date)
+    • تاريخ الانتهاء (End Date)
+    • المسؤوليات الرئيسية (Key Responsibilities)
+    • سبب ترك العمل (Reason for Leaving)
+    • ملخص البيانات المهنية (Professional Summary)
+    • المسمى الوظيفي الحالي (Current Job Title)
+    • سنوات الخبرة الإدارية (Years of Management
+
+                      Experience)
+    • حجم المنظمة (Organization Size)
+    • الميزانية السنوية المدارة (Annual Budget Managed)
+    • عدد المرؤوسين المباشرين (Direct Reports / Team
+
+                      Size)
+    • الخبرة العالمية (Global Experience - سنوات في
+
+                      الخارج)
+
+Step 5 — 10 label(s) missing marker:
+    • المهارات التقنية (Technical Skills)
+    • مهارات الحاسب الآلي (Computer Skills)
+    • المهارات الشخصية (Soft Skills)
+    • مهارات أخرى (Other Skills)
+    • اللغة الأم (Mother Language)
+    • اللغة الثانية (الإنجليزية) — مستوى الإجادة فقط
+    • لغات إضافية (حتى لغتين غير الإنجليزية)
+    • وصف الاهتمامات
+    • هل تستخدم وسائل التواصل الاجتماعي؟
+    • منصات التواصل (تشغيل / إيقاف لكل منصة)
+
+Step 6 — 21 label(s) missing marker:
+    • هل حصلت على أي جوائز أو تكريمات؟
+    • اسم الجائزة / التكريم
+    • تاريخ الحصول عليها
+    • فئة الجائزة
+    • الجهة المانحة
+    • تحميل صورة الشهادة (PDF أو صورة)
+    • هل شاركت في أي مؤتمرات أو ورش عمل؟
+    • اسم الفعالية
+    • الجهة المنظمة
+    • تاريخ البدء
+    • تاريخ الانتهاء
+    • مستوى المشاركة
+    • الجوائز والتكريمات (Impact &amp; Awards)
+    • عنوان الجائزة / التكريم (Award / Recognition
+
+                          Title)
+    • الجهة المانحة (Issuing Body)
+    • الإنجاز الرئيسي (حتى 100 كلمة) (Key Achievement)
+    • القيادة المجتمعية / التطوع (Community / Volunteer
+
+                    Leadershi
+    • الأنشطة اللاصفية (Extracurricular Depth)
+    • الدور (Role)
+    • مدة المشروع (Project Duration)
+    • منشورات / ملف أعمال (Publication / Portfolio)
+
+Step 7 — 9 label(s) missing marker:
+    • هل شاركت في أي عمل عام أو تطوعي؟
+    • اسم المؤسسة أو الجمعية الخيرية
+    • المنصب / الدور الوظيفي
+    • سنة / تاريخ الالتحاق
+    • سنة / تاريخ المغادرة
+    • نطاق العمل ووصف الخبرة
+    • مجال العمل
+    • دولة العمل
+    • هل شاركت في أي عمل سياسي؟
+
+Step 9 — 9 label(s) missing marker:
+    • تم تسليمك دليلاً مكوناً من 50 صفحة لبرنامج جديد ومعقد. ما هي خطوتك الأولى؟
+    • When explaining a concept to a friend, you
+
+                      naturally:
+    • Which "aha!" moment feels best to you?
+    • A website performs poorly. Your instinct is to
+
+                      fix:
+    • In a strategy game, you prefer to be:
+    • If you were to write a book, it would likely be:
+    • Which phrase sounds most like a compliment to you?
+    • "Deep work" kicks in for you when:
+    • When finishing a project, what gives you the most
+
+                      pride?

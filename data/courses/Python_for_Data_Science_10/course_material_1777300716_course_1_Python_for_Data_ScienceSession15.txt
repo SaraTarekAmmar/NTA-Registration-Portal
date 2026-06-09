@@ -1,0 +1,94 @@
+Session 15: Classification and Clustering Basics
+
+Welcome to the final week of instruction! In Session 14, we looked at regression and basic classification. Today, we expand our toolkit with two very popular algorithms: K-Nearest Neighbors (KNN) and K-Means Clustering.
+
+This session is unique because it introduces the difference between Supervised Learning (KNN) and Unsupervised Learning (K-Means).
+
+1. K-Nearest Neighbors (KNN) - Supervised
+
+KNN is a simple, intuitive algorithm that classifies a data point based on how its neighbors are classified. It is often called a "lazy learner" because it doesn't build a mathematical model; it just stores the training data.
+
+How it works: To predict the class of a new point, the algorithm finds the 'K' closest points in the training set and takes a "majority vote."
+
+Key Parameter: n_neighbors (K). A small K is sensitive to noise; a large K may blur the boundaries between classes.
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+# 1. Instantiate the model (using 5 neighbors)
+knn = KNeighborsClassifier(n_neighbors=5)
+
+# 2. Fit and Predict
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+
+
+2. K-Means Clustering - Unsupervised
+
+Unlike the models we've seen so far, K-Means is Unsupervised. This means the data has no labels ($y$). The algorithm tries to find hidden patterns or groups (clusters) within the features ($X$).
+
+How it works: It randomly places $K$ "centroids" and assigns every data point to the nearest one. It then moves the centroids to the center of those points and repeats until the groups are stable.
+
+Use Case: Customer segmentation, image compression, or anomaly detection.
+
+from sklearn.cluster import KMeans
+
+# 1. Instantiate the model
+# 'n_clusters' is the number of groups we want to find
+kmeans = KMeans(n_clusters=3, random_state=42)
+
+# 2. Fit the model (No 'y' variable!)
+kmeans.fit(X)
+
+# 3. Get the labels (Which cluster each row belongs to)
+clusters = kmeans.labels_
+
+
+3. The Importance of Distance
+
+Both algorithms rely on measuring the distance between points (usually Euclidean Distance). Because of this, Feature Scaling (Session 13) is mandatory. If one feature has a much larger range than others, it will dominate the distance calculation.
+
+4. Finding the Right 'K' (The Elbow Method)
+
+For K-Means, how do we know how many clusters to pick? We use the Elbow Method. We plot the "Inertia" (sum of squared distances to the nearest centroid) for different values of $K$. The point where the decrease slows down (the "elbow") is usually the optimal number of clusters.
+
+inertia = []
+for k in range(1, 11):
+    km = KMeans(n_clusters=k).fit(X)
+    inertia.append(km.inertia_)
+
+# Plotting inertia vs k will show the 'elbow'
+
+
+Hands-on Exercise: Customer Segmentation
+
+Task:
+
+Create a simulated dataset of customer spending:
+
+import numpy as np
+import pandas as pd
+data = {
+    'Annual_Income': [15, 16, 17, 80, 85, 88, 120, 125, 130],
+    'Spending_Score': [80, 85, 90, 40, 45, 50, 10, 15, 20]
+}
+df_customers = pd.DataFrame(data)
+
+
+Pre-processing: Scale the features using StandardScaler.
+
+Clustering: Use KMeans with n_clusters=3 to group the customers.
+
+Visualization: Create a Seaborn scatterplot of Income vs. Spending Score, using the cluster labels as the hue.
+
+Interpretation: Look at the plot. How would you describe the three groups of customers? (e.g., "Low income, high spending").
+
+Summary Checklist
+
+[ ] Can you explain the difference between Supervised and Unsupervised learning?
+
+[ ] Why is feature scaling critical for KNN and K-Means?
+
+[ ] Do you know how to use the Elbow Method to choose the number of clusters?
+
+Final Session (Session 16): Capstone Presentations! You will present your end-to-end data product.

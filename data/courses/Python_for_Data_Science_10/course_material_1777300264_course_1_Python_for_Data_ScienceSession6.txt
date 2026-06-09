@@ -1,0 +1,101 @@
+Session 6: GroupBy Operations and Pivot Tables
+
+Welcome to the final session of Week 3! Now that we know how to clean our data, it's time to learn how to summarize it. In Data Science, we often need to look at data in groups—for example, calculating the average sales per region or the total number of users per subscription tier.
+
+Today, we cover the "Split-Apply-Combine" strategy using GroupBy and the powerful Pivot Table.
+
+1. The Split-Apply-Combine Strategy
+
+When we use groupby(), Pandas performs three steps:
+
+Split: Breaks the data into groups based on a key (e.g., 'Category').
+
+Apply: Computes a function (like mean, sum, or count) for each group.
+
+Combine: Merges the results into a new summary object.
+
+import pandas as pd
+
+# Sample Data
+data = {
+    'Department': ['Sales', 'IT', 'Sales', 'IT', 'HR', 'HR'],
+    'Employee': ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank'],
+    'Salary': [50000, 80000, 55000, 85000, 60000, 62000],
+    'Bonus': [5000, 10000, 4000, 12000, 3000, 3500]
+}
+df = pd.DataFrame(data)
+
+# Group by Department and calculate mean salary
+dept_stats = df.groupby('Department')['Salary'].mean()
+print(dept_stats)
+
+
+2. Multiple Aggregations
+
+You can calculate multiple statistics at once using the .agg() method.
+
+# Calculate both mean and max salary for each department
+stats = df.groupby('Department')['Salary'].agg(['mean', 'max', 'count'])
+print(stats)
+
+
+3. Pivot Tables
+
+A Pivot Table is a multidimensional version of GroupBy. It allows you to group data by two or more keys, creating a grid-like summary similar to what you find in Excel.
+
+Syntax: df.pivot_table(values, index, columns, aggfunc)
+
+# Creating a pivot table to see Average Salary by Department
+pivot = df.pivot_table(values='Salary', index='Department', aggfunc='mean')
+print(pivot)
+
+
+4. Multi-Level Indexing (Grouping by Multiple Columns)
+
+You can group by more than one column to see more granular data.
+
+# Assuming we had a 'Location' column
+# df.groupby(['Department', 'Location'])['Salary'].mean()
+
+
+5. Sorting Grouped Data
+
+Often, you want to see the "top" groups (e.g., the highest-earning department).
+
+# Sort departments by their average salary
+sorted_depts = df.groupby('Department')['Salary'].mean().sort_values(ascending=False)
+print(sorted_depts)
+
+
+Hands-on Exercise: Regional Sales Analysis
+
+Task:
+
+Create a DataFrame with this data:
+
+sales_data = {
+    'Region': ['East', 'West', 'East', 'North', 'West', 'North', 'East', 'West'],
+    'Product': ['A', 'A', 'B', 'A', 'B', 'B', 'A', 'A'],
+    'Sales': [1200, 2500, 800, 1500, 2100, 1100, 1300, 2700],
+    'Orders': [10, 20, 5, 12, 18, 9, 11, 22]
+}
+df_sales = pd.DataFrame(sales_data)
+
+
+Simple GroupBy: Find the total sales for each Region.
+
+Advanced Aggregation: For each Product, calculate the mean and sum of both Sales and Orders.
+
+Pivot Table: Create a pivot table showing Total Sales with Region as the index and Product as the columns.
+
+Insights: Which Region has the highest total sales? Use code to find the answer.
+
+Summary Checklist
+
+[ ] Do you understand the "Split-Apply-Combine" concept?
+
+[ ] Can you use .agg() to calculate mean and sum simultaneously?
+
+[ ] Can you create a pivot table to compare two categorical variables?
+
+Next Week (Week 4): We begin Exploratory Data Analysis (EDA) and launch your Midterm Project!

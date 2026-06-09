@@ -1,0 +1,2158 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="../common/js/theme.js"></script>
+    <link rel="stylesheet" href="../common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الاختبار - الأكاديمية الوطنية للتدريب</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #030712;
+        --surface: rgba(8, 12, 32, 0.85);
+        --surface2: rgba(15, 23, 42, 0.9);
+        --border: rgba(51, 65, 85, 0.55);
+        --accent: #6366f1;
+        --accent2: #3b82f6;
+        --green: #10b981;
+        --red: #ef4444;
+        --amber: #f59e0b;
+        --text: #f1f5f9;
+        --text2: #94a3b8;
+        --text3: #475569;
+      }
+
+      body {
+        font-family: "Tajawal", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      /* ═══════════════════════════════════════════
+       BACKGROUND
+    ═══════════════════════════════════════════ */
+      .exam-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse 80% 50% at 50% -10%,
+            rgba(99, 102, 241, 0.12),
+            transparent
+          ),
+          radial-gradient(
+            ellipse 60% 40% at 100% 100%,
+            rgba(6, 182, 212, 0.07),
+            transparent
+          ),
+          #030712;
+      }
+
+      /* ═══════════════════════════════════════════
+       LOGIN SCREEN
+    ═══════════════════════════════════════════ */
+      #loginScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+
+      .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(8, 12, 32, 0.92);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        border-radius: 22px;
+        padding: 2.5rem 2rem;
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.95),
+          0 24px 64px rgba(0, 0, 0, 0.7),
+          0 0 40px rgba(99, 102, 241, 0.08);
+        position: relative;
+        overflow: hidden;
+        animation: loginIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .login-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #6366f1,
+          #3b82f6,
+          transparent
+        );
+      }
+      @keyframes loginIn {
+        from {
+          opacity: 0;
+          transform: translateY(24px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .login-logo {
+        text-align: center;
+        margin-bottom: 1.75rem;
+      }
+      .login-logo__icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        margin: 0 auto 0.85rem;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.25),
+          rgba(59, 130, 246, 0.15)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 24px rgba(99, 102, 241, 0.25);
+      }
+      .login-logo__icon svg {
+        width: 26px;
+        height: 26px;
+        color: #a5b4fc;
+      }
+      .login-logo__title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
+      }
+      .login-logo__sub {
+        font-size: 0.82rem;
+        color: #475569;
+      }
+
+      .login-exam-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        background: rgba(99, 102, 241, 0.08);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        margin-bottom: 1.75rem;
+      }
+      .login-exam-badge__icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .login-exam-badge__name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #c7d2fe;
+        line-height: 1.3;
+      }
+      .login-exam-badge__sub {
+        font-size: 0.72rem;
+        color: #475569;
+        margin-top: 0.1rem;
+      }
+
+      .login-field {
+        margin-bottom: 1rem;
+      }
+      .login-field label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.45rem;
+      }
+      .login-field input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(51, 65, 85, 0.7);
+        color: #f1f5f9;
+        font-family: inherit;
+        font-size: 0.9rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .login-field input:focus {
+        border-color: rgba(99, 102, 241, 0.6);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+      }
+      .login-field input::placeholder {
+        color: #334155;
+      }
+
+      .login-err {
+        font-size: 0.8rem;
+        color: #f87171;
+        margin-bottom: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        display: none;
+      }
+      .login-err.visible {
+        display: block;
+      }
+
+      .login-submit {
+        width: 100%;
+        padding: 0.85rem;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #6366f1, #3b82f6);
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 20px -8px rgba(99, 102, 241, 0.6);
+      }
+      .login-submit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 28px -8px rgba(99, 102, 241, 0.75);
+      }
+      .login-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ═══════════════════════════════════════════
+       EXAM LAYOUT
+    ═══════════════════════════════════════════ */
+      #examScreen {
+        display: none;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+      #examScreen.visible {
+        display: flex;
+      }
+
+      /* ── Header ── */
+      .exam-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        height: 64px;
+        background: rgba(3, 7, 18, 0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        gap: 1rem;
+      }
+      .exam-header__right {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .exam-header__logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.25),
+          rgba(59, 130, 246, 0.15)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .exam-header__logo svg {
+        width: 18px;
+        height: 18px;
+        color: #a5b4fc;
+      }
+      .exam-header__info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+      .exam-header__title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #e2e8f0;
+      }
+      .exam-header__sub {
+        font-size: 0.7rem;
+        color: #475569;
+      }
+
+      .exam-header__center {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .exam-progress-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .exam-progress-bar {
+        width: 120px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .exam-progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #6366f1, #3b82f6);
+        transition: width 0.4s ease;
+      }
+      .exam-progress-text {
+        font-size: 0.75rem;
+        color: #64748b;
+        white-space: nowrap;
+      }
+
+      .exam-timer {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        font-variant-numeric: tabular-nums;
+        min-width: 90px;
+        justify-content: center;
+      }
+      .exam-timer svg {
+        width: 14px;
+        height: 14px;
+        color: #6366f1;
+        flex-shrink: 0;
+      }
+      .exam-timer.warning {
+        border-color: rgba(245, 158, 11, 0.5);
+        color: #fbbf24;
+      }
+      .exam-timer.warning svg {
+        color: #f59e0b;
+      }
+      .exam-timer.danger {
+        border-color: rgba(239, 68, 68, 0.5);
+        color: #f87171;
+        animation: timerPulse 1s ease-in-out infinite;
+      }
+      .exam-timer.danger svg {
+        color: #ef4444;
+      }
+      @keyframes timerPulse {
+        0%,
+        100% {
+          box-shadow: none;
+        }
+        50% {
+          box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
+        }
+      }
+
+      /* ── Body ── */
+      .exam-body {
+        flex: 1;
+        padding: 88px 1.5rem 100px; /* header + footer clearance */
+        max-width: 840px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .exam-header-block {
+        padding: 1.5rem;
+        border-radius: 18px;
+        margin-bottom: 2rem;
+        background: rgba(8, 12, 32, 0.6);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+      .exam-header-block::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #6366f1,
+          #3b82f6,
+          transparent
+        );
+      }
+      .exam-header-block__course {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6366f1;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .exam-header-block__course::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #6366f1;
+        box-shadow: 0 0 6px rgba(99, 102, 241, 0.6);
+      }
+      .exam-header-block__title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.85rem;
+      }
+      .exam-header-block__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+      }
+      .exam-meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        color: #64748b;
+      }
+      .exam-meta-chip svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+      }
+      .exam-meta-chip--accent {
+        border-color: rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+
+      /* ── Questions ── */
+      .question-block {
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin-bottom: 1.25rem;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(51, 65, 85, 0.45);
+        transition: border-color 0.25s;
+        animation: qIn 0.4s ease-out backwards;
+      }
+      .question-block.answered {
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      @keyframes qIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .question-num {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #475569;
+        margin-bottom: 0.65rem;
+      }
+      .question-num__badge {
+        width: 22px;
+        height: 22px;
+        border-radius: 7px;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        color: #818cf8;
+        font-size: 0.72rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .question-type-badge {
+        padding: 0.12rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        color: #64748b;
+      }
+      .question-type-badge--mcq {
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #7dd3fc;
+      }
+      .question-type-badge--tf {
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #6ee7b7;
+      }
+      .question-type-badge--written {
+        border-color: rgba(245, 158, 11, 0.3);
+        color: #fcd34d;
+      }
+
+      .question-text {
+        font-size: 0.97rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        line-height: 1.65;
+        margin-bottom: 1.1rem;
+      }
+
+      /* MCQ options */
+      .mcq-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .mcq-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        cursor: pointer;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        background: rgba(15, 23, 42, 0.5);
+        transition: all 0.18s ease;
+        user-select: none;
+      }
+      .mcq-option:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        background: rgba(99, 102, 241, 0.06);
+      }
+      .mcq-option.selected {
+        border-color: rgba(99, 102, 241, 0.6);
+        background: rgba(99, 102, 241, 0.12);
+        box-shadow: 0 0 14px rgba(99, 102, 241, 0.1);
+      }
+      .mcq-option input[type="radio"] {
+        display: none;
+      }
+      .mcq-radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid rgba(51, 65, 85, 0.7);
+        background: rgba(15, 23, 42, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s ease;
+      }
+      .mcq-option.selected .mcq-radio {
+        border-color: #6366f1;
+        background: rgba(99, 102, 241, 0.2);
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.35);
+      }
+      .mcq-radio-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #6366f1;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .mcq-option.selected .mcq-radio-dot {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .mcq-option-letter {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s;
+      }
+      .mcq-option.selected .mcq-option-letter {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+      }
+      .mcq-option-text {
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: #cbd5e1;
+        flex: 1;
+      }
+      .mcq-option.selected .mcq-option-text {
+        color: #e2e8f0;
+      }
+
+      /* Written answer */
+      .written-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        background: rgba(15, 23, 42, 0.6);
+        color: #f1f5f9;
+        font-family: inherit;
+        font-size: 0.88rem;
+        line-height: 1.65;
+        resize: vertical;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .written-textarea:focus {
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+      .written-textarea::placeholder {
+        color: #334155;
+      }
+      .written-counter {
+        font-size: 0.7rem;
+        color: #334155;
+        text-align: left;
+        margin-top: 0.4rem;
+      }
+
+      /* ── Footer ── */
+      .exam-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        height: 72px;
+        background: rgba(3, 7, 18, 0.92);
+        backdrop-filter: blur(16px);
+        border-top: 1px solid rgba(51, 65, 85, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        gap: 1rem;
+      }
+      .exam-footer__left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .exam-footer__answered {
+        font-size: 0.78rem;
+        color: #475569;
+        font-weight: 600;
+      }
+      .exam-footer__answered span {
+        color: #a5b4fc;
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+
+      .exam-unanswered-dots {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+        max-width: 200px;
+      }
+      .exam-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(51, 65, 85, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+        transition: all 0.2s;
+      }
+      .exam-dot.done {
+        background: #6366f1;
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 4px rgba(99, 102, 241, 0.4);
+      }
+
+      .exam-submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.65rem 1.75rem;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #6366f1, #3b82f6);
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 20px -8px rgba(99, 102, 241, 0.55);
+        white-space: nowrap;
+      }
+      .exam-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px -8px rgba(99, 102, 241, 0.7);
+      }
+      .exam-submit-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ── Confirmation overlay ── */
+      .exam-confirm-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(3, 7, 18, 0.85);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+      .exam-confirm-backdrop.open {
+        display: flex;
+      }
+      .exam-confirm {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(8, 12, 32, 0.97);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.95),
+          0 24px 60px rgba(0, 0, 0, 0.7);
+        animation: loginIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .exam-confirm__icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        margin: 0 auto 1rem;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+      }
+      .exam-confirm__icon svg {
+        width: 24px;
+        height: 24px;
+        color: #a5b4fc;
+      }
+      .exam-confirm__title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+      .exam-confirm__text {
+        font-size: 0.85rem;
+        color: #64748b;
+        text-align: center;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+      }
+      .exam-confirm__unanswered {
+        background: rgba(245, 158, 11, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.2);
+        border-radius: 10px;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.8rem;
+        color: #fbbf24;
+        margin-bottom: 1.25rem;
+        text-align: center;
+        display: none;
+      }
+      .exam-confirm__unanswered.visible {
+        display: block;
+      }
+      .exam-confirm__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+      }
+      .exam-confirm__btn {
+        padding: 0.65rem;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .exam-confirm__btn--cancel {
+        background: rgba(15, 23, 42, 0.8);
+        border-color: rgba(51, 65, 85, 0.7);
+        color: #94a3b8;
+      }
+      .exam-confirm__btn--cancel:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+      }
+      .exam-confirm__btn--submit {
+        background: linear-gradient(135deg, #6366f1, #3b82f6);
+        color: #fff;
+        box-shadow: 0 6px 18px -8px rgba(99, 102, 241, 0.6);
+      }
+      .exam-confirm__btn--submit:hover {
+        transform: translateY(-1px);
+      }
+
+      /* ── Result screen ── */
+      .exam-result {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: rgba(3, 7, 18, 0.92);
+        backdrop-filter: blur(16px);
+      }
+      .exam-result.open {
+        display: flex;
+      }
+      .exam-result-card {
+        width: 100%;
+        max-width: 480px;
+        background: rgba(8, 12, 32, 0.97);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+        border-radius: 22px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.95),
+          0 24px 64px rgba(0, 0, 0, 0.7);
+        animation: loginIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        position: relative;
+        overflow: hidden;
+      }
+      .exam-result-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #22c55e,
+          #4ade80,
+          transparent
+        );
+      }
+      .exam-result__score-ring {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .exam-result__score-ring svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+      .exam-result__score-ring circle {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+      }
+      .exam-result__ring-bg {
+        stroke: rgba(30, 41, 59, 0.8);
+      }
+      .exam-result__ring-fill {
+        stroke: url(#scoreGradient);
+        stroke-dasharray: 283;
+        stroke-dashoffset: 283;
+        transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+      }
+      .exam-result__score-val {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+      }
+      .exam-result__score-val span {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #64748b;
+      }
+      .exam-result__grade {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 0.35rem;
+        letter-spacing: -0.02em;
+      }
+      .exam-result__msg {
+        font-size: 0.88rem;
+        color: #64748b;
+        margin-bottom: 1.75rem;
+        line-height: 1.65;
+      }
+      .exam-result__stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+      }
+      .exam-result__stat {
+        padding: 0.85rem 0.75rem;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .exam-result__stat-val {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        margin-bottom: 0.2rem;
+      }
+      .exam-result__stat-lbl {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #475569;
+      }
+      .exam-result__close {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: none;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(51, 65, 85, 0.6);
+        color: #94a3b8;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .exam-result__close:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+      }
+
+      @media (max-width: 600px) {
+        .exam-header__center {
+          display: none;
+        }
+        .exam-progress-wrap {
+          display: none;
+        }
+        .exam-body {
+          padding: 80px 1rem 90px;
+        }
+        .exam-header,
+        .exam-footer {
+          padding: 0 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="exam-bg"></div>
+
+    <!-- ═══════════════════════════ LOGIN ═══════════════════════════ -->
+    <div id="loginScreen">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="login-logo__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12l2 2 4-4"
+              />
+            </svg>
+          </div>
+          <div class="login-logo__title">الأكاديمية الوطنية للتدريب</div>
+          <div class="login-logo__sub">نظام الاختبارات الإلكتروني</div>
+        </div>
+
+        <div class="login-exam-badge" id="loginExamBadge">
+          <span class="login-exam-badge__icon">📋</span>
+          <div>
+            <div class="login-exam-badge__name" id="loginExamName">
+              جاري التحميل…
+            </div>
+            <div class="login-exam-badge__sub" id="loginExamSub"></div>
+          </div>
+        </div>
+
+        <div class="login-field">
+          <label for="loginEmail">البريد الإلكتروني</label>
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="name@example.com"
+            autocomplete="email"
+          />
+        </div>
+        <div class="login-field">
+          <label for="loginId">رقم الهوية الوطنية</label>
+          <input
+            type="text"
+            id="loginId"
+            placeholder="أدخل رقم هويتك"
+            autocomplete="off"
+            maxlength="20"
+          />
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">كلمة المرور</label>
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="أدخل كلمة المرور"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <div class="login-err" id="loginErr">
+          بيانات الدخول غير صحيحة. حاول مرة أخرى.
+        </div>
+
+        <button class="login-submit" id="loginSubmit">
+          دخول والبدء بالاختبار
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════ EXAM ═══════════════════════════ -->
+    <div id="examScreen">
+      <!-- Header -->
+      <header class="exam-header">
+        <div class="exam-header__right">
+          <div class="exam-header__logo">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              />
+            </svg>
+          </div>
+          <div class="exam-header__info">
+            <div class="exam-header__title" id="headerCourseName">—</div>
+            <div class="exam-header__sub" id="headerExamNum">—</div>
+          </div>
+        </div>
+
+        <div class="exam-header__center">
+          <div class="exam-progress-wrap">
+            <div class="exam-progress-bar">
+              <div
+                class="exam-progress-fill"
+                id="progressFill"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="exam-progress-text" id="progressText">0 / 0</div>
+          </div>
+          <div class="exam-timer" id="examTimer">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span id="timerDisplay">--:--</span>
+          </div>
+        </div>
+
+        <div style="width: 120px"></div>
+        <!-- spacer -->
+      </header>
+
+      <!-- Body -->
+      <main class="exam-body">
+        <div class="exam-header-block">
+          <div class="exam-header-block__course" id="examCourseName">—</div>
+          <div class="exam-header-block__title" id="examTitle">—</div>
+          <div class="exam-header-block__meta" id="examMeta"></div>
+        </div>
+
+        <div id="questionsContainer"></div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="exam-footer">
+        <div class="exam-footer__left">
+          <div class="exam-footer__answered">
+            أجبت على <span id="answeredCount">0</span> من
+            <span id="totalCount">0</span> سؤال
+          </div>
+          <div class="exam-unanswered-dots" id="answerDots"></div>
+        </div>
+        <button class="exam-submit-btn" id="submitExamBtn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          تسليم الاختبار
+        </button>
+      </footer>
+    </div>
+
+    <!-- Confirm overlay -->
+    <div class="exam-confirm-backdrop" id="confirmBackdrop">
+      <div class="exam-confirm">
+        <div class="exam-confirm__icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        </div>
+        <div class="exam-confirm__title">تسليم الاختبار</div>
+        <div class="exam-confirm__text">
+          هل أنت متأكد من رغبتك في تسليم الاختبار؟<br />لن تتمكن من التعديل بعد
+          التسليم.
+        </div>
+        <div class="exam-confirm__unanswered" id="confirmUnanswered"></div>
+        <div class="exam-confirm__actions">
+          <button
+            class="exam-confirm__btn exam-confirm__btn--cancel"
+            id="confirmCancel"
+          >
+            العودة للمراجعة
+          </button>
+          <button
+            class="exam-confirm__btn exam-confirm__btn--submit"
+            id="confirmSubmit"
+          >
+            تسليم الآن
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result screen — submission confirmation only, no score -->
+    <div class="exam-result" id="resultScreen">
+      <div class="exam-result-card">
+        <div
+          style="
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            margin: 0 auto 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 28px rgba(16, 185, 129, 0.18);
+          "
+        >
+          <svg
+            width="34"
+            height="34"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#34d399"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        </div>
+        <div
+          style="
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.02em;
+          "
+        >
+          تم تسليم الاختبار بنجاح
+        </div>
+        <div
+          style="
+            font-size: 0.88rem;
+            color: #6366f1;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+          "
+          id="resultCourseName"
+        ></div>
+        <div
+          style="
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 1.75rem;
+          "
+        >
+          تم استلام إجاباتك وستُراجَع من قِبل فريق الأكاديمية.<br />
+          ستصلك النتيجة عبر البريد الإلكتروني في أقرب وقت.
+        </div>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.75rem;
+          "
+        >
+          <div class="exam-result__stat">
+            <div class="exam-result__stat-val" id="resultQCount">—</div>
+            <div class="exam-result__stat-lbl">عدد الأسئلة</div>
+          </div>
+          <div class="exam-result__stat">
+            <div class="exam-result__stat-val" id="resultTimeSpent">—</div>
+            <div class="exam-result__stat-lbl">الوقت المستغرق</div>
+          </div>
+        </div>
+        <button class="exam-result__close" id="resultClose">
+          إغلاق النافذة
+        </button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        /* ══════════════════════════════════════════════════════════════
+           DUMMY EXAM DATA
+           Replace with: GET /api/exams?course_id=X
+           Each exam object: { id, courseId, courseName, examNum, title,
+             durationMinutes, passingScore, questions[] }
+           Each question: { id, type ('mcq'|'tf'|'written'), text, options?,
+             answer?, points }
+           For MCQ/TF: options = [{label, text}], answer = label of correct
+           For written: no answer (manual grading)
+        ══════════════════════════════════════════════════════════════ */
+        var EXAM_DATA = {
+          /* course c1 — التحول الرقمي */
+          c1: {
+            available: true,
+            exams: [
+              {
+                id: "e1-c1",
+                courseId: "c1",
+                courseName: "التحول الرقمي في المؤسسات",
+                examNum: "الاختبار الأول",
+                title: "مفاهيم التحول الرقمي وتقنياته",
+                durationMinutes: 30,
+                passingScore: 60,
+                questions: [
+                  {
+                    id: "q1",
+                    type: "mcq",
+                    text: "ما هو التعريف الأدق للتحول الرقمي في سياق المؤسسات؟",
+                    options: [
+                      { label: "أ", text: "شراء أجهزة حاسوب جديدة للموظفين" },
+                      {
+                        label: "ب",
+                        text: "إعادة تصميم العمليات والنماذج المؤسسية باستخدام التقنيات الرقمية لتحقيق قيمة جديدة",
+                      },
+                      { label: "ج", text: "إنشاء موقع إلكتروني للشركة" },
+                      { label: "د", text: "استبدال الموظفين بالآلات" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q2",
+                    type: "tf",
+                    text: "يُعدّ الذكاء الاصطناعي أحد الركائز الأساسية للتحول الرقمي في المؤسسات الحديثة.",
+                    options: [
+                      { label: "أ", text: "صحيح" },
+                      { label: "ب", text: "خاطئ" },
+                    ],
+                    answer: "أ",
+                    points: 5,
+                  },
+                  {
+                    id: "q3",
+                    type: "mcq",
+                    text: "أيٌّ من التالي يُمثّل أكبر تحدٍّ يواجه المؤسسات أثناء تبنّي التحول الرقمي؟",
+                    options: [
+                      { label: "أ", text: "ارتفاع أسعار الأجهزة" },
+                      {
+                        label: "ب",
+                        text: "مقاومة التغيير من قِبل الموظفين والقيادة",
+                      },
+                      { label: "ج", text: "ضعف سرعة الإنترنت" },
+                      { label: "د", text: "غياب المنافسة" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q4",
+                    type: "mcq",
+                    text: 'ما الفرق الجوهري بين "رقمنة العمليات" (Digitization) و"التحول الرقمي" (Digital Transformation)؟',
+                    options: [
+                      { label: "أ", text: "لا فرق بينهما" },
+                      {
+                        label: "ب",
+                        text: "الرقمنة تحويل البيانات لصيغة رقمية فحسب، بينما التحول الرقمي يُعيد تصميم النموذج المؤسسي بأكمله",
+                      },
+                      { label: "ج", text: "التحول الرقمي أرخص تكلفة" },
+                      {
+                        label: "د",
+                        text: "الرقمنة تشمل تغيير الثقافة المؤسسية",
+                      },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q5",
+                    type: "tf",
+                    text: "تُعدّ الحوسبة السحابية (Cloud Computing) أداةً اختياريةً لا تأثير لها على سرعة التحول الرقمي.",
+                    options: [
+                      { label: "أ", text: "صحيح" },
+                      { label: "ب", text: "خاطئ" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q6",
+                    type: "mcq",
+                    text: 'ما المقصود بـ "تجربة العميل الرقمية" (Digital Customer Experience)؟',
+                    options: [
+                      { label: "أ", text: "بيع المنتجات عبر الإنترنت فقط" },
+                      {
+                        label: "ب",
+                        text: "مجموع تفاعلات العميل مع المؤسسة عبر كافة القنوات الرقمية بشكل متكامل وسلس",
+                      },
+                      { label: "ج", text: "تصميم تطبيق جوال للشركة" },
+                      { label: "د", text: "تقليل عدد موظفي خدمة العملاء" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q7",
+                    type: "written",
+                    text: "اذكر ثلاثة قطاعات مؤسسية أُحدث فيها التحول الرقمي تأثيراً بالغاً، وبيّن طبيعة هذا التأثير لكل قطاع.",
+                    points: 15,
+                  },
+                ],
+              },
+            ],
+          },
+          /* course c2 — أمن المعلومات */
+          c2: {
+            available: true,
+            exams: [
+              {
+                id: "e1-c2",
+                courseId: "c2",
+                courseName: "أمن المعلومات والشبكات",
+                examNum: "الاختبار الأول",
+                title: "مفاهيم أمن المعلومات الأساسية",
+                durationMinutes: 40,
+                passingScore: 70,
+                questions: [
+                  {
+                    id: "q1",
+                    type: "mcq",
+                    text: "ما الاختصار الذي يُعبّر عن المبادئ الثلاثة الأساسية لأمن المعلومات؟",
+                    options: [
+                      { label: "أ", text: "HTTP" },
+                      { label: "ب", text: "CIA (السرية، السلامة، الإتاحة)" },
+                      { label: "ج", text: "VPN" },
+                      { label: "د", text: "DNS" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q2",
+                    type: "tf",
+                    text: "يُعدّ التشفير (Encryption) وسيلةً وقائية تضمن عدم إمكانية اختراق الأنظمة نهائياً.",
+                    options: [
+                      { label: "أ", text: "صحيح" },
+                      { label: "ب", text: "خاطئ" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q3",
+                    type: "mcq",
+                    text: "ما هجوم التصيد الاحتيالي (Phishing)؟",
+                    options: [
+                      {
+                        label: "أ",
+                        text: "مسح الشبكة لاكتشاف الأجهزة المتصلة",
+                      },
+                      {
+                        label: "ب",
+                        text: "محاولة خداع المستخدم للكشف عن بياناته الحساسة عبر رسائل أو مواقع مزيفة",
+                      },
+                      { label: "ج", text: "تشفير الملفات دون إذن صاحبها" },
+                      {
+                        label: "د",
+                        text: "إيقاف الخدمة بإغراق الخادم بالطلبات",
+                      },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q4",
+                    type: "mcq",
+                    text: "أيٌّ مما يلي يُعدّ من أفضل ممارسات كلمات المرور؟",
+                    options: [
+                      {
+                        label: "أ",
+                        text: "استخدام نفس كلمة المرور لجميع المواقع لسهولة التذكر",
+                      },
+                      {
+                        label: "ب",
+                        text: "كلمة مرور طويلة تجمع أحرفاً وأرقاماً ورموزاً مع تغييرها دورياً",
+                      },
+                      {
+                        label: "ج",
+                        text: "استخدام تاريخ الميلاد لسهولة التذكر",
+                      },
+                      {
+                        label: "د",
+                        text: "كتابة كلمة المرور على ورقة ملصقة بالشاشة",
+                      },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q5",
+                    type: "tf",
+                    text: "جدار الحماية (Firewall) يحمي الشبكة من جميع أنواع الهجمات السيبرانية بما فيها الهجمات الداخلية.",
+                    options: [
+                      { label: "أ", text: "صحيح" },
+                      { label: "ب", text: "خاطئ" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q6",
+                    type: "written",
+                    text: 'اشرح الفرق بين هجوم "رفض الخدمة" (DoS) وهجوم "رفض الخدمة الموزع" (DDoS)، مع ذكر مثال توضيحي.',
+                    points: 15,
+                  },
+                ],
+              },
+            ],
+          },
+          /* course c3 — مهارات القيادة */
+          c3: {
+            available: false /* لا يوجد اختبار متاح حالياً */,
+            exams: [],
+          },
+          /* course c4 — تحليل البيانات */
+          c4: {
+            available: true,
+            exams: [
+              {
+                id: "e1-c4",
+                courseId: "c4",
+                courseName: "تحليل البيانات والتقارير",
+                examNum: "الاختبار الأول",
+                title: "أسس تحليل البيانات واستخدام Excel",
+                durationMinutes: 35,
+                passingScore: 65,
+                questions: [
+                  {
+                    id: "q1",
+                    type: "mcq",
+                    text: "ما الفرق بين البيانات (Data) والمعلومات (Information)؟",
+                    options: [
+                      { label: "أ", text: "لا فرق بينهما" },
+                      {
+                        label: "ب",
+                        text: "البيانات حقائق خام غير مُعالَجة، بينما المعلومات بيانات مُعالَجة لها سياق ومعنى",
+                      },
+                      { label: "ج", text: "المعلومات أقل تنظيماً من البيانات" },
+                      { label: "د", text: "البيانات تخص الأفراد فقط" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q2",
+                    type: "tf",
+                    text: "تُعدّ الرسومات البيانية (Charts) أداةً أساسيةً لتوصيل نتائج تحليل البيانات للمتخصصين فقط دون غيرهم.",
+                    options: [
+                      { label: "أ", text: "صحيح" },
+                      { label: "ب", text: "خاطئ" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q3",
+                    type: "mcq",
+                    text: "ما دالة Excel المستخدمة للبحث عن قيمة في عمود وإرجاع قيمة مقابلة من عمود آخر؟",
+                    options: [
+                      { label: "أ", text: "SUM" },
+                      { label: "ب", text: "VLOOKUP" },
+                      { label: "ج", text: "COUNTIF" },
+                      { label: "د", text: "AVERAGE" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q4",
+                    type: "mcq",
+                    text: "ما الأداة الأكثر مناسبةً لتلخيص وتحليل كميات كبيرة من بيانات Excel دون كتابة صيغ معقدة؟",
+                    options: [
+                      { label: "أ", text: "المخططات (Charts)" },
+                      { label: "ب", text: "جداول المحاور (Pivot Tables)" },
+                      { label: "ج", text: "التحقق من صحة البيانات" },
+                      { label: "د", text: "التنسيق الشرطي" },
+                    ],
+                    answer: "ب",
+                    points: 5,
+                  },
+                  {
+                    id: "q5",
+                    type: "written",
+                    text: "صِف خطوات تنظيف البيانات (Data Cleaning) وأهميتها قبل البدء بعملية التحليل، مع ذكر ثلاثة أخطاء شائعة في البيانات الخام.",
+                    points: 20,
+                  },
+                ],
+              },
+            ],
+          },
+        };
+        /* ══ نهاية البيانات التجريبية ══ */
+
+        /* ══════════════════════════════════════════════════════════════
+           LOGIN — uses same API as index.html: POST /api/auth/login
+           Body:     { email, nationalId, password, role: 'trainee' }
+           Success:  { access_token, userId, ... }
+           Error:    response.json() → { detail: '...' }
+        ══════════════════════════════════════════════════════════════ */
+
+        /* ═══════════════════════════════════
+           STATE
+        ═══════════════════════════════════ */
+        var state = {
+          courseId: null,
+          examData: null,
+          answers: {},
+          timerInterval: null,
+          secondsLeft: 0,
+          startTime: null,
+          token: null,
+          userId: null,
+        };
+
+        /* ═══════════════════════════════════
+           PARSE URL PARAMS
+        ═══════════════════════════════════ */
+        var params = new URLSearchParams(window.location.search);
+        state.courseId = String(params.get("course_id") || "1");
+        var courseName = decodeURIComponent(
+          params.get("course_name") || "الدورة",
+        );
+
+        /* Numeric aliases: API sends '1','2'... dummy keys are 'c1','c2'... */
+        for (var _ni = 1; _ni <= 20; _ni++) {
+          if (!EXAM_DATA[String(_ni)] && EXAM_DATA["c" + _ni]) {
+            EXAM_DATA[String(_ni)] = EXAM_DATA["c" + _ni];
+          }
+        }
+
+        /* ═══════════════════════════════════
+           POPULATE LOGIN BADGE
+        ═══════════════════════════════════ */
+        var examEntry = EXAM_DATA[state.courseId] || {
+          available: false,
+          exams: [],
+        };
+        /* Override dummy courseName with the real name passed from URL */
+        if (examEntry.exams && examEntry.exams[0]) {
+          examEntry.exams[0].courseName = courseName;
+        }
+        if (examEntry.available && examEntry.exams.length) {
+          var firstExam = examEntry.exams[0];
+          document.getElementById("loginExamName").textContent =
+            firstExam.title;
+          document.getElementById("loginExamSub").textContent =
+            courseName + " · " + firstExam.examNum;
+        } else {
+          document.getElementById("loginExamName").textContent = courseName;
+          document.getElementById("loginExamSub").textContent =
+            "لا يوجد اختبار متاح حالياً";
+          document.getElementById("loginSubmit").disabled = true;
+          document.getElementById("loginErr").textContent =
+            "لا يوجد اختبار متاح لهذه الدورة في الوقت الحالي.";
+          document.getElementById("loginErr").classList.add("visible");
+        }
+
+        /* ═══════════════════════════════════
+           LOGIN
+        ═══════════════════════════════════ */
+        document
+          .getElementById("loginPassword")
+          .addEventListener("keydown", function (e) {
+            if (e.key === "Enter")
+              document.getElementById("loginSubmit").click();
+          });
+
+        document
+          .getElementById("loginSubmit")
+          .addEventListener("click", function () {
+            var email = document.getElementById("loginEmail").value.trim();
+            var nid = document.getElementById("loginId").value.trim();
+            var pass = document.getElementById("loginPassword").value.trim();
+            var err = document.getElementById("loginErr");
+            var btn = document.getElementById("loginSubmit");
+            err.classList.remove("visible");
+
+            if (!email || !nid || !pass) {
+              err.textContent = "يرجى ملء جميع الحقول.";
+              err.classList.add("visible");
+              return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "جاري التحقق…";
+
+            fetch("/api/exams/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: email,
+                nationalId: nid,
+                password: pass,
+                role: "trainee",
+              }),
+            })
+              .then(function (res) {
+                if (!res.ok)
+                  return res.json().then(function (d) {
+                    throw new Error(d.detail || "بيانات الدخول غير صحيحة.");
+                  });
+                return res.json();
+              })
+              .then(function (data) {
+                state.token = data.access_token;
+                state.userId = data.userId;
+
+                /* Check already-taken via localStorage — no API needed */
+                var takenKey =
+                  "exam_taken_" + state.userId + "_" + state.courseId;
+                if (localStorage.getItem(takenKey)) {
+                  btn.disabled = false;
+                  btn.textContent = "دخول والبدء بالاختبار";
+                  showAlreadyTaken();
+                  return;
+                }
+
+                /* Fetch real quiz from server, fallback to dummy if not found */
+                fetch("/api/exams/" + state.courseId, {
+                  headers: { Authorization: "Bearer " + state.token },
+                })
+                  .then(function (r) {
+                    if (r.ok) return r.json();
+                    return null;
+                  })
+                  .then(function (apiQuiz) {
+                    if (apiQuiz) {
+                      state.examData = apiQuiz;
+                    } else {
+                      state.examData = (examEntry && examEntry.exams) ? examEntry.exams[0] : null;
+                    }
+
+                    if (!state.examData) {
+                      throw new Error("لا يوجد اختبار متاح لهذه الدورة حالياً.");
+                    }
+
+                    startExam();
+                  })
+                  .catch(function (err2) {
+                    btn.disabled = false;
+                    btn.textContent = "دخول والبدء بالاختبار";
+                    err.textContent = err2.message;
+                    err.classList.add("visible");
+                  });
+              })
+              .catch(function (e) {
+                btn.disabled = false;
+                btn.textContent = "دخول والبدء بالاختبار";
+                err.textContent = e.message || "حدث خطأ أثناء الاتصال بالخادم.";
+                err.classList.add("visible");
+              });
+          });
+
+        /* ═══════════════════════════════════
+           ALREADY TAKEN SCREEN
+        ═══════════════════════════════════ */
+        function goToCourses() {
+          window.close();
+          setTimeout(function () {
+            window.location.href = "courses.html?filter=my";
+          }, 300);
+        }
+
+        function showAlreadyTaken() {
+          document.getElementById("loginScreen").style.display = "none";
+          var rs = document.getElementById("resultScreen");
+          var card = rs.querySelector(".exam-result-card");
+          card.innerHTML =
+            '<div style="width:72px;height:72px;border-radius:20px;margin:0 auto 1.5rem;' +
+            "background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.35);" +
+            "display:flex;align-items:center;justify-content:center;" +
+            'box-shadow:0 0 28px rgba(99,102,241,0.2);">' +
+            '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>' +
+            "</svg>" +
+            "</div>" +
+            '<div style="font-size:1.2rem;font-weight:800;color:#f1f5f9;margin-bottom:0.65rem;">لقد أديت هذا الاختبار مسبقاً</div>' +
+            '<div style="font-size:0.86rem;color:#475569;line-height:1.8;margin-bottom:1.5rem;">' +
+            courseName +
+            "<br/>" +
+            "لا يُسمح بتأدية الاختبار أكثر من مرة.<br/>تواصل مع إدارة البرنامج إن كنت تعتقد أن هذا خطأ." +
+            "</div>" +
+            '<button class="exam-result__close" onclick="goToCourses()">إغلاق النافذة</button>';
+          rs.classList.add("open");
+        }
+
+        /* ═══════════════════════════════════
+           START EXAM
+        ═══════════════════════════════════ */
+        function startExam() {
+          document.getElementById("loginScreen").style.display = "none";
+          var es = document.getElementById("examScreen");
+          es.classList.add("visible");
+
+          var ex = state.examData;
+          document.getElementById("headerCourseName").textContent =
+            ex.courseName;
+          document.getElementById("headerExamNum").textContent = ex.examNum;
+          document.getElementById("examCourseName").textContent = ex.courseName;
+          document.getElementById("examTitle").textContent = ex.title;
+
+          var total = ex.questions.reduce(function (s, q) {
+            return s + q.points;
+          }, 0);
+          document.getElementById("examMeta").innerHTML =
+            '<span class="exam-meta-chip exam-meta-chip--accent">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>' +
+            ex.questions.length +
+            " سؤال" +
+            "</span>" +
+            '<span class="exam-meta-chip">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+            ex.durationMinutes +
+            " دقيقة" +
+            "</span>" +
+            '<span class="exam-meta-chip">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' +
+            total +
+            " درجة" +
+            "</span>" +
+            '<span class="exam-meta-chip">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
+            "للنجاح: " +
+            ex.passingScore +
+            "%" +
+            "</span>";
+
+          document.getElementById("totalCount").textContent =
+            ex.questions.length;
+          renderQuestions(ex.questions);
+          buildDots(ex.questions.length);
+
+          /* Timer */
+          state.secondsLeft = ex.durationMinutes * 60;
+          state.startTime = Date.now();
+          updateTimer();
+          state.timerInterval = setInterval(function () {
+            state.secondsLeft--;
+            updateTimer();
+            if (state.secondsLeft <= 0) {
+              clearInterval(state.timerInterval);
+              submitExam(true);
+            }
+          }, 1000);
+        }
+
+        /* ═══════════════════════════════════
+           RENDER QUESTIONS
+        ═══════════════════════════════════ */
+        var LETTERS = ["أ", "ب", "ج", "د", "هـ"];
+        function renderQuestions(questions) {
+          var container = document.getElementById("questionsContainer");
+          container.innerHTML = "";
+          questions.forEach(function (q, i) {
+            var block = document.createElement("div");
+            block.className = "question-block";
+            block.id = "qblock-" + q.id;
+            block.style.animationDelay = i * 0.05 + "s";
+
+            var typeLbl =
+              q.type === "mcq"
+                ? "اختيار من متعدد"
+                : q.type === "tf"
+                  ? "صح أم خطأ"
+                  : "سؤال مقالي";
+            var typeClass =
+              q.type === "mcq" ? "mcq" : q.type === "tf" ? "tf" : "written";
+
+            var html =
+              '<div class="question-num">' +
+              '<span class="question-num__badge">' +
+              (i + 1) +
+              "</span>" +
+              "السؤال " +
+              (i + 1) +
+              " من " +
+              questions.length +
+              ' <span class="question-type-badge question-type-badge--' +
+              typeClass +
+              '">' +
+              typeLbl +
+              "</span>" +
+              ' <span style="margin-right:auto;font-size:0.7rem;color:#334155;">' +
+              q.points +
+              " درجة</span>" +
+              "</div>" +
+              '<div class="question-text">' +
+              q.text +
+              "</div>";
+
+            if (q.type === "mcq" || q.type === "tf") {
+              html += '<div class="mcq-options">';
+              q.options.forEach(function (opt) {
+                html +=
+                  '<label class="mcq-option" data-qid="' +
+                  q.id +
+                  '" data-val="' +
+                  opt.label +
+                  '">' +
+                  '<input type="radio" name="q-' +
+                  q.id +
+                  '" value="' +
+                  opt.label +
+                  '">' +
+                  '<div class="mcq-radio"><div class="mcq-radio-dot"></div></div>' +
+                  '<span class="mcq-option-letter">' +
+                  opt.label +
+                  "</span>" +
+                  '<span class="mcq-option-text">' +
+                  opt.text +
+                  "</span>" +
+                  "</label>";
+              });
+              html += "</div>";
+            } else {
+              html +=
+                '<textarea class="written-textarea" data-qid="' +
+                q.id +
+                '"' +
+                ' placeholder="اكتب إجابتك هنا…" rows="5" maxlength="2000">' +
+                "</textarea>" +
+                '<div class="written-counter" id="wc-' +
+                q.id +
+                '">0 / 2000 حرف</div>';
+            }
+
+            block.innerHTML = html;
+            container.appendChild(block);
+          });
+
+          /* MCQ click handlers */
+          container.querySelectorAll(".mcq-option").forEach(function (opt) {
+            opt.addEventListener("click", function () {
+              var qid = opt.getAttribute("data-qid");
+              var val = opt.getAttribute("data-val");
+              container
+                .querySelectorAll('[data-qid="' + qid + '"]')
+                .forEach(function (o) {
+                  o.classList.remove("selected");
+                });
+              opt.classList.add("selected");
+              state.answers[qid] = val;
+              var block = document.getElementById("qblock-" + qid);
+              if (block) block.classList.add("answered");
+              updateProgress();
+            });
+          });
+
+          /* Written handlers */
+          container
+            .querySelectorAll(".written-textarea")
+            .forEach(function (ta) {
+              ta.addEventListener("input", function () {
+                var qid = ta.getAttribute("data-qid");
+                state.answers[qid] = ta.value.trim();
+                var block = document.getElementById("qblock-" + qid);
+                if (block)
+                  block.classList.toggle(
+                    "answered",
+                    ta.value.trim().length > 0,
+                  );
+                var wc = document.getElementById("wc-" + qid);
+                if (wc) wc.textContent = ta.value.length + " / 2000 حرف";
+                updateProgress();
+              });
+            });
+        }
+
+        /* ═══════════════════════════════════
+           PROGRESS & DOTS
+        ═══════════════════════════════════ */
+        function buildDots(n) {
+          var d = document.getElementById("answerDots");
+          d.innerHTML = "";
+          for (var i = 0; i < n; i++) {
+            var dot = document.createElement("div");
+            dot.className = "exam-dot";
+            dot.id = "dot-" + i;
+            d.appendChild(dot);
+          }
+        }
+
+        function updateProgress() {
+          if (!state.examData) return;
+          var qs = state.examData.questions;
+          var ans = Object.keys(state.answers).filter(function (k) {
+            return state.answers[k] && state.answers[k].length;
+          }).length;
+          var total = qs.length;
+          var pct = total ? Math.round((ans / total) * 100) : 0;
+          document.getElementById("progressFill").style.width = pct + "%";
+          document.getElementById("progressText").textContent =
+            ans + " / " + total;
+          document.getElementById("answeredCount").textContent = ans;
+
+          qs.forEach(function (q, i) {
+            var dot = document.getElementById("dot-" + i);
+            if (dot)
+              dot.classList.toggle(
+                "done",
+                !!(state.answers[q.id] && state.answers[q.id].length),
+              );
+          });
+        }
+
+        /* ═══════════════════════════════════
+           TIMER
+        ═══════════════════════════════════ */
+        function updateTimer() {
+          var s = Math.max(0, state.secondsLeft);
+          var m = Math.floor(s / 60);
+          var sec = s % 60;
+          document.getElementById("timerDisplay").textContent =
+            String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+          var el = document.getElementById("examTimer");
+          el.classList.remove("warning", "danger");
+          if (s <= 60) el.classList.add("danger");
+          else if (s <= 5 * 60) el.classList.add("warning");
+        }
+
+        /* ═══════════════════════════════════
+           SUBMIT
+        ═══════════════════════════════════ */
+        document
+          .getElementById("submitExamBtn")
+          .addEventListener("click", openConfirm);
+        document
+          .getElementById("confirmCancel")
+          .addEventListener("click", closeConfirm);
+        document
+          .getElementById("confirmSubmit")
+          .addEventListener("click", function () {
+            submitExam(false);
+          });
+
+        function openConfirm() {
+          var qs = state.examData ? state.examData.questions : [];
+          var unanswered = qs.filter(function (q) {
+            return !state.answers[q.id] || !state.answers[q.id].length;
+          }).length;
+          var msg = document.getElementById("confirmUnanswered");
+          if (unanswered > 0) {
+            msg.textContent =
+              "تنبيه: لم تُجب على " + unanswered + " سؤال/أسئلة بعد.";
+            msg.classList.add("visible");
+          } else {
+            msg.classList.remove("visible");
+          }
+          document.getElementById("confirmBackdrop").classList.add("open");
+        }
+
+        function closeConfirm() {
+          document.getElementById("confirmBackdrop").classList.remove("open");
+        }
+
+        function submitExam(timeUp) {
+          closeConfirm();
+          clearInterval(state.timerInterval);
+
+          var ex = state.examData;
+          var elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+          var em = Math.floor(elapsed / 60),
+            es2 = elapsed % 60;
+          var timeStr =
+            String(em).padStart(2, "0") + ":" + String(es2).padStart(2, "0");
+
+          /* Mark as taken in localStorage — blocks re-entry without needing an API */
+          if (state.userId && state.courseId) {
+            localStorage.setItem(
+              "exam_taken_" + state.userId + "_" + state.courseId,
+              "1",
+            );
+          }
+
+          /* Populate the confirmation card */
+          var cname = document.getElementById("resultCourseName");
+          if (cname) cname.textContent = ex.courseName + " · " + ex.examNum;
+          var qcount = document.getElementById("resultQCount");
+          if (qcount) qcount.textContent = ex.questions.length;
+          var tspent = document.getElementById("resultTimeSpent");
+          if (tspent) tspent.textContent = timeStr;
+
+          document.getElementById("resultScreen").classList.add("open");
+
+          /* POST to backend */
+          fetch("/api/exams/" + state.courseId + "/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + state.token,
+            },
+            body: JSON.stringify({
+              score: (Math.random() * 20 + 80), // Dummy calculation for now
+              details: {
+                answers: state.answers,
+                elapsed_seconds: elapsed,
+                time_finished: new Date().toISOString()
+              }
+            }),
+          }).catch(console.error);
+        }
+
+        document
+          .getElementById("resultClose")
+          .addEventListener("click", function () {
+            window.close();
+            /* fallback if window.close() is blocked */
+            setTimeout(function () {
+              window.location.href = "courses.html?filter=my";
+            }, 300);
+          });
+      })();
+    </script>
+  </body>
+</html>

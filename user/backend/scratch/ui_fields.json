@@ -1,0 +1,1612 @@
+[
+  {
+    "tag": "input",
+    "name": "fullName",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "fullNameEn",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "dob",
+    "id": "dob",
+    "type": "date",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "gender",
+    "id": "",
+    "type": "radio",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "gender",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "countryOfStay",
+    "id": "countryOfStay",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "governmentOrState",
+    "id": "governmentOrState",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "city",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "address",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "maritalStatus",
+    "id": "",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "militaryStatus",
+    "id": "militaryStatus",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "militaryReason",
+    "id": "militaryReason",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "identityDocType",
+    "id": "identityDocNationalId",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "identityDocType",
+    "id": "identityDocPassport",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "nationalId",
+    "id": "nationalId",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "passportNumber",
+    "id": "passportNumber",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "identityDocumentScan",
+    "id": "identityDocumentScan",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "numberOfNationalities",
+    "id": "numberOfNationalities",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "nationality",
+    "id": "",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "secondNationality",
+    "id": "secondNationality",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "thirdNationality",
+    "id": "thirdNationality",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "mobileNumber1",
+    "id": "",
+    "type": "tel",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "mobileNumber2",
+    "id": "",
+    "type": "tel",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "landlineNumber",
+    "id": "",
+    "type": "tel",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "whatsappNumber",
+    "id": "",
+    "type": "tel",
+    "required": true
+  },
+  {
+    "tag": "select",
+    "name": "monthlyAverageIncome",
+    "id": "",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "primaryEmail",
+    "id": "",
+    "type": "email",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "secondaryEmail",
+    "id": "",
+    "type": "email",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "emergencyContactsCount",
+    "id": "emergencyContactsCount",
+    "type": "",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "emergencyName1",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "emergencyPhone1",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "emergencyAddress1",
+    "id": "",
+    "type": "text",
+    "required": true
+  },
+  {
+    "tag": "input",
+    "name": "emergencyId1",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "emergencyName2",
+    "id": "emergencyName2",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "emergencyPhone2",
+    "id": "emergencyPhone2",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "emergencyAddress2",
+    "id": "emergencyAddress2",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "emergencyId2",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduHighestDegree",
+    "id": "eduHighestDegree",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduInstitution[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduCollegeFacultySelect[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduCollegeFacultyText[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduSpeciality[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduGpa[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduTotalScore[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduPercentage[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduGraduationDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "graduationCertificateScan[]",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduHasPostgraduate",
+    "id": "eduHasPostgraduate",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduPostgraduateDegreeType[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduDegreeIssuerEntity[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduMainSpecialityPg[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduSecondarySpecialityPg[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduPgStartDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduPgEndDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "eduFunding[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduRecommendingEntity[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "eduScholarshipEntity[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "standardizedTestName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "standardizedTestScore[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "standardizedTestAuthority[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "standardizedTestDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "standardizedTestDocument[]",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empExperienceStatus",
+    "id": "empExperienceStatus",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "employmentSectionCv",
+    "id": "employmentSectionCv",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empJobType",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empMinistry",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empMinistrySub",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empJoiningDate",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empCurrentlyWorking",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empEndDate",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empJobTitle",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empSeniority",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empDepartment",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empSpeciality",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empJobDescription",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empCompanyAddress",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empIndustryPrimary",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empIndustrySecondary",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empRefName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empRefPhone[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "empRefEmail[]",
+    "id": "",
+    "type": "email",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "empRefPlaceIndex[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "organizationIndustry[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "startDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "endDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "keyResponsibilities[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "reasonForLeaving[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "currentJobTitle",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "yearsManagementExperience",
+    "id": "",
+    "type": "number",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "organizationSize",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "annualBudgetManaged",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "directReports",
+    "id": "",
+    "type": "number",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "globalExperience",
+    "id": "",
+    "type": "number",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "technicalSkillCategory[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "technicalSkillName[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "technicalSkillProficiency[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "computerSkillCategory[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "computerSkillName[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "computerSkillProficiency[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "softSkillCategory[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "softSkillName[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "softSkillProficiency[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "otherSkillsFreeText",
+    "id": "otherSkillsFreeText",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "nativeLanguage",
+    "id": "nativeLanguage",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "englishProficiency",
+    "id": "englishProficiency",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestCode[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "interestsDescription",
+    "id": "interestsDescription",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "usesSocialMedia",
+    "id": "usesSocialMedia",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialPlatformFacebook",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialPlatformInstagram",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialPlatformX",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialPlatformLinkedIn",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialPlatformTikTok",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasPrizesAwards",
+    "id": "hasPrizesAwards",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "prizeName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "prizeDateAchieved[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "prizeCategory[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "prizeIssuingBody[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "prizeCertificate[]",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasConferencesWorkshops",
+    "id": "hasConferencesWorkshops",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "cwActivityType[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cwEventName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cwOrganizingEntity[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cwStartDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cwEndDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "cwParticipationLevel[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "awardTitle[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "issuingBody[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "keyAchievement[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "communityLeadership",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "extracurricularRole[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "extracurricularDuration[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "portfolioUrl",
+    "id": "",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "portfolioFile",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasPublicVoluntaryWork",
+    "id": "hasPublicVoluntaryWork",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "pvFoundationName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "pvPosition[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "pvJoinDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "pvStillMember[]",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "pvLeaveDate[]",
+    "id": "",
+    "type": "date",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "pvScope[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "pvWorkField[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "pvCountry[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "pvState[]",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasPoliticalParticipation",
+    "id": "hasPoliticalParticipation",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "politicalPartyName",
+    "id": "politicalPartyName",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "politicalRole",
+    "id": "politicalRole",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "politicalWorkDetails",
+    "id": "politicalWorkDetails",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasPoliticalCandidacy",
+    "id": "hasPoliticalCandidacy",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "candidacyPositionName",
+    "id": "candidacyPositionName",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "candidacyResult",
+    "id": "candidacyResult",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "candidacyExperienceDescription",
+    "id": "candidacyExperienceDescription",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "hasPriorCriminalConvictions",
+    "id": "hasPriorCriminalConvictions",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "priorConvictionDescription",
+    "id": "priorConvictionDescription",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "sectionSevenCriminalRecordCertificate",
+    "id": "sectionSevenCriminalRecordCertificate",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cvResume",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "organizationalChart",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "lettersOfRecommendation",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "idScan",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "criminalRecord",
+    "id": "criminalRecord",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "employerNoc",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "referenceName[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "referenceRelationship[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "referenceContact[]",
+    "id": "",
+    "type": "text",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "primaryLearningObjective",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "uniqueContribution",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "futureCareerGoal",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "select",
+    "name": "fundingSource",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "scholarshipEssay",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "scholarshipEssayFile",
+    "id": "",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "scheduleAcknowledgment",
+    "id": "",
+    "type": "checkbox",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "dietaryRestrictions",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "textarea",
+    "name": "accessibilityRequirements",
+    "id": "",
+    "type": "",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog1",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog1",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog1",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog1",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog2",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog2",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog2",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog2",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog3",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog3",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog3",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog3",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog4",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog4",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog4",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog4",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog5",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog5",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog5",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog5",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog6",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog6",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog6",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog6",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog7",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog7",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog7",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog7",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog8",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog8",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog8",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog8",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog9",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog9",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog9",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "cog9",
+    "id": "",
+    "type": "radio",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "photoFront",
+    "id": "photoFront",
+    "type": "file",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialProfileFacebookUrl",
+    "id": "socialProfileFacebookUrl",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialProfileInstagramUrl",
+    "id": "socialProfileInstagramUrl",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialProfileXUrl",
+    "id": "socialProfileXUrl",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialProfileLinkedInUrl",
+    "id": "socialProfileLinkedInUrl",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "socialProfileTikTokUrl",
+    "id": "socialProfileTikTokUrl",
+    "type": "url",
+    "required": false
+  },
+  {
+    "tag": "input",
+    "name": "dataAccuracyTermsConfirmed",
+    "id": "dataAccuracyTermsConfirmed",
+    "type": "checkbox",
+    "required": false
+  }
+]

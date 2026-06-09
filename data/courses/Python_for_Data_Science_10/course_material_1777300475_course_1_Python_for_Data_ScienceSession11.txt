@@ -1,0 +1,100 @@
+Session 11: Time-Series Analysis with Pandas
+
+Welcome to Week 6! This week, we transition from static datasets to Time-Series data. In data science, time is often a critical variable—whether you are tracking stock prices, sensor readings, or website traffic. Pandas was originally developed for financial time-series analysis, so its tools for this are exceptionally powerful.
+
+1. The Datetime Object
+
+Before we can perform time-based operations, we must ensure our date column is not just a string, but a datetime64 object.
+
+import pandas as pd
+
+# Converting strings to datetime
+dates = ['2023-01-01', '2023-01-02', '2023-01-03']
+dt_series = pd.to_datetime(dates)
+
+# Extracting components
+print(dt_series.dt.year)
+print(dt_series.dt.month_name())
+print(dt_series.dt.day_name())
+
+
+2. Working with Time-Series Indices
+
+For the best performance, we often set the datetime column as the index of our DataFrame. This enables "Datetime Slicing."
+
+# Assuming 'df' has a 'Date' column
+df['Date'] = pd.to_datetime(df['Date'])
+df.set_index('Date', inplace=True)
+
+# Slice data for a specific year or month
+jan_data = df.loc['2023-01']
+q1_data = df.loc['2023-01':'2023-03']
+
+
+3. Resampling Data
+
+Resampling is the process of changing the frequency of your time-series observations (e.g., converting daily data into monthly data).
+
+Downsampling: Reducing frequency (Daily -> Monthly). Requires an aggregation like mean() or sum().
+
+Upsampling: Increasing frequency (Monthly -> Daily). Requires interpolation to fill gaps.
+
+# Downsample to Monthly frequency and get the average
+monthly_avg = df['Sales'].resample('M').mean()
+
+# Common Aliases: 'D' (Day), 'W' (Week), 'M' (Month), 'Q' (Quarter), 'Y' (Year)
+
+
+4. Rolling Windows (Moving Averages)
+
+Rolling operations allow you to calculate statistics over a "sliding window" of time. This is the standard way to smooth out noise in volatile data.
+
+# Calculate a 7-day moving average
+df['7day_MA'] = df['Sales'].rolling(window=7).mean()
+
+# Plotting the result helps visualize the trend
+import matplotlib.pyplot as plt
+df[['Sales', '7day_MA']].plot(figsize=(10, 5))
+plt.show()
+
+
+5. Shifting and Lagging
+
+In predictive modeling, we often need to compare today's value to yesterday's.
+
+# Create a 'Lagged' column (yesterday's sales)
+df['Prev_Sales'] = df['Sales'].shift(1)
+
+# Calculate Daily Percentage Change
+df['Pct_Change'] = df['Sales'].pct_change()
+
+
+Hands-on Exercise: Crypto Price Analysis
+
+Task:
+
+Create a simulated dataset for 30 days of Bitcoin prices:
+
+import numpy as np
+dates = pd.date_range(start='2023-01-01', periods=30, freq='D')
+prices = [20000 + x*100 + np.random.randint(-500, 500) for x in range(30)]
+df_crypto = pd.DataFrame({'Price': prices}, index=dates)
+
+
+Indexing: Slice the data to show only prices from January 10th to January 20th.
+
+Resampling: Calculate the average price per week ('W').
+
+Rolling: Create a new column 3day_MA showing the 3-day moving average.
+
+Growth: Calculate the day-over-day percentage change in price.
+
+Summary Checklist
+
+[ ] Can you convert a string column to a proper datetime object?
+
+[ ] Do you understand the difference between .resample() and .rolling()?
+
+[ ] Can you explain why we shift data when preparing for machine learning?
+
+Next Session: We will learn how to acquire data from the web using Web Scraping and API Integration!

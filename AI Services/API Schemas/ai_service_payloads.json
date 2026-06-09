@@ -1,0 +1,268 @@
+{
+  "_meta": {
+    "description": "Canonical request/response schemas for all NTA AI microservices.",
+    "dispatch_url": "POST /api/ai/dispatch  (Super Admin proxy)",
+    "last_updated": "2026-05-12",
+    "notes": [
+      "All services are reached through the Super Admin AI Proxy via the 'service' and 'endpoint' fields.",
+      "Services marked 'background' return immediately with status='processing'. Poll the status endpoint for completion.",
+      "File-based services use multipart/form-data. All others use application/json."
+    ]
+  },
+
+  "chat_assistant": {
+    "_description": "Persona-based conversational assistant. Provider-agnostic (OpenAI / Gemini). Not dispatched via /api/ai/dispatch — called directly from each portal's chat engine.",
+    "dispatch": {
+      "service": "Chat Assistant",
+      "endpoint": "N/A — called directly via admin/backend/core/chat_engine.py"
+    },
+    "request": {
+      "question": "string",
+      "role": "trainee | admin | editor",
+      "history": [
+        { "role": "user | assistant", "content": "string" }
+      ]
+    },
+    "response": {
+      "reply": "string (Markdown-formatted Arabic or English text)",
+      "id": "int (message sequence id)"
+    }
+  },
+
+  "quiz_generator": {
+    "_description": "Generates MCQ, True/False, or essay questions from uploaded course material files.",
+    "dispatch": {
+      "service": "Quiz Engine",
+      "endpoint": "/generate",
+      "content_type": "multipart/form-data"
+    },
+    "request": {
+      "file": "multipart/form-data (field name: 'file', one or more course material files)",
+      "num_questions": "int (default: 10)",
+      "question_type": "mcq | true_false | essay (default: mcq)",
+      "difficulty": "easy | medium | hard (default: medium)",
+      "language": "auto | ar | en (default: auto)",
+      "course_id": "int",
+      "target_session_id": "int",
+      "groupId": "string (optional, used as quiz name in DB)"
+    },
+    "response": {
+      "questions": [
+        {
+          "question": "string",
+          "type": "mcq | true_false | essay",
+          "options": {
+            "A": "string",
+            "B": "string",
+            "C": "string",
+            "D": "string"
+          },
+          "answer": "A | B | C | D | true | false",
+          "explanation": "string (optional)",
+          "key_points": ["string"]
+        }
+      ]
+    },
+    "db_side_effects": [
+      "INSERT into quizzes (course_id, session_id, name)",
+      "INSERT into questions (quiz_id, question_text, question_type, max_mark)",
+      "INSERT into answers (question_id, answer_text, is_correct, fraction)",
+      "UPDATE courses SET quiz_json, has_active_quiz = 1"
+    ]
+  },
+
+  "electronic_sorting": {
+    "_description": "AI-driven 4-phase audit of Identity, CV, and Certificates. Replaces legacy National ID OCR.",
+    "dispatch": {
+      "service": "Electronic Sorting",
+      "endpoint": "/extract",
+      "content_type": "multipart/form-data"
+    },
+    "request": {
+      "batchSize": "int (number of Stage-1 trainees to process)"
+    },
+    "phases": [
+      { "id": 1, "name": "Identity Audit", "description": "National ID data extraction & mismatch detection" },
+      { "id": 2, "name": "Experience Audit", "description": "Professional history alignment with career track" },
+      { "id": 3, "name": "Education Audit", "description": "Degree verification and relevance check" },
+      { "id": 4, "name": "Synthesis", "description": "Final recommendation and persistence to stage_reviews" }
+    ],
+    "response": {
+      "batch_status": "complete",
+      "processed": "int",
+      "results": [
+        {
+          "national_id": "string",
+          "status": "Accepted | Rejected | Flagged",
+          "overall_score": "float (0-100)",
+          "phases_completed": "int"
+        }
+      ]
+    },
+    "db_side_effects": [
+      "INSERT into admission_sorting_results",
+      "INSERT into stage_reviews (trainee_id, stage_id=1, status, ai_score, review_json)"
+    ]
+  },
+
+  "face_recognition": {
+    "_description": "Handles biometric enrollment (Stage 7) and identity verification at attendance check-in.",
+    "dispatch": {
+      "service": "Face Engine",
+      "endpoint": "/enroll | /checkin",
+      "content_type": "application/json"
+    },
+    "request_enroll": {
+      "image_b64": "string (data:image/jpeg;base64,<encoded>)",
+      "label": "string (trainee national_id)",
+      "registrations": [
+        {
+          "course_id": "int",
+          "course_title": "string",
+          "sessions": [
+            {
+              "session_id": "int",
+              "session_name": "string",
+              "date": "YYYY-MM-DD",
+              "time": "HH:MM AM/PM"
+            }
+          ]
+        }
+      ]
+    },
+    "request_checkin": {
+      "image_b64": "string (data:image/jpeg;base64,<encoded>)",
+      "session_id": "int"
+    },
+    "response_enroll": {
+      "status": "success | error",
+      "message": "string"
+    },
+    "response_checkin": {
+      "status": "success | error",
+      "label": "string (matched national_id)",
+      "confidence": "float (0.0 – 1.0)",
+      "session_id": "int"
+    },
+    "batch_response": {
+      "batch_status": "complete",
+      "processed": "int",
+      "results": [
+        {
+          "national_id": "string",
+          "status": "Success | Error",
+          "data": "object (raw face service response)"
+        }
+      ]
+    },
+    "db_side_effects": [
+      "INSERT into attendance_logs (face matching score and photo)"
+    ]
+  },
+
+  "requirement_analyzer": {
+    "_description": "Two-step vLLM pipeline: Step 1 produces a quantitative JSON radar chart; Step 2 generates an Arabic prose summary. Runs as a background batch job.",
+    "dispatch": {
+      "service": "Requirement Analyzer",
+      "endpoint": "/process-unprocessed",
+      "mechanism": "background thread — returns immediately, poll /api/ai/batch-status"
+    },
+    "dispatch_request": {
+      "service": "Requirement Analyzer",
+      "endpoint": "/process-unprocessed",
+      "data": {}
+    },
+    "dispatch_response": {
+      "status": "processing | skipped",
+      "message": "string",
+      "estimated_time_minutes": "float"
+    },
+    "vllm_step1_output": {
+      "requirement_matches": [
+        {
+          "requirement": "string (topic name)",
+          "score": "int (0–100)",
+          "evidence": "string (1-sentence justification)"
+        }
+      ],
+      "overall_match_percentage": "int (0–100)"
+    },
+    "vllm_step2_output": "string (2–3 sentence Arabic professional summary)",
+    "batch_status_endpoint": {
+      "url": "GET /api/ai/batch-status",
+      "response": {
+        "is_running": "bool",
+        "total": "int",
+        "current": "int",
+        "last_message": "string",
+        "start_time": "float (unix timestamp)"
+      }
+    },
+    "db_side_effects": [
+      "INSERT / UPDATE cv_matching_results (course_id, national_id, match_score, evidence, analysis_json)"
+    ]
+  },
+
+  "class_trainer_matrix": {
+    "_description": "Two-step vLLM pipeline: Step 1 classifies the course (Practical/Theoretical); Step 2 assigns each approved trainee to the most suitable trainer. Runs as a background thread.",
+    "dispatch": {
+      "service": "Class Trainer Matrix",
+      "endpoint": "/generate/<course_id>",
+      "mechanism": "background thread — returns immediately, poll /api/ai/matrix-status/{course_id}"
+    },
+    "dispatch_request": {
+      "service": "Class Trainer Matrix",
+      "endpoint": "/generate/<course_id>",
+      "data": {
+        "course_id": "int"
+      }
+    },
+    "dispatch_response": {
+      "status": "processing",
+      "message": "string",
+      "course_id": "int"
+    },
+    "vllm_step1_output": {
+      "nature": "Practical | Theoretical",
+      "reasoning": "string (Arabic, 1 sentence)"
+    },
+    "vllm_step2_output": {
+      "assignments": [
+        {
+          "trainee_id": "int",
+          "trainer_id": "int",
+          "trainer_analysis": {
+            "strengths": "string (Arabic)",
+            "weaknesses": "string (Arabic)",
+            "reason": "string (Arabic)"
+          },
+          "trainee_analysis": {
+            "strengths": "string (Arabic)",
+            "weaknesses": "string (Arabic)",
+            "reason": "string (Arabic)",
+            "confidence_score": "int (0–100)"
+          }
+        }
+      ]
+    },
+    "matrix_status_endpoint": {
+      "url": "GET /api/ai/matrix-status/{course_id}",
+      "response": {
+        "status": "processing | done | error | idle",
+        "course_id": "int",
+        "result": {
+          "success": "bool",
+          "assignments_count": "int",
+          "trainers_count": "int",
+          "course_nature": "Practical | Theoretical"
+        },
+        "error": "string | null"
+      }
+    },
+    "db_side_effects": [
+      "INSERT / UPDATE course_ai_analysis (course_id, nature, reasoning)",
+      "DELETE + INSERT class_matrix_recommendations (course_id, trainer_id, trainee_id, trainer_analysis, trainee_analysis)",
+      "DELETE + INSERT class_matrix_summary (course_id, trainer_id, avg_confidence, total_trainees)"
+    ]
+  }
+}

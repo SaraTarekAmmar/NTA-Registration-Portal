@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قائمة المتدربين - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Course selector strip ── */
+      .at-course-strip {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        align-items: center;
+      }
+      .at-course-strip__label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+        margin-left: 0.25rem;
+      }
+      .at-course-pill {
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid var(--border-main);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text-subtle);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .at-course-pill:hover {
+        border-color: rgba(99, 102, 241, 0.45);
+        color: #a5b4fc;
+      }
+      .at-course-pill.active {
+        background: rgba(99, 102, 241, 0.18);
+        border-color: rgba(99, 102, 241, 0.6);
+        color: #c7d2fe;
+        box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
+      }
+
+      /* ── KPI row ── */
+      .at-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      @media (max-width: 800px) {
+        .at-kpi-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .at-kpi {
+        padding: 1.1rem 1.2rem;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        background: rgba(8, 12, 32, 0.35);
+        backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease,
+          border-color 350ms ease;
+        animation:
+          kpi-enter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          kpi-glow-loop 7s ease-in-out infinite;
+      }
+      .at-kpi::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--kpi-accent, var(--accent)),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 350ms ease;
+      }
+      .at-kpi::after {
+        content: "";
+        position: absolute;
+        top: -40%;
+        bottom: -40%;
+        width: 35%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.22),
+          transparent
+        );
+        opacity: 0;
+        transform: translateX(-130%) skewX(-12deg);
+        pointer-events: none;
+        animation: kpi-shine 8s ease-in-out infinite;
+      }
+      .at-kpi:hover {
+        transform: translateY(-6px) scale(1.02);
+        border-color: var(--surface-glass-strong);
+      }
+      .at-kpi:hover::before {
+        opacity: 1;
+      }
+      .at-kpi:hover {
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.25),
+          0 0 30px var(--kpi-glow, rgba(99, 102, 241, 0.2));
+      }
+
+      .at-kpi--students {
+        --kpi-accent: var(--accent-hover);
+        --kpi-glow: rgba(99, 102, 241, 0.35);
+      }
+      .at-kpi--att {
+        --kpi-accent: var(--color-success);
+        --kpi-glow: rgba(16, 185, 129, 0.35);
+      }
+      .at-kpi--avg {
+        --kpi-accent: var(--color-warning);
+        --kpi-glow: rgba(245, 158, 11, 0.35);
+      }
+      .at-kpi--top {
+        --kpi-accent: #06b6d4;
+        --kpi-glow: rgba(6, 182, 212, 0.35);
+      }
+
+      .at-kpi__icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.1rem;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease;
+      }
+      .at-kpi:hover .at-kpi__icon {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px var(--kpi-glow, rgba(99, 102, 241, 0.4));
+      }
+      .at-kpi--students .at-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.25),
+          rgba(99, 102, 241, 0.1)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+      .at-kpi--att .at-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.25),
+          rgba(16, 185, 129, 0.1)
+        );
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-kpi-mint);
+      }
+      .at-kpi--avg .at-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.25),
+          rgba(245, 158, 11, 0.1)
+        );
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--color-kpi-gold);
+      }
+      .at-kpi--top .at-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.25),
+          rgba(6, 182, 212, 0.1)
+        );
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        color: var(--color-kpi-cyan);
+      }
+
+      .at-kpi__val {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-on-accent);
+        line-height: 1;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 24px var(--kpi-glow, rgba(99, 102, 241, 0.35));
+        transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .at-kpi:hover .at-kpi__val {
+        transform: scale(1.05);
+      }
+      .at-kpi__lbl {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(140, 175, 230, 0.6);
+      }
+
+      @keyframes kpi-enter {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes kpi-glow-loop {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+        50% {
+          box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.4),
+            0 0 26px var(--kpi-glow, rgba(99, 102, 241, 0.35));
+        }
+      }
+      @keyframes kpi-shine {
+        0% {
+          opacity: 0;
+          transform: translateX(-130%) skewX(-12deg);
+        }
+        10% {
+          opacity: 0.18;
+        }
+        30% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+      }
+
+      /* ── Trainee card — same design language as admin-users ── */
+      .at-card {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 18px 40px -20px rgba(0, 0, 0, 0.6);
+        transition:
+          transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+          box-shadow 0.3s,
+          border-color 0.3s;
+        animation: atCardIn 0.45s ease-out backwards;
+        cursor: pointer;
+      }
+      .at-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 22px 55px -18px rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(99, 102, 241, 0.45),
+          0 0 35px rgba(99, 102, 241, 0.15);
+      }
+
+      .at-card__img-wrap {
+        position: relative;
+        height: 160px;
+        background: linear-gradient(135deg, var(--skeleton-base), var(--bg-card-solid));
+        overflow: hidden;
+      }
+      .at-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+      .at-card:hover .at-card__img {
+        transform: scale(1.06);
+      }
+      .at-card__img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #c7d2fe;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.2),
+          rgba(59, 130, 246, 0.15)
+        );
+      }
+      .at-card__stage-badge {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-on-accent);
+        background: rgba(8, 12, 32, 0.75);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      /* Progress bar on image bottom */
+      .at-card__img-prog {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .at-card__img-prog-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), #06b6d4);
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+      }
+
+      .at-card__body {
+        padding: 0.9rem 1rem 1rem;
+      }
+      .at-card__name-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.2rem;
+      }
+      .at-card__name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .at-card__cat-badge {
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        flex-shrink: 0;
+        font-size: 0.65rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        color: #a5b4fc;
+      }
+      .at-card__meta {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        margin: 0 0 0.65rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .at-card__meta svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+      }
+
+      /* Attendance mini bar */
+      .at-card__att-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.7rem;
+      }
+      .at-card__att-label {
+        font-size: 0.68rem;
+        color: var(--text-subtle);
+        font-weight: 600;
+        min-width: 42px;
+      }
+      .at-card__att-bar {
+        flex: 1;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .at-card__att-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--color-success), var(--color-success-soft));
+      }
+      .at-card__att-val {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--color-success-soft);
+        min-width: 28px;
+        text-align: left;
+      }
+
+      .at-card__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        width: 100%;
+        padding: 0.55rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        background: rgba(99, 102, 241, 0.12);
+        color: #a5b4fc;
+        font-size: 0.78rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      .at-card__btn:hover {
+        background: rgba(99, 102, 241, 0.22);
+        border-color: rgba(99, 102, 241, 0.7);
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+        transform: translateY(-1px);
+      }
+      .at-card__btn svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* ── Cards grid ── */
+      .at-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+      }
+      @media (max-width: 1100px) {
+        .at-cards-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 800px) {
+        .at-cards-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .at-cards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── Header bar ── */
+      .at-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .at-header__left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .at-header__title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .at-count {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+      .at-search {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 65, 85, 0.8);
+        background: rgba(15, 23, 42, 0.95);
+      }
+      .at-search svg {
+        width: 14px;
+        height: 14px;
+        color: var(--text-subtle);
+        flex-shrink: 0;
+      }
+      .at-search input {
+        border: none;
+        background: transparent;
+        color: var(--text-main);
+        font-family: inherit;
+        font-size: 0.8rem;
+        outline: none;
+        width: 180px;
+      }
+        .at-search input::placeholder {
+          color: var(--text-subtle);
+        }
+
+        /* ── Sorting Wand ── */
+        .at-wand-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          border: 1px solid rgba(99, 102, 241, 0.45);
+          background: rgba(99, 102, 241, 0.15);
+          color: #a5b4fc;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s;
+          position: relative;
+          overflow: hidden;
+        }
+        .at-wand-btn:hover {
+          background: rgba(99, 102, 241, 0.25);
+          transform: scale(1.05);
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .at-wand-btn.active {
+          background: var(--accent);
+          color: var(--text-on-accent);
+          border-color: var(--accent-hover);
+          box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        .at-wand-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+        .at-wand-btn__sparkle {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        .at-wand-btn:hover .at-wand-btn__sparkle {
+          opacity: 0.1;
+          animation: wand-shimmer 1.5s infinite;
+        }
+        @keyframes wand-shimmer {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+          50% { opacity: 0.2; }
+          100% { transform: translate(20%, 20%) scale(1.5); opacity: 0; }
+        }
+
+        /* AI Score Badge */
+        .at-card__ai-badge {
+          position: absolute;
+          top: 0.65rem;
+          left: 0.65rem;
+          padding: 0.2rem 0.6rem;
+          border-radius: 8px;
+          font-size: 0.65rem;
+          font-weight: 800;
+          color: var(--text-on-accent);
+          background: linear-gradient(135deg, var(--accent), #a855f7);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+          z-index: 10;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .at-card__ai-badge svg {
+          width: 10px;
+          height: 10px;
+        }
+
+      /* ── Skeleton ── */
+      .at-skeleton-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+      }
+      @media (max-width: 1100px) {
+        .at-skeleton-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 800px) {
+        .at-skeleton-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .at-skel-card {
+        border-radius: 18px;
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .at-skel-img {
+        height: 160px;
+      }
+      .at-skel-body {
+        padding: 0.9rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .at-skel-line {
+        border-radius: 6px;
+        height: 0.85rem;
+      }
+      .at-skel-btn {
+        border-radius: 8px;
+        height: 36px;
+        margin-top: 0.25rem;
+      }
+      .at-skel-img,
+      .at-skel-line,
+      .at-skel-btn {
+        background: linear-gradient(
+          90deg,
+          var(--skeleton-base) 25%,
+          var(--skeleton-shine) 50%,
+          var(--skeleton-base) 75%
+        );
+        background-size: 200% 100%;
+        animation: atShimmer 1.5s ease-in-out infinite;
+      }
+
+
+
+      .at-modal__header {
+        padding: 1.1rem 1.4rem;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        background: var(--assign-card-hover-bg);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+      .at-modal__header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .at-modal__avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #c7d2fe;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.3),
+          rgba(59, 130, 246, 0.2)
+        );
+        border: 2px solid rgba(99, 102, 241, 0.4);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+      }
+      .at-modal__name {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 0.2rem;
+      }
+      .at-modal__sub {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        margin: 0;
+      }
+      .at-modal__close {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 65, 85, 0.7);
+        background: var(--bg-card);
+        color: var(--text-subtle);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+        flex-shrink: 0;
+      }
+      .at-modal__close:hover {
+        color: var(--text-main);
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      .at-modal__body {
+        padding: 1.25rem 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      /* Score chips row */
+      .at-modal__scores {
+        display: flex;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+      }
+      .at-score-chip {
+        padding: 0.55rem 0.85rem;
+        border-radius: 12px;
+        text-align: center;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--border-main);
+        flex: 1;
+        min-width: 80px;
+      }
+      .at-score-chip__label {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.2rem;
+      }
+      .at-score-chip__val {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .at-score-chip--indigo .at-score-chip__label {
+        color: var(--accent-hover);
+      }
+      .at-score-chip--green .at-score-chip__label {
+        color: var(--color-success-soft);
+      }
+      .at-score-chip--red .at-score-chip__label {
+        color: var(--color-error-soft);
+      }
+      .at-score-chip--cyan .at-score-chip__label {
+        color: var(--color-kpi-cyan);
+      }
+
+      /* Analysis section panel */
+      .at-panel {
+        padding: 1.1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .at-panel__title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 0 0 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .at-panel__title svg {
+        width: 14px;
+        height: 14px;
+      }
+      .at-panel__title--indigo {
+        color: var(--accent-hover);
+      }
+      .at-panel__title--green {
+        color: var(--color-success-soft);
+      }
+      .at-panel__title--red {
+        color: var(--color-error-soft);
+      }
+      .at-panel__title--cyan {
+        color: var(--color-kpi-cyan);
+      }
+
+      /* AI notes */
+      .at-ai-note {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      /* Red flags */
+      .at-flags-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .at-flags-list li {
+        font-size: 0.78rem;
+        color: var(--color-error-pale);
+        padding: 0.3rem 0.55rem;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .at-flags-list li::before {
+        content: "⚠";
+        font-size: 0.68rem;
+      }
+      .at-flags-none {
+        font-size: 0.78rem;
+        color: var(--color-success-soft);
+        padding: 0.3rem 0.55rem;
+        border-radius: 8px;
+        background: rgba(74, 222, 128, 0.07);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+      }
+
+      /* Quick stats */
+      .at-quickstats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.55rem;
+      }
+      @media (max-width: 600px) {
+        .at-quickstats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .at-qs {
+        padding: 0.65rem;
+        border-radius: 12px;
+        text-align: center;
+        background: rgba(8, 12, 32, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .at-qs__label {
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.2rem;
+      }
+      .at-qs__val {
+        font-size: 1rem;
+        font-weight: 800;
+      }
+
+      /* Skills chips */
+      .at-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .at-skill-chip {
+        padding: 0.28rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.28);
+        color: #a5b4fc;
+      }
+
+      /* Charts row */
+      .at-charts-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 600px) {
+        .at-charts-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .at-chart-box {
+        padding: 0.9rem 1rem;
+        border-radius: 14px;
+        background: rgba(8, 12, 32, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .at-chart-box h4 {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      /* Attendance sessions table */
+      .at-att-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+      }
+      .at-att-table th {
+        padding: 0.5rem 0.75rem;
+        text-align: right;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-main);
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .at-att-table td {
+        padding: 0.6rem 0.75rem;
+        border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+        color: var(--text-muted);
+      }
+      .at-att-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .at-att-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.05);
+      }
+      .at-att-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .at-att-dot--present {
+        background: var(--color-success);
+        box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+      }
+      .at-att-dot--absent {
+        background: var(--color-error);
+      }
+      .at-att-dot--excused {
+        background: var(--color-warning);
+      }
+
+      /* Attendance summary bar */
+      .at-att-summary {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.85rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .at-att-summary__bar {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .at-att-summary__fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--color-success), var(--color-success-soft));
+        transition: width 0.7s ease;
+      }
+      .at-att-summary__val {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--color-success-soft);
+        min-width: 42px;
+      }
+      .at-att-summary__lbl {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+      }
+
+      .at-empty {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(15, 23, 42, 0.3);
+        border-radius: 18px;
+        border: 1px dashed var(--border-main);
+        color: var(--skeleton-shine);
+        font-size: 0.9rem;
+      }
+
+      @keyframes atCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes atShimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+    </style>
+    <script src="js/admin-guard.js"></script>
+</head>
+  <body class="trainee-app" data-page="admin-trainees">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+      <!-- Hero -->
+      <div class="admin-hero" style="margin-bottom: 1.5rem">
+        <h1>قائمة المتدربين</h1>
+        <p class="admin-hero__subtitle">
+          المتدربون المسجلون بالبرنامج — مرتبون حسب الدورة
+        </p>
+      </div>
+
+      <!-- Course selector -->
+      <div class="at-course-strip" id="atCourseStrip">
+        <span class="at-course-strip__label">الدورة:</span>
+      </div>
+
+      <!-- KPIs -->
+      <div class="at-kpi-row" id="atKpiRow">
+        <div class="at-kpi at-kpi--students" style="animation-delay: 0.05s">
+          <div class="at-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <div class="at-kpi__val" id="atKpiStudents">—</div>
+          <div class="at-kpi__lbl">المتدربون</div>
+        </div>
+        <div class="at-kpi at-kpi--att" style="animation-delay: 0.12s">
+          <div class="at-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <polyline points="23 11 17 11" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+            </svg>
+          </div>
+          <div class="at-kpi__val" id="atKpiAtt">—</div>
+          <div class="at-kpi__lbl">متوسط الحضور</div>
+        </div>
+        <div class="at-kpi at-kpi--avg" style="animation-delay: 0.19s">
+          <div class="at-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M18 20V10M12 20V4M6 20v-6" />
+            </svg>
+          </div>
+          <div class="at-kpi__val" id="atKpiAvg">—</div>
+          <div class="at-kpi__lbl">متوسط الإنجاز</div>
+        </div>
+        <div class="at-kpi at-kpi--top" style="animation-delay: 0.26s">
+          <div class="at-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+          </div>
+          <div class="at-kpi__val" id="atKpiTop">—</div>
+          <div class="at-kpi__lbl">أعلى إنجاز</div>
+        </div>
+      </div>
+
+      <!-- Section -->
+      <section class="admin-section">
+        <div class="at-header">
+          <div class="at-header__left">
+            <h2 class="at-header__title" id="atSectionTitle">المتدربون</h2>
+            <span class="at-count" id="atCount">0</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <div class="at-search">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+              <input
+                type="text"
+                id="atSearch"
+                placeholder="بحث بالاسم..."
+                autocomplete="off"
+              />
+            </div>
+            <button class="at-wand-btn" id="atWandBtn" title="ترتيب حسب مطابقة الذكاء الاصطناعي">
+              <div class="at-wand-btn__sparkle"></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 14 4-4" />
+                <path d="m14 18 4-4" />
+                <path d="M18.5 22 22 18.5" />
+                <path d="m2 21 21.16-21.16" />
+                <path d="m8 10 4-4" />
+                <path d="m2 16 4-4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Skeleton -->
+        <div class="at-skeleton-grid" id="atSkeleton">
+          <div class="at-skel-card">
+            <div class="at-skel-img"></div>
+            <div class="at-skel-body">
+              <div class="at-skel-line" style="width: 70%"></div>
+              <div class="at-skel-line" style="width: 50%"></div>
+              <div class="at-skel-btn"></div>
+            </div>
+          </div>
+          <div class="at-skel-card">
+            <div class="at-skel-img"></div>
+            <div class="at-skel-body">
+              <div class="at-skel-line" style="width: 70%"></div>
+              <div class="at-skel-line" style="width: 50%"></div>
+              <div class="at-skel-btn"></div>
+            </div>
+          </div>
+          <div class="at-skel-card">
+            <div class="at-skel-img"></div>
+            <div class="at-skel-body">
+              <div class="at-skel-line" style="width: 70%"></div>
+              <div class="at-skel-line" style="width: 50%"></div>
+              <div class="at-skel-btn"></div>
+            </div>
+          </div>
+          <div class="at-skel-card">
+            <div class="at-skel-img"></div>
+            <div class="at-skel-body">
+              <div class="at-skel-line" style="width: 70%"></div>
+              <div class="at-skel-line" style="width: 50%"></div>
+              <div class="at-skel-btn"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="at-cards-grid" id="atCardsGrid" style="display: none"></div>
+        <div id="atPagination"></div>
+      </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="header/header.js?v=3"></script>
+    <script>
+      (function () {
+        var session = {};
+        try {
+          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        } catch (e) {}
+        if (session.role !== "admin") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           DATA INITIALIZATION
+           Variables are populated by fetchData() via API
+        ══════════════════════════════════════════════════════ */
+        var COURSES = [];
+        var allStudents = [];
+        var activeCourse = "0";
+        var filtered = [];
+        var sortByAI = false;
+        var currentPage = 1;
+        var pageSize = 12;
+        /* ── Course strip ── */
+        function renderCourseStrip() {
+          var el = document.getElementById("atCourseStrip");
+          if (!el) return;
+          el.innerHTML =
+            '<span class="at-course-strip__label">الدورة:</span>' +
+            COURSES.map(function (c) {
+              return (
+                '<button class="at-course-pill' +
+                (c.id === activeCourse ? " active" : "") +
+                '" onclick="selectCourse(\'' +
+                c.id +
+                "')\">" +
+                c.icon +
+                " " +
+                c.name +
+                "</button>"
+              );
+            }).join("");
+        }
+        /* ── Render coordinator ── */
+        // Single source of truth for execution order.
+        // applyFilters() MUST run first (populates `filtered`),
+        // then renderKpis() (reads allStudents via courseFilter),
+        // then renderCards() (reads `filtered`).
+        // All call-sites use refresh() so this order can never drift.
+        function refresh() {
+          applyFilters();
+          renderKpis();
+          renderCards();
+        }
+
+        window.selectCourse = function (id) {
+          activeCourse = id;
+          currentPage = 1;
+          renderCourseStrip();
+          refresh();
+        };
+
+        /* ── Course match helper ── */
+        // Centralised so renderKpis() and applyFilters() are always in sync.
+        // A trainee with courseId === null (no course assigned) never matches any tab.
+        function courseFilter(s) {
+          return s.courseId !== null && s.courseId === activeCourse.toString();
+        }
+
+        /* ── KPIs ── */
+        function renderKpis() {
+          var students = allStudents.filter(courseFilter);
+          var avgAtt = students.length
+            ? Math.round(
+                students.reduce(function (a, s) {
+                  return a + s.attRate;
+                }, 0) / students.length,
+              )
+            : 0;
+          var avgProg = students.length
+            ? Math.round(
+                students.reduce(function (a, s) {
+                  return a + s.progress;
+                }, 0) / students.length,
+              )
+            : 0;
+          var topProg = students.length
+            ? Math.max.apply(
+                null,
+                students.map(function (s) {
+                  return s.progress;
+                }),
+              )
+            : 0;
+          document.getElementById("atKpiStudents").textContent =
+            students.length;
+          document.getElementById("atKpiAtt").textContent = avgAtt + "%";
+          document.getElementById("atKpiAvg").textContent = avgProg + "%";
+          document.getElementById("atKpiTop").textContent = topProg + "%";
+        }
+
+        /* ── Filter ── */
+        function applyFilters() {
+          var q = (document.getElementById("atSearch").value || "")
+            .trim()
+            .toLowerCase();
+          filtered = allStudents.filter(courseFilter);
+          if (q)
+            filtered = filtered.filter(function (s) {
+              return s.name.toLowerCase().indexOf(q) >= 0;
+            });
+          
+          if (sortByAI) {
+            filtered.sort(function(a, b) {
+              return (b.aiMatchScore || 0) - (a.aiMatchScore || 0);
+            });
+          }
+
+          var course = COURSES.find(function (c) {
+            return c.id.toString() === activeCourse;
+          });
+          document.getElementById("atSectionTitle").textContent = course
+            ? course.name
+            : "—";
+          document.getElementById("atCount").textContent = filtered.length;
+        }
+
+        /* ── Build card ── */
+        function buildCard(s, idx) {
+          var initials = s.name
+            .split(" ")
+            .slice(0, 2)
+            .map(function (w) {
+              return w.charAt(0);
+            })
+            .join("");
+          return (
+            '<div class="at-card" style="animation-delay:' +
+            idx * 0.06 +
+            's" onclick="window.location.href=\'admin-profile.html?id=' +
+            s.id +
+            "&course_id=" +
+            activeCourse +
+            "&from=trainees" +
+            '\'">' +
+            (s.aiMatchScore ? 
+              '<div class="at-card__ai-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>' + s.aiMatchScore + '% مطابقة</div>' : 
+              ''
+            ) +
+            '<div class="at-card__img-wrap">' +
+            (s.image && s.image !== "null" ? '<img src="' + s.image + '" alt="" class="at-card__img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '') +
+            '<div class="at-card__img-placeholder" style="' + (s.image && s.image !== "null" ? 'display:none' : 'display:flex') + '">' +
+            initials +
+            "</div>" +
+            '<span class="at-card__stage-badge">مسجل بالبرنامج</span>' +
+            '<div class="at-card__img-prog"><div class="at-card__img-prog-fill" style="width:' +
+            s.progress +
+            '%"></div></div>' +
+            "</div>" +
+            '<div class="at-card__body">' +
+            '<div class="at-card__name-row">' +
+            '<h3 class="at-card__name">' +
+            s.name +
+            "</h3>" +
+            '<span class="at-card__cat-badge">' +
+            (s.category || "عام") +
+            "</span>" +
+            "</div>" +
+            '<p class="at-card__meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' +
+            s.education +
+            " · " +
+            s.age +
+            " سنة</p>" +
+            '<div class="at-card__att-row">' +
+            '<span class="at-card__att-label">الحضور</span>' +
+            '<div class="at-card__att-bar"><div class="at-card__att-fill" style="width:' +
+            s.attRate +
+            '%"></div></div>' +
+            '<span class="at-card__att-val">' +
+            s.attRate +
+            "%</span>" +
+            "</div>" +
+            '<button class="at-card__btn">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>' +
+            "فتح الملف والتحليل</button>" +
+            "</div></div>"
+          );
+        }
+
+        /* ── Render cards ── */
+        function renderCards() {
+          var grid = document.getElementById("atCardsGrid");
+          if (!grid) return;
+          var total = filtered.length;
+          var totalPages = Math.max(1, Math.ceil(total / pageSize));
+          currentPage = Math.min(currentPage, totalPages);
+          var slice = filtered.slice(
+            (currentPage - 1) * pageSize,
+            currentPage * pageSize,
+          );
+          grid.innerHTML =
+            total === 0
+              ? '<div class="at-empty">لا يوجد متدربون في هذه الدورة.</div>'
+              : slice
+                  .map(function (s, i) {
+                    return buildCard(s, i);
+                  })
+                  .join("");
+
+          var pg = document.getElementById("atPagination");
+          if (totalPages > 1) {
+            pg.innerHTML =
+              '<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:1.25rem 0;">' +
+              '<button class="courses-pagination__btn"' +
+              (currentPage === 1 ? " disabled" : "") +
+              ' onclick="atGoPage(' +
+              (currentPage - 1) +
+              ')">‹ السابق</button>' +
+              '<span style="font-size:0.82rem;color:var(--text-subtle);min-width:100px;text-align:center;">صفحة ' +
+              currentPage +
+              " من " +
+              totalPages +
+              "</span>" +
+              '<button class="courses-pagination__btn"' +
+              (currentPage === totalPages ? " disabled" : "") +
+              ' onclick="atGoPage(' +
+              (currentPage + 1) +
+              ')">التالي ›</button>' +
+              "</div>";
+          } else {
+            pg.innerHTML = "";
+          }
+        }
+        window.atGoPage = function (p) {
+          currentPage = p;
+          renderCards();  // page-turn only: filtered is already current, skip applyFilters
+        };
+
+        /* ── Toast helper ── */
+        function showToast(msg, type) {
+          var tc = document.getElementById("toastContainer");
+          if (!tc) return;
+          var t = document.createElement("div");
+          t.className = "toast toast--" + (type || "error");
+          t.style.cssText = [
+            "display:flex;align-items:center;gap:0.6rem;",
+            "padding:0.75rem 1.1rem;border-radius:12px;font-size:0.84rem;font-weight:600;",
+            "color:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.35);",
+            "animation:fadeSlideIn 0.3s ease;max-width:360px;",
+            type === "error"
+              ? "background:linear-gradient(135deg,#ef4444,#b91c1c);border:1px solid rgba(239,68,68,0.4);"
+              : "background:linear-gradient(135deg,#6366f1,#4338ca);border:1px solid rgba(99,102,241,0.4);"
+          ].join("");
+          t.innerHTML = (type === "error" ? "⚠ " : "ℹ ") + msg +
+            '<button onclick="this.parentNode.remove()" style="margin-right:auto;background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;line-height:1;padding:0 0 0 0.5rem;">✕</button>';
+          tc.appendChild(t);
+          setTimeout(function () { if (t.parentNode) t.remove(); }, 6000);
+        }
+
+        /* ── Fetch from API ── */
+        function fetchData() {
+          window.authenticatedFetch("/api/admin/courses")
+            .then(res => {
+              if (!res.ok) throw new Error("فشل تحميل الدورات (" + res.status + ")");
+              return res.json();
+            })
+            .then(courses => {
+              COURSES = courses;
+              if (COURSES.length > 0 && activeCourse === "0") activeCourse = COURSES[0].id.toString();
+              renderCourseStrip();
+              
+              return window.authenticatedFetch("/api/admin/trainees?role=trainee");
+            })
+            .then(res => {
+              if (!res.ok) throw new Error("فشل تحميل بيانات المتدربين (" + res.status + ")");
+              return res.json();
+            })
+            .then(trainees => {
+               allStudents = trainees.map(t => ({
+                 id: t.id,
+                 name: t.name,
+                 email: t.email,
+                 category: t.category || "عام",
+                 image: t.image_url || null,
+                 stage: t.stage,
+                 // null course_id → unassigned trainee; store null so courseFilter()
+                 // excludes them from every course tab instead of bucketing them
+                 // into whatever activeCourse happens to be selected at load time.
+                 courseId: t.course_id != null ? t.course_id.toString() : null,
+                 progress: t.progress_percentage || 0,
+                 attRate: t.att_rate || 0,
+                 education: t.education || "بكالوريوس",
+                 age: t.age || 28,
+                 aiMatchScore: t.ai_match_score || 0
+               }));
+               document.getElementById("atSkeleton").style.display = "none";
+               document.getElementById("atCardsGrid").style.display = "";
+               applyFilters();
+               renderKpis();
+               renderCards();
+            })
+            .catch(err => {
+              console.error("Fetch error:", err);
+              // 1. Hide the skeleton so it doesn't spin forever
+              var skeleton = document.getElementById("atSkeleton");
+              if (skeleton) skeleton.style.display = "none";
+              // 2. Show error state inside the cards grid with a Retry button
+              var grid = document.getElementById("atCardsGrid");
+              if (grid) {
+                grid.style.display = "";
+                grid.innerHTML =
+                  '<div class="at-empty" style="border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.05);">' +
+                  '<div style="font-size:2rem;margin-bottom:0.75rem;">⚠</div>' +
+                  '<div style="color:#fca5a5;font-weight:700;margin-bottom:0.35rem;">تعذّر تحميل بيانات المتدربين</div>' +
+                  '<div style="font-size:0.8rem;color:var(--text-subtle);margin-bottom:1.1rem;">' + (err.message || "خطأ في الاتصال بالخادم") + '</div>' +
+                  '<button onclick="fetchData()" style="padding:0.55rem 1.4rem;border-radius:10px;background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff;border:none;cursor:pointer;font-size:0.84rem;font-weight:700;">إعادة المحاولة</button>' +
+                  '</div>';
+              }
+              // 3. Fire a dismissible toast
+              showToast(err.message || "خطأ في الاتصال بالخادم", "error");
+            });
+        }
+
+
+        /* ── Search ── */
+        document
+          .getElementById("atSearch")
+          .addEventListener("input", function () {
+            currentPage = 1;
+            refresh();
+          });
+
+        /* ── Wand Toggle ── */
+        document.getElementById("atWandBtn").addEventListener("click", function() {
+          sortByAI = !sortByAI;
+          this.classList.toggle("active", sortByAI);
+          currentPage = 1;
+          refresh();
+        });
+
+        /* ── Init ── */
+        fetchData();
+      })();
+    </script>
+    <div id="chatWidget"></div>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

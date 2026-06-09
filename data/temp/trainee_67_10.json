@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "منى عاطف زهران",
+      "full_name_en": "Mona Atef Zahran",
+      "national_id": "29604221000015"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Environmental Assessment",
+          "category": "environment",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Sustainability",
+          "category": "environment",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ArcGIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ENVI",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الوعي البيئي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "البحث العلمي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "نشر المعرفة",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "إدارة الموارد الطبيعية",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2018-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "",
+          "startDate": "",
+          "department": "",
+          "organization": ""
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 4,
+        "objective": "قيادة السياسة البيئية الوطنية"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

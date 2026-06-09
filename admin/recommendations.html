@@ -1,0 +1,3116 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التوصيات - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+      /* ══════════════════════════════════════════════
+       BASE
+    ══════════════════════════════════════════════ */
+      * {
+        box-sizing: border-box;
+      }
+      .rec-wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+
+      /* no-scrollbar */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* tab system */
+      .rec-tab-content {
+        display: none;
+      }
+      .rec-tab-content.active {
+        display: block;
+      }
+
+      /* ══════════════════════════════════════════════
+       BACK BUTTON
+    ══════════════════════════════════════════════ */
+      .rec-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(55, 65, 81, 0.8);
+        background: var(--bg-card);
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          transform 0.15s;
+      }
+      .rec-back:hover {
+        border-color: var(--border-accent);
+        color: var(--accent-solid);
+        transform: translateX(3px);
+      }
+      .rec-back svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ══════════════════════════════════════════════
+       HERO HEADER
+    ══════════════════════════════════════════════ */
+      .rec-hero {
+        padding: 1.75rem;
+        border-radius: 18px;
+        margin-bottom: 2rem;
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(99, 102, 241, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at bottom left,
+            rgba(59, 130, 246, 0.12),
+            transparent 55%
+          ),
+          var(--bg-card);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        box-shadow:
+          0 0 0 1px var(--border-main),
+          var(--shadow-soft);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .rec-hero h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0 0 0.25rem;
+        color: var(--text-main);
+      }
+      .rec-hero p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 0;
+      }
+      .rec-hero__badge {
+        padding: 0.45rem 1.1rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.45);
+        color: var(--accent);
+      }
+
+      /* ══════════════════════════════════════════════
+       TAB NAV
+    ══════════════════════════════════════════════ */
+      .rec-layout {
+        display: grid;
+        grid-template-columns: 168px minmax(0, 1fr);
+        gap: 1.5rem;
+        align-items: start;
+      }
+      @media (max-width: 800px) {
+        .rec-layout {
+          grid-template-columns: 1fr;
+        }
+        .rec-sidenav {
+          display: flex;
+          flex-direction: row;
+          gap: 0.4rem;
+        }
+      }
+
+      .rec-sidenav {
+        position: sticky;
+        top: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 1rem;
+        border-radius: 16px;
+        background: var(--bg-card);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+      }
+
+      .rec-sidenav__btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        background: none;
+        color: var(--text-subtle);
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: right;
+        width: 100%;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .rec-sidenav__btn svg {
+        flex-shrink: 0;
+      }
+      .rec-sidenav__btn:hover {
+        background: var(--quiz-accent-tint-bg);
+        color: var(--accent-solid);
+      }
+      .rec-sidenav__btn.active {
+        background: var(--admin-toggle-active);
+        border-color: var(--border-accent);
+        color: var(--accent-solid);
+        box-shadow: var(--shadow-soft);
+      }
+
+      /* ══════════════════════════════════════════════
+       KPI ROW  (shining glass — from provided CSS)
+    ══════════════════════════════════════════════ */
+      .rec-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 900px) {
+        .rec-kpi-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .rec-kpi-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .rec-kpi {
+        min-width: 130px;
+        padding: 1.25rem 1.5rem;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease,
+          border-color 350ms ease;
+        animation:
+          kpi-enter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          kpi-glow-loop 7s ease-in-out infinite;
+      }
+      .rec-kpi::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--kpi-accent, var(--accent)),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 350ms ease;
+      }
+      .rec-kpi::after {
+        content: "";
+        position: absolute;
+        top: -40%;
+        bottom: -40%;
+        width: 35%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.22),
+          transparent
+        );
+        opacity: 0;
+        transform: translateX(-130%) skewX(-12deg);
+        pointer-events: none;
+        animation: kpi-shine 8s ease-in-out infinite;
+      }
+      .rec-kpi:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.06),
+          0 0 30px var(--kpi-glow, rgba(99, 102, 241, 0.2));
+        border-color: var(--surface-glass-strong);
+      }
+      .rec-kpi:hover::before {
+        opacity: 1;
+      }
+      .rec-kpi--indigo {
+        --kpi-accent: var(--accent-hover);
+        --kpi-glow: rgba(99, 102, 241, 0.35);
+      }
+      .rec-kpi--cyan {
+        --kpi-accent: #06b6d4;
+        --kpi-glow: rgba(6, 182, 212, 0.35);
+      }
+      .rec-kpi--amber {
+        --kpi-accent: var(--color-warning);
+        --kpi-glow: rgba(245, 158, 11, 0.35);
+      }
+      .rec-kpi--emerald {
+        --kpi-accent: var(--color-success);
+        --kpi-glow: rgba(16, 185, 129, 0.35);
+      }
+
+      .rec-kpi__icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.25rem;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease;
+      }
+      .rec-kpi:hover .rec-kpi__icon {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px var(--kpi-glow, rgba(99, 102, 241, 0.4));
+      }
+      .rec-kpi__icon--indigo {
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.25),
+          rgba(99, 102, 241, 0.1)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: var(--accent-solid);
+      }
+      .rec-kpi__icon--cyan {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.25),
+          rgba(6, 182, 212, 0.1)
+        );
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        color: var(--color-kpi-cyan);
+      }
+      .rec-kpi__icon--amber {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.25),
+          rgba(245, 158, 11, 0.1)
+        );
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--color-kpi-gold);
+      }
+      .rec-kpi__icon--emerald {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.25),
+          rgba(16, 185, 129, 0.1)
+        );
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-kpi-mint);
+      }
+
+      .rec-kpi__val {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+        letter-spacing: -0.5px;
+        text-shadow: none;
+        transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .rec-kpi:hover .rec-kpi__val {
+        transform: scale(1.05);
+      }
+      .rec-kpi__lbl {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-muted);
+      }
+      .rec-kpi__trend {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        width: fit-content;
+      }
+      .rec-kpi__trend--up {
+        color: var(--color-success-soft);
+        background: rgba(74, 222, 128, 0.12);
+      }
+      .rec-kpi__trend--down {
+        color: var(--color-error-soft);
+        background: rgba(248, 113, 113, 0.12);
+      }
+
+      @keyframes kpi-enter {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes kpi-glow-loop {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+        50% {
+          box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.4),
+            0 0 26px var(--kpi-glow, rgba(99, 102, 241, 0.35));
+        }
+      }
+      @keyframes kpi-shine {
+        0% {
+          opacity: 0;
+          transform: translateX(-130%) skewX(-12deg);
+        }
+        10% {
+          opacity: 0.18;
+        }
+        30% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+      }
+
+      /* ══════════════════════════════════════════════
+       GLASS PANEL (generic dark section panel)
+    ══════════════════════════════════════════════ */
+      .rec-panel {
+        position: relative;
+        padding: 1.25rem 1.4rem;
+        border-radius: 18px;
+        overflow: hidden;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border-main);
+        box-shadow: var(--shadow-soft);
+      }
+      .rec-panel > * {
+        position: relative;
+        z-index: 1;
+      }
+      @keyframes panel-shine {
+        0%,
+        100% {
+          left: -60%;
+        }
+        50% {
+          left: 110%;
+        }
+      }
+
+      .rec-panel__title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .rec-panel__title svg {
+        width: 16px;
+        height: 16px;
+        color: var(--accent-hover);
+      }
+
+      /* ══════════════════════════════════════════════
+       FILTER BAR
+    ══════════════════════════════════════════════ */
+      .rec-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-radius: 14px;
+        margin-bottom: 1.25rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+      }
+      .rec-filter-bar__label {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        font-weight: 600;
+      }
+      .rec-search {
+        flex: 1;
+        min-width: 180px;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        border: 1px solid var(--border-main);
+        background: var(--bg-input);
+        color: var(--text-main);
+        font-family: inherit;
+        font-size: 0.82rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .rec-search:focus {
+        border-color: rgba(99, 102, 241, 0.7);
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+      }
+      .rec-search::placeholder {
+        color: var(--text-subtle);
+      }
+      .rec-score-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .rec-score-wrap input[type="range"] {
+        width: 100px;
+        accent-color: var(--accent);
+      }
+      .rec-score-val {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--accent-solid);
+        min-width: 20px;
+      }
+
+      /* ══════════════════════════════════════════════
+       TRAINEE CAROUSEL
+    ══════════════════════════════════════════════ */
+      .rec-carousel-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .rec-carousel-btn {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        background: var(--bg-card);
+        color: var(--accent-hover);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          transform 0.15s;
+      }
+      .rec-carousel-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        transform: scale(1.05);
+      }
+      .rec-carousel-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+      .rec-carousel {
+        flex: 1;
+        overflow-x: auto;
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem 0;
+      }
+
+      /* shining trainee card */
+      .rec-trainee-card {
+        min-width: 280px;
+        padding: 1.35rem 1.25rem;
+        position: relative;
+        overflow: hidden;
+        padding: 1.1rem 1rem;
+        border-radius: 16px;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border-main);
+        box-shadow: var(--shadow-soft);
+        cursor: pointer;
+        transition:
+          transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+          box-shadow 0.3s ease,
+          border-color 0.3s;
+        animation: courseCardIn 0.5s ease-out backwards;
+      }
+      .rec-trainee-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .rec-trainee-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        border-color: rgba(99, 102, 241, 0.45);
+        box-shadow:
+          0 0 0 1px rgba(99, 102, 241, 0.3),
+          0 16px 40px -15px rgba(99, 102, 241, 0.35);
+      }
+      @keyframes card-shine {
+        0%,
+        100% {
+          left: -60%;
+        }
+        45%,
+        55% {
+          left: 110%;
+        }
+      }
+
+      .rec-trainee-card__head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .rec-trainee-card__avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        font-size: 1rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: var(--accent-solid);
+        background: var(--quiz-accent-tint-bg);
+        border: 1px solid var(--border-accent);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .rec-trainee-card:hover .rec-trainee-card__avatar {
+        transform: scale(1.1);
+      }
+      .rec-trainee-card__name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.1rem;
+      }
+      .rec-trainee-card__role {
+        font-size: 0.8rem;
+        color: var(--text-subtle);
+      }
+      .rec-trainee-card__prog-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--text-subtle);
+        margin-bottom: 0.3rem;
+      }
+      .rec-trainee-card__prog-bar {
+        height: 4px;
+        border-radius: 999px;
+        background: var(--bg-input);
+        overflow: hidden;
+}
+      .rec-trainee-card__prog-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--color-info));
+        transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .rec-table-wrap {
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+        border-radius: 1rem;
+        padding: 1.5rem;
+      }
+      .rec-table-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+      }
+      .rec-table-head h3 {
+        color: var(--text-main);
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .rec-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .rec-table th {
+        text-align: right;
+        padding: 1rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-bottom: 1px solid var(--border-main);
+      }
+      .rec-table td {
+        padding: 1.25rem 1rem;
+        color: var(--text-main);
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--border-main);
+      }
+      .rec-table__name {
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .rec-table__perf {
+        background: rgba(16, 185, 129, 0.08);
+        color: var(--color-success);
+        padding: 0.25rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .rec-table__btn {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--accent-hover);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .rec-table__btn:hover {
+        background: var(--accent);
+        color: var(--text-on-accent);
+      }
+
+      /* Detailed Rec Table Styles */
+      .rec-detail-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+        margin-top: 1rem;
+      }
+      .rec-detail-table th {
+        text-align: right;
+        padding: 0.75rem 1rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .rec-detail-table td {
+        padding: 1rem;
+        background: var(--bg-input);
+        border-top: 1px solid var(--border-main);
+        border-bottom: 1px solid var(--border-main);
+      }
+      .rec-detail-table td:first-child {
+        border-left: 1px solid var(--border-main);
+        border-radius: 0.75rem 0 0 0.75rem;
+      }
+      .rec-detail-table td:last-child {
+        border-right: 1px solid var(--border-main);
+        border-radius: 0 0.75rem 0.75rem 0;
+      }
+      .rec-detail-table .trainer-row td {
+        background: var(--quiz-accent-tint-bg);
+        border: 1px solid var(--border-accent);
+        color: var(--text-main);
+      }
+      .rec-detail-table .trainer-row .rec-table__name {
+        font-size: 1.1rem;
+        color: var(--accent-solid);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .rec-detail-table .trainer-row .rec-table__name::before {
+        content: "⭐";
+        font-size: 0.9rem;
+      }
+
+      .rec-analysis-text {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        max-width: 300px;
+      }
+      .rec-conf-score {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      .rec-conf-score.high { color: var(--color-success); }
+      .rec-conf-score.medium { color: var(--color-warning); }
+      .rec-conf-score.low { color: var(--color-error); }
+
+      .rec-generate-btn {
+        background: linear-gradient(135deg, var(--accent), #a855f7);
+        color: var(--text-on-accent);
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      }
+      .rec-generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+      }
+      .rec-generate-btn:disabled {
+        background: var(--text-subtle);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      .rec-generate-btn svg {
+        transition: transform 0.5s ease;
+      }
+      .rec-generate-btn.loading svg {
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* ══════════════════════════════════════════════
+       TRAINER TABLE
+    ══════════════════════════════════════════════ */
+      .rec-table-wrap {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+      }
+      .rec-table-head {
+        padding: 0.85rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-main);
+        background: var(--bg-input);
+      }
+      .rec-table-head h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .rec-table-pill {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: var(--accent-solid);
+      }
+      .rec-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+      .rec-table th {
+        padding: 0.65rem 1rem;
+        text-align: right;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid var(--border-main);
+        background: var(--assign-card-bg);
+      }
+      .rec-table td {
+        padding: 0.7rem 1rem;
+        text-align: right;
+        border-bottom: 1px solid var(--bg-input);
+        color: var(--text-muted);
+      }
+      .rec-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .rec-table tbody tr {
+        transition: background 0.15s;
+      }
+      .rec-table tbody {
+        font-size: 0.85rem;
+      }
+      .rec-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.06);
+      }
+      .rec-table__name {
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .rec-table__perf {
+        display: inline-flex;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-weight: 700;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-success-soft);
+      }
+      .rec-table__btn {
+        font-weight: 600;
+        color: var(--accent-hover);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        padding: 0;
+        transition: color 0.2s;
+      }
+      .rec-table__btn:hover {
+        color: var(--accent-solid);
+      }
+
+      /* ══════════════════════════════════════════════
+       AI INSIGHTS PANEL (dark indigo glow)
+    ══════════════════════════════════════════════ */
+      .rec-ai-panel {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        padding: 1.5rem 1.75rem;
+        background: linear-gradient(
+          135deg,
+          rgba(49, 46, 129, 0.85),
+          rgba(30, 27, 75, 0.9)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        box-shadow:
+          0 0 40px rgba(99, 102, 241, 0.15),
+          0 0 0 1px var(--bg-card);
+      }
+      .rec-ai-panel::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 30%;
+        height: 200%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.06),
+          transparent
+        );
+        transform: skewX(-12deg);
+        pointer-events: none;
+        animation: panel-shine 11s ease-in-out infinite;
+      }
+      .rec-ai-panel > * {
+        position: relative;
+        z-index: 1;
+      }
+      .rec-ai-panel__grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1.5rem;
+      }
+      @media (max-width: 800px) {
+        .rec-ai-panel__grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .rec-ai-panel__left {
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 1.25rem;
+      }
+      .rec-ai-panel__icon-row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+      }
+      .rec-ai-panel__icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(99, 102, 241, 0.3);
+        border: 1px solid rgba(99, 102, 241, 0.5);
+        color: var(--accent-solid);
+      }
+      .rec-ai-panel__icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .rec-ai-panel__heading {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-on-accent);
+        margin: 0;
+      }
+      .rec-ai-panel__text {
+        font-size: 0.85rem;
+        color: var(--accent-solid);
+        line-height: 1.65;
+        margin: 0;
+      }
+      .rec-ai-panel__stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      .rec-ai-stat {
+        padding: 0.75rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .rec-ai-stat__label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--accent-solid);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.35rem;
+      }
+      .rec-ai-stat__val {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--text-on-accent);
+        line-height: 1;
+      }
+      .rec-ai-stat__sub {
+        font-size: 0.68rem;
+        color: var(--text-muted);
+        margin-top: 0.15rem;
+      }
+      .rec-ai-stat__bar {
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, 0.2);
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+      .rec-ai-stat__fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent-hover), var(--color-success-soft));
+      }
+      .rec-ai-mat-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .rec-ai-mat-list li {
+        font-size: 0.78rem;
+        color: var(--accent-solid);
+        padding: 0.35rem 0.6rem;
+        border-radius: 8px;
+        background: var(--surface-glass-border);
+        border: 1px solid var(--surface-glass-strong);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .rec-ai-mat-list li::before {
+        content: "▸";
+        color: var(--accent-hover);
+        font-size: 0.65rem;
+      }
+
+      /* ══════════════════════════════════════════════
+       TAB 2: USER ANALYTICS
+    ══════════════════════════════════════════════ */
+      .rec-analytics-placeholder {
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 18px;
+        border: 2px dashed var(--border-main);
+        background: var(--bg-card);
+        color: var(--text-subtle);
+        font-size: 0.9rem;
+      }
+      .rec-analytics-placeholder svg {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1rem;
+        display: block;
+        color: var(--skeleton-shine);
+      }
+
+      .rec-user-header {
+        padding: 1.25rem 1.5rem;
+        border-radius: 18px;
+        margin-bottom: 1.5rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .rec-user-header__left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .rec-user-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--accent-solid);
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.35),
+          rgba(59, 130, 246, 0.25)
+        );
+        border: 2px solid rgba(99, 102, 241, 0.4);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+      }
+      #user-detail-name {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 0.2rem;
+      }
+      #user-detail-role {
+        font-size: 0.82rem;
+        color: var(--text-subtle);
+        margin: 0;
+      }
+      .rec-user-header__scores {
+        display: flex;
+        gap: 0.75rem;
+      }
+      .rec-score-chip {
+        padding: 0.5rem 0.85rem;
+        border-radius: 12px;
+        text-align: center;
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+      }
+      .rec-score-chip__label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.2rem;
+      }
+      .rec-score-chip__val {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .rec-score-chip--indigo .rec-score-chip__label {
+        color: var(--accent-hover);
+      }
+      .rec-score-chip--green .rec-score-chip__label {
+        color: var(--color-success-soft);
+      }
+      .rec-score-chip--red .rec-score-chip__label {
+        color: var(--color-error-soft);
+      }
+
+      .rec-analytics-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1.25rem;
+      }
+      @media (max-width: 900px) {
+        .rec-analytics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .rec-ai-notes-panel {
+        padding: 1.1rem 1.25rem;
+        border-radius: 16px;
+        margin-bottom: 1rem;
+        background: rgba(99, 102, 241, 0.07);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+      }
+      .rec-ai-notes-panel__title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--accent-hover);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 0 0 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .rec-ai-notes-panel__title svg {
+        width: 14px;
+        height: 14px;
+      }
+      #ai-notes {
+        font-size: 0.83rem;
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .rec-flags-panel {
+        padding: 1.1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(239, 68, 68, 0.07);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+      }
+      .rec-flags-panel__title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--color-error-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 0 0 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .rec-flags-panel__title svg {
+        width: 14px;
+        height: 14px;
+      }
+      #red-flags-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      #red-flags-list li {
+        font-size: 0.8rem;
+        color: var(--color-error-pale);
+        padding: 0.3rem 0.5rem;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      #red-flags-list li::before {
+        content: "⚠";
+        font-size: 0.7rem;
+      }
+
+      .rec-charts-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      @media (max-width: 700px) {
+        .rec-charts-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .rec-chart-box {
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+      }
+      .rec-chart-box h4 {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin: 0 0 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .rec-skills-panel {
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        margin-bottom: 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+      }
+      .rec-skills-panel h4 {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin: 0 0 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      #skills-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+      .rec-skill-chip {
+        padding: 0.3rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: var(--accent-solid);
+      }
+
+      .rec-quickstats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.65rem;
+      }
+      @media (max-width: 600px) {
+        .rec-quickstats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .rec-quickstat {
+        padding: 0.75rem;
+        border-radius: 12px;
+        text-align: center;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+      }
+      .rec-quickstat__label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
+      .rec-quickstat__val {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+
+      /* ══════════════════════════════════════════════
+       TAB 3: COURSE SELECTOR + REC CARDS
+    ══════════════════════════════════════════════ */
+      .rec-engine-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .rec-engine-header h2 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 0.25rem;
+      }
+      .rec-engine-header p {
+        font-size: 0.82rem;
+        color: var(--text-subtle);
+        margin: 0;
+      }
+      .rec-engine-stats {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.65rem 1rem;
+        border-radius: 12px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+      }
+      .rec-engine-stat {
+        text-align: center;
+      }
+      .rec-engine-stat__label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+      }
+      .rec-engine-stat__val {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--accent-hover);
+      }
+      .rec-engine-divider {
+        width: 1px;
+        height: 30px;
+        background: rgba(51, 65, 85, 0.7);
+      }
+
+      .rec-course-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      @media (max-width: 900px) {
+        .rec-course-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .rec-course-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .rec-course-card {
+        position: relative;
+        overflow: hidden;
+        padding: 1rem;
+        border-radius: 16px;
+        cursor: pointer;
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+        transition:
+          transform 0.25s,
+          border-color 0.25s,
+          box-shadow 0.25s;
+        animation: courseCardIn 0.45s ease-out backwards;
+      }
+      .rec-course-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .rec-course-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(99, 102, 241, 0.4);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.12);
+      }
+      .rec-course-card.active {
+        border-color: rgba(99, 102, 241, 0.7);
+        background: rgba(99, 102, 241, 0.12);
+        box-shadow:
+          0 0 0 1px rgba(99, 102, 241, 0.3),
+          0 0 30px rgba(99, 102, 241, 0.2);
+      }
+      .rec-course-card__icon {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .rec-course-card__name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.4rem;
+        line-height: 1.3;
+      }
+      .rec-course-card__meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .rec-course-card__cat {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .rec-course-card__level {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        background: var(--border-main);
+        color: var(--text-muted);
+      }
+
+      /* rec cards grid */
+      .rec-cards-outer {
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+      }
+      .rec-cards-filter-bar {
+        padding: 0.85rem 1.25rem;
+        border-bottom: 1px solid var(--border-main);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        background: var(--bg-input);
+      }
+      .rec-cards-filter-bar h3 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .rec-cards-grid {
+        padding: 1.25rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 1rem;
+      }
+
+      /* individual recommendation card — glass + shine */
+      .rec-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px;
+        padding: 1.1rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 18px 45px -20px rgba(0, 0, 0, 0.7),
+          0 0 0 0 var(--kpi-glow, rgba(99, 102, 241, 0.15));
+        transition:
+          transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+          box-shadow 0.3s,
+          border-color 0.3s;
+        animation: courseCardIn 0.5s ease-out backwards;
+      }
+      .rec-card::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 28%;
+        height: 200%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.09),
+          transparent
+        );
+        transform: skewX(-12deg);
+        pointer-events: none;
+        animation: card-shine 8s ease-in-out infinite;
+      }
+      .rec-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .rec-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        border-color: rgba(99, 102, 241, 0.25);
+        box-shadow:
+          0 0 0 1px rgba(99, 102, 241, 0.15),
+          0 18px 50px -18px rgba(99, 102, 241, 0.3),
+          0 0 40px rgba(99, 102, 241, 0.08);
+      }
+
+      .rec-card__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.85rem;
+      }
+      .rec-card__id-row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .rec-card__avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--accent-solid);
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.25),
+          rgba(59, 130, 246, 0.18)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.3);
+      }
+      .rec-card__name {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.1rem;
+      }
+      .rec-card__role {
+        font-size: 0.7rem;
+        color: var(--text-subtle);
+      }
+      .rec-score-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+      .rec-score-badge--high {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: var(--color-success-soft);
+      }
+      .rec-score-badge--medium {
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: var(--theme-btn-color);
+      }
+      .rec-score-badge--low {
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: var(--color-error-soft);
+      }
+
+      .rec-card__rationale {
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        margin-bottom: 0.75rem;
+        background: rgba(99, 102, 241, 0.06);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+      }
+      .rec-card__rat-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 0.25rem;
+      }
+      .rec-card__rat-text {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        font-style: italic;
+        margin: 0;
+      }
+
+      .rec-card__prog-wrap {
+        margin-bottom: 0.75rem;
+      }
+      .rec-card__prog-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: var(--text-subtle);
+        margin-bottom: 0.3rem;
+      }
+      .rec-card__prog-bar {
+        height: 4px;
+        border-radius: 999px;
+        background: var(--bg-input);
+        overflow: hidden;
+      }
+      .rec-card__prog-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--color-info));
+      }
+
+      .rec-card__footer {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .rec-card__link {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--accent-hover);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        padding: 0;
+        transition: color 0.2s;
+      }
+      .rec-card__link:hover {
+        color: var(--accent-solid);
+      }
+
+      .rec-empty {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-subtle);
+        font-size: 0.88rem;
+        grid-column: 1/-1;
+      }
+
+      /* ══════════════════════════════════════════════
+       SECTION HEADINGS
+    ══════════════════════════════════════════════ */
+      .rec-section-heading {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .rec-section-heading svg {
+        width: 15px;
+        height: 15px;
+        color: var(--accent-hover);
+      }
+
+      /* spin anim (from trainee.css fallback) */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes courseCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .rec-course-strip {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 16px;
+        background: var(--bg-card);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        align-items: center;
+      }
+      .rec-course-strip__label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-left: 0.5rem;
+        flex-shrink: 0;
+      }
+      .rec-course-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid rgba(51, 65, 85, 0.7);
+        background: var(--bg-input);
+        color: var(--text-subtle);
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
+        white-space: nowrap;
+      }
+      .rec-course-pill:hover {
+        border-color: rgba(99, 102, 241, 0.45);
+        color: var(--accent-solid);
+      }
+      .rec-course-pill.active {
+        background: rgba(99, 102, 241, 0.18);
+        border-color: rgba(99, 102, 241, 0.65);
+        color: var(--accent-solid);
+        box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
+      }
+      .rec-course-pill__icon {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .rec-course-pill__icon svg {
+        display: block;
+      }
+    </style>
+  </head>
+  <body class="trainee-app">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="rec-wrap">
+      <!-- Back -->
+      <a href="javascript:history.back()" class="rec-back">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        العودة إلى الدورات
+      </a>
+
+      <!-- Hero -->
+      <div class="rec-hero">
+        <div>
+          <h1 id="recPageTitle">لوحة التوصيات</h1>
+          <p id="recPageSub">تحليل أداء المتدربين وتوصيات الذكاء الاصطناعي</p>
+        </div>
+        <span class="rec-hero__badge" id="recCourseBadge">—</span>
+      </div>
+
+      <!-- Course selector strip — ABOVE KPIs -->
+      <div class="rec-course-strip" id="recCourseStrip"></div>
+
+      <!-- KPIs -->
+      <div class="rec-kpi-row">
+        <div class="rec-kpi rec-kpi--indigo" style="animation-delay: 0.05s">
+          <div class="rec-kpi__icon rec-kpi__icon--indigo">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <div class="rec-kpi__val" id="kpiTotal">—</div>
+          <div class="rec-kpi__lbl">إجمالي المتدربين</div>
+          <div class="rec-kpi__trend rec-kpi__trend--up" id="kpiTotalTrend">
+            +3 هذا الشهر
+          </div>
+        </div>
+        <div class="rec-kpi rec-kpi--cyan" style="animation-delay: 0.12s">
+          <div class="rec-kpi__icon rec-kpi__icon--cyan">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M18 20V10M12 20V4M6 20v-6" />
+            </svg>
+          </div>
+          <div class="rec-kpi__val" id="kpiAvg">—</div>
+          <div class="rec-kpi__lbl">متوسط درجة التوصية</div>
+          <div class="rec-kpi__trend rec-kpi__trend--up">من 10</div>
+        </div>
+        <div class="rec-kpi rec-kpi--emerald" style="animation-delay: 0.19s">
+          <div class="rec-kpi__icon rec-kpi__icon--emerald">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div class="rec-kpi__val" id="kpiHigh">—</div>
+          <div class="rec-kpi__lbl">توصيات عالية ≥8</div>
+          <div class="rec-kpi__trend rec-kpi__trend--up" id="kpiHighPct">
+            —%
+          </div>
+        </div>
+        <div class="rec-kpi rec-kpi--amber" style="animation-delay: 0.26s">
+          <div class="rec-kpi__icon rec-kpi__icon--amber">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path
+                d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+              />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <div class="rec-kpi__val" id="kpiLow">—</div>
+          <div class="rec-kpi__lbl">تحتاج متابعة &lt;5</div>
+          <div class="rec-kpi__trend rec-kpi__trend--down" id="kpiLowPct">
+            —%
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab nav -->
+      <div class="rec-layout">
+        <nav class="rec-sidenav">
+          <button
+            class="rec-sidenav__btn active"
+            onclick="switchTab('overview')"
+            id="tab-btn-overview"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="18"
+              height="18"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            <span>نظرة عامة</span>
+          </button>
+          <button
+            class="rec-sidenav__btn"
+            onclick="switchTab('analytics')"
+            id="tab-btn-analytics"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="18"
+              height="18"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>تحليل المتدرب</span>
+          </button>
+          <button
+            class="rec-sidenav__btn"
+            onclick="switchTab('materials')"
+            id="tab-btn-materials"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="18"
+              height="18"
+            >
+              <path
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+            <span>محرك التوصيات</span>
+          </button>
+        </nav>
+        <div class="rec-content">
+          <!-- ═══ TAB 1: OVERVIEW ═══ -->
+          <div id="tab-overview" class="rec-tab-content active">
+            <!-- Trainee carousel -->
+            <div style="margin-bottom: 1.5rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin-bottom: 0.85rem;
+                "
+              >
+                <p class="rec-section-heading" style="margin: 0">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  أبرز المتدربين
+                </p>
+                <div style="display: flex; gap: 0.5rem">
+                  <button
+                    class="rec-carousel-btn"
+                    onclick="scrollCarousel(-280)"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <button
+                    class="rec-carousel-btn"
+                    onclick="scrollCarousel(280)"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div id="user-carousel" class="rec-carousel no-scrollbar"></div>
+            </div>
+
+            <!-- Trainer matrix -->
+            <div class="rec-table-wrap" style="margin-bottom: 1.5rem">
+              <div class="rec-table-head">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h3>مصفوفة المدربين والفصول</h3>
+                    <button id="btnGenerateMatrix" class="rec-generate-btn" onclick="triggerMatrixGeneration()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                        </svg>
+                        توليد مصفوفة ذكية
+                    </button>
+                </div>
+                <span class="rec-table-pill" id="active-class-pill">جاري التحميل...</span>
+              </div>
+              <div style="overflow-x: auto">
+                <table class="rec-table">
+                  <thead>
+                    <tr>
+                      <th>المدرب</th>
+                      <th>الفصل / الموضوع</th>
+                      <th>عدد المتدربين</th>
+                      <th>متوسط الأداء</th>
+                      <th style="text-align: left">إجراء</th>
+                    </tr>
+                  </thead>
+                  <tbody id="trainer-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- AI Insights panel -->
+            <div class="rec-ai-panel">
+              <div class="rec-ai-panel__grid">
+                <div class="rec-ai-panel__left">
+                  <div class="rec-ai-panel__icon-row">
+                    <div class="rec-ai-panel__icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h3 class="rec-ai-panel__heading">ملخص الذكاء الاصطناعي</h3>
+                  </div>
+                  <p class="rec-ai-panel__text" id="ai-sidebar-rec">
+                    اختر دورة لتوليد رؤى الأداء الفوري.
+                  </p>
+                </div>
+                <div class="rec-ai-panel__stats" id="ai-stats-grid">
+                  <div class="rec-ai-stat">
+                    <div class="rec-ai-stat__label">معدل تقدم المجموعة</div>
+                    <div class="rec-ai-stat__val" id="ai-cohort-pct">82%</div>
+                    <div class="rec-ai-stat__sub">
+                      +5% مقارنة بالأسبوع الماضي
+                    </div>
+                    <div class="rec-ai-stat__bar">
+                      <div
+                        class="rec-ai-stat__fill"
+                        id="ai-cohort-bar"
+                        style="width: 82%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="rec-ai-stat">
+                    <div class="rec-ai-stat__label">متوسط درجات الاختبارات</div>
+                    <div class="rec-ai-stat__val" id="ai-avg-grade">88%</div>
+                    <div class="rec-ai-stat__sub">أعلى من المتوسط بـ 8%</div>
+                    <div class="rec-ai-stat__bar">
+                      <div
+                        class="rec-ai-stat__fill"
+                        id="ai-grade-bar"
+                        style="width: 88%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="rec-ai-stat" style="grid-column: 1/-1">
+                    <div class="rec-ai-stat__label">
+                      مواد الدورة المُوصى بها
+                    </div>
+                    <ul class="rec-ai-mat-list" id="ai-materials-list">
+                      <li>الوحدة 4: أنماط الأداء المتقدمة</li>
+                      <li>اختبار تفاعلي: أساسيات البنية المعمارية</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ TAB 2: USER ANALYTICS ═══ -->
+          <div id="tab-analytics" class="rec-tab-content">
+            <div id="analytics-placeholder" class="rec-analytics-placeholder">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              اختر متدرباً من تبويب "نظرة عامة" أو "محرك التوصيات" لعرض
+              إحصائياته التفصيلية
+            </div>
+
+            <div id="analytics-content" style="display: none">
+              <!-- User header -->
+              <div class="rec-user-header">
+                <div class="rec-user-header__left">
+                  <div class="rec-user-avatar" id="user-detail-avatar"></div>
+                  <div>
+                    <h2 id="user-detail-name"></h2>
+                    <p id="user-detail-role"></p>
+                  </div>
+                </div>
+                <div class="rec-user-header__scores">
+                  <div class="rec-score-chip rec-score-chip--indigo">
+                    <div class="rec-score-chip__label">الدرجة الكلية</div>
+                    <div
+                      class="rec-score-chip__val"
+                      id="user-detail-score"
+                    ></div>
+                  </div>
+                  <div class="rec-score-chip rec-score-chip--green">
+                    <div class="rec-score-chip__label">اجتاز</div>
+                    <div
+                      class="rec-score-chip__val"
+                      id="user-detail-passed"
+                    ></div>
+                  </div>
+                  <div class="rec-score-chip rec-score-chip--red">
+                    <div class="rec-score-chip__label">راسب</div>
+                    <div
+                      class="rec-score-chip__val"
+                      id="user-detail-failed"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rec-analytics-grid">
+                <!-- Left column -->
+                <div style="display: flex; flex-direction: column; gap: 1rem">
+                  <div class="rec-ai-notes-panel">
+                    <div class="rec-ai-notes-panel__title">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        />
+                      </svg>
+                      ملاحظات الذكاء الاصطناعي
+                    </div>
+                    <p id="ai-notes"></p>
+                  </div>
+                  <div class="rec-flags-panel" id="red-flags-container">
+                    <div class="rec-flags-panel__title">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                      </svg>
+                      يستلزم الانتباه
+                    </div>
+                    <ul id="red-flags-list"></ul>
+                  </div>
+                  <!-- Quick stats -->
+                  <div class="rec-quickstats">
+                    <div class="rec-quickstat">
+                      <div class="rec-quickstat__label">الجلسات</div>
+                      <div
+                        class="rec-quickstat__val"
+                        id="stat-sessions"
+                        style="color: var(--color-info-soft)"
+                      ></div>
+                    </div>
+                    <div class="rec-quickstat">
+                      <div class="rec-quickstat__label">رسوب اختبارات</div>
+                      <div
+                        class="rec-quickstat__val"
+                        id="stat-failed"
+                        style="color: var(--color-error-soft)"
+                      ></div>
+                    </div>
+                    <div class="rec-quickstat">
+                      <div class="rec-quickstat__label">الترتيب</div>
+                      <div
+                        class="rec-quickstat__val"
+                        id="stat-rank"
+                        style="color: var(--accent-solid)"
+                      ></div>
+                    </div>
+                    <div class="rec-quickstat">
+                      <div class="rec-quickstat__label">التقدير</div>
+                      <div
+                        class="rec-quickstat__val"
+                        id="stat-grade"
+                        style="color: var(--color-success-soft)"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right column -->
+                <div style="display: flex; flex-direction: column; gap: 1rem">
+                  <div class="rec-charts-row">
+                    <div class="rec-chart-box">
+                      <h4>معدل تطور المهارات</h4>
+                      <canvas id="skillsChart" height="180"></canvas>
+                    </div>
+                    <div class="rec-chart-box">
+                      <h4>مركز التفاعل الاجتماعي</h4>
+                      <canvas id="interactionChart" height="180"></canvas>
+                    </div>
+                  </div>
+                  <div class="rec-skills-panel">
+                    <h4>المهارات المكتسبة</h4>
+                    <div id="skills-badges" class="rec-skills-badges"></div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- Closes analytics-content -->
+          </div> <!-- Closes tab-analytics -->
+
+          <!-- ═══ TAB 3: MATRIX DETAILS (MATERIALS) ═══ -->
+          <div id="tab-materials" class="rec-tab-content">
+            <div class="rec-table-wrap" style="padding: 2rem;">
+              <div class="rec-table-head">
+                <h3 id="recDetailTitle">تفاصيل التوصيات</h3>
+              </div>
+              <div style="overflow-x: auto; background: var(--assign-card-bg); border-radius: 12px; padding: 1rem;">
+                <table class="rec-detail-table" style="width: 100%; min-width: 900px; text-align: right; border-spacing: 0 10px;">
+                  <thead>
+                    <tr>
+                      <th style="padding: 1rem; color: var(--text-muted); width: 15%;">الاسم</th>
+                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط القوة</th>
+                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط الضعف</th>
+                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">مبرر التوزيع (AI)</th>
+                      <th style="padding: 1rem; color: var(--text-muted); width: 10%;">التوافق</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recDetailBody">
+                    <tr><td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-subtle);">اختر "عرض الفصل" من شاشة النظرة العامة لرؤية التفاصيل</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div> <!-- Closes tab-materials -->
+
+        </div> <!-- Closes rec-content -->
+      </div> <!-- Closes rec-layout -->
+    </main>
+
+    <script src="header/header.js?v=2"></script>
+    <script>
+      /* Toast Helper */
+      function showToast(msg, type = "success") {
+          const ct = document.getElementById("ntaHeader"); // Use header area or create toast container
+          const t = document.createElement("div");
+          t.style = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;background:rgba(15,23,42,0.95);color:white;z-index:9999;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(10px);box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;display:flex;align-items:center;gap:10px;";
+          const icon = type === "success" ? "✅" : "❌";
+          t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+          document.body.appendChild(t);
+          setTimeout(() => {
+              t.style.opacity = "0";
+              t.style.transition = "opacity 0.3s";
+              setTimeout(() => t.remove(), 300);
+          }, 3000);
+      }
+
+      let COURSES = [];
+      let activeCourseData = {
+        trainers: [],
+        trainees: [],
+        recScores: {},
+        rationale: {},
+        aiSummary: { text: "جاري تحميل البيانات...", cohort: 0, grade: 0, materials: [] }
+      };
+
+      const mockData = {
+        c1: { trainers: [], trainees: [], recScores: {}, rationale: {}, aiSummary: {} },
+        c3: {
+          trainers: [
+            {
+              name: "أ. خالد المنصور",
+              class: "مهارات القيادة الإدارية",
+              count: 16,
+              performance: "95%",
+            },
+          ],
+          trainees: [
+            {
+              id: 7,
+              name: "منى القحطاني",
+              role: "مديرة إدارية",
+              score: 940,
+              sessions: 26,
+              passed: 13,
+              failed: 0,
+              rank: "#3",
+              grade: "A+",
+              skills: ["القيادة", "التفاوض", "إدارة الفرق"],
+              ai: "قيادة تحويلية واضحة. مثال يُحتذى به للمجموعة.",
+              interactions: [35, 35, 20, 10],
+              flags: [],
+            },
+            {
+              id: 8,
+              name: "بدر الزهراني",
+              role: "رئيس قسم",
+              score: 810,
+              sessions: 21,
+              passed: 9,
+              failed: 2,
+              rank: "#14",
+              grade: "B",
+              skills: ["التخطيط الاستراتيجي", "SWOT"],
+              ai: "أداء متوسط. يحتاج تطوير مهارات التواصل والعرض.",
+              interactions: [25, 40, 25, 10],
+              flags: ["ضعف في مهارات العرض"],
+            },
+            {
+              id: 9,
+              name: "لمياء الدوسري",
+              role: "مشرفة فريق",
+              score: 870,
+              sessions: 23,
+              passed: 11,
+              failed: 1,
+              rank: "#9",
+              grade: "A-",
+              skills: ["تحفيز الفريق", "حل النزاعات"],
+              ai: "مهارات إنسانية ممتازة. تحتاج تعزيز الجانب التحليلي.",
+              interactions: [40, 30, 20, 10],
+              flags: [],
+            },
+          ],
+          recScores: { 7: 9, 8: 6, 9: 8 },
+          rationale: {
+            7: "توافق ممتاز مع توجهها القيادي.",
+            8: "مناسب لتطوير مهاراته الناعمة.",
+            9: "يكمل مسارها التدريبي بشكل ممتاز.",
+          },
+          aiSummary: {
+            text: "انتظام عالٍ في الحضور والتفاعل. تحتاج بعض العناصر تطوير مهارات التواصل والعرض أمام المجموعة.",
+            cohort: 91,
+            grade: 94,
+            materials: [
+              "نماذج القيادة التحويلية",
+              "حالة دراسية: إدارة الأزمات",
+            ],
+          },
+        },
+        c4: {
+          trainers: [
+            {
+              name: "د. نورة العتيبي",
+              class: "تحليل البيانات والتقارير",
+              count: 20,
+              performance: "87%",
+            },
+          ],
+          trainees: [
+            {
+              id: 10,
+              name: "هند العمري",
+              role: "محللة بيانات",
+              score: 965,
+              sessions: 29,
+              passed: 14,
+              failed: 0,
+              rank: "#2",
+              grade: "A+",
+              skills: ["Python", "Pandas", "Matplotlib", "SQL"],
+              ai: "تفوق في النمذجة الإحصائية. تفاعل عالٍ في مراجعات الزملاء.",
+              interactions: [30, 30, 30, 10],
+              flags: [],
+            },
+            {
+              id: 11,
+              name: "سلطان المطيري",
+              role: "مهندس بيانات",
+              score: 830,
+              sessions: 22,
+              passed: 10,
+              failed: 2,
+              rank: "#13",
+              grade: "B+",
+              skills: ["SQL", "Power BI", "Tableau"],
+              ai: "إلمام جيد بالأدوات. يحتاج تعمقاً في تفسير النتائج.",
+              interactions: [20, 40, 25, 15],
+              flags: ["صعوبة في تفسير البيانات المعقدة"],
+            },
+            {
+              id: 12,
+              name: "نجلاء السبيعي",
+              role: "مديرة تقارير",
+              score: 900,
+              sessions: 25,
+              passed: 12,
+              failed: 1,
+              rank: "#6",
+              grade: "A",
+              skills: ["Excel المتقدم", "DAX", "Power Query"],
+              ai: "إنتاجية عالية في بناء التقارير. أسلوب منهجي ومنظم.",
+              interactions: [25, 35, 30, 10],
+              flags: [],
+            },
+          ],
+          recScores: { 10: 10, 11: 7, 12: 9 },
+          rationale: {
+            10: "أعلى توافق في المجموعة. أداء ممتاز في جميع المحاور.",
+            11: "خلفيته في الأدوات تجعله مرشحاً جيداً.",
+            12: "يكمل مسارها في بناء التقارير المتقدمة.",
+          },
+          aiSummary: {
+            text: "أداء متميز بشكل عام. يُنصح بالانتقال إلى وحدة تحليل البيانات المتقدمة في الأسبوع القادم مع تقييم ختامي.",
+            cohort: 88,
+            grade: 89,
+            materials: [
+              "الوحدة 5: نماذج التنبؤ الإحصائي",
+              "اختبار: تحليل سيناريوهات بيانات حقيقية",
+            ],
+          },
+        },
+      };
+
+      /* ═══════════════════════════════════════════════════════════════════════════
+     STATE
+  ═══════════════════════════════════════════════════════════════════════════ */
+      const params = new URLSearchParams(window.location.search);
+      let activeCourseId = params.get("course_id");
+      let skillChart = null;
+      let interactChart = null;
+
+      function getCourseData(cid) {
+        return activeCourseData;
+      }
+
+      function getCourseIcon(category, level) {
+        const icons = {
+          "إدارة-مبتدئ":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+          "إدارة-متوسط":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
+          "إدارة-متقدم":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+          "تقنية-مبتدئ":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+          "تقنية-متوسط":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+          "تقنية-متقدم":
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+        };
+        return (
+          icons[category + "-" + level] ||
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+        );
+      }
+
+      /* ═══════════════════════════════════════════════════════════════════════════
+     INIT
+  ═══════════════════════════════════════════════════════════════════════════ */
+      /* ══ INITIALIZATION ══ */
+      (async function init() {
+        await fetchCourses();
+        
+        const params = new URLSearchParams(window.location.search);
+        let cid = params.get("course_id");
+        
+        if (!cid && COURSES.length > 0) {
+            cid = COURSES[0].dbId;
+        }
+        
+        if (cid) {
+            await selectActiveCourse(cid);
+        }
+      })();
+
+      async function fetchCourses() {
+          try {
+              const resp = await authenticatedFetch('/api/courses');
+              const data = await resp.json();
+              COURSES = data.map(c => ({
+                  id: 'c' + c.id,
+                  dbId: c.id,
+                  name: c.title_ar || c.title,
+                  category: c.classification || "عام",
+                  level: c.skill_level || "متوسط",
+                  course_type: c.course_type
+              }));
+              renderCourseStrip();
+          } catch (err) {
+              console.error("Failed to fetch courses", err);
+              showToast("فشل جلب قائمة الدورات", "error");
+          }
+      }
+
+      async function fetchCourseTrainees(courseId) {
+          try {
+              const resp = await authenticatedFetch(`/api/admin/trainees?course_id=${courseId}&stage=7`);
+              const trainees = await resp.json();
+              
+              activeCourseData.trainees = trainees.map(t => ({
+                  id: t.id,
+                  name: t.name,
+                  role: t.category || "متدرب",
+                  score: t.ai_match_score ? Math.round(t.ai_match_score * 100) : 750,
+                  sessions: 0, // Mock for now
+                  passed: 0,
+                  failed: 0,
+                  rank: "—",
+                  grade: "—",
+                  skills: [],
+                  ai: "تحليل ذكاء اصطناعي قيد المعالجة...",
+                  interactions: [25, 25, 25, 25],
+                  flags: []
+              }));
+              
+              activeCourseData.recScores = {};
+              trainees.forEach(t => {
+                  if (t.ai_match_score) {
+                      activeCourseData.recScores[t.id] = Math.round(t.ai_match_score * 10);
+                  }
+              });
+              
+              renderCarousel();
+              renderKpis();
+              updateAISidebar();
+          } catch (err) {
+              console.error("Failed to fetch trainees", err);
+          }
+      }
+
+      async function triggerMatrixGeneration() {
+        const btn = document.getElementById("btnGenerateMatrix");
+        if (!activeCourseId) return;
+
+        btn.disabled = true;
+        btn.classList.add("loading");
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-anim">
+                <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+            </svg>
+            جاري التحليل...
+        `;
+
+        try {
+            const resp = await authenticatedFetch(`/api/admin/class-matrix/generate/${activeCourseId}`, {
+                method: 'POST'
+            });
+            const data = await resp.json();
+            if (data.status === "processing" || data.success) {
+                showToast("تم بدء المعالجة في الخلفية. يرجى الانتظار...", "info");
+                // Start polling
+                pollMatrixStatus(activeCourseId, btn, originalHTML);
+            } else {
+                showToast(data.error || "فشل توليد المصفوفة", "error");
+                btn.disabled = false;
+                btn.classList.remove("loading");
+                btn.innerHTML = originalHTML;
+            }
+        } catch (err) {
+            console.error(err);
+            showToast("خطأ في الاتصال بالخادم", "error");
+            btn.disabled = false;
+            btn.classList.remove("loading");
+            btn.innerHTML = originalHTML;
+        }
+      }
+
+      async function pollMatrixStatus(courseId, btn, originalHTML) {
+          const check = async () => {
+              try {
+                  const resp = await authenticatedFetch(`/api/admin/class-matrix/status/${courseId}`);
+                  const data = await resp.json();
+                  
+                  if (data.status === "done") {
+                      showToast("تم توليد مصفوفة التوصيات بنجاح بواسطة الذكاء الاصطناعي", "success");
+                      await fetchMatrixSummary();
+                      resetBtn();
+                  } else if (data.status === "error") {
+                      showToast(data.error || "حدث خطأ أثناء التحليل", "error");
+                      resetBtn();
+                  } else {
+                      // Still processing, poll again in 3 seconds
+                      setTimeout(check, 3000);
+                  }
+              } catch (err) {
+                  console.error(err);
+                  showToast("خطأ في جلب حالة المعالجة", "error");
+                  resetBtn();
+              }
+          };
+          
+          const resetBtn = () => {
+              btn.disabled = false;
+              btn.classList.remove("loading");
+              btn.innerHTML = originalHTML;
+          };
+
+          // Start first check after 2 seconds
+          setTimeout(check, 2000);
+      }
+
+      let matrixSummary = [];
+      async function fetchMatrixSummary() {
+          if (!activeCourseId) return;
+          try {
+              const resp = await authenticatedFetch(`/api/admin/class-matrix/summary/${activeCourseId}`);
+              matrixSummary = await resp.json();
+              renderTrainerTable();
+          } catch (err) {
+              console.error("Failed to fetch matrix summary", err);
+          }
+      }
+
+      async function viewClassDetails(trainerId) {
+          switchTab('materials');
+          const body = document.getElementById("recDetailBody");
+          body.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 3rem;">
+              <div class="loading-spinner" style="margin: 0 auto;"></div>
+              <p style="margin-top: 1rem; color: var(--text-muted);">جاري جلب تفاصيل التوزيع من الذكاء الاصطناعي...</p>
+          </td></tr>`;
+
+          try {
+              const resp = await authenticatedFetch(`/api/admin/class-matrix/details/${activeCourseId}/${trainerId}`);
+              const data = await resp.json();
+              renderDetailedMatrix(data);
+          } catch (err) {
+              console.error("Failed to fetch matrix details", err);
+              body.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--color-error);">فشل تحميل البيانات</td></tr>`;
+          }
+      }
+
+      function renderDetailedMatrix(data) {
+          const body = document.getElementById("recDetailBody");
+          const title = document.getElementById("recDetailTitle");
+
+          if (!data || !data.trainer) {
+              body.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--color-error);">لم يتم العثور على بيانات المدرب</td></tr>`;
+              return;
+          }
+          title.textContent = "توزيع المتدربين للمدرب: " + data.trainer.trainer_name;
+          
+          let rows = "";
+          
+          // 1. Trainer Row (Highlighted)
+          const ta = data.trainer.trainer_analysis || {};
+          rows += `
+            <tr class="trainer-row">
+                <td><span class="rec-table__name">${data.trainer.trainer_name}</span><br/><small style="color: var(--text-muted);">(المدرب)</small></td>
+                <td class="rec-analysis-text">${ta.strengths || "—"}</td>
+                <td class="rec-analysis-text">${ta.weaknesses || "—"}</td>
+                <td class="rec-analysis-text">${ta.reason || "تحليل المدرب بالنسبة لهذه الدورة"}</td>
+                <td>—</td>
+            </tr>
+          `;
+
+          // 2. Trainee Rows
+          data.trainees.forEach(t => {
+              const ana = t.trainee_analysis || {};
+              const score = ana.confidence_score || 0;
+              const sc = score >= 85 ? 'high' : score >= 70 ? 'medium' : 'low';
+              rows += `
+                <tr>
+                    <td><span class="rec-table__name">${t.trainee_name}</span></td>
+                    <td class="rec-analysis-text">${ana.strengths || "—"}</td>
+                    <td class="rec-analysis-text">${ana.weaknesses || "—"}</td>
+                    <td class="rec-analysis-text">${ana.reason || "—"}</td>
+                    <td>
+                        <div class="rec-conf-score ${sc}">
+                            ${score}%
+                        </div>
+                    </td>
+                </tr>
+              `;
+          });
+
+          body.innerHTML = rows;
+      }
+
+      /* ══ KPIs ══ */
+      function renderKpis() {
+        const d = activeCourseData;
+        const scores = d.trainees.map((t) => activeCourseData.recScores[t.id] || 50);
+        const avg = scores.length
+          ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1)
+          : "—";
+        const high = scores.filter((s) => s >= 80).length; // Adjusted for 0-100 scores
+        const low = scores.filter((s) => s < 50).length;
+        const pct = (n) =>
+          scores.length ? Math.round((n / scores.length) * 100) + "%" : "—%";
+        
+        document.getElementById("kpiTotal").textContent = d.trainees.length;
+        document.getElementById("kpiAvg").textContent = avg;
+        document.getElementById("kpiHigh").textContent = high;
+        document.getElementById("kpiLow").textContent = low;
+        document.getElementById("kpiHighPct").textContent = pct(high);
+        document.getElementById("kpiLowPct").textContent = pct(low);
+      }
+
+      /* ══ Overview ══ */
+
+      function renderOverview() {
+        updateAISidebar(activeCourse);
+      }
+
+      function renderCourseStrip() {
+        const strip = document.getElementById("recCourseStrip");
+        if (!strip) return;
+        strip.innerHTML =
+          '<span class="rec-course-strip__label">عرض الدورة:</span>' +
+          COURSES.map(
+            (c) =>
+              `<button class="rec-course-pill ${String(c.dbId) === String(activeCourseId) ? "active" : ""}"
+         onclick="selectActiveCourse('${c.dbId}')">
+   <span class="rec-course-pill__icon">${getCourseIcon(c.category, c.level)}</span>${c.name}
+ </button>`,
+          ).join("");
+      }
+
+      async function selectActiveCourse(dbId) {
+        activeCourseId = dbId;
+        const c = COURSES.find(x => String(x.dbId) === String(dbId));
+        if (!c) return;
+
+        // Update UI
+        document.getElementById("recPageTitle").textContent = "توصيات: " + c.name;
+        document.getElementById("recPageSub").textContent = c.category + " · " + c.level;
+        document.getElementById("recCourseBadge").textContent = c.name;
+        document.getElementById("recCourseBadge").className = "rec-badge " + (c.course_type === 'Practical' ? 'practical' : 'theoretical');
+        
+        const natureBadge = document.getElementById("recNatureBadge");
+        if (natureBadge) {
+            natureBadge.innerHTML = c.course_type === 'Practical' 
+                ? '<span class="nature-pill practical">تطبيقي / عملي</span>' 
+                : c.course_type === 'Theoretical' 
+                    ? '<span class="nature-pill theoretical">نظري / أكاديمي</span>'
+                    : '<span class="nature-pill unknown">غير مصنف بعد</span>';
+        }
+
+        renderCourseStrip();
+        
+        // Fetch Data
+        await Promise.all([
+            fetchMatrixSummary(),
+            fetchCourseTrainees(dbId)
+        ]);
+        
+        updateAISidebar();
+      }
+
+      function getInitials(name) {
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].charAt(0);
+        return parts[0].charAt(0) + parts[1].charAt(0);
+      }
+
+      function renderCarousel(cid) {
+        const wrap = document.getElementById("user-carousel");
+        const list = getCourseData(cid).trainees;
+        if (!list.length) {
+          wrap.innerHTML =
+            '<div style="color:var(--text-subtle);font-size:.85rem;padding:1rem;">لا يوجد متدربون لهذه الدورة.</div>';
+          return;
+        }
+        wrap.innerHTML = list
+          .map((u, i) => {
+            const pct = Math.round((u.score || 0) / 10);
+            return `<div class="rec-trainee-card" style="animation-delay:${i * 0.07}s" onclick="goToUser('${u.id}')">
+        <div class="rec-trainee-card__head">
+          <div class="rec-trainee-card__avatar">${getInitials(u.name)}</div>
+          <div>
+            <p class="rec-trainee-card__name">${u.name}</p>
+            <p class="rec-trainee-card__role">${u.role}</p>
+          </div>
+        </div>
+        <div class="rec-trainee-card__prog-label"><span>التقدم</span><span>${pct}%</span></div>
+        <div class="rec-trainee-card__prog-bar"><div class="rec-trainee-card__prog-fill" style="width:${pct || 0}%;"></div></div>
+      </div>`;
+          })
+          .join("");
+      }
+
+      function renderTrainerTable() {
+        const body = document.getElementById("trainer-table-body");
+        const pill = document.getElementById("active-class-pill");
+        
+        if (matrixSummary.length === 0) {
+            body.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-subtle);">لا توجد توصيات حالية. اضغط على "توليد مصفوفة ذكية" للبدء.</td></tr>`;
+            pill.textContent = "بانتظار التحليل";
+            return;
+        }
+
+        pill.textContent = matrixSummary[0].course_name;
+        body.innerHTML = matrixSummary
+          .map(
+            (t) => `
+      <tr>
+        <td><span class="rec-table__name">${t.trainer_name}</span></td>
+        <td>${t.course_name}</td>
+        <td>${t.total_trainees} متدرب</td>
+        <td><span class="rec-table__perf">${Math.round(t.avg_confidence || 0)}%</span></td>
+        <td style="text-align:left;"><button class="rec-table__btn" onclick="viewClassDetails('${t.trainer_id}')">عرض الفصل</button></td>
+      </tr>`,
+          )
+          .join("");
+      }
+
+      function updateAISidebar() {
+        const s = activeCourseData.aiSummary;
+        document.getElementById("ai-sidebar-rec").textContent = s.text;
+        document.getElementById("ai-cohort-pct").textContent = s.cohort + "%";
+        document.getElementById("ai-cohort-bar").style.width = s.cohort + "%";
+        document.getElementById("ai-avg-grade").textContent = s.grade + "%";
+        document.getElementById("ai-grade-bar").style.width = s.grade + "%";
+        document.getElementById("ai-materials-list").innerHTML = s.materials
+          .map((m) => `<li>${m}</li>`)
+          .join("");
+      }
+
+      /* ══ Deep analytics ══ */
+      function goToUser(id) {
+        let u = activeCourseData.trainees.find((x) => String(x.id) === String(id));
+        if (!u) return;
+        switchTab("analytics");
+        document.getElementById("analytics-placeholder").style.display = "none";
+        document.getElementById("analytics-content").style.display = "block";
+
+        document.getElementById("user-detail-avatar").textContent = getInitials(
+          u.name,
+        );
+
+        document.getElementById("user-detail-name").textContent = u.name;
+        document.getElementById("user-detail-role").textContent =
+          "التخصص: " + u.role;
+        document.getElementById("user-detail-score").textContent = u.score;
+        document.getElementById("user-detail-passed").textContent = u.passed;
+        document.getElementById("user-detail-failed").textContent = u.failed;
+        document.getElementById("ai-notes").textContent = u.ai;
+        document.getElementById("stat-sessions").textContent =
+          u.sessions + "/30";
+        document.getElementById("stat-failed").textContent = u.failed;
+        document.getElementById("stat-rank").textContent = u.rank;
+        document.getElementById("stat-grade").textContent = u.grade;
+
+        const flags = document.getElementById("red-flags-list");
+        const flagsCon = document.getElementById("red-flags-container");
+        if (u.flags.length) {
+          flagsCon.style.display = "";
+          flags.innerHTML = u.flags.map((f) => `<li>${f}</li>`).join("");
+        } else {
+          flags.innerHTML =
+            '<li style="color:var(--color-success-soft);background:rgba(74,222,128,.07);border-color:rgba(74,222,128,.2);">لا توجد ملاحظات سلبية</li>';
+        }
+
+        document.getElementById("skills-badges").innerHTML = u.skills
+          .map((s) => `<span class="rec-skill-chip">${s}</span>`)
+          .join("");
+
+        buildCharts(u);
+      }
+
+      function buildCharts(u) {
+        if (skillChart) skillChart.destroy();
+        if (interactChart) interactChart.destroy();
+
+        const chartDefaults = {
+          color: "var(--text-subtle)",
+          plugins: {
+            legend: {
+              labels: {
+                color: "var(--text-subtle)",
+                font: { family: "Tajawal", size: 11 },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(51,65,85,.4)" },
+              ticks: { color: "var(--text-subtle)", font: { family: "Tajawal" } },
+            },
+            y: {
+              grid: { color: "rgba(51,65,85,.4)" },
+              ticks: { color: "var(--text-subtle)", font: { family: "Tajawal" } },
+              beginAtZero: true,
+            },
+          },
+        };
+
+        skillChart = new Chart(
+          document.getElementById("skillsChart").getContext("2d"),
+          {
+            type: "line",
+            data: {
+              labels: ["أسبوع 1", "أسبوع 2", "أسبوع 3", "أسبوع 4", "أسبوع 5"],
+              datasets: [
+                {
+                  label: "درجة المهارة",
+                  data: [10, 25, 45, 70, Math.round(u.score / 10)],
+                  borderColor: "var(--accent-hover)",
+                  backgroundColor: "rgba(99,102,241,.12)",
+                  fill: true,
+                  tension: 0.4,
+                  pointBackgroundColor: "var(--accent-hover)",
+                  pointRadius: 4,
+                },
+              ],
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: chartDefaults.scales,
+            },
+          },
+        );
+
+        interactChart = new Chart(
+          document.getElementById("interactionChart").getContext("2d"),
+          {
+            type: "doughnut",
+            data: {
+              labels: ["الأقران", "المدربون", "الذكاء الاصطناعي", "التواصل"],
+              datasets: [
+                {
+                  data: u.interactions || [25, 25, 25, 25],
+                  backgroundColor: ["var(--accent-hover)", "var(--color-success)", "var(--color-warning)", "var(--color-error)"],
+                  borderWidth: 0,
+                  hoverOffset: 6,
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    color: "var(--text-subtle)",
+                    font: { family: "Tajawal", size: 11 },
+                    padding: 12,
+                  },
+                },
+              },
+            },
+          },
+        );
+      }
+
+      /* ══ Recommendation Engine (Tab 3) ══ */
+      function getScore(uid) {
+        return (activeCourseData.recScores || {})[uid] || 50;
+      }
+      function getRationale(uid) {
+        return (activeCourseData.rationale || {})[uid] || "لا توجد ملاحظات محددة.";
+      }
+      function scoreClass(s) {
+        return s >= 80 ? "high" : s >= 50 ? "medium" : "low";
+      }
+
+      function updateEngineStats() {
+        const d = activeCourseData;
+        const engCourses = document.getElementById("eng-total-courses");
+        const engTrainees = document.getElementById("eng-total-trainees");
+        if (engCourses) engCourses.textContent = 1; 
+        if (engTrainees) engTrainees.textContent = d.trainees.length;
+      }
+
+      function updateMaterialsView() {
+        const scoreEl = document.getElementById("score-filter");
+        if (!scoreEl) return;
+        const minScore = parseInt(scoreEl.value);
+        const search = (
+          document.getElementById("trainee-search").value || ""
+        ).toLowerCase();
+        document.getElementById("score-value").textContent = minScore;
+
+        const filtered = activeCourseData.trainees.filter((u) => {
+          const s = getScore(u.id);
+          return s >= minScore && u.name.includes(search);
+        });
+
+        const grid = document.getElementById("recommendation-grid");
+        if (!filtered.length) {
+          grid.innerHTML =
+            '<p class="rec-empty">لا يوجد متدربون يطابقون معايير الفلتر.</p>';
+          return;
+        }
+        grid.innerHTML = filtered
+          .map((u, i) => {
+            const s = getScore(u.id);
+            const sc = scoreClass(s);
+            const rat = getRationale(u.id);
+            const pct = Math.round((u.score || 0) / 10);
+            return `<div class="rec-card" style="animation-delay:${i * 0.06}s">
+        <div class="rec-card__head">
+          <div class="rec-card__id-row">
+            <div class="rec-card__avatar">${getInitials(u.name)}</div>
+            <div>
+              <p class="rec-card__name">${u.name}</p>
+              <p class="rec-card__role">${u.role}</p>
+            </div>
+          </div>
+          <div class="rec-score-badge rec-score-badge--${sc}">${s}</div>
+        </div>
+        <div class="rec-card__rationale">
+          <p class="rec-card__rat-label">تحليل AI</p>
+          <p class="rec-card__rat-text">"${rat}"</p>
+        </div>
+        <div class="rec-card__prog-wrap">
+          <div class="rec-card__prog-label"><span>تقدم الدورة</span><span>${pct}%</span></div>
+          <div class="rec-card__prog-bar"><div class="rec-card__prog-fill" style="width:${pct || 0}%;"></div></div>
+        </div>
+        <div class="rec-card__footer">
+          <button class="rec-card__link" onclick="goToUser('${u.id}')">التحليل الكامل ←</button>
+        </div>
+      </div>`;
+          })
+          .join("");
+      }
+
+      /* ══ Tab switching ══ */
+      function switchTab(id) {
+        document
+          .querySelectorAll(".rec-tab-content")
+          .forEach((el) => el.classList.remove("active"));
+        document
+          .querySelectorAll(".rec-sidenav__btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        document.getElementById("tab-" + id).classList.add("active");
+        document.getElementById("tab-btn-" + id).classList.add("active");
+      }
+
+      /* ══ Carousel scroll ══ */
+      function scrollCarousel(dist) {
+        document.getElementById("user-carousel").scrollLeft += dist;
+      }
+    </script>
+  </body>
+</html>

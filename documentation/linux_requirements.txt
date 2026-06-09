@@ -1,0 +1,43 @@
+# =========================================================
+# NTA REGISTRATION PORTAL - LINUX INSTALLATION COMMANDS
+# =========================================================
+# This file contains all requirements collected from:
+# - admin/backend/requirements.txt
+# - user/backend/requirements.txt
+# - superadmin/backend/requirements.txt
+# - deploy/requirements.txt
+# =========================================================
+
+# 1. Update system and install Python dependencies
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y python3 python3-pip python3-venv default-libmysqlclient-dev build-essential
+
+# 2. Upgrade core python tools
+pip3 install --upgrade pip setuptools wheel
+
+# 3. Install All Project Requirements
+pip3 install fastapi uvicorn python-multipart httpx requests mysql-connector-python \
+google-generativeai python-dotenv pydantic[email] email-validator \
+python-jose[cryptography] passlib[bcrypt,argon2] bcrypt argon2-cffi cryptography \
+pandas openpyxl pyjwt
+
+# =========================================================
+# Optional: Install MySQL Server if not already present
+# =========================================================
+# sudo apt install -y mysql-server
+# sudo systemctl start mysql
+# sudo systemctl enable mysql
+
+# 1. Additional system-level dependencies for SSL and Database building
+sudo apt update
+sudo apt install -y pkg-config libssl-dev python3-dev
+
+# 2. Production Process Manager and Database drivers
+# (Gunicorn is necessary to keep the API running in the background)
+pip3 install gunicorn pymysql certifi
+
+# 3. Optional but recommended: Create the .env file template
+# (The code will crash without these variables defined)
+touch .env
+echo "GOOGLE_API_KEY=" >> .env
+echo "DATABASE_URL=mysql+pymysql://user:password@localhost/dbname" >> .env

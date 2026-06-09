@@ -1,0 +1,115 @@
+Session 14: Supervised Learning: Linear and Logistic Regression
+
+Welcome to Session 14! Now that we know how to prepare our data (Session 13), it is time to build our first predictive models. We will focus on Supervised Learning, where the model learns from labeled data.
+
+We will cover the two "workhorses" of the industry:
+
+Linear Regression: Used for predicting continuous numerical values (e.g., Stock Price, Temperature).
+
+Logistic Regression: Used for predicting categories or classes (e.g., Spam vs. Not Spam, Survived vs. Perished).
+
+1. Linear Regression (Regression)
+
+Linear Regression finds the "line of best fit" through your data points. It assumes a linear relationship between the input features ($X$) and the target variable ($y$).
+
+The Scikit-Learn Pattern:
+
+Import: Load the model.
+
+Instantiate: Create the model object.
+
+Fit: Train the model on your training data.
+
+Predict: Use the model on the test data.
+
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# 1. Create the model
+model = LinearRegression()
+
+# 2. Train the model
+model.fit(X_train, y_train)
+
+# 3. Make predictions
+predictions = model.predict(X_test)
+
+# 4. Evaluate (Lower is better)
+mse = mean_squared_error(y_test, predictions)
+print(f"Mean Squared Error: {mse}")
+
+
+2. Logistic Regression (Classification)
+
+Despite its name, Logistic Regression is used for Classification. It uses the Sigmoid function to output a probability between 0 and 1. If the probability is $>0.5$, it classifies the result as "1" (True/Positive).
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+# 1. Create the model
+clf = LogisticRegression()
+
+# 2. Train the model
+clf.fit(X_train, y_train)
+
+# 3. Make predictions
+class_preds = clf.predict(X_test)
+
+# 4. Evaluate (Higher is better)
+acc = accuracy_score(y_test, class_preds)
+print(f"Accuracy: {acc * 100:.2f}%")
+
+
+3. Evaluating Model Performance
+
+In machine learning, we need specific metrics to know if our model is "guessing" or actually learning.
+
+For Regression:
+
+MSE (Mean Squared Error): The average squared difference between actual and predicted values.
+
+R-squared ($R^2$): How much of the variance in the data is explained by the model (Scale 0 to 1).
+
+For Classification:
+
+Accuracy: Percentage of correct predictions.
+
+Confusion Matrix: A table showing True Positives, True Negatives, False Positives, and False Negatives.
+
+4. Overfitting vs. Underfitting
+
+Underfitting: The model is too simple to learn the patterns (High error on both Train and Test sets).
+
+Overfitting: The model "memorizes" the training data but fails on new data (Low error on Train, High error on Test).
+
+Hands-on Exercise: Predicting Tips
+
+Task:
+
+Load the tips dataset from Seaborn: df = sns.load_dataset('tips').
+
+Regression Task: Predict the tip amount based on the total_bill.
+
+Split the data (80/20).
+
+Train a LinearRegression model.
+
+Calculate the $R^2$ score.
+
+Classification Task: Predict if a customer is a smoker (Yes/No) based on their total_bill and tip.
+
+Use pd.get_dummies() for categorical variables.
+
+Train a LogisticRegression model.
+
+Print the Accuracy Score.
+
+Summary Checklist
+
+[ ] Can you identify when to use Regression vs. Classification?
+
+[ ] Do you know the four steps of the Scikit-Learn API (import, instantiate, fit, predict)?
+
+[ ] Can you interpret a Confusion Matrix?
+
+Next Week (Week 8): We explore Classification and Clustering basics with KNN and K-Means, and kick off the Final Capstone Project!

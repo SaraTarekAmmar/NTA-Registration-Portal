@@ -1,0 +1,100 @@
+[
+  {
+    "category_id": 1,
+    "name_en": "Technical Skills",
+    "name_ar": "المهارات التقنية",
+    "description_en": "Reflects technical readiness for digital transformation and professional expertise across domains",
+    "description_ar": "يعكس الاستعداد التقني للتحول الرقمي والخبرة المهنية عبر المجالات",
+    "subcategories": [
+      {"subcategory_id": 1, "name_en": "Software Development", "name_ar": "تطوير البرمجيات", "description_en": "Skills in coding, software design, and app development", "description_ar": "مهارات في البرمجة وتصميم البرمجيات وتطوير التطبيقات"},
+      {"subcategory_id": 2, "name_en": "Data & Analytics", "name_ar": "البيانات والتحليلات", "description_en": "Skills in data collection, processing, and visualization", "description_ar": "مهارات في جمع البيانات ومعالجتها وتصويرها"},
+      {"subcategory_id": 3, "name_en": "AI & Machine Learning", "name_ar": "الذكاء الاصطناعي والتعلم الآلي", "description_en": "Skills in AI, machine learning, and predictive modeling", "description_ar": "مهارات في الذكاء الاصطناعي والتعلم الآلي والنمذجة التنبؤية"},
+      {"subcategory_id": 4, "name_en": "Cloud & Networking", "name_ar": "الحوسبة السحابية والشبكات", "description_en": "Skills in cloud platforms, networking, and infrastructure", "description_ar": "مهارات في الحوسبة السحابية وإدارة الشبكات والبنية التحتية"},
+      {"subcategory_id": 5, "name_en": "Cybersecurity", "name_ar": "الأمن السيبراني", "description_en": "Skills to protect systems, networks, and data", "description_ar": "مهارات لحماية الأنظمة والشبكات والبيانات"},
+      {"subcategory_id": 6, "name_en": "Digital Transformation", "name_ar": "التحول الرقمي", "description_en": "Skills to apply digital solutions across processes", "description_ar": "مهارات لتطبيق الحلول الرقمية عبر العمليات"},
+      {"subcategory_id": 7, "name_en": "Engineering & Manufacturing", "name_ar": "الهندسة والتصنيع", "description_en": "Technical skills in engineering, design, and manufacturing processes", "description_ar": "مهارات فنية في الهندسة والتصميم وعمليات التصنيع"},
+      {"subcategory_id": 8, "name_en": "IoT & Embedded Systems", "name_ar": "إنترنت الأشياء والأنظمة المدمجة", "description_en": "Skills in connected devices, sensors, and embedded systems", "description_ar": "مهارات في الأجهزة المتصلة وأجهزة الاستشعار والأنظمة المدمجة"},
+      {"subcategory_id": 9, "name_en": "Graphic Design & UX/UI", "name_ar": "التصميم الجرافيكي وتجربة المستخدم", "description_en": "Skills in visual design, UX, and interface design", "description_ar": "مهارات في التصميم المرئي وتجربة المستخدم وتصميم الواجهات"},
+      {"subcategory_id": 10, "name_en": "Marketing Technology", "name_ar": "التكنولوجيا التسويقية", "description_en": "Skills in digital marketing tools and platforms", "description_ar": "مهارات في أدوات ومنصات التسويق الرقمي"},
+      {"subcategory_id": 11, "name_en": "Finance Technology", "name_ar": "التكنولوجيا المالية", "description_en": "Skills in fintech, automation, and financial systems", "description_ar": "مهارات في التكنولوجيا المالية والأتمتة والأنظمة المالية"},
+      {"subcategory_id": 12, "name_en": "HR Systems & Tools", "name_ar": "نظم وأدوات الموارد البشرية", "description_en": "Skills in HR software, payroll, and workforce management", "description_ar": "مهارات في برمجيات الموارد البشرية والرواتب وإدارة القوى العاملة"},
+      {"subcategory_id": 13, "name_en": "IT Support & Helpdesk", "name_ar": "دعم تكنولوجيا المعلومات وخدمة العملاء", "description_en": "Skills in troubleshooting, support, and IT maintenance", "description_ar": "مهارات في استكشاف الأخطاء والدعم وصيانة تكنولوجيا المعلومات"},
+      {"subcategory_id": 14, "name_en": "Quality Assurance & Testing", "name_ar": "ضمان الجودة والاختبار", "description_en": "Skills in software testing, QA processes, and automation", "description_ar": "مهارات في اختبار البرمجيات وعمليات ضمان الجودة والأتمتة"},
+      {"subcategory_id": 15, "name_en": "DevOps & Automation", "name_ar": "التطوير التشغيلي والأتمتة", "description_en": "Skills in CI/CD, automation pipelines, and deployment", "description_ar": "مهارات في CI/CD وأنظمة الأتمتة والنشر"},
+      {"subcategory_id": 16, "name_en": "Blockchain & Web3", "name_ar": "البلوكشين والويب 3", "description_en": "Skills in blockchain development, smart contracts, and decentralized systems", "description_ar": "مهارات في تطوير البلوكشين والعقود الذكية والأنظمة اللامركزية"},
+      {"subcategory_id": 17, "name_en": "Robotics & Mechatronics", "name_ar": "الروبوتات والهندسة الميكاترونية", "description_en": "Skills in robotics, sensors, and automation systems", "description_ar": "مهارات في الروبوتات وأجهزة الاستشعار وأنظمة الأتمتة"},
+      {"subcategory_id": 18, "name_en": "Technical Writing", "name_ar": "الكتابة التقنية", "description_en": "Skills in documentation, manuals, and technical communication", "description_ar": "مهارات في إعداد الوثائق والكتيبات والتواصل الفني"},
+      {"subcategory_id": 19, "name_en": "Simulation & Modeling", "name_ar": "المحاكاة والنمذجة", "description_en": "Skills in modeling systems, simulations, and scenario analysis", "description_ar": "مهارات في نمذجة الأنظمة والمحاكاة وتحليل السيناريوهات"},
+      {"subcategory_id": 20, "name_en": "Product Management & Agile", "name_ar": "إدارة المنتجات وأجايل", "description_en": "Skills in managing products, agile methodology, and delivery processes", "description_ar": "مهارات في إدارة المنتجات ومنهجية أجايل وعمليات التسليم"},
+      {"subcategory_id": 21, "name_en": "Sustainable Tech (Green IT)", "name_ar": "التقنيات المستدامة (تكنولوجيا خضراء)", "description_en": "Skills in environmental impact, energy-efficient technologies, and green IT practices", "description_ar": "مهارات في الأثر البيئي والتقنيات الموفرة للطاقة وممارسات التكنولوجيا الخضراء"},
+      {"subcategory_id": 22, "name_en": "AR / VR / Spatial Computing", "name_ar": "الواقع المعزز / الواقع الافتراضي / الحوسبة المكانية", "description_en": "Skills in immersive media, augmented reality, virtual reality, and spatial computing", "description_ar": "مهارات في الوسائط الغامرة، الواقع المعزز، الواقع الافتراضي، والحوسبة المكانية"},
+      {"subcategory_id": 23, "name_en": "Low-Code / No-Code", "name_ar": "البرمجة منخفضة / بدون كود", "description_en": "Skills in rapid prototyping, low-code/no-code platforms, and application development", "description_ar": "مهارات في النماذج الأولية السريعة ومنصات البرمجة منخفضة/بدون كود وتطوير التطبيقات"},
+      {"subcategory_id": 24, "name_en": "Enterprise Systems (ERP)", "name_ar": "أنظمة المؤسسات (ERP)", "description_en": "Skills in business operations, ERP systems, and enterprise software", "description_ar": "مهارات في عمليات الأعمال وأنظمة ERP وبرمجيات المؤسسات"},
+      {"subcategory_id": 25, "name_en": "Healthcare & Medical Technology", "name_ar": "تكنولوجيا الرعاية الصحية والطبية", "description_en": "Skills in health information systems, medical devices, and digital health solutions", "description_ar": "مهارات في نظم المعلومات الصحية والأجهزة الطبية وحلول الصحة الرقمية"},
+      {"subcategory_id": 26, "name_en": "Legal & Compliance Technology", "name_ar": "تكنولوجيا القانون والامتثال", "description_en": "Skills in legal documentation, compliance tools, and regulatory technology", "description_ar": "مهارات في التوثيق القانوني وأدوات الامتثال والتكنولوجيا التنظيمية"}
+    ]
+  },
+  {
+    "category_id": 2,
+    "name_en": "Computer Skills",
+    "name_ar": "مهارات الحاسب الآلي",
+    "description_en": "Defines proficiency in general and specialized software",
+    "description_ar": "يحدد الكفاءة في البرامج العامة والمتخصصة",
+    "subcategories": [
+      {"subcategory_id": 27, "name_en": "Microsoft Office Suite", "name_ar": "مجموعة برامج مايكروسوفت أوفيس", "description_en": "Word, Excel, PowerPoint, and basic office applications", "description_ar": "معالجة النصوص والجداول والبيانات والمهارات الأساسية"},
+      {"subcategory_id": 28, "name_en": "Operating Systems", "name_ar": "أنظمة التشغيل", "description_en": "Proficiency in Windows, Linux, and other OS platforms", "description_ar": "الكفاءة في استخدام ويندوز ولينكس والأنظمة الأخرى"},
+      {"subcategory_id": 29, "name_en": "Specialized Professional Tools", "name_ar": "أدوات احترافية متخصصة", "description_en": "Tools like AutoCAD, SPSS, or industry-specific software", "description_ar": "برامج متخصصة مثل أوتوكاد و SPSS وغيرها"},
+      {"subcategory_id": 30, "name_en": "Digital Productivity & Collaboration", "name_ar": "الإنتاجية الرقمية والتعاون", "description_en": "Proficiency in remote work and team collaboration tools", "description_ar": "الكفاءة في أدوات العمل عن بعد والتعاون الجماعي"},
+      {"subcategory_id": 31, "name_en": "Basic IT & Hardware Maintenance", "name_ar": "أساسيات تكنولوجيا المعلومات وصيانة الأجهزة", "description_en": "Basic hardware setup, troubleshooting, and maintenance", "description_ar": "إعداد الأجهزة الأساسية واستكشاف الأعطال وإصلاحها"},
+      {"subcategory_id": 32, "name_en": "Digital Security & Information Privacy", "name_ar": "الأمن الرقمي وخصوصية المعلومات", "description_en": "Personal digital security and data protection basics", "description_ar": "أساسيات الأمن الرقمي الشخصي وحماية البيانات"},
+      {"subcategory_id": 33, "name_en": "Computer Programming Basics", "name_ar": "أساسيات برمجة الحاسب", "description_en": "Foundational coding skills and logical thinking", "description_ar": "مهارات البرمجة الأساسية والتفكير المنطقي"},
+      {"subcategory_id": 34, "name_en": "Data Analysis & Visualization", "name_ar": "تحليل البيانات وتصويرها", "description_en": "Using software to interpret and present data insights", "description_ar": "استخدام البرامج لتفسير وعرض رؤى البيانات"},
+      {"subcategory_id": 35, "name_en": "Cloud Computing Fundamentals", "name_ar": "أساسيات الحوسبة السحابية", "description_en": "Basic understanding of cloud platforms and storage", "description_ar": "الفهم الأساسي للمنصات السحابية والتخزين"},
+      {"subcategory_id": 36, "name_en": "Advanced Cyber Security & Privacy Tools", "name_ar": "أدوات الأمن السيبراني والخصوصية المتقدمة", "description_en": "Encryption, VPNs, and advanced digital defense", "description_ar": "التشفير، الشبكات الخاصة الافتراضية، والدفاع الرقمي المتقدم"},
+      {"subcategory_id": 37, "name_en": "Multimedia & Digital Design", "name_ar": "الوسائط المتعددة والتصميم الرقمي", "description_en": "Graphic design, video editing, and content creation tools", "description_ar": "أدوات التصميم الجرافيكي وتحرير الفيديو وصناعة المحتوى"},
+      {"subcategory_id": 38, "name_en": "Network & Connectivity Essentials", "name_ar": "أساسيات الشبكات والاتصال", "description_en": "Managing local networks, WiFi, and basic connectivity", "description_ar": "إدارة الشبكات المحلية والواي فاي والاتصال الأساسي"},
+      {"subcategory_id": 39, "name_en": "Workflow Automation & Scripting", "name_ar": "أتمتة سير العمل والبرمجة النصية", "description_en": "Increasing efficiency through simple automation tools", "description_ar": "زيادة الكفاءة من خلال أدوات الأتمتة البسيطة"}
+    ]
+  },
+  {
+    "category_id": 3,
+    "name_en": "Soft Skills",
+    "name_ar": "المهارات الشخصية",
+    "description_en": "Interpersonal and behavioral professional skills",
+    "description_ar": "المهارات المهنية السلوكية والشخصية",
+    "subcategories": [
+      {"subcategory_id": 40, "name_en": "Leadership & Team Management", "name_ar": "القيادة وإدارة الفرق", "description_en": "Directing teams and inspiring collective action", "description_ar": "توجيه الفرق وإلهام العمل الجماعي"},
+      {"subcategory_id": 41, "name_en": "Advanced Communication Skills", "name_ar": "مهارات التواصل المتقدمة", "description_en": "Public speaking, persuasive pitching, and advanced presentations", "description_ar": "التحدث أمام الجمهور، العروض التقديمية المتقدمة والإقناع"},
+      {"subcategory_id": 42, "name_en": "Non-Verbal & Interpersonal Communication", "name_ar": "التواصل غير اللفظي والاجتماعي", "description_en": "Active listening and professional interaction", "description_ar": "الاستماع الفعال والتفاعل المهني"},
+      {"subcategory_id": 43, "name_en": "Conflict Resolution & Mediation", "name_ar": "حل النزاعات والوساطة", "description_en": "Techniques for de-escalation and diplomatic negotiation", "description_ar": "تقنيات تهدئة النزاعات والتفاوض الدبلوماسي"},
+      {"subcategory_id": 44, "name_en": "Strategic Networking & Relationship Building", "name_ar": "بناء الشبكات الاستراتيجية والعلاقات", "description_en": "Building professional connections and stakeholder management", "description_ar": "بناء الاتصالات المهنية وإدارة أصحاب المصلحة"},
+      {"subcategory_id": 45, "name_en": "Cultural Competence & Global Diversity", "name_ar": "الكفاءة الثقافية والتنوع العالمي", "description_en": "Working effectively in diverse and cross-cultural environments", "description_ar": "العمل بفعالية في بيئات متنوعة ومتعددة الثقافات"},
+      {"subcategory_id": 46, "name_en": "Time Management & Personal Productivity", "name_ar": "إدارة الوقت والإنتاجية الشخصية", "description_en": "Prioritizing tasks and optimizing professional output", "description_ar": "تحديد أولويات المهام وتحسين المخرجات المهنية"},
+      {"subcategory_id": 47, "name_en": "Emotional Intelligence & Resilience", "name_ar": "الذكاء العاطفي والمرونة", "description_en": "Managing self-awareness and stress regulation", "description_ar": "إدارة الوعي الذاتي وتنظيم التوتر"},
+      {"subcategory_id": 48, "name_en": "Critical Thinking & Cognitive Flexibility", "name_ar": "التفكير النقدي والمرونة الذهنية", "description_en": "Analytical reasoning and managing ambiguity", "description_ar": "الاستدلال التحليلي وإدارة الغموض"},
+      {"subcategory_id": 49, "name_en": "Creative Problem Solving & Innovation", "name_ar": "حل المشكلات الإبداعي والابتكار", "description_en": "Brainstorming and design thinking methods", "description_ar": "طرق العصف الذهني والتفكير التصميمي"},
+      {"subcategory_id": 50, "name_en": "Ethical Judgment & Professional Integrity", "name_ar": "الحكم الأخلاقي والنزاهة المهنية", "description_en": "Making values-aligned and ethical professional choices", "description_ar": "اتخاذ خيارات مهنية أخلاقية وقائمة على القيم"},
+      {"subcategory_id": 51, "name_en": "Teamwork & Collaborative Dynamics", "name_ar": "العمل الجماعي وديناميكيات التعاون", "description_en": "Synergy and cross-functional team participation", "description_ar": "التآزر والمشاركة في فرق العمل المشتركة"}
+    ]
+  },
+  {
+    "category_id": 4,
+    "name_en": "Other Skills",
+    "name_ar": "مهارات أخرى",
+    "description_en": "Includes any relevant skills not covered above",
+    "description_ar": "يتضمن أي مهارات ذات صلة غير مغطاة أعلاه",
+    "subcategories": [
+      {"subcategory_id": 52, "name_en": "Multilingual & Cross-Cultural Communication", "name_ar": "التواصل متعدد اللغات والثقافات", "description_en": "Fluency in multiple languages and cultural mediation", "description_ar": "الطلاقة في لغات متعددة والوساطة الثقافية"},
+      {"subcategory_id": 53, "name_en": "Entrepreneurship & Business Innovation", "name_ar": "ريادة الأعمال والابتكار في الأعمال", "description_en": "Startup mindset and business venture development", "description_ar": "عقلية الشركات الناشئة وتطوير المشاريع التجارية"},
+      {"subcategory_id": 54, "name_en": "Research, Analysis & Academic Skills", "name_ar": "البحث والتحليل والمهارات الأكاديمية", "description_en": "Scientific and academic investigation methods", "description_ar": "أساليب البحث العلمي والأكاديمي"},
+      {"subcategory_id": 55, "name_en": "Mentorship, Coaching & Knowledge Transfer", "name_ar": "الإرشاد والتوجيه ونقل المعرفة", "description_en": "Peer mentoring and professional knowledge sharing", "description_ar": "الإرشاد المهني ومشاركة المعرفة"},
+      {"subcategory_id": 56, "name_en": "Digital Content Creation & Storytelling", "name_ar": "صناعة المحتوى الرقمي وسرد القصص", "description_en": "Copywriting, social media, and digital narrative", "description_ar": "كتابة المحتوى ووسائل التواصل الاجتماعي والسرد الرقمي"},
+      {"subcategory_id": 57, "name_en": "Project & Portfolio Management Fundamentals", "name_ar": "أساسيات إدارة المشاريع والمحافظ", "description_en": "Task tracking and resource management basics", "description_ar": "أساسيات تتبع المهام وإدارة الموارد"},
+      {"subcategory_id": 58, "name_en": "Lifelong Learning & Personal Development", "name_ar": "التعلم مدى الحياة والتطوير الشخصي", "description_en": "Continuous skill acquisition and professional growth", "description_ar": "اكتساب المهارات المستمر والنمو المهني"},
+      {"subcategory_id": 59, "name_en": "Professional Certifications & Accreditations", "name_ar": "الشهادات المهنية والاعتمادات", "description_en": "Accredited certifications from global institutions", "description_ar": "شهادات معتمدة من مؤسسات عالمية"},
+      {"subcategory_id": 60, "name_en": "Volunteering, Social Impact & Community Service", "name_ar": "التطوع والأثر الاجتماعي وخدمة المجتمع", "description_en": "Community engagement and social contributions", "description_ar": "المشاركة المجتمعية والمساهمات الاجتماعية"},
+      {"subcategory_id": 61, "name_en": "Artistic, Creative & Cultural Performance", "name_ar": "الأداء الفني والإبداعي والثقافي", "description_en": "Arts, music, and creative expression performance", "description_ar": "الأداء في الفنون والموسيقى والتعبير الإبداعي"},
+      {"subcategory_id": 62, "name_en": "Physical, Trades & Vocational Mastery", "name_ar": "المهارات البدنية والحرفية والمهنية", "description_en": "Technical trades and manual professional crafts", "description_ar": "الحرف الفنية والمهن اليدوية"}
+    ]
+  }
+]

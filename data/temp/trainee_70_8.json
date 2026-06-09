@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "كريم عصام الدين فهمي",
+      "full_name_en": "Karim Essam El-Din Fahmy",
+      "national_id": "29109141000018"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Agricultural Policy",
+          "category": "agriculture",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Food Security",
+          "category": "agriculture",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "FAOSTAT",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "GIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الاستدامة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الحوكمة الرشيدة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "القيادة التحويلية",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "السياسات الغذائية",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2016-01-01",
+          "institution": "جامعة الإسكندرية"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "وزارة الزراعة",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 7,
+        "objective": "تحقيق الأمن الغذائي المصري"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

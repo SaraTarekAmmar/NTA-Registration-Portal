@@ -1,0 +1,3342 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دوراتي - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link rel="stylesheet" href="editor-theme.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="chat/chat.css?v=3" />
+    <link rel="stylesheet" href="course-modal.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Extra card buttons — embedded to guarantee UA stylesheet override */
+      .course-card__extra-actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        margin-top: 0.4rem;
+      }
+      .course-card__extra-btn {
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.78rem;
+        font-family: "Tajawal", "Segoe UI", sans-serif;
+        font-weight: 600;
+        border-radius: 999px;
+        background: var(--admin-input-bg);
+        border: 1px solid var(--border-main);
+        color: var(--text-main);
+        cursor: pointer;
+        white-space: nowrap;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease,
+          transform 0.15s ease;
+      }
+      .course-card__extra-btn svg {
+        flex-shrink: 0;
+        width: 13px;
+        height: 13px;
+      }
+      .course-card__extra-btn:hover {
+        transform: translateY(-1px);
+      }
+      .course-card__extra-btn--recommendations {
+        border-color: var(--border-accent);
+        color: var(--accent-hover);
+      }
+      .course-card__extra-btn--recommendations:hover {
+        background: var(--quiz-accent-tint-bg);
+        border-color: var(--accent-solid);
+        color: var(--accent-solid);
+      }
+      .course-card__extra-btn--upload {
+        border-color: var(--color-success-border);
+        color: var(--color-success-soft);
+      }
+      .course-card__extra-btn--upload:hover {
+        background: var(--color-success-bg);
+        border-color: var(--color-success);
+        color: var(--color-success);
+      }
+
+      .excel-upload-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 1.75rem 1rem;
+        border: 1px dashed rgba(99, 102, 241, 0.4);
+        border-radius: 14px;
+        background: var(--bg-input);
+        transition:
+          border-color 0.25s,
+          background 0.25s;
+      }
+      .excel-upload-box:hover,
+      .excel-upload-box.dragover {
+        border-color: rgba(99, 102, 241, 0.75);
+        background: rgba(99, 102, 241, 0.07);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.12);
+      }
+      .excel-upload-box__icon {
+        color: var(--accent-hover);
+        opacity: 0.85;
+      }
+      .excel-upload-box__text {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      .permissions-form-msg {
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+      }
+      .permissions-form-msg--success {
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: var(--color-success-soft);
+      }
+      .permissions-form-msg--error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        color: var(--color-error-soft);
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ══ Visibility toggle — full override ══ */
+      .course-visibility-field {
+        padding: 0.8rem 0.95rem;
+        border-radius: 14px;
+        border: 2px solid transparent;
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88))
+            padding-box,
+          linear-gradient(120deg, var(--bg-elevated), #1e40af, var(--bg-elevated)) border-box;
+        transition:
+          background 0.4s ease,
+          box-shadow 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+      .course-visibility-field--private {
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88))
+            padding-box,
+          linear-gradient(120deg, #92400e, var(--color-warning), var(--color-warning-dark), #92400e) border-box;
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+      }
+      .course-visibility-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .course-visibility-label-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+      .course-visibility-desc {
+        font-size: 0.7rem;
+        color: var(--text-subtle);
+        transition: color 0.3s;
+      }
+      .course-visibility-field--private .course-visibility-desc {
+        color: #92400e;
+      }
+      .course-visibility-badge {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        transition: all 0.3s ease;
+      }
+      .course-visibility-badge--public {
+        background: rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        color: var(--color-info-soft);
+      }
+      .course-visibility-badge--private {
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        color: var(--theme-btn-color);
+      }
+
+      /* ── The switch knob ── */
+      .course-vis-switch {
+        position: relative;
+        display: inline-block;
+        width: 52px;
+        height: 28px;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+      .course-vis-switch input[type="checkbox"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: none;
+        pointer-events: none;
+      }
+      .course-vis-switch__track {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        /* gradient border — blue (public) state */
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95))
+            padding-box,
+          linear-gradient(120deg, #1e40af, var(--color-info), #1e40af) border-box;
+        transition:
+          background 0.35s ease,
+          box-shadow 0.35s ease;
+      }
+      .course-vis-switch__track::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        /* blue knob when public */
+        background: radial-gradient(circle at 35% 35%, var(--color-info-soft), var(--color-info));
+        box-shadow:
+          0 0 6px var(--chip-border),
+          0 1px 4px rgba(0, 0, 0, 0.4);
+        transition:
+          right 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.35s ease,
+          box-shadow 0.35s ease;
+      }
+      /* checked = private = amber */
+      .course-vis-switch
+        input[type="checkbox"]:checked
+        ~ .course-vis-switch__track {
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95))
+            padding-box,
+          linear-gradient(120deg, #92400e, var(--color-warning), var(--color-warning-dark), #92400e) border-box;
+        box-shadow:
+          0 0 14px rgba(245, 158, 11, 0.4),
+          0 0 28px rgba(245, 158, 11, 0.15);
+      }
+      .course-vis-switch
+        input[type="checkbox"]:checked
+        ~ .course-vis-switch__track::after {
+        right: calc(100% - 22px);
+        background: radial-gradient(circle at 35% 35%, #fde68a, var(--color-warning));
+        box-shadow:
+          0 0 10px rgba(245, 158, 11, 0.7),
+          0 1px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      @keyframes sIn {
+        from {
+          opacity: 0;
+          transform: translateX(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .fg {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.22rem;
+      }
+      .lbl {
+        font-size: 0.63rem;
+        font-weight: 800;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .inp,
+      .sel,
+      .ta {
+        background: var(--admin-input-bg);
+        border: 1px solid var(--border-main);
+        color: var(--text-main);
+        border-radius: 9px;
+        padding: 0.48rem 0.78rem;
+        font-family: inherit;
+        font-size: 0.82rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        width: 100%;
+        accent-color: var(--accent);
+        color-scheme: light dark;
+      }
+      .inp:focus,
+      .sel:focus,
+      .ta:focus {
+        border-color: var(--admin-border-focus);
+        box-shadow: 0 0 0 3px var(--admin-focus-ring);
+      }
+      .inp[type="number"]::-webkit-inner-spin-button,
+      .inp[type="number"]::-webkit-outer-spin-button {
+        cursor: pointer;
+        opacity: 0.7;
+      }
+      .inp[type="number"]::-webkit-inner-spin-button:hover,
+      .inp[type="number"]::-webkit-outer-spin-button:hover {
+        opacity: 1;
+      }
+      .sel option {
+        background: var(--skeleton-base);
+      }
+      .ta {
+        resize: vertical;
+        min-height: 68px;
+      }
+      .courses-modal__footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 0.8rem 1.4rem;
+        border-top: 1px solid var(--border-main);
+        flex-shrink: 0;
+        background: var(--bg-input);
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.46rem 0.95rem;
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .btn-ghost {
+        background: transparent;
+        border-color: var(--border-main);
+        color: var(--text-muted);
+      }
+      .btn-ghost:hover {
+        background: var(--bg-input);
+        color: var(--text-main);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent-solid), var(--accent-hover));
+        color: var(--text-on-accent);
+        box-shadow: var(--btn-primary-shadow);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-accent);
+      }
+      .vis-field {
+        padding: 0.7rem 0.9rem;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88))
+            padding-box,
+          linear-gradient(120deg, var(--bg-elevated), #1e40af, var(--bg-elevated)) border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        transition:
+          background 0.4s,
+          box-shadow 0.4s;
+      }
+      .vis-field.priv {
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88))
+            padding-box,
+          linear-gradient(120deg, #92400e, var(--color-warning), var(--color-warning-dark), #92400e) border-box;
+        box-shadow: 0 0 18px rgba(245, 158, 11, 0.12);
+      }
+      .vis-badge {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+      }
+      .vis-badge.pub {
+        background: rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        color: var(--color-info-soft);
+      }
+      .vis-badge.prv {
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        color: var(--theme-btn-color);
+      }
+      .vis-desc {
+        font-size: 0.67rem;
+        color: var(--text-subtle);
+        margin-top: 0.1rem;
+      }
+      .vis-field.priv .vis-desc {
+        color: #92400e;
+      }
+
+      .file-upload-compact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .file-label-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.8rem !important;
+        border-style: dashed !important;
+        border-color: rgba(99, 102, 241, 0.4) !important;
+      }
+      .file-label-btn:hover {
+        border-color: rgba(99, 102, 241, 0.8) !important;
+        background: rgba(99, 102, 241, 0.05) !important;
+      }
+      .file-name-hint {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 0.2rem;
+      }
+
+      .image-preview-cont {
+        width: 100%;
+        height: 120px;
+        border-radius: 12px;
+        background: var(--assign-card-hover-bg);
+        border: 1px solid var(--border-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 0.2rem;
+      }
+      .image-preview-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--text-subtle);
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .image-preview-cont img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.3s ease;
+      }
+      .sw {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 26px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .sw input {
+        appearance: none;
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .sw-track {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        border: 2px solid transparent;
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95))
+            padding-box,
+          linear-gradient(120deg, #1e40af, var(--color-info), #1e40af) border-box;
+        transition:
+          background 0.3s,
+          box-shadow 0.3s;
+      }
+      .sw-track::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 3px;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, var(--color-info-soft), var(--color-info));
+        box-shadow: 0 0 5px var(--chip-border);
+        transition:
+          right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.3s;
+      }
+      .sw input:checked ~ .sw-track {
+        background:
+          linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95))
+            padding-box,
+          linear-gradient(120deg, #92400e, var(--color-warning), var(--color-warning-dark), #92400e) border-box;
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+      }
+      .sw input:checked ~ .sw-track::after {
+        right: calc(100% - 20px);
+        background: radial-gradient(circle at 35% 35%, #fde68a, var(--color-warning));
+      }
+      .stage-row {
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        border-radius: 12px;
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: border-color 0.2s;
+      }
+      .stage-row:hover {
+        border-color: rgba(99, 102, 241, 0.25);
+      }
+      .stage-row-head {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .stage-num {
+        width: 26px;
+        height: 26px;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.28);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.68rem;
+        font-weight: 800;
+        color: var(--accent-hover);
+        flex-shrink: 0;
+      }
+      .stage-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--text-main);
+        flex: 1;
+      }
+      .sbadge {
+        font-size: 0.58rem;
+        font-weight: 800;
+        padding: 0.15rem 0.52rem;
+        border-radius: 999px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .sbadge.soon {
+        background: rgba(59, 130, 246, 0.09);
+        color: var(--color-info-soft);
+        border: 1px solid rgba(59, 130, 246, 0.22);
+      }
+      .sbadge.active {
+        background: rgba(16, 185, 129, 0.09);
+        color: var(--color-success-soft);
+        border: 1px solid rgba(16, 185, 129, 0.22);
+      }
+      .sbadge.ended {
+        background: rgba(239, 68, 68, 0.09);
+        color: var(--color-error-soft);
+        border: 1px solid rgba(239, 68, 68, 0.22);
+      }
+      .icon-btn {
+        background: none;
+        border: none;
+        color: var(--text-subtle);
+        cursor: pointer;
+        padding: 0.2rem;
+        display: flex;
+        border-radius: 5px;
+        transition: color 0.2s;
+      }
+      .icon-btn:hover {
+        color: var(--color-error-soft);
+      }
+      .add-stage-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.5rem;
+        border: 1px dashed rgba(51, 65, 85, 0.55);
+        border-radius: 10px;
+        background: transparent;
+        color: var(--text-subtle);
+        font-family: inherit;
+        font-size: 0.73rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+      }
+      .add-stage-btn:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: var(--accent-hover);
+        background: rgba(99, 102, 241, 0.04);
+      }
+      .acc-item {
+        border: 1px solid rgba(51, 65, 85, 0.55);
+        border-radius: 13px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .acc-item.open {
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      .acc-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.65rem 0.9rem;
+        cursor: pointer;
+        user-select: none;
+        background: var(--bg-input);
+        transition: background 0.18s;
+        width: 100%;
+        border: none;
+        font-family: inherit;
+        color: inherit;
+        text-align: right;
+      }
+      .acc-trigger:hover {
+        background: var(--admin-hover-surface);
+      }
+      .acc-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.22);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--accent-hover);
+        flex-shrink: 0;
+      }
+      .acc-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--text-main);
+        flex: 1;
+        text-align: right;
+      }
+      .acc-meta {
+        font-size: 0.64rem;
+        color: var(--text-subtle);
+      }
+      .acc-chevron {
+        color: var(--text-subtle);
+        transition: transform 0.25s;
+        display: flex;
+        flex-shrink: 0;
+      }
+      .acc-item.open .acc-chevron {
+        transform: rotate(180deg);
+      }
+      .acc-body {
+        display: none;
+        padding: 0.7rem 0.9rem;
+        flex-direction: column;
+        gap: 0.6rem;
+        background: var(--bg-card);
+      }
+      .acc-item.open .acc-body {
+        display: flex;
+      }
+      .batch-tabs {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+      }
+      .batch-tab {
+        padding: 0.28rem 0.65rem;
+        border-radius: 7px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid var(--border-main);
+        background: var(--bg-input);
+        color: var(--text-muted);
+        font-family: inherit;
+        transition: all 0.2s;
+      }
+      .batch-tab.active {
+        background: var(--color-warning-bg);
+        border-color: var(--color-warning);
+        color: var(--color-warning);
+      }
+      .batch-tab:hover:not(.active) {
+        background: var(--quiz-accent-tint-bg);
+        color: var(--color-warning);
+        border-color: var(--border-accent);
+      }
+      .batch-panel {
+        display: none;
+        flex-direction: column;
+        gap: 0.6rem;
+        animation: sIn 0.18s ease;
+      }
+      .batch-panel.active {
+        display: flex;
+      }
+      .role-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.6rem;
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        border-radius: 8px;
+      }
+      .role-label {
+        font-size: 0.62rem;
+        font-weight: 800;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+      }
+      .role-pills {
+        display: flex;
+        gap: 0.3rem;
+        flex: 1;
+      }
+      .rpill {
+        flex: 1;
+        padding: 0.3rem;
+        border-radius: 7px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid var(--border-main);
+        background: transparent;
+        font-family: inherit;
+        color: var(--text-subtle);
+        transition: all 0.2s;
+      }
+      .rpill.t {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: var(--border-accent);
+        color: var(--color-info-soft);
+      }
+      .rpill.r {
+        background: rgba(168, 85, 247, 0.1);
+        border-color: rgba(168, 85, 247, 0.35);
+        color: var(--color-purple-muted);
+      }
+      .upzone {
+        border-radius: 9px;
+        padding: 0.55rem 0.75rem;
+        border: 1px dashed;
+        position: relative;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+      .upzone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+      .upzone-inner {
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+      .upzone-ico {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .upzone-xl {
+        border-color: rgba(245, 158, 11, 0.28);
+        background: rgba(245, 158, 11, 0.03);
+      }
+      .upzone-xl:hover,
+      .upzone-xl.drag {
+        border-color: rgba(245, 158, 11, 0.6);
+        background: rgba(245, 158, 11, 0.07);
+      }
+      .upzone-xl .upzone-ico {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--color-warning);
+      }
+      .upzone-xl .ut-main {
+        font-size: 0.73rem;
+        font-weight: 700;
+        color: var(--theme-btn-color);
+      }
+      .upzone-xl .ut-hint {
+        font-size: 0.61rem;
+        color: var(--text-muted);
+        margin-top: 0.08rem;
+      }
+      .upzone-ss {
+        border-color: rgba(99, 102, 241, 0.22);
+        background: rgba(99, 102, 241, 0.03);
+      }
+      .upzone-ss:hover,
+      .upzone-ss.drag {
+        border-color: rgba(99, 102, 241, 0.55);
+        background: rgba(99, 102, 241, 0.07);
+      }
+      .upzone-ss .upzone-ico {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--accent-hover);
+      }
+      .upzone-ss .ut-main {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .upzone-ss .ut-hint {
+        font-size: 0.59rem;
+        color: var(--text-muted);
+        margin-top: 0.08rem;
+      }
+      .fchip {
+        display: none;
+        align-items: center;
+        gap: 0.38rem;
+        padding: 0.28rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        margin-top: 0.28rem;
+      }
+      .fchip.show {
+        display: inline-flex;
+      }
+      .fchip-xl {
+        background: rgba(245, 158, 11, 0.07);
+        border: 1px solid rgba(245, 158, 11, 0.18);
+        color: var(--color-kpi-gold);
+      }
+      .fchip-ss {
+        background: rgba(99, 102, 241, 0.07);
+        border: 1px solid rgba(99, 102, 241, 0.18);
+        color: var(--accent-solid);
+      }
+      .fchip-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+      }
+      .vmsg {
+        display: none;
+        align-items: center;
+        gap: 0.38rem;
+        padding: 0.28rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.67rem;
+        font-weight: 700;
+        margin-top: 0.28rem;
+      }
+      .vmsg.err {
+        display: flex;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: var(--color-error-soft);
+      }
+      .vmsg.ok {
+        display: flex;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        color: var(--color-success-soft);
+      }
+      .vmsg-inline {
+        color: var(--color-error-soft);
+        font-size: 0.65rem;
+        margin-top: 0.25rem;
+        display: none;
+        animation: sIn 0.2s ease;
+      }
+      .invalid {
+        border-color: rgba(239, 68, 68, 0.6) !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+      }
+      .invalid-zone {
+        border-color: rgba(239, 68, 68, 0.6) !important;
+        background: rgba(239, 68, 68, 0.05) !important;
+      }
+      .req {
+        color: var(--color-error-soft);
+        margin-right: 0.15rem;
+      }
+      .sess-hrow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .sess-count-inp {
+        width: 72px;
+        text-align: center;
+        font-size: 0.78rem;
+      }
+      .sess-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.32rem;
+        margin-top: 0.4rem;
+      }
+      .sess-item {
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+        border-radius: 9px;
+        padding: 0.5rem 0.7rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        transition: border-color 0.15s;
+      }
+      .sess-item:hover {
+        border-color: var(--border-accent);
+      }
+      .sess-irow {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .sess-num {
+        width: 21px;
+        height: 21px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.18);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        font-weight: 800;
+        color: var(--accent-hover);
+        flex-shrink: 0;
+      }
+      .sess-ninp {
+        flex: 1;
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        color: var(--text-main);
+        border-radius: 7px;
+        padding: 0.3rem 0.58rem;
+        font-family: inherit;
+        font-size: 0.72rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .sess-ninp:focus {
+        border-color: var(--admin-border-focus);
+        box-shadow: 0 0 0 2px var(--admin-focus-ring);
+      }
+      .sess-ninp::placeholder {
+        color: var(--text-subtle);
+      }
+      .sess-dinp {
+        width: 110px;
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        color: var(--text-main);
+        border-radius: 7px;
+        padding: 0.3rem 0.4rem;
+        font-family: inherit;
+        font-size: 0.72rem;
+        outline: none;
+        transition: border-color 0.2s;
+        color-scheme: light dark;
+      }
+      .sess-dinp:focus {
+        border-color: var(--admin-border-focus);
+        box-shadow: 0 0 0 2px var(--admin-focus-ring);
+      }
+      .dvd {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .dvd-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border-main);
+      }
+      .dvd-lbl {
+        font-size: 0.57rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        white-space: nowrap;
+      }
+      .empty {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 8px;
+        border: 1px dashed var(--border-main);
+        background: var(--bg-input);
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-style: italic;
+      }
+      .tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.4rem;
+        padding: 0.48rem 0.65rem;
+        background: var(--quiz-accent-tint-bg);
+        border: 1px solid var(--quiz-accent-tint-border);
+        border-radius: 8px;
+        font-size: 0.68rem;
+        color: var(--text-muted);
+        line-height: 1.55;
+      }
+    </style>
+    <script src="js/admin-guard.js"></script>
+</head>
+
+  <body class="trainee-app" data-page="courses">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main">
+      <div class="adm-hero" id="adminHero" style="display: none">
+        <div>
+          <h1 class="adm-hero__title">إدارة الدورات</h1>
+          <p class="adm-hero__sub">
+            إدارة البرامج التدريبية، المراحل، والدفعات
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="courses-editor-summary"
+        id="coursesEditorSummary"
+        style="display: none"
+      ></div>
+
+      <div
+        class="courses-editor-toolbar"
+        id="coursesEditorToolbar"
+        style="display: none"
+      >
+        <div class="courses-editor-toolbar__left">
+          <button
+            type="button"
+            class="courses-editor-add-btn"
+            id="addCourseBtn"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            إضافة دورة جديدة
+          </button>
+        </div>
+      </div>
+
+      <h1 id="traineeHeading">دوراتي</h1>
+      <div class="courses-grid" id="coursesGrid"></div>
+      <div class="courses-pagination" id="coursesPagination">
+        <button
+          type="button"
+          class="courses-pagination__btn"
+          id="prevPageBtn"
+          disabled
+        >
+          ‹ السابق
+        </button>
+        <div class="courses-pagination__info" id="pageInfo">صفحة 1 من 1</div>
+        <button
+          type="button"
+          class="courses-pagination__btn"
+          id="nextPageBtn"
+          disabled
+        >
+          التالي ›
+        </button>
+      </div>
+    </main>
+
+    <div id="chatWidget"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Course editor modal -->
+    <div
+      class="courses-modal-backdrop"
+      id="modalBackdrop"
+      style="display: none"
+    >
+      <div class="courses-modal" role="dialog" aria-modal="true">
+        <div class="courses-modal__header">
+          <h2 class="courses-modal__title" id="modalTitle">إضافة دورة جديدة</h2>
+          <button type="button" class="courses-modal__icon-btn" id="modalClose">
+            ✕
+          </button>
+        </div>
+
+        <div class="stepper">
+          <div class="step active" data-s="1">
+            <div class="step-dot">1</div>
+            <span class="step-lbl">معلومات</span>
+          </div>
+          <div class="step" data-s="2">
+            <div class="step-dot">2</div>
+            <span class="step-lbl">المراحل</span>
+          </div>
+          <div class="step" data-s="3">
+            <div class="step-dot">3</div>
+            <span class="step-lbl">الدفعات والجلسات</span>
+          </div>
+        </div>
+
+        <form class="courses-modal__body" id="mainForm" novalidate>
+          <!-- ══ STEP 1 ══ -->
+          <div class="step-pane active" id="pane1">
+            <div class="fg">
+              <div class="field">
+                <label class="lbl"
+                  >اسم الدورة (EN) <span class="req">*</span></label
+                ><input
+                  class="inp"
+                  id="titleEn"
+                  placeholder="e.g. Leadership Skills"
+                  oninput="clearInvalid(this)"
+                />
+              </div>
+              <div class="field">
+                <label class="lbl"
+                  >اسم الدورة (AR) <span class="req">*</span></label
+                ><input
+                  class="inp"
+                  id="titleAr"
+                  placeholder="مهارات القيادة"
+                  oninput="clearInvalid(this)"
+                />
+              </div>
+            </div>
+            <div class="fg">
+              <div class="field">
+                <label class="lbl">اسم مختصر <span class="req">*</span></label
+                ><input
+                  class="inp"
+                  id="shortNameInp"
+                  placeholder="LS-101"
+                  oninput="clearInvalid(this)"
+                />
+              </div>
+              <div class="field">
+                <label class="lbl">التصنيف <span class="req">*</span></label
+                ><select
+                  class="sel"
+                  id="classificationSel"
+                  onchange="clearInvalid(this)"
+                >
+                  <option value="">اختر التصنيف</option>
+                  <option>تكليف</option>
+                  <option>حكومي</option>
+                  <option>للأفراد</option>
+                  <option>للشركات</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label class="lbl">وصف الدورة <span class="req">*</span></label
+              ><textarea
+                class="ta"
+                id="descTa"
+                rows="2"
+                placeholder="وصف موجز…"
+                oninput="clearInvalid(this)"
+              ></textarea>
+            </div>
+            <div class="field">
+              <label class="lbl">المستوى <span class="req">*</span></label
+              ><select class="sel" id="levelSel" onchange="clearInvalid(this)">
+                <option value="">اختر المستوى</option>
+                <option>مبتدئ</option>
+                <option selected>متوسط</option>
+                <option>متقدم</option>
+              </select>
+            </div>
+            <!-- ══ صورة الدورة ══ -->
+            <div class="fg">
+              <div class="field" style="grid-column: 1/-1">
+                <label class="lbl"
+                  >صورة الدورة <span class="req">*</span></label
+                >
+                <div class="file-upload-compact" style="width: 100%">
+                  <div
+                    class="image-preview-cont"
+                    id="imagePreviewCont"
+                    style="
+                      cursor: pointer;
+                      height: 150px;
+                      position: relative;
+                      overflow: hidden;
+                      transition: border-color 0.2s;
+                    "
+                    onclick="document.getElementById('imageFileInp').click()"
+                    ondragover="
+                      event.preventDefault();
+                      this.style.borderColor = 'rgba(99,102,241,.75)';
+                    "
+                    ondragleave="this.style.borderColor = ''"
+                    ondrop="
+                      event.preventDefault();
+                      this.style.borderColor = '';
+                      (function (f) {
+                        if (!f || !f.type.startsWith('image/')) return;
+                        var r = new FileReader();
+                        r.onload = function (e) {
+                          var img = document.getElementById('imagePreviewImg');
+                          img.src = e.target.result;
+                          img.style.display = 'block';
+                          document.getElementById(
+                            'imagePreviewPlaceholder',
+                          ).style.display = 'none';
+                          document.getElementById('imageFileName').textContent =
+                            f.name;
+                          document.getElementById(
+                            'imgActionsBar',
+                          ).style.display = 'flex';
+                        };
+                        r.readAsDataURL(f);
+                      })(event.dataTransfer.files[0]);
+                    "
+                  >
+                    <img
+                      id="imagePreviewImg"
+                      src=""
+                      alt=""
+                      style="
+                        display: none;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: inherit;
+                      "
+                    />
+
+                    <div
+                      id="imagePreviewPlaceholder"
+                      class="image-preview-placeholder"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="26"
+                        height="26"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <span
+                        >اسحب الصورة هنا أو
+                        <strong style="color: var(--accent-hover)"
+                          >اضغط للاختيار</strong
+                        ></span
+                      >
+                      <span style="font-size: 0.6rem; color: var(--skeleton-shine)"
+                        >PNG · JPG · WEBP</span
+                      >
+                    </div>
+
+                    <!-- overlay shown only while hovering a loaded image — toggled via JS -->
+                    <div
+                      id="imgHoverOverlay"
+                      style="
+                        display: none;
+                        position: absolute;
+                        inset: 0;
+                        background: rgba(0, 0, 0, 0.45);
+                        align-items: center;
+                        justify-content: center;
+                        gap: 0.5rem;
+                        pointer-events: none;
+                      "
+                    >
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          color: var(--text-main);
+                          font-weight: 700;
+                        "
+                        >انقر للتغيير</span
+                      >
+                    </div>
+                  </div>
+
+                  <!-- actions bar — hidden until image is chosen -->
+                  <div
+                    id="imgActionsBar"
+                    style="
+                      display: none;
+                      align-items: center;
+                      justify-content: space-between;
+                      gap: 0.4rem;
+                      margin-top: 0.3rem;
+                    "
+                  >
+                    <div
+                      id="imageFileName"
+                      class="file-name-hint"
+                      style="
+                        flex: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      "
+                    >
+                      لم يتم اختيار ملف
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-ghost"
+                      style="font-size: 0.68rem; padding: 0.25rem 0.65rem"
+                      onclick="document.getElementById('imageFileInp').click()"
+                    >
+                      تغيير
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-ghost"
+                      style="
+                        font-size: 0.68rem;
+                        padding: 0.25rem 0.65rem;
+                        border-color: rgba(239, 68, 68, 0.35);
+                        color: var(--color-error-soft);
+                      "
+                      onclick="removeSelectedImage()"
+                    >
+                      حذف
+                    </button>
+                  </div>
+
+                  <!-- keep hint visible when no image -->
+                  <div
+                    id="imageFileNameEmpty"
+                    class="file-name-hint"
+                    style="text-align: center"
+                  >
+                    لم يتم اختيار ملف
+                  </div>
+
+                  <input
+                    type="file"
+                    id="imageFileInp"
+                    accept="image/*"
+                    style="display: none"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- ══ مواد الدورة ══ -->
+            <div class="field">
+              <label class="lbl" id="matGroupLabel"
+                >مواد الدورة (عام) <span class="req">*</span></label
+              >
+              <div class="file-upload-compact" id="matUploadZone">
+                <label
+                  for="generalMaterialInp"
+                  class="btn btn-ghost file-label-btn"
+                  ondragover="
+                    event.preventDefault();
+                    this.style.borderColor = 'rgba(99,102,241,.75)';
+                  "
+                  ondragleave="this.style.borderColor = ''"
+                  ondrop="
+                    event.preventDefault();
+                    this.style.borderColor = '';
+                    addMatFiles(event.dataTransfer.files);
+                  "
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <span>رفع مواد الدورة أو اسحبها هنا</span>
+                </label>
+                <input
+                  type="file"
+                  id="generalMaterialInp"
+                  multiple
+                  style="display: none"
+                />
+
+                <div id="generalMaterialName" class="file-name-hint">
+                  لم يتم اختيار ملفات
+                </div>
+
+                <!-- file chips list -->
+                <div
+                  id="matFileList"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.28rem;
+                    margin-top: 0.15rem;
+                  "
+                ></div>
+              </div>
+            </div>
+            <div class="vis-field" id="visField">
+              <div style="display: flex; flex-direction: column; gap: 0.18rem">
+                <span class="lbl">رؤية الدورة</span>
+                <span class="vis-desc" id="visDesc">مرئية لجميع المتدربين</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="vis-badge pub" id="visBadge">عام 🌐</span>
+                <label class="sw"
+                  ><input type="checkbox" id="privToggle" /><span
+                    class="sw-track"
+                  ></span
+                ></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ STEP 2: stages ══ -->
+          <div class="step-pane" id="pane2">
+            <div class="tip">
+              <svg
+                viewBox="0 0 24 24"
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="flex-shrink: 0; margin-top: 1px"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              حدد لكل مرحلة التواريخ وعدد الدفعات والمتدربين. في الخطوة التالية
+              ستضيف بيانات كل دفعة وجلساتها.
+            </div>
+            <div
+              id="stagesCont"
+              style="display: flex; flex-direction: column; gap: 0.55rem"
+            ></div>
+            <button type="button" class="add-stage-btn" id="addStageBtn">
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              إضافة مرحلة
+            </button>
+          </div>
+
+          <!-- ══ STEP 3: accordion ══ -->
+          <div class="step-pane" id="pane3">
+            <div
+              id="accCont"
+              style="display: flex; flex-direction: column; gap: 0.5rem"
+            ></div>
+          </div>
+        </form>
+
+        <div class="courses-modal__footer">
+          <button
+            type="button"
+            class="btn btn-ghost"
+            id="btnPrev"
+            style="display: none"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            السابق
+          </button>
+          <button type="button" class="btn btn-ghost" id="btnCancel">
+            إلغاء
+          </button>
+          <button type="button" class="btn btn-primary" id="btnNext">
+            التالي
+            <svg
+              viewBox="0 0 24 24"
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="btnSave"
+            form="mainForm"
+            style="display: none"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            حفظ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete confirm modal -->
+    <div
+      class="courses-confirm-backdrop"
+      id="courseDeleteBackdrop"
+      style="display: none"
+    >
+      <div
+        class="courses-confirm"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="courseDeleteTitle"
+      >
+        <div class="courses-confirm__icon"><span>!</span></div>
+        <h2 class="courses-confirm__title" id="courseDeleteTitle">
+          تأكيد حذف الدورة
+        </h2>
+        <p class="courses-confirm__text">
+          هل تريد بالتأكيد حذف هذه الدورة من قائمة الدورات؟
+        </p>
+        <div class="courses-confirm__actions">
+          <button
+            type="button"
+            class="courses-confirm__btn courses-confirm__btn--ghost"
+            id="courseDeleteCancel"
+          >
+            إلغاء
+          </button>
+          <button
+            type="button"
+            class="courses-confirm__btn courses-confirm__btn--danger"
+            id="courseDeleteConfirm"
+          >
+            نعم، حذف
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Excel upload modal -->
+    <div
+      class="courses-confirm-backdrop"
+      id="excelUploadBackdrop"
+      style="display: none"
+    >
+      <div
+        class="courses-modal"
+        style="max-width: 480px"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="excelUploadTitle"
+      >
+        <div class="courses-modal__header">
+          <h2 class="courses-modal__title" id="excelUploadTitle">
+            رفع قائمة المتدربين
+          </h2>
+          <button
+            type="button"
+            class="courses-modal__icon-btn"
+            id="excelUploadClose"
+            aria-label="إغلاق"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="courses-modal__body">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.75rem">
+            قم برفع ملف Excel يحتوي على أرقام هوية المتدربين. سيتم تسجيلهم
+            تلقائياً في الدورة:
+            <strong id="excelUploadCourseName" style="color: var(--color-info-soft)"></strong>
+          </p>
+          <div class="excel-upload-box" id="excelDropZone">
+            <div class="excel-upload-box__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                width="32"
+                height="32"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" />
+              </svg>
+            </div>
+            <p class="excel-upload-box__text">اسحب الملف هنا أو</p>
+            <label
+              class="courses-modal__btn courses-modal__btn--ghost"
+              style="cursor: pointer; display: inline-flex"
+            >
+              اختر ملف
+              <input
+                type="file"
+                id="excelFileInput"
+                accept=".xlsx,.xls,.csv"
+                style="display: none"
+              />
+            </label>
+            <p class="excel-upload-box__hint">xlsx, xls, csv</p>
+          </div>
+          <div
+            id="excelFileChosen"
+            style="
+              display: none;
+              margin-top: 0.65rem;
+              padding: 0.55rem 0.75rem;
+              background: var(--quiz-accent-tint-bg);
+              border: 1px solid var(--border-accent);
+              border-radius: 10px;
+              font-size: 0.82rem;
+              color: var(--accent-solid);
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            <span id="excelFileName"></span>
+          </div>
+          <div
+            id="excelUploadMsg"
+            style="display: none; margin-top: 0.65rem"
+          ></div>
+        </div>
+        <div class="courses-modal__footer">
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--ghost"
+            id="excelUploadCancel"
+          >
+            إلغاء
+          </button>
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--primary"
+            id="excelUploadSubmit"
+            disabled
+          >
+            <span id="excelUploadBtnText">رفع وتسجيل</span>
+            <span
+              id="excelUploadLoader"
+              style="
+                display: none;
+                width: 16px;
+                height: 16px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-top-color: var(--text-on-accent);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+              "
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="header/header.js?v=2"></script>
+    <script>
+      (function () {
+        // Read from new admin_token first, fall back to legacy ntaTrainee key
+        var session = {};
+        var _adminTok = sessionStorage.getItem("admin_token");
+        if (_adminTok) {
+          try {
+            var _ap = JSON.parse(atob(_adminTok.split(".")[1]));
+            session = { token: _adminTok, role: _ap.role };
+          } catch (e) {}
+        }
+        if (!session.token) {
+          try { session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+        }
+        // admin-guard.js already enforces admin-only access on this page.
+        // Admins VIEW courses and run bulk-enroll but do NOT create/edit/delete.
+        // Editors manage content via the dedicated editor portal (/editor/).
+        var isAdmin  = session.role === "admin";
+        var isEditor = false; // editor actions are blocked on the admin portal
+
+        var courses = [],
+          pageSize = 12,
+          currentPage = 1,
+          totalPages = 1;
+        var grid = document.getElementById("coursesGrid");
+        var prevBtn = document.getElementById("prevPageBtn");
+        var nextBtn = document.getElementById("nextPageBtn");
+        var pageInfo = document.getElementById("pageInfo");
+
+        // Modal state & navigation
+        var step = 1;
+        var stages = [mkStage(1)];
+        var batchData = {}; // key = 's{stageId}b{bIdx}' → {role, file, sessionsCount, sessionNames:[]}
+
+        function mkStage(id) {
+          return {
+            id: id,
+            startDate: "",
+            endDate: "",
+            batches: 1,
+            attendees: 0,
+          };
+        }
+        function bk(sid, bi) {
+          return "s" + sid + "b" + bi;
+        }
+        function ensureBD(sid, bi) {
+          var k = bk(sid, bi);
+          if (!batchData[k])
+            batchData[k] = {
+              trainerFile: null,
+              traineeFile: null,
+              sessionsCount: 0,
+              sessionNames: [],
+              sessionDates: [],
+            };
+          return batchData[k];
+        }
+
+        var modalBackdrop = document.getElementById("modalBackdrop");
+        var modalTitle = document.getElementById("modalTitle");
+        var mainForm = document.getElementById("mainForm");
+        var modalClose = document.getElementById("modalClose");
+        var btnCancel = document.getElementById("btnCancel");
+        var btnNext = document.getElementById("btnNext");
+        var btnPrev = document.getElementById("btnPrev");
+        var btnSave = document.getElementById("btnSave");
+
+        /* ── Validation Helpers ── */
+        window.setInvalid = function (el, msg) {
+          el.classList.add("invalid");
+          if (el.tagName === "DIV") el.classList.add("invalid-zone");
+          var next = el.nextElementSibling;
+          if (!next || !next.classList.contains("vmsg-inline")) {
+            next = document.createElement("div");
+            next.className = "vmsg-inline";
+            el.parentNode.insertBefore(next, el.nextSibling);
+          }
+          next.textContent = msg;
+          next.style.display = "block";
+        };
+
+        window.clearInvalid = function (el) {
+          el.classList.remove("invalid");
+          el.classList.remove("invalid-zone");
+          var next = el.nextElementSibling;
+          if (next && next.classList.contains("vmsg-inline")) {
+            next.style.display = "none";
+          }
+        };
+
+        function checkReq(id, msg, firstInvalidObj) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          if (!el.value.trim()) {
+            setInvalid(el, msg);
+            if (!firstInvalidObj.el) firstInvalidObj.el = el;
+            return false;
+          } else {
+            clearInvalid(el);
+            return true;
+          }
+        }
+
+        function validateStep1() {
+          var valid = true;
+          var firstInvalidObj = { el: null };
+
+          if (
+            !checkReq(
+              "titleEn",
+              "يرجى إدخال اسم الدورة بالإنجليزية",
+              firstInvalidObj,
+            )
+          )
+            valid = false;
+          if (
+            !checkReq(
+              "titleAr",
+              "يرجى إدخال اسم الدورة بالعربية",
+              firstInvalidObj,
+            )
+          )
+            valid = false;
+          if (
+            !checkReq(
+              "shortNameInp",
+              "يرجى إدخال الاسم المختصر",
+              firstInvalidObj,
+            )
+          )
+            valid = false;
+          if (
+            !checkReq(
+              "classificationSel",
+              "يرجى اختيار التصنيف",
+              firstInvalidObj,
+            )
+          )
+            valid = false;
+          if (!checkReq("descTa", "يرجى إدخال وصف الدورة", firstInvalidObj))
+            valid = false;
+          if (!checkReq("levelSel", "يرجى اختيار المستوى", firstInvalidObj))
+            valid = false;
+
+          // Image upload validation
+          var imgCont = document.getElementById("imagePreviewCont");
+          var imgImg = document.getElementById("imagePreviewImg");
+          var imgHasFile =
+            !!imgImg.src &&
+            imgImg.src !== window.location.href &&
+            imgImg.style.display !== "none";
+
+          if (!imgHasFile) {
+            setInvalid(imgCont, "صورة الدورة مطلوبة");
+            if (!firstInvalidObj.el) firstInvalidObj.el = imgCont;
+            valid = false;
+          } else {
+            clearInvalid(imgCont);
+          }
+
+          // General Materials
+          var matLabel = document.getElementById("matUploadZone");
+          if (matFiles.length === 0) {
+            setInvalid(matLabel, "يجب إرفاق مادة دراسية واحدة على الأقل");
+            if (!firstInvalidObj.el) firstInvalidObj.el = matLabel;
+            valid = false;
+          } else {
+            clearInvalid(matLabel);
+          }
+
+          if (firstInvalidObj.el)
+            firstInvalidObj.el.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          return valid;
+        }
+
+        modalClose.onclick = closeCourseModal;
+        btnCancel.onclick = closeCourseModal;
+        modalBackdrop.addEventListener("click", function (e) {
+          if (e.target === this) closeCourseModal();
+        });
+
+        btnNext.onclick = function () {
+          if (step === 1 && !validateStep1()) return;
+          if (step === 2 && !validateStep2()) return;
+
+          if (step < 3) {
+            step++;
+            if (step === 3) renderAccordion();
+            updateStep();
+          }
+        };
+        btnPrev.onclick = function () {
+          if (step > 1) {
+            step--;
+            updateStep();
+          }
+        };
+
+        function updateStep() {
+          ["pane1", "pane2", "pane3"].forEach(function (id, i) {
+            document
+              .getElementById(id)
+              .classList.toggle("active", i + 1 === step);
+          });
+          document.querySelectorAll(".step").forEach(function (el) {
+            var s = parseInt(el.dataset.s);
+            el.classList.toggle("active", s === step);
+            el.classList.toggle("completed", s < step);
+          });
+          btnPrev.style.display = step > 1 ? "inline-flex" : "none";
+          btnNext.style.display = step < 3 ? "inline-flex" : "none";
+          btnSave.style.display = step === 3 ? "inline-flex" : "none";
+        }
+
+        /* ── Visibility ── */
+        document
+          .getElementById("privToggle")
+          .addEventListener("change", function () {
+            var p = this.checked;
+            document.getElementById("visBadge").textContent = p
+              ? "🔒 خاص"
+              : "🌐 عام";
+            document.getElementById("visBadge").className =
+              "vis-badge " + (p ? "prv" : "pub");
+            document.getElementById("visDesc").textContent = p
+              ? "للمتدربين المُضافين عبر Excel فقط"
+              : "مرئية لجميع المتدربين";
+            document.getElementById("visField").classList.toggle("priv", p);
+          });
+
+        /* ══ Step 2 — Stage rows ══ */
+        function renderStage2() {
+          var c = document.getElementById("stagesCont");
+          c.innerHTML = "";
+          stages.forEach(function (s) {
+            c.appendChild(buildStageRow(s));
+          });
+        }
+
+        document.getElementById("addStageBtn").onclick = function () {
+          stages.push(mkStage(stages.length + 1));
+          renderStage2();
+        };
+
+        window.removeStage = function (id) {
+          if (stages.length < 2) return;
+          stages = stages.filter(function (s) {
+            return s.id !== id;
+          });
+          stages.forEach(function (s, i) {
+            s.id = i + 1;
+          });
+          renderStage2();
+        };
+
+        window.updStage = function (id, key, val) {
+          var s = stages.find(function (s) {
+            return s.id === id;
+          });
+          if (!s) return;
+          s[key] =
+            key === "batches" || key === "attendees"
+              ? Math.max(0, parseInt(val) || 0)
+              : val;
+          if (key === "startDate" || key === "endDate") refreshBadge(s);
+        };
+
+        function validateStep2() {
+          var valid = true;
+          var firstInvalidObj = { el: null };
+
+          stages.forEach(function (s) {
+            var stId = "st-" + s.id + "-start";
+            var enId = "st-" + s.id + "-end";
+            var btId = "st-" + s.id + "-batches";
+
+            checkReq(stId, "تاريخ البدء مطلوب", firstInvalidObj);
+            checkReq(enId, "تاريخ الانتهاء مطلوب", firstInvalidObj);
+            checkReq(btId, "عدد الدفعات مطلوب", firstInvalidObj);
+
+            var stEl = document.getElementById(stId);
+            var enEl = document.getElementById(enId);
+            if (stEl && enEl && stEl.value && enEl.value) {
+              var dStart = new Date(stEl.value);
+              var dEnd = new Date(enEl.value);
+
+              if (dStart >= dEnd) {
+                setInvalid(enEl, "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء");
+                if (!firstInvalidObj.el) firstInvalidObj.el = enEl;
+                valid = false;
+              } else {
+                if (
+                  enEl.classList.contains("invalid") &&
+                  enEl.nextElementSibling &&
+                  enEl.nextElementSibling.textContent.indexOf(
+                    "يجب أن يكون بعد",
+                  ) !== -1
+                ) {
+                  clearInvalid(enEl);
+                }
+              }
+            }
+          });
+
+          var anyInvalid = document.querySelector("#pane2 .invalid");
+          if (anyInvalid) valid = false;
+
+          if (firstInvalidObj.el)
+            firstInvalidObj.el.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          return valid;
+        }
+
+        function validateStep3() {
+          var valid = true;
+          var firstInvalidObj = { el: null };
+
+          stages.forEach(function (s) {
+            var bCount = Math.max(1, s.batches || 1);
+            for (var bi = 1; bi <= bCount; bi++) {
+              var k = bk(s.id, bi);
+              var bd = batchData[k];
+
+              // Trainer file
+              var uzTrainer = document.getElementById("uz-trainer-" + k);
+              if (!bd || (!bd.trainerFile && !bd.trainer_file_path)) {
+                // Check if it's a string (existing path)
+                if (bd && typeof bd.trainerFile === 'string') {
+                    clearInvalid(uzTrainer);
+                } else {
+                    if (uzTrainer)
+                      setInvalid(uzTrainer, "يرجى رفع ملف المدربين لهذه الدفعة");
+                    if (!firstInvalidObj.el && uzTrainer)
+                      firstInvalidObj.el = uzTrainer;
+                    valid = false;
+                }
+              } else {
+                if (uzTrainer) clearInvalid(uzTrainer);
+              }
+
+              // Sessions Count
+              var scId = "sc-" + k;
+              var scEl = document.getElementById(scId);
+              if (!bd || bd.sessionsCount < 1) {
+                if (scEl) setInvalid(scEl, "يجب تحديد جلسة واحدة على الأقل");
+                if (!firstInvalidObj.el && scEl) firstInvalidObj.el = scEl;
+                valid = false;
+              } else {
+                if (scEl) clearInvalid(scEl);
+                // validate session names
+                for (var i = 1; i <= bd.sessionsCount; i++) {
+                  var snId = "sn-" + k + "-" + i;
+                  if (!checkReq(snId, "اسم الجلسة مطلوب", firstInvalidObj))
+                    valid = false;
+                  var sdId = "sd-" + k + "-" + i;
+                  if (!checkReq(sdId, "تاريخ الجلسة مطلوب", firstInvalidObj))
+                    valid = false;
+                }
+              }
+            }
+          });
+
+          if (firstInvalidObj.el) {
+            var accItem = firstInvalidObj.el.closest(".acc-item");
+            if (accItem && !accItem.classList.contains("open")) {
+              accItem.querySelector(".acc-trigger").click();
+            }
+
+            var batchPanel = firstInvalidObj.el.closest(".batch-panel");
+            if (batchPanel && !batchPanel.classList.contains("active")) {
+              var tabs =
+                batchPanel.parentElement.querySelectorAll(".batch-tab");
+              var panels =
+                batchPanel.parentElement.querySelectorAll(".batch-panel");
+              var pnlIdx = Array.prototype.indexOf.call(panels, batchPanel);
+              if (tabs[pnlIdx]) tabs[pnlIdx].click();
+            }
+
+            setTimeout(function () {
+              firstInvalidObj.el.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }, 100);
+          }
+          return valid;
+        }
+
+        function refreshBadge(s) {
+          var el = document.getElementById("sbadge-" + s.id);
+          if (!el) return;
+          var today = new Date();
+          today.setHours(0, 0, 0, 0);
+          var lbl, cls;
+          if (!s.startDate || !s.endDate) {
+            lbl = "قادم";
+            cls = "soon";
+          } else {
+            var st = new Date(s.startDate);
+            st.setHours(0, 0, 0, 0);
+            var en = new Date(s.endDate);
+            en.setHours(0, 0, 0, 0);
+            if (today > en) {
+              lbl = "منتهي";
+              cls = "ended";
+            } else if (today >= st) {
+              lbl = "مفعل";
+              cls = "active";
+            } else {
+              lbl = "قادم";
+              cls = "soon";
+            }
+          }
+          el.textContent = lbl;
+          el.className = "sbadge " + cls;
+        }
+
+        function buildStageRow(s) {
+          var del =
+            stages.length > 1
+              ? '<button type="button" class="icon-btn" onclick="removeStage(' +
+                s.id +
+                ')" title="حذف"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>'
+              : "";
+          var row = document.createElement("div");
+          row.className = "stage-row";
+          row.innerHTML =
+            '<div class="stage-row-head">' +
+            '<div class="stage-num">' +
+            s.id +
+            "</div>" +
+            '<span class="stage-label">المرحلة ' +
+            s.id +
+            "</span>" +
+            '<span class="sbadge soon" id="sbadge-' +
+            s.id +
+            '">قادم</span>' +
+            del +
+            "</div>" +
+            '<div class="fg">' +
+            '<div class="field"><label class="lbl">تاريخ البدء <span class="req">*</span></label><input type="date" class="inp" id="st-' +
+            s.id +
+            '-start" value="' +
+            s.startDate +
+            '" oninput="updStage(' +
+            s.id +
+            ",'startDate',this.value); clearInvalid(this);\"></div>" +
+            '<div class="field"><label class="lbl">تاريخ الانتهاء <span class="req">*</span></label><input type="date" class="inp" id="st-' +
+            s.id +
+            '-end" value="' +
+            s.endDate +
+            '" oninput="updStage(' +
+            s.id +
+            ",'endDate',this.value); clearInvalid(this);\"></div>" +
+            "</div>" +
+            '<div class="fg">' +
+            '<div class="field"><label class="lbl">عدد الدفعات <span class="req">*</span></label><input type="number" class="inp" id="st-' +
+            s.id +
+            '-batches" min="1" max="20" value="' +
+            s.batches +
+            '" oninput="updStage(' +
+            s.id +
+            ",'batches',this.value); clearInvalid(this);\"></div>" +
+            "</div>";
+          return row;
+        }
+
+        /* ── Step 3 — Accordion ── */
+        function renderAccordion() {
+          var c = document.getElementById("accCont");
+          c.innerHTML = "";
+          stages.forEach(function (s, si) {
+            var item = buildAccItem(s);
+            c.appendChild(item);
+            if (si === 0) {
+              item.classList.add("open");
+              item.querySelector(".acc-body").style.display = "flex";
+            }
+          });
+        }
+
+        function buildAccItem(s) {
+          var bCount = Math.max(1, s.batches || 1);
+          var item = document.createElement("div");
+          item.className = "acc-item";
+          item.id = "acc-" + s.id;
+          var trig = document.createElement("button");
+          trig.type = "button";
+          trig.className = "acc-trigger";
+          trig.innerHTML =
+            '<div class="acc-icon">' +
+            s.id +
+            "</div>" +
+            '<span class="acc-title">المرحلة ' +
+            s.id +
+            "</span>" +
+            '<span class="acc-meta">' +
+            bCount +
+            " " +
+            (bCount === 1 ? "دفعة" : "دفعات") +
+            "</span>" +
+            '<span class="acc-chevron"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>';
+          trig.onclick = function () {
+            var open = item.classList.toggle("open");
+            item.querySelector(".acc-body").style.display = open
+              ? "flex"
+              : "none";
+          };
+          var body = document.createElement("div");
+          body.className = "acc-body";
+          body.style.display = "none";
+          var tabsDiv = document.createElement("div");
+          tabsDiv.className = "batch-tabs";
+          for (var bi = 1; bi <= bCount; bi++) {
+            (function (bIdx) {
+              var tab = document.createElement("button");
+              tab.type = "button";
+              tab.className = "batch-tab" + (bIdx === 1 ? " active" : "");
+              tab.textContent = "الدفعة " + bIdx;
+              tab.onclick = function () {
+                tabsDiv.querySelectorAll(".batch-tab").forEach(function (t) {
+                  t.classList.remove("active");
+                });
+                this.classList.add("active");
+                body.querySelectorAll(".batch-panel").forEach(function (p) {
+                  p.classList.remove("active");
+                });
+                var pnl = document.getElementById("panel-" + bk(s.id, bIdx));
+                if (pnl) pnl.classList.add("active");
+              };
+              tabsDiv.appendChild(tab);
+            })(bi);
+          }
+          body.appendChild(tabsDiv);
+          for (var bi = 1; bi <= bCount; bi++) {
+            body.appendChild(buildBatchPanel(s.id, bi, bi === 1));
+          }
+          item.appendChild(trig);
+          item.appendChild(body);
+          return item;
+        }
+
+        function buildBatchPanel(sid, bi, isFirst) {
+          var k = bk(sid, bi);
+          var bd = ensureBD(sid, bi);
+          var panel = document.createElement("div");
+          panel.className = "batch-panel" + (isFirst ? " active" : "");
+          var trainerVal = bd.trainerFile ? (typeof bd.trainerFile === 'string' ? '✓ ملف محفوظ' : '✓ ' + bd.trainerFile.name) : '';
+          var traineeVal = bd.traineeFile ? (typeof bd.traineeFile === 'string' ? '✓ ملف محفوظ' : '✓ ' + bd.traineeFile.name) : '';
+          var trainerCls = bd.trainerFile ? 'vmsg ok' : 'vmsg';
+          var traineeCls = bd.traineeFile ? 'vmsg ok' : 'vmsg';
+
+          panel.innerHTML =
+            '<div style="display:flex;flex-direction:column;gap:.8rem">' +
+            '<div><label class="lbl">ملف المدربين (Excel) <span class="req">*</span></label>' +
+            '<div class="upzone upzone-xl" id="uz-trainer-' +
+            k +
+            '" style="position:relative"><input type="file" accept=".xlsx,.xls" onchange="onExcel(\'' +
+            k +
+            '\', \'trainer\', this)"><div class="upzone-inner"><div class="upzone-ico" style="background:rgba(239,68,68,.1);color:var(--color-error)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><div><div class="ut-main">رفع قائمة المدربين للدفعة ' +
+            bi +
+            '</div><div class="ut-hint">حقل مطلوب. يُقبل .xlsx / .xls</div></div></div></div><div class="' + trainerCls + '" id="vm-trainer-' +
+            k +
+            '">' + trainerVal + '</div></div>' +
+            '<div><label class="lbl">ملف المتدربين (Excel) <span style="font-size:.6rem;color:var(--text-subtle);font-weight:600;text-transform:none">(اختياري)</span></label>' +
+            '<div class="upzone upzone-xl" id="uz-trainee-' +
+            k +
+            '" style="position:relative"><input type="file" accept=".xlsx,.xls" onchange="onExcel(\'' +
+            k +
+            '\', \'trainee\', this)"><div class="upzone-inner"><div class="upzone-ico"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><div><div class="ut-main">رفع قائمة المتدربين للدفعة ' +
+            bi +
+            '</div><div class="ut-hint">حقل اختياري. يُقبل .xlsx / .xls</div></div></div></div><div class="' + traineeCls + '" id="vm-trainee-' +
+            k +
+            '">' + traineeVal + '</div></div>' +
+            "</div>" +
+            '<div class="dvd"><div class="dvd-line"></div><span class="dvd-lbl">جلسات الدفعة</span><div class="dvd-line"></div></div>' +
+            '<div><div class="sess-hrow"><span class="lbl">عدد الجلسات <span class="req">*</span></span><input type="number" class="inp sess-count-inp" min="1" max="30" value="' + (bd.sessionsCount || 0) + '" id="sc-' +
+            k +
+            '" oninput="onSessCount(\'' +
+            k +
+            '\',this.value); clearInvalid(this)"></div><div class="sess-list" id="sl-' +
+            k +
+            '"><div class="empty">حدد العدد أعلاه</div></div></div>';
+          
+          setTimeout(function() {
+              if (bd.sessionsCount > 0) buildSessList(k, bd.sessionsCount);
+          }, 10);
+          return panel;
+        }
+
+        window.onExcel = function (k, role, input) {
+          var vm = document.getElementById("vm-" + role + "-" + k);
+          var uz = document.getElementById("uz-" + role + "-" + k);
+          vm.className = "vmsg";
+          clearInvalid(uz);
+          var f = input.files[0];
+          if (!f) return;
+          if (!/\.(xlsx|xls)$/i.test(f.name)) {
+            vm.textContent = "⚠ يُقبل فقط .xlsx أو .xls";
+            vm.className = "vmsg err";
+            input.value = "";
+            return;
+          }
+          vm.textContent = "✓ " + f.name;
+          vm.className = "vmsg ok";
+          if (batchData[k]) {
+            if (role === "trainer") batchData[k].trainerFile = f;
+            else batchData[k].traineeFile = f;
+          }
+        };
+
+        window.onSessCount = function (k, val) {
+          var n = Math.max(0, parseInt(val) || 0);
+          if (batchData[k]) batchData[k].sessionsCount = n;
+          buildSessList(k, n);
+        };
+
+        function buildSessList(k, n) {
+          var list = document.getElementById("sl-" + k);
+          if (!list) return;
+          list.innerHTML = "";
+          if (n === 0) {
+            list.innerHTML = '<div class="empty">لا توجد جلسات</div>';
+            return;
+          }
+          var bd = batchData[k] || {};
+          for (var i = 1; i <= n; i++) {
+            var sid2 = "si-" + k + "-" + i;
+            var nm = (bd.sessionNames && bd.sessionNames[i - 1]) || "";
+            var sd = (bd.sessionDates && bd.sessionDates[i - 1]) || "";
+            var matData = (bd.sessionMaterials && bd.sessionMaterials[i - 1]) || null;
+            var matTxt = matData ? (typeof matData === 'string' ? 'ملف محفوظ' : (matData.length === 1 ? matData[0].name : matData.length + ' ملفات')) : '';
+            var matShow = matData ? 'show' : '';
+
+            var item = document.createElement("div");
+            item.className = "sess-item";
+            item.innerHTML =
+              '<div class="sess-irow"><span class="sess-num">' +
+              i +
+              '</span><input class="sess-ninp" id="sn-' +
+              k +
+              "-" +
+              i +
+              '" placeholder="اسم الجلسة ' +
+              i +
+              '…" value="' +
+              nm +
+              '" oninput="updSessName(\'' +
+              k +
+              "'," +
+              (i - 1) +
+              ',this.value); clearInvalid(this)">' +
+              '<input type="date" class="sess-dinp" id="sd-' +
+              k +
+              "-" +
+              i +
+              '" value="' +
+              sd +
+              '" oninput="updSessDate(\'' +
+              k +
+              "'," +
+              (i - 1) +
+              ',this.value); clearInvalid(this)">' +
+              '</div>' +
+              '<div class="upzone upzone-ss" style="position:relative;padding:.38rem .65rem"><input type="file" multiple id="sf-' +
+              sid2 +
+              '" onchange="onSessMat(\'' +
+              k +
+              '\',' + (i-1) + ',\'' + sid2 + '\',this)"><div class="upzone-inner"><div class="upzone-ico" style="width:22px;height:22px"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div><div class="ut-main">مواد الجلسة</div></div></div></div><div class="fchip fchip-ss ' + matShow + '" id="sfc-' +
+              sid2 +
+              '"><div class="fchip-dot"></div><span id="sfn-' +
+              sid2 +
+              '">' + matTxt + '</span></div>';
+            list.appendChild(item);
+          }
+        }
+
+        window.updSessName = function (k, idx, val) {
+          var bd = batchData[k];
+          if (!bd) return;
+          if (!bd.sessionNames) bd.sessionNames = [];
+          bd.sessionNames[idx] = val;
+        };
+
+        window.updSessDate = function (k, idx, val) {
+          var bd = batchData[k];
+          if (!bd) return;
+          if (!bd.sessionDates) bd.sessionDates = [];
+          bd.sessionDates[idx] = val;
+        };
+
+        window.onSessMat = function (k, idx, sid2, input) {
+          var fc = document.getElementById("sfc-" + sid2),
+            fn = document.getElementById("sfn-" + sid2);
+          var files = input.files;
+          if (!files || files.length === 0) {
+            // If we have existing files and just clicked cancel, keep them
+            if (batchData[k] && batchData[k].sessionMaterials && batchData[k].sessionMaterials[idx]) return;
+            fc.classList.remove("show");
+            return;
+          }
+          
+          if (batchData[k]) {
+            if (!batchData[k].sessionMaterials) batchData[k].sessionMaterials = [];
+            batchData[k].sessionMaterials[idx] = Array.from(files);
+          }
+
+          fn.textContent =
+            files.length === 1 ? files[0].name : files.length + " ملفات";
+          fc.classList.add("show");
+        };
+
+        // Step 1 File Listeners
+        var imageFileInp = document.getElementById("imageFileInp");
+        var imageFileName = document.getElementById("imageFileName");
+        var imagePreviewImg = document.getElementById("imagePreviewImg");
+        var imagePreviewPlaceholder = document.getElementById(
+          "imagePreviewPlaceholder",
+        );
+
+        /* ── Image upload ── */
+        var imageFileInp = document.getElementById("imageFileInp");
+        var imageFileName = document.getElementById("imageFileName"); // inside actions bar
+        var imageFileNameEmpty = document.getElementById("imageFileNameEmpty");
+        var imagePreviewImg = document.getElementById("imagePreviewImg");
+        var imagePreviewPlaceholder = document.getElementById(
+          "imagePreviewPlaceholder",
+        );
+        var imgActionsBar = document.getElementById("imgActionsBar");
+        var imgHoverOverlay = document.getElementById("imgHoverOverlay");
+        var imagePreviewCont = document.getElementById("imagePreviewCont");
+
+        function loadImagePreview(file) {
+          if (!file || !file.type.startsWith("image/")) return;
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            imagePreviewImg.src = e.target.result;
+            imagePreviewImg.style.display = "block";
+            imagePreviewPlaceholder.style.display = "none";
+            imageFileNameEmpty.style.display = "none";
+            imgActionsBar.style.display = "flex";
+            imageFileName.textContent = file.name;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        if (imageFileInp) {
+          imageFileInp.onchange = function () {
+            if (this.files[0]) loadImagePreview(this.files[0]);
+          };
+        }
+
+        // hover overlay — show when image loaded
+        if (imagePreviewCont) {
+          imagePreviewCont.addEventListener("mouseenter", function () {
+            if (imagePreviewImg.style.display !== "none")
+              imgHoverOverlay.style.display = "flex";
+          });
+          imagePreviewCont.addEventListener("mouseleave", function () {
+            imgHoverOverlay.style.display = "none";
+          });
+        }
+
+        window.removeSelectedImage = function () {
+          imagePreviewImg.src = "";
+          imagePreviewImg.style.display = "none";
+          imagePreviewPlaceholder.style.display = "";
+          imgActionsBar.style.display = "none";
+          imgHoverOverlay.style.display = "none";
+          imageFileNameEmpty.style.display = "";
+          if (imageFileInp) imageFileInp.value = "";
+        };
+
+        /* ── Materials upload ── */
+        var generalMaterialInp = document.getElementById("generalMaterialInp");
+        var generalMaterialName = document.getElementById(
+          "generalMaterialName",
+        );
+        var matFiles = [];
+
+        window.addMatFiles = function (fileList) {
+          Array.from(fileList).forEach(function (f) {
+            matFiles.push(f);
+          });
+          renderMatList();
+        };
+
+        window.removeMat = function (idx) {
+          matFiles.splice(idx, 1);
+          renderMatList();
+        };
+
+        function renderMatList() {
+          var list = document.getElementById("matFileList");
+          if (!list) return;
+          list.innerHTML = "";
+          if (matFiles.length === 0) {
+            generalMaterialName.textContent = "لم يتم اختيار ملفات";
+            return;
+          }
+          generalMaterialName.textContent =
+            matFiles.length +
+            " " +
+            (matFiles.length === 1 ? "ملف محدد" : "ملفات محددة");
+          matFiles.forEach(function (f, i) {
+            var ext = f.name.split(".").pop().toUpperCase();
+            var size =
+              f.size < 1048576
+                ? (f.size / 1024).toFixed(0) + " KB"
+                : (f.size / 1048576).toFixed(1) + " MB";
+            var item = document.createElement("div");
+            item.className = "admin-mat-chip";
+            item.style.animation = "sIn .15s ease";
+            item.innerHTML =
+              '<span class="admin-mat-chip__ext">' +
+              ext +
+              "</span>" +
+              '<span class="admin-mat-chip__name">' +
+              f.name +
+              "</span>" +
+              '<span class="admin-mat-chip__size">' +
+              size +
+              "</span>" +
+              '<button type="button" class="admin-mat-chip__remove" onclick="removeMat(' +
+              i +
+              ')" title="حذف"' +
+              '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">' +
+              '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' +
+              "</svg></button>";
+            list.appendChild(item);
+          });
+        }
+
+        if (generalMaterialInp) {
+          generalMaterialInp.onchange = function () {
+            addMatFiles(this.files);
+            this.value = "";
+          };
+        }
+        // Delete modal
+        var deleteBackdrop = document.getElementById("courseDeleteBackdrop");
+        var deleteCancel = document.getElementById("courseDeleteCancel");
+        var deleteConfirm = document.getElementById("courseDeleteConfirm");
+        var pendingDeleteId = null;
+
+        // Excel modal
+        var excelBackdrop = document.getElementById("excelUploadBackdrop");
+        var excelClose = document.getElementById("excelUploadClose");
+        var excelCancel = document.getElementById("excelUploadCancel");
+        var excelSubmit = document.getElementById("excelUploadSubmit");
+        var excelFileInput = document.getElementById("excelFileInput");
+        var excelFileName = document.getElementById("excelFileName");
+        var excelFileChosen = document.getElementById("excelFileChosen");
+        var excelUploadMsg = document.getElementById("excelUploadMsg");
+        var excelCourseName = document.getElementById("excelUploadCourseName");
+        var excelCourseId = null;
+
+        if (isAdmin) {
+          // Show the toolbar area with an editor-portal shortcut instead of create button
+          var ah  = document.getElementById("adminHero");
+          var th  = document.getElementById("traineeHeading");
+          var cet = document.getElementById("coursesEditorToolbar");
+          if (ah) ah.style.display = "block";
+          if (th) th.style.display = "none";
+          if (cet) {
+            cet.style.display = "flex";
+            // Replace "Add Course" button with a link to the editor portal
+            cet.innerHTML =
+              '<div class="courses-editor-toolbar__left" style="width:100%;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">' +
+              '<a href="/editor/editor-dashboard.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.5rem 1.1rem;border-radius:10px;font-size:0.85rem;font-weight:700;font-family:inherit;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(99,102,241,0.22)\'" onmouseout="this.style.background=\'rgba(99,102,241,0.12)\'">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>' +
+              'بوابة المحرر — إنشاء وتعديل الدورات' +
+              '</a>' +
+              '<span style="font-size:0.78rem;color:var(--text-subtle);">لإنشاء دورة جديدة أو تعديل محتوى موجود، استخدم بوابة المحرر.</span>' +
+              '</div>';
+          }
+        }
+
+        function renderSkeletons(count) {
+          grid.classList.add("is-loading");
+          grid.classList.remove("is-transitioning");
+          grid.innerHTML = "";
+          for (var i = 0; i < Math.min(count || pageSize, 12); i++) {
+            var s = document.createElement("div");
+            s.className = "course-card-skeleton";
+            s.innerHTML =
+              '<div class="course-card-skeleton__image"></div><div class="course-card-skeleton__body"><div class="course-card-skeleton__title"></div><div class="course-card-skeleton__desc"></div><div class="course-card-skeleton__desc"></div><div class="course-card-skeleton__meta"><span></span><span></span><span></span></div><div class="course-card-skeleton__btn"></div></div>';
+            grid.appendChild(s);
+          }
+        }
+
+        function renderSummary() {
+          if (!isEditor) return;
+          var el = document.getElementById("coursesEditorSummary");
+          if (!el) return;
+          var total = courses.length,
+            live = courses.filter(function (c) {
+              return c.status === "جاري";
+            }).length;
+          el.innerHTML =
+            '<div class="courses-editor-summary__grid">' +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--inquiries"><div class="courses-editor-summary-card__label">إجمالي الاستفسارات النشطة</div><div class="courses-editor-summary-card__value">' +
+            live +
+            "</div></div>" +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--live"><div class="courses-editor-summary-card__label">الدورات المباشرة الآن</div><div class="courses-editor-summary-card__value">' +
+            live +
+            " / " +
+            total +
+            "</div></div>" +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--status"><div class="courses-editor-summary-card__label">حالة المنصة</div><div class="courses-editor-summary-card__value">مستقر</div></div></div>';
+        }
+
+        function getStatusKey(s) {
+          return s === "جاري"
+            ? "ongoing"
+            : s === "مكتمل"
+              ? "done"
+              : s === "قادم"
+                ? "upcoming"
+                : "neutral";
+        }
+
+        function openCourseModal(mode, course) {
+          if (!isEditor || !modalBackdrop || !mainForm) return;
+          modalMode = mode;
+          modalEditingId = course ? course.id : null;
+          step = 1;
+          
+          if (mode === "edit" && course) {
+            modalTitle.textContent = "تعديل بيانات الدورة";
+            stages = JSON.parse(JSON.stringify(course.stages || [mkStage(1)]));
+            batchData = JSON.parse(JSON.stringify(course.batchData || {}));
+            matFiles = []; // For now, we don't load existing materials into the edit list for re-upload
+            
+            document.getElementById("titleEn").value = course.title || "";
+            document.getElementById("titleAr").value = course.titleAr || "";
+            document.getElementById("shortNameInp").value = course.shortName || "";
+            document.getElementById("descTa").value = course.desc || "";
+            document.getElementById("levelSel").value = course.level || "متوسط";
+            document.getElementById("privToggle").checked =
+              course.isPrivate || false;
+            
+            if (imageFileName) imageFileName.textContent = "ملف محفوظ";
+            if (generalMaterialName)
+              generalMaterialName.textContent = "ملفات محفوظة";
+            
+            // For editing, show the current image
+            if (course.image && imagePreviewImg) {
+              imagePreviewImg.src = course.image;
+              imagePreviewImg.style.display = "block";
+              if (imagePreviewPlaceholder)
+                imagePreviewPlaceholder.style.display = "none";
+              if (imgActionsBar) imgActionsBar.style.display = "flex";
+              if (imageFileNameEmpty) imageFileNameEmpty.style.display = "none";
+            }
+          } else {
+            modalTitle.textContent = "إضافة دورة جديدة";
+            stages = [mkStage(1)];
+            batchData = {};
+            matFiles = [];
+            renderMatList();
+            removeSelectedImage();
+            
+            mainForm.reset();
+            if (imageFileName) imageFileName.textContent = "لم يتم اختيار ملف";
+            if (generalMaterialName)
+              generalMaterialName.textContent = "لم يتم اختيار ملفات";
+            if (imagePreviewImg) imagePreviewImg.style.display = "none";
+            if (imagePreviewPlaceholder)
+              imagePreviewPlaceholder.style.display = "flex";
+          }
+
+          renderStage2();
+          updateStep();
+          modalBackdrop.style.display = "flex";
+          setTimeout(function () {
+            modalBackdrop.classList.add("courses-modal-backdrop--visible");
+          }, 10);
+        }
+
+        function closeCourseModal() {
+          if (!modalBackdrop) return;
+          modalBackdrop.classList.remove("courses-modal-backdrop--visible");
+          setTimeout(function () {
+            modalBackdrop.style.display = "none";
+          }, 160);
+          modalMode = null;
+          modalEditingId = null;
+        }
+
+        function openDeleteModal(id) {
+          if (!isEditor || !deleteBackdrop) return;
+          pendingDeleteId = id;
+          deleteBackdrop.style.display = "flex";
+          setTimeout(function () {
+            deleteBackdrop.classList.add("courses-confirm-backdrop--visible");
+          }, 10);
+        }
+
+        function closeDeleteModal() {
+          if (!deleteBackdrop) return;
+          deleteBackdrop.classList.remove("courses-confirm-backdrop--visible");
+          setTimeout(function () {
+            deleteBackdrop.style.display = "none";
+          }, 160);
+          pendingDeleteId = null;
+        }
+
+        function openExcelUploadModal(courseId, courseTitle) {
+          excelCourseId = courseId;
+          if (excelCourseName) excelCourseName.textContent = courseTitle;
+          if (excelFileInput) excelFileInput.value = "";
+          if (excelFileChosen) excelFileChosen.style.display = "none";
+          if (excelUploadMsg) {
+            excelUploadMsg.style.display = "none";
+            excelUploadMsg.textContent = "";
+          }
+          if (excelSubmit) excelSubmit.disabled = true;
+          excelBackdrop.style.display = "flex";
+          setTimeout(function () {
+            excelBackdrop.classList.add("courses-confirm-backdrop--visible");
+          }, 10);
+        }
+
+        function closeExcelUploadModal() {
+          excelBackdrop.classList.remove("courses-confirm-backdrop--visible");
+          setTimeout(function () {
+            excelBackdrop.style.display = "none";
+          }, 160);
+          excelCourseId = null;
+        }
+
+        if (excelClose)
+          excelClose.addEventListener("click", closeExcelUploadModal);
+        if (excelCancel)
+          excelCancel.addEventListener("click", closeExcelUploadModal);
+        if (excelBackdrop)
+          excelBackdrop.addEventListener("click", function (e) {
+            if (e.target === excelBackdrop) closeExcelUploadModal();
+          });
+
+        if (excelFileInput) {
+          excelFileInput.addEventListener("change", function () {
+            var f = excelFileInput.files[0];
+            if (!f) return;
+            excelFileName.textContent = f.name;
+            excelFileChosen.style.display = "flex";
+            excelSubmit.disabled = false;
+            excelUploadMsg.style.display = "none";
+          });
+        }
+
+        if (excelSubmit) {
+          excelSubmit.addEventListener("click", function () {
+            var f = excelFileInput && excelFileInput.files[0];
+            if (!f || !excelCourseId) return;
+            excelSubmit.disabled = true;
+            document.getElementById("excelUploadBtnText").style.display =
+              "none";
+            document.getElementById("excelUploadLoader").style.display =
+              "inline-block";
+            var fd = new FormData();
+            fd.append("file", f);
+            fd.append("course_id", excelCourseId);
+            window
+              .authenticatedFetch("/api/courses/bulk-enroll", {
+                method: "POST",
+                body: fd,
+              })
+              .then(function (res) {
+                document.getElementById("excelUploadBtnText").style.display =
+                  "";
+                document.getElementById("excelUploadLoader").style.display =
+                  "none";
+                excelSubmit.disabled = false;
+                if (!res.ok)
+                  return res.json().then(function (e) {
+                    throw new Error(e.detail || "فشل الرفع");
+                  });
+                return res.json();
+              })
+              .then(function (data) {
+                var n = data.enrolled_count != null ? data.enrolled_count : "—";
+                var m = data.mode === "trainers" ? "مدرب" : "متدرب";
+                excelUploadMsg.textContent =
+                  "تم تسجيل " + n + " " + m + " بنجاح.";
+                excelUploadMsg.className =
+                  "permissions-form-msg permissions-form-msg--success";
+                excelUploadMsg.style.display = "block";
+                excelFileInput.value = "";
+                excelFileChosen.style.display = "none";
+                excelSubmit.disabled = true;
+                showToast("تم تسجيل المتدربين بنجاح!");
+              })
+              .catch(function (err) {
+                excelUploadMsg.textContent = "خطأ: " + err.message;
+                excelUploadMsg.className =
+                  "permissions-form-msg permissions-form-msg--error";
+                excelUploadMsg.style.display = "block";
+              });
+          });
+        }
+
+        window.appliedCourseIds = new Set();
+
+        function handleVisibilityToggle() {
+          var toggle = document.getElementById("coursePrivateToggle");
+          var badge = document.getElementById("visBadge");
+          var desc = document.getElementById("visDesc");
+          var field = document.getElementById("visibilityField");
+          var isPrivate = toggle.checked;
+
+          badge.textContent = isPrivate ? "🔒 خاص" : "🌐 عام";
+          badge.className =
+            "course-visibility-badge course-visibility-badge--" +
+            (isPrivate ? "private" : "public");
+
+          if (desc) {
+            desc.textContent = isPrivate
+              ? "تظهر فقط للمتدربين المُضافين عبر رفع Excel"
+              : "الدورة مرئية لجميع المتدربين";
+          }
+
+          field.classList.toggle("course-visibility-field--private", isPrivate);
+        }
+
+        var privToggle = document.getElementById("coursePrivateToggle");
+        if (privToggle) {
+          privToggle.addEventListener("change", handleVisibilityToggle);
+        }
+
+        function fetchCourses() {
+          renderSkeletons(pageSize);
+          var pp = Promise.resolve({ courses: [] });
+          if (!isEditor && session.userId) {
+            pp = window
+              .authenticatedFetch("/api/trainee/profile/" + session.userId)
+              .then(function (r) {
+                return r.json();
+              })
+              .catch(function () {
+                return { courses: [] };
+              });
+          }
+          Promise.all([
+            window.authenticatedFetch("/api/courses").then(function (r) {
+              if (!r.ok) throw new Error();
+              return r.json();
+            }),
+            pp,
+          ])
+            .then(function (res) {
+              var applied = res[1].courses || [];
+              window.appliedCourseIds = new Set(
+                applied.map(function (a) {
+                  return a.course_id;
+                }),
+              );
+              courses = res[0].map(function (c) {
+                return {
+                  id: c.id,
+                  title: c.title,
+                  desc: c.description,
+                  image: (function (raw) {
+                    if (!raw || raw.trim() === "")
+                      return "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=220&fit=crop";
+                    if (/^https?:\/\//i.test(raw)) return raw;
+                    // relative path from server — prefix origin
+                    return (
+                      window.location.origin + "/" + raw.replace(/^\//, "")
+                    );
+                  })(c.image_url),
+                  duration: c.duration_weeks + " أسابيع",
+                  level: c.skill_level,
+                  sessions: c.total_sessions + " جلسة",
+                  status: c.status,
+                  isPrivate: c.is_public === false,
+                  privateIds: c.private_ids || [],
+                  stages: c.stages || [],
+                  batchData: c.batch_data || {},
+                  titleAr: c.title_ar || "",
+                  shortName: c.short_name || "",
+                  classification: c.classification || ""
+                };
+              });
+              grid.classList.remove("is-loading");
+              totalPages = Math.max(1, Math.ceil(courses.length / pageSize));
+              if (currentPage > totalPages) currentPage = totalPages;
+              renderPage(currentPage);
+              if (isEditor) renderSummary();
+            })
+            .catch(function () {
+              grid.classList.remove("is-loading");
+              grid.innerHTML =
+                '<p class="error-message">حدث خطأ أثناء تحميل الدورات.</p>';
+            });
+        }
+
+        function renderPage(page) {
+          if (page < 1 || page > totalPages) return;
+          currentPage = page;
+          grid.classList.add("is-transitioning");
+          grid.innerHTML = "";
+          var slice = courses.slice((page - 1) * pageSize, page * pageSize);
+          slice.forEach(function (c, idx) {
+            var card = document.createElement("div");
+            card.className =
+              "course-card" + (isEditor ? " course-card--editor" : "");
+            card.style.animationDelay = idx * 0.08 + "s";
+
+            if (isEditor) {
+              card.style.cursor = "pointer";
+              card.onclick = (function(course) {
+                return function(e) {
+                  if (e.target.closest('.course-card__editor-actions') ||
+                      e.target.closest('.course-card__extra-actions')) return;
+                  openCourseModal("edit", course);
+                };
+              })(c);
+            }
+
+            var chip = isEditor
+              ? '<div class="course-card__tags"><span class="courses-editor-status courses-editor-status--' +
+                getStatusKey(c.status) +
+                '">' +
+                c.status +
+                '</span><span class="course-card__level-tag">' +
+                c.level +
+                "</span></div>"
+              : "";
+
+            var hasApplied =
+              window.appliedCourseIds && window.appliedCourseIds.has(c.id);
+            var btn = "";
+            if (isAdmin) {
+              // Admin: bulk-enroll + recommendations only — no create/edit/delete
+              btn =
+                '<div class="course-card__extra-actions">' +
+                '<button type="button" class="course-card__extra-btn course-card__extra-btn--recommendations" data-id="' +
+                c.id + '" data-title="' + (c.title || "") + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>' +
+                "التوصيات</button>" +
+                '<button type="button" class="course-card__extra-btn course-card__extra-btn--upload" data-id="' +
+                c.id + '" data-title="' + (c.title || "") + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
+                "رفع Excel</button>" +
+                "</div>";
+            } else if (isEditor) {
+              btn =
+                '<div class="course-card__extra-actions">' +
+                '<button type="button" class="course-card__extra-btn course-card__extra-btn--recommendations" data-id="' +
+                c.id + '" data-title="' + (c.title || "") + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>' +
+                "التوصيات</button>" +
+                '<button type="button" class="course-card__extra-btn course-card__extra-btn--upload" data-id="' +
+                c.id + '" data-title="' + (c.title || "") + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
+                "رفع Excel</button></div>" +
+                '<div class="course-card__actions-divider"></div>' +
+                '<div class="course-card__editor-actions">' +
+                '<button type="button" class="courses-editor-action courses-editor-action--edit" data-id="' + c.id + '">تعديل</button>' +
+                '<button type="button" class="courses-editor-action courses-editor-action--delete" data-id="' + c.id + '">حذف</button>' +
+                "</div>";
+            } else {
+              btn = hasApplied
+                ? '<button class="course-card__btn course-card__btn--waiting" disabled>قيد المراجعة</button>'
+                : '<button class="course-card__btn" onclick="applyCourse(' +
+                  c.id +
+                  ')">تقدم الآن</button>';
+            }
+
+            card.innerHTML =
+              '<div class="course-card__image-wrap">' +
+              '<img src="' +
+              c.image +
+              '" alt="' +
+              c.title +
+              '" class="course-card__image" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+              '<div class="course-card__image-placeholder" style="display:none"><span>📚</span></div>' +
+              '<span class="course-card__badge">' +
+              c.status +
+              "</span></div>" +
+              '<div class="course-card__body">' +
+              '<h3 class="course-card__title">' +
+              c.title +
+              "</h3>" +
+              chip +
+              '<p class="course-card__desc">' +
+              c.desc +
+              "</p>" +
+              '<div class="course-card__meta">' +
+              '<span title="المدة"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' +
+              c.duration +
+              "</span>" +
+              '<span title="المستوى"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>' +
+              c.level +
+              "</span>" +
+              '<span title="الجلسات"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>' +
+              c.sessions +
+              "</span>" +
+              "</div>" +
+              btn +
+              "</div>";
+            grid.appendChild(card);
+          });
+          requestAnimationFrame(function () {
+            grid.classList.remove("is-transitioning");
+          });
+          if (pageInfo)
+            pageInfo.textContent = "صفحة " + currentPage + " من " + totalPages;
+          if (prevBtn) prevBtn.disabled = currentPage === 1;
+          if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+        }
+
+        // Modal listeners
+        if (modalClose) modalClose.addEventListener("click", closeCourseModal);
+        if (btnCancel)
+          btnCancel.addEventListener("click", closeCourseModal);
+        if (modalBackdrop)
+          mainForm.onsubmit = function (e) {
+            e.preventDefault();
+            if (!validateStep1() || !validateStep2() || !validateStep3()) {
+              if (!validateStep1()) {
+                step = 1;
+                updateStep();
+                validateStep1(); // re-run to scroll
+              } else if (!validateStep2()) {
+                step = 2;
+                updateStep();
+                validateStep2();
+              }
+              return;
+            }
+
+            var btn = btnSave;
+            var originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = "<span>جاري الحفظ...</span>";
+
+            var payload = {
+              title: document.getElementById("titleEn").value,
+              title_ar: document.getElementById("titleAr").value,
+              short_name: document.getElementById("shortNameInp").value,
+              classification:
+                document.getElementById("classificationSel").value,
+              description: document.getElementById("descTa").value,
+              image_url: document.getElementById("imageInp").value,
+              is_public: !document.getElementById("privToggle").checked,
+              skill_level: document.getElementById("levelSel").value,
+              stages: stages,
+              batch_data: {},
+            };
+
+            // ── NEW: Async Upload Wrapper ──
+            async function uploadFile(file, folder) {
+              if (!file || typeof file === "string") return file;
+              var fd = new FormData();
+              fd.append("file", file);
+              fd.append("folder", folder || "temp");
+              const res = await window.authenticatedFetch("/api/admin/upload", {
+                method: "POST",
+                body: fd,
+              });
+              if (!res.ok) throw new Error("فشل رفع الملف: " + file.name);
+              const d = await res.json();
+              return d.file_path;
+            }
+
+            (async function() {
+              try {
+                // 1. Upload Course Image if any
+                var imgFile = document.getElementById("imageFileInp").files[0];
+                if (imgFile) {
+                  payload.image_url = await uploadFile(imgFile, "course_image");
+                }
+
+                // 2. Upload General Materials
+                // Assuming matFiles is a global array of Files
+                if (window.matFiles && window.matFiles.length > 0) {
+                  var matPaths = [];
+                  for (var f of window.matFiles) {
+                    if (typeof f === "string") matPaths.push(f);
+                    else matPaths.push(await uploadFile(f, "course_material"));
+                  }
+                  payload.general_materials = matPaths;
+                }
+
+                // 3. Upload Batch/Session Files
+                for (var k in batchData) {
+                  var bd = batchData[k];
+                  if (bd.trainerFile && typeof bd.trainerFile !== "string") {
+                    bd.trainerFile = await uploadFile(bd.trainerFile, "temp");
+                  }
+                  if (bd.traineeFile && typeof bd.traineeFile !== "string") {
+                    bd.traineeFile = await uploadFile(bd.traineeFile, "temp");
+                  }
+                  if (bd.sessionMaterials) {
+                    for (var i = 0; i < bd.sessionMaterials.length; i++) {
+                      var mats = bd.sessionMaterials[i];
+                      if (Array.isArray(mats)) {
+                        var paths = [];
+                        for (var f of mats) {
+                          if (typeof f === "string") paths.push(f);
+                          else paths.push(await uploadFile(f, "course_material"));
+                        }
+                        bd.sessionMaterials[i] = paths;
+                      }
+                    }
+                  }
+                }
+
+                payload.batch_data = batchData;
+
+                var url =
+                  "/api/courses" +
+                  (modalMode === "edit" ? "/" + modalEditingId : "");
+                
+                const r = await window.authenticatedFetch(url, {
+                  method: modalMode === "edit" ? "PUT" : "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(payload),
+                });
+
+                if (!r.ok) {
+                  const err = await r.json();
+                  throw new Error(err.detail || "فشل الحفظ");
+                }
+                
+                closeCourseModal();
+                fetchCourses();
+                showToast("تم الحفظ بنجاح!");
+              } catch (err) {
+                showToast(err.message || "حدث خطأ أثناء الحفظ.", "error");
+              } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+              }
+            })();
+          };
+        if (deleteBackdrop)
+          deleteBackdrop.addEventListener("click", function (e) {
+            if (e.target === deleteBackdrop) closeDeleteModal();
+          });
+        if (deleteCancel)
+          deleteCancel.addEventListener("click", closeDeleteModal);
+        if (deleteConfirm) {
+          deleteConfirm.addEventListener("click", function () {
+            if (pendingDeleteId == null) {
+              closeDeleteModal();
+              return;
+            }
+            var id = pendingDeleteId;
+            window
+              .authenticatedFetch("/api/courses/" + id, { method: "DELETE" })
+              .then(function (r) {
+                if (!r.ok) throw new Error();
+                return r.text();
+              })
+              .then(function () {
+                closeDeleteModal();
+                fetchCourses();
+                showToast("تم حذف الدورة بنجاح!");
+              })
+              .catch(function () {
+                showToast("حدث خطأ أثناء حذف الدورة.", "error");
+              });
+          });
+        }
+        if (prevBtn)
+          prevBtn.addEventListener("click", function () {
+            renderPage(currentPage - 1);
+          });
+        if (nextBtn)
+          nextBtn.addEventListener("click", function () {
+            renderPage(currentPage + 1);
+          });
+
+        // ── Grid click handler — handles both admin and editor roles ──
+        if (isAdmin || isEditor) {
+          grid.addEventListener("click", function (e) {
+            var recBtn  = e.target.closest(".course-card__extra-btn--recommendations");
+            var upBtn   = e.target.closest(".course-card__extra-btn--upload");
+            var editBtn = e.target.closest(".courses-editor-action--edit");
+            var delBtn  = e.target.closest(".courses-editor-action--delete");
+
+            if (recBtn) {
+              window.location.href = "recommendations.html?course_id=" + recBtn.getAttribute("data-id");
+              return;
+            }
+            if (upBtn) {
+              openExcelUploadModal(
+                parseInt(upBtn.getAttribute("data-id"), 10),
+                upBtn.getAttribute("data-title") || ""
+              );
+              return;
+            }
+            // Edit and delete are editor-only — guard so admins can never trigger them
+            if (!isEditor) return;
+            if (editBtn) {
+              var c = findCourseById(parseInt(editBtn.getAttribute("data-id"), 10));
+              if (c) openCourseModal("edit", c);
+              return;
+            }
+            if (delBtn) {
+              openDeleteModal(parseInt(delBtn.getAttribute("data-id"), 10));
+              return;
+            }
+          });
+        }
+
+        fetchCourses();
+
+        function showToast(msg, type) {
+          type = type || "success";
+          var ct = document.getElementById("toastContainer");
+          if (!ct) return;
+          var t = document.createElement("div");
+          t.className = "toast toast--" + type;
+          var icon =
+            type === "success"
+              ? '<span class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>'
+              : '<span class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>';
+          t.innerHTML = icon + '<span class="toast__text">' + msg + "</span>";
+          ct.appendChild(t);
+          setTimeout(function () {
+            t.style.opacity = "0";
+            t.style.transform = "translateY(-8px)";
+            t.style.transition = "opacity 0.25s ease,transform 0.25s ease";
+            setTimeout(function () {
+              if (t.parentNode) t.parentNode.removeChild(t);
+            }, 250);
+          }, 3000);
+        }
+
+        function findCourseById(id) {
+          for (var i = 0; i < courses.length; i++) {
+            if (courses[i].id === id) return courses[i];
+          }
+          return null;
+        }
+
+        window.applyCourse = function (courseId) {
+          // Custom inline confirm instead of native confirm()
+          var overlay = document.createElement("div");
+          overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;";
+          overlay.innerHTML = '<div style="background:#0f1628;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:2rem 2.5rem;max-width:380px;width:90%;text-align:center;font-family:Tajawal,sans-serif;">'
+            + '<p style="color:#e2e8f0;font-size:1rem;font-weight:600;margin:0 0 1.5rem;">هل أنت متأكد من رغبتك في التقدم لهذه الدورة؟</p>'
+            + '<div style="display:flex;gap:0.75rem;justify-content:center;">'
+            + '<button id="_applyConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(99,102,241,0.5);background:rgba(99,102,241,0.2);color:#a5b4fc;font-weight:700;cursor:pointer;font-family:inherit;">تأكيد التقديم</button>'
+            + '<button id="_applyConfirmCancel" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#94a3b8;font-weight:600;cursor:pointer;font-family:inherit;">إلغاء</button>'
+            + '</div></div>';
+          document.body.appendChild(overlay);
+          overlay.querySelector("#_applyConfirmCancel").onclick = function() { document.body.removeChild(overlay); };
+          overlay.querySelector("#_applyConfirmOk").onclick = function() {
+            document.body.removeChild(overlay);
+            window.authenticatedFetch("/api/trainee/apply", {
+              method: "POST",
+              body: JSON.stringify({ course_id: courseId }),
+            })
+            .then(function (r) {
+              if (!r.ok) return r.json().then(function (e) { throw new Error(e.detail || "فشل التقديم"); });
+              return r.json();
+            })
+            .then(function () {
+              showToast("تم التقديم بنجاح!");
+              fetchCourses();
+            })
+            .catch(function (err) {
+              showToast("خطأ: " + err.message, "error");
+            });
+          };
+        };
+      })();
+    </script>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+Session 3: Data Manipulation with Pandas I
+
+Welcome to Session 3! Today we begin our journey with Pandas, the most popular library for data analysis in Python. If NumPy provides the numerical backbone, Pandas provides the structure and flexibility needed to work with labeled data, much like a programmatic version of Excel or SQL.
+
+1. Core Data Structures: Series and DataFrames
+
+Pandas relies on two primary data structures:
+
+Series: A one-dimensional array-like object containing a sequence of values and an associated array of data labels, called its index.
+
+DataFrame: A two-dimensional, size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns).
+
+import pandas as pd
+import numpy as np
+
+# Creating a Series
+s = pd.Series([10, 20, 30, 40], index=['a', 'b', 'c', 'd'])
+print(s['b']) # Access by label
+
+# Creating a DataFrame from a dictionary
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['New York', 'London', 'Paris']
+}
+df = pd.DataFrame(data)
+print(df)
+
+
+2. Loading Data
+
+In real-world data science, you rarely create DataFrames by hand. You load them from external files.
+
+# Loading a CSV file
+# df = pd.read_csv('data.csv')
+
+# Loading an Excel file
+# df = pd.read_excel('data.xlsx')
+
+# Checking the first few rows
+print(df.head())
+
+# Getting basic info about the dataset
+print(df.info())
+
+
+3. Basic Inspection Tools
+
+Before analyzing data, you must understand its "shape" and content.
+
+.head(n) / .tail(n): View the first or last $n$ rows.
+
+.shape: Get the number of rows and columns.
+
+.columns: View column names.
+
+.describe(): Summary statistics for numerical columns (mean, std, min, max, etc.).
+
+4. Selection and Filtering
+
+Pandas offers powerful ways to slice and dice your data.
+
+Column Selection
+
+# Select a single column (returns a Series)
+ages = df['Age']
+
+# Select multiple columns (returns a DataFrame)
+subset = df[['Name', 'City']]
+
+
+Filtering (Boolean Indexing)
+
+You can filter rows based on conditions.
+
+# Select users older than 28
+adults = df[df['Age'] > 28]
+
+# Multiple conditions
+london_adults = df[(df['Age'] > 28) & (df['City'] == 'London')]
+
+
+5. Adding and Dropping Columns
+
+# Adding a new column
+df['Senior'] = df['Age'] > 30
+
+# Dropping a column (axis=1 refers to columns)
+df = df.drop('Senior', axis=1)
+
+
+Hands-on Exercise: Exploring a Mini-Dataset
+
+Task:
+
+Create a DataFrame representing a small store's inventory:
+
+Product: ['Apple', 'Banana', 'Orange', 'Milk', 'Bread']
+
+Price: [1.2, 0.5, 0.8, 2.5, 1.5]
+
+Category: ['Fruit', 'Fruit', 'Fruit', 'Dairy', 'Bakery']
+
+Stock: [100, 150, 80, 20, 30]
+
+Calculate the total value of the inventory (Price * Stock) and add it as a new column named Total_Value.
+
+Filter the DataFrame to show only items in the 'Fruit' category.
+
+Find the average price of all products using .mean().
+
+Summary Checklist
+
+[ ] Do you understand the difference between a Series and a DataFrame?
+
+[ ] Can you load a CSV and view its summary statistics?
+
+[ ] Are you comfortable filtering a DataFrame using boolean logic?
+
+Next Session: We will master advanced indexing with .loc and .iloc, and perform complex data filtering!

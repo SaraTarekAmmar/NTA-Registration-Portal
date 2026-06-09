@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="chat/chat.css?v=3" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      /* ══ KPI Cards — rec-dashboard style ══ */
+      .adm-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 800px) {
+        .adm-kpi-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .adm-kpi-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .adm-kpi {
+        min-width: 130px;
+        padding: 1.25rem 1.5rem;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        background: rgba(8, 12, 32, 0.35);
+        backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease,
+          border-color 350ms ease;
+        animation:
+          admKpiEnter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          admKpiGlow 7s ease-in-out infinite;
+      }
+      .adm-kpi::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--kpi-accent, var(--accent)),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 350ms ease;
+      }
+      .adm-kpi::after {
+        content: "";
+        position: absolute;
+        top: -40%;
+        bottom: -40%;
+        width: 35%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.22),
+          transparent
+        );
+        opacity: 0;
+        transform: translateX(-130%) skewX(-12deg);
+        pointer-events: none;
+        animation: admKpiShine 8s ease-in-out infinite;
+      }
+      .adm-kpi:hover {
+        transform: translateY(-6px) scale(1.02);
+        border-color: var(--surface-glass-strong);
+      }
+      .adm-kpi:hover::before {
+        opacity: 1;
+      }
+      .adm-kpi:hover {
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.25),
+          0 0 30px var(--kpi-glow, rgba(99, 102, 241, 0.2));
+      }
+
+      .adm-kpi--blue {
+        --kpi-accent: var(--color-info-soft);
+        --kpi-glow: var(--border-accent);
+      }
+      .adm-kpi--green {
+        --kpi-accent: var(--color-success);
+        --kpi-glow: rgba(16, 185, 129, 0.35);
+      }
+      .adm-kpi--red {
+        --kpi-accent: var(--color-error-soft);
+        --kpi-glow: rgba(239, 68, 68, 0.35);
+      }
+
+      .adm-kpi__icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.15rem;
+        transition:
+          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 350ms ease;
+      }
+      .adm-kpi:hover .adm-kpi__icon {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px var(--kpi-glow, rgba(99, 102, 241, 0.4));
+      }
+      .adm-kpi--blue .adm-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.25),
+          rgba(59, 130, 246, 0.1)
+        );
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: var(--color-info-soft);
+      }
+      .adm-kpi--green .adm-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.25),
+          rgba(16, 185, 129, 0.1)
+        );
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-kpi-mint);
+      }
+      .adm-kpi--red .adm-kpi__icon {
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.25),
+          rgba(239, 68, 68, 0.1)
+        );
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--color-error-pale);
+      }
+
+      .adm-kpi__val {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--text-on-accent);
+        line-height: 1;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 24px var(--kpi-glow, rgba(99, 102, 241, 0.35));
+        transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .adm-kpi:hover .adm-kpi__val {
+        transform: scale(1.05);
+      }
+      .adm-kpi__lbl {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(140, 175, 230, 0.6);
+      }
+
+      @keyframes admKpiEnter {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes admKpiGlow {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+        50% {
+          box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.4),
+            0 0 26px var(--kpi-glow, rgba(99, 102, 241, 0.35));
+        }
+      }
+      @keyframes admKpiShine {
+        0% {
+          opacity: 0;
+          transform: translateX(-130%) skewX(-12deg);
+        }
+        10% {
+          opacity: 0.18;
+        }
+        30% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(140%) skewX(-12deg);
+        }
+      }
+
+      /* ══ Hero ══ */
+      .adm-hero {
+        padding: 1.6rem 1.8rem;
+        border-radius: 20px;
+        margin-bottom: 1.75rem;
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(99, 102, 241, 0.15),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at bottom left,
+            rgba(6, 182, 212, 0.1),
+            transparent 55%
+          ),
+          rgba(8, 12, 32, 0.7);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.95),
+          0 0 40px rgba(99, 102, 241, 0.06);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .adm-hero::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.12) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .adm-hero__title {
+        font-size: 1.9rem;
+        font-weight: 800;
+        margin: 0 0 0.3rem;
+        color: var(--text-main);
+        letter-spacing: -0.02em;
+      }
+      .adm-hero__sub {
+        font-size: 0.88rem;
+        color: var(--text-subtle);
+        margin: 0;
+        line-height: 1.65;
+      }
+
+      /* ══ Charts grid ══ */
+      .adm-charts-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+        min-width: 0;
+      }
+      @media (max-width: 900px) {
+        .adm-charts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .adm-chart-card {
+        padding: 1.15rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .adm-chart-card:hover {
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.25),
+          0 0 20px rgba(99, 102, 241, 0.07);
+      }
+      .adm-chart-card--wide {
+        grid-column: 1 / -1;
+      }
+      .adm-chart-card--scroll-legend .adm-chart {
+        height: 195px;
+      }
+      .adm-chart-legend-scroll {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding: 0.55rem 0 0.15rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(99, 102, 241, 0.35) transparent;
+      }
+      .adm-chart-legend-scroll::-webkit-scrollbar {
+        height: 3px;
+      }
+      .adm-chart-legend-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .adm-chart-legend-scroll::-webkit-scrollbar-thumb {
+        background: rgba(99, 102, 241, 0.4);
+        border-radius: 999px;
+      }
+      .adm-chart-legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        background: var(--assign-card-hover-bg);
+        border: 1px solid var(--border-main);
+      }
+      .adm-chart-legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .adm-chart-card__header {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.85rem;
+      }
+      .adm-chart-card__icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        color: var(--accent-hover);
+      }
+      .adm-chart-card__icon svg {
+        width: 14px;
+        height: 14px;
+      }
+      .adm-chart-card__title {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+
+      .adm-chart {
+        width: 100%;
+        height: 260px;
+        min-width: 0;
+      }
+      .adm-chart-card--wide .adm-chart {
+        height: 240px;
+      }
+      .adm-chart-card--scroll-legend .adm-chart {
+        height: 195px;
+        min-width: 0;
+      }
+
+      /* ══ Stages legend ══ */
+      .adm-stages-wrap {
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.45);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        margin-bottom: 1.75rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem 0.9rem;
+      }
+      .adm-stages-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .adm-stages-label svg {
+        width: 14px;
+        height: 14px;
+      }
+      .adm-stage-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.32rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--border-main);
+        color: var(--text-subtle);
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .adm-stage-item:hover {
+        border-color: rgba(99, 102, 241, 0.5);
+        color: var(--color-accent-pale);
+        background: rgba(99, 102, 241, 0.08);
+      }
+      .adm-stage-item__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .adm-stage-item[data-stage="1"] .adm-stage-item__dot {
+        background: var(--color-error);
+        box-shadow: 0 0 5px rgba(225, 29, 72, 0.5);
+      }
+      .adm-stage-item[data-stage="2"] .adm-stage-item__dot {
+        background: var(--color-info-soft);
+        box-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+      }
+      .adm-stage-item[data-stage="3"] .adm-stage-item__dot {
+        background: var(--color-info-soft);
+        box-shadow: 0 0 5px rgba(96, 165, 250, 0.5);
+      }
+      .adm-stage-item[data-stage="4"] .adm-stage-item__dot {
+        background: var(--accent-hover);
+        box-shadow: 0 0 5px rgba(129, 140, 248, 0.5);
+      }
+      .adm-stage-item[data-stage="5"] .adm-stage-item__dot {
+        background: var(--theme-btn-color);
+        box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+      }
+      .adm-stage-item[data-stage="6"] .adm-stage-item__dot {
+        background: var(--color-success-soft);
+        box-shadow: 0 0 5px rgba(52, 211, 153, 0.5);
+      }
+
+      /* ══ CTA buttons ══ */
+      .adm-cta-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      @media (max-width: 600px) {
+        .adm-cta-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .adm-cta {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        text-decoration: none;
+        color: var(--text-main);
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .adm-cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--cta-bg, rgba(99, 102, 241, 0.05));
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+      .adm-cta:hover {
+        transform: translateY(-3px);
+      }
+      .adm-cta:hover::before {
+        opacity: 1;
+      }
+
+      .adm-cta--candidates {
+        --cta-bg: rgba(99, 102, 241, 0.08);
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      .adm-cta--candidates:hover {
+        border-color: rgba(99, 102, 241, 0.6);
+        box-shadow:
+          0 8px 28px rgba(99, 102, 241, 0.15),
+          0 0 20px rgba(99, 102, 241, 0.1);
+        color: var(--color-accent-pale-2);
+      }
+      .adm-cta--trainees {
+        --cta-bg: rgba(16, 185, 129, 0.07);
+        border-color: rgba(16, 185, 129, 0.3);
+      }
+      .adm-cta--trainees:hover {
+        border-color: rgba(16, 185, 129, 0.6);
+        box-shadow:
+          0 8px 28px rgba(16, 185, 129, 0.15),
+          0 0 20px rgba(16, 185, 129, 0.1);
+        color: var(--color-success-pale-2);
+      }
+
+      .adm-cta__icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        transition: transform 0.25s ease;
+      }
+      .adm-cta:hover .adm-cta__icon {
+        transform: scale(1.08);
+      }
+      .adm-cta--candidates .adm-cta__icon {
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: var(--color-accent-pale);
+      }
+      .adm-cta--trainees .adm-cta__icon {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-kpi-mint);
+      }
+      .adm-cta__icon svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .adm-cta__body {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        z-index: 1;
+      }
+      .adm-cta__title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        margin: 0 0 0.15rem;
+      }
+      .adm-cta__sub {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        margin: 0;
+      }
+
+      .adm-cta__arrow {
+        font-size: 1.1rem;
+        opacity: 0.5;
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.25s ease,
+          opacity 0.25s;
+      }
+      .adm-cta:hover .adm-cta__arrow {
+        transform: translateX(-4px);
+        opacity: 1;
+      }
+
+      /* ══ Courses CTA ══ */
+      .adm-courses-cta {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 1.25rem;
+        border-radius: 14px;
+        background: rgba(245, 158, 11, 0.07);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(245, 158, 11, 0.25);
+        text-decoration: none;
+        color: var(--color-kpi-gold);
+        margin-bottom: 1.5rem;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s;
+      }
+      .adm-courses-cta:hover {
+        transform: translateY(-2px);
+        border-color: rgba(245, 158, 11, 0.5);
+        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
+      }
+      .adm-courses-cta__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--theme-btn-color);
+      }
+      .adm-courses-cta__icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .adm-courses-cta__text {
+        font-size: 0.88rem;
+        font-weight: 600;
+        flex: 1;
+      }
+      .adm-courses-cta__arrow {
+        font-size: 1rem;
+        opacity: 0.6;
+        transition: transform 0.25s;
+      }
+      .adm-courses-cta:hover .adm-courses-cta__arrow {
+        transform: translateX(-4px);
+        opacity: 1;
+      }
+
+      /* section title with accent */
+      .adm-section-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-subtle);
+        margin: 0 0 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .adm-section-title::before {
+        content: "";
+        width: 3px;
+        height: 14px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, var(--accent), var(--color-info));
+        flex-shrink: 0;
+      }
+    </style>
+    <script src="js/admin-guard.js"></script>
+</head>
+
+  <body class="trainee-app" data-page="admin">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+      <!-- Hero -->
+      <div class="adm-hero">
+        <div>
+          <h1 class="adm-hero__title">لوحة التحكم</h1>
+          <p class="adm-hero__sub">
+            Recruitment lifecycle &amp; candidate filtration tracking.<br />
+            دورة حياة التوظيف وتتبع فلترة المرشحين
+          </p>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="adm-kpi-row">
+        <a
+          href="admin-users.html"
+          class="adm-kpi adm-kpi--blue"
+          style="animation-delay: 0.05s"
+        >
+          <div class="adm-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <div class="adm-kpi__val" id="kpiApplied">—</div>
+          <div class="adm-kpi__lbl">إجمالي المتقدمين</div>
+        </a>
+
+        <a
+          href="admin-trainees.html"
+          class="adm-kpi adm-kpi--green"
+          style="animation-delay: 0.12s"
+        >
+          <div class="adm-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div class="adm-kpi__val" id="kpiEnrolled">—</div>
+          <div class="adm-kpi__lbl">المسجلون بالبرنامج</div>
+        </a>
+
+        <a
+          href="admin-users.html?status=rejected"
+          class="adm-kpi adm-kpi--red"
+          style="animation-delay: 0.19s"
+        >
+          <div class="adm-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <div class="adm-kpi__val" id="kpiDropped">—</div>
+          <div class="adm-kpi__lbl">المرفوضون</div>
+        </a>
+      </div>
+
+      <!-- Charts -->
+      <p class="adm-section-title">تحليلات خط التقديم</p>
+      <div class="adm-charts-grid">
+        <div class="adm-chart-card adm-chart-card--scroll-legend">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21.21 15.89A10 10 0 118 2.83" />
+                <path d="M22 12A10 10 0 0012 2v10z" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">توزيع المرشحين حسب المرحلة</h3>
+          </div>
+          <div id="admChartStage" class="adm-chart"></div>
+          <div class="adm-chart-legend-scroll" id="admStageLegend"></div>
+        </div>
+
+        <div class="adm-chart-card">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">توزيع حسب الجنس</h3>
+          </div>
+          <div id="admChartGender" class="adm-chart"></div>
+        </div>
+
+        <div class="adm-chart-card adm-chart-card--wide">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 20V10M12 20V4M6 20v-6" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">أعداد المرشحين في كل مرحلة</h3>
+          </div>
+          <div id="admChartBar" class="adm-chart"></div>
+        </div>
+
+        <div class="adm-chart-card">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <path d="M16 2v4M8 2v4M3 10h18" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">توزيع الأعمار</h3>
+          </div>
+          <div id="admChartAge" class="adm-chart"></div>
+        </div>
+
+        <div class="adm-chart-card adm-chart-card--scroll-legend">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="m22 7-10-5L2 7l10 5 10-5Z" />
+                <path d="M6 10v6c0 1.1 2.7 2 6 2s6-.9 6-2v-6" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">توزيع المستوى التعليمي</h3>
+          </div>
+          <div id="admChartEducation" class="adm-chart"></div>
+          <div class="adm-chart-legend-scroll" id="admEduLegend"></div>
+        </div>
+
+        <div class="adm-chart-card adm-chart-card--wide">
+          <div class="adm-chart-card__header">
+            <div class="adm-chart-card__icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h3 class="adm-chart-card__title">
+              مسار خط التقديم (تقديم → مقابلة → تسجيل)
+            </h3>
+          </div>
+          <div id="admChartPipeline" class="adm-chart"></div>
+        </div>
+      </div>
+
+      <!-- Stages legend -->
+      <div class="adm-stages-wrap">
+        <span class="adm-stages-label">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"
+            />
+            <rect x="9" y="3" width="6" height="4" rx="2" />
+          </svg>
+          المراحل:
+        </span>
+        <a
+          href="admin-users.html?stage=1"
+          class="adm-stage-item"
+          data-stage="1"
+        >
+          <span class="adm-stage-item__dot"></span><b>1</b> الفرز الإلكتروني
+        </a>
+        <a
+          href="admin-users.html?stage=2"
+          class="adm-stage-item"
+          data-stage="2"
+        >
+          <span class="adm-stage-item__dot"></span><b>2</b> الاستعلام الأمني
+        </a>
+        <a
+          href="admin-users.html?stage=3"
+          class="adm-stage-item"
+          data-stage="3"
+        >
+          <span class="adm-stage-item__dot"></span><b>3</b> الاختبار النفسي
+        </a>
+        <a
+          href="admin-users.html?stage=4"
+          class="adm-stage-item"
+          data-stage="4"
+        >
+          <span class="adm-stage-item__dot"></span><b>4</b> اختبارات المعلومات
+          العامة
+        </a>
+        <a
+          href="admin-users.html?stage=5"
+          class="adm-stage-item"
+          data-stage="5"
+        >
+          <span class="adm-stage-item__dot"></span><b>5</b> المقابلة الأولى
+        </a>
+        <a
+          href="admin-users.html?stage=6"
+          class="adm-stage-item"
+          data-stage="6"
+        >
+          <span class="adm-stage-item__dot"></span><b>6</b> المقابلة الثانية
+        </a>
+      </div>
+
+      <!-- CTA Buttons -->
+      <p class="adm-section-title">روابط سريعة</p>
+      <div class="adm-cta-row">
+        <a href="admin-users.html" class="adm-cta adm-cta--candidates">
+          <div class="adm-cta__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </div>
+          <div class="adm-cta__body">
+            <div class="adm-cta__title">عرض قائمة المرشحين</div>
+            <div class="adm-cta__sub">المراحل 1–6 من خط التقديم</div>
+          </div>
+          <span class="adm-cta__arrow">←</span>
+        </a>
+
+        <a href="admin-trainees.html" class="adm-cta adm-cta--trainees">
+          <div class="adm-cta__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div class="adm-cta__body">
+            <div class="adm-cta__title">عرض قائمة المتدربين</div>
+            <div class="adm-cta__sub">المسجلون النشطون في الدورات</div>
+          </div>
+          <span class="adm-cta__arrow">←</span>
+        </a>
+      </div>
+
+      <!-- Courses CTA -->
+      <a href="admin-courses.html" class="adm-courses-cta">
+        <div class="adm-courses-cta__icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <span class="adm-courses-cta__text">إدارة كتالوج البرامج والدورات</span>
+        <span class="adm-courses-cta__arrow">←</span>
+      </a>
+    </main>
+
+    <div id="chatWidget"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="header/header.js?v=2"></script>
+    <script>
+      (function () {
+        var session = {};
+        try {
+          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        } catch (e) {}
+        if (session.role !== "admin") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        function getThemeColor(varName, fallback) {
+          var val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+          return val || fallback;
+        }
+
+        var stages = [
+          { id: 1, label: "الفرز الإلكتروني", colorVar: "--color-error", fallback: "#ef4444" },
+          { id: 2, label: "الاستعلام الأمني", colorVar: "--color-info-soft", fallback: "#60a5fa" },
+          { id: 3, label: "الاختبار النفسي", colorVar: "--color-info",      fallback: "#3b82f6" },
+          { id: 4, label: "اختبارات المعلومات", colorVar: "--accent-hover", fallback: "#818cf8" },
+          { id: 5, label: "المقابلة الأولى", colorVar: "--theme-btn-color", fallback: "#fbbf24" },
+          { id: 6, label: "المقابلة الثانية", colorVar: "--color-success-soft", fallback: "#34d399" },
+        ];
+
+        var trainees = [];
+        var chStage, chGender, chBar, chAge, chEdu, chPipe;
+
+        function fetchData() {
+          window
+            .authenticatedFetch("/api/admin/trainees")
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              trainees = data;
+              updateKpis();
+              initCharts();
+            })
+            .catch(function (err) {
+              console.error("Dashboard fetch error:", err);
+            });
+        }
+
+        function updateKpis() {
+          // Candidates are those in stages 1-6
+          var candidates = trainees.filter(function (t) {
+            return t.stage > 0 && t.stage < 7;
+          });
+          // Enrolled are those in stage 7
+          var enrolled = trainees.filter(function (t) {
+            return t.stage === 7;
+          });
+          // Dropped are those marked as rejected
+          var dropped = trainees.filter(function (t) {
+            return t.status === "rejected";
+          });
+
+          document.getElementById("kpiApplied").textContent = candidates.length;
+          document.getElementById("kpiEnrolled").textContent = enrolled.length;
+          document.getElementById("kpiDropped").textContent = dropped.length;
+        }
+
+        function initCharts() {
+          if (typeof echarts === "undefined") return;
+
+          // Dispose existing charts if any
+          [chStage, chGender, chBar, chAge, chEdu, chPipe].forEach(function (c) {
+            if (c && typeof c.dispose === "function") {
+              try { c.dispose(); } catch (e) {}
+            }
+          });
+
+          // Resolve dynamic theme colors
+          stages.forEach(function (s) {
+            s.color = getThemeColor(s.colorVar, s.fallback);
+          });
+
+          var CHART_TEXT_COLOR = getThemeColor("--text-subtle", "#64748b");
+          var CHART_GRID_COLOR = "rgba(51,65,85,0.35)";
+          var cInfo = getThemeColor("--color-info", "#3b82f6");
+          var cPurple = getThemeColor("--color-purple", "#8b5cf6");
+          var cAccent = getThemeColor("--accent", "#6366f1");
+          var cAccentHover = getThemeColor("--accent-hover", "#818cf8");
+          var cAccentPale = getThemeColor("--color-accent-pale", "#a5b4fc");
+          var cAccentPale2 = getThemeColor("--color-accent-pale-2", "#c7d2fe");
+
+          function sharedTooltip() {
+            return {
+              backgroundColor: "rgba(8,12,32,0.92)",
+              borderColor: "rgba(99,102,241,0.3)",
+              borderWidth: 1,
+              textStyle: {
+                color: getThemeColor("--text-main", "#e2e8f0"),
+                fontFamily: "Tajawal",
+                fontSize: 12,
+              },
+            };
+          }
+
+          var stageCounts = {};
+          stages.forEach(function (s) {
+            stageCounts[s.id] = 0;
+          });
+          var genderCounts = { male: 0, female: 0 };
+          var ageBuckets = { "20-25": 0, "26-30": 0, "31-35": 0, "36+": 0 };
+          var eduCounts = {};
+
+          trainees.forEach(function (t) {
+            if (stageCounts[t.stage] !== undefined && t.status === 'active') stageCounts[t.stage]++;
+            if (t.gender === "male") genderCounts.male++;
+            else if (t.gender === "female") genderCounts.female++;
+            var age = new Date().getFullYear() - new Date(t.dob).getFullYear();
+            if (age <= 25) ageBuckets["20-25"]++;
+            else if (age <= 30) ageBuckets["26-30"]++;
+            else if (age <= 35) ageBuckets["31-35"]++;
+            else ageBuckets["36+"]++;
+            var deg = t.category || "غير محدد";
+            eduCounts[deg] = (eduCounts[deg] || 0) + 1;
+          });
+
+          // ── Stage donut ──
+          var elStage = document.getElementById("admChartStage");
+          if (elStage) {
+            chStage = echarts.init(elStage);
+            chStage.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
+              series: [
+                {
+                  type: "pie",
+                  radius: ["42%", "70%"],
+                  center: ["50%", "50%"],
+                  label: { show: false },
+                  emphasis: {
+                    label: {
+                      show: true,
+                      fontFamily: "Tajawal",
+                      color: getThemeColor("--text-main", "#e2e8f0"),
+                      fontSize: 13,
+                      fontWeight: 700,
+                    },
+                  },
+                  data: stages.map(function (s) {
+                    return {
+                      value: stageCounts[s.id],
+                      name: s.label,
+                      itemStyle: { color: s.color },
+                    };
+                  }),
+                },
+              ],
+            });
+            var stageLegendEl = document.getElementById("admStageLegend");
+            if (stageLegendEl) {
+              stageLegendEl.innerHTML = stages
+                .map(function (s) {
+                  return (
+                    '<span class="adm-chart-legend-item">' +
+                    '<span class="adm-chart-legend-dot" style="background:' +
+                    s.color +
+                    ";box-shadow:0 0 5px " +
+                    s.color +
+                    '88"></span>' +
+                    s.label +
+                    " (" +
+                    stageCounts[s.id] +
+                    ")" +
+                    "</span>"
+                  );
+                })
+                .join("");
+            }
+          }
+
+          // ── Gender pie ──
+          var elGender = document.getElementById("admChartGender");
+          if (elGender) {
+            chGender = echarts.init(elGender);
+            chGender.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
+              legend: {
+                bottom: 10,
+                textStyle: {
+                  color: CHART_TEXT_COLOR,
+                  fontFamily: "Tajawal",
+                  fontSize: 11,
+                },
+              },
+              series: [
+                {
+                  type: "pie",
+                  radius: ["38%", "65%"],
+                  center: ["50%", "45%"],
+                  label: { show: false },
+                  emphasis: {
+                    label: {
+                      show: true,
+                      fontFamily: "Tajawal",
+                      color: getThemeColor("--text-main", "#e2e8f0"),
+                      fontSize: 13,
+                      fontWeight: 700,
+                    },
+                  },
+                  data: [
+                    {
+                      value: genderCounts.male,
+                      name: "ذكور",
+                      itemStyle: { color: cInfo },
+                    },
+                    {
+                      value: genderCounts.female,
+                      name: "إناث",
+                      itemStyle: { color: cPurple },
+                    },
+                  ],
+                },
+              ],
+            });
+          }
+
+          // ── Stage bar ──
+          var elBar = document.getElementById("admChartBar");
+          if (elBar) {
+            chBar = echarts.init(elBar);
+            chBar.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign(
+                { trigger: "axis", axisPointer: { type: "shadow" } },
+                sharedTooltip(),
+              ),
+              grid: { top: 10, bottom: 40, left: 160, right: 20 },
+              xAxis: {
+                type: "value",
+                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
+                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
+              },
+              yAxis: {
+                type: "category",
+                data: stages
+                  .map(function (s) {
+                    return s.label;
+                  })
+                  .reverse(),
+                axisLabel: {
+                  color: CHART_TEXT_COLOR,
+                  fontFamily: "Tajawal",
+                  fontSize: 11,
+                },
+              },
+              series: [
+                {
+                  type: "bar",
+                  barMaxWidth: 22,
+                  data: stages
+                    .map(function (s) {
+                      return stageCounts[s.id];
+                    })
+                    .reverse(),
+                  itemStyle: {
+                    color: function (params) {
+                      return stages[stages.length - 1 - params.dataIndex].color;
+                    },
+                    borderRadius: [0, 8, 8, 0],
+                  },
+                  emphasis: {
+                    itemStyle: {
+                      shadowBlur: 12,
+                      shadowColor: "rgba(99,102,241,0.4)",
+                    },
+                  },
+                },
+              ],
+            });
+          }
+
+          // ── Age bar ──
+          var elAge = document.getElementById("admChartAge");
+          if (elAge) {
+            chAge = echarts.init(elAge);
+            chAge.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign({ trigger: "axis" }, sharedTooltip()),
+              grid: { top: 10, bottom: 30, left: 30, right: 10 },
+              xAxis: {
+                type: "category",
+                data: Object.keys(ageBuckets),
+                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
+              },
+              yAxis: {
+                type: "value",
+                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
+                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
+              },
+              series: [
+                {
+                  type: "bar",
+                  barMaxWidth: 40,
+                  data: Object.values(ageBuckets),
+                  itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                      { offset: 0, color: cAccentHover },
+                      { offset: 1, color: "rgba(129,140,248,0.25)" },
+                    ]),
+                    borderRadius: [6, 6, 0, 0],
+                  },
+                },
+              ],
+            });
+          }
+
+          // ── Education donut ──
+          var elEdu = document.getElementById("admChartEducation");
+          if (elEdu) {
+            var eduColors = [
+              getThemeColor("--color-success", "#10b981"),
+              getThemeColor("--color-info", "#3b82f6"),
+              getThemeColor("--color-warning", "#f59e0b"),
+              getThemeColor("--color-error", "#ef4444"),
+              getThemeColor("--color-purple", "#8b5cf6"),
+              getThemeColor("--color-cyan", "#06b6d4"),
+            ];
+            chEdu = echarts.init(elEdu);
+            chEdu.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
+              series: [
+                {
+                  type: "pie",
+                  radius: ["42%", "68%"],
+                  center: ["50%", "50%"],
+                  label: { show: false },
+                  data: Object.keys(eduCounts).map(function (k, i) {
+                    return {
+                      value: eduCounts[k],
+                      name: k,
+                      itemStyle: { color: eduColors[i % eduColors.length] },
+                    };
+                  }),
+                },
+              ],
+            });
+            var eduLegendEl = document.getElementById("admEduLegend");
+            if (eduLegendEl) {
+              eduLegendEl.innerHTML = Object.keys(eduCounts)
+                .map(function (k, i) {
+                  var color = eduColors[i % eduColors.length];
+                  return (
+                    '<span class="adm-chart-legend-item">' +
+                    '<span class="adm-chart-legend-dot" style="background:' +
+                    color +
+                    ";box-shadow:0 0 5px " +
+                    color +
+                    '88"></span>' +
+                    k +
+                    " (" +
+                    eduCounts[k] +
+                    ")" +
+                    "</span>"
+                  );
+                })
+                .join("");
+            }
+          }
+
+          // ── Pipeline funnel line ──
+          var elPipe = document.getElementById("admChartPipeline");
+          if (elPipe) {
+            chPipe = echarts.init(elPipe);
+            var pipeData = [
+              trainees.length,
+              trainees.filter(function (t) {
+                return t.stage >= 3;
+              }).length,
+              trainees.filter(function (t) {
+                return t.stage >= 5;
+              }).length,
+              trainees.filter(function (t) {
+                return t.stage === 7;
+              }).length,
+            ];
+            chPipe.setOption({
+              backgroundColor: "transparent",
+              tooltip: Object.assign({ trigger: "axis" }, sharedTooltip()),
+              grid: { top: 15, bottom: 35, left: 40, right: 20 },
+              xAxis: {
+                type: "category",
+                data: ["التقديم", "اجتاز الفرز", "المقابلات", "التسجيل"],
+                axisLabel: {
+                  color: CHART_TEXT_COLOR,
+                  fontFamily: "Tajawal",
+                  fontSize: 11,
+                },
+              },
+              yAxis: {
+                type: "value",
+                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
+                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
+              },
+              series: [
+                {
+                  type: "line",
+                  smooth: true,
+                  data: pipeData,
+                  symbol: "circle",
+                  symbolSize: 8,
+                  lineStyle: { width: 3, color: cAccent },
+                  itemStyle: {
+                    color: cAccentHover,
+                    borderWidth: 2,
+                    borderColor: cAccentPale2,
+                  },
+                  areaStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                      { offset: 0, color: "rgba(99,102,241,0.3)" },
+                      { offset: 1, color: "rgba(99,102,241,0.02)" },
+                    ]),
+                  },
+                  label: {
+                    show: true,
+                    position: "top",
+                    color: cAccentPale,
+                    fontFamily: "Tajawal",
+                    fontSize: 11,
+                    fontWeight: 700,
+                  },
+                },
+              ],
+            });
+          }
+
+          // Resize on window change
+          window.addEventListener("resize", function () {
+            [chStage, chGender, chBar, chAge, chEdu, chPipe].forEach(
+              function (c) {
+                if (c) c.resize();
+              },
+            );
+          });
+        }
+
+        // Register theme-change listener once using the stable initCharts reference
+        window.addEventListener("nta-theme-changed", initCharts);
+        fetchData();
+      })();
+    </script>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

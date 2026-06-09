@@ -1,0 +1,609 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إدارة الإذونات - NTA</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .perm-wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+
+      /* ── Page title ── */
+      .perm-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0 0 0.35rem;
+      }
+      .perm-subtitle {
+        font-size: 0.85rem;
+        color: var(--text-subtle);
+        margin: 0 0 2rem;
+      }
+
+      /* ── Section heading ── */
+      .perm-section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin: 0 0 0.85rem;
+      }
+      .perm-section-title--pending {
+        color: var(--color-warning);
+      }
+      .perm-section-title--done {
+        color: var(--text-subtle);
+      }
+
+      .perm-section-title__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .perm-section-title--pending .perm-section-title__dot {
+        background: var(--color-warning);
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+        animation: dotPulse 2s ease-in-out infinite;
+      }
+      .perm-section-title--done .perm-section-title__dot {
+        background: var(--text-subtle);
+      }
+
+      @keyframes dotPulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.4);
+        }
+      }
+
+      /* ── Permission card ── */
+      .perm-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .perm-card {
+        position: relative;
+        border-radius: 16px;
+        border: 1px solid rgba(51, 65, 85, 0.7);
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        padding: 1.1rem 1.25rem;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        align-items: center;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+        animation: permCardIn 0.4s ease-out backwards;
+        overflow: hidden;
+      }
+      .perm-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: var(--border-main);
+        transition: background 0.25s;
+      }
+      .perm-card--pending::before {
+        background: var(--color-warning);
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+      }
+      .perm-card--accepted::before {
+        background: var(--color-success);
+      }
+      .perm-card--rejected::before {
+        background: var(--color-error);
+      }
+
+      .perm-card--pending {
+        border-color: rgba(245, 158, 11, 0.3);
+        box-shadow: 0 0 24px rgba(245, 158, 11, 0.06);
+      }
+      .perm-card--pending:hover {
+        border-color: rgba(245, 158, 11, 0.55);
+        box-shadow: 0 0 30px rgba(245, 158, 11, 0.12);
+      }
+
+      @keyframes permCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── Card meta ── */
+      .perm-card__top {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 0.6rem;
+      }
+      .perm-card__student {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .perm-card__name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+      .perm-card__type {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+      }
+      .perm-card__type--absent {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--color-error-soft);
+      }
+      .perm-card__type--late {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--theme-btn-color);
+      }
+      .perm-card__type--early {
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+      .perm-card__type--defer {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: var(--color-info-soft);
+      }
+      .perm-card__type--exam {
+        background: rgba(168, 85, 247, 0.1);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        color: #d8b4fe;
+      }
+      .perm-card__sub-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .perm-card__meta-label {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        font-weight: 600;
+        min-width: 42px;
+      }
+      .perm-card__course {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--color-info-soft);
+      }
+      .perm-card__day {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+      }
+
+      .perm-card__reason {
+        margin-top: 0.6rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        padding: 0.45rem 0.75rem;
+        border-radius: 10px;
+        background: var(--assign-card-hover-bg);
+        border: 1px solid var(--border-main);
+        font-style: italic;
+        line-height: 1.5;
+      }
+
+      /* ── Action buttons ── */
+      .perm-card__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .perm-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        min-width: 90px;
+      }
+      .perm-action-btn svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .perm-action-btn--accept {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: var(--color-success-soft);
+      }
+      .perm-action-btn--accept:hover {
+        background: rgba(16, 185, 129, 0.22);
+        border-color: rgba(16, 185, 129, 0.75);
+        box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+        transform: translateY(-1px);
+      }
+      .perm-action-btn--reject {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.35);
+        color: var(--color-error-soft);
+      }
+      .perm-action-btn--reject:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.7);
+        box-shadow: 0 0 14px rgba(239, 68, 68, 0.2);
+        transform: translateY(-1px);
+      }
+
+      /* ── Status badge (replied cards) ── */
+      .perm-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .perm-status-badge--accepted {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--color-success-soft);
+      }
+      .perm-status-badge--rejected {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--color-error-soft);
+      }
+
+      /* ── Empty state ── */
+      .perm-empty {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        border-radius: 16px;
+        border: 1px dashed var(--border-main);
+        background: rgba(8, 12, 32, 0.3);
+        color: var(--skeleton-shine);
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+      }
+      .perm-empty svg {
+        width: 36px;
+        height: 36px;
+        margin: 0 auto 0.65rem;
+        display: block;
+        opacity: 0.35;
+      }
+
+      /* ── Toast ── */
+      .perm-toast-container {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        pointer-events: none;
+      }
+    </style>
+    <script src="js/admin-guard.js"></script>
+</head>
+  <body class="trainee-app" data-page="admin-permissions">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="perm-wrap">
+      <h1 class="perm-title">إدارة الإذونات</h1>
+      <p class="perm-subtitle">
+        مراجعة طلبات الإذن المُقدَّمة من المتدربين والرد عليها
+      </p>
+
+      <!-- Pending -->
+      <div class="perm-section-title perm-section-title--pending">
+        <span class="perm-section-title__dot"></span>
+        بانتظار الرد
+        <span
+          id="pendingCount"
+          style="
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--theme-btn-color);
+            margin-right: auto;
+          "
+        ></span>
+      </div>
+      <div class="perm-list" id="pendingList"></div>
+
+      <!-- Replied -->
+      <div class="perm-section-title perm-section-title--done">
+        <span class="perm-section-title__dot"></span>
+        تم الرد عليها
+      </div>
+      <div class="perm-list" id="repliedList"></div>
+    </main>
+
+    <div class="perm-toast-container" id="permToastContainer"></div>
+
+    <script src="header/header.js?v=2"></script>
+    <script>
+      setTimeout(function () {
+        var session = {};
+        try {
+          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        } catch (e) {}
+
+        console.log("=== HEADER DEBUG ===");
+        console.log("Session:", session);
+        console.log("Role:", session.role);
+        console.log(
+          "ntaHeader container:",
+          document.getElementById("ntaHeader"),
+        );
+        console.log(
+          "ntaHeader innerHTML length:",
+          (document.getElementById("ntaHeader") || {}).innerHTML?.length,
+        );
+        console.log("homeChip:", document.getElementById("headerHomeChip"));
+        console.log("usersChip:", document.getElementById("headerUsersChip"));
+        console.log(
+          "permissionsChip:",
+          document.getElementById("headerPermissionsChip"),
+        );
+        console.log(
+          "attendanceChip:",
+          document.getElementById("headerAttendanceChip"),
+        );
+
+        var chips = document.querySelectorAll(".nta-header__chip");
+        console.log("Total chips found:", chips.length);
+        chips.forEach(function (c) {
+          console.log(
+            "  chip:",
+            c.id,
+            "| display:",
+            c.style.display,
+            "| data-page:",
+            c.getAttribute("data-page"),
+          );
+        });
+      }, 1000);
+    </script>
+    <script>
+      var permissions = [];
+
+      async function fetchPermissions() {
+        try {
+          const response = await window.authenticatedFetch("/api/permissions");
+          if (response.ok) {
+            permissions = await response.json();
+            renderPermissions();
+          }
+        } catch (err) {
+          console.error("Failed to fetch permissions:", err);
+        }
+      }
+
+      function getTypeColor(type) {
+        if (type === "غياب") return "rgba(239,68,68,0.1)";
+        if (type === "تأخير") return "rgba(245,158,11,0.1)";
+        if (type === "تأجيل") return "rgba(59,130,246,0.1)";
+        if (type === "عدم حضور امتحان") return "rgba(168,85,247,0.1)";
+        return "rgba(99,102,241,0.1)";
+      }
+
+      function renderPermissions() {
+        var pending = permissions.filter(function (p) {
+          return p.status === "pending";
+        });
+        var replied = permissions.filter(function (p) {
+          return p.status !== "pending";
+        });
+
+        var pendingCount = document.getElementById("pendingCount");
+        if (pendingCount) pendingCount.textContent = pending.length || "";
+
+        renderList("pendingList", pending, true);
+        renderList("repliedList", replied, false);
+      }
+
+      function renderList(containerId, list, isPending) {
+        var el = document.getElementById(containerId);
+        if (!list.length) {
+          el.innerHTML =
+            '<div class="perm-empty">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' +
+            (isPending
+              ? "لا توجد إذونات بانتظار الرد"
+              : "لا توجد إذونات مُجابة") +
+            "</div>";
+          return;
+        }
+
+        el.innerHTML = list
+          .map(function (p, idx) {
+            var statusClass = isPending ? "pending" : p.status;
+            var typeClass =
+              p.type === "غياب"
+                ? "absent"
+                : p.type === "تأخير"
+                  ? "late"
+                  : p.type === "مغادرة مبكرة"
+                    ? "early"
+                    : p.type === "تأجيل"
+                      ? "defer"
+                      : p.type === "عدم حضور امتحان"
+                        ? "exam"
+                        : "late";
+            var delay = idx * 0.06;
+
+            var actionsHtml = isPending
+              ? '<div class="perm-card__actions">' +
+                '<button class="perm-action-btn perm-action-btn--accept" onclick="replyPermission(' +
+                p.id +
+                ",'accepted')\">" +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>قبول</button>' +
+                '<button class="perm-action-btn perm-action-btn--reject" onclick="replyPermission(' +
+                p.id +
+                ",'rejected')\">" +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>رفض</button>' +
+                "</div>"
+              : '<div class="perm-card__actions">' +
+                '<span class="perm-status-badge perm-status-badge--' +
+                p.status +
+                '">' +
+                (p.status === "accepted"
+                  ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M20 6L9 17l-5-5"/></svg>مقبول'
+                  : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>مرفوض') +
+                "</span></div>";
+
+            return (
+              '<div class="perm-card perm-card--' +
+              statusClass +
+              '" style="animation-delay:' +
+              delay +
+              's">' +
+              "<div>" +
+              '<div class="perm-card__top">' +
+              '<div class="perm-card__student">' +
+              '<span class="perm-card__name">' +
+              p.studentName +
+              "</span>" +
+              '<span class="perm-card__type perm-card__type--' +
+              typeClass +
+              '">' +
+              p.type +
+              "</span>" +
+              "</div>" +
+              '<div class="perm-card__sub-row">' +
+              '<span class="perm-card__meta-label">الدورة:</span>' +
+              '<span class="perm-card__course">' +
+              p.courseName +
+              "</span>" +
+              "</div>" +
+              '<div class="perm-card__sub-row">' +
+              '<span class="perm-card__meta-label">التاريخ:</span>' +
+              '<span class="perm-card__day">' +
+              p.date +
+              "</span>" +
+              "</div>" +
+              "</div>" +
+              '<div class="perm-card__reason">"' +
+              p.reason +
+              '"</div>' +
+              "</div>" +
+              actionsHtml +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      async function replyPermission(id, status) {
+        try {
+          const response = await window.authenticatedFetch(`/api/permissions/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({ status: status })
+          });
+          
+          if (response.ok) {
+            showPermToast(
+              status === "accepted" ? "تم قبول الإذن بنجاح" : "تم رفض الإذن",
+              status === "accepted" ? "success" : "error",
+            );
+            fetchPermissions();
+          } else {
+            showPermToast("فشل تحديث الحالة — يرجى المحاولة مرة أخرى", "error");
+          }
+        } catch (err) {
+          showPermToast("خطأ في الاتصال بالخادم", "error");
+        }
+      }
+
+      function showPermToast(msg, type) {
+        var ct = document.getElementById("permToastContainer");
+        if (!ct) return;
+        var t = document.createElement("div");
+        t.className = "toast toast--" + (type || "success");
+        var icon =
+          type === "success"
+            ? '<span class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>'
+            : '<span class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>';
+        t.innerHTML = icon + '<span class="toast__text">' + msg + "</span>";
+        ct.appendChild(t);
+        setTimeout(function () {
+          t.style.opacity = "0";
+          t.style.transform = "translateY(-8px)";
+          t.style.transition = "opacity 0.25s,transform 0.25s";
+          setTimeout(function () {
+            if (t.parentNode) t.parentNode.removeChild(t);
+          }, 250);
+        }, 3000);
+      }
+
+      // Guard: admin only
+      (function () {
+        var session = {};
+        try {
+          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        } catch (e) {}
+        if (session.role !== "admin") {
+          window.location.href = "index.html";
+          return;
+        }
+        fetchPermissions();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مراجعة مراحل المتقدم - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css">
+    <link rel="stylesheet" href="header/header.css">
+    <link rel="stylesheet" href="chat/chat.css?v=3">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-portal.css">
+    <link rel="stylesheet" href="admin-theme.css">
+    <link rel="stylesheet" href="admin-stage-review.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="js/admin-guard.js"></script>
+</head>
+
+<body class="trainee-app" data-page="admin-users">
+    <div class="trainee-bg"></div>
+
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+        <div class="admin-hero admin-hero--compact admin-stage-hero">
+            <div class="admin-hero__title-block">
+                <h1 id="stageReviewName">مراجعة مراحل المتقدم</h1>
+                <p class="admin-hero__subtitle" id="stageReviewSubtitle">اختر مرحلة لعرض تفاصيل تقييم المتقدم.</p>
+                <div class="stage-progress-container">
+                    <div class="stage-progress-info">
+                        <span>إجمالي التقدم في الخط</span>
+                        <span class="stage-progress-pct" id="stageProgressPct">0%</span>
+                    </div>
+                    <div class="stage-progress-bar">
+                        <div class="stage-progress-fill" id="stageProgressFill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-stage-hero__right">
+                <button type="button" class="admin-profile__btn admin-profile__btn--secondary" id="stageBackBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
+                        <path d="M20 12H9" />
+                    </svg>
+                    <span>عودة لملف المتدرب</span>
+                </button>
+                <div class="admin-profile-stage">
+                    <div class="admin-profile-stage__info">
+                        <span class="admin-profile-stage__label">المرحلة الحالية</span>
+                        <span class="admin-profile-stage__badge" id="stageReviewCurrent">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="admin-section admin-stage-review">
+            <div class="admin-stage-tabs" id="stageTabs">
+                <button type="button" class="admin-stage-tab admin-stage-tab--active" data-stage="1">
+                    <span class="admin-stage-tab__index">1</span>
+                    <span>الفرز الإلكتروني</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="2">
+                    <span class="admin-stage-tab__index">2</span>
+                    <span>الاستعلام الأمني</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="3">
+                    <span class="admin-stage-tab__index">3</span>
+                    <span>الاختبار النفسي</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="4">
+                    <span class="admin-stage-tab__index">4</span>
+                    <span>اختبارات المعلومات العامة واللغة العربية</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="5">
+                    <span class="admin-stage-tab__index">5</span>
+                    <span>المقابلة الأولى</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="6">
+                    <span class="admin-stage-tab__index">6</span>
+                    <span>المقابلة الثانية</span>
+                </button>
+                <button type="button" class="admin-stage-tab" data-stage="7">
+                    <span class="admin-stage-tab__index">7</span>
+                    <span>القبول النهائي</span>
+                </button>
+            </div>
+
+            <div class="admin-stage-panels">
+                <section class="admin-stage-panel admin-stage-panel--active" data-stage-panel="1">
+                    <h2 class="admin-stage-panel__title">الفرز الإلكتروني</h2>
+                    <p class="admin-stage-panel__subtitle">نتيجة الفرز الإلكتروني الآلي بناءً على بيانات ملف المتدرب.
+                    </p>
+
+                    <div id="stage1Content">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="2">
+                    <h2 class="admin-stage-panel__title">الاستعلام الأمني</h2>
+                    <p class="admin-stage-panel__subtitle">عملية التحقق من الخلفية والاستعلام الأمني.</p>
+
+                    <div class="stage-fields-grid">
+                        <div class="stage-field">
+                            <label class="stage-field__label">نوع الاستعلام</label>
+                            <select class="stage-field__select" data-field="security_type">
+                                <option value="primary">أولي</option>
+                                <option value="detailed">تفصيلي</option>
+                                <option value="criminal">جنائي</option>
+                            </select>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">الجهات المستعلمة</label>
+                            <input type="text" class="stage-field__input" data-field="security_entities" placeholder="أدخل الجهات">
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">مستوى الخطورة</label>
+                            <select class="stage-field__select" data-field="security_risk">
+                                <option value="low">منخفض</option>
+                                <option value="medium">متوسط</option>
+                                <option value="high">مرتفع</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid">
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">اسم المسؤول</span>
+                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
+                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">المرفقات</span>
+                            <div class="stage-upload-box">
+                                <input type="file" class="stage-upload-input" style="display:none">
+                                <button type="button" class="stage-upload-btn">اختر ملف</button>
+                                <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
+                            </div>
+                        </div>
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="3">
+                    <h2 class="admin-stage-panel__title">الاختبار النفسي</h2>
+                    <p class="admin-stage-panel__subtitle">تقييم السمات والقدرات النفسية للمتقدم.</p>
+
+                    <div class="stage-fields-grid">
+                        <div class="stage-field">
+                            <label class="stage-field__label">درجة الذكاء (IQ)</label>
+                            <input type="number" class="stage-field__input" data-field="iq_score" placeholder="أدخل الدرجة">
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">الثبات الانفعالي</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="emotional_stability" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">السمات القيادية</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="leadership_potential" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid">
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">اسم المسؤول</span>
+                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
+                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">المرفقات</span>
+                            <div class="stage-upload-box">
+                                <input type="file" class="stage-upload-input" style="display:none">
+                                <button type="button" class="stage-upload-btn">اختر ملف</button>
+                                <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
+                            </div>
+                        </div>
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="4">
+                    <h2 class="admin-stage-panel__title">اختبارات المعلومات العامة واللغة العربية</h2>
+                    <p class="admin-stage-panel__subtitle">تقييم المعرفة العامة وكفاءة اللغة العربية.</p>
+
+                    <div class="automated-results">
+                        <!-- Arabic Exam -->
+                        <div class="exam-result-box">
+                            <h3 class="exam-result-box__title">اللغة العربية</h3>
+                            <div class="exam-radar-container">
+                                <canvas id="radar-arabic"></canvas>
+                            </div>
+                            <div class="exam-summary-box" id="summary-arabic">بانتظار تأدية الاختبار...</div>
+                        </div>
+
+                        <!-- English Exam -->
+                        <div class="exam-result-box">
+                            <h3 class="exam-result-box__title">اللغة الإنجليزية</h3>
+                            <div class="exam-radar-container">
+                                <canvas id="radar-english"></canvas>
+                            </div>
+                            <div class="exam-summary-box" id="summary-english">بانتظار تأدية الاختبار...</div>
+                        </div>
+
+                        <!-- Public Knowledge Exam -->
+                        <div class="exam-result-box">
+                            <h3 class="exam-result-box__title">المعلومات العامة</h3>
+                            <div class="exam-radar-container">
+                                <canvas id="radar-public_knowledge"></canvas>
+                            </div>
+                            <div class="exam-summary-box" id="summary-public_knowledge">بانتظار تأدية الاختبار...</div>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid stage-review-grid--actions">
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="5">
+                    <h2 class="admin-stage-panel__title">المقابلة الأولى</h2>
+                    <p class="admin-stage-panel__subtitle">تقييم المتقدم في المقابلة الشخصية الأولى.</p>
+
+                    <div class="stage-fields-grid">
+                        <div class="stage-field">
+                            <label class="stage-field__label">أعضاء لجنة المقابلة</label>
+                            <input type="text" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">مهارات التواصل</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">الثقة بالنفس</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">المظهر العام</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid">
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">اسم المسؤول</span>
+                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
+                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">المرفقات</span>
+                            <div class="stage-upload-box">
+                                <input type="file" class="stage-upload-input" style="display:none">
+                                <button type="button" class="stage-upload-btn">اختر ملف</button>
+                                <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
+                            </div>
+                        </div>
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="6">
+                    <h2 class="admin-stage-panel__title">المقابلة الثانية</h2>
+                    <p class="admin-stage-panel__subtitle">تقييم المتقدم في المقابلة الشخصية الثانية (النهائية).</p>
+
+                    <div class="stage-fields-grid">
+                        <div class="stage-field">
+                            <label class="stage-field__label">أعضاء لجنة المقابلة</label>
+                            <input type="text" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">مهارات التواصل</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">الثقة بالنفس</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                        <div class="stage-field">
+                            <label class="stage-field__label">المظهر العام</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="range" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
+                                <span class="stage-score-display">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid">
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">اسم المسؤول</span>
+                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
+                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">المرفقات</span>
+                            <div class="stage-upload-box">
+                                <input type="file" class="stage-upload-input" style="display:none">
+                                <button type="button" class="stage-upload-btn">اختر ملف</button>
+                                <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
+                            </div>
+                        </div>
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-stage-panel" data-stage-panel="7">
+                    <h2 class="admin-stage-panel__title">القبول النهائي</h2>
+                    <p class="admin-stage-panel__subtitle">المرحلة الأخيرة لاعتماد المتقدم كمتدرب رسمي في البرنامج.</p>
+
+                    <div class="stage-fields-grid">
+                        <div class="stage-field">
+                            <label class="stage-field__label">الدورة التدريبية</label>
+                            <select class="stage-field__select" id="assignedCourse" data-field="assigned_course_id">
+                                <option value="">جاري تحميل الدورات...</option>
+                            </select>
+                        </div>
+                        <div class="stage-field" id="batchSelectContainer" style="display:none">
+                            <label class="stage-field__label">الدفعة</label>
+                            <select class="stage-field__select" id="assignedBatch" data-field="assigned_batch_id">
+                                <option value="">اختر الدفعة...</option>
+                            </select>
+                        </div>
+                        <div class="stage-field" id="stageSelectContainer" style="display:none">
+                            <label class="stage-field__label">المرحلة</label>
+                            <select class="stage-field__select" id="assignedStage" data-field="assigned_stage_id">
+                                <option value="">اختر المرحلة...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="stage-review-grid" style="grid-template-columns: 1fr 2fr;">
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">اسم المسؤول</span>
+                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                        </div>
+                        <div class="stage-review-card">
+                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
+                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                        </div>
+                        <div class="stage-review-card stage-review-card--final">
+                            <span class="stage-review-card__label">النتيجة النهائية</span>
+                            <div class="stage-review-status">
+                                <button type="button" class="stage-status-btn stage-status-btn--secondary"
+                                    data-status="rejected">
+                                    <span class="stage-status-btn__icon">✖</span>
+                                    <span>(Rejected) رفض</span>
+                                </button>
+                                <button type="button"
+                                    class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
+                                    data-status="active">
+                                    <span class="stage-status-btn__icon">✔</span>
+                                    <span>(Active) قبول واعتماد</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div id="chatWidget"></div>
+
+    <script src="header/header.js?v=3"></script>
+    <script>
+        (function () {
+            var session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+            if (session.role !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            var params = new URLSearchParams(window.location.search);
+            var traineeId = parseInt(params.get('id') || '0', 10);
+            window.traineeId = traineeId;  // expose for triggerStage1AI
+            var currentStageId = parseInt(params.get('stage') || '1', 10);
+
+            function ntaCssVar(name) {
+                return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+            }
+
+            function scoreBadgeHtml(score) {
+                var cls = 's1-score-badge s1-score-badge--low';
+                if (score >= 80) cls = 's1-score-badge s1-score-badge--high';
+                else if (score >= 50) cls = 's1-score-badge s1-score-badge--mid';
+                return '<span class="' + cls + '">' + score + '% Match</span>';
+            }
+
+            // -- Unified Dropdown Notification System (Toast) --
+            window.showDropdownMessage = function (msg, isError = true) {
+                let toastContainer = document.getElementById('globalToastContainer');
+                if (!toastContainer) {
+                    toastContainer = document.createElement('div');
+                    toastContainer.id = 'globalToastContainer';
+                    toastContainer.className = 'global-toast-container';
+                    document.body.appendChild(toastContainer);
+                }
+                const toast = document.createElement('div');
+                toast.className = 'reg-toast ' + (isError ? 'reg-toast--error' : 'reg-toast--success');
+                toast.innerHTML = `<span style="font-size:1.25rem;">${isError ? '⚠️' : '✅'}</span><div style="flex:1;line-height:1.5;">${msg}</div><button type="button" class="reg-toast__close">&times;</button>`;
+                toast.querySelector('button').onclick = () => { toast.style.opacity = '0'; toast.style.transform = 'translateY(-20px)'; setTimeout(() => toast.remove(), 300); };
+                toastContainer.appendChild(toast);
+                requestAnimationFrame(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; });
+                setTimeout(() => { if (toast.parentElement) toast.querySelector('button').click(); }, 6000);
+            };
+
+            var stages = [
+                { id: 1, label: 'الفرز الإلكتروني' },
+                { id: 2, label: 'الاستعلام الأمني' },
+                { id: 3, label: 'الاختبار النفسي' },
+                { id: 4, label: 'اختبارات المعلومات العامة واللغة العربية' },
+                { id: 5, label: 'المقابلة الأولى' },
+                { id: 6, label: 'المقابلة الثانية' },
+                { id: 7, label: 'القبول النهائي' }
+            ];
+
+            let trainee = null;
+            let traineeApp = null;
+            let reviews = [];
+            let allCourses = [];
+
+            function fetchTraineeData() {
+                window.authenticatedFetch(`/api/admin/trainees/${traineeId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        trainee = data.user;
+                        traineeApp = data.application;
+                        trainee.stage = data.user.current_stage_id || 1;
+                        renderInfo();
+                        fetchCourses();
+                    })
+                    .catch(err => console.error("Error fetching trainee data:", err));
+            }
+
+            function fetchCourses() {
+                window.authenticatedFetch('/api/courses')
+                    .then(res => res.json())
+                    .then(data => {
+                        allCourses = data;
+                        populateCourseDropdown();
+                    })
+                    .catch(err => console.error("Error fetching courses:", err));
+            }
+
+            function populateCourseDropdown() {
+                const select = document.getElementById('assignedCourse');
+                if (!select) return;
+                
+                select.innerHTML = '<option value="">اختر الدورة...</option>';
+                allCourses.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.title_ar || c.title;
+                    select.appendChild(opt);
+                });
+
+                // Pre-fill if trainee already has an application
+                if (traineeApp && traineeApp.course_id) {
+                    select.value = traineeApp.course_id;
+                    handleCourseChange(traineeApp.course_id);
+                }
+            }
+
+            function handleCourseChange(courseId) {
+                const course = allCourses.find(c => c.id == courseId);
+                const batchCont = document.getElementById('batchSelectContainer');
+                const stageCont = document.getElementById('stageSelectContainer');
+                const batchSelect = document.getElementById('assignedBatch');
+                const stageSelect = document.getElementById('assignedStage');
+
+                if (!course) {
+                    batchCont.style.display = 'none';
+                    stageCont.style.display = 'none';
+                    return;
+                }
+
+                // Handle Batches
+                const batches = course.batch_data || {};
+                const batchKeys = Object.keys(batches);
+                if (batchKeys.length > 0) {
+                    batchCont.style.display = 'block';
+                    batchSelect.innerHTML = '<option value="">اختر الدفعة...</option>';
+                    batchKeys.forEach(key => {
+                        const opt = document.createElement('option');
+                        opt.value = key;
+                        opt.textContent = key; // Use the key (e.g. 'Batch 1')
+                        batchSelect.appendChild(opt);
+                    });
+                } else {
+                    batchCont.style.display = 'none';
+                }
+
+                // Handle Stages
+                const stagesList = course.stages || [];
+                if (stagesList.length > 0) {
+                    stageCont.style.display = 'block';
+                    stageSelect.innerHTML = '<option value="">اختر المرحلة...</option>';
+                    stagesList.forEach((s, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = idx + 1;
+                        opt.textContent = s.name_ar || s.name;
+                        stageSelect.appendChild(opt);
+                    });
+                } else {
+                    stageCont.style.display = 'none';
+                }
+            }
+
+            document.getElementById('assignedCourse')?.addEventListener('change', (e) => {
+                handleCourseChange(e.target.value);
+            });
+
+            function fetchReviews() {
+                window.authenticatedFetch(`/api/admin/reviews/${traineeId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        reviews = data;
+                        renderReviews();
+                    })
+                    .catch(err => console.error("Error fetching reviews:", err));
+            }
+
+            function renderInfo() {
+                if (!trainee) return;
+                document.getElementById('stageReviewName').textContent = trainee.full_name_ar;
+                document.getElementById('stageReviewCurrent').textContent = stages.find(s => s.id === (trainee.stage || 1))?.label || '—';
+                
+                // Update Progress Bar
+                const pct = trainee.progress_percentage || 0;
+                document.getElementById('stageProgressPct').textContent = pct + '%';
+                document.getElementById('stageProgressFill').style.width = pct + '%';
+            }
+
+            function renderReviews() {
+                document.querySelectorAll('.admin-stage-panel').forEach(panel => {
+                    const stageId = parseInt(panel.getAttribute('data-stage-panel'));
+                    const review = reviews.find(r => r.stage_id === stageId);
+                    if (review) {
+                        const container = panel.querySelector('.stage-review-status');
+                        if (container) {
+                            container.style.display = 'none';
+                            const result = document.createElement('div');
+                            const isAccept = review.result === 'Active';
+                            result.className = 'stage-review-status-result ' + (isAccept ? 'stage-review-status-result--accept' : 'stage-review-status-result--reject');
+                            
+                            let attachmentHtml = "";
+                            if (review.attachment_path) {
+                                attachmentHtml = `
+                                    <div class="stage-attachment-box">
+                                        <a href="/${review.attachment_path}" target="_blank" class="s1-ai-link">
+                                            <span>📎 عرض المرفق</span>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                                        </a>
+                                    </div>
+                                `;
+                            }
+
+                            result.innerHTML = `
+                                <div>${isAccept ? 'تم قبول المتقدم في هذه المرحلة.' : 'تم رفض المتقدم في هذه المرحلة.'}</div>
+                                ${attachmentHtml}
+                            `;
+                            container.parentNode.appendChild(result);
+                        }
+                        const reviewerInput = panel.querySelector('.stage-review-input[placeholder="اسم المسؤول"]');
+                        if (reviewerInput) reviewerInput.value = review.reviewer_name;
+                        const notesArea = panel.querySelector('.stage-review-textarea');
+                        if (notesArea) notesArea.value = review.notes;
+
+                        // Populate Stage-Specific Fields
+                        if (review.details) {
+                            Object.keys(review.details).forEach(key => {
+                                const input = panel.querySelector(`[data-field="${key}"]`);
+                                if (input) {
+                                    input.value = review.details[key];
+                                    // Trigger range update if it's a range input
+                                    if (input.type === 'range' && input.nextElementSibling) {
+                                        input.nextElementSibling.textContent = input.value;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            // wire upload buttons for all stages
+            document.querySelectorAll('.stage-upload-box').forEach(box => {
+                const btn = box.querySelector('.stage-upload-btn');
+                const input = box.querySelector('.stage-upload-input');
+                const text = box.querySelector('.stage-upload-text');
+                if (!btn || !input || !text) return;
+
+                btn.addEventListener('click', () => {
+                    input.click();
+                });
+
+                input.addEventListener('change', () => {
+                    if (input.files && input.files.length > 0) {
+                        let valid = true;
+                        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                        for (let i = 0; i < input.files.length; i++) {
+                            const file = input.files[i];
+                            if (!allowedTypes.includes(file.type)) {
+                                window.showDropdownMessage(`الفورمات غير مدعوم للملف ${file.name}. يرجى التأكد من رفع ملفات بصيغة PDF, JPG, أو PNG فقط.`, true);
+                                valid = false;
+                                break;
+                            }
+                            if (file.size > 10 * 1024 * 1024) {
+                                window.showDropdownMessage(`حجم الملف كبير جداً (${file.name}). الحد الأقصى لحجم الملف هو 10 ميجابايت لجميع المرفقات.`, true);
+                                valid = false;
+                                break;
+                            }
+                        }
+
+                        if (!valid) {
+                            input.value = '';
+                            text.textContent = 'ارفع التقارير أو صور المستندات هنا';
+                            return;
+                        }
+
+                        text.textContent = input.files.length === 1
+                            ? 'تم اختيار ملف: ' + input.files[0].name
+                            : 'تم اختيار ' + input.files.length + ' ملفات';
+                    } else {
+                        text.textContent = 'ارفع التقارير أو صور المستندات هنا';
+                    }
+                });
+            });
+
+            // wire accept/reject buttons
+            document.querySelectorAll('.stage-status-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const panel = btn.closest('.admin-stage-panel');
+                    const stageId = parseInt(panel.getAttribute('data-stage-panel'));
+                    const status = btn.getAttribute('data-status');
+                    const isAccept = status === 'active';
+
+                    const reviewerName = panel.querySelector('.stage-review-input[placeholder="اسم المسؤول"]')?.value || "";
+                    const notes = panel.querySelector('.stage-review-textarea')?.value || "";
+                    const fileInput = panel.querySelector('.stage-upload-input');
+                    
+                    // 1. Mandatory Field Validation for Non-Automated Stages (2,3,5,6)
+                    if (![1, 4].includes(stageId)) {
+                        let missingFields = [];
+                        panel.querySelectorAll('[data-field]').forEach(input => {
+                            if (!input.value || input.value === "" || (input.type === 'number' && isNaN(input.value))) {
+                                const label = input.closest('.stage-field')?.querySelector('.stage-field__label')?.textContent || "حقل مفقود";
+                                missingFields.push(label);
+                            }
+                        });
+                        
+                        if (missingFields.length > 0) {
+                            window.showDropdownMessage('يرجى ملء جميع الحقول المطلوبة قبل اتخاذ القرار: ' + missingFields.join('، '), true);
+                            return;
+                        }
+
+                        if (!reviewerName) {
+                            window.showDropdownMessage('يرجى إدخال اسم المراجع', true);
+                            return;
+                        }
+                    }
+
+                    // 2. Mandatory Rejection Reason
+                    if (!isAccept && !notes) {
+                        window.showDropdownMessage('يرجى إدخال سبب الرفض في خانة الملاحظات', true);
+                        return;
+                    }
+
+                    // 3. Stage 7: course must be selected before accepting
+                    if (stageId === 7 && isAccept) {
+                        const courseSelect = document.getElementById('assignedCourse');
+                        if (!courseSelect || !courseSelect.value) {
+                            window.showDropdownMessage('يرجى اختيار الدورة التدريبية قبل القبول', true);
+                            return;
+                        }
+                    }
+
+                    // Custom confirm — no native confirm()
+                    const _confirmMsg = isAccept ? 'تأكيد القبول؟ سيتم ترقية المتدرب للمرحلة التالية.' : 'تأكيد الرفض؟ لا يمكن التراجع عن هذا القرار.';
+                    const _overlay = document.createElement('div');
+                    _overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
+                    _overlay.innerHTML = '<div style="background:#0f1628;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:2rem 2.5rem;max-width:400px;width:90%;font-family:Tajawal,sans-serif;text-align:center;">'
+                      + '<p style="color:#e2e8f0;font-size:1rem;font-weight:600;margin:0 0 1.5rem;">' + _confirmMsg + '</p>'
+                      + '<div style="display:flex;gap:0.75rem;justify-content:center;">'
+                      + '<button id="_srConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid ' + (isAccept ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)') + ';background:' + (isAccept ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)') + ';color:' + (isAccept ? '#6ee7b7' : '#fca5a5') + ';font-weight:700;cursor:pointer;font-family:inherit;font-size:0.9rem;">تأكيد</button>'
+                      + '<button id="_srConfirmCancel" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#94a3b8;font-weight:600;cursor:pointer;font-family:inherit;font-size:0.9rem;">إلغاء</button>'
+                      + '</div></div>';
+                    document.body.appendChild(_overlay);
+                    _overlay.querySelector('#_srConfirmCancel').onclick = () => document.body.removeChild(_overlay);
+                    _overlay.querySelector('#_srConfirmOk').onclick = () => {
+                      document.body.removeChild(_overlay);
+                      _doSubmit();
+                    };
+
+                    const _doSubmit = () => {
+                    const submitReview = (attachmentPath) => {
+                        // Collect Stage-Specific Details
+                        const details = {};
+                        panel.querySelectorAll('[data-field]').forEach(input => {
+                            details[input.getAttribute('data-field')] = input.value;
+                        });
+
+                        const payload = {
+                            trainee_id: traineeId,
+                            stage_id: stageId,
+                            reviewer_id: session.userId || 1,
+                            result: isAccept ? 'Active' : 'Rejected',
+                            reviewer_name: reviewerName || (stageId === 4 ? 'النظام الآلي' : ''),
+                            notes: notes,
+                            attachment_path: attachmentPath,
+                            details: details
+                        };
+
+                        window.authenticatedFetch('/api/admin/stage-review', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (stageId === 7 && isAccept) {
+                                    window.showDropdownMessage('تم قبول المتدرب وإلحاقه بالدورة التدريبية بنجاح ✓', false);
+                                    setTimeout(() => {
+                                        window.location.href = `admin-profile.html?id=${traineeId}`;
+                                    }, 1800);
+                                } else {
+                                    window.showDropdownMessage(data.message || 'تم تحديث حالة المرحلة بنجاح', false);
+                                    fetchReviews();
+                                }
+                            })
+                            .catch(err => window.showDropdownMessage("حدث خطأ أثناء الاتصال بالخادم: " + err, true));
+                    };
+
+                    // Handle file upload first if file exists
+                    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                        const formData = new FormData();
+                        formData.append('file', fileInput.files[0]);
+                        formData.append('folder', 'review_attachment');
+                        
+                        window.authenticatedFetch('/api/admin/upload', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.file_path) {
+                                submitReview(data.file_path);
+                            } else {
+                                throw new Error('Failed to upload attachment');
+                            }
+                        })
+                        .catch(err => window.showDropdownMessage("خطأ في رفع الملف: " + err.message, true));
+                    } else {
+                        submitReview("");
+                    }
+                    }; // end _doSubmit
+                });
+            });
+
+            document.getElementById('stageBackBtn').addEventListener('click', () => {
+                window.location.href = `admin-profile.html?id=${traineeId}`;
+            });
+
+            function activateStage(stageId) {
+                document.querySelectorAll('.admin-stage-tab').forEach(btn => {
+                    btn.classList.toggle('admin-stage-tab--active', btn.getAttribute('data-stage') === String(stageId));
+                });
+                document.querySelectorAll('.admin-stage-panel').forEach(panel => {
+                    panel.classList.toggle('admin-stage-panel--active', panel.getAttribute('data-stage-panel') === String(stageId));
+                });
+                if (String(stageId) === "4") loadExamResults(traineeId);
+            }
+
+            function loadExamResults(tid) {
+                window.authenticatedFetch(`/api/exams/results/${tid}`)
+                    .then(res => res.json())
+                    .then(results => {
+                        const subjects = ['arabic', 'english', 'public_knowledge'];
+                        subjects.forEach(sub => {
+                            const res = results.find(r => r.subject === sub);
+                            if (res && res.processed_results) {
+                                renderRadarChart(`radar-${sub}`, res.processed_results.density);
+                                document.getElementById(`summary-${sub}`).textContent = res.processed_results.summary;
+                            } else {
+                                document.getElementById(`summary-${sub}`).textContent = "لم يتم تأدية هذا الاختبار بعد.";
+                                // Clear chart if exists
+                                if (window.charts && window.charts[`radar-${sub}`]) {
+                                    window.charts[`radar-${sub}`].destroy();
+                                    delete window.charts[`radar-${sub}`];
+                                }
+                            }
+                        });
+                    })
+                    .catch(err => console.error("Error loading exam results:", err));
+            }
+
+            function renderRadarChart(canvasId, density) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                const labels = Object.keys(density);
+                const values = Object.values(density);
+
+                if (!window.charts) window.charts = {};
+                if (window.charts[canvasId]) window.charts[canvasId].destroy();
+
+                var accent = ntaCssVar('--accent');
+                var accentRgb = ntaCssVar('--accent-glow');
+                var gridLine = ntaCssVar('--surface-glass-border');
+                var labelColor = ntaCssVar('--text-muted');
+
+                window.charts[canvasId] = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Density (%)',
+                            data: values,
+                            backgroundColor: accentRgb,
+                            borderColor: accent,
+                            borderWidth: 2,
+                            pointBackgroundColor: accent,
+                            pointBorderColor: ntaCssVar('--text-on-accent')
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                angleLines: { color: gridLine },
+                                grid: { color: gridLine },
+                                pointLabels: { color: labelColor, font: { size: 10 } },
+                                ticks: { display: false, stepSize: 20 },
+                                min: 0,
+                                max: 100
+                            }
+                        },
+                        plugins: { legend: { display: false } },
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            document.getElementById('stageTabs').addEventListener('click', e => {
+                const btn = e.target.closest('.admin-stage-tab');
+                if (btn) activateStage(btn.getAttribute('data-stage'));
+            });
+
+            fetchTraineeData();
+            fetchReviews();
+            activateStage(currentStageId);
+
+            // ── Stage 1: AI Verification Integration ──
+
+            function renderStage1() {
+                const el = document.getElementById('stage1Content');
+                if (!el) return;
+
+                el.innerHTML = `<div class="s1-ai-intro">
+                    <div class="trainee-loader"></div>
+                    <p class="s1-ai-loading">جاري تحميل نتائج التحقق من الهوية...</p>
+                </div>`;
+
+                window.authenticatedFetch(`/api/admin/ai-verification/${traineeId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data) {
+                            renderStage1Empty();
+                        } else {
+                            renderStage1Result(data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error fetching AI result:", err);
+                        renderStage1Empty();
+                    });
+            }
+
+            function renderStage1Empty() {
+                const el = document.getElementById('stage1Content');
+                el.innerHTML = `
+                    <div class="s1-ai-card s1-ai-intro">
+                        <div class="s1-ai-intro__icon">🤖</div>
+                        <h3 class="s1-ai-intro__title">نظام الفرز الإلكتروني الشامل</h3>
+                        <p class="s1-ai-intro__desc">سيقوم النظام بالتحقق من الهوية، السيرة الذاتية، والشهادات التعليمية بشكل آلي.</p>
+                        <button class="s1-ai-btn" id="runAIBtn">بدء الفرز الإلكتروني (4 مراحل)</button>
+                    </div>
+                `;
+                document.getElementById('runAIBtn').onclick = triggerStage1AI;
+            }
+
+            function getScoreBadge(score) {
+                return scoreBadgeHtml(score);
+            }
+
+            function renderStage1Result(result) {
+                const el = document.getElementById('stage1Content');
+                const details = result.details || {};
+                const judge = result.judge || 'Rejected';
+                const isMatch = judge === 'Accepted';
+                
+                el.innerHTML = `
+                    <div class="s1-results-container">
+                        <!-- Summary Card -->
+                        <div class="s1-summary-header ${isMatch ? 's1-ai-result--match' : 's1-ai-result--reject'}">
+                            <div style="font-size: 2.5rem;">${isMatch ? '✅' : '❌'}</div>
+                            <div style="flex: 1;">
+                                <h3 class="s1-ai-text" style="margin: 0;">قرار النظام: ${isMatch ? 'مقبول مبدئياً' : 'مرفوض آلياً'}</h3>
+                                <p class="s1-ai-muted" style="margin: 0.5rem 0 0;">متوسط درجة المطابقة: ${result.confidence}% | الحالة: ${isMatch ? 'اجتياز' : 'عدم اجتياز'}</p>
+                            </div>
+                            <div style="text-align: left;">
+                                <button class="admin-profile__btn admin-profile__btn--secondary" id="reRunAIBtn">إعادة الفرز</button>
+                            </div>
+                        </div>
+
+                        <!-- 1. Identity Card -->
+                        <div class="s1-review-card">
+                            <div class="s1-card-head">
+                                <div>
+                                    <h4 class="s1-ai-section-title">1. التحقق من الهوية (Identity)</h4>
+                                    <p class="s1-ai-section-desc">مطابقة البيانات المستخرجة من البطاقة/الجواز مع البيانات المسجلة.</p>
+                                </div>
+                                <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('idScan')">عرض المستند</button>
+                            </div>
+                            <div class="s1-card-body">
+                                ${Object.entries(details.identity?.match_results || {}).map(([key, val]) => `
+                                    <div class="s1-field-row">
+                                        <span class="s1-ai-muted" style="text-transform: capitalize;">${key.replace('_', ' ')}</span>
+                                        <div class="s1-field-pair">
+                                            <span class="s1-ai-text" style="font-size: 0.9rem;">${val.ai || '—'}</span>
+                                            ${getScoreBadge(val.score)}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- 2. Professional Card -->
+                        <div class="s1-review-card">
+                            <div class="s1-card-head">
+                                <div>
+                                    <h4 class="s1-ai-section-title">2. الفحص المهني (Professional CV)</h4>
+                                    <p class="s1-ai-section-desc">مطابقة محتوى السيرة الذاتية مع الخبرات والمهارات المدخلة.</p>
+                                </div>
+                                <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('cvResume')">عرض السيرة الذاتية</button>
+                            </div>
+                            <div class="s1-card-body">
+                                <div class="s1-ai-body">
+                                    ${details.professional?.status === 'Matched' ? '✅ تم العثور على توافق تام بين السيرة الذاتية والبيانات المدخلة.' : '⚠️ تم العثور على بعض الاختلافات أو نقص في التفاصيل المذكورة.'}
+                                    <div class="s1-field-pair" style="margin-top: 10px;">
+                                        <strong>درجة الثقة:</strong> ${getScoreBadge(details.professional?.confidence || 0)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Education Card -->
+                        <div class="s1-review-card">
+                            <div class="s1-card-head">
+                                <div>
+                                    <h4 class="s1-ai-section-title">3. التدقيق الأكاديمي (Education)</h4>
+                                    <p class="s1-ai-section-desc">التحقق من صحة الشهادات المرفوعة ومطابقتها للمؤهل المعلن.</p>
+                                </div>
+                                <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('graduationCertificate')">عرض الشهادة</button>
+                            </div>
+                            <div class="s1-card-body">
+                                <div class="s1-ai-body">
+                                    <strong>الحالة:</strong> <span class="${details.education?.status === 'Verified' ? 's1-ai-verified' : 's1-ai-pending'}">${details.education?.status || 'N/A'}</span>
+                                    <br>
+                                    <strong>التقييم:</strong> ${getScoreBadge(details.education?.confidence || 0)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Summary -->
+                        <div class="s1-review-card s1-ai-card--summary">
+                            <h4 class="s1-ai-summary-title">4. ملخص تقييم الذكاء الاصطناعي</h4>
+                            <div class="s1-ai-summary-body">
+                                ${result.summary}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('reRunAIBtn').onclick = triggerStage1AI;
+            }
+
+            function triggerStage1AI() {
+                // Show Processing Modal
+                const modal = document.createElement('div');
+                modal.className = 's1-process-modal';
+                modal.innerHTML = `
+                    <div class="s1-process-content">
+                        <div class="s1-spinner"></div>
+                        <h3 id="s1StatusMsg">جاري بدء عملية الفرز...</h3>
+                        <div class="s1-progress-bar">
+                            <div id="s1ProgressBar" style="width: 0%"></div>
+                        </div>
+                        <p id="s1SubMsg" class="s1-ai-loading" style="margin-top: 10px;">يرجى الانتظار، قد تستغرق هذه العملية حتى 40 ثانية.</p>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                let traineeId = window.traineeId;  // set at page init from URL params
+                let courseId = window.courseId || 1;
+
+                const pollStatus = () => {
+                    window.authenticatedFetch(`/api/ai/admission/status/${traineeId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'processing' || data.status === 'starting') {
+                                document.getElementById('s1StatusMsg').textContent = data.message || 'جاري المعالجة...';
+                                document.getElementById('s1ProgressBar').style.width = (data.progress || 0) + '%';
+                                setTimeout(pollStatus, 2000);
+                            } else if (data.status === 'completed') {
+                                document.body.removeChild(modal);
+                                window.showDropdownMessage('تم انتهاء الفرز الإلكتروني بنجاح', false);
+                                renderStage1();
+                            } else if (data.status === 'failed') {
+                                document.body.removeChild(modal);
+                                window.showDropdownMessage(data.message || 'فشل الفرز الآلي', true);
+                            }
+                        })
+                        .catch(err => {
+                            document.body.removeChild(modal);
+                            window.showDropdownMessage('خطأ في الاتصال بالخادم', true);
+                        });
+                };
+
+                window.authenticatedFetch(`/api/ai/admission/full-check?trainee_id=${traineeId}&course_id=${courseId}`, { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        pollStatus();
+                    })
+                    .catch(err => {
+                        document.body.removeChild(modal);
+                        window.showDropdownMessage(err.message, true);
+                    });
+            }
+
+            window.viewTraineeDoc = function(docType) {
+                if (!trainee || !trainee.documents) return;
+                const docs = trainee.documents;
+                const path = docs[docType];
+                if (path) {
+                    window.open(`/${path}`, '_blank');
+                } else {
+                    window.showDropdownMessage('المستند غير متوفر', true);
+                }
+            };
+
+            renderStage1();
+        })();
+    </script>
+    <script src="chat/chat.js"></script>
+</body>
+
+</html>

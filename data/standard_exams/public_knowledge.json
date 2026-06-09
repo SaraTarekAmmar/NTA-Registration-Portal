@@ -1,0 +1,166 @@
+{
+  "title": "Public Knowledge & General Culture Exam",
+  "durationMinutes": 30,
+  "passingScore": 60,
+  "questions": [
+    {
+      "number": 1,
+      "type": "choose",
+      "question": "What is the capital city of Egypt?",
+      "options": ["Alexandria", "Luxor", "Cairo", "Giza"],
+      "correct_answer": "Cairo",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "A1", "Topic": "Capitals" }
+    },
+    {
+      "number": 2,
+      "type": "choose",
+      "question": "Who was the first President of the United States?",
+      "options": ["Abraham Lincoln", "George Washington", "Thomas Jefferson", "John Adams"],
+      "correct_answer": "George Washington",
+      "metadata": { "Pillar": "History", "CEFR_Level": "A2", "Topic": "World History" }
+    },
+    {
+      "number": 3,
+      "type": "choose",
+      "question": "Which planet is known as the Red Planet?",
+      "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+      "correct_answer": "Mars",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A1", "Topic": "Astronomy" }
+    },
+    {
+      "number": 4,
+      "type": "choose",
+      "question": "What is the largest ocean on Earth?",
+      "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+      "correct_answer": "Pacific Ocean",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "A1", "Topic": "Oceans" }
+    },
+    {
+      "number": 5,
+      "type": "choose",
+      "question": "Which gas do plants absorb from the atmosphere for photosynthesis?",
+      "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+      "correct_answer": "Carbon Dioxide",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A2", "Topic": "Biology" }
+    },
+    {
+      "number": 6,
+      "type": "choose",
+      "question": "In which year did World War II end?",
+      "options": ["1918", "1939", "1945", "1950"],
+      "correct_answer": "1945",
+      "metadata": { "Pillar": "History", "CEFR_Level": "B1", "Topic": "Modern History" }
+    },
+    {
+      "number": 7,
+      "type": "choose",
+      "question": "Who wrote the play 'Romeo and Juliet'?",
+      "options": ["Charles Dickens", "William Shakespeare", "Mark Twain", "Leo Tolstoy"],
+      "correct_answer": "William Shakespeare",
+      "metadata": { "Pillar": "Culture", "CEFR_Level": "A2", "Topic": "Literature" }
+    },
+    {
+      "number": 8,
+      "type": "choose",
+      "question": "What is the chemical symbol for water?",
+      "options": ["O2", "H2O", "CO2", "NaCl"],
+      "correct_answer": "H2O",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A1", "Topic": "Chemistry" }
+    },
+    {
+      "number": 9,
+      "type": "choose",
+      "question": "Which country is famous for the Great Barrier Reef?",
+      "options": ["Brazil", "Australia", "Thailand", "Canada"],
+      "correct_answer": "Australia",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "A2", "Topic": "World Landmarks" }
+    },
+    {
+      "number": 10,
+      "type": "choose",
+      "question": "Who painted the Mona Lisa?",
+      "options": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+      "correct_answer": "Leonardo da Vinci",
+      "metadata": { "Pillar": "Culture", "CEFR_Level": "B1", "Topic": "Art History" }
+    },
+    {
+      "number": 11,
+      "type": "choose",
+      "question": "What is the fastest land animal?",
+      "options": ["Lion", "Cheetah", "Horse", "Eagle"],
+      "correct_answer": "Cheetah",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A1", "Topic": "Zoology" }
+    },
+    {
+      "number": 12,
+      "type": "choose",
+      "question": "Which organ in the human body is responsible for pumping blood?",
+      "options": ["Lungs", "Brain", "Liver", "Heart"],
+      "correct_answer": "Heart",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A1", "Topic": "Anatomy" }
+    },
+    {
+      "number": 13,
+      "type": "choose",
+      "question": "What is the currency used in Japan?",
+      "options": ["Dollar", "Euro", "Yen", "Pound"],
+      "correct_answer": "Yen",
+      "metadata": { "Pillar": "Culture", "CEFR_Level": "A2", "Topic": "Economics" }
+    },
+    {
+      "number": 14,
+      "type": "choose",
+      "question": "Which continent is known as the 'Dark Continent'?",
+      "options": ["Asia", "Africa", "South America", "Antarctica"],
+      "correct_answer": "Africa",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "B1", "Topic": "Continents" }
+    },
+    {
+      "number": 15,
+      "type": "true or false",
+      "question": "Sound travels faster than light.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "A2", "Topic": "Physics" }
+    },
+    {
+      "number": 16,
+      "type": "true or false",
+      "question": "The Great Wall of China is visible from the Moon with the naked eye.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "metadata": { "Pillar": "Culture", "CEFR_Level": "B1", "Topic": "General Myths" }
+    },
+    {
+      "number": 17,
+      "type": "true or false",
+      "question": "Mount Everest is the highest mountain in the world.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "A1", "Topic": "Mountains" }
+    },
+    {
+      "number": 18,
+      "type": "true or false",
+      "question": "The Amazon Rainforest is located in Africa.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "metadata": { "Pillar": "Geography", "CEFR_Level": "A2", "Topic": "Ecosystems" }
+    },
+    {
+      "number": 19,
+      "type": "true or false",
+      "question": "Diamond is the hardest natural substance on Earth.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "metadata": { "Pillar": "Science", "CEFR_Level": "B1", "Topic": "Geology" }
+    },
+    {
+      "number": 20,
+      "type": "text",
+      "question": "In your opinion, what is the most important invention of the 21st century and why?",
+      "correct_answer": "N/A",
+      "metadata": { "Pillar": "Culture/Logic", "CEFR_Level": "B2", "Topic": "Critical Thinking" }
+    }
+  ]
+}

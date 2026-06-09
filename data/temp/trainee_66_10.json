@@ -1,0 +1,79 @@
+[
+  {
+    "account": {
+      "full_name_ar": "طارق سيد الباز",
+      "full_name_en": "Tarek Sayed El-Baz",
+      "national_id": "29207051000014"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Strategic Planning",
+          "category": "military_civil",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Crisis Management",
+          "category": "military_civil",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "GIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Decision Support Systems",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "القيادة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الانضباط",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الضغط",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "ممتاز",
+          "major": "القيادة والإدارة",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2014-01-01",
+          "institution": "الأكاديمية العسكرية"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "رئيس العمليات",
+          "startDate": "2021-01-01",
+          "department": "General Command",
+          "organization": "Ministry of Defense"
+        }
+      ],
+      "professional_summary": {
+        "yearsExperience": 8,
+        "objective": "نقل الخبرة العسكرية إلى القطاع المدني"
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully",
+        "goal": "Not specified"
+      },
+      "quiz_scores": {}
+    }
+  }
+]

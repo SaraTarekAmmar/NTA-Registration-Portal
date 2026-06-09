@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-05-11T15:37:17.731936",
+    "trace_id": "beb923d6-1655-470e-a8cb-9ee7f77fc479",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/courses",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 14
+  }
+]

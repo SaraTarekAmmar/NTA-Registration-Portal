@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تأكيد القرار - لوحة تحكم المشرف</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/admin-guard.js"></script>
+    <style>
+      .final-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 80px);
+        padding: 2rem;
+      }
+      .final-card {
+        max-width: 540px;
+        width: 100%;
+        background: rgba(8,12,32,0.65);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      }
+      .final-icon {
+        width: 76px; height: 76px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.2rem;
+      }
+      .final-icon--accept  { background: rgba(16,185,129,0.15); border: 2px solid rgba(16,185,129,0.4); }
+      .final-icon--reject  { background: rgba(239,68,68,0.15);  border: 2px solid rgba(239,68,68,0.4); }
+      .final-icon--trainee { background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.4); }
+      .final-icon--perm    { background: rgba(16,185,129,0.15); border: 2px solid rgba(16,185,129,0.4); }
+      .final-candidate {
+        display: inline-block;
+        padding: 0.3rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 700;
+        background: rgba(99,102,241,0.12);
+        border: 1px solid rgba(99,102,241,0.3);
+        color: #a5b4fc;
+        margin-bottom: 1rem;
+      }
+      .final-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.6rem; }
+      .final-sub   { font-size: 0.92rem; color: var(--text-subtle); margin: 0 0 0.4rem; line-height: 1.65; }
+      .final-detail { font-size: 0.85rem; color: var(--text-subtle); margin: 0 0 2rem; }
+      .final-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+        padding: 0.65rem 1.4rem; border-radius: 10px; font-size: 0.86rem; font-weight: 700;
+        font-family: inherit; cursor: pointer; border: 1px solid transparent;
+        transition: all 0.2s; text-decoration: none;
+      }
+      .btn--primary {
+        background: linear-gradient(135deg,rgba(99,102,241,0.25),rgba(99,102,241,0.1));
+        border-color: rgba(99,102,241,0.4); color: #a5b4fc;
+      }
+      .btn--primary:hover { background: rgba(99,102,241,0.25); border-color: rgba(99,102,241,0.6); }
+      .btn--secondary {
+        background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); color: var(--text-subtle);
+      }
+      .btn--secondary:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
+    </style>
+  </head>
+  <body class="trainee-app">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <div class="final-wrap">
+      <div class="final-card">
+        <div class="final-icon" id="finalIcon">✅</div>
+
+        <div class="final-candidate" id="candidateName" style="display:none;"></div>
+
+        <h1 class="final-title" id="finalTitle">تمت العملية بنجاح</h1>
+        <p class="final-sub"  id="finalSub"></p>
+        <p class="final-detail" id="finalDetail"></p>
+
+        <div class="final-actions" id="finalActions"></div>
+      </div>
+    </div>
+
+    <script src="header/header.js"></script>
+    <script>
+      (function(){
+        var p = new URLSearchParams(window.location.search);
+        var action    = p.get("action")    || "accept_stage";
+        var candidate = p.get("candidate") || "";
+        var stage     = p.get("stage")     || "";
+        var course    = p.get("course")    || "";
+        var traineeId = p.get("trainee_id")|| "";
+
+        var icon    = document.getElementById("finalIcon");
+        var nameEl  = document.getElementById("candidateName");
+        var title   = document.getElementById("finalTitle");
+        var sub     = document.getElementById("finalSub");
+        var detail  = document.getElementById("finalDetail");
+        var actions = document.getElementById("finalActions");
+
+        if (candidate) {
+          nameEl.textContent = candidate;
+          nameEl.style.display = "inline-block";
+        }
+
+        function btn(href, label, cls) {
+          return '<a href="'+href+'" class="btn '+cls+'">'+label+'</a>';
+        }
+
+        if (action === "accept_stage") {
+          icon.className = "final-icon final-icon--accept";
+          icon.textContent = "✅";
+          title.textContent = "تم قبول المرحلة بنجاح";
+          sub.textContent   = stage ? "تم ترقية المتقدم إلى " + stage + "." : "تم ترقية المتقدم للمرحلة التالية.";
+          actions.innerHTML =
+            btn("admin-users.html",   "العودة لقائمة المرشحين", "btn--secondary") +
+            (traineeId ? btn("admin-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--primary") : "");
+
+        } else if (action === "reject") {
+          icon.className = "final-icon final-icon--reject";
+          icon.textContent = "❌";
+          title.textContent = "تم رفض المتقدم";
+          sub.textContent   = "تم تحديث حالة المتقدم إلى مرفوض.";
+          actions.innerHTML =
+            btn("admin-users.html",   "العودة لقائمة المرشحين", "btn--primary") +
+            (traineeId ? btn("admin-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--secondary") : "");
+
+        } else if (action === "final_acceptance") {
+          icon.className = "final-icon final-icon--trainee";
+          icon.textContent = "🎓";
+          title.textContent = "تم القبول النهائي";
+          sub.textContent   = "المتقدم الآن متدرب نشط.";
+          detail.textContent = course ? "الدورة المُعيَّنة: " + course : "";
+          actions.innerHTML =
+            btn("admin-trainees.html", "عرض المتدربين",       "btn--primary") +
+            btn("admin.html",          "العودة للوحة التحكم", "btn--secondary");
+
+        } else if (action === "approve_permission") {
+          icon.className = "final-icon final-icon--perm";
+          icon.textContent = "✅";
+          title.textContent = "تمت الموافقة على الطلب";
+          sub.textContent   = "تم تحديث حالة الطلب إلى موافق عليه.";
+          actions.innerHTML = btn("admin-permissions.html", "العودة للطلبات", "btn--secondary");
+
+        } else if (action === "reject_permission") {
+          icon.className = "final-icon final-icon--reject";
+          icon.textContent = "❌";
+          title.textContent = "تم رفض الطلب";
+          sub.textContent   = "تم تحديث حالة الطلب إلى مرفوض.";
+          actions.innerHTML = btn("admin-permissions.html", "العودة للطلبات", "btn--secondary");
+
+        } else {
+          title.textContent = "تمت العملية بنجاح";
+          actions.innerHTML = btn("admin.html", "العودة للوحة التحكم", "btn--secondary");
+        }
+      })();
+    </script>
+  </body>
+</html>

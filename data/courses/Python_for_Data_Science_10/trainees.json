@@ -1,0 +1,191 @@
+[
+  {
+    "trainee_id": 65,
+    "name_ar": "رانيا يوسف البيطار",
+    "name_en": "Rania Youssef El-Baytar",
+    "technical_skills": [
+      {
+        "name": "Hospital Administration",
+        "category": "health_management",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Health Policy",
+        "category": "health_management",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "HIS Systems",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "SAP",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "القيادة بالقدوة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "إدارة الأزمات",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "التواصل",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "مدير عمليات",
+        "startDate": "2021-01-01",
+        "department": "مستشفى القصر العيني",
+        "organization": "Ministry of Higher Education"
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "امتياز",
+        "major": "Computer Engineering",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2020-01-01",
+        "institution": "جامعة القاهرة"
+      }
+    ],
+    "motivation": {}
+  },
+  {
+    "trainee_id": 66,
+    "name_ar": "طارق سيد الباز",
+    "name_en": "Tarek Sayed El-Baz",
+    "technical_skills": [
+      {
+        "name": "Strategic Planning",
+        "category": "military_civil",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Crisis Management",
+        "category": "military_civil",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "GIS",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Decision Support Systems",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "القيادة",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "الانضباط",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "إدارة الضغط",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "رئيس العمليات",
+        "startDate": "2021-01-01",
+        "department": "General Command",
+        "organization": "Ministry of Defense"
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "ممتاز",
+        "major": "القيادة والإدارة",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2014-01-01",
+        "institution": "الأكاديمية العسكرية"
+      }
+    ],
+    "motivation": {}
+  },
+  {
+    "trainee_id": 67,
+    "name_ar": "منى عاطف زهران",
+    "name_en": "Mona Atef Zahran",
+    "technical_skills": [
+      {
+        "name": "Environmental Assessment",
+        "category": "environment",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "Sustainability",
+        "category": "environment",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "ArcGIS",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      },
+      {
+        "name": "ENVI",
+        "category": "tools",
+        "proficiency": "Intermediate"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "الوعي البيئي",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "البحث العلمي",
+        "category": "General",
+        "proficiency": "Advanced"
+      },
+      {
+        "name": "نشر المعرفة",
+        "category": "General",
+        "proficiency": "Advanced"
+      }
+    ],
+    "professional_history": [
+      {
+        "jobTitle": "",
+        "startDate": "",
+        "department": "",
+        "organization": ""
+      }
+    ],
+    "academic_history": [
+      {
+        "gpa": "امتياز",
+        "major": "إدارة الموارد الطبيعية",
+        "degree": "مؤهل عالي (Higher Degree)",
+        "ranking": "Top 15%",
+        "gradYear": "2018-01-01",
+        "institution": "جامعة القاهرة"
+      }
+    ],
+    "motivation": {}
+  }
+]

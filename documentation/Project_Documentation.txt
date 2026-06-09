@@ -1,0 +1,130 @@
+================================================================================
+  NTA REGISTRATION PORTAL - MASTER TECHNICAL DOCUMENTATION & EXECUTION GUIDE
+  ================================================================================
+  Company: National Training Academy (NTA)
+  Version: 5.0 (Super Admin AI Proxy Integrated)
+  Status: FINAL DELIVERY + AI ENHANCED
+  Last Updated: 2026-04-22
+  
+  --------------------------------------------------------------------------------
+  1. PROJECT OVERVIEW
+  --------------------------------------------------------------------------------
+  The NTA Registration Portal is a secure, bilingual (Arabic/English) platform 
+  designed to manage trainee registrations and recruitment workflows. The 
+  architecture is localized into three independent components to ensure 
+  modularity, security, and AI scalability.
+  
+  --------------------------------------------------------------------------------
+  2. DIRECTORY STRUCTURE
+  --------------------------------------------------------------------------------
+  - /user          : Trainee Portal (Frontend + FastAPI Backend). Port 7771.
+  - /admin         : Management Portal (Frontend + FastAPI Backend). Port 8002.
+  - /superadmin    : Super Admin AI Proxy (FastAPI Backend). Port 8003.
+  - /documentation : Technical manuals, schema guides, and testing credentials.
+  - /deploy        : Deployment scripts, database initialization, and seeding tools.
+  - /AI Services   : Specialized microservices for Face Rec, OCR, and Analysis.
+  
+  --------------------------------------------------------------------------------
+  3. PREREQUISITES & ENVIRONMENT
+  --------------------------------------------------------------------------------
+  - OS: Windows (Optimized for PowerShell/CMD) or Linux (Ubuntu/CentOS).
+  - Language: Python 3.10+
+  - Database: MySQL 8.0+
+  - Environment Setup (Windows): deploy/setup_tools.bat
+  
+  Each portal has a `backend/.env` file containing:
+  - DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
+  - AI Microservice Port Registry (for SuperAdmin)
+  
+  --------------------------------------------------------------------------------
+  4. EXECUTION GUIDE (LOCAL & REMOTE SETUP)
+  --------------------------------------------------------------------------------
+  
+  OPTION A: ONE-CLICK MASTER START (Recommended)
+  - Script: deploy/RUN_SYSTEM.bat
+  - Action: Double-click to auto-create venvs, install deps, init DB, and launch all 3 services.
+  - Launches: 
+    - User Portal (7771)
+    - Admin Portal (8002)
+    - Super Admin AI Proxy (8003)
+  
+  OPTION B: HEADLESS/SSH MODE (Linux/Remote)
+  - Command: `python3 deploy/run_system.py --headless`
+  - Action: Runs servers in the background and binds to 0.0.0.0.
+  
+  --------------------------------------------------------------------------------
+  5. SYSTEM HEALTH CHECK (API ENDPOINTS)
+  --------------------------------------------------------------------------------
+  
+  USER PORTAL (port 7771):
+    GET  http://localhost:7771/                     → 200 (Login page)
+    GET  http://localhost:7771/api/skills/tree      → 200 (Skills DB)
+  
+  ADMIN PORTAL (port 8002):
+    GET  http://localhost:8002/                         → 200 (Login page)
+    GET  http://localhost:8002/api/admin/trainees       → 200 (requires admin JWT)
+  
+  SUPER ADMIN AI PROXY (port 8003):
+    GET  http://localhost:8003/                         → 200 (Status: ONLINE)
+    POST http://localhost:8003/api/attendance/webhook    → 200 (Webhook Listener)
+  
+  --------------------------------------------------------------------------------
+  6. SECURITY & UTILITIES
+  --------------------------------------------------------------------------------
+  - Environment Setup: deploy/setup_tools.bat
+  - Database Initialization: deploy/init_db.py
+  - Unified Logging System: Centralized `activity_logs` table for traffic, security, and audit trails.
+  - Schema Flexibility: `registration_extra` JSON field + `ai_verification_results` table.
+  
+  --------------------------------------------------------------------------------
+  7. CORE DOCUMENTATION SUITE
+  --------------------------------------------------------------------------------
+  - credentials.txt        : Accounts & Startup Commands.
+  - database_structure.txt : Schema & JSON field mapping.
+  - workflows.md           : Detailed Roles & Workflow click-by-click guide.
+  
+  --------------------------------------------------------------------------------
+  8. AI INTEGRATION & SUPER ADMIN ARCHITECTURE
+  --------------------------------------------------------------------------------
+  The portal employs a Producer-Consumer AI model to handle high-latency tasks:
+  - **Producer (Super Admin)**: Dispatches tasks to AI microservices via Port 8003 Proxy and persists results into the central database.
+  - **Consumer (Admin/User)**: Fetches pre-processed AI data (OCR flags, clustering reports) from the database via fast REST endpoints.
+  
+  AI Microservice Port Registry (Status Managed by Super Admin):
+  - 2341: Face Engine (Biometrics & Enrollment)
+  - 2343: Electronic Sorting (4-Phase AI Admission Audit)
+  - 2345: Quiz Engine (vLLM Sequential Batch Generation)
+  - 2346: Course Analytics (Statistical Insights)
+  - 7834: Requirement Analyzer (Skill Gap Analysis Hub)
+
+  Additional Administrative Controls:
+  - Dynamic Quiz Access: Granular deadline management via the `quiz_access_overrides` table, 
+    allowing Super Admins to prioritize specific trainee access over global session rules.
+  - Duration Governance: Time-based availability controls (in hours) persisted at generation.
+  
+  --------------------------------------------------------------------------------
+  9. COURSE APPLICATION & REGISTRATION WORKFLOW
+  --------------------------------------------------------------------------------
+  [Existing content on registration validation, social media rules, upload hardening, etc.]
+  
+  --------------------------------------------------------------------------------
+  10. UNIVERSAL FILE UPLOAD SYSTEM
+  --------------------------------------------------------------------------------
+  - Storage Strategy: Physical files in `uploads/`, paths in DB JSON fields.
+  - Core Utility: `core/upload_manager.py`.
+  
+  --------------------------------------------------------------------------------
+  11. LLM-SUPPORTED CHATBOT
+  --------------------------------------------------------------------------------
+  - Role-Based Logic for Trainees, Admins, and Editors.
+  - Tech Stack: FastAPI + Singleton ChatEngine + Google Gemini.
+  
+  --------------------------------------------------------------------------------
+  12. KNOWN SECURITY GAPS (PENDING FUTURE WORK)
+  --------------------------------------------------------------------------------
+  A. TRAINEE AUTHENTICATION (National ID as plain-text password)
+  B. CORS POLICY (Currently allows all origins)
+  C. HTTPS ENFORCEMENT (Currently runs over HTTP)
+  
+  ================================================================================
+  EOF

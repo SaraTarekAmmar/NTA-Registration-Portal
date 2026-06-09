@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة تحكم المحرر - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="dashboard">
+    <div id="editorSidebar"></div>
+
+    <main class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">لوحة تحكم المحرر</h1>
+        <p class="editor-page-header__sub">نظرة عامة على المحتوى التعليمي والدورات</p>
+      </div>
+
+      <!-- Banner for errors -->
+      <div id="dashboardBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18A9 9 0 0112 3z"/></svg>
+        <span id="dashboardBannerText"></span>
+        <button type="button" onclick="loadDashboard()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="editor-kpi-row" id="kpiRow">
+        <div class="editor-kpi" onclick="window.location.href='editor-courses.html'">
+          <div class="editor-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="kpiTotal">—</div>
+            <div class="editor-kpi__lbl">إجمالي الدورات</div>
+          </div>
+        </div>
+
+        <a href="editor-courses.html?status=draft" class="editor-kpi" style="text-decoration:none;">
+          <div class="editor-kpi__icon" style="background:rgba(234,179,8,0.12);border-color:rgba(234,179,8,0.25);color:#fde68a;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="kpiDraft">—</div>
+            <div class="editor-kpi__lbl">مسودات</div>
+          </div>
+        </a>
+
+        <a href="editor-courses.html?status=published" class="editor-kpi" style="text-decoration:none;">
+          <div class="editor-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="kpiPublished">—</div>
+            <div class="editor-kpi__lbl">منشورة</div>
+          </div>
+        </a>
+
+        <a href="editor-courses.html?status=archived" class="editor-kpi" style="text-decoration:none;">
+          <div class="editor-kpi__icon" style="background:rgba(100,116,139,0.12);border-color:rgba(100,116,139,0.25);color:#94a3b8;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          </div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="kpiArchived">—</div>
+            <div class="editor-kpi__lbl">مؤرشفة</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display:flex;gap:0.75rem;margin-bottom:2rem;flex-wrap:wrap;">
+        <a href="editor-course-form.html" class="btn btn--primary btn--lg">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          إنشاء دورة جديدة
+        </a>
+        <a href="editor-courses.html" class="btn btn--secondary btn--lg">عرض كل الدورات</a>
+      </div>
+
+      <!-- Recent courses -->
+      <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0 0 1rem;">آخر الدورات المحدّثة</h2>
+
+      <div id="recentState" class="editor-state" style="display:none;">
+        <div class="editor-state__icon">📚</div>
+        <div class="editor-state__title" id="recentStateTitle">جاري التحميل...</div>
+        <div class="editor-state__text" id="recentStateText"></div>
+      </div>
+
+      <div class="editor-cards-grid" id="recentCourses" style="display:none;"></div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      function statusBadge(status) {
+        var map = {
+          draft: ["مسودة", "draft"],
+          published: ["منشورة", "published"],
+          archived: ["مؤرشفة", "archived"]
+        };
+        var s = map[status] || [status, "draft"];
+        return '<span class="editor-course-card__badge editor-course-card__badge--' + s[1] + '">' + s[0] + '</span>';
+      }
+
+      function loadDashboard() {
+        document.getElementById("dashboardBanner").style.display = "none";
+        document.getElementById("recentState").style.display = "flex";
+        document.getElementById("recentStateTitle").textContent = "جاري التحميل...";
+        document.getElementById("recentStateText").textContent = "";
+        document.getElementById("recentCourses").style.display = "none";
+
+        authFetch("/api/courses")
+          .then(function(r) {
+            if (!r.ok) throw new Error("فشل تحميل البيانات");
+            return r.json();
+          })
+          .then(function(courses) {
+            // KPIs
+            var total = courses.length;
+            var draft = courses.filter(function(c){return c.status==="draft"||!c.status;}).length;
+            var published = courses.filter(function(c){return c.status==="published";}).length;
+            var archived = courses.filter(function(c){return c.status==="archived";}).length;
+
+            document.getElementById("kpiTotal").textContent = total;
+            document.getElementById("kpiDraft").textContent = draft;
+            document.getElementById("kpiPublished").textContent = published;
+            document.getElementById("kpiArchived").textContent = archived;
+
+            if (courses.length === 0) {
+              document.getElementById("recentState").style.display = "flex";
+              document.getElementById("recentStateTitle").textContent = "لا توجد دورات بعد";
+              document.getElementById("recentStateText").textContent = "أنشئ أول دورة للبدء.";
+              return;
+            }
+
+            var recent = courses.slice(0, 6);
+            var html = "";
+            recent.forEach(function(c) {
+              html += '<div class="editor-course-card">';
+              html += '<h3 class="editor-course-card__title">' + (c.title_ar || c.title || "بدون عنوان") + '</h3>';
+              html += '<div class="editor-course-card__meta">' + statusBadge(c.status || "draft") + '</div>';
+              html += '<div class="editor-course-card__stats">';
+              if (c.duration_weeks) html += '<span>' + c.duration_weeks + ' أسابيع</span>';
+              if (c.total_sessions) html += '<span>' + c.total_sessions + ' جلسة</span>';
+              html += '</div>';
+              html += '<div class="editor-course-card__actions">';
+              html += '<a href="editor-course-form.html?id=' + c.id + '" class="btn btn--secondary btn--sm">تعديل</a>';
+              html += '<a href="editor-preview.html?id=' + c.id + '" class="btn btn--secondary btn--sm">معاينة</a>';
+              html += '</div></div>';
+            });
+
+            document.getElementById("recentCourses").innerHTML = html;
+            document.getElementById("recentCourses").style.display = "grid";
+            document.getElementById("recentState").style.display = "none";
+          })
+          .catch(function(err) {
+            document.getElementById("dashboardBanner").style.display = "flex";
+            document.getElementById("dashboardBannerText").textContent = "تعذّر تحميل الصفحة. " + (err.message || "");
+            document.getElementById("recentState").style.display = "none";
+          });
+      }
+
+      loadDashboard();
+    </script>
+  </body>
+</html>

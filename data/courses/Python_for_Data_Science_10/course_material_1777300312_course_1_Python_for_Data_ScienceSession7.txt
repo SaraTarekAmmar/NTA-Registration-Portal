@@ -1,0 +1,112 @@
+Session 7: Statistical Analysis with Pandas
+
+Welcome to Week 4! This week is all about Exploratory Data Analysis (EDA). Before we can visualize data or build models, we need to understand the underlying statistical properties of our variables. Pandas provides a robust suite of tools to calculate descriptive statistics and identify relationships between variables.
+
+1. Descriptive Statistics Recap
+
+While we've used .describe(), it's important to know how to call specific metrics and understand what they tell us about data distribution.
+
+import pandas as pd
+import numpy as np
+
+# Sample Data: Exam scores for two different classes
+data = {
+    'Class_A': [85, 88, 90, 78, 92, 85, 100, 70, 85, 95],
+    'Class_B': [60, 95, 80, 85, 70, 75, 90, 85, 80, 100]
+}
+df = pd.DataFrame(data)
+
+# Central Tendency
+print(f"Mean: {df['Class_A'].mean()}")
+print(f"Median: {df['Class_A'].median()}")
+print(f"Mode: {df['Class_A'].mode()[0]}")
+
+# Dispersion
+print(f"Variance: {df['Class_A'].var()}")
+print(f"Std Deviation: {df['Class_A'].std()}")
+
+
+2. Quantiles and Percentiles
+
+Quantiles help us understand the distribution of data beyond just the average. The Interquartile Range (IQR) is a common method for identifying outliers.
+
+# Calculate the 25th, 50th, and 75th percentiles
+quantiles = df['Class_A'].quantile([0.25, 0.5, 0.75])
+print(quantiles)
+
+# Calculating IQR
+iqr = quantiles[0.75] - quantiles[0.25]
+print(f"Interquartile Range: {iqr}")
+
+
+3. Correlation and Covariance
+
+In Data Science, we often ask: Does variable X affect variable Y? * Correlation (.corr()): Measures the strength and direction of a linear relationship (values between -1 and 1).
+
+Covariance (.cov()): Indicates the direction of the linear relationship between variables.
+
+# Measuring relationship between Class A and Class B scores
+correlation = df['Class_A'].corr(df['Class_B'])
+print(f"Correlation: {correlation:.2f}")
+
+# Correlation Matrix (for entire DataFrames)
+print(df.corr())
+
+
+4. Value Counts and Unique Values
+
+Essential for categorical data analysis.
+
+# Create categorical data
+colors = pd.Series(['Red', 'Blue', 'Red', 'Green', 'Blue', 'Blue'])
+
+print(colors.unique())        # Distinct values
+print(colors.nunique())       # Count of distinct values
+print(colors.value_counts())  # Frequency of each value
+
+
+5. Identifying Outliers (The Z-Score approach)
+
+A common statistical task is identifying data points that are "too far" from the mean.
+
+# Simple outlier detection (more than 2 standard deviations away)
+mean = df['Class_A'].mean()
+std = df['Class_A'].std()
+
+outliers = df[(df['Class_A'] > mean + 2*std) | (df['Class_A'] < mean - 2*std)]
+print("Outliers in Class A:")
+print(outliers)
+
+
+Hands-on Exercise: Analyzing Housing Data
+
+Task:
+
+Create a DataFrame simulating housing data:
+
+house_data = {
+    'Price': [250000, 300000, 280000, 450000, 200000, 800000, 310000, 290000],
+    'SqFt': [1500, 1800, 1600, 2400, 1200, 4500, 1750, 1700],
+    'Bedrooms': [3, 3, 3, 4, 2, 5, 3, 3],
+    'City': ['NY', 'NY', 'LA', 'LA', 'CHI', 'NY', 'CHI', 'LA']
+}
+df_houses = pd.DataFrame(house_data)
+
+
+Basic Stats: Find the mean and median Price. Is the mean higher than the median? (This suggests "skewness").
+
+Correlation: Calculate the correlation between SqFt and Price. Is there a strong relationship?
+
+Categorical: Which City has the most listings in this dataset?
+
+Outlier Detection: Using the IQR method (1.5 * IQR), check if the $800,000 house is considered a statistical outlier for this price list.
+
+Summary Checklist
+
+[ ] Can you explain the difference between Correlation and Covariance?
+
+[ ] Do you know how to calculate the 90th percentile of a column?
+
+[ ] Can you identify outliers using the Standard Deviation or IQR method?
+
+Next Session: Midterm Project Launch! You will apply everything from Week 1-4 to a real-world dataset.

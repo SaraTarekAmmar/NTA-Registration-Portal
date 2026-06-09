@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المواد التعليمية - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="materials">
+    <div id="editorSidebar"></div>
+    <main class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">المواد التعليمية</h1>
+        <p class="editor-page-header__sub">رفع وإدارة ملفات الدورات</p>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+      </div>
+
+      <!-- Upload area -->
+      <div class="editor-upload-area" id="uploadArea"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleDrop(event)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40" style="margin-bottom:0.75rem;opacity:0.6;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+        </svg>
+        <p style="margin:0 0 0.5rem;font-weight:700;color:var(--text-main);">اسحب الملفات هنا أو انقر للاختيار</p>
+        <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('fileInput').click()">اختر ملفات</button>
+        <p style="margin:0.6rem 0 0;font-size:0.75rem;color:var(--text-subtle);">PDF, Word, PowerPoint, MP4 — أقصى حجم 50MB لكل ملف</p>
+        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.mp4,.ppt,.pptx" style="display:none;" onchange="handleFiles(this.files)" />
+      </div>
+
+      <!-- Upload progress -->
+      <div id="uploadProgress" style="display:none;margin-top:1rem;">
+        <div style="font-size:0.84rem;color:var(--text-subtle);margin-bottom:0.4rem;" id="uploadProgressLabel">جاري الرفع...</div>
+        <div class="upload-progress"><div class="upload-progress__fill" id="uploadProgressFill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Materials list -->
+      <div style="margin-top:1.75rem;">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0 0 1rem;">الملفات المرفوعة</h2>
+        <div id="loadingState" class="editor-state">
+          <div class="editor-state__icon">⏳</div>
+          <div class="editor-state__title">جاري التحميل...</div>
+        </div>
+        <div id="emptyState" class="editor-state" style="display:none;">
+          <div class="editor-state__icon">📂</div>
+          <div class="editor-state__title">لا توجد مواد بعد</div>
+          <div class="editor-state__text">ارفع أول ملف باستخدام المنطقة أعلاه.</div>
+        </div>
+        <div id="materialsList"></div>
+      </div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var uploadedMaterials = [];
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById("uploadArea").classList.remove("dragover");
+        handleFiles(e.dataTransfer.files);
+      }
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1048576) return (bytes/1024).toFixed(1) + " KB";
+        return (bytes/1048576).toFixed(1) + " MB";
+      }
+
+      function handleFiles(files) {
+        var allowed = ["application/pdf","application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "video/mp4","application/vnd.ms-powerpoint",
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation"];
+        var validFiles = [];
+        Array.from(files).forEach(function(f) {
+          if (f.size > 50*1024*1024) {
+            showEditorToast("الملف أكبر من 50MB: " + f.name, "error"); return;
+          }
+          if (allowed.indexOf(f.type) === -1 && f.type !== "") {
+            showEditorToast("نوع غير مدعوم: " + f.name, "error"); return;
+          }
+          validFiles.push(f);
+        });
+        if (!validFiles.length) return;
+        uploadFiles(validFiles);
+      }
+
+      function uploadFiles(files) {
+        var prog = document.getElementById("uploadProgress");
+        var fill = document.getElementById("uploadProgressFill");
+        var label = document.getElementById("uploadProgressLabel");
+        prog.style.display = "block";
+        fill.style.width = "0%";
+        label.textContent = "جاري رفع " + files.length + " ملف...";
+
+        var done = 0;
+        function next() {
+          if (done >= files.length) {
+            prog.style.display = "none";
+            showEditorToast("تم رفع " + files.length + " ملف بنجاح.", "success");
+            renderMaterials();
+            return;
+          }
+          var f = files[done];
+          var fd = new FormData();
+          fd.append("file", f);
+          fd.append("folder", "materials");
+          var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+          fetch("/api/admin/upload", {
+            method:"POST",
+            headers: {"Authorization": "Bearer " + token},
+            body: fd
+          })
+          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(data) {
+            uploadedMaterials.push({ name: f.name, size: formatSize(f.size), path: data.file_path, date: new Date().toLocaleDateString("ar-EG") });
+            done++;
+            fill.style.width = Math.round(done/files.length*100) + "%";
+            label.textContent = "تم رفع " + done + " من " + files.length;
+            next();
+          })
+          .catch(function() {
+            uploadedMaterials.push({ name: f.name, size: formatSize(f.size), path: null, date: new Date().toLocaleDateString("ar-EG") });
+            done++;
+            fill.style.width = Math.round(done/files.length*100) + "%";
+            next();
+          });
+        }
+        next();
+      }
+
+      function renderMaterials() {
+        document.getElementById("loadingState").style.display = "none";
+        var list = document.getElementById("materialsList");
+        if (!uploadedMaterials.length) {
+          document.getElementById("emptyState").style.display = "flex";
+          list.innerHTML = "";
+          return;
+        }
+        document.getElementById("emptyState").style.display = "none";
+        var html = '<div class="editor-table-wrap"><table class="editor-table"><thead><tr>' +
+          '<th>اسم الملف</th><th>الحجم</th><th>تاريخ الرفع</th><th>الإجراءات</th>' +
+          '</tr></thead><tbody>';
+        uploadedMaterials.forEach(function(m, i) {
+          html += '<tr><td>' + m.name + '</td><td>' + m.size + '</td><td>' + m.date + '</td>';
+          html += '<td style="display:flex;gap:0.5rem;">';
+          html += '<button type="button" class="btn btn--secondary btn--sm" onclick="deleteMaterial('+i+')">حذف</button>';
+          html += '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+        list.innerHTML = html;
+      }
+
+      function deleteMaterial(idx) {
+        editorConfirm({
+          title: "حذف المادة؟",
+          body: "أنت على وشك حذف: <strong>" + uploadedMaterials[idx].name + "</strong><br>لا يمكن التراجع عن هذا الإجراء.",
+          okLabel: "حذف المادة",
+          cancelLabel: "إلغاء",
+          danger: true
+        }).then(function(ok) {
+          if (ok) {
+            uploadedMaterials.splice(idx, 1);
+            renderMaterials();
+            showEditorToast("تم حذف الملف.", "success");
+          }
+        });
+      }
+
+      // Initial render
+      document.getElementById("loadingState").style.display = "none";
+      renderMaterials();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+Session 1: Python Review for Data Science
+
+Welcome to the first session! Before we dive into heavy data libraries like Pandas and NumPy, we must ensure our "Core Python" skills are sharp. Data science often requires writing efficient, readable, and functional code to transform raw data.
+
+1. List Comprehensions
+
+List comprehensions provide a concise way to create lists. In data science, we use them constantly for cleaning strings or transforming data columns.
+
+Syntax: [expression for item in iterable if condition]
+
+Example:
+
+# Traditional way
+squares = []
+for x in range(10):
+    squares.append(x**2)
+
+# List comprehension way
+squares = [x**2 for x in range(10)]
+
+# With a condition (Only even squares)
+even_squares = [x**2 for x in range(10) if x % 2 == 0]
+
+
+2. Lambda Functions
+
+Lambda functions are small, anonymous functions defined with the lambda keyword. They are most useful when passed as arguments to functions like map(), filter(), or Pandas .apply().
+
+Example:
+
+# A function that adds 10 to a number
+add_ten = lambda x: x + 10
+print(add_ten(5)) # Output: 15
+
+# Used in sorting (sorting a list of tuples by the second element)
+data = [("Apple", 15), ("Banana", 7), ("Cherry", 20)]
+data.sort(key=lambda x: x[1])
+print(data) # Output: [('Banana', 7), ('Apple', 15), ('Cherry', 20)]
+
+
+3. Decorators (Brief Overview)
+
+Decorators are a way to modify the behavior of a function without changing its source code. In data science, they are often used for logging, timing execution, or authentication.
+
+Example: A Simple Timer Decorator
+
+import time
+
+def timer_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Execution time of {func.__name__}: {end_time - start_time:.4f} seconds")
+        return result
+    return wrapper
+
+@timer_decorator
+def heavy_computation():
+    return sum(range(10**7))
+
+heavy_computation()
+
+
+4. Map, Filter, and Reduce
+
+These functional programming tools are essential for data transformation.
+
+map(func, seq): Applies a function to all items in an input list.
+
+filter(func, seq): Filters elements of a sequence based on a boolean condition.
+
+Example:
+
+numbers = [1, 2, 3, 4, 5, 6]
+
+# Convert all numbers to strings
+str_nums = list(map(str, numbers))
+
+# Keep only numbers greater than 3
+big_nums = list(filter(lambda x: x > 3, numbers))
+
+
+Hands-on Exercise: Data Cleaning Simulation
+
+Imagine you have a list of messy user data from a web form. Your task is to clean it using the concepts above.
+
+The Data:
+
+raw_users = [
+    {"name": "  alice ", "email": "ALICE@gmail.com", "age": 25},
+    {"name": "bob", "email": "bob@outlook.com", "age": 17},
+    {"name": " CHARLIE  ", "email": "charlie@yahoo.com", "age": 30},
+    {"name": "dave", "email": "dave@gmail.com", "age": 15}
+]
+
+
+Task:
+
+Use a list comprehension to create a new list where names are stripped of whitespace and capitalized.
+
+Use filter to only include users who are 18 or older (adults).
+
+Use map with a lambda to ensure all emails are lowercase.
+
+Summary Checklist
+
+[ ] Can you explain the difference between a list comprehension and a for-loop?
+
+[ ] Do you know when to use a lambda vs. a def function?
+
+[ ] Can you read a basic decorator without feeling intimidated?
+
+Next Session: We move into the world of NumPy to handle numerical arrays!

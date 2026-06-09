@@ -1,0 +1,131 @@
+Session 9: Visual Storytelling with Matplotlib
+
+Welcome to Week 5! You’ve spent the first half of the course mastering data manipulation and statistics. Now, we enter the world of Data Visualization. Visualization is not just about making pretty pictures; it is a critical tool for identifying patterns, trends, and outliers that are invisible in raw tables.
+
+Today, we focus on Matplotlib, the "grandfather" of Python visualization libraries upon which almost all other tools (like Seaborn) are built.
+
+1. The Anatomy of a Figure
+
+To master Matplotlib, you must understand its hierarchy. Think of it like a painting:
+
+Figure: The entire canvas or page.
+
+Axes: An individual plot or graph (a Figure can contain multiple Axes).
+
+Axis: The x and y lines, including ticks and labels.
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Basic plot creation
+plt.plot([1, 2, 3, 4], [10, 20, 25, 30])
+plt.show()
+
+
+2. Basic Plot Types
+
+Different data requires different plots. Here are the four "Essential Four":
+
+Line Plots (Trends over time)
+
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+plt.plot(x, y, label='Sine Wave', color='blue', linestyle='--')
+plt.title("Simple Line Plot")
+plt.legend()
+plt.show()
+
+
+Scatter Plots (Relationships/Correlations)
+
+x = np.random.randn(50)
+y = np.random.randn(50)
+
+plt.scatter(x, y, alpha=0.5, c='red')
+plt.xlabel("Variable X")
+plt.ylabel("Variable Y")
+plt.show()
+
+
+Bar Charts (Categorical Comparisons)
+
+categories = ['A', 'B', 'C', 'D']
+values = [15, 30, 45, 10]
+
+plt.bar(categories, values, color='teal')
+plt.show()
+
+
+Histograms (Distributions)
+
+data = np.random.normal(100, 20, 1000)
+plt.hist(data, bins=30, edgecolor='black')
+plt.show()
+
+
+3. Customizing Your Plot
+
+A plot without labels is just a squiggle. Always include the "Big Three":
+
+Title: plt.title("Descriptive Title")
+
+Labels: plt.xlabel() and plt.ylabel()
+
+Legend: plt.legend() (requires a label argument in the plot function).
+
+plt.plot(x, y, label="Revenue")
+plt.title("Monthly Revenue 2023", fontsize=14)
+plt.xlabel("Month")
+plt.ylabel("USD ($)")
+plt.grid(True, linestyle=':', alpha=0.6)
+plt.legend()
+plt.show()
+
+
+4. Subplots: Multiple Plots in One Figure
+
+Sometimes you need to compare different views of the data side-by-side.
+
+# Create a grid of 1 row, 2 columns
+fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+
+ax[0].plot(x, y)
+ax[0].set_title("Plot 1")
+
+ax[1].scatter(x, y)
+ax[1].set_title("Plot 2")
+
+plt.tight_layout() # Prevents overlapping
+plt.show()
+
+
+Hands-on Exercise: Stock Price Visualization
+
+Task:
+
+Create a simulated dataset for a week (7 days) of stock prices:
+
+Days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+Tech_Stock: [150, 155, 152, 160, 158, 162, 165]
+
+Oil_Stock: [80, 78, 79, 75, 74, 72, 70]
+
+Line Plot: Plot both stocks on the same graph. Use different colors and markers (e.g., 'o' for dots).
+
+Labels: Add a title "Weekly Stock Performance", X-axis label "Day of Week", and Y-axis label "Price (USD)".
+
+Comparison: Use plt.fill_between() to highlight the area between the two lines (Bonus research task!).
+
+Save: Use plt.savefig('my_plot.png') to save your result.
+
+Summary Checklist
+
+[ ] Do you understand the difference between a Figure and an Axes object?
+
+[ ] Can you choose the right plot type for a given dataset?
+
+[ ] Are all your plots properly labeled and titled?
+
+Next Session: We take visualization to the next level with Seaborn for advanced statistical plotting!

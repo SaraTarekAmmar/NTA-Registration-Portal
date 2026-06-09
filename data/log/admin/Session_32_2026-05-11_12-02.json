@@ -1,0 +1,62 @@
+[
+  {
+    "timestamp": "2026-05-11T12:02:09.141466",
+    "trace_id": "d21ccee5-3aa1-432f-8190-09880614415f",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/admin/trainees",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 4
+  },
+  {
+    "timestamp": "2026-05-11T12:02:10.945515",
+    "trace_id": "0e4f4bc6-753c-47b3-9726-87938537ef41",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/admin/courses",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 2
+  },
+  {
+    "timestamp": "2026-05-11T12:02:10.963214",
+    "trace_id": "b3717b0b-7fa3-463f-ac00-631ee5b0d895",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/admin/trainees",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 4
+  },
+  {
+    "timestamp": "2026-05-11T12:02:14.381528",
+    "trace_id": "84e8e8a2-9847-43d3-a57e-917ca991abe1",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/permissions",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 12
+  }
+]

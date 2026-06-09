@@ -1,0 +1,114 @@
+Session 10: Statistical Visualizations with Seaborn
+
+Welcome to the second half of Week 5! While Matplotlib is powerful, it can be verbose. Today, we introduce Seaborn, a library built on top of Matplotlib that is specifically designed for statistical data visualization. It integrates deeply with Pandas DataFrames and provides a high-level interface for drawing attractive and informative graphics.
+
+1. Why Seaborn?
+
+Pandas Integration: Seaborn understands DataFrames natively (you can pass column names as strings).
+
+Aesthetics: It comes with beautiful default styles and color palettes.
+
+Statistical Power: It can automatically calculate and display trends, confidence intervals, and distributions.
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Set the default Seaborn theme
+sns.set_theme(style="whitegrid")
+
+
+2. Visualizing Distributions
+
+Understanding the "shape" of your data is the first step in EDA.
+
+Histograms and KDE
+
+# Create a histogram with a Kernel Density Estimate (KDE) curve
+data = sns.load_dataset("penguins")
+sns.histplot(data=data, x="flipper_length_mm", kde=True, color="m")
+plt.title("Distribution of Flipper Lengths")
+plt.show()
+
+
+Joint Plots (Bivariate Data)
+
+A joint plot shows the relationship between two variables along with their individual distributions.
+
+sns.jointplot(data=data, x="bill_length_mm", y="bill_depth_mm", hue="species")
+plt.show()
+
+
+3. Categorical Data Plots
+
+Seaborn shines when comparing variables across different categories.
+
+Box Plots and Violin Plots
+
+Essential for seeing outliers and the density of data across categories.
+
+# Box Plot
+sns.boxplot(data=data, x="species", y="body_mass_g", palette="Set2")
+plt.show()
+
+# Violin Plot (Combines box plot and KDE)
+sns.violinplot(data=data, x="island", y="body_mass_g", hue="sex", split=True)
+plt.show()
+
+
+Bar and Count Plots
+
+# Count how many penguins of each species are in the dataset
+sns.countplot(data=data, x="species", palette="viridis")
+plt.show()
+
+
+4. Matrix Plots: Heatmaps
+
+Heatmaps are the best way to visualize correlation matrices or large grids of numbers.
+
+# Calculate correlation matrix
+corr = data.corr()
+
+# Plot the heatmap
+sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Correlation Heatmap of Penguin Features")
+plt.show()
+
+
+5. FacetGrids (Small Multiples)
+
+Seaborn allows you to create multiple plots based on a categorical variable with a single function call.
+
+# Create a scatter plot for every species/sex combination
+g = sns.FacetGrid(data, col="island", hue="species")
+g.map(sns.scatterplot, "bill_length_mm", "bill_depth_mm")
+g.add_legend()
+plt.show()
+
+
+Hands-on Exercise: Analyzing the 'Tips' Dataset
+
+Task:
+
+Load the built-in 'tips' dataset: tips = sns.load_dataset("tips").
+
+Distribution: Create a histplot of the total_bill column.
+
+Categorical Analysis: Create a violinplot showing the distribution of tip amount for each day of the week.
+
+Relationship: Create a scatterplot of total_bill vs tip, using hue="time" to differentiate between Lunch and Dinner.
+
+Correlation: Create a heatmap of the correlations in the dataset.
+
+Bonus: Use sns.lmplot() to draw a scatter plot with a regression line for total_bill vs tip.
+
+Summary Checklist
+
+[ ] Can you explain why Seaborn is often preferred over Matplotlib for DataFrames?
+
+[ ] Do you know when to use a Box Plot vs a Violin Plot?
+
+[ ] Can you interpret a Correlation Heatmap?
+
+Next Week (Week 6): We move into Working with Real-World Data, starting with Time-Series analysis!

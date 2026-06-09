@@ -1,0 +1,822 @@
+[
+  {
+    "account": {
+      "full_name_ar": "مدير النظام",
+      "full_name_en": "System Admin",
+      "national_id": "29001011234567"
+    },
+    "profile_details": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "academic_history": [],
+      "professional_history": [],
+      "professional_summary": {
+        "yearsExperience": 0,
+        "objective": ""
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "محرر المحتوى",
+      "full_name_en": "Content Editor",
+      "national_id": "29505051234567"
+    },
+    "profile_details": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "academic_history": [],
+      "professional_history": [],
+      "professional_summary": {
+        "yearsExperience": 0,
+        "objective": ""
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "محمد أحمد علي",
+      "full_name_en": "Mohamed Ahmed Ali",
+      "national_id": "29808081234567"
+    },
+    "profile_details": {
+      "technical_skills": [
+        "Python",
+        "JavaScript",
+        "SQL",
+        "FastAPI"
+      ],
+      "soft_skills": [
+        "Leadership",
+        "Communication",
+        "Problem Solving"
+      ],
+      "academic_history": [
+        {
+          "year": "2020",
+          "grade": "Excellent",
+          "degree": "Bachelor of Computer Science",
+          "institution": "Cairo University"
+        }
+      ],
+      "professional_history": [
+        {
+          "title": "Software Developer",
+          "period": "2021 - Present",
+          "company": "Tech Solutions"
+        }
+      ],
+      "professional_summary": "Aspiring tech leader with focus on backend systems."
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "عمر أحمد محمد",
+      "full_name_en": "Omar Ahmed Mohamed",
+      "national_id": "29203151000001"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Python",
+          "category": "programming",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "SQL",
+          "category": "programming",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Excel",
+          "category": "data",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "PowerBI",
+          "category": "data",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "التواصل الفعّال",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "العمل الجماعي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الوقت",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "جيد جداً",
+          "major": "هندسة الحاسوب",
+          "degree": "بكالوريوس هندسة",
+          "ranking": "Top 15%",
+          "gradYear": "2015",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "endDate": "2023-01-01",
+          "startDate": "2021-01-01",
+          "organization": "شركة رؤية للتقنية",
+          "reasonForLeaving": "Career growth",
+          "responsibilities": "تطوير تطبيقات الويب وقواعد البيانات"
+        }
+      ],
+      "professional_summary": {
+        "objective": "قيادة التحول الرقمي في القطاع الحكومي",
+        "yearsExperience": 3
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "فاطمة علي السيد",
+      "full_name_en": "Fatima Ali El-Sayed",
+      "national_id": "29505031000002"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Financial Analysis",
+          "category": "finance",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Budgeting",
+          "category": "finance",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "SAP",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "QuickBooks",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "القيادة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "التفكير النقدي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الأزمات",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "محاسبة",
+          "degree": "بكالوريوس تجارة",
+          "ranking": "Top 15%",
+          "gradYear": "2018",
+          "institution": "جامعة الإسكندرية"
+        }
+      ],
+      "professional_history": [
+        {
+          "endDate": "2023-01-01",
+          "startDate": "2021-01-01",
+          "organization": "البنك الأهلي المصري",
+          "reasonForLeaving": "Career growth",
+          "responsibilities": "تحليل البيانات المالية وإعداد التقارير"
+        }
+      ],
+      "professional_summary": {
+        "objective": "إصلاح منظومة الموازنة العامة",
+        "yearsExperience": 4
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "خالد إبراهيم النجار",
+      "full_name_en": "Khaled Ibrahim El-Naggar",
+      "national_id": "29808081000003"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Administrative Law",
+          "category": "law",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Public Policy",
+          "category": "law",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Case Studies",
+          "category": "research",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Legal Analysis",
+          "category": "research",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "التفاوض",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الإقناع",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الدقة والتفاصيل",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "جيد جداً",
+          "major": "قانون عام",
+          "degree": "ليسانس حقوق",
+          "ranking": "Top 15%",
+          "gradYear": "2020",
+          "institution": "جامعة عين شمس"
+        }
+      ],
+      "professional_history": [
+        {
+          "endDate": "2023-01-01",
+          "startDate": "2021-01-01",
+          "organization": "مجلس الدولة",
+          "reasonForLeaving": "Career growth",
+          "responsibilities": "مراجعة العقود وصياغة القرارات"
+        }
+      ],
+      "professional_summary": {
+        "objective": "تطوير منظومة التشريعات الحكومية",
+        "yearsExperience": 2
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "رانيا يوسف البيطار",
+      "full_name_en": "Rania Youssef El-Baytar",
+      "national_id": "29501301000013"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Hospital Administration",
+          "category": "health_management",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Health Policy",
+          "category": "health_management",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "HIS Systems",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "SAP",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "القيادة بالقدوة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الأزمات",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "التواصل",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "Computer Engineering",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2020-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير عمليات",
+          "startDate": "2021-01-01",
+          "department": "مستشفى القصر العيني",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "objective": "تطوير إدارة المنظومة الصحية الحكومية",
+        "yearsExperience": 4
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully"
+      },
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "طارق سيد الباز",
+      "full_name_en": "Tarek Sayed El-Baz",
+      "national_id": "29207051000014"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Strategic Planning",
+          "category": "military_civil",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Crisis Management",
+          "category": "military_civil",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "GIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Decision Support Systems",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "القيادة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الانضباط",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "إدارة الضغط",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "ممتاز",
+          "major": "القيادة والإدارة",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2014-01-01",
+          "institution": "الأكاديمية العسكرية"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "رئيس العمليات",
+          "startDate": "2021-01-01",
+          "department": "General Command",
+          "organization": "Ministry of Defense"
+        }
+      ],
+      "professional_summary": {
+        "objective": "نقل الخبرة العسكرية إلى القطاع المدني",
+        "yearsExperience": 8
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully"
+      },
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "منى عاطف زهران",
+      "full_name_en": "Mona Atef Zahran",
+      "national_id": "29604221000015"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Environmental Assessment",
+          "category": "environment",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Sustainability",
+          "category": "environment",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ArcGIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ENVI",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الوعي البيئي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "البحث العلمي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "نشر المعرفة",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "إدارة الموارد الطبيعية",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2018-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "",
+          "startDate": "",
+          "department": "",
+          "organization": ""
+        }
+      ],
+      "professional_summary": {
+        "objective": "قيادة السياسة البيئية الوطنية",
+        "yearsExperience": 4
+      }
+    },
+    "application_data": {
+      "motivation_data": {
+        "reason": "Completed all admission phases successfully"
+      },
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "باسم محمد الغزالي",
+      "full_name_en": "Bassem Mohamed El-Ghazaly",
+      "national_id": "29008171000016"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Financial Auditing",
+          "category": "audit",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Risk Assessment",
+          "category": "audit",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "ACL Analytics",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "IDEA",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الدقة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "النزاهة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الحيادية",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "جيد جداً",
+          "major": "مراجعة وضبط الجودة",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2012-01-01",
+          "institution": "جامعة عين شمس"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "الجهاز المركزي للمحاسبات",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "objective": "قيادة منظومة الرقابة المالية الحكومية",
+        "yearsExperience": 9
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "لبنى حسين الشناوي",
+      "full_name_en": "Lobna Hussein El-Shinawi",
+      "national_id": "29403071000017"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Scientific Research",
+          "category": "science",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Nanotechnology",
+          "category": "science",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "MATLAB",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "LabVIEW",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "التفكير النقدي",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الدقة العلمية",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "التعاون البحثي",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "النانو تكنولوجي",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2021-01-01",
+          "institution": "جامعة القاهرة"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "المركز القومي للبحوث",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "objective": "ربط البحث العلمي بالسياسات الحكومية",
+        "yearsExperience": 3
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "كريم عصام الدين فهمي",
+      "full_name_en": "Karim Essam El-Din Fahmy",
+      "national_id": "29109141000018"
+    },
+    "profile_details": {
+      "technical_skills": [
+        {
+          "name": "Agricultural Policy",
+          "category": "agriculture",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "Food Security",
+          "category": "agriculture",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "FAOSTAT",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        },
+        {
+          "name": "GIS",
+          "category": "tools",
+          "proficiency": "Intermediate"
+        }
+      ],
+      "soft_skills": [
+        {
+          "name": "الاستدامة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "الحوكمة الرشيدة",
+          "category": "General",
+          "proficiency": "Advanced"
+        },
+        {
+          "name": "القيادة التحويلية",
+          "category": "General",
+          "proficiency": "Advanced"
+        }
+      ],
+      "academic_history": [
+        {
+          "gpa": "امتياز",
+          "major": "السياسات الغذائية",
+          "degree": "مؤهل عالي (Higher Degree)",
+          "ranking": "Top 15%",
+          "gradYear": "2016-01-01",
+          "institution": "جامعة الإسكندرية"
+        }
+      ],
+      "professional_history": [
+        {
+          "jobTitle": "مدير",
+          "startDate": "2021-01-01",
+          "department": "وزارة الزراعة",
+          "organization": "Ministry of Higher Education"
+        }
+      ],
+      "professional_summary": {
+        "objective": "تحقيق الأمن الغذائي المصري",
+        "yearsExperience": 7
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "أمل سيد حسن",
+      "full_name_en": "Amal Sayed Hassan",
+      "national_id": "29901011234567"
+    },
+    "profile_details": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "academic_history": [],
+      "professional_history": [],
+      "professional_summary": {
+        "yearsExperience": 0,
+        "objective": ""
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "???? ????",
+      "full_name_en": "Super Admin",
+      "national_id": "10000000000000"
+    },
+    "profile_details": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "academic_history": [],
+      "professional_history": [],
+      "professional_summary": {
+        "yearsExperience": 0,
+        "objective": ""
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  },
+  {
+    "account": {
+      "full_name_ar": "غادة عبد اللطيف",
+      "full_name_en": "Ghada Abdullatif",
+      "national_id": "29404252103456"
+    },
+    "profile_details": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "academic_history": [],
+      "professional_history": [],
+      "professional_summary": {
+        "yearsExperience": 0,
+        "objective": ""
+      }
+    },
+    "application_data": {
+      "motivation_data": {},
+      "quiz_scores": {}
+    }
+  }
+]

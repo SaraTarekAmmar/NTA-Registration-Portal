@@ -1,0 +1,30 @@
+Line 333:     transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+Line 334: 
+Line 335:   }
+Line 336: 
+Line 337: </style>
+Line 338: 
+Line 339: </head>
+Line 340: 
+Line 341: <body class="registration-page">
+Line 342: 
+Line 343: <div id="devBypassWidget" class="dev-bypass-widget">
+Line 344: 
+Line 345:   <div class="dev-bypass-header">
+Line 346: 
+Line 347:     <span class="dev-bypass-indicator"></span>
+Line 348: 
+Line 349:     <span class="dev-bypass-title">التحقق نشط 🛡️</span>
+Line 350: 
+Line 351:   </div>
+Line 352: 
+Line 353:   <label class="dev-bypass-switch">
+Line 354: 
+Line 355:     <input type="checkbox" id="devBypassToggle">
+Line 356: 
+Line 357:     <span class="dev-bypass-slider"></span>
+Line 358: 
+Line 359:   </label>
+Line 360: 
+Line 361: </div>
+Line 362: 

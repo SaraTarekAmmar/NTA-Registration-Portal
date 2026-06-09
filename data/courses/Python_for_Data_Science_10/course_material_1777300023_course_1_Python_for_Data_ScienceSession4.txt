@@ -1,0 +1,122 @@
+Session 4: Selection, Filtering, and Indexing Logic
+
+In the previous session, we learned how to load data and perform basic column selection. Today, we dive deeper into indexing. Mastering how to precisely target specific rows and columns is what separates a beginner from an intermediate Pandas user.
+
+1. The Two Pillars: .loc vs .iloc
+
+Pandas provides two primary methods for selecting data. The difference is fundamental:
+
+Method
+
+Type of Selection
+
+Logic
+
+.loc
+
+Label-based
+
+Uses the names of rows (index) and columns.
+
+.iloc
+
+Integer-based
+
+Uses the numerical position (0, 1, 2...).
+
+Using .loc
+
+Syntax: df.loc[row_label, column_label]
+
+import pandas as pd
+
+# Sample DataFrame with custom index
+df = pd.DataFrame({
+    'Score': [90, 85, 77],
+    'Subject': ['Math', 'Science', 'History']
+}, index=['Student_A', 'Student_B', 'Student_C'])
+
+# Get Score for Student_A
+print(df.loc['Student_A', 'Score']) 
+
+# Get all columns for Student_B
+print(df.loc['Student_B', :])
+
+
+Using .iloc
+
+Syntax: df.iloc[row_position, column_position]
+
+# Get the very first value in the first column
+print(df.iloc[0, 0]) 
+
+# Get the first two rows and the first column
+print(df.iloc[0:2, 0])
+
+
+2. Conditional Selection (Advanced Filtering)
+
+In Session 3, we saw basic filtering. Now we combine multiple conditions using bitwise operators:
+
+& (AND)
+
+| (OR)
+
+~ (NOT)
+
+# Example: Find subjects where Score > 80 OR Subject is 'History'
+high_or_history = df[(df['Score'] > 80) | (df['Subject'] == 'History')]
+
+
+3. The .isin() and .str Accessors
+
+These are "power tools" for filtering categorical and text data.
+
+# Filtering by a list of values
+target_subjects = ['Math', 'Physics', 'Chemistry']
+df_subset = df[df['Subject'].isin(target_subjects)]
+
+# String filtering (Case-insensitive search)
+# Returns rows where Subject contains 'sci'
+science_data = df[df['Subject'].str.contains('sci', case=False)]
+
+
+4. Setting Values
+
+You should always use .loc or .iloc when modifying data to avoid the SettingWithCopyWarning.
+
+# Correct way to update a value
+df.loc['Student_C', 'Score'] = 80
+
+
+Hands-on Exercise: The Employee Directory
+
+Task:
+
+Create a DataFrame with the following data:
+
+Name: ['Anna', 'Ben', 'Ciara', 'Dan', 'Elena']
+
+Dept: ['HR', 'IT', 'IT', 'Sales', 'IT']
+
+Salary: [50000, 80000, 75000, 60000, 110000]
+
+Years: [2, 5, 3, 1, 10]
+
+Integer Indexing: Use .iloc to select the first 3 employees and the first 2 columns.
+
+Complex Filtering: Filter for employees who are in the 'IT' department AND have a salary greater than 70,000.
+
+String Logic: Filter for employees whose names start with the letter 'A' or 'B'.
+
+Bonus: Increase the salary of anyone with Years > 4 by 10% using .loc.
+
+Summary Checklist
+
+[ ] Do you know when to use .loc vs .iloc?
+
+[ ] Can you filter data using three different conditions at once?
+
+[ ] Do you understand why df[df['col'] == val] is often just the beginning of filtering?
+
+Next Week (Week 3): We tackle the messy reality of data science—Data Cleaning and Handling Missing Values!

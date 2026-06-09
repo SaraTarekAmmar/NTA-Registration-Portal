@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>معاينة الدورة - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="courses">
+    <div id="editorSidebar"></div>
+    <main class="editor-main">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;flex-wrap:wrap;">
+        <button type="button" class="btn btn--secondary" onclick="history.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          رجوع للتعديل
+        </button>
+        <div>
+          <h1 class="editor-page-header__title" style="margin:0 0 0.2rem;" id="previewPageTitle">معاينة الدورة</h1>
+          <p class="editor-page-header__sub" style="margin:0;">مراجعة محتوى الدورة قبل النشر</p>
+        </div>
+      </div>
+
+      <div id="loadingState" class="editor-state">
+        <div class="editor-state__icon">⏳</div>
+        <div class="editor-state__title">جاري تحميل الدورة...</div>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+        <button type="button" onclick="loadCourse()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;">إعادة المحاولة</button>
+      </div>
+
+      <div id="previewContent" style="display:none;">
+        <!-- Status badge -->
+        <div style="margin-bottom:1.25rem;" id="statusBadgeRow"></div>
+
+        <!-- Missing requirements -->
+        <div id="missingBanner" class="editor-banner editor-banner--error" style="display:none;">
+          <div>
+            <div style="font-weight:700;margin-bottom:0.25rem;">لا يمكن نشر الدورة — البيانات الناقصة:</div>
+            <ul id="missingList" style="margin:0;padding-right:1.25rem;font-size:0.84rem;line-height:1.8;"></ul>
+          </div>
+        </div>
+
+        <!-- Course summary card -->
+        <div style="background:rgba(8,12,32,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:2rem;margin-bottom:1.5rem;">
+          <h2 id="courseTitleAr" style="font-size:1.5rem;font-weight:800;margin:0 0 0.5rem;color:var(--text-main);"></h2>
+          <p id="courseTitleEn" style="font-size:0.88rem;color:var(--text-subtle);margin:0 0 1.25rem;"></p>
+          <p id="courseDesc" style="font-size:0.92rem;color:var(--text-main);line-height:1.7;margin:0 0 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:1.25rem;"></p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;">
+            <div style="text-align:center;padding:1rem;background:rgba(16,185,129,0.07);border-radius:12px;border:1px solid rgba(16,185,129,0.15);">
+              <div style="font-size:1.6rem;font-weight:800;color:#6ee7b7;" id="statDuration">—</div>
+              <div style="font-size:0.72rem;font-weight:700;color:var(--text-subtle);text-transform:uppercase;">أسابيع</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:rgba(99,102,241,0.07);border-radius:12px;border:1px solid rgba(99,102,241,0.15);">
+              <div style="font-size:1.6rem;font-weight:800;color:#a5b4fc;" id="statSessions">—</div>
+              <div style="font-size:0.72rem;font-weight:700;color:var(--text-subtle);text-transform:uppercase;">جلسات</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:flex-end;">
+          <a id="editLink" href="editor-course-form.html" class="btn btn--secondary">تعديل الدورة</a>
+          <button type="button" class="btn btn--secondary" onclick="saveDraft()" id="saveDraftBtn">حفظ مسودة</button>
+          <button type="button" class="btn btn--primary" id="publishBtn" onclick="publishCourse()">نشر الدورة</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var courseData = null;
+      var courseId = null;
+
+      (function(){
+        var p = new URLSearchParams(window.location.search);
+        courseId = p.get("id");
+        var action = p.get("action");
+        if (!courseId) {
+          document.getElementById("loadingState").style.display = "none";
+          document.getElementById("pageBanner").style.display = "flex";
+          document.getElementById("pageBannerText").textContent = "لم يتم تحديد دورة.";
+          return;
+        }
+        loadCourse();
+        if (action === "publish") {
+          // Will auto-trigger publish dialog after load
+          window._autoPublish = true;
+        }
+      })();
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers||{});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers:headers}));
+      }
+
+      function loadCourse() {
+        document.getElementById("pageBanner").style.display = "none";
+        document.getElementById("loadingState").style.display = "flex";
+        document.getElementById("previewContent").style.display = "none";
+
+        authFetch("/api/courses/" + courseId)
+          .then(function(r){ if(!r.ok) throw new Error("فشل التحميل"); return r.json(); })
+          .then(function(c){
+            courseData = c;
+            document.getElementById("loadingState").style.display = "none";
+            renderPreview(c);
+            if (window._autoPublish) { window._autoPublish = false; publishCourse(); }
+          })
+          .catch(function(err){
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("pageBanner").style.display = "flex";
+            document.getElementById("pageBannerText").textContent = "تعذّر تحميل الدورة. " + (err.message||"");
+          });
+      }
+
+      function renderPreview(c) {
+        document.getElementById("previewPageTitle").textContent = "معاينة: " + (c.title_ar||c.title||"");
+        document.getElementById("courseTitleAr").textContent = c.title_ar || c.title || "بدون عنوان";
+        document.getElementById("courseTitleEn").textContent = c.title && c.title !== c.title_ar ? c.title : "";
+        document.getElementById("courseDesc").textContent = c.description || "لا يوجد وصف.";
+        document.getElementById("statDuration").textContent = c.duration_weeks || "—";
+        document.getElementById("statSessions").textContent = c.total_sessions || "—";
+        document.getElementById("editLink").href = "editor-course-form.html?id=" + c.id;
+
+        // Status badge
+        var statusMap = {draft:["مسودة","draft"], published:["منشورة","published"], archived:["مؤرشفة","archived"]};
+        var s = statusMap[c.status||"draft"];
+        document.getElementById("statusBadgeRow").innerHTML =
+          '<span class="editor-course-card__badge editor-course-card__badge--'+s[1]+'" style="font-size:0.84rem;padding:0.3rem 0.9rem;">'+s[0]+'</span>';
+
+        // Check missing requirements
+        var missing = [];
+        if (!c.title_ar && !c.title) missing.push("اسم الدورة");
+        if (!c.description) missing.push("وصف الدورة");
+        if (!c.duration_weeks) missing.push("مدة الدورة");
+        if (!c.total_sessions) missing.push("عدد الجلسات");
+
+        var publishBtn = document.getElementById("publishBtn");
+        if (missing.length) {
+          publishBtn.disabled = true;
+          publishBtn.title = "استكمل البيانات الناقصة قبل النشر";
+          document.getElementById("missingBanner").style.display = "flex";
+          var ul = document.getElementById("missingList");
+          ul.innerHTML = "";
+          missing.forEach(function(m){ var li=document.createElement("li"); li.textContent=m; ul.appendChild(li); });
+        } else {
+          publishBtn.disabled = false;
+          document.getElementById("missingBanner").style.display = "none";
+        }
+
+        document.getElementById("previewContent").style.display = "block";
+      }
+
+      function saveDraft() {
+        if (!courseData) return;
+        authFetch("/api/courses/" + courseId, {
+          method: "PUT",
+          body: JSON.stringify(Object.assign({}, courseData, {status:"draft"}))
+        })
+        .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+        .then(function(){
+          showEditorToast("تم حفظ المسودة.", "success");
+          setTimeout(function(){ window.location.replace("editor-final.html?action=draft&id="+courseId); }, 800);
+        })
+        .catch(function(){ showEditorToast("فشل الحفظ. حاول مرة أخرى.", "error"); });
+      }
+
+      function publishCourse() {
+        editorConfirm({
+          title: "نشر الدورة؟",
+          body: "ستصبح الدورة <strong>" + (courseData ? (courseData.title_ar||courseData.title) : "") + "</strong> مرئية للمتدربين فور النشر.",
+          okLabel: "نشر الدورة",
+          cancelLabel: "إلغاء"
+        }).then(function(ok){
+          if (!ok) return;
+          var btn = document.getElementById("publishBtn");
+          btn.disabled = true;
+          btn.textContent = "جاري النشر...";
+          authFetch("/api/courses/" + courseId, {
+            method: "PUT",
+            body: JSON.stringify(Object.assign({}, courseData, {status:"published"}))
+          })
+          .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(){
+            window.location.replace("editor-final.html?action=published&id="+courseId);
+          })
+          .catch(function(){
+            btn.disabled = false;
+            btn.textContent = "نشر الدورة";
+            showEditorToast("فشل النشر. حاول مرة أخرى.", "error");
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

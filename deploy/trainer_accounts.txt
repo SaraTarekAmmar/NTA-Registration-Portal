@@ -1,0 +1,16 @@
+# NTA Trainer Accounts Import Template
+# ======================================
+# Instructions:
+# 1. ADD your trainers below using the format:
+#    Full Name (AR) | Full Name (EN) | Email | National ID | Password
+#
+# 2. RUN 'python install_trainers.py' to import them.
+#
+# Note: Lines starting with # are ignored.
+# Empty lines are ignored.
+#
+# Passwords are authoritative — edit here to change them on a fresh deploy.
+# Sync with documentation/credentials.txt.
+
+أحمد سعيد محمد | Ahmed Saeed Mohamed | trainer@nta.edu.eg | 28501011234567 | NTA@Trainer2026
+غادة عبد اللطيف | Ghada Abdullatif | ghada.abdullatif@example.com | 29404252103456 | NTA@Trainer2026

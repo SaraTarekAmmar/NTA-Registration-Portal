@@ -1,0 +1,1917 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دوراتي - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css?v=2" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="chat/chat.css?v=3" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ── دوراتي enrolled modal view ── */
+      .cd-my-body {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+        align-items: stretch;
+        min-height: 220px;
+        justify-content: center;
+      }
+      .cd-my-prog-wrap {
+      }
+      .cd-my-prog-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-bottom: 0.55rem;
+      }
+      .cd-my-prog-bar {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.9);
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+      }
+      .cd-my-prog-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--gradient-progress);
+        transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 12px var(--chip-border);
+        position: relative;
+      }
+      .cd-my-prog-fill::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.25) 50%,
+          transparent 100%
+        );
+        animation: cdProgShine 2s ease-in-out infinite;
+      }
+      @keyframes cdProgShine {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(200%);
+        }
+      }
+      .cd-my-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      .cd-my-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid transparent;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .cd-my-btn::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 16px;
+        padding: 2px;
+        -webkit-mask:
+          linear-gradient(var(--mask-cutout) 0 0) content-box,
+          linear-gradient(var(--mask-cutout) 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(var(--mask-cutout) 0 0) content-box,
+          linear-gradient(var(--mask-cutout) 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      .cd-my-btn:hover {
+        transform: translateY(-2px);
+      }
+      .cd-my-btn--perm {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: rgba(99, 102, 241, 0.5);
+        color: var(--color-accent-pale-2);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 8px 24px -10px rgba(99, 102, 241, 0.4);
+      }
+      .cd-my-btn--perm::before {
+        background: linear-gradient(135deg, var(--accent), var(--accent-hover), var(--accent));
+        background-size: 200% 200%;
+        animation: cdBtnBorder 4s ease infinite;
+      }
+      .cd-my-btn--perm:hover {
+        background: rgba(99, 102, 241, 0.25);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 12px 30px -10px rgba(99, 102, 241, 0.55),
+          0 0 20px rgba(99, 102, 241, 0.2);
+      }
+      .cd-my-btn--quiz {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.45);
+        color: var(--color-success-pale-3);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 8px 24px -10px rgba(16, 185, 129, 0.35);
+      }
+      .cd-my-btn--quiz::before {
+        background: linear-gradient(135deg, var(--color-success), var(--color-success-soft), var(--color-success));
+        background-size: 200% 200%;
+        animation: cdBtnBorder 4s ease infinite 0.5s;
+      }
+      .cd-my-btn--quiz:hover {
+        background: rgba(16, 185, 129, 0.22);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 12px 30px -10px rgba(16, 185, 129, 0.5),
+          0 0 20px rgba(16, 185, 129, 0.18);
+      }
+      @keyframes cdBtnBorder {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      /* ── My-course modal image ── */
+      .cd-my-image-wrap {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: var(--assign-card-hover-bg);
+        min-height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .cd-my-image {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        display: block;
+        border-radius: 14px;
+      }
+      .cd-my-image-placeholder {
+        width: 100%;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card-solid));
+      }
+
+      /* ── Themed scrollbar for الدورات modal body ── */
+      .course-details-modal__body {
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent)
+          var(--bg-input, var(--assign-card-bg));
+      }
+      .course-details-modal__body::-webkit-scrollbar {
+        width: 6px;
+      }
+      .course-details-modal__body::-webkit-scrollbar-track {
+        background: var(--bg-input, var(--assign-card-bg));
+        border-radius: 999px;
+        margin: 4px 0;
+      }
+      .course-details-modal__body::-webkit-scrollbar-thumb {
+        background: var(--accent, var(--accent));
+        border-radius: 999px;
+      }
+      .course-details-modal__body::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-hover, var(--accent-hover));
+      }
+
+      /* ── Better spacing/styling for الدورات modal sections ── */
+      .course-details-modal__section-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--accent);
+        margin: 0.75rem 0 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+      }
+      .course-details-modal__section-title::before {
+        content: "";
+        width: 3px;
+        height: 12px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, var(--accent), var(--color-info));
+        flex-shrink: 0;
+      }
+      .course-details-modal__stat {
+        background: var(--bg-input, var(--assign-card-hover-bg));
+        border: 1px solid var(--border-main);
+        border-radius: 10px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .course-details-modal__stat:hover {
+        border-color: var(--border-accent);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.08);
+      }
+      .course-details-modal__stat-text {
+        color: var(--text-main);
+      }
+      .course-details-modal__kv {
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--border-main, var(--bg-input));
+      }
+      .course-details-modal__kv:last-child {
+        border-bottom: none;
+      }
+      .course-details-modal__kv-list {
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        border-radius: 12px;
+        padding: 0.3rem 0.75rem;
+      }
+      .course-details-modal__k {
+        color: var(--text-muted);
+      }
+      .course-details-modal__v {
+        color: var(--text-main);
+        font-weight: 600;
+      }
+
+      /* ── دوراتي card (mc-*) ── */
+      .course-card--my {
+        cursor: default;
+      }
+      .course-card--my:hover {
+        transform: translateY(-4px) scale(1.01);
+      }
+      .mc-prog-wrap {
+        margin-bottom: 0.65rem;
+      }
+      .mc-prog-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+      .mc-prog-bar {
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.9);
+        overflow: hidden;
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .mc-prog-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--gradient-progress);
+        transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 10px var(--chip-border);
+        position: relative;
+        overflow: hidden;
+      }
+      .mc-prog-fill::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: mcShine 2.5s ease-in-out infinite;
+      }
+      @keyframes mcShine {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(200%);
+        }
+      }
+      .mc-action-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.45rem;
+        margin-bottom: 0.45rem;
+      }
+      .mc-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          box-shadow 0.2s,
+          transform 0.15s;
+      }
+      .mc-btn:hover {
+        transform: translateY(-1px);
+      }
+      .mc-btn--perm {
+        background: rgba(99, 102, 241, 0.12);
+        border-color: rgba(99, 102, 241, 0.4);
+        color: var(--color-accent-pale);
+      }
+      .mc-btn--perm:hover {
+        background: rgba(99, 102, 241, 0.22);
+        border-color: rgba(99, 102, 241, 0.7);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
+      }
+      .mc-btn--quiz {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.35);
+        color: var(--color-success-pale-2);
+      }
+      .mc-btn--quiz:hover {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.65);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+      }
+      .mc-complete-btn {
+        margin-top: 20px;
+        width: 100%;
+        background: linear-gradient(135deg, var(--color-info-soft), var(--color-info)) !important;
+        box-shadow: 0 6px 18px -8px rgba(14, 165, 233, 0.6);
+      }
+      .mc-complete-btn:hover {
+        background: linear-gradient(135deg, var(--color-info-soft), var(--color-info)) !important;
+        box-shadow: 0 8px 22px -8px rgba(14, 165, 233, 0.75);
+      }
+      @keyframes mcPulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+      .mc-btn--quiz.active-quiz-pulse {
+        animation: mcPulse 1.5s infinite;
+        background: rgba(16, 185, 129, 0.25) !important;
+        border-color: var(--color-success) !important;
+        color: var(--text-on-accent) !important;
+        text-shadow: 0 0 8px rgba(16, 185, 129, 0.8) !important;
+        border-width: 1.5px !important;
+      }
+
+      /* Light theme — course details modal sections */
+      html.light-mode .course-details-modal__stat,
+      html.light-mode .course-details-modal__kv-list {
+        background: var(--bg-input, var(--text-main));
+        border-color: var(--border-main, var(--text-main));
+      }
+      html.light-mode .course-details-modal__stat-text,
+      html.light-mode .course-details-modal__v {
+        color: var(--text-main, var(--skeleton-base));
+      }
+      html.light-mode .course-details-modal__k {
+        color: var(--text-muted, var(--text-subtle));
+      }
+      html.light-mode .course-details-modal__kv {
+        border-bottom-color: var(--border-main, var(--text-main));
+      }
+      html.light-mode .course-details-modal__stat svg {
+        color: var(--accent, var(--accent-solid));
+      }
+
+      html.light-mode .course-details-modal__body {
+        scrollbar-color: var(--text-subtle, var(--text-muted))
+          var(--bg-input, var(--text-main));
+      }
+      html.light-mode .course-details-modal__body::-webkit-scrollbar-track {
+        background: var(--bg-input, var(--text-main));
+      }
+      html.light-mode .course-details-modal__body::-webkit-scrollbar-thumb {
+        background: var(--text-muted);
+      }
+      html.light-mode .course-details-modal__body::-webkit-scrollbar-thumb:hover {
+        background: var(--accent, var(--accent-solid));
+      }
+
+      html.light-mode .courses-modal__icon-btn {
+        background: var(--bg-input, var(--text-main));
+        border-color: var(--border-main, var(--text-main));
+        color: var(--text-muted, var(--text-subtle));
+      }
+      html.light-mode .courses-modal__icon-btn:hover {
+        background: var(--accent, var(--accent-solid));
+        border-color: var(--accent, var(--accent-solid));
+        color: var(--text-on-accent);
+      }
+
+      html.light-mode .course-details-modal .courses-modal__btn--ghost {
+        background: var(--bg-input, var(--text-main));
+        border: 1px solid var(--border-main, var(--text-main));
+        color: var(--text-main, var(--skeleton-base));
+      }
+      html.light-mode .course-details-modal .courses-modal__btn--ghost:hover {
+        background: var(--border-main, var(--text-main));
+        color: var(--text-main, var(--bg-card-solid));
+      }
+
+      html.light-mode .course-details-modal.courses-modal .courses-modal__footer {
+        border-top-color: var(--border-main, var(--text-main));
+      }
+    </style>
+  </head>
+
+  <body class="trainee-app" data-page="courses">
+    <div class="trainee-bg"></div>
+
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main">
+      <h1>الدورات</h1>
+      <div class="courses-grid" id="coursesGrid">
+        <!-- Filled by JS -->
+      </div>
+      <div class="courses-pagination" id="coursesPagination">
+        <button
+          type="button"
+          class="courses-pagination__btn"
+          id="prevPageBtn"
+          disabled
+        >
+          ‹ السابق
+        </button>
+        <div class="courses-pagination__info" id="pageInfo">صفحة 1 من 1</div>
+        <button
+          type="button"
+          class="courses-pagination__btn"
+          id="nextPageBtn"
+          disabled
+        >
+          التالي ›
+        </button>
+      </div>
+    </main>
+
+    <div id="chatWidget"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Course editor modal -->
+    <div
+      class="courses-modal-backdrop"
+      id="courseModalBackdrop"
+      style="display: none"
+    >
+      <div
+        class="courses-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="courseModalTitle"
+      >
+        <div class="courses-modal__header">
+          <h2 class="courses-modal__title" id="courseModalTitle">
+            إدارة الدورة
+          </h2>
+          <button
+            type="button"
+            class="courses-modal__icon-btn"
+            id="courseModalClose"
+            aria-label="إغلاق"
+          >
+            ✕
+          </button>
+        </div>
+        <form class="courses-modal__body" id="courseModalForm">
+          <div class="courses-modal__field">
+            <label class="courses-modal__label" for="courseTitleInput"
+              >اسم الدورة</label
+            >
+            <input
+              id="courseTitleInput"
+              name="title"
+              type="text"
+              class="courses-modal__input"
+              required
+            />
+          </div>
+          <div class="courses-modal__field">
+            <label class="courses-modal__label" for="courseDescInput"
+              >وصف مختصر</label
+            >
+            <textarea
+              id="courseDescInput"
+              name="desc"
+              class="courses-modal__textarea"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="courses-modal__field">
+            <label class="courses-modal__label" for="courseImageInput"
+              >رابط صورة الدورة (اختياري)</label
+            >
+            <input
+              id="courseImageInput"
+              name="image"
+              type="text"
+              class="courses-modal__input"
+              placeholder="https://..."
+            />
+          </div>
+          <div class="courses-modal__grid">
+            <div class="courses-modal__field">
+              <label class="courses-modal__label" for="courseDurationInput"
+                >المدة</label
+              >
+              <input
+                id="courseDurationInput"
+                name="duration"
+                type="text"
+                class="courses-modal__input"
+                placeholder="مثال: 6 أسابيع"
+              />
+            </div>
+            <div class="courses-modal__field">
+              <label class="courses-modal__label" for="courseSessionsInput"
+                >عدد الجلسات</label
+              >
+              <input
+                id="courseSessionsInput"
+                name="sessions"
+                type="text"
+                class="courses-modal__input"
+                placeholder="مثال: 12 جلسة"
+              />
+            </div>
+          </div>
+          <div class="courses-modal__grid">
+            <div class="courses-modal__field">
+              <label class="courses-modal__label" for="courseLevelInput"
+                >المستوى</label
+              >
+              <select
+                id="courseLevelInput"
+                name="level"
+                class="courses-modal__select"
+              >
+                <option value="مبتدئ">مبتدئ</option>
+                <option value="متوسط">متوسط</option>
+                <option value="متقدم">متقدم</option>
+              </select>
+            </div>
+            <div class="courses-modal__field">
+              <label class="courses-modal__label" for="courseStatusInput"
+                >الحالة</label
+              >
+              <select
+                id="courseStatusInput"
+                name="status"
+                class="courses-modal__select"
+              >
+                <option value="قادم">قادم</option>
+                <option value="جاري">جاري</option>
+                <option value="مكتمل">مكتمل</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div class="courses-modal__footer">
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--ghost"
+            id="courseModalCancel"
+          >
+            إلغاء
+          </button>
+          <button
+            type="submit"
+            class="courses-modal__btn courses-modal__btn--primary"
+            form="courseModalForm"
+          >
+            حفظ التغييرات
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete confirm modal (course editor) -->
+    <div
+      class="courses-confirm-backdrop"
+      id="courseDeleteBackdrop"
+      style="display: none"
+    >
+      <div
+        class="courses-confirm"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="courseDeleteTitle"
+      >
+        <div class="courses-confirm__icon">
+          <span>!</span>
+        </div>
+        <h2 class="courses-confirm__title" id="courseDeleteTitle">
+          تأكيد حذف الدورة
+        </h2>
+        <p class="courses-confirm__text">
+          هل تريد بالتأكيد حذف هذه الدورة من قائمة الدورات؟
+        </p>
+        <div class="courses-confirm__actions">
+          <button
+            type="button"
+            class="courses-confirm__btn courses-confirm__btn--ghost"
+            id="courseDeleteCancel"
+          >
+            إلغاء
+          </button>
+          <button
+            type="button"
+            class="courses-confirm__btn courses-confirm__btn--danger"
+            id="courseDeleteConfirm"
+          >
+            نعم، حذف
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course details modal — two modes: regular info OR دوراتي enrolled view -->
+    <div
+      class="courses-modal-backdrop"
+      id="courseDetailsBackdrop"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div
+        class="courses-modal course-details-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="courseDetailsTitle"
+      >
+        <div class="courses-modal__header">
+          <h2 class="courses-modal__title" id="courseDetailsTitle"></h2>
+          <button
+            type="button"
+            class="courses-modal__icon-btn"
+            id="courseDetailsClose"
+            aria-label="إغلاق"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Regular info body (non-enrolled / editor) -->
+        <div class="course-details-modal__body" id="courseDetailsBody">
+          <div class="course-details-modal__image-wrap">
+            <img
+              id="courseDetailsImage"
+              src=""
+              alt=""
+              class="course-details-modal__image"
+            />
+            <div
+              id="courseDetailsImagePlaceholder"
+              class="course-details-modal__image-placeholder"
+              hidden
+              aria-hidden="true"
+            >
+              <span>📚</span>
+            </div>
+          </div>
+          <span
+            class="course-details-modal__badge"
+            id="courseDetailsBadge"
+            aria-hidden="true"
+          ></span>
+          <p class="course-details-modal__desc" id="courseDetailsDesc"></p>
+          <h3 class="course-details-modal__section-title">ملخص سريع</h3>
+          <div class="course-details-modal__meta" id="courseDetailsMeta"></div>
+          <h3 class="course-details-modal__section-title">تفاصيل البرنامج</h3>
+          <div
+            class="course-details-modal__kv-list"
+            id="courseDetailsDl"
+            role="list"
+          ></div>
+        </div>
+
+        <!-- دوراتي enrolled body — shown instead when isMyCourses + hasApplied -->
+        <div
+          id="courseDetailsMyCourseBody"
+          style="display: none"
+          class="cd-my-body"
+        >
+          <div class="cd-my-image-wrap">
+            <img id="cdMyImage" src="" alt="" class="cd-my-image" />
+            <div
+              id="cdMyImagePlaceholder"
+              class="cd-my-image-placeholder"
+              style="display: none"
+            >
+              <span>📚</span>
+            </div>
+          </div>
+          <div class="cd-my-prog-wrap">
+            <div class="cd-my-prog-label">
+              <span>التقدم في الدورة</span>
+              <span id="cdMyProgVal">0%</span>
+            </div>
+            <div class="cd-my-prog-bar">
+              <div
+                class="cd-my-prog-fill"
+                id="cdMyProgFill"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+          <div class="cd-my-actions">
+            <button
+              type="button"
+              class="cd-my-btn cd-my-btn--perm"
+              id="cdMyPermBtn"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="15"
+                height="15"
+              >
+                <path
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+              الإذونات
+            </button>
+            <button
+              type="button"
+              class="cd-my-btn cd-my-btn--quiz"
+              id="cdMyQuizBtn"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="15"
+                height="15"
+              >
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              الاختبارات
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="courses-modal__footer course-details-modal__footer"
+          id="courseDetailsFooter"
+        >
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--ghost"
+            id="courseDetailsCloseFooter"
+          >
+            إغلاق
+          </button>
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--primary"
+            id="courseDetailsApply"
+            style="display: none"
+          >
+            تقدم الآن
+          </button>
+          <button
+            type="button"
+            class="courses-modal__btn courses-modal__btn--primary"
+            id="courseDetailsEdit"
+            style="display: none"
+          >
+            تعديل الدورة
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="header/header.js?v=2"></script>
+    <script>
+      (function () {
+        var session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        var isEditor = session.role === "admin" || session.role === "editor"; // Admin also has editor rights
+        if (!isEditor && session.role !== "trainee") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        var courses = [];
+        var pageSize = 12;
+        var currentPage = 1;
+        var totalPages = 1; // Initialize totalPages
+
+        var grid = document.getElementById("coursesGrid");
+        var pagination = document.getElementById("coursesPagination");
+        var prevBtn = document.getElementById("prevPageBtn");
+        var nextBtn = document.getElementById("nextPageBtn");
+        var pageInfo = document.getElementById("pageInfo");
+
+        // Modal elements (course editor)
+        var modalBackdrop = document.getElementById("courseModalBackdrop");
+        var modalTitle = document.getElementById("courseModalTitle");
+        var modalForm = document.getElementById("courseModalForm");
+        var modalClose = document.getElementById("courseModalClose");
+        var modalCancel = document.getElementById("courseModalCancel");
+        var titleInput = document.getElementById("courseTitleInput");
+        var descInput = document.getElementById("courseDescInput");
+        var durationInput = document.getElementById("courseDurationInput");
+        var sessionsInput = document.getElementById("courseSessionsInput");
+        var levelInput = document.getElementById("courseLevelInput");
+        var statusInput = document.getElementById("courseStatusInput");
+        var modalMode = null; // 'add' or 'edit'
+        var modalEditingId = null;
+        var imageInput = document.getElementById("courseImageInput");
+
+        // Delete confirm modal elements
+        var deleteBackdrop = document.getElementById("courseDeleteBackdrop");
+        var deleteCancel = document.getElementById("courseDeleteCancel");
+        var deleteConfirm = document.getElementById("courseDeleteConfirm");
+        var pendingDeleteId = null;
+
+        var detailsBackdrop = document.getElementById("courseDetailsBackdrop");
+        var detailsTitle = document.getElementById("courseDetailsTitle");
+        var detailsImage = document.getElementById("courseDetailsImage");
+        var detailsDesc = document.getElementById("courseDetailsDesc");
+        var detailsMeta = document.getElementById("courseDetailsMeta");
+        var detailsDl = document.getElementById("courseDetailsDl");
+        var detailsBadge = document.getElementById("courseDetailsBadge");
+        var detailsClose = document.getElementById("courseDetailsClose");
+        var detailsCloseFooter = document.getElementById(
+          "courseDetailsCloseFooter",
+        );
+        var detailsApplyBtn = document.getElementById("courseDetailsApply");
+        var detailsEditBtn = document.getElementById("courseDetailsEdit");
+        var detailsCourse = null;
+
+        var heading = document.querySelector(".trainee-main h1");
+        if (isEditor && heading) {
+          heading.textContent = "إدارة الدورات";
+        }
+
+        if (isEditor) {
+          var main = document.querySelector(".trainee-main");
+          if (main && heading) {
+            var summary = document.createElement("section");
+            summary.id = "coursesEditorSummary";
+            summary.className = "courses-editor-summary";
+            main.insertBefore(summary, heading.nextSibling);
+
+            var toolbar = document.createElement("div");
+            toolbar.id = "coursesEditorToolbar";
+            toolbar.className = "courses-editor-toolbar";
+            toolbar.innerHTML =
+              '<div class="courses-editor-toolbar__left">' +
+              '<button type="button" class="courses-editor-add-btn" id="addCourseBtn">+ إضافة دورة جديدة</button>' +
+              "</div>";
+            main.insertBefore(toolbar, grid);
+
+            var addBtn = document.getElementById("addCourseBtn");
+            if (addBtn && isEditor) {
+              addBtn.addEventListener("click", function () {
+                openCourseModal("add", null);
+              });
+            }
+          }
+        }
+
+        function renderSkeletons(count) {
+          grid.classList.add("is-loading");
+          grid.classList.remove("is-transitioning");
+          grid.innerHTML = "";
+          var n = Math.min(count || pageSize, 12);
+          for (var i = 0; i < n; i++) {
+            var skel = document.createElement("div");
+            skel.className = "course-card-skeleton";
+            skel.innerHTML =
+              '<div class="course-card-skeleton__image"></div>' +
+              '<div class="course-card-skeleton__body">' +
+              '<div class="course-card-skeleton__title"></div>' +
+              '<div class="course-card-skeleton__desc"></div>' +
+              '<div class="course-card-skeleton__desc"></div>' +
+              '<div class="course-card-skeleton__meta">' +
+              "<span></span><span></span><span></span>" +
+              "</div>" +
+              '<div class="course-card-skeleton__btn"></div>' +
+              "</div>";
+            grid.appendChild(skel);
+          }
+        }
+
+        function renderSummary() {
+          if (!isEditor) return;
+          var summaryEl = document.getElementById("coursesEditorSummary");
+          if (!summaryEl) return;
+          var total = courses.length;
+          var live = courses.filter(function (c) {
+            return c.status === "جاري";
+          }).length;
+          var activeInquiries = live; // Simplified for this example
+          var platformStatus = "مستقر";
+
+          summaryEl.innerHTML =
+            '<div class="courses-editor-summary__grid">' +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--inquiries">' +
+            '<div class="courses-editor-summary-card__label">إجمالي الاستفسارات النشطة</div>' +
+            '<div class="courses-editor-summary-card__value">' +
+            activeInquiries +
+            "</div>" +
+            "</div>" +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--live">' +
+            '<div class="courses-editor-summary-card__label">الدورات المباشرة الآن</div>' +
+            '<div class="courses-editor-summary-card__value">' +
+            live +
+            " / " +
+            total +
+            "</div>" +
+            "</div>" +
+            '<div class="courses-editor-summary-card courses-editor-summary-card--status">' +
+            '<div class="courses-editor-summary-card__label">حالة المنصة</div>' +
+            '<div class="courses-editor-summary-card__value">' +
+            platformStatus +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        function getStatusKey(status) {
+          if (status === "جاري" || status === "Ongoing" || status === "ongoing")
+            return "ongoing";
+          if (
+            status === "مكتمل" ||
+            status === "Completed" ||
+            status === "completed"
+          )
+            return "done";
+          if (
+            status === "قادم" ||
+            status === "Upcoming" ||
+            status === "upcoming"
+          )
+            return "upcoming";
+          return "neutral";
+        }
+
+        function escapeHtml(s) {
+          if (s == null || s === "") return "";
+          return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        /** Resolve DB paths like "images/course1.jpg" against site origin so the modal shows the same image as course cards. */
+        function resolveCourseImageUrl(raw) {
+          if (raw == null || String(raw).trim() === "") return "";
+          var p = String(raw).trim();
+          if (/^https?:\/\//i.test(p)) return p;
+          if (p.indexOf("//") === 0) return window.location.protocol + p;
+          if (p.charAt(0) === "/") return window.location.origin + p;
+          try {
+            return new URL(p, window.location.origin + "/").href;
+          } catch (e) {
+            return p;
+          }
+        }
+
+        function localizeCourseStatus(s) {
+          if (s == null || s === "") return "—";
+          var k = String(s).trim();
+          var map = {
+            Upcoming: "قادمة",
+            upcoming: "قادمة",
+            Ongoing: "جارية",
+            ongoing: "جارية",
+            Completed: "مكتملة",
+            completed: "مكتملة",
+            جاري: "جارية",
+            قادم: "قادمة",
+            مكتمل: "مكتملة",
+          };
+          return map[k] || k;
+        }
+
+        function localizeSkillLevel(s) {
+          if (s == null || s === "") return "—";
+          var k = String(s).trim();
+          var map = {
+            Beginner: "مبتدئ",
+            beginner: "مبتدئ",
+            Intermediate: "متوسط",
+            intermediate: "متوسط",
+            Advanced: "متقدم",
+            advanced: "متقدم",
+            مبتدئ: "مبتدئ",
+            متوسط: "متوسط",
+            متقدم: "متقدم",
+          };
+          return map[k] || k;
+        }
+
+        function openCourseModal(mode, course) {
+          if (!isEditor || !modalBackdrop || !modalForm) return;
+          modalMode = mode;
+          modalEditingId = course ? course.id : null;
+
+          if (mode === "edit" && course) {
+            modalTitle.textContent = "تعديل بيانات الدورة";
+            titleInput.value = course.title || "";
+            descInput.value = course.desc || "";
+            durationInput.value = parseInt(course.duration) || ""; // Extract number from "X أسابيع"
+            sessionsInput.value = parseInt(course.sessions) || ""; // Extract number from "X جلسة"
+            levelInput.value = course.level || "متوسط";
+            statusInput.value = course.status || "قادم";
+            imageInput.value = course.image || "";
+          } else {
+            modalTitle.textContent = "إضافة دورة جديدة";
+            titleInput.value = "";
+            descInput.value = "";
+            durationInput.value = "";
+            sessionsInput.value = "";
+            levelInput.value = "متوسط";
+            statusInput.value = "قادم";
+            imageInput.value = "";
+          }
+
+          modalBackdrop.style.display = "flex";
+          setTimeout(function () {
+            modalBackdrop.classList.add("courses-modal-backdrop--visible");
+          }, 10);
+          titleInput.focus();
+        }
+
+        function closeCourseModal() {
+          if (!modalBackdrop) return;
+          modalBackdrop.classList.remove("courses-modal-backdrop--visible");
+          setTimeout(function () {
+            modalBackdrop.style.display = "none";
+          }, 160);
+          modalMode = null;
+          modalEditingId = null;
+        }
+
+        function openDeleteModal(id) {
+          if (!isEditor || !deleteBackdrop) return;
+          pendingDeleteId = id;
+          deleteBackdrop.style.display = "flex";
+          setTimeout(function () {
+            deleteBackdrop.classList.add("courses-confirm-backdrop--visible");
+          }, 10);
+        }
+
+        function closeDeleteModal() {
+          if (!deleteBackdrop) return;
+          deleteBackdrop.classList.remove("courses-confirm-backdrop--visible");
+          setTimeout(function () {
+            deleteBackdrop.style.display = "none";
+          }, 160);
+          pendingDeleteId = null;
+        }
+
+        function openCourseDetailsModal(course) {
+          if (!detailsBackdrop || !course) return;
+          detailsCourse = course;
+          var hasApplied =
+            window.appliedCourseIds && window.appliedCourseIds.has(course.id);
+          var statusBadge;
+          var badgeClass;
+          if (hasApplied) {
+            statusBadge = "ملتحق";
+            badgeClass = "ongoing";
+          } else if (
+            course.status === "Completed" ||
+            course.status === "completed" ||
+            course.status === "مكتمل"
+          ) {
+            statusBadge = "منتهي";
+            badgeClass = "completed";
+          } else {
+            statusBadge = "متاح";
+            badgeClass = "upcoming";
+          }
+
+          var levelAr = localizeSkillLevel(course.level);
+          var statusAr = localizeCourseStatus(course.status);
+
+          detailsTitle.textContent = course.title || "";
+          detailsDesc.textContent = course.desc || "لا يوجد وصف متاح.";
+          var detailsPh = document.getElementById(
+            "courseDetailsImagePlaceholder",
+          );
+          var rawImg = course.image || course.image_url || "";
+          var resolvedImg = resolveCourseImageUrl(rawImg);
+          detailsImage.alt = course.title || "";
+          detailsImage.onload = function () {
+            this.style.display = "block";
+            if (detailsPh) detailsPh.hidden = true;
+          };
+          detailsImage.onerror = function () {
+            this.style.display = "none";
+            if (detailsPh) {
+              detailsPh.hidden = false;
+            }
+          };
+          if (resolvedImg) {
+            detailsImage.style.display = "";
+            if (detailsPh) detailsPh.hidden = true;
+            detailsImage.src = resolvedImg;
+          } else {
+            detailsImage.removeAttribute("src");
+            detailsImage.style.display = "none";
+            if (detailsPh) detailsPh.hidden = false;
+          }
+          detailsBadge.textContent = statusBadge;
+          detailsBadge.className =
+            "course-details-modal__badge course-card__badge course-card__badge--" +
+            badgeClass;
+
+          detailsMeta.innerHTML =
+            '<span class="course-details-modal__stat" title="المدة"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="course-details-modal__stat-text">' +
+            escapeHtml(course.duration || "—") +
+            "</span></span>" +
+            '<span class="course-details-modal__stat" title="المستوى"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg><span class="course-details-modal__stat-text">' +
+            escapeHtml(levelAr) +
+            "</span></span>" +
+            '<span class="course-details-modal__stat" title="الجلسات"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span class="course-details-modal__stat-text">' +
+            escapeHtml(course.sessions || "—") +
+            "</span></span>" +
+            '<span class="course-details-modal__stat course-details-modal__stat--text-only" title="حالة الدورة"><span class="course-details-modal__stat-text">' +
+            escapeHtml(statusAr) +
+            "</span></span>";
+
+          var weeks = course.durationWeeks;
+          var ts = course.totalSessions;
+          var perWeek =
+            weeks != null &&
+            !isNaN(weeks) &&
+            weeks > 0 &&
+            ts != null &&
+            !isNaN(ts)
+              ? Math.round((ts / weeks) * 10) / 10
+              : null;
+
+          var dlRows = [
+            ["رقم الدورة", "#" + String(course.id)],
+            [
+              "المدة الإجمالية",
+              weeks != null && !isNaN(weeks)
+                ? weeks + " أسابيع"
+                : course.duration || "—",
+            ],
+            [
+              "عدد الجلسات التدريبية",
+              ts != null && !isNaN(ts) ? String(ts) : "—",
+            ],
+            ["المستوى التدريبي", levelAr],
+            ["حالة البرنامج", statusAr],
+          ];
+          if (perWeek != null && !isNaN(perWeek)) {
+            dlRows.push(["متوسط الجلسات أسبوعياً", String(perWeek)]);
+          }
+          if (detailsDl) {
+            detailsDl.innerHTML = dlRows
+              .map(function (r) {
+                return (
+                  '<div class="course-details-modal__kv" role="listitem">' +
+                  '<span class="course-details-modal__k">' +
+                  escapeHtml(r[0]) +
+                  "</span>" +
+                  '<span class="course-details-modal__v">' +
+                  escapeHtml(r[1]) +
+                  "</span>" +
+                  "</div>"
+                );
+              })
+              .join("");
+          }
+
+          detailsApplyBtn.style.display = "none";
+          detailsEditBtn.style.display = "none";
+          detailsApplyBtn.disabled = false;
+          detailsApplyBtn.style.opacity = "";
+          detailsApplyBtn.style.cursor = "";
+
+          var myBody = document.getElementById("courseDetailsMyCourseBody");
+          var regBody = document.getElementById("courseDetailsBody");
+          var isMyCourses =
+            new URLSearchParams(window.location.search).get("filter") === "my";
+          var showMyView = !isEditor && isMyCourses && hasApplied;
+
+          if (myBody) myBody.style.display = showMyView ? "flex" : "none";
+          if (regBody) regBody.style.display = showMyView ? "none" : "flex";
+
+          if (showMyView) {
+            // Set course image
+            var cdImg = document.getElementById("cdMyImage");
+            var cdPh = document.getElementById("cdMyImagePlaceholder");
+            if (cdImg) {
+              cdImg.alt = course.title || "";
+              if (course.image) {
+                cdImg.src = course.image;
+                cdImg.style.display = "block";
+                if (cdPh) cdPh.style.display = "none";
+                cdImg.onerror = function () {
+                  this.style.display = "none";
+                  if (cdPh) cdPh.style.display = "flex";
+                };
+              } else {
+                cdImg.style.display = "none";
+                if (cdPh) cdPh.style.display = "flex";
+              }
+            }
+            // Progress (dummy — replace with real API value from course progress endpoint)
+            var prog = Math.floor(Math.random() * 45 + 30);
+            var fillEl = document.getElementById("cdMyProgFill");
+            var valEl = document.getElementById("cdMyProgVal");
+            if (fillEl) fillEl.style.width = prog + "%";
+            if (valEl) valEl.textContent = prog + "%";
+
+            var permBtn = document.getElementById("cdMyPermBtn");
+            var quizBtn = document.getElementById("cdMyQuizBtn");
+            if (permBtn)
+              permBtn.onclick = function () {
+                closeCourseDetailsModal();
+                window.location.href =
+                  "trainee-permissions.html?course_id=" +
+                  course.id +
+                  "&course_name=" +
+                  encodeURIComponent(course.title || "");
+              };
+            if (quizBtn) {
+              if (course.has_active_quiz) {
+                quizBtn.onclick = function () {
+                  closeCourseDetailsModal();
+                  window.open("exam.html?course_id=" + course.id, "_blank");
+                };
+                quizBtn.classList.remove("disabled");
+                quizBtn.style.opacity = "1";
+              } else {
+                quizBtn.onclick = function () {
+                  showToast("لا يوجد اختبار متاح لهذه الدورة حالياً", "error");
+                };
+                quizBtn.style.opacity = "0.5";
+                quizBtn.classList.add("disabled");
+              }
+            }
+          } else if (isEditor) {
+            detailsEditBtn.style.display = "inline-flex";
+          } else {
+            if (hasApplied) {
+              detailsApplyBtn.textContent = "ابدأ الآن";
+              detailsApplyBtn.style.display = "inline-flex";
+              detailsApplyBtn.style.background =
+                "var(--gradient-success-cta)";
+              detailsApplyBtn.disabled = true;
+              detailsApplyBtn.style.cursor = "default";
+            } else if (
+              course.status === "Completed" ||
+              course.status === "completed" ||
+              course.status === "مكتمل"
+            ) {
+              detailsApplyBtn.textContent = "التسجيل مغلق";
+              detailsApplyBtn.style.display = "inline-flex";
+              detailsApplyBtn.style.opacity = "0.5";
+              detailsApplyBtn.disabled = true;
+              detailsApplyBtn.style.cursor = "not-allowed";
+            } else {
+              detailsApplyBtn.textContent = "تقدم الآن";
+              detailsApplyBtn.style.display = "inline-flex";
+              detailsApplyBtn.style.background = "";
+            }
+          }
+
+          detailsBackdrop.style.display = "flex";
+          detailsBackdrop.setAttribute("aria-hidden", "false");
+          setTimeout(function () {
+            detailsBackdrop.classList.add("courses-modal-backdrop--visible");
+          }, 10);
+        }
+
+        function closeCourseDetailsModal() {
+          if (!detailsBackdrop) return;
+          detailsBackdrop.classList.remove("courses-modal-backdrop--visible");
+          detailsBackdrop.setAttribute("aria-hidden", "true");
+          setTimeout(function () {
+            detailsBackdrop.style.display = "none";
+          }, 160);
+          detailsCourse = null;
+        }
+
+        window.appliedCourseIds = new Set();
+        function fetchCourses() {
+          renderSkeletons(pageSize); // Show skeletons while fetching
+
+          // If trainee, fetch their profile to see what they've applied for
+          let profilePromise = Promise.resolve({ courses: [] });
+          if (!isEditor && session.userId) {
+            profilePromise = window
+              .authenticatedFetch(`/api/trainee/profile/${session.userId}`)
+              .then((res) => res.json())
+              .catch((err) => {
+                console.error("Error fetching profile for applications:", err);
+                return { courses: [] };
+              });
+          }
+
+          Promise.all([
+            window.authenticatedFetch("/api/courses").then((res) => {
+              if (!res.ok) throw new Error("Network response was not ok");
+              return res.json();
+            }),
+            profilePromise,
+          ])
+            .then(([courseData, profileData]) => {
+              const applied = profileData.courses || [];
+              window.appliedCourseIds = new Set(
+                applied.map((a) => a.course_id),
+              );
+
+              courses = courseData.map((c) => ({
+                id: c.id,
+                title: c.title,
+                desc: c.description,
+                image:
+                  resolveCourseImageUrl(c.image_url) ||
+                  "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=220&fit=crop",
+                duration:
+                  c.duration_weeks != null ? c.duration_weeks + " أسابيع" : "—",
+                durationWeeks:
+                  c.duration_weeks != null ? Number(c.duration_weeks) : null,
+                level: c.skill_level,
+                sessions:
+                  c.total_sessions != null ? c.total_sessions + " جلسة" : "—",
+                totalSessions:
+                  c.total_sessions != null ? Number(c.total_sessions) : null,
+                status: c.status,
+                has_active_quiz: !!c.has_active_quiz,
+                quiz_json: c.quiz_json,
+              }));
+              grid.classList.remove("is-loading");
+              totalPages = Math.max(1, Math.ceil(courses.length / pageSize));
+              if (currentPage > totalPages) currentPage = totalPages;
+              renderPage(currentPage);
+              if (isEditor) renderSummary();
+            })
+            .catch((err) => {
+              console.error("Error fetching courses:", err);
+              grid.classList.remove("is-loading");
+              grid.innerHTML =
+                '<p class="error-message">حدث خطأ أثناء تحميل الدورات. الرجاء المحاولة لاحقاً.</p>';
+            });
+        }
+
+        function renderPage(page) {
+          if (page < 1 || page > totalPages) return;
+          currentPage = page;
+
+          var params = new URLSearchParams(window.location.search);
+          var isMyCourses = params.get("filter") === "my";
+
+          grid.classList.add("is-transitioning");
+          grid.innerHTML = "";
+
+          var displayCourses = courses;
+          if (isMyCourses) {
+            displayCourses = courses.filter(function (c) {
+              return window.appliedCourseIds.has(c.id);
+            });
+          } else if (!isEditor) {
+            displayCourses = courses.filter(function (c) {
+              return !window.appliedCourseIds.has(c.id);
+            });
+          }
+
+          totalPages = Math.max(1, Math.ceil(displayCourses.length / pageSize));
+          if (currentPage > totalPages) currentPage = totalPages;
+
+          if (displayCourses.length === 0) {
+            grid.classList.remove("is-transitioning");
+            grid.innerHTML =
+              '<div class="courses-empty-state">' +
+              '<div class="courses-empty-state__icon">📚</div>' +
+              '<h3 class="courses-empty-state__title">' +
+              (isMyCourses
+                ? "لا يوجد كورسات مسجلة حالياً"
+                : "لا توجد دورات متاحة حالياً") +
+              "</h3>" +
+              '<p class="courses-empty-state__text">' +
+              (isMyCourses
+                ? "تصفح قائمة الدورات وابدأ رحلتك التعليمية اليوم."
+                : "يرجى العودة لاحقاً لمتابعة جديد البرامج التدريبية.") +
+              "</p>" +
+              (isMyCourses
+                ? '<a href="courses.html" class="course-card__btn courses-empty-state__btn">تصفح الدورات</a>'
+                : "") +
+              "</div>";
+            if (isMyCourses) {
+              totalPages = 1;
+              if (pageInfo) pageInfo.textContent = "صفحة 1 من 1";
+            }
+            return;
+          }
+
+          var start = (page - 1) * pageSize;
+          var end = start + pageSize;
+          var slice = displayCourses.slice(start, end);
+
+          slice.forEach(function (c, idx) {
+            var hasApplied =
+              window.appliedCourseIds && window.appliedCourseIds.has(c.id);
+            var statusBadge, badgeClass;
+            if (hasApplied) {
+              statusBadge = "ملتحق";
+              badgeClass = "ongoing";
+            } else if (
+              c.status === "Completed" ||
+              c.status === "completed" ||
+              c.status === "مكتمل"
+            ) {
+              statusBadge = "منتهي";
+              badgeClass = "completed";
+            } else {
+              statusBadge = "متاح";
+              badgeClass = "upcoming";
+            }
+
+            var card = document.createElement("div");
+            card.style.animationDelay = idx * 0.08 + "s";
+            card.setAttribute("data-course-id", String(c.id));
+
+            // ── دوراتي enrolled card ─────────────────────────────────────────
+            if (isMyCourses && hasApplied) {
+              var safeName = (c.title || "")
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;");
+              card.className = "course-card course-card--my";
+              var prog = Math.floor(Math.random() * 45 + 30); // dummy — replace with real API
+              card.innerHTML =
+                '<div class="course-card__image-wrap">' +
+                '<img src="' +
+                c.image +
+                '" alt="" class="course-card__image" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+                '<div class="course-card__image-placeholder" style="display:none"><span>📚</span></div>' +
+                '<span class="course-card__badge course-card__badge--' +
+                badgeClass +
+                '">' +
+                statusBadge +
+                "</span>" +
+                "</div>" +
+                '<div class="course-card__body">' +
+                '<h3 class="course-card__title">' +
+                c.title +
+                "</h3>" +
+                '<div class="mc-prog-wrap">' +
+                '<div class="mc-prog-label"><span>التقدم</span><span>' +
+                prog +
+                "%</span></div>" +
+                '<div class="mc-prog-bar"><div class="mc-prog-fill" style="width:' +
+                prog +
+                '%"></div></div>' +
+                "</div>" +
+                '<div class="mc-action-row">' +
+                '<button type="button" class="mc-btn mc-btn--perm" data-course-name="' +
+                safeName +
+                '" onclick="openPermissionsPage(' +
+                c.id +
+                ',this,event)">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>' +
+                "الإذونات</button>" +
+                '<button type="button" class="mc-btn mc-btn--quiz' + (c.has_active_quiz ? ' active-quiz-pulse' : ' disabled') + '" style="' + (c.has_active_quiz ? '' : 'opacity:0.5') + '" onclick="' + (c.has_active_quiz ? 'window.open(\'exam.html?course_id=' + c.id + '\', \'_blank\')' : 'window._showQuizToast()') + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>' +
+                "الاختبارات</button>" +
+                "</div>" +
+                '<button class="course-card__btn mc-complete-btn" onclick="window.location.href=\'course-details.html?id=' + c.id + '\'">اذهب للدورة</button>' +
+                "</div>";
+              card.onclick = function() { window.location.href='course-details.html?id=' + c.id; };
+              grid.appendChild(card);
+              return;
+            }
+
+            // ── Regular card (الدورات / editor) ─────────────────────────────
+            card.className =
+              "course-card course-card--clickable" +
+              (isEditor ? " course-card--editor" : "");
+            card.setAttribute("tabindex", "0");
+            card.setAttribute("role", "button");
+            card.setAttribute(
+              "aria-label",
+              "عرض تفاصيل الدورة: " + (c.title || ""),
+            );
+
+            var statusChipHtml = isEditor
+              ? '<div class="course-card__tags">' +
+                '<span class="courses-editor-status courses-editor-status--' +
+                getStatusKey(c.status) +
+                '">' +
+                c.status +
+                "</span>" +
+                '<span class="course-card__level-tag">' +
+                c.level +
+                "</span>" +
+                "</div>"
+              : "";
+
+            var btnHtml = "";
+            if (isEditor) {
+              btnHtml =
+                '<div class="course-card__editor-actions">' +
+                '<button type="button" class="courses-editor-action courses-editor-action--edit" data-id="' +
+                c.id +
+                '">تعديل</button>' +
+                '<button type="button" class="courses-editor-action courses-editor-action--delete" data-id="' +
+                c.id +
+                '">حذف</button>' +
+                "</div>";
+            } else if (hasApplied) {
+              btnHtml =
+                '<button class="course-card__btn course-card__btn--enroll" onclick="window.location.href=\'course-details.html?id=' + c.id + '\'">ابدأ الآن</button>';
+            } else if (
+              c.status === "Completed" ||
+              c.status === "completed" ||
+              c.status === "مكتمل"
+            ) {
+              btnHtml =
+                '<button class="course-card__btn" style="opacity:0.5;cursor:not-allowed" disabled>التسجيل مغلق</button>';
+            } else {
+              btnHtml =
+                '<button class="course-card__btn" onclick="applyCourse(' +
+                c.id +
+                ')">تقدم الآن</button>';
+            }
+
+            card.innerHTML =
+              '<div class="course-card__image-wrap">' +
+              '<img src="' +
+              c.image +
+              '" alt="" class="course-card__image" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+              '<div class="course-card__image-placeholder" style="display:none"><span>📚</span></div>' +
+              '<span class="course-card__badge course-card__badge--' +
+              badgeClass +
+              '">' +
+              statusBadge +
+              "</span>" +
+              "</div>" +
+              '<div class="course-card__body">' +
+              '<h3 class="course-card__title">' +
+              c.title +
+              "</h3>" +
+              statusChipHtml +
+              '<p class="course-card__desc">' +
+              c.desc +
+              "</p>" +
+              '<div class="course-card__meta">' +
+              '<span title="المدة"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' +
+              c.duration +
+              "</span>" +
+              '<span title="المستوى"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>' +
+              c.level +
+              "</span>" +
+              '<span title="الجلسات"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>' +
+              c.sessions +
+              "</span>" +
+              "</div>" +
+              btnHtml +
+              "</div>";
+            grid.appendChild(card);
+          });
+
+          requestAnimationFrame(function () {
+            grid.classList.remove("is-transitioning");
+          });
+
+          if (pageInfo)
+            pageInfo.textContent = "صفحة " + currentPage + " من " + totalPages;
+          if (prevBtn) prevBtn.disabled = currentPage === 1;
+          if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+        }
+
+        if (modalClose) {
+          modalClose.addEventListener("click", function () {
+            closeCourseModal();
+          });
+        }
+        if (modalCancel) {
+          modalCancel.addEventListener("click", function () {
+            closeCourseModal();
+          });
+        }
+        if (modalBackdrop) {
+          modalBackdrop.addEventListener("click", function (e) {
+            if (e.target === modalBackdrop) {
+              closeCourseModal();
+            }
+          });
+        }
+        if (modalForm) {
+          modalForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (!titleInput.value.trim()) {
+              titleInput.focus();
+              return;
+            }
+            const formData = new FormData(modalForm);
+            const payload = {
+              title: formData.get("title"),
+              description: formData.get("desc") || "",
+              image_url: formData.get("image") || "",
+              duration_weeks: parseInt(formData.get("duration")) || 6,
+              total_sessions: parseInt(formData.get("sessions")) || 12,
+              skill_level: formData.get("level") || "متوسط",
+              status: formData.get("status") || "قادم",
+            };
+
+            let url = "/api/courses";
+            let method = "POST";
+
+            if (modalMode === "edit" && modalEditingId != null) {
+              url += `/${modalEditingId}`;
+              method = "PUT";
+            }
+
+            window
+              .authenticatedFetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              })
+              .then((res) => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.json();
+              })
+              .then(() => {
+                closeCourseModal();
+                fetchCourses(); // Refresh courses after add/edit
+                showToast(
+                  modalMode === "add"
+                    ? "تم إضافة الدورة بنجاح!"
+                    : "تم تحديث الدورة بنجاح!",
+                );
+              })
+              .catch((err) => {
+                console.error("Error saving course:", err);
+                showToast("حدث خطأ أثناء حفظ الدورة.", "error");
+              });
+          });
+        }
+
+        if (deleteBackdrop) {
+          deleteBackdrop.addEventListener("click", function (e) {
+            if (e.target === deleteBackdrop) {
+              closeDeleteModal();
+            }
+          });
+        }
+        if (deleteCancel) {
+          deleteCancel.addEventListener("click", function () {
+            closeDeleteModal();
+          });
+        }
+        if (deleteConfirm) {
+          deleteConfirm.addEventListener("click", function () {
+            if (pendingDeleteId == null) {
+              closeDeleteModal();
+              return;
+            }
+            var idToDelete = pendingDeleteId;
+            window
+              .authenticatedFetch(`/api/courses/${idToDelete}`, {
+                method: "DELETE",
+              })
+              .then((res) => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.text(); // DELETE usually returns no content or empty string
+              })
+              .then(() => {
+                closeDeleteModal();
+                fetchCourses(); // Refresh courses after delete
+                showToast("تم حذف الدورة بنجاح!");
+              })
+              .catch((err) => {
+                console.error("Error deleting course:", err);
+                showToast("حدث خطأ أثناء حذف الدورة.", "error");
+              });
+          });
+        }
+
+        if (prevBtn && nextBtn) {
+          prevBtn.addEventListener("click", function () {
+            renderPage(currentPage - 1);
+          });
+          nextBtn.addEventListener("click", function () {
+            renderPage(currentPage + 1);
+          });
+        }
+
+        // Initial load
+        fetchCourses();
+
+        function showToast(message, type = "success") {
+          var container = document.getElementById("toastContainer");
+          if (!container) return;
+          var toast = document.createElement("div");
+          toast.className = "toast toast--" + type;
+          var iconHtml =
+            type === "success"
+              ? '<span class="toast__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>'
+              : '<span class="toast__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>';
+          toast.innerHTML =
+            iconHtml + '<span class="toast__text">' + message + "</span>";
+          container.appendChild(toast);
+          setTimeout(function () {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(-8px)";
+            toast.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+            setTimeout(function () {
+              if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 250);
+          }, 3000);
+        }
+
+        function findCourseById(id) {
+          for (var i = 0; i < courses.length; i++) {
+            if (courses[i].id === id) return courses[i];
+          }
+          return null;
+        }
+
+        grid.addEventListener("click", function (e) {
+          var editBtn = e.target.closest(".courses-editor-action--edit");
+          var deleteBtn = e.target.closest(".courses-editor-action--delete");
+          if (editBtn) {
+            var editId = parseInt(editBtn.getAttribute("data-id"), 10);
+            var courseEdit = findCourseById(editId);
+            if (courseEdit) openCourseModal("edit", courseEdit);
+            return;
+          }
+          if (deleteBtn) {
+            var delId = parseInt(deleteBtn.getAttribute("data-id"), 10);
+            if (!isNaN(delId)) openDeleteModal(delId);
+            return;
+          }
+          if (e.target.closest(".course-card__btn")) {
+            return;
+          }
+          var cardEl = e.target.closest(".course-card");
+          if (!cardEl || !cardEl.classList.contains("course-card--clickable"))
+            return;
+          var idAttr = cardEl.getAttribute("data-course-id");
+          var cid = idAttr ? parseInt(idAttr, 10) : NaN;
+          if (isNaN(cid)) return;
+          var courseOpen = findCourseById(cid);
+          if (courseOpen) {
+            // If trainee and enrolled, go to new page
+            var hasApplied = window.appliedCourseIds && window.appliedCourseIds.has(cid);
+            if (!isEditor && hasApplied) {
+              window.location.href = 'course-details.html?id=' + cid;
+              return;
+            } else {
+              openCourseDetailsModal(courseOpen);
+            }
+          }
+        });
+
+        grid.addEventListener("keydown", function (e) {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          var cardEl = e.target.closest(".course-card--clickable");
+          if (!cardEl) return;
+          e.preventDefault();
+          var idAttr = cardEl.getAttribute("data-course-id");
+          var cid = idAttr ? parseInt(idAttr, 10) : NaN;
+          if (isNaN(cid)) return;
+          var courseK = findCourseById(cid);
+          if (courseK) openCourseDetailsModal(courseK);
+        });
+
+        if (detailsClose)
+          detailsClose.addEventListener("click", closeCourseDetailsModal);
+        if (detailsCloseFooter)
+          detailsCloseFooter.addEventListener("click", closeCourseDetailsModal);
+        if (detailsBackdrop) {
+          detailsBackdrop.addEventListener("click", function (e) {
+            if (e.target === detailsBackdrop) closeCourseDetailsModal();
+          });
+        }
+        if (detailsApplyBtn) {
+          detailsApplyBtn.addEventListener("click", function () {
+            if (!detailsCourse || detailsApplyBtn.disabled) return;
+            var id = detailsCourse.id;
+            closeCourseDetailsModal();
+            if (typeof window.applyCourse === "function") {
+              window.applyCourse(id);
+            }
+          });
+        }
+        if (detailsEditBtn) {
+          detailsEditBtn.addEventListener("click", function () {
+            var c = detailsCourse;
+            if (!c || !isEditor) return;
+            closeCourseDetailsModal();
+            openCourseModal("edit", c);
+          });
+        }
+        document.addEventListener("keydown", function (e) {
+          if (e.key !== "Escape") return;
+          if (!detailsBackdrop || detailsBackdrop.style.display === "none")
+            return;
+          if (
+            !detailsBackdrop.classList.contains(
+              "courses-modal-backdrop--visible",
+            )
+          )
+            return;
+          closeCourseDetailsModal();
+        });
+
+        var chatFab = document.getElementById("chatFab");
+
+        window.openPermissionsPage = function (courseId, el, e) {
+          if (e) e.stopPropagation();
+          var courseName =
+            el && el.getAttribute
+              ? el.getAttribute("data-course-name") || ""
+              : "";
+          window.location.href =
+            "trainee-permissions.html?course_id=" +
+            courseId +
+            "&course_name=" +
+            encodeURIComponent(courseName);
+        };
+
+        window.applyCourse = function (courseId) {
+          if (!confirm("هل أنت متأكد من رغبتك في التقدم لهذه الدورة؟")) return;
+
+          window
+            .authenticatedFetch("/api/trainee/apply", {
+              method: "POST",
+              body: JSON.stringify({ course_id: courseId }),
+            })
+            .then((res) => {
+              if (!res.ok) {
+                return res.json().then((err) => {
+                  throw new Error(err.detail || "فشل التقديم");
+                });
+              }
+              return res.json();
+            })
+            .then((data) => {
+              showToast("تم التقديم بنجاح!");
+              fetchCourses(); // Refresh UI to show "Under Review"
+            })
+            .catch((err) => {
+              alert("خطأ: " + err.message);
+            });
+        };
+      })();
+    </script>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الجلسات - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="sessions">
+    <div id="editorSidebar"></div>
+    <main class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">الجلسات</h1>
+        <p class="editor-page-header__sub">إضافة وتعديل جلسات الدورات</p>
+      </div>
+
+      <!-- Course selector -->
+      <div class="editor-form-group" style="max-width:360px;margin-bottom:1.5rem;">
+        <label for="courseSelect">اختر الدورة</label>
+        <select id="courseSelect" class="editor-select" onchange="loadSessions()">
+          <option value="">— اختر دورة —</option>
+        </select>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+        <button type="button" onclick="loadSessions()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0;">قائمة الجلسات</h2>
+        <button type="button" class="btn btn--primary btn--sm" onclick="addSession()" id="addSessionBtn" disabled>+ إضافة جلسة</button>
+      </div>
+
+      <div id="loadingState" class="editor-state" style="display:none;">
+        <div class="editor-state__icon">⏳</div>
+        <div class="editor-state__title">جاري التحميل...</div>
+      </div>
+      <div id="emptyState" class="editor-state">
+        <div class="editor-state__icon">📅</div>
+        <div class="editor-state__title">اختر دورة أولاً</div>
+        <div class="editor-state__text">اختر دورة من القائمة أعلاه لعرض وإدارة جلساتها.</div>
+      </div>
+      <div id="sessionsList" style="display:none;"></div>
+
+      <!-- Edit session modal -->
+      <div id="sessionModal" class="editor-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
+        <div class="editor-modal">
+          <h2 class="editor-modal__title" id="sessionModalTitle">تعديل الجلسة</h2>
+          <div class="editor-form-group">
+            <label for="sessionTitle">عنوان الجلسة <span class="required">*</span></label>
+            <input type="text" id="sessionTitle" class="editor-input" placeholder="عنوان الجلسة" />
+            <p id="sessionTitleError" class="inline-error" style="display:none;">عنوان الجلسة مطلوب.</p>
+          </div>
+          <div class="editor-form-group">
+            <label for="sessionDate">التاريخ والوقت</label>
+            <input type="datetime-local" id="sessionDate" class="editor-input" />
+          </div>
+          <div class="editor-form-group">
+            <label for="sessionStatus">الحالة</label>
+            <select id="sessionStatus" class="editor-select">
+              <option value="scheduled">مجدولة</option>
+              <option value="completed">مكتملة</option>
+              <option value="cancelled">ملغاة</option>
+            </select>
+          </div>
+          <div class="editor-modal__actions">
+            <button type="button" class="btn btn--secondary" onclick="closeSessionModal()">إلغاء</button>
+            <button type="button" class="btn btn--primary" onclick="saveSession()" id="saveSessionBtn">حفظ الجلسة</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var sessions = [];
+      var editingIdx = -1;
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      // Load courses into selector
+      authFetch("/api/courses")
+        .then(function(r) { return r.json(); })
+        .then(function(courses) {
+          var sel = document.getElementById("courseSelect");
+          courses.forEach(function(c) {
+            var opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.title_ar || c.title;
+            sel.appendChild(opt);
+          });
+          // Check URL param
+          var params = new URLSearchParams(window.location.search);
+          var cid = params.get("course_id");
+          if (cid) { sel.value = cid; loadSessions(); }
+        })
+        .catch(function() {});
+
+      function loadSessions() {
+        var courseId = document.getElementById("courseSelect").value;
+        document.getElementById("addSessionBtn").disabled = !courseId;
+        if (!courseId) {
+          sessions = [];
+          document.getElementById("emptyState").style.display = "flex";
+          document.getElementById("sessionsList").style.display = "none";
+          document.getElementById("emptyState").querySelector(".editor-state__title").textContent = "اختر دورة أولاً";
+          document.getElementById("emptyState").querySelector(".editor-state__text").textContent = "اختر دورة من القائمة أعلاه لعرض وإدارة جلساتها.";
+          return;
+        }
+        document.getElementById("pageBanner").style.display = "none";
+        document.getElementById("loadingState").style.display = "flex";
+        document.getElementById("emptyState").style.display = "none";
+        document.getElementById("sessionsList").style.display = "none";
+
+        authFetch("/api/courses/" + courseId + "/sessions")
+          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(data) {
+            sessions = data || [];
+            document.getElementById("loadingState").style.display = "none";
+            renderSessions();
+          })
+          .catch(function() {
+            sessions = [];
+            document.getElementById("loadingState").style.display = "none";
+            renderSessions();
+          });
+      }
+
+      function renderSessions() {
+        var list = document.getElementById("sessionsList");
+        var empty = document.getElementById("emptyState");
+        if (!sessions.length) {
+          list.style.display = "none";
+          empty.style.display = "flex";
+          empty.querySelector(".editor-state__title").textContent = "لا توجد جلسات";
+          empty.querySelector(".editor-state__text").textContent = "اضغط \"إضافة جلسة\" لإنشاء أول جلسة.";
+          return;
+        }
+        empty.style.display = "none";
+        var statusMap = { scheduled:"مجدولة", completed:"مكتملة", cancelled:"ملغاة" };
+        var html = '<div class="editor-table-wrap"><table class="editor-table"><thead><tr>' +
+          '<th>#</th><th>عنوان الجلسة</th><th>التاريخ</th><th>الحالة</th><th>الإجراءات</th>' +
+          '</tr></thead><tbody>';
+        sessions.forEach(function(s, i) {
+          html += '<tr>';
+          html += '<td style="color:var(--text-subtle);">'+(i+1)+'</td>';
+          html += '<td style="font-weight:600;">'+(s.topic||s.title||"جلسة "+(i+1))+'</td>';
+          html += '<td>'+(s.session_date ? new Date(s.session_date).toLocaleDateString("ar-EG") : "—")+'</td>';
+          html += '<td><span class="editor-course-card__badge editor-course-card__badge--'+(s.status==="completed"?"published":s.status==="cancelled"?"archived":"draft")+'">'+
+            (statusMap[s.status]||"مجدولة")+'</span></td>';
+          html += '<td style="display:flex;gap:0.5rem;">';
+          html += '<button type="button" class="btn btn--secondary btn--sm" onclick="openEditSession('+i+')">تعديل</button>';
+          html += '<button type="button" class="btn btn--danger btn--sm" onclick="deleteSession('+i+')">حذف</button>';
+          html += '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+        list.innerHTML = html;
+        list.style.display = "block";
+      }
+
+      function addSession() {
+        editingIdx = -1;
+        document.getElementById("sessionModalTitle").textContent = "إضافة جلسة جديدة";
+        document.getElementById("sessionTitle").value = "";
+        document.getElementById("sessionDate").value = "";
+        document.getElementById("sessionStatus").value = "scheduled";
+        document.getElementById("sessionTitleError").style.display = "none";
+        document.getElementById("sessionModal").style.display = "flex";
+        document.getElementById("sessionTitle").focus();
+      }
+
+      function openEditSession(idx) {
+        editingIdx = idx;
+        var s = sessions[idx];
+        document.getElementById("sessionModalTitle").textContent = "تعديل الجلسة";
+        document.getElementById("sessionTitle").value = s.topic || s.title || "";
+        document.getElementById("sessionDate").value = s.session_date ? s.session_date.slice(0,16) : "";
+        document.getElementById("sessionStatus").value = s.status || "scheduled";
+        document.getElementById("sessionTitleError").style.display = "none";
+        document.getElementById("sessionModal").style.display = "flex";
+        document.getElementById("sessionTitle").focus();
+      }
+
+      function closeSessionModal() {
+        document.getElementById("sessionModal").style.display = "none";
+      }
+
+      function saveSession() {
+        var title = document.getElementById("sessionTitle").value.trim();
+        if (!title) {
+          document.getElementById("sessionTitleError").style.display = "block";
+          return;
+        }
+        document.getElementById("sessionTitleError").style.display = "none";
+        var obj = {
+          topic: title,
+          title: title,
+          session_date: document.getElementById("sessionDate").value || null,
+          status: document.getElementById("sessionStatus").value
+        };
+        if (editingIdx >= 0) {
+          sessions[editingIdx] = Object.assign(sessions[editingIdx], obj);
+          showEditorToast("تم تحديث الجلسة.", "success");
+        } else {
+          sessions.push(obj);
+          showEditorToast("تمت إضافة الجلسة.", "success");
+        }
+        closeSessionModal();
+        renderSessions();
+      }
+
+      function deleteSession(idx) {
+        var title = sessions[idx].topic || sessions[idx].title || "الجلسة";
+        editorConfirm({
+          title: "حذف الجلسة؟",
+          body: "أنت على وشك حذف: <strong>" + title + "</strong>. لا يمكن التراجع عن هذا الإجراء.",
+          okLabel: "حذف الجلسة",
+          cancelLabel: "إلغاء",
+          danger: true
+        }).then(function(ok) {
+          if (ok) {
+            sessions.splice(idx, 1);
+            renderSessions();
+            showEditorToast("تم حذف الجلسة.", "success");
+          }
+        });
+      }
+
+      // Close modal on Escape
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeSessionModal();
+      });
+    </script>
+  </body>
+</html>

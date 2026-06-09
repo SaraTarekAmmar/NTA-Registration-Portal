@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الدورات - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+  </head>
+  <body data-page="courses">
+    <div id="editorSidebar"></div>
+
+    <main class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">الدورات التعليمية</h1>
+        <p class="editor-page-header__sub">إدارة وتحرير الدورات — مسودة / منشورة / مؤرشفة</p>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+        <button type="button" onclick="loadCourses()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="editor-filters">
+        <div class="editor-search">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
+          <input type="text" id="searchInput" placeholder="البحث بالاسم..." oninput="filterCourses()" />
+        </div>
+        <select class="editor-filter-select" id="statusFilter" onchange="filterCourses()">
+          <option value="">كل الحالات</option>
+          <option value="draft">مسودة</option>
+          <option value="published">منشورة</option>
+          <option value="archived">مؤرشفة</option>
+        </select>
+        <a href="editor-course-form.html" class="btn btn--primary">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          دورة جديدة
+        </a>
+      </div>
+
+      <!-- States -->
+      <div id="loadingState" class="editor-state">
+        <div class="editor-state__icon">⏳</div>
+        <div class="editor-state__title">جاري تحميل الدورات...</div>
+      </div>
+      <div id="emptyState" class="editor-state" style="display:none;">
+        <div class="editor-state__icon">📚</div>
+        <div class="editor-state__title">لا توجد دورات</div>
+        <div class="editor-state__text">جرّب تغيير الفلتر أو البحث. أو أنشئ أول دورة الآن.</div>
+        <a href="editor-course-form.html" class="btn btn--primary">إنشاء دورة جديدة</a>
+      </div>
+
+      <!-- Grid -->
+      <div class="editor-cards-grid" id="coursesGrid" style="display:none;"></div>
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js"></script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var allCourses = [];
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      // Pre-select filter from URL param
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        var s = params.get("status");
+        if (s) {
+          var sel = document.getElementById("statusFilter");
+          if (sel) sel.value = s;
+        }
+      })();
+
+      function statusBadge(status) {
+        var map = { draft:["مسودة","draft"], published:["منشورة","published"], archived:["مؤرشفة","archived"] };
+        var s = map[status] || [status,"draft"];
+        return '<span class="editor-course-card__badge editor-course-card__badge--'+s[1]+'">'+s[0]+'</span>';
+      }
+
+      function renderCourses(list) {
+        var grid = document.getElementById("coursesGrid");
+        var empty = document.getElementById("emptyState");
+        if (!list.length) {
+          grid.style.display = "none";
+          empty.style.display = "flex";
+          return;
+        }
+        empty.style.display = "none";
+        var html = "";
+        list.forEach(function(c) {
+          html += '<div class="editor-course-card">';
+          html += '<h3 class="editor-course-card__title">'+(c.title_ar||c.title||"بدون عنوان")+'</h3>';
+          html += '<div class="editor-course-card__meta">'+statusBadge(c.status||"draft")+'</div>';
+          html += '<div class="editor-course-card__stats">';
+          if(c.duration_weeks) html += '<span>'+c.duration_weeks+' أسابيع</span>';
+          if(c.total_sessions) html += '<span>'+c.total_sessions+' جلسة</span>';
+          html += '</div>';
+          html += '<div class="editor-course-card__actions">';
+          html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
+          html += '<a href="editor-preview.html?id='+c.id+'" class="btn btn--secondary btn--sm">معاينة</a>';
+          if(c.status !== "published") html += '<a href="editor-preview.html?id='+c.id+'&action=publish" class="btn btn--primary btn--sm">نشر</a>';
+          html += '</div></div>';
+        });
+        grid.innerHTML = html;
+        grid.style.display = "grid";
+      }
+
+      function filterCourses() {
+        var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+        var s = document.getElementById("statusFilter").value;
+        var filtered = allCourses.filter(function(c) {
+          var title = (c.title_ar || c.title || "").toLowerCase();
+          var matchQ = !q || title.includes(q);
+          var matchS = !s || (c.status || "draft") === s;
+          return matchQ && matchS;
+        });
+        renderCourses(filtered);
+      }
+
+      function loadCourses() {
+        document.getElementById("pageBanner").style.display = "none";
+        document.getElementById("loadingState").style.display = "flex";
+        document.getElementById("coursesGrid").style.display = "none";
+        document.getElementById("emptyState").style.display = "none";
+
+        authFetch("/api/courses")
+          .then(function(r) { if(!r.ok) throw new Error("فشل التحميل"); return r.json(); })
+          .then(function(data) {
+            allCourses = data;
+            document.getElementById("loadingState").style.display = "none";
+            filterCourses();
+          })
+          .catch(function(err) {
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("pageBanner").style.display = "flex";
+            document.getElementById("pageBannerText").textContent = "تعذّر تحميل الدورات. " + (err.message||"");
+          });
+      }
+
+      loadCourses();
+    </script>
+  </body>
+</html>

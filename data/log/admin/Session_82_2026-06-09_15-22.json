@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2026-06-09T15:22:54.010890",
+    "trace_id": "fb8ef891-e8da-4353-8038-fd0f7471f802",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/admin/trainees",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 21
+  },
+  {
+    "timestamp": "2026-06-09T15:23:12.378541",
+    "trace_id": "69d6a0af-ea46-4f2e-8373-9dc377ac8dc8",
+    "level": "INFO",
+    "component": "System",
+    "category": "ACTION",
+    "event_type": "API_CALL",
+    "ip_address": "127.0.0.1",
+    "request_path": "/api/admin/trainees",
+    "status_code": 200,
+    "details": null,
+    "traceback": null,
+    "payload": null,
+    "duration_ms": 12
+  }
+]

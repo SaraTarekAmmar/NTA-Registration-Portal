@@ -1,0 +1,13 @@
+﻿HAS_HINT | identityDocumentScan
+HAS_HINT | graduationCertificateScan[]
+HAS_HINT | standardizedTestDocument[]
+HAS_HINT | employmentSectionCv
+HAS_HINT | prizeCertificate[]
+HAS_HINT | portfolioFile
+HAS_HINT | sectionSevenCriminalRecordCertificate
+HAS_HINT | cvResume
+HAS_HINT | lettersOfRecommendation
+HAS_HINT | criminalRecord
+HAS_HINT | employerNoc
+HAS_HINT | scholarshipEssayFile
+HAS_HINT | photoFront

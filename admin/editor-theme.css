@@ -1,0 +1,560 @@
+/**
+ * Course editor portal (admin-courses.html) — light/dark via theme.css + html.light-mode
+ * Load after admin-theme.css
+ */
+
+/* ── Dark defaults: token-based surfaces (also helps before paint) ── */
+body[data-page="courses"] .course-card--editor {
+  background: var(--admin-panel-gradient);
+  border: 1px solid var(--admin-border-subtle);
+}
+
+body[data-page="courses"] .courses-modal-backdrop {
+  background: var(--surface-modal-overlay);
+}
+
+body[data-page="courses"] .courses-modal.courses-modal,
+body[data-page="courses"] #modalBackdrop .courses-modal {
+  background: var(--bg-card-solid);
+  border-color: var(--admin-border-input);
+  box-shadow: var(--shadow-strong);
+}
+
+/* ══ Light mode — editor portal ══ */
+html.light-mode body[data-page="courses"] {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .trainee-main h1 {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .adm-hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode body[data-page="courses"] .adm-hero__title {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .adm-hero__sub {
+  color: var(--text-muted);
+}
+
+/* Summary KPIs */
+html.light-mode body[data-page="courses"] .courses-editor-summary-card {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-summary-card__label {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-summary-card__value {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-summary-card--inquiries .courses-editor-summary-card__value {
+  color: var(--color-success);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-summary-card--live .courses-editor-summary-card__value {
+  color: var(--color-info);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-summary-card--status .courses-editor-summary-card__value {
+  color: var(--accent-solid);
+}
+
+/* Toolbar */
+html.light-mode body[data-page="courses"] .courses-editor-view-label {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-add-btn {
+  background: linear-gradient(135deg, var(--accent-solid), var(--accent-hover));
+  border-color: var(--accent-solid);
+  color: var(--text-on-accent);
+  box-shadow: var(--btn-primary-shadow);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-add-btn:hover {
+  box-shadow: var(--shadow-accent);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-view-btn {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-view-btn--active {
+  background: var(--admin-toggle-active);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-view-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--text-main);
+}
+
+/* Course cards */
+html.light-mode body[data-page="courses"] .course-card--editor {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode body[data-page="courses"] .course-card--editor::before {
+  display: none;
+}
+
+html.light-mode body[data-page="courses"] .course-card__editor-actions {
+  border-top-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-action {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-action--edit {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-action--edit:hover {
+  background: var(--quiz-accent-tint-bg);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-action--delete {
+  border-color: var(--color-error-border);
+  color: var(--color-error);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-action--delete:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+html.light-mode body[data-page="courses"] .course-card__extra-btn {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .course-card__extra-btn--recommendations {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .course-card__extra-btn--recommendations:hover {
+  background: var(--quiz-accent-tint-bg);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .course-card__extra-btn--upload {
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode body[data-page="courses"] .course-card__extra-btn--upload:hover {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+/* Table view */
+html.light-mode body[data-page="courses"] .courses-editor-table {
+  background: var(--bg-card);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-table thead {
+  background: var(--bg-input);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-table th {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-table td {
+  color: var(--text-main);
+  border-bottom-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-table tbody tr:hover {
+  background: var(--admin-row-hover);
+}
+
+html.light-mode body[data-page="courses"] .courses-editor-status {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+/* Pagination */
+html.light-mode body[data-page="courses"] .courses-pagination__btn {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-pagination__info {
+  color: var(--text-muted);
+}
+
+/* Modal backdrop & shell */
+html.light-mode body[data-page="courses"] .courses-modal-backdrop {
+  background: var(--surface-modal-overlay);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  color: var(--text-main);
+  box-shadow: var(--shadow-strong);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal__title {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal__input:focus,
+html.light-mode body[data-page="courses"] .courses-modal__textarea:focus,
+html.light-mode body[data-page="courses"] .courses-modal__select:focus {
+  background: var(--bg-input);
+  border-color: var(--accent-solid);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal__btn--primary {
+  color: var(--text-on-accent);
+}
+
+/* Inline modal: visibility, uploads, stages */
+html.light-mode body[data-page="courses"] .excel-upload-box {
+  background: var(--bg-input);
+  border-color: var(--border-accent);
+}
+
+html.light-mode body[data-page="courses"] .excel-upload-box:hover,
+html.light-mode body[data-page="courses"] .excel-upload-box.dragover {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--accent-solid);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode body[data-page="courses"] .course-visibility-field,
+html.light-mode body[data-page="courses"] .vis-field {
+  background: var(--bg-card) !important;
+  border-color: var(--border-main) !important;
+  box-shadow: none !important;
+}
+
+html.light-mode body[data-page="courses"] .course-visibility-field--private,
+html.light-mode body[data-page="courses"] .vis-field.priv {
+  box-shadow: var(--shadow-soft) !important;
+}
+
+html.light-mode body[data-page="courses"] .course-visibility-desc,
+html.light-mode body[data-page="courses"] .vis-desc {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .course-visibility-field--private .course-visibility-desc,
+html.light-mode body[data-page="courses"] .vis-field.priv .vis-desc {
+  color: var(--color-warning);
+}
+
+html.light-mode body[data-page="courses"] .sw-track {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+}
+
+html.light-mode body[data-page="courses"] .stage-row {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .stage-row:hover {
+  border-color: var(--border-accent);
+}
+
+html.light-mode body[data-page="courses"] .tip {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .file-label-btn {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+  color: var(--text-main) !important;
+}
+
+html.light-mode body[data-page="courses"] .file-label-btn:hover {
+  background: var(--quiz-accent-tint-bg) !important;
+  border-color: var(--border-accent) !important;
+}
+
+html.light-mode body[data-page="courses"] .image-preview-cont {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .step.active .step-lbl {
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .step.completed .step-lbl {
+  color: var(--accent-solid);
+}
+
+/* ══ إضافة دورة — الدفعات والجلسات (step 3) ══ */
+html.light-mode body[data-page="courses"] .courses-modal .lbl {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal .inp,
+html.light-mode body[data-page="courses"] .courses-modal .sel,
+html.light-mode body[data-page="courses"] .courses-modal .ta {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+  color-scheme: light;
+}
+
+html.light-mode body[data-page="courses"] .courses-modal .inp:focus,
+html.light-mode body[data-page="courses"] .courses-modal .sel:focus,
+html.light-mode body[data-page="courses"] .courses-modal .ta:focus {
+  border-color: var(--accent-solid);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal .sel option {
+  background: var(--bg-card-solid);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .stage-row {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .stage-label,
+html.light-mode body[data-page="courses"] .acc-title {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .stage-num,
+html.light-mode body[data-page="courses"] .acc-icon {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .acc-item {
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .acc-item.open {
+  border-color: var(--border-accent);
+}
+
+html.light-mode body[data-page="courses"] .acc-trigger {
+  background: var(--bg-input);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .acc-trigger:hover {
+  background: var(--quiz-accent-tint-bg);
+}
+
+html.light-mode body[data-page="courses"] .acc-meta,
+html.light-mode body[data-page="courses"] .acc-chevron {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .acc-body {
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .batch-tab {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .batch-tab.active {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning);
+  color: var(--color-warning-dark);
+  font-weight: 800;
+}
+
+html.light-mode body[data-page="courses"] .batch-tab:hover:not(.active) {
+  background: var(--bg-elevated);
+  border-color: var(--border-accent);
+  color: var(--color-warning-dark);
+}
+
+html.light-mode body[data-page="courses"] .batch-panel {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .role-wrap {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .role-label {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .rpill {
+  color: var(--text-muted);
+  border-color: var(--border-main);
+  background: var(--bg-card);
+}
+
+html.light-mode body[data-page="courses"] .rpill.t {
+  background: var(--color-info-bg);
+  border-color: var(--border-accent);
+  color: var(--color-info);
+}
+
+html.light-mode body[data-page="courses"] .rpill.r {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: var(--color-purple-dark);
+}
+
+html.light-mode body[data-page="courses"] .upzone-xl {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning);
+}
+
+html.light-mode body[data-page="courses"] .upzone-xl .ut-main {
+  color: var(--color-warning-dark);
+}
+
+html.light-mode body[data-page="courses"] .upzone-ss {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+}
+
+html.light-mode body[data-page="courses"] .upzone-ss .ut-main {
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .upzone-ss .ut-hint,
+html.light-mode body[data-page="courses"] .upzone-xl .ut-hint {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .fchip-xl {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning);
+  color: var(--color-warning-dark);
+}
+
+html.light-mode body[data-page="courses"] .fchip-ss {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .dvd-lbl {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .dvd-line {
+  background: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .sess-hrow .lbl {
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .sess-item {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .sess-num {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode body[data-page="courses"] .sess-ninp,
+html.light-mode body[data-page="courses"] .sess-dinp,
+html.light-mode body[data-page="courses"] .sess-count-inp {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+  color-scheme: light;
+}
+
+html.light-mode body[data-page="courses"] .sess-ninp::placeholder {
+  color: var(--text-subtle);
+}
+
+html.light-mode body[data-page="courses"] .empty {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .tip {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .add-stage-btn {
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .add-stage-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+  background: var(--quiz-accent-tint-bg);
+}
+
+html.light-mode body[data-page="courses"] .courses-modal__footer {
+  background: var(--bg-input);
+  border-top-color: var(--border-main);
+}
+
+html.light-mode body[data-page="courses"] .icon-btn {
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .icon-btn:hover {
+  color: var(--color-error);
+}
+
+html.light-mode body[data-page="courses"] .btn-ghost {
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode body[data-page="courses"] .btn-ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-main);
+}
+
+html.light-mode body[data-page="courses"] .btn-primary {
+  color: var(--text-on-accent);
+}

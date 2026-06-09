@@ -1,0 +1,28 @@
+# NTA Trainee Accounts Import Template
+# ====================================
+# Instructions:
+# 1. ADD your trainees below using the format:
+#    Full Name (AR) | Full Name (EN) | Email | National ID | Password
+#
+# 2. RUN 'python install_trainees.py' to import them.
+#
+# Note: Lines starting with # are ignored.
+# Empty lines are ignored.
+#
+# Passwords are authoritative — edit here to change them on a fresh deploy.
+# Sync with documentation/credentials.txt.
+
+# ── Primary Test Trainees ─────────────────────────────────────────────
+محمد أحمد علي | Mohamed Ahmed Ali | trainee@example.com | 29808081234567 | NTA@Trainee2026
+أمل سيد حسن | Amal Sayed Hassan | amal@example.com | 29901011234567 | Pass@2024
+
+# ── Demo / Batch Trainees ─────────────────────────────────────────────
+عمر أحمد محمد | Omar Ahmed Mohamed | omar.ahmed.fake01@nta-test.eg | 29203151000001 | Password123
+فاطمة علي السيد | Fatima Ali El-Sayed | fatima.ali.fake02@nta-test.eg | 29505031000002 | Password123
+خالد إبراهيم النجار | Khaled Ibrahim El-Naggar | khaled.ibrahim.fake03@nta-test.eg | 29808081000003 | Password123
+رانيا يوسف البيطار | Rania Youssef El-Baytar | rania.youssef.fake13@nta-test.eg | 29501301000013 | Password123
+طارق سيد الباز | Tarek Sayed El-Baz | tarek.sayed.fake14@nta-test.eg | 29207051000014 | Password123
+منى عاطف زهران | Mona Atef Zahran | mona.atef.fake15@nta-test.eg | 29604221000015 | Password123
+باسم محمد الغزالي | Bassem Mohamed El-Ghazaly | bassem.m.fake16@nta-test.eg | 29008171000016 | Password123
+لبنى حسين الشناوي | Lobna Hussein El-Shinawi | lobna.hussein.fake17@nta-test.eg | 29403071000017 | Password123
+كريم عصام الدين فهمي | Karim Essam El-Din Fahmy | karim.essam.fake18@nta-test.eg | 29109141000018 | Password123

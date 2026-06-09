@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قائمة المرشحين - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin-portal.css" />
+    <link rel="stylesheet" href="admin-theme.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Stage pills filter ── */
+      .au-stage-pills {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 14px;
+        background: rgba(8, 12, 32, 0.45);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+      }
+      .au-stage-pill {
+        padding: 0.32rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid var(--border-main);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text-subtle);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .au-stage-pill:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+      }
+      .au-stage-pill.active {
+        background: rgba(99, 102, 241, 0.18);
+        border-color: rgba(99, 102, 241, 0.6);
+        color: #c7d2fe;
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+      }
+
+      /* ── Improved candidate card ── */
+      .au-card {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 18px 40px -20px rgba(0, 0, 0, 0.6);
+        transition:
+          transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+          box-shadow 0.3s,
+          border-color 0.3s;
+        animation: auCardIn 0.45s ease-out backwards;
+        cursor: pointer;
+      }
+      .au-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow:
+          0 0 0 1px var(--bg-card),
+          0 22px 55px -18px rgba(0, 0, 0, 0.6),
+          0 0 0 2px var(--au-hover-ring, rgba(99, 102, 241, 0.5)),
+          0 0 35px var(--au-hover-glow, rgba(99, 102, 241, 0.18));
+      }
+      .au-card[data-stage="1"] {
+        --au-hover-ring: rgba(148, 163, 184, 0.45);
+        --au-hover-glow: rgba(148, 163, 184, 0.12);
+      }
+      .au-card[data-stage="2"] {
+        --au-hover-ring: rgba(56, 189, 248, 0.5);
+        --au-hover-glow: rgba(56, 189, 248, 0.15);
+      }
+      .au-card[data-stage="3"] {
+        --au-hover-ring: rgba(96, 165, 250, 0.5);
+        --au-hover-glow: rgba(96, 165, 250, 0.15);
+      }
+      .au-card[data-stage="4"] {
+        --au-hover-ring: rgba(129, 140, 248, 0.5);
+        --au-hover-glow: rgba(129, 140, 248, 0.15);
+      }
+      .au-card[data-stage="5"] {
+        --au-hover-ring: rgba(251, 191, 36, 0.5);
+        --au-hover-glow: rgba(251, 191, 36, 0.15);
+      }
+      .au-card[data-stage="6"] {
+        --au-hover-ring: rgba(52, 211, 153, 0.5);
+        --au-hover-glow: rgba(52, 211, 153, 0.15);
+      }
+      .au-card[data-stage="7"] {
+        --au-hover-ring: rgba(34, 197, 94, 0.5);
+        --au-hover-glow: rgba(34, 197, 94, 0.15);
+      }
+
+      .au-card__img-wrap {
+        position: relative;
+        height: 160px;
+        background: linear-gradient(135deg, var(--skeleton-base), var(--bg-card-solid));
+        overflow: hidden;
+      }
+      .au-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+      .au-card:hover .au-card__img {
+        transform: scale(1.06);
+      }
+      .au-card__img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #c7d2fe;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.2),
+          rgba(59, 130, 246, 0.15)
+        );
+      }
+      .au-card__stage-badge {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-on-accent);
+        background: rgba(8, 12, 32, 0.75);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .au-card__name-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.2rem;
+      }
+      .au-card__name-row .au-card__name {
+        margin: 0;
+      }
+      .au-card__cat-badge {
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        color: #a5b4fc;
+      }
+
+      .au-card__body {
+        padding: 0.9rem 1rem 1rem;
+      }
+      .au-card__name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.2rem;
+      }
+      .au-card__meta {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        margin: 0 0 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .au-card__meta svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+      }
+
+      .au-card__progress-wrap {
+        margin-bottom: 0.75rem;
+      }
+      .au-card__progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        margin-bottom: 0.25rem;
+      }
+      .au-card__progress-bar {
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .au-card__progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(
+          --au-card-progress,
+          linear-gradient(90deg, var(--text-muted), var(--text-subtle))
+        );
+        transition: width 0.7s ease;
+      }
+      .au-card[data-stage="5"] .au-card__progress-fill {
+        --au-card-progress: linear-gradient(90deg, var(--theme-btn-color), var(--color-warning));
+      }
+      .au-card[data-stage="6"] .au-card__progress-fill {
+        --au-card-progress: linear-gradient(90deg, var(--color-success-soft), var(--color-success));
+      }
+      .au-card[data-stage="7"] .au-card__progress-fill {
+        --au-card-progress: linear-gradient(90deg, var(--color-success), var(--color-success));
+      }
+
+      .au-card__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        width: 100%;
+        padding: 0.55rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        background: rgba(99, 102, 241, 0.12);
+        color: #a5b4fc;
+        font-size: 0.78rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      .au-card__btn:hover {
+        background: rgba(99, 102, 241, 0.22);
+        border-color: rgba(99, 102, 241, 0.7);
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+        transform: translateY(-1px);
+      }
+      .au-card__btn svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* ── Cards grid ── */
+      .au-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        animation: auCardIn 0.35s ease-out;
+      }
+      @media (max-width: 1100px) {
+        .au-cards-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 800px) {
+        .au-cards-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .au-cards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── Header bar ── */
+      .au-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .au-header__title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .au-header__count {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+      .au-search {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 65, 85, 0.8);
+        background: rgba(15, 23, 42, 0.95);
+      }
+      .au-search svg {
+        width: 14px;
+        height: 14px;
+        color: var(--text-subtle);
+        flex-shrink: 0;
+      }
+      .au-search input {
+        border: none;
+        background: transparent;
+        color: var(--text-main);
+        font-family: inherit;
+        font-size: 0.8rem;
+        outline: none;
+        width: 180px;
+      }
+      .au-search input::placeholder {
+        color: var(--text-subtle);
+      }
+
+      /* ── Table improvements ── */
+      .au-table-wrap {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: rgba(8, 12, 32, 0.45);
+        backdrop-filter: blur(12px);
+      }
+      .au-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.83rem;
+      }
+      .au-table th {
+        padding: 0.65rem 1rem;
+        text-align: right;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-main);
+        background: var(--assign-card-hover-bg);
+      }
+      .au-table td {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+        color: var(--text-muted);
+      }
+      .au-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .au-table tbody tr {
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+      .au-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.06);
+      }
+      .au-table__avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(99, 102, 241, 0.2);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        flex-shrink: 0;
+      }
+      .au-table__avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .au-table__avatar-fallback {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #a5b4fc;
+      }
+      .au-table__name {
+        font-weight: 700;
+        color: var(--text-main);
+      }
+      .au-stage-chip {
+        display: inline-flex;
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      /* ── View toggle ── */
+      .au-view-toggle {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .au-view-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(51, 65, 85, 0.7);
+        background: var(--bg-card);
+        color: var(--text-subtle);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .au-view-btn:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #a5b4fc;
+      }
+      .au-view-btn.active {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: rgba(99, 102, 241, 0.55);
+        color: #c7d2fe;
+      }
+      .au-view-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ── Skeleton ── */
+      .au-skeleton-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+      }
+      @media (max-width: 1100px) {
+        .au-skeleton-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 800px) {
+        .au-skeleton-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .au-skel-card {
+        border-radius: 18px;
+        overflow: hidden;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .au-skel-img {
+        height: 160px;
+      }
+      .au-skel-body {
+        padding: 0.9rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .au-skel-line {
+        border-radius: 6px;
+        height: 0.85rem;
+      }
+      .au-skel-btn {
+        border-radius: 8px;
+        height: 36px;
+        margin-top: 0.25rem;
+      }
+      .au-skel-img,
+      .au-skel-line,
+      .au-skel-btn {
+        background: linear-gradient(
+          90deg,
+          var(--skeleton-base) 25%,
+          var(--skeleton-shine) 50%,
+          var(--skeleton-base) 75%
+        );
+        background-size: 200% 100%;
+        animation: auShimmer 1.5s ease-in-out infinite;
+      }
+
+      /* ── Empty ── */
+      .au-empty {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(15, 23, 42, 0.3);
+        border-radius: 18px;
+        border: 1px dashed var(--border-main);
+        color: var(--skeleton-shine);
+        font-size: 0.9rem;
+      }
+
+      @keyframes auCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes auShimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* Stage chip colors */
+      .au-chip-1 {
+        background: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        color: var(--text-muted);
+      }
+      .au-chip-2 {
+        background: rgba(56, 189, 248, 0.1);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: var(--color-info-soft);
+      }
+      .au-chip-3 {
+        background: rgba(96, 165, 250, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        color: var(--color-info-soft);
+      }
+      .au-chip-4 {
+        background: rgba(129, 140, 248, 0.1);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: var(--accent-hover);
+      }
+      .au-chip-5 {
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        color: var(--theme-btn-color);
+      }
+      .au-chip-6 {
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        color: var(--color-success-soft);
+      }
+      .au-chip-7 {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: var(--color-success-soft);
+      }
+    </style>
+    <script src="js/admin-guard.js"></script>
+</head>
+  <body class="trainee-app" data-page="admin-users">
+    <div class="trainee-bg"></div>
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+      <!-- Hero -->
+      <div class="admin-hero" style="margin-bottom: 1.5rem">
+        <h1>قائمة المرشحين</h1>
+        <p class="admin-hero__subtitle">
+          إدارة وعرض جميع المرشحين في مراحل خط التقديم
+        </p>
+      </div>
+
+      <!-- Stage pills -->
+      <div class="au-stage-pills" id="auStagePills"></div>
+
+      <!-- Section -->
+      <section class="admin-section">
+        <div class="au-header">
+          <div style="display: flex; align-items: center; gap: 0.65rem">
+            <h2 class="au-header__title" id="auSectionTitle">المرشحون</h2>
+            <span class="au-header__count" id="auCount">0</span>
+          </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              flex-wrap: wrap;
+            "
+          >
+            <div class="au-search">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+              <input
+                type="text"
+                id="auSearch"
+                placeholder="بحث بالاسم أو البريد..."
+                autocomplete="off"
+              />
+            </div>
+            <div class="au-view-toggle">
+              <button
+                type="button"
+                class="au-view-btn active"
+                data-view="cards"
+                title="بطاقات"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="au-view-btn"
+                data-view="table"
+                title="جدول"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards view -->
+        <div id="auViewCards">
+          <div class="au-skeleton-grid" id="auSkeleton">
+            <div class="au-skel-card">
+              <div class="au-skel-img"></div>
+              <div class="au-skel-body">
+                <div class="au-skel-line" style="width: 70%"></div>
+                <div class="au-skel-line" style="width: 50%"></div>
+                <div class="au-skel-btn"></div>
+              </div>
+            </div>
+            <div class="au-skel-card">
+              <div class="au-skel-img"></div>
+              <div class="au-skel-body">
+                <div class="au-skel-line" style="width: 70%"></div>
+                <div class="au-skel-line" style="width: 50%"></div>
+                <div class="au-skel-btn"></div>
+              </div>
+            </div>
+            <div class="au-skel-card">
+              <div class="au-skel-img"></div>
+              <div class="au-skel-body">
+                <div class="au-skel-line" style="width: 70%"></div>
+                <div class="au-skel-line" style="width: 50%"></div>
+                <div class="au-skel-btn"></div>
+              </div>
+            </div>
+            <div class="au-skel-card">
+              <div class="au-skel-img"></div>
+              <div class="au-skel-body">
+                <div class="au-skel-line" style="width: 70%"></div>
+                <div class="au-skel-line" style="width: 50%"></div>
+                <div class="au-skel-btn"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="au-cards-grid"
+            id="auCardsGrid"
+            style="display: none"
+          ></div>
+          <div class="admin-pagination" id="auPagination"></div>
+          <div class="admin-pagination-info" id="auPaginationInfo"></div>
+        </div>
+
+        <!-- Table view -->
+        <div id="auViewTable" style="display: none">
+          <div class="au-table-wrap">
+            <table class="au-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>الصورة</th>
+                  <th>الاسم</th>
+                  <th>التصنيف</th>
+                  <th>العمر</th>
+                  <th>التعليم</th>
+                  <th>المرحلة</th>
+                </tr>
+              </thead>
+              <tbody id="auTableBody"></tbody>
+            </table>
+          </div>
+          <div class="admin-table-pagination" id="auTablePagination"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="header/header.js?v=3"></script>
+    <script>
+      (function () {
+        var session = {};
+        try {
+          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        } catch (e) {}
+        if (session.role !== "admin") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        var STAGES = [
+          { id: 0, label: "الكل" },
+          { id: 1, label: "الفرز الإلكتروني" },
+          { id: 2, label: "الاستعلام الأمني" },
+          { id: 3, label: "الاختبار النفسي" },
+          { id: 4, label: "اختبارات المعلومات واللغة العربية" },
+          { id: 5, label: "المقابلة الأولى" },
+          { id: 6, label: "المقابلة الثانية" },
+        ];
+
+        var trainees = [];
+        var filtered = [];
+        var activeStage = 0;
+        var currentView = "cards";
+        var currentPage = 1;
+        var pageSize = 12;
+        var isLoading = true;
+
+        /* ── Stage pills ── */
+        function renderPills() {
+          var el = document.getElementById("auStagePills");
+          el.innerHTML = STAGES.map(function (s) {
+            var count = trainees.filter(function(t) {
+              return (s.id === 0 || t.stage === s.id) && t.status !== 'rejected';
+            }).length;
+            
+            return (
+              '<button class="au-stage-pill' +
+              (activeStage === s.id ? " active" : "") +
+              '" onclick="selectStage(' +
+              s.id +
+              ')">' +
+              s.label + ' (' + count + ')' +
+              "</button>"
+            );
+          }).join("");
+        }
+        window.selectStage = function (id) {
+          activeStage = id;
+          currentPage = 1;
+          renderPills();
+          applyFilters();
+          render();
+        };
+
+        /* ── Filters ── */
+        function applyFilters() {
+          var q = (document.getElementById("auSearch").value || "")
+            .trim()
+            .toLowerCase();
+          
+          // Show active and pending candidates; exclude rejected
+          var list = trainees.filter(function(t) {
+            return t.status !== 'rejected';
+          });
+
+          if (activeStage)
+            list = list.filter(function (t) {
+              return t.stage === activeStage;
+            });
+          if (q)
+            list = list.filter(function (t) {
+              return (
+                (t.name || "").toLowerCase().indexOf(q) >= 0 ||
+                (t.email || "").toLowerCase().indexOf(q) >= 0
+              );
+            });
+          filtered = list;
+          var title = activeStage
+            ? STAGES.find(function (s) {
+                return s.id === activeStage;
+              }).label
+            : "جميع المرشحين";
+          document.getElementById("auSectionTitle").textContent = title;
+          document.getElementById("auCount").textContent = filtered.length;
+        }
+
+        /* ── Build card ── */
+        function buildCard(t, idx) {
+          var prog = t.progress_percentage || 10;
+          var initials = (t.name || "؟")
+            .split(" ")
+            .slice(0, 2)
+            .map(function (w) {
+              return w.charAt(0);
+            })
+            .join("");
+          return (
+            '<div class="au-card" data-stage="' +
+            t.stage +
+            '" style="animation-delay:' +
+            idx * 0.05 +
+            's">' +
+            '<div class="au-card__img-wrap">' +
+            '<img src="' +
+            t.image +
+            '" alt="" class="au-card__img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+            '<div class="au-card__img-placeholder" style="display:none">' +
+            initials +
+            "</div>" +
+            '<span class="au-card__stage-badge">المرحلة ' +
+            t.stage +
+            "</span>" +
+            "</div>" +
+            '<div class="au-card__body">' +
+            '<div class="au-card__name-row">' +
+            '<h3 class="au-card__name">' +
+            t.name +
+            "</h3>" +
+            '<span class="au-card__cat-badge">' +
+            (t.category || "عام") +
+            "</span>" +
+            "</div>" +
+            '<p class="au-card__meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>' +
+            (t.education || "—") +
+            " · " +
+            (t.age || "—") +
+            " سنة</p>" +
+            '<div class="au-card__progress-wrap">' +
+            '<div class="au-card__progress-label"><span>التقدم في الخط</span><span>' +
+            prog +
+            "%</span></div>" +
+            '<div class="au-card__progress-bar"><div class="au-card__progress-fill" style="width:' +
+            prog +
+            '%"></div></div>' +
+            "</div>" +
+            '<a href="admin-profile.html?id=' +
+            t.id +
+            '&from=applicants" class="au-card__btn">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+            "إدارة الملف الشخصي</a>" +
+            "</div></div>"
+          );
+        }
+
+        /* ── Build table row ── */
+        function buildRow(t, i) {
+          var initials = (t.name || "؟")
+            .split(" ")
+            .slice(0, 2)
+            .map(function (w) {
+              return w.charAt(0);
+            })
+            .join("");
+          var stageLabel =
+            (
+              STAGES.find(function (s) {
+                return s.id === t.stage;
+              }) || {}
+            ).label || "—";
+          return (
+            "<tr onclick=\"window.location.href='admin-profile.html?id=" +
+            t.id +
+            "&from=applicants'\">" +
+            "<td>" +
+            i +
+            "</td>" +
+            '<td><div class="au-table__avatar">' +
+            (t.image && t.image !== "null" ? '<img src="' + t.image + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' : '') +
+            '<span class="au-table__avatar-fallback" style="' + (t.image && t.image !== "null" ? 'display:none' : 'display:flex') + '">' +
+            initials +
+            "</span></div></td>" +
+            '<td><span class="au-table__name">' +
+            t.name +
+            "</span></td>" +
+            "<td>" +
+            (t.category || "عام") +
+            "</td>" +
+            "<td>" +
+            (t.age || "—") +
+            "</td>" +
+            "<td>" +
+            (t.education || "—") +
+            "</td>" +
+            '<td><span class="au-stage-chip au-chip-' +
+            t.stage +
+            '">' +
+            stageLabel +
+            "</span></td>" +
+            "</tr>"
+          );
+        }
+
+        /* ── Render ── */
+        function render() {
+          if (isLoading) return;
+          var total = filtered.length;
+          var totalPages = Math.max(1, Math.ceil(total / pageSize));
+          currentPage = Math.min(currentPage, totalPages);
+          var start = (currentPage - 1) * pageSize;
+          var slice = filtered.slice(start, start + pageSize);
+
+          if (currentView === "cards") {
+            document.getElementById("auViewTable").style.display = "none";
+            document.getElementById("auViewCards").style.display = "";
+            var grid = document.getElementById("auCardsGrid");
+            grid.innerHTML =
+              total === 0
+                ? '<div class="au-empty">لا توجد نتائج.</div>'
+                : slice
+                    .map(function (t, i) {
+                      return buildCard(t, i);
+                    })
+                    .join("");
+            renderPagination(totalPages, "auPagination", "auPaginationInfo");
+          } else {
+            document.getElementById("auViewCards").style.display = "none";
+            document.getElementById("auViewTable").style.display = "";
+            var tbody = document.getElementById("auTableBody");
+            tbody.innerHTML =
+              total === 0
+                ? '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-subtle);">لا توجد نتائج</td></tr>'
+                : slice
+                    .map(function (t, i) {
+                      return buildRow(t, start + i + 1);
+                    })
+                    .join("");
+            renderPagination(totalPages, "auTablePagination", null);
+          }
+        }
+
+        function renderPagination(totalPages, containerId, infoId) {
+          var el = document.getElementById(containerId);
+          if (!el) return;
+          if (totalPages <= 1) {
+            el.innerHTML = "";
+            return;
+          }
+          var html =
+            '<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:1.25rem 0;">';
+          html +=
+            '<button class="courses-pagination__btn" ' +
+            (currentPage === 1 ? "disabled" : "") +
+            ' onclick="goPage(' +
+            (currentPage - 1) +
+            ')">‹ السابق</button>';
+          html +=
+            '<span style="font-size:0.82rem;color:var(--text-subtle);min-width:100px;text-align:center;">صفحة ' +
+            currentPage +
+            " من " +
+            totalPages +
+            "</span>";
+          html +=
+            '<button class="courses-pagination__btn" ' +
+            (currentPage === totalPages ? "disabled" : "") +
+            ' onclick="goPage(' +
+            (currentPage + 1) +
+            ')">التالي ›</button>';
+          html += "</div>";
+          el.innerHTML = html;
+        }
+        window.goPage = function (p) {
+          currentPage = p;
+          render();
+        };
+
+        /* ── Fetch ── */
+        function fetchTrainees() {
+          isLoading = true;
+          // Check URL params for initial stage/status
+          var urlParams = new URLSearchParams(window.location.search);
+          var urlStage = urlParams.get("stage");
+          var urlStatus = urlParams.get("status");
+          if (urlStage) activeStage = parseInt(urlStage) || 0;
+          if (urlStatus === "accepted") activeStage = 7;
+          if (urlStatus === "rejected") {
+            // Show only rejected candidates regardless of stage
+            trainees = trainees.filter(function(t) { return t.status === 'rejected'; });
+          }
+
+          var url = "/api/admin/trainees?role=applicant";
+          // Fetch all then filter client-side for pill flexibility
+          window
+            .authenticatedFetch(url)
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              trainees = data
+                .map(function (t) {
+                  return {
+                    id: t.id,
+                    name: t.name,
+                    email: t.email,
+                    stage: t.stage || 1,
+                    status: t.status,
+                    category: t.category || "عام",
+                    image: t.image_url || null,
+                    age: t.age,
+                    education: t.education,
+                    progress_percentage: t.progress_percentage || 0
+                  };
+                  // Exclude stage 7 (المسجلين بالبرنامج) — they are shown in قائمة المتدربين
+                })
+                .filter(function (t) {
+                  return t.stage !== 7;
+                });
+              isLoading = false;
+              document.getElementById("auSkeleton").style.display = "none";
+              document.getElementById("auCardsGrid").style.display = "";
+              renderPills();
+              applyFilters();
+              render();
+            })
+            .catch(function (err) {
+              console.error("Error fetching trainees:", err);
+              isLoading = false;
+              document.getElementById("auSkeleton").style.display = "none";
+              document.getElementById("auCardsGrid").style.display = "";
+              document.getElementById("auCardsGrid").innerHTML =
+                '<div class="au-empty">حدث خطأ أثناء تحميل البيانات.</div>';
+            });
+        }
+
+        /* ── Events ── */
+        document
+          .getElementById("auSearch")
+          .addEventListener("input", function () {
+            currentPage = 1;
+            applyFilters();
+            render();
+          });
+        document.querySelectorAll(".au-view-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentView = this.getAttribute("data-view");
+            document.querySelectorAll(".au-view-btn").forEach(function (b) {
+              b.classList.remove("active");
+            });
+            this.classList.add("active");
+            currentPage = 1;
+            render();
+          });
+        });
+
+        renderPills();
+        fetchTrainees();
+      })();
+    </script>
+    <div id="chatWidget"></div>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

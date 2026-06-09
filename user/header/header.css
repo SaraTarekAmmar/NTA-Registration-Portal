@@ -1,0 +1,258 @@
+/* ===== NTA Header - Neon Glow Style ===== */
+.nta-header {
+    position: relative;
+    z-index: 100;
+    margin: 1.25rem auto;
+    width: 95%;
+    padding: 0.6rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 55%),
+        var(--bg-header, rgba(10, 20, 40, 0.96));
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-accent, rgba(59, 130, 246, 0.35));
+    border-radius: 999px;
+    box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 1),
+        0 0 24px rgba(37, 99, 235, 0.45),
+        0 0 60px rgba(15, 23, 42, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+div#ntaHeader {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.nta-header__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nta-header__logo-img {
+    height: 48px;
+    width: auto;
+}
+
+.nta-header__logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.nta-header__logo-main {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main, #f1f5f9);
+}
+
+.nta-header__logo-sub {
+    font-size: 0.65rem;
+    color: var(--text-muted, #94a3b8);
+    letter-spacing: 0.05em;
+}
+
+.nta-header__logo-ar {
+    font-size: 0.7rem;
+    color: var(--text-subtle, #64748b);
+}
+
+.nta-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nta-header__center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    text-align: center;
+}
+
+.nta-header__section-label {
+    display: inline-block;
+    color: var(--text-main, #e2e8f0);
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.nta-header__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.nta-header__btn:hover {
+    background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.nta-header__btn.active {
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+}
+
+/* Center tabs inside nav: show as outlined pills even if they use nta-header__btn */
+.nta-header__nav .nta-header__btn {
+    padding: 0.38rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(59, 130, 246, 0.8);
+    background: transparent;
+    color: #bfdbfe;
+    font-size: 0.8rem;
+    box-shadow: none;
+}
+
+.nta-header__nav .nta-header__btn:hover,
+.nta-header__nav .nta-header__btn.active {
+    border-color: rgba(96, 165, 250, 1);
+    background: transparent;
+    color: #f9fafb;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+}
+
+.nta-header__btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Center tabs (simple chips) */
+.nta-header__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.38rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(59, 130, 246, 0.8) !important;
+    background: transparent !important;
+    color: #bfdbfe;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nta-header__chip:hover {
+    border-color: rgba(96, 165, 250, 1);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+}
+
+.nta-header__chip.active {
+    border-color: rgba(59, 130, 246, 1) !important;
+    background: transparent !important;
+    color: #f9fafb;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(37, 99, 235, 0.75);
+}
+
+.nta-header__chip svg {
+    width: 17px;
+    height: 17px;
+}
+
+.nta-header__label {
+    color: #f1f5f9;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.nta-header__theme {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--theme-btn-bg, rgba(251, 191, 36, 0.15));
+    border: 1px solid var(--theme-btn-border, rgba(251, 191, 36, 0.4));
+    color: var(--theme-btn-color, #fbbf24);
+    cursor: pointer;
+    transition: all 0.25s;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.nta-header__theme:hover {
+    background: rgba(251, 191, 36, 0.25);
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+}
+
+.nta-header__theme svg {
+    width: 22px;
+    height: 22px;
+}
+
+.nta-header__btn--logout {
+    padding: 0.4rem 1.2rem;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid rgba(248, 113, 113, 0.8);
+    color: #fecaca;
+    box-shadow: none;
+}
+
+.nta-header__btn--logout:hover {
+    background: rgba(127, 29, 29, 0.25);
+    border-color: rgba(248, 113, 113, 1);
+    box-shadow: 0 0 16px rgba(248, 113, 113, 0.55);
+}
+
+/* Login button style (left big pill) */
+.nta-header__btn--login {
+    padding-inline: 1.4rem;
+}
+
+.nta-header__btn--login svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Actions container (left side) */
+.nta-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Trainee app: reuse same pill header layout as login (no overrides) */
+
+/* Responsive header */
+@media (max-width: 768px) {
+    .nta-header {
+        flex-wrap: wrap;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+    }
+
+    .nta-header__logo-text .nta-header__logo-sub,
+    .nta-header__logo-ar {
+        display: none;
+    }
+
+    .nta-header__nav {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
