@@ -85,6 +85,16 @@ async def save_upload_file(file: UploadFile, category: str = "temp", identifier:
     relative_path = os.path.join("data", subfolder, unique_filename).replace("\\", "/")
     return relative_path
 
+def _safe_resolve(rel_path: str) -> "Path | None":
+    """Resolve a relative path and ensure it stays within UPLOAD_DIR."""
+    try:
+        full = (PROJECT_ROOT / rel_path.lstrip('/')).resolve()
+        if UPLOAD_DIR.resolve() in full.parents or full.parent == UPLOAD_DIR.resolve():
+            return full
+    except Exception:
+        pass
+    return None
+
 def move_user_files_to_user_folder(name: str, nid: str, role: str, file_paths: list) -> dict:
     """
     Moves a list of relative file paths to a user-centric folder: data/{role}/{name}_{nid}/
@@ -93,29 +103,29 @@ def move_user_files_to_user_folder(name: str, nid: str, role: str, file_paths: l
     import shutil
     name_slug = name.strip().replace(' ', '_')
     if not name_slug: name_slug = "user"
-    
+
     role_folder = "trainees" if role == 'trainee' else "trainers"
     if role in ['admin', 'superadmin', 'editor']:
         role_folder = "admins"
-        
+
     user_folder = UPLOAD_DIR / role_folder / f"{name_slug}_{nid}"
     os.makedirs(user_folder, exist_ok=True)
-    
+
     path_map = {}
     for old_rel_path in file_paths:
         if not old_rel_path: continue
-        
+
         # old_rel_path is like 'data/trainees/ids/...'
-        old_full_path = PROJECT_ROOT / old_rel_path.lstrip('/')
-        if old_full_path.exists() and old_full_path.is_file():
+        old_full_path = _safe_resolve(old_rel_path)
+        if old_full_path and old_full_path.exists() and old_full_path.is_file():
             filename = old_full_path.name
             new_full_path = user_folder / filename
-            
+
             # Avoid moving if it's already there
             if old_full_path.resolve() != new_full_path.resolve():
                 shutil.move(str(old_full_path), str(new_full_path))
-            
+
             new_rel_path = os.path.join("data", role_folder, f"{name_slug}_{nid}", filename).replace("\\", "/")
             path_map[old_rel_path] = new_rel_path
-            
+
     return path_map

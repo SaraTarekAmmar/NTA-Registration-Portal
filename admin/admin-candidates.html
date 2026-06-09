@@ -564,10 +564,11 @@
     <script src="js/admin-guard.js"></script>
 </head>
   <body class="trainee-app" data-page="admin-users">
+    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
     <div class="trainee-bg"></div>
     <div id="ntaHeader"></div>
 
-    <main class="trainee-main admin-main">
+    <main id="main-content" class="trainee-main admin-main">
       <!-- Hero -->
       <div class="admin-hero" style="margin-bottom: 1.5rem">
         <h1>قائمة المرشحين</h1>
@@ -862,7 +863,7 @@
             prog +
             '%"></div></div>' +
             "</div>" +
-            '<a href="admin-profile.html?id=' +
+            '<a href="admin-candidate-profile.html?id=' +
             t.id +
             '&from=applicants" class="au-card__btn">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
@@ -887,7 +888,7 @@
               }) || {}
             ).label || "—";
           return (
-            "<tr onclick=\"window.location.href='admin-profile.html?id=" +
+            "<tr onclick=\"window.location.href='admin-candidate-profile.html?id=" +
             t.id +
             "&from=applicants'\">" +
             "<td>" +

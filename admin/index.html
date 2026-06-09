@@ -10,7 +10,7 @@
         var adminToken = sessionStorage.getItem("admin_token");
         var editorToken = sessionStorage.getItem("editor_token");
         if (adminToken) {
-          window.location.replace("admin.html");
+          window.location.replace("admin-dashboard.html");
         } else if (editorToken) {
           window.location.replace("/editor/editor-dashboard.html");
         } else {

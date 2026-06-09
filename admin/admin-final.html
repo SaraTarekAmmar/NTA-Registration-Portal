@@ -125,8 +125,8 @@
           title.textContent = "تم قبول المرحلة بنجاح";
           sub.textContent   = stage ? "تم ترقية المتقدم إلى " + stage + "." : "تم ترقية المتقدم للمرحلة التالية.";
           actions.innerHTML =
-            btn("admin-users.html",   "العودة لقائمة المرشحين", "btn--secondary") +
-            (traineeId ? btn("admin-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--primary") : "");
+            btn("admin-candidates.html",   "العودة لقائمة المرشحين", "btn--secondary") +
+            (traineeId ? btn("admin-candidate-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--primary") : "");
 
         } else if (action === "reject") {
           icon.className = "final-icon final-icon--reject";
@@ -134,8 +134,8 @@
           title.textContent = "تم رفض المتقدم";
           sub.textContent   = "تم تحديث حالة المتقدم إلى مرفوض.";
           actions.innerHTML =
-            btn("admin-users.html",   "العودة لقائمة المرشحين", "btn--primary") +
-            (traineeId ? btn("admin-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--secondary") : "");
+            btn("admin-candidates.html",   "العودة لقائمة المرشحين", "btn--primary") +
+            (traineeId ? btn("admin-candidate-profile.html?id="+traineeId, "فتح ملف المتقدم", "btn--secondary") : "");
 
         } else if (action === "final_acceptance") {
           icon.className = "final-icon final-icon--trainee";
@@ -145,7 +145,7 @@
           detail.textContent = course ? "الدورة المُعيَّنة: " + course : "";
           actions.innerHTML =
             btn("admin-trainees.html", "عرض المتدربين",       "btn--primary") +
-            btn("admin.html",          "العودة للوحة التحكم", "btn--secondary");
+            btn("admin-dashboard.html",          "العودة للوحة التحكم", "btn--secondary");
 
         } else if (action === "approve_permission") {
           icon.className = "final-icon final-icon--perm";
@@ -163,7 +163,7 @@
 
         } else {
           title.textContent = "تمت العملية بنجاح";
-          actions.innerHTML = btn("admin.html", "العودة للوحة التحكم", "btn--secondary");
+          actions.innerHTML = btn("admin-dashboard.html", "العودة للوحة التحكم", "btn--secondary");
         }
       })();
     </script>

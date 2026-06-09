@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "user-portal",
+      "runtimeExecutable": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\user\\backend\\venv\\Scripts\\uvicorn.exe",
+      "runtimeArgs": ["main:app", "--reload", "--port", "8000"],
+      "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\user\\backend",
+      "port": 8000
+    },
+    {
+      "name": "admin-portal",
+      "runtimeExecutable": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\admin\\backend\\venv\\Scripts\\uvicorn.exe",
+      "runtimeArgs": ["main:app", "--reload", "--port", "8001"],
+      "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\admin\\backend",
+      "port": 8001
+    },
+    {
+      "name": "superadmin-portal",
+      "runtimeExecutable": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\superadmin\\backend\\venv\\Scripts\\uvicorn.exe",
+      "runtimeArgs": ["main:app", "--reload", "--port", "8002"],
+      "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\superadmin\\backend",
+      "port": 8002
+    }
+  ]
+}

@@ -130,13 +130,6 @@ async def login(req: Request, request: LoginRequest):
                 request_path=req.url.path,
                 details={"reason": "User not found", "email": email, "role": role}
             )
-            # Check if user exists with DIFFERENT role to be more helpful
-            cursor.execute("SELECT role FROM users WHERE email = %s", (email,))
-            other_roles = cursor.fetchall()
-            if other_roles:
-                roles_str = ", ".join([r['role'] for r in other_roles])
-                raise HTTPException(status_code=401, detail=f"المستخدم موجود بصلاحيات أخرى: {roles_str}. يرجى اختيار نوع الحساب الصحيح.")
-            
             raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
         
         # Validation Logic:
@@ -164,7 +157,7 @@ async def login(req: Request, request: LoginRequest):
                 request_path=req.url.path,
                 details={"reason": "Invalid password", "email": email}
             )
-            raise HTTPException(status_code=401, detail="كلمة المرور غير صحيحة")
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
             
         # For non-staff (Trainees and Trainers), verify National ID
         if not is_staff:

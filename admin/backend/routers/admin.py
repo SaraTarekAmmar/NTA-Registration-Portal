@@ -174,20 +174,32 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                 6: "admission_stage_6_interview2",
                 7: "admission_stage_7_final"
             }
+            # Whitelisted columns per stage table — prevents SQL injection via
+            # attacker-controlled JSON keys being interpolated into the query.
+            allowed_columns_map = {
+                "admission_stage_2_security":     {"result", "notes", "officer_name", "check_date", "clearance_level"},
+                "admission_stage_3_psychological": {"result", "notes", "psychologist_name", "test_date", "score"},
+                "admission_stage_5_interview1":   {"result", "notes", "interviewer_name", "interview_date", "score"},
+                "admission_stage_6_interview2":   {"result", "notes", "interviewer_name", "interview_date", "score"},
+                "admission_stage_7_final":        {"result", "notes", "decision_maker", "decision_date", "final_score"},
+            }
             target_table = table_map.get(review.stage_id)
             if target_table:
-                # Prepare keys and values from details
-                columns = ["trainee_id"] + list(review.details.keys())
-                placeholders = ["%s"] * len(columns)
-                values = [review.trainee_id] + list(review.details.values())
+                allowed = allowed_columns_map.get(target_table, set())
+                # Only keep keys that are whitelisted; silently drop unknown ones.
+                safe_details = {k: v for k, v in review.details.items() if k in allowed}
+                if safe_details:
+                    columns = ["trainee_id"] + list(safe_details.keys())
+                    placeholders = ["%s"] * len(columns)
+                    values = [review.trainee_id] + list(safe_details.values())
 
-                # Check for existing record to UPSERT
-                cursor.execute(f"SELECT id FROM {target_table} WHERE trainee_id = %s", (review.trainee_id,))
-                if cursor.fetchone():
-                    update_set = ", ".join([f"{col} = %s" for col in review.details.keys()])
-                    cursor.execute(f"UPDATE {target_table} SET {update_set} WHERE trainee_id = %s", list(review.details.values()) + [review.trainee_id])
-                else:
-                    cursor.execute(f"INSERT INTO {target_table} ({', '.join(columns)}) VALUES ({', '.join(placeholders)})", tuple(values))
+                    # Check for existing record to UPSERT
+                    cursor.execute(f"SELECT id FROM {target_table} WHERE trainee_id = %s", (review.trainee_id,))
+                    if cursor.fetchone():
+                        update_set = ", ".join([f"{col} = %s" for col in safe_details.keys()])
+                        cursor.execute(f"UPDATE {target_table} SET {update_set} WHERE trainee_id = %s", list(safe_details.values()) + [review.trainee_id])
+                    else:
+                        cursor.execute(f"INSERT INTO {target_table} ({', '.join(columns)}) VALUES ({', '.join(placeholders)})", tuple(values))
 
         # ── Stage 4: Sync exam scores into admission_stage_4_exams ──
         # Stage 4 exam results are written by the exam portal into

@@ -13,13 +13,14 @@
         radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 55%),
         radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 55%),
         var(--bg-header, rgba(10, 20, 40, 0.96));
+    -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border-accent, rgba(59, 130, 246, 0.35));
     border-radius: 999px;
     box-shadow:
         0 0 0 1px rgba(15, 23, 42, 1),
         0 0 24px rgba(37, 99, 235, 0.45),
-        0 0 60px rgba(15, 23, 42, 0.9),
+        0 8px 32px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 div#ntaHeader {
@@ -53,9 +54,9 @@ div#ntaHeader {
 }
 
 .nta-header__logo-sub {
-    font-size: 0.65rem;
+    font-size: 0.72rem;
     color: var(--text-muted, #94a3b8);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
 }
 
 .nta-header__logo-ar {
@@ -100,7 +101,7 @@ div#ntaHeader {
     font-size: 0.9rem;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.25s;
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
@@ -145,14 +146,14 @@ div#ntaHeader {
     gap: 0.4rem;
     padding: 0.38rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8) !important;
-    background: transparent !important;
+    border: 1px solid rgba(59, 130, 246, 0.8);
+    background: transparent;
     color: #bfdbfe;
     font-size: 0.8rem;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .nta-header__chip:hover {
@@ -161,8 +162,8 @@ div#ntaHeader {
 }
 
 .nta-header__chip.active {
-    border-color: rgba(59, 130, 246, 1) !important;
-    background: transparent !important;
+    border-color: rgba(59, 130, 246, 1);
+    background: transparent;
     color: #f9fafb;
     box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(37, 99, 235, 0.75);
 }
@@ -189,7 +190,7 @@ div#ntaHeader {
     border: 1px solid var(--theme-btn-border, rgba(251, 191, 36, 0.4));
     color: var(--theme-btn-color, #fbbf24);
     cursor: pointer;
-    transition: all 0.25s;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
     flex-shrink: 0;
     z-index: 2;
 }

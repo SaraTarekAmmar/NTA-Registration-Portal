@@ -747,10 +747,10 @@ body.trainee-app {
 }
 
 .courses-modal__btn--primary {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
   border-color: rgba(37, 99, 235, 0.95);
-  color: var(--text-main);
-  box-shadow: 0 10px 25px -12px rgba(37, 99, 235, 1);
+  color: var(--text-on-accent);
+  box-shadow: 0 10px 25px -12px rgba(37, 99, 235, 0.7);
 }
 
 .courses-modal__btn--primary:hover {
@@ -1051,7 +1051,7 @@ body.trainee-app {
   top: 0.75rem;
   right: 0.75rem;
   padding: 0.3rem 0.75rem;
-  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-info) 100%);
+  background: linear-gradient(135deg, var(--color-info-soft) 0%, var(--color-info) 100%);
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -1135,16 +1135,16 @@ a.course-card__btn {
   justify-content: center;
   padding: 0.6rem 1rem;
   cursor: pointer !important;
-  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-info) 100%);
+  background: linear-gradient(135deg, var(--color-info-soft) 0%, var(--color-info) 100%);
   border: none;
   border-radius: 10px;
   color: var(--text-on-accent);
   font-weight: 600;
-  max-width: 180px; 
+  max-width: 180px;
   font-size: 0.875rem;
-  margin: auto; 
+  margin: auto;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 }
 
 .course-card__btn:hover {
@@ -1390,7 +1390,7 @@ a.course-card__btn {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .courses-pagination__btn:hover:not(:disabled) {
@@ -1918,7 +1918,7 @@ a.course-card__btn {
 }
 
 .profile-course-card[data-status="جاري"]::before {
-  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info), var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info-deep-3), var(--color-info), var(--color-info-deep-1));
 }
 
 .profile-course-card[data-status="قادم"]::before {
@@ -2660,7 +2660,7 @@ a.course-card__btn {
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
 }
 
 .btn-edit-profile:hover {
@@ -3165,7 +3165,7 @@ a.course-card__btn {
   font-family: inherit;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .mycourse-action-btn--perm {
   background: rgba(99, 102, 241, 0.12);
@@ -3200,12 +3200,13 @@ a.course-card__btn {
 
 .profile-analytics-card {
   background: var(--bg-card);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-main, var(--surface-glass-strong));
   border-radius: 24px;
   padding: 1.75rem;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 

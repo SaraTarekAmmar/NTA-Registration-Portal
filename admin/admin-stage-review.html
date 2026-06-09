@@ -23,11 +23,12 @@
 </head>
 
 <body class="trainee-app" data-page="admin-users">
+    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
     <div class="trainee-bg"></div>
 
     <div id="ntaHeader"></div>
 
-    <main class="trainee-main admin-main">
+    <main id="main-content" class="trainee-main admin-main">
         <div class="admin-hero admin-hero--compact admin-stage-hero">
             <div class="admin-hero__title-block">
                 <h1 id="stageReviewName">مراجعة مراحل المتقدم</h1>
@@ -828,7 +829,7 @@
                                 if (stageId === 7 && isAccept) {
                                     window.showDropdownMessage('تم قبول المتدرب وإلحاقه بالدورة التدريبية بنجاح ✓', false);
                                     setTimeout(() => {
-                                        window.location.href = `admin-profile.html?id=${traineeId}`;
+                                        window.location.href = `admin-candidate-profile.html?id=${traineeId}`;
                                     }, 1800);
                                 } else {
                                     window.showDropdownMessage(data.message || 'تم تحديث حالة المرحلة بنجاح', false);
@@ -865,7 +866,7 @@
             });
 
             document.getElementById('stageBackBtn').addEventListener('click', () => {
-                window.location.href = `admin-profile.html?id=${traineeId}`;
+                window.location.href = `admin-candidate-profile.html?id=${traineeId}`;
             });
 
             function activateStage(stageId) {

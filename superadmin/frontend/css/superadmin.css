@@ -83,7 +83,7 @@ body {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     backdrop-filter: blur(8px);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: filter 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glass-card:hover {
@@ -134,7 +134,7 @@ body {
     border: 1px solid var(--card-border);
     color: var(--text-main);
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
 
@@ -273,7 +273,7 @@ input:focus, select:focus {
 .btn-premium {
     background: var(--premium-gradient);
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease, transform 0.3s ease, filter 0.3s ease;
 }
 
 .btn-premium:hover {

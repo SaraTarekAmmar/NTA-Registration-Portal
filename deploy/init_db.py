@@ -107,5 +107,8 @@ def init_database():
 if __name__ == "__main__":
     if init_database():
         print("\n[INFO] You can now run seed_fake_data.py to populate the portal.")
+        print("[INFO] POST-SETUP MIGRATION: run deploy/fix_stage_reviews_fk.py to change the")
+        print("       stage_reviews.trainee_id FK from ON DELETE CASCADE to ON DELETE SET NULL.")
+        print("       This preserves audit trail rows when rejected trainees are deleted.")
     else:
         exit(1)

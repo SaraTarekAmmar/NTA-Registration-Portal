@@ -117,7 +117,7 @@
           try {
             var p = JSON.parse(atob(existingToken.split(".")[1]));
             if (p && p.role === "admin" && (!p.exp || p.exp > Date.now() / 1000)) {
-              window.location.replace("admin.html");
+              window.location.replace("admin-dashboard.html");
             }
           } catch (e) {}
         }
@@ -173,7 +173,7 @@
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
               }
               sessionStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);
-              window.location.replace("admin.html");
+              window.location.replace("admin-dashboard.html");
             })
             .catch(function (err) {
               btn.classList.remove("loading");

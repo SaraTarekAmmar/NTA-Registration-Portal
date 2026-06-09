@@ -1042,10 +1042,11 @@
     <script src="js/admin-guard.js"></script>
 </head>
   <body class="trainee-app" data-page="admin-trainees">
+    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
     <div class="trainee-bg"></div>
     <div id="ntaHeader"></div>
 
-    <main class="trainee-main admin-main">
+    <main id="main-content" class="trainee-main admin-main">
       <!-- Hero -->
       <div class="admin-hero" style="margin-bottom: 1.5rem">
         <h1>قائمة المتدربين</h1>
@@ -1364,7 +1365,7 @@
           return (
             '<div class="at-card" style="animation-delay:' +
             idx * 0.06 +
-            's" onclick="window.location.href=\'admin-profile.html?id=' +
+            's" onclick="window.location.href=\'admin-candidate-profile.html?id=' +
             s.id +
             "&course_id=" +
             activeCourse +

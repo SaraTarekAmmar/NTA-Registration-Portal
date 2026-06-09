@@ -320,10 +320,10 @@
   --color-success-text: #dcfce7;
   --color-error-text: #fee2e2;
   --color-success-surface: #ecfdf5;
-  --color-error-surface: #fef2e2;
+  --color-error-surface: #fef2f2;
   --color-teal: #22d3ee;
   --gradient-accent-btn: linear-gradient(90deg, var(--accent), var(--accent-solid));
-  --gradient-admin-ai-btn: linear-gradient(135deg, var(--color-info), var(--color-info));
+  --gradient-admin-ai-btn: linear-gradient(135deg, var(--color-info), var(--color-info-deep-3));
   --gradient-admin-purple: linear-gradient(135deg, var(--color-purple), var(--color-purple-dark));
   --gradient-admin-success-btn: linear-gradient(135deg, var(--color-success), #059669);
   --gradient-admin-cyan-card: linear-gradient(135deg, var(--color-teal), var(--color-cyan));
@@ -339,6 +339,37 @@
     var(--color-error),
     transparent
   );
+
+  /* ── Design Scale Tokens ── */
+
+  /* Border radius scale */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Spacing scale (base-4 system) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Typography scale */
+  --text-xs: 0.72rem;
+  --text-sm: 0.84rem;
+  --text-base: 0.92rem;
+  --text-md: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
 }
 
 /* Native controls & autofill follow the active theme */
@@ -590,7 +621,7 @@ html.light-mode {
 .reg-toast {
   color: var(--text-on-accent);
   padding: 16px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 10px);
   box-shadow: var(--shadow-card);
   font-size: 0.95rem;
   text-align: right;
@@ -598,7 +629,7 @@ html.light-mode {
   pointer-events: auto;
   transform: translateY(-20px);
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -685,12 +716,12 @@ html.light-mode {
   align-items: center;
   gap: 10px;
   padding: 13px 20px;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-full, 9999px);
   font-family: "Tajawal", sans-serif;
-  font-size: 0.82rem;
+  font-size: var(--text-sm, 0.84rem);
   font-weight: 700;
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   box-shadow: var(--toast-shadow);
   white-space: nowrap;
   max-width: calc(100vw - 48px);
@@ -1347,6 +1378,65 @@ html.light-mode .chat-dialog__send {
 }
 
 [dir="rtl"] .nta-theme-fab {
-  right: auto;
-  left: 1.25rem;
+  left: auto;
+  right: 1.25rem;
+}
+
+/* ── Global Accessibility & Performance Rules ── */
+
+/* Keyboard focus ring — only shown for keyboard/non-pointer navigation */
+:focus-visible {
+  outline: 2px solid var(--accent, #6366f1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Suppress focus ring for mouse/touch — keeps designs clean */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Honor user motion preferences — critical for vestibular disorders */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip navigation link — keyboard/screen reader users jump to main content */
+.skip-to-main {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent, #6366f1);
+  color: var(--text-on-accent, #ffffff);
+  border-radius: 0 0 var(--radius-md, 10px) var(--radius-md, 10px);
+  font-weight: 700;
+  font-size: var(--text-sm, 0.84rem);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Screen-reader-only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

@@ -1,0 +1,60 @@
+# Environment secrets — NEVER commit these
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+data/log/
+
+# Uploaded user files
+data/temp/
+data/trainees/
+data/trainers/
+data/admins/
+data/admission/
+
+# Brain session scratch pads
+brain/
+
+# User-uploaded files
+uploads/
+
+# Tool-specific config dirs
+.antigravity/
+.hermes/
+.warp/
+opencode.json

@@ -29,11 +29,15 @@ def _db_json(val):
     return None
 
 @router.post("/upload")
-async def upload_file(file: UploadFile = File(...), folder: str = "general"):
+async def upload_file(request: Request, file: UploadFile = File(...), folder: str = "general"):
     """
     Universal upload endpoint for trainees.
     Supports any file format (Images, PDF, DOCX, etc.)
     """
+    csrf_cookie = request.cookies.get("csrf_token")
+    csrf_header = request.headers.get("x-csrf-token")
+    if not csrf_cookie or not csrf_header or csrf_cookie != csrf_header:
+        raise HTTPException(status_code=403, detail="خطأ في التحقق من صحة الطلب (CSRF). يرجى إعادة تحميل الصفحة.")
     try:
         file_path = await save_upload_file(file, folder)
         return {"file_path": file_path}

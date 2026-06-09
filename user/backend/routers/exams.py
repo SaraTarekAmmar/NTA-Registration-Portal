@@ -27,13 +27,13 @@ async def exam_login(request: LoginRequest):
             raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
         
         if not request.password or not user["password_hash"]:
-            raise HTTPException(status_code=401, detail="كلمة المرور مطلوبة")
-        
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
+
         if not verify_password(request.password, user["password_hash"]):
-            raise HTTPException(status_code=401, detail="كلمة المرور غير صحيحة")
-            
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
+
         if request.nationalId != user["national_id"]:
-            raise HTTPException(status_code=401, detail="رقم الهوية غير صحيح")
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
             
         # Create a special token with exam scope (optional but good practice)
         access_token = create_access_token(

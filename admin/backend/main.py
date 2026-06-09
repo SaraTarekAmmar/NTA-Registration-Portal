@@ -33,8 +33,8 @@ app.add_middleware(
         "http://localhost:8002"
     ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
 
 from core.logger_util import log_activity, session_context, trace_context, get_traceback

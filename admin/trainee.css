@@ -799,7 +799,7 @@ body.trainee-app {
   top: 0.75rem;
   right: 0.75rem;
   padding: 0.3rem 0.75rem;
-  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-info) 100%);
+  background: linear-gradient(135deg, var(--color-info-soft) 0%, var(--color-info) 100%);
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -882,13 +882,13 @@ a.course-card__btn {
   justify-content: center;
   padding: 0.6rem 1rem;
   cursor: pointer !important;
-  background: linear-gradient(135deg, var(--color-info) 0%, var(--color-info) 100%);
+  background: linear-gradient(135deg, var(--color-info-soft) 0%, var(--color-info) 100%);
   border-radius: 10px;
   color: white;
   font-weight: 600;
   font-size: 0.875rem;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 }
 
 .course-card__btn:hover {
@@ -899,7 +899,7 @@ a.course-card__btn {
 }
 
 .course-card__btn--waiting {
-  background: linear-gradient(135deg, var(--text-subtle) 0%, var(--text-subtle) 100%);
+  background: linear-gradient(135deg, var(--text-muted) 0%, var(--text-subtle) 100%);
 }
 
 .course-card__btn--waiting:hover {
@@ -909,7 +909,7 @@ a.course-card__btn {
 }
 
 .course-card__btn--approved {
-  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
+  background: linear-gradient(135deg, var(--color-success-soft) 0%, var(--color-success) 100%);
   cursor: default !important;
 }
 
@@ -1126,7 +1126,7 @@ a.course-card__btn {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .courses-pagination__btn:hover:not(:disabled) {
@@ -1594,7 +1594,7 @@ a.course-card__btn {
 }
 
 .profile-course-card[data-status="جاري"]::before {
-  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info), var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info-deep-3), var(--color-info), var(--color-info-deep-1));
 }
 
 .profile-course-card[data-status="قادم"]::before {

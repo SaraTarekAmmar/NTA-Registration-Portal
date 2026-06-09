@@ -520,7 +520,7 @@ html.light-mode .adm-cta__sub {
   color: var(--text-muted);
 }
 
-/* ── قائمة المرشحين (admin-users.html) ── */
+/* ── قائمة المرشحين (admin-candidates.html) ── */
 html.light-mode .au-stage-pills,
 html.light-mode .at-course-strip {
   background: var(--bg-card);

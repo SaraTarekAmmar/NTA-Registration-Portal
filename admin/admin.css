@@ -132,7 +132,13 @@
   color: var(--color-error-soft);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 960px) {
+  .admin-summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
   .admin-summary-cards {
     grid-template-columns: 1fr;
   }
@@ -450,7 +456,7 @@
   color: var(--text-muted);
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .admin-view-toggle__btn:hover {
@@ -700,7 +706,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .admin-carousel__btn:hover {
@@ -790,7 +796,7 @@
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .admin-pagination__btn:hover {
@@ -801,7 +807,7 @@
 }
 
 .admin-pagination__btn--active {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
   border-color: var(--color-info);
   color: var(--text-on-accent);
   box-shadow: var(--shadow-accent);
@@ -1050,7 +1056,7 @@
 }
 
 .admin-profile__btn--primary {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
   border-color: var(--color-info);
   box-shadow: var(--shadow-accent);
 }
@@ -1102,7 +1108,7 @@
 }
 
 .admin-profile__tab--active {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
   color: var(--text-on-accent);
   border-color: var(--color-info);
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
@@ -1442,7 +1448,7 @@
 }
 
 .admin-stage-tab--active {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
   border-color: var(--color-info);
   box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
 }
@@ -1695,7 +1701,7 @@
   padding: 2px;
   background: var(
     --admin-card-accent,
-    linear-gradient(135deg, var(--color-info-soft), var(--color-info), var(--color-info))
+    linear-gradient(135deg, var(--color-info-soft), var(--color-info))
   );
   -webkit-mask:
     linear-gradient(var(--text-on-accent) 0 0) content-box,
@@ -1710,10 +1716,10 @@
 }
 
 .admin-trainee-card--stage-1 {
-  --admin-card-accent: linear-gradient(135deg, var(--color-info-soft), var(--color-info-soft));
+  --admin-card-accent: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
 }
 .admin-trainee-card--stage-2 {
-  --admin-card-accent: linear-gradient(135deg, var(--color-info-soft), var(--color-info-soft));
+  --admin-card-accent: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
 }
 .admin-trainee-card--stage-3 {
   --admin-card-accent: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
@@ -1722,7 +1728,7 @@
   --admin-card-accent: linear-gradient(135deg, var(--accent-hover), var(--accent));
 }
 .admin-trainee-card--stage-5 {
-  --admin-card-accent: linear-gradient(135deg, var(--color-info), var(--color-info));
+  --admin-card-accent: linear-gradient(135deg, var(--color-info), var(--color-info-deep-3));
 }
 .admin-trainee-card--stage-6 {
   --admin-card-accent: var(--gradient-admin-cyan-card);
@@ -1759,7 +1765,7 @@
   border: 2px solid transparent;
   background:
     linear-gradient(var(--skeleton-base), var(--skeleton-base)) padding-box,
-    linear-gradient(135deg, var(--color-info-soft), var(--color-info), var(--color-info)) border-box;
+    linear-gradient(135deg, var(--color-info-soft), var(--color-info)) border-box;
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
@@ -1857,7 +1863,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 
 .admin-trainee-card__view-profile:hover {
@@ -1881,7 +1887,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
   font-family: inherit;
 }
 
@@ -1896,7 +1902,7 @@
 }
 
 .admin-trainee-card--stage-3 .admin-trainee-card__action {
-  background: linear-gradient(135deg, var(--color-info), var(--color-info));
+  background: linear-gradient(135deg, var(--color-info-soft), var(--color-info-deep-3));
   color: var(--text-on-accent);
 }
 

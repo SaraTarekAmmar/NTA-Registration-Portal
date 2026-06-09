@@ -11,7 +11,7 @@ import json
 router = APIRouter(prefix="/api/courses", tags=["Courses"])
 
 @router.get("", response_model=List[Course])
-async def get_courses():
+async def get_courses(staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -194,7 +194,7 @@ def sync_course_sessions(db, course_id, course_title, batch_data):
         cursor.close()
 
 @router.get("/{course_id}", response_model=Course)
-async def get_course(course_id: int):
+async def get_course(course_id: int, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -216,7 +216,7 @@ async def get_course(course_id: int):
 
 
 @router.get("/{course_id}/sessions")
-async def get_course_sessions(course_id: int):
+async def get_course_sessions(course_id: int, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:

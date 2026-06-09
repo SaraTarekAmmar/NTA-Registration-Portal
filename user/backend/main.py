@@ -30,10 +30,10 @@ app.add_middleware(
         "http://localhost:8001",
         "http://localhost:8002"
     ],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|null",
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
 
 import secrets
@@ -50,8 +50,8 @@ async def csrf_middleware(request: Request, call_next):
         response.set_cookie(
             key="csrf_token",
             value=token,
-            samesite="lax",
-            httponly=False  # Must be readable by Javascript
+            samesite="strict",
+            httponly=False  # Must be readable by JS for the double-submit cookie pattern
         )
     return response
 
