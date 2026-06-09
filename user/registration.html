@@ -178,8 +178,8 @@ textarea[aria-invalid="true"] {
 
 </style>
 </head>
-<body class="registration-page">
-<a href="#regForm" class="skip-link">الانتقال إلى نموذج التسجيل</a>
+
+<a class="skip-link" href="#regForm">الانتقال إلى نموذج التسجيل</a>
 <div class="reg-bg"></div>
 <div class="reg-logo">
 <img alt="شعار الأكاديمية الوطنية للتدريب" class="reg-header__logo-img reg-logo__img" src="images/logo2.png"/>
@@ -193,46 +193,46 @@ textarea[aria-invalid="true"] {
 <h1 class="reg-page-title" id="regPageTitle">التسجيل في الأكاديمية الوطنية للتدريب</h1>
 <div class="reg-stepper">
 <div class="reg-stepper__bar-wrap">
-<div class="reg-stepper__bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="10" aria-label="تقدم التسجيل: الخطوة 1 من 10" style="--progress: 0%"></div>
+<div aria-label="تقدم التسجيل: الخطوة 1 من 10" aria-valuemax="10" aria-valuemin="1" aria-valuenow="1" class="reg-stepper__bar" role="progressbar" style="--progress: 0%"></div>
 </div>
-<div class="reg-stepper__steps" role="group" aria-label="خطوات التسجيل" style="--progress: 0%">
-<div class="reg-stepper__item active" data-step="1">
+<div aria-label="خطوات التسجيل" class="reg-stepper__steps" role="group" style="--progress: 0%">
+<div aria-label="الخطوة 1: البيانات الشخصية" class="reg-stepper__item active" data-step="1" role="tab" tabindex="0">
 <span class="reg-stepper__num">1</span>
 <span class="reg-stepper__label">البيانات الشخصية</span>
 </div>
-<div class="reg-stepper__item" data-step="2">
+<div aria-label="الخطوة 2: معلومات الاتصال" class="reg-stepper__item" data-step="2" role="tab" tabindex="0">
 <span class="reg-stepper__num">2</span>
 <span class="reg-stepper__label">معلومات الاتصال</span>
 </div>
-<div class="reg-stepper__item" data-step="3">
+<div aria-label="الخطوة 3: الخلفية التعليمية" class="reg-stepper__item" data-step="3" role="tab" tabindex="0">
 <span class="reg-stepper__num">3</span>
 <span class="reg-stepper__label">الخلفية التعليمية</span>
 </div>
-<div class="reg-stepper__item" data-step="4">
+<div aria-label="الخطوة 4: الخبرة العملية" class="reg-stepper__item" data-step="4" role="tab" tabindex="0">
 <span class="reg-stepper__num">4</span>
 <span class="reg-stepper__label">الخبرة العملية</span>
 </div>
-<div class="reg-stepper__item" data-step="5">
+<div aria-label="الخطوة 5: المهارات واللغات والاهتمامات" class="reg-stepper__item" data-step="5" role="tab" tabindex="0">
 <span class="reg-stepper__num">5</span>
 <span class="reg-stepper__label">المهارات واللغات والاهتمامات</span>
 </div>
-<div class="reg-stepper__item" data-step="6">
+<div aria-label="الخطوة 6: الجوائز والمؤتمرات" class="reg-stepper__item" data-step="6" role="tab" tabindex="0">
 <span class="reg-stepper__num">6</span>
 <span class="reg-stepper__label">الجوائز والمؤتمرات</span>
 </div>
-<div class="reg-stepper__item" data-step="7">
+<div aria-label="الخطوة 7: العمل العام والوضع القانوني" class="reg-stepper__item" data-step="7" role="tab" tabindex="0">
 <span class="reg-stepper__num">7</span>
 <span class="reg-stepper__label">العمل العام والوضع القانوني</span>
 </div>
-<div class="reg-stepper__item" data-step="8">
+<div aria-label="الخطوة 8: اللوجستيات والالتزامات" class="reg-stepper__item" data-step="8" role="tab" tabindex="0">
 <span class="reg-stepper__num">8</span>
 <span class="reg-stepper__label">اللوجستيات والالتزامات</span>
 </div>
-<div class="reg-stepper__item" data-step="9">
+<div aria-label="الخطوة 9: اختبار الإدراك والشخصية" class="reg-stepper__item" data-step="9" role="tab" tabindex="0">
 <span class="reg-stepper__num">9</span>
 <span class="reg-stepper__label">اختبار الإدراك والشخصية</span>
 </div>
-<div class="reg-stepper__item" data-step="10">
+<div aria-label="الخطوة 10: التحقق والتأكيد النهائي" class="reg-stepper__item" data-step="10" role="tab" tabindex="0">
 <span class="reg-stepper__num">10</span>
 <span class="reg-stepper__label">التحقق والتأكيد النهائي</span>
 </div>
@@ -240,30 +240,30 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-card">
 <div class="reg-content">
-<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
-<form class="reg-form" id="regForm" aria-label="نموذج التسجيل في الأكاديمية الوطنية للتدريب" novalidate>
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="a11yAnnouncer" role="status"></div>
+<form aria-label="نموذج التسجيل في الأكاديمية الوطنية للتدريب" class="reg-form" id="regForm" novalidate="">
 <!-- Premium Dynamic Role Alert Banner -->
-<div id="roleAlertBanner" class="role-alert-banner" style="display: none;">
-  <div class="role-alert-icon" id="roleAlertIcon">💡</div>
-  <div class="role-alert-text">
-    <span class="role-alert-title">مسار التسجيل النشط:</span>
-    <span id="roleAlertLabel">تحميل البيانات...</span>
-  </div>
+<div class="role-alert-banner" id="roleAlertBanner" style="display: none;">
+<div class="role-alert-icon" id="roleAlertIcon">💡</div>
+<div class="role-alert-text">
+<span class="role-alert-title">مسار التسجيل النشط:</span>
+<span id="roleAlertLabel">تحميل البيانات...</span>
+</div>
 </div>
 <!-- Step 1: Personal Information -->
 <div class="reg-step active" data-step="1">
 <h2 class="reg-step__title" id="step1Heading" tabindex="-1">القسم الأول - البيانات الشخصية</h2>
 <div class="form-group">
-<label for="fullName">الاسم الكامل <span aria-hidden="true">(بالعربية أو الإنجليزية)</span> <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="fullName" name="fullName" autocomplete="name" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
+<label for="fullName">الاسم الكامل <span aria-hidden="true">(بالعربية أو الإنجليزية)</span> <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="name" id="fullName" name="fullName" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
 </div>
 <div class="form-group">
-<label for="fullNameEn">الاسم بالإنجليزية <span aria-hidden="true">(Full name in English)</span> <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="fullNameEn" name="fullNameEn" autocomplete="name" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
+<label for="fullNameEn">الاسم بالإنجليزية <span aria-hidden="true">(Full name in English)</span> <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="name" id="fullNameEn" name="fullNameEn" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="dob">تاريخ الميلاد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="dob">تاريخ الميلاد <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
 <input id="dob" name="dob" required="" type="date"/>
@@ -271,7 +271,7 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="form-group">
 <fieldset class="reg-fieldset">
-<legend class="reg-fieldset__legend">النوع <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></legend>
+<legend class="reg-fieldset__legend">النوع <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></legend>
 <div class="reg-radio-group">
 <label class="reg-radio">
 <input name="gender" required="" type="radio" value="male"/>
@@ -287,7 +287,7 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="countryOfStay">دولة الإقامة <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="countryOfStay">دولة الإقامة <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="countryOfStay" name="countryOfStay" required="">
@@ -296,7 +296,7 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label for="governmentOrState">المحافظة أو الولاية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="governmentOrState">المحافظة أو الولاية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="governmentOrState" name="governmentOrState" required="">
@@ -307,17 +307,17 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="city">المدينة <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="city" name="city" autocomplete="address-level2" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
+<label for="city">المدينة <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="address-level2" id="city" name="city" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
 </div>
 <div class="form-group">
-<label for="address">العنوان <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="address" minlength="10" name="address" autocomplete="street-address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
+<label for="address">العنوان <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="street-address" id="address" minlength="10" name="address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="maritalStatus">الحالة الاجتماعية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="maritalStatus">الحالة الاجتماعية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="maritalStatus" name="maritalStatus" required="">
@@ -330,7 +330,7 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label for="militaryStatus">الموقف من التجنيد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="militaryStatus">الموقف من التجنيد <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="militaryStatus" name="militaryStatus" required="">
@@ -346,12 +346,12 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group" id="militaryReasonGroup" style="display: none">
-<label for="militaryReason">سبب الموقف من التجنيد <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب عند الاختيار</span></label>
+<label for="militaryReason">سبب الموقف من التجنيد <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب عند الاختيار</span></label>
 <input id="militaryReason" name="militaryReason" placeholder="اكتب سبب الموقف من التجنيد" type="text"/>
 </div>
 <div class="form-group identity-doc-group">
 <fieldset class="reg-fieldset reg-fieldset--inline">
-<legend class="reg-fieldset__legend">نوع وثيقة الهوية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></legend>
+<legend class="reg-fieldset__legend">نوع وثيقة الهوية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></legend>
 <div class="identity-doc-grid">
 <label class="identity-doc-option" for="identityDocNationalId">
 <input id="identityDocNationalId" name="identityDocType" required="" type="checkbox" value="national_id"/>
@@ -372,30 +372,30 @@ textarea[aria-invalid="true"] {
 </span>
 </label>
 </div>
-</div>
+</fieldset></div>
 <div class="reg-form__row">
 <div class="form-group" id="nationalIdGroup" style="display: none">
-<label for="nationalId">رقم البطاقة الشخصية (الرقم القومي) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="nationalId" autocomplete="off" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
+<label for="nationalId">رقم البطاقة الشخصية (الرقم القومي) <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="off" id="nationalId" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
 </div>
 <div class="form-group" id="passportNumberGroup" style="display: none">
 <label for="passportNumber">رقم جواز السفر <span class="sr-only">(اختياري)</span></label>
-<input id="passportNumber" autocomplete="off" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
+<input autocomplete="off" id="passportNumber" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
 </div>
 </div>
 <div class="form-group" id="identityDocScanGroup" style="display: none">
-<label for="identityDocumentScan">صورة وثيقة الهوية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<small id="identityDocScanHint" class="file-upload-hint">يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG — الحجم الأقصى 5 ميجابايت لكل ملف.</small>
+<label for="identityDocumentScan">صورة وثيقة الهوية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<small class="file-upload-hint" id="identityDocScanHint">يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG — الحجم الأقصى 5 ميجابايت لكل ملف.</small>
 <div style="display: flex; gap: 10px; align-items: center;">
-<input accept=".jpg,.jpeg,.png,.pdf" id="identityDocumentScan" aria-describedby="identityDocScanHint identityDocScanCount" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
+<input accept=".jpg,.jpeg,.png,.pdf" aria-describedby="identityDocScanHint identityDocScanCount" id="identityDocumentScan" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
 <button class="reg-btn reg-btn--outline" id="aiExtractBtn" style="white-space: nowrap; padding: 0 15px; height: 48px; border-radius: 10px;" type="button">استخراج البيانات بالذكاء الاصطناعي</button>
 </div>
 <small class="reg-step__desc">الحد الأقصى 3 ملفات (JPG, PNG, PDF).</small>
-<div id="aiExtractStatus" aria-live="polite" aria-atomic="true" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
+<div aria-atomic="true" aria-live="polite" id="aiExtractStatus" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="numberOfNationalities">عدد الجنسيات <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="numberOfNationalities">عدد الجنسيات <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="numberOfNationalities" name="numberOfNationalities" required="">
@@ -407,7 +407,7 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label for="nationality">الجنسية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="nationality">الجنسية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="nationality" name="nationality" required="">
@@ -454,26 +454,26 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="mobileNumber1">رقم الموبايل الأول <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="mobileNumber1" name="mobileNumber1" autocomplete="tel" placeholder="+201..." required="" type="tel"/>
+<label for="mobileNumber1">رقم الموبايل الأول <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="tel" id="mobileNumber1" name="mobileNumber1" placeholder="+201..." required="" type="tel"/>
 </div>
 <div class="form-group">
 <label for="mobileNumber2">رقم الموبايل الثاني <span class="sr-only">(اختياري)</span></label>
-<input id="mobileNumber2" name="mobileNumber2" autocomplete="tel" placeholder="+201..." type="tel"/>
+<input autocomplete="tel" id="mobileNumber2" name="mobileNumber2" placeholder="+201..." type="tel"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="whatsappNumber">رقم الواتساب <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input name="whatsappNumber" id="whatsappNumber" autocomplete="tel" placeholder="+201..." required="" type="tel"/>
-<label for="whatsappSameAsMobile" class="reg-inline-check">
-<input type="checkbox" id="whatsappSameAsMobile" style="width: auto; margin: 0;"/>
+<label for="whatsappNumber">رقم الواتساب <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="tel" id="whatsappNumber" name="whatsappNumber" placeholder="+201..." required="" type="tel"/>
+<label class="reg-inline-check" for="whatsappSameAsMobile">
+<input id="whatsappSameAsMobile" style="width: auto; margin: 0;" type="checkbox"/>
 هو نفس الموبايل الأول
 </label>
 </div>
 </div>
 <div class="form-group">
-<label for="monthlyAverageIncome">متوسط الدخل الشهري <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="monthlyAverageIncome">متوسط الدخل الشهري <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="monthlyAverageIncome" name="monthlyAverageIncome" required="">
@@ -492,16 +492,16 @@ textarea[aria-invalid="true"] {
 <h2 class="reg-step__title">القسم الثاني - بيانات الاتصال</h2>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="primaryEmail">البريد الإلكتروني <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="primaryEmail" name="primaryEmail" autocomplete="email" placeholder="example@domain.com" required="" type="email"/>
+<label for="primaryEmail">البريد الإلكتروني <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="email" id="primaryEmail" name="primaryEmail" placeholder="example@domain.com" required="" type="email"/>
 </div>
 <div class="form-group">
 <label for="secondaryEmail">البريد الإلكتروني الثانوي <span class="sr-only">(اختياري)</span></label>
-<input id="secondaryEmail" name="secondaryEmail" autocomplete="email" placeholder="example2@domain.com" type="email"/>
+<input autocomplete="email" id="secondaryEmail" name="secondaryEmail" placeholder="example2@domain.com" type="email"/>
 </div>
 </div>
 <div class="form-group">
-<label for="emergencyContactsCount">عدد جهات اتصال الطوارئ <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="emergencyContactsCount">عدد جهات اتصال الطوارئ <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="emergencyContactsCount" name="emergencyContactsCount" required="">
@@ -513,18 +513,18 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="emergencyName1">جهة اتصال الطوارئ 1 - الاسم <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="emergencyName1" name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
+<label for="emergencyName1">جهة اتصال الطوارئ 1 - الاسم <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="name" id="emergencyName1" name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
 </div>
 <div class="form-group">
-<label for="emergencyPhone1">جهة اتصال الطوارئ 1 - الرقم <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="emergencyPhone1" name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
+<label for="emergencyPhone1">جهة اتصال الطوارئ 1 - الرقم <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="tel" id="emergencyPhone1" name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label for="emergencyAddress1">جهة اتصال الطوارئ 1 - العنوان <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-<input id="emergencyAddress1" name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
+<label for="emergencyAddress1">جهة اتصال الطوارئ 1 - العنوان <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input autocomplete="street-address" id="emergencyAddress1" name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
 </div>
 <div class="form-group">
 <label for="emergencyId1">جهة اتصال الطوارئ 1 - رقم الهوية <span class="sr-only">(اختياري)</span></label>
@@ -534,22 +534,22 @@ textarea[aria-invalid="true"] {
 <div id="emergencyContact2Block" style="display: none">
 <div class="reg-form__row">
 <div class="form-group">
-<label>جهة اتصال الطوارئ 2 - الاسم (اختيارى)</label>
-<input id="emergencyName2" name="emergencyName2" placeholder="الاسم بالكامل" type="text"/>
+<label for="emergencyName2">جهة اتصال الطوارئ 2 - الاسم</label>
+<input autocomplete="name" id="emergencyName2" name="emergencyName2" placeholder="الاسم بالكامل" type="text"/>
 </div>
 <div class="form-group">
-<label>جهة اتصال الطوارئ 2 - الرقم (اختيارى)</label>
-<input id="emergencyPhone2" name="emergencyPhone2" placeholder="+201..." type="text"/>
+<label for="emergencyPhone2">جهة اتصال الطوارئ 2 - الرقم</label>
+<input autocomplete="tel" id="emergencyPhone2" name="emergencyPhone2" placeholder="+201..." type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>جهة اتصال الطوارئ 2 - العنوان (اختيارى)</label>
-<input id="emergencyAddress2" name="emergencyAddress2" placeholder="العنوان بالكامل" type="text"/>
+<label for="emergencyAddress2">جهة اتصال الطوارئ 2 - العنوان</label>
+<input autocomplete="street-address" id="emergencyAddress2" name="emergencyAddress2" placeholder="العنوان بالكامل" type="text"/>
 </div>
 <div class="form-group">
-<label>جهة اتصال الطوارئ 2 - رقم الهوية (اختيارى)</label>
-<input name="emergencyId2" placeholder="رقم الهوية (اختياري)" type="text"/>
+<label for="emergencyId2">جهة اتصال الطوارئ 2 - رقم الهوية</label>
+<input id="emergencyId2" name="emergencyId2" placeholder="رقم الهوية (اختياري)" type="text"/>
 </div>
 </div>
 </div>
@@ -563,7 +563,7 @@ textarea[aria-invalid="true"] {
                   Section Three - Educational Background
                 </p>
 <div class="form-group">
-<label>أعلى مؤهل تعليمي تم الحصول عليه (اجبارى)</label>
+<label for="eduHighestDegree">أعلى مؤهل تعليمي تم الحصول عليه<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="eduHighestDegree" name="eduHighestDegree">
@@ -594,19 +594,19 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="acc-body accordion-body">
 <div class="form-group edu-degree-country-group" style="display: none">
-<label>الدولة / Country (اجبارى)</label>
+<label for="eduDegreeCountry">الدولة / Country<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="edu-degree-country" name="eduDegreeCountry[]">
+<select class="edu-degree-country" id="eduDegreeCountry" name="eduDegreeCountry[]">
 <option value="">اختر الدولة</option>
 </select>
 </div>
 </div>
 <div class="form-group edu-institution-group" style="display: none">
-<label>الجامعة / المعهد / University / Institute (اجبارى)</label>
+<label for="eduInstitution">الجامعة / المعهد / University / Institute<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="edu-institution" name="eduInstitution[]">
+<select class="edu-institution" id="eduInstitution" name="eduInstitution[]">
 <option value="">اختر من القائمة</option>
 <option data-faculty="1" value="cairo_univ">جامعة القاهرة</option>
 <option data-faculty="1" value="ain_shams_univ">جامعة عين شمس</option>
@@ -619,59 +619,58 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group edu-institute-name-group" style="display: none">
-<label>اسم المعهد / Institute Name (اجبارى)</label>
-<input class="edu-institute-name" name="eduInstituteName[]" placeholder="اكتب اسم المعهد" type="text"/>
+<label for="eduInstituteName">اسم المعهد / Institute Name<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-institute-name" id="eduInstituteName" name="eduInstituteName[]" placeholder="اكتب اسم المعهد" type="text"/>
 </div>
 <div class="form-group edu-school-name-group" style="display: none">
-<label>اسم المدرسة / School Name (اجبارى)</label>
-<input class="edu-school-name" name="eduSchoolName[]" placeholder="اكتب اسم المدرسة" type="text"/>
+<label for="eduSchoolName">اسم المدرسة / School Name<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-school-name" id="eduSchoolName" name="eduSchoolName[]" placeholder="اكتب اسم المدرسة" type="text"/>
 </div>
 <div class="form-group edu-college-select-wrap" style="display: none">
-<label>الكلية / الكيان (قائمة) (اجبارى)</label>
+<label for="eduCollegeFacultySelect">الكلية / الكيان (قائمة)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="edu-college-faculty-select" name="eduCollegeFacultySelect[]">
+<select class="edu-college-faculty-select" id="eduCollegeFacultySelect" name="eduCollegeFacultySelect[]">
 <option value="">اختر الكلية</option>
 </select>
 </div>
 </div>
 <div class="form-group edu-college-text-wrap" style="display: none">
-<label>الكلية / قسم الدراسة بالمعهد / الإدارة التعليمية (اجبارى)</label>
-<input class="edu-college-faculty-text" name="eduCollegeFacultyText[]" placeholder="أدخل الاسم يدويًا" type="text"/>
+<label for="eduCollegeFacultyText">الكلية / قسم الدراسة بالمعهد / الإدارة التعليمية<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-college-faculty-text" id="eduCollegeFacultyText" name="eduCollegeFacultyText[]" placeholder="أدخل الاسم يدويًا" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>التخصص (اجبارى)</label>
-<input class="edu-speciality" name="eduSpeciality[]" placeholder="التخصص أو مجال الدراسة" type="text"/>
+<label for="eduSpeciality">التخصص<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-speciality" id="eduSpeciality" name="eduSpeciality[]" placeholder="التخصص أو مجال الدراسة" type="text"/>
 </div>
 <div class="form-group edu-gpa-group" style="display: none">
-<label>المعدل التراكمي (GPA) (اجبارى)</label>
-<input class="edu-gpa" name="eduGpa[]" placeholder="مثال: 3.5 / 4.0" type="text"/>
+<label for="eduGpa">المعدل التراكمي (GPA)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-gpa" id="eduGpa" name="eduGpa[]" placeholder="مثال: 3.5 / 4.0" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group edu-total-score-group" style="display: none">
-<label>المجموع (اجبارى)</label>
-<input class="edu-total-score" name="eduTotalScore[]" placeholder="المجموع (رقم)" type="text"/>
+<label for="eduTotalScore">المجموع<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-total-score" id="eduTotalScore" name="eduTotalScore[]" placeholder="المجموع (رقم)" type="text"/>
 </div>
 <div class="form-group edu-percentage-group" style="display: none">
-<label>النسبة المئوية (اجبارى)</label>
-<input class="edu-percentage" name="eduPercentage[]" placeholder="مثال: 95%" type="text"/>
+<label for="eduPercentage">النسبة المئوية<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-percentage" id="eduPercentage" name="eduPercentage[]" placeholder="مثال: 95%" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تاريخ التخرج (اجبارى)</label>
+<label for="eduGraduationDate">تاريخ التخرج<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="edu-graduation-date" name="eduGraduationDate[]" type="date"/>
+<input class="edu-graduation-date" id="eduGraduationDate" name="eduGraduationDate[]" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>صورة شهادة التخرج <span class="sr-only">(اختياري)</span></label>
+<label for="graduationCertificateScan">صورة شهادة التخرج</label>
 <small class="file-upload-hint" id="gradCertHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت.</small>
-<input accept=".jpg,.jpeg,.png,.pdf" aria-describedby="gradCertHint" class="graduation-certificate-scan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
-
+<input accept=".jpg,.jpeg,.png,.pdf" aria-describedby="gradCertHint" class="graduation-certificate-scan" id="graduationCertificateScan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
 </div>
 </div>
 <div class="acc-actions">
@@ -686,10 +685,10 @@ textarea[aria-invalid="true"] {
 <div id="eduPostgraduateSection" style="display: none">
 <hr class="reg-divider"/>
 <div class="form-group">
-<label>درجة علمية أعلى (دراسات عليا) (اختيارى)</label>
+<label for="eduHasPostgraduate">درجة علمية أعلى (دراسات عليا)</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select id="eduHasPostgraduate" name="eduHasPostgraduate" class="optional-select">
+<select class="optional-select" id="eduHasPostgraduate" name="eduHasPostgraduate">
 <option value="">اختر</option>
 <option value="yes">نعم / Yes</option>
 <option value="no">لا / No</option>
@@ -711,11 +710,10 @@ textarea[aria-invalid="true"] {
 <div class="acc-body accordion-body">
 <div class="reg-form__row">
 <div class="form-group">
-<label>الدرجة (ماجستير - دكتوراه) (اجبارى)
-</label>
+<label for="eduPostgraduateDegreeType">الدرجة (ماجستير - دكتوراه)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="edu-pg-degree-type" name="eduPostgraduateDegreeType[]">
+<select class="edu-pg-degree-type" id="eduPostgraduateDegreeType" name="eduPostgraduateDegreeType[]">
 <option value="">اختر</option>
 <option value="master">Master / ماجستير</option>
 <option value="phd">PHD / دكتوراه</option>
@@ -723,48 +721,42 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>اسم الجهة المانحة للدرجة (اجبارى)
-</label>
-<input class="edu-degree-issuer-entity" name="eduDegreeIssuerEntity[]" placeholder="الجهة التي أصدرت الدرجة" type="text"/>
+<label for="eduDegreeIssuerEntity">اسم الجهة المانحة للدرجة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-degree-issuer-entity" id="eduDegreeIssuerEntity" name="eduDegreeIssuerEntity[]" placeholder="الجهة التي أصدرت الدرجة" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>التخصص الرئيسي للدرجة (اجبارى)
-</label>
-<input class="edu-main-speciality-pg" name="eduMainSpecialityPg[]" placeholder="التخصص الرئيسي" type="text"/>
+<label for="eduMainSpecialityPg">التخصص الرئيسي للدرجة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="edu-main-speciality-pg" id="eduMainSpecialityPg" name="eduMainSpecialityPg[]" placeholder="التخصص الرئيسي" type="text"/>
 </div>
 <div class="form-group">
-<label>التخصص الفرعي (اختيارى)
-</label>
-<input class="edu-secondary-speciality-pg" name="eduSecondarySpecialityPg[]" placeholder="اختياري" type="text"/>
+<label for="eduSecondarySpecialityPg">التخصص الفرعي</label>
+<input class="edu-secondary-speciality-pg" id="eduSecondarySpecialityPg" name="eduSecondarySpecialityPg[]" placeholder="اختياري" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تاريخ البدء (اجبارى)
-</label>
+<label for="eduPgStartDate">تاريخ البدء<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="edu-pg-start-date" name="eduPgStartDate[]" type="date"/>
+<input class="edu-pg-start-date" id="eduPgStartDate" name="eduPgStartDate[]" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>تاريخ الانتهاء (اجبارى)
-</label>
+<label for="eduPgEndDate">تاريخ الانتهاء<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="edu-pg-end-date" name="eduPgEndDate[]" type="date"/>
+<input class="edu-pg-end-date" id="eduPgEndDate" name="eduPgEndDate[]" type="date"/>
 </div>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تمويل شخصي أم جهة خارجية (اختيارى)
-</label>
+<label for="eduFunding">تمويل شخصي أم جهة خارجية</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="edu-funding optional-select" name="eduFunding[]">
+<select class="edu-funding optional-select" id="eduFunding" name="eduFunding[]">
 <option value="">اختر</option>
 <option value="personal">شخصي / Personally</option>
 <option value="third_party">جهة خارجية / Third Party</option>
@@ -772,15 +764,13 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>اسم الجهة التي رشحتك (اختيارى)
-</label>
-<input class="edu-recommending-entity" name="eduRecommendingEntity[]" placeholder="اختياري" type="text"/>
+<label for="eduRecommendingEntity">اسم الجهة التي رشحتك</label>
+<input class="edu-recommending-entity" id="eduRecommendingEntity" name="eduRecommendingEntity[]" placeholder="اختياري" type="text"/>
 </div>
 </div>
 <div class="form-group edu-scholarship-group" style="display: none">
-<label>اسم جهة المنحة (اختيارى)
-</label>
-<input class="edu-scholarship-entity" name="eduScholarshipEntity[]" placeholder="اسم الجهة المانحة للمنحة" type="text"/>
+<label for="eduScholarshipEntity">اسم جهة المنحة</label>
+<input class="edu-scholarship-entity" id="eduScholarshipEntity" name="eduScholarshipEntity[]" placeholder="اسم الجهة المانحة للمنحة" type="text"/>
 </div>
 <div class="acc-actions">
 <button class="reg-btn reg-btn--danger remove-higher-edu-btn" style="display: none;" type="button">
@@ -797,8 +787,7 @@ textarea[aria-invalid="true"] {
 <hr class="reg-divider"/>
 <h3 class="reg-step__subtitle">الاختبارات والشهادات المعيارية</h3>
 <div class="form-group">
-<label>الاختبارات والشهادات المعيارية (اختيارى)
-</label>
+<label for="standardizedTestName">الاختبارات والشهادات المعيارية</label>
 <div id="testScoresContainer">
 <div class="test-score-card acc-item open mb-3">
 <div class="acc-header accordion-header">
@@ -813,40 +802,35 @@ textarea[aria-invalid="true"] {
 <div class="acc-body accordion-body">
 <div class="reg-form__row">
 <div class="form-group">
-<label>اسم الاختبار (Test Name) (اختيارى)
-</label>
-<input class="test-name" name="standardizedTestName[]" placeholder="مثال: GMAT / GRE / CFA / IELTS" type="text"/>
+<label for="standardizedTestName">اسم الاختبار (Test Name)</label>
+<input class="test-name" id="standardizedTestName" name="standardizedTestName[]" placeholder="مثال: GMAT / GRE / CFA / IELTS" type="text"/>
 </div>
 <div class="form-group">
-<label>درجة الاختبار (Test Score) (اختيارى)
-</label>
-<input class="test-score" name="standardizedTestScore[]" placeholder="مثال: 700" type="number" min="0"/>
+<label for="standardizedTestScore">درجة الاختبار (Test Score)</label>
+<input class="test-score" id="standardizedTestScore" min="0" name="standardizedTestScore[]" placeholder="مثال: 700" type="number"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>جهة الإصدار (Issuing Authority) (اختيارى)
-</label>
-<input class="test-authority" name="standardizedTestAuthority[]" placeholder="اسم الجهة المانحة" type="text"/>
+<label for="standardizedTestAuthority">جهة الإصدار (Issuing Authority)</label>
+<input class="test-authority" id="standardizedTestAuthority" name="standardizedTestAuthority[]" placeholder="اسم الجهة المانحة" type="text"/>
 </div>
 <div class="form-group">
-<label>تاريخ الحصول (Date Obtained) (اختيارى)
-</label>
+<label for="standardizedTestDate">تاريخ الحصول (Date Obtained)</label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="standardized-test-date" name="standardizedTestDate[]" type="date"/>
+<input class="standardized-test-date" id="standardizedTestDate" name="standardizedTestDate[]" type="date"/>
 </div>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>Attach Document (اختيارى)
-</label>
-<input accept=".pdf,.jpg,.jpeg,.png" class="test-document" name="standardizedTestDocument[]" type="file"/>
+<label for="standardizedTestDocument">Attach Document</label>
+<input accept=".pdf,.jpg,.jpeg,.png" class="test-document" id="standardizedTestDocument" name="standardizedTestDocument[]" type="file"/>
 </div>
 <div class="form-group">
-<label>رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)</label>
-<input class="test-url" name="standardizedTestUrl[]" placeholder="https://..." type="url"/>
+<label for="standardizedTestUrl">رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input class="test-url" id="standardizedTestUrl" name="standardizedTestUrl[]" placeholder="https://..." type="url"/>
 </div>
 </div>
 <div class="acc-actions">
@@ -878,8 +862,7 @@ textarea[aria-invalid="true"] {
                   بالتداخل بين أنواع وظائف مختلفة.
                 </p>
 <div class="form-group">
-<label>هل لديك خبرة عملية؟ (اجبارى)
-</label>
+<label for="empExperienceStatus">هل لديك خبرة عملية؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="empExperienceStatus" name="empExperienceStatus">
@@ -895,19 +878,17 @@ textarea[aria-invalid="true"] {
 </div>
 <div id="empHaveExperienceBlock" style="display: none">
 <div class="form-group" id="empCvUploadGroup">
-<label for="employmentSectionCv">تحميل السيرة الذاتية <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="employmentSectionCv">تحميل السيرة الذاتية <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <small class="file-upload-hint" id="empCvHint">الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت.</small>
 <input accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="empCvHint" id="employmentSectionCv" name="employmentSectionCv" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت — السيرة الذاتية الكاملة المحدّثة.</small>
-
 </div>
 <div id="employmentHistoryContainer">
 <div class="emp-history-card academic-history-card">
 <div class="form-group">
-<label>نوع الوظيفة (اجبارى)
-</label>
+<label for="empJobType">نوع الوظيفة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-job-type" name="empJobType">
+<select class="emp-job-type" id="empJobType" name="empJobType">
 <option value="">اختر</option>
 <option value="governmental">
                               حكومي
@@ -925,11 +906,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>طبيعة الوظيفة (اجبارى)
-</label>
+<label for="empWorkNature">طبيعة الوظيفة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select emp-work-nature-wrap">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-work-nature" name="empWorkNature">
+<select class="emp-work-nature" id="empWorkNature" name="empWorkNature">
 <option value="">اختر طبيعة الوظيفة</option>
 </select>
 </div>
@@ -937,11 +917,10 @@ textarea[aria-invalid="true"] {
 <div class="emp-block-gov" style="display: none">
 <div class="reg-form__row">
 <div class="form-group">
-<label>الوزارة (اجبارى)
-</label>
+<label for="empMinistry">الوزارة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-ministry" name="empMinistry">
+<select class="emp-ministry" id="empMinistry" name="empMinistry">
 <option value="">اختر الوزارة</option>
 <option value="education">
                                   التربية والتعليم
@@ -959,11 +938,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>الجهة التابعة للوزارة (اختيارى)
-</label>
+<label for="empMinistrySub">الجهة التابعة للوزارة</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-ministry-sub optional-select" name="empMinistrySub">
+<select class="emp-ministry-sub optional-select" id="empMinistrySub" name="empMinistrySub">
 <option value="">اختر الجهة</option>
 </select>
 </div>
@@ -972,19 +950,17 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row emp-block-dates">
 <div class="form-group">
-<label>تاريخ الالتحاق بالعمل (اجبارى)
-</label>
+<label for="empJoiningDate">تاريخ الالتحاق بالعمل<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="emp-joining-date" name="empJoiningDate" type="date"/>
+<input class="emp-joining-date" id="empJoiningDate" name="empJoiningDate" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>ما زلت أعمل في هذه الوظيفة (اختيارى)
-</label>
+<label for="empCurrentlyWorking">ما زلت أعمل في هذه الوظيفة</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-currently-working optional-select" name="empCurrentlyWorking">
+<select class="emp-currently-working optional-select" id="empCurrentlyWorking" name="empCurrentlyWorking">
 <option value="">اختر</option>
 <option value="yes">نعم</option>
 <option value="no">لا</option>
@@ -992,22 +968,20 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group emp-end-date-wrap">
-<label>تاريخ الانتهاء من العمل (اجبارى)
-</label>
+<label for="empEndDate">تاريخ الانتهاء من العمل<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="emp-end-date" name="empEndDate" type="date"/>
+<input class="emp-end-date" id="empEndDate" name="empEndDate" type="date"/>
 </div>
 </div>
 </div>
 <div class="emp-block-org" style="display: none">
 <div class="reg-form__row">
 <div class="form-group">
-<label>المسمى الوظيفي (اجبارى)
-</label>
+<label for="empJobTitle">المسمى الوظيفي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-job-title" name="empJobTitle">
+<select class="emp-job-title" id="empJobTitle" name="empJobTitle">
 <option value="">اختر</option>
 <option value="admin">موظف إداري</option>
 <option value="engineer">مهندس</option>
@@ -1019,11 +993,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>المستوى الوظيفي / الأقدمية (اختيارى)
-</label>
+<label for="empSeniority">المستوى الوظيفي / الأقدمية</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-seniority optional-select" name="empSeniority">
+<select class="emp-seniority optional-select" id="empSeniority" name="empSeniority">
 <option value="">اختر</option>
 <option value="junior">مبتدئ</option>
 <option value="mid">متوسط</option>
@@ -1035,11 +1008,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>القسم / الإدارة (اختيارى)
-</label>
+<label for="empDepartment">القسم / الإدارة</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-department optional-select" name="empDepartment">
+<select class="emp-department optional-select" id="empDepartment" name="empDepartment">
 <option value="">اختر (يُفلتر حسب المسمى)</option>
 <option value="hr">الموارد البشرية</option>
 <option value="it">تقنية المعلومات</option>
@@ -1051,29 +1023,25 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>التخصص المهني (اختيارى)
-</label>
-<input class="emp-speciality" name="empSpeciality" placeholder="يُقترح حسب المسمى أو أدخل يدويًا" type="text"/>
+<label for="empSpeciality">التخصص المهني</label>
+<input class="emp-speciality" id="empSpeciality" name="empSpeciality" placeholder="يُقترح حسب المسمى أو أدخل يدويًا" type="text"/>
 </div>
 <div class="form-group">
-<label>وصف الوظيفة والمسؤوليات (اختيارى)
-</label>
-<input name="empJobDescription" placeholder="اختياري" type="text"/>
+<label for="empJobDescription">وصف الوظيفة والمسؤوليات</label>
+<input id="empJobDescription" name="empJobDescription" placeholder="اختياري" type="text"/>
 </div>
 <div class="form-group">
-<label>عنوان جهة العمل (اختيارى)
-</label>
-<input name="empCompanyAddress" placeholder="العنوان بالكامل" type="text"/>
+<label for="empCompanyAddress">عنوان جهة العمل</label>
+<input id="empCompanyAddress" name="empCompanyAddress" placeholder="العنوان بالكامل" type="text"/>
 </div>
 </div>
 <div class="emp-block-free" style="display: none">
 <div class="reg-form__row">
 <div class="form-group">
-<label>مجال العمل / طبيعة النشاط (أول) (اختيارى)
-</label>
+<label for="empIndustryPrimary">مجال العمل / طبيعة النشاط (أول)</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-industry-primary optional-select" name="empIndustryPrimary">
+<select class="emp-industry-primary optional-select" id="empIndustryPrimary" name="empIndustryPrimary">
 <option value="">اختر</option>
 <option value="tech">تقنية</option>
 <option value="finance">مالية</option>
@@ -1087,11 +1055,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>مجال العمل (ثانٍ — اختياري، حتى مجالين) (اختيارى)
-</label>
+<label for="empIndustrySecondary">مجال العمل (ثانٍ — اختياري، حتى مجالين)</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-industry-secondary optional-select" name="empIndustrySecondary">
+<select class="emp-industry-secondary optional-select" id="empIndustrySecondary" name="empIndustrySecondary">
 <option value="">—</option>
 <option value="tech">تقنية</option>
 <option value="finance">مالية</option>
@@ -1130,28 +1097,24 @@ textarea[aria-invalid="true"] {
                       ">
 <div class="reg-form__row">
 <div class="form-group">
-<label>اسم المرجع (اختيارى)
-</label>
-<input class="emp-ref-name" name="empRefName[]" type="text"/>
+<label for="empRefName">اسم المرجع</label>
+<input class="emp-ref-name" id="empRefName" name="empRefName[]" type="text"/>
 </div>
 <div class="form-group">
-<label>رقم هاتف المرجع (اختيارى)
-</label>
-<input class="emp-ref-phone" name="empRefPhone[]" type="text"/>
+<label for="empRefPhone">رقم هاتف المرجع</label>
+<input class="emp-ref-phone" id="empRefPhone" name="empRefPhone[]" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>البريد الإلكتروني للمرجع (اختيارى)
-</label>
-<input class="emp-ref-email" name="empRefEmail[]" type="email"/>
+<label for="empRefEmail">البريد الإلكتروني للمرجع</label>
+<input class="emp-ref-email" id="empRefEmail" name="empRefEmail[]" type="email"/>
 </div>
 <div class="form-group">
-<label>مكان العمل المشترك (اختيارى)
-</label>
+<label for="empRefPlaceIndex">مكان العمل المشترك</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="emp-ref-place-select optional-select" name="empRefPlaceIndex[]">
+<select class="emp-ref-place-select optional-select" id="empRefPlaceIndex" name="empRefPlaceIndex[]">
 <option value="">اختر من الخبرات المدخلة</option>
 </select>
 </div>
@@ -1171,41 +1134,33 @@ textarea[aria-invalid="true"] {
 <h3 class="reg-step__subtitle">
                   السجل المهني التفصيلي وملخص الخبرة (Professional History)
                 </h3>
-<div class="form-group">
-<label>السجل المهني (Professional History) (اختيارى)
-</label>
-</div>
+<h3 class="reg-step__subtitle" id="section-------------">السجل المهني</h3>
 <div id="professionalHistoryContainer">
 <div class="professional-history-card">
 <div class="reg-form__row">
 <div class="form-group">
-<label>المنظمة / جهة العمل والقطاع (Organization &amp;
-                          Industry) (اختيارى)
-</label>
-<input name="organizationIndustry[]" placeholder="اسم الجهة والقطاع" type="text"/>
+<label for="organizationIndustry">المنظمة / جهة العمل والقطاع (Organization &amp;
+                          Industry)</label>
+<input id="organizationIndustry" name="organizationIndustry[]" placeholder="اسم الجهة والقطاع" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تاريخ البدء (Start Date) (اجبارى)
-</label>
-<input name="startDate[]" type="date"/>
+<label for="startDate">تاريخ البدء (Start Date)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="startDate" name="startDate[]" type="date"/>
 </div>
 <div class="form-group">
-<label>تاريخ الانتهاء (End Date) (اجبارى)
-</label>
-<input name="endDate[]" type="date"/>
+<label for="endDate">تاريخ الانتهاء (End Date)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="endDate" name="endDate[]" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>المسؤوليات الرئيسية (Key Responsibilities) (اختيارى)
-</label>
-<textarea name="keyResponsibilities[]" placeholder="أبرز المسؤوليات والمهام في هذه الوظيفة" rows="3"></textarea>
+<label for="keyResponsibilities">المسؤوليات الرئيسية (Key Responsibilities)</label>
+<textarea id="keyResponsibilities" name="keyResponsibilities[]" placeholder="أبرز المسؤوليات والمهام في هذه الوظيفة" rows="3"></textarea>
 </div>
 <div class="form-group">
-<label>سبب ترك العمل (Reason for Leaving) (اختيارى)
-</label>
-<select name="reasonForLeaving[]" class="optional-select">
+<label for="reasonForLeaving">سبب ترك العمل (Reason for Leaving)</label>
+<select class="optional-select" id="reasonForLeaving" name="reasonForLeaving[]">
 <option value="">اختر السبب</option>
 <option value="career_growth">
                           نمو مهني / فرصة أفضل
@@ -1227,28 +1182,22 @@ textarea[aria-invalid="true"] {
                   + إضافة سجل مهني آخر
                 </button>
 <hr class="reg-divider"/>
-<div class="form-group">
-<label>ملخص البيانات المهنية (Professional Summary) (اختيارى)
-</label>
-</div>
+<h3 class="reg-step__subtitle" id="section---------------------">ملخص البيانات المهنية</h3>
 <div class="reg-form__row">
 <div class="form-group">
-<label>المسمى الوظيفي الحالي (Current Job Title) (اجبارى)
-</label>
-<input name="currentJobTitle" placeholder="أدخل مسماك الوظيفي الحالي" type="text"/>
+<label for="currentJobTitle">المسمى الوظيفي الحالي (Current Job Title)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="currentJobTitle" name="currentJobTitle" placeholder="أدخل مسماك الوظيفي الحالي" type="text"/>
 </div>
 <div class="form-group">
-<label>سنوات الخبرة الإدارية (Years of Management
-                      Experience) (اختيارى)
-</label>
-<input name="yearsManagementExperience" placeholder="عدد السنوات" type="number"/>
+<label for="yearsManagementExperience">سنوات الخبرة الإدارية (Years of Management
+                      Experience)</label>
+<input id="yearsManagementExperience" name="yearsManagementExperience" placeholder="عدد السنوات" type="number"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>حجم المنظمة (Organization Size) (اختيارى)
-</label>
-<select name="organizationSize" class="optional-select">
+<label for="organizationSize">حجم المنظمة (Organization Size)</label>
+<select class="optional-select" id="organizationSize" name="organizationSize">
 <option value="">اختر حجم المنظمة</option>
 <option value="startup">أقل من 50 موظف (ناشئة)</option>
 <option value="small">50 - 249 موظف (صغيرة)</option>
@@ -1260,23 +1209,20 @@ textarea[aria-invalid="true"] {
 </select>
 </div>
 <div class="form-group">
-<label>الميزانية السنوية المدارة (Annual Budget Managed) (اختيارى)
-</label>
-<input name="annualBudgetManaged" placeholder="مثال: 2M EGP / 500K USD" type="text"/>
+<label for="annualBudgetManaged">الميزانية السنوية المدارة (Annual Budget Managed)</label>
+<input id="annualBudgetManaged" name="annualBudgetManaged" placeholder="مثال: 2M EGP / 500K USD" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>عدد المرؤوسين المباشرين (Direct Reports / Team
-                      Size) (اختيارى)
-</label>
-<input name="directReports" placeholder="عدد أعضاء الفريق" type="number"/>
+<label for="directReports">عدد المرؤوسين المباشرين (Direct Reports / Team
+                      Size)</label>
+<input id="directReports" name="directReports" placeholder="عدد أعضاء الفريق" type="number"/>
 </div>
 <div class="form-group">
-<label>الخبرة العالمية (Global Experience - سنوات في
-                      الخارج) (اختيارى)
-</label>
-<input name="globalExperience" placeholder="عدد السنوات في الخارج (إن وجد)" type="number"/>
+<label for="globalExperience">الخبرة العالمية (Global Experience - سنوات في
+                      الخارج)</label>
+<input id="globalExperience" name="globalExperience" placeholder="عدد السنوات في الخارج (إن وجد)" type="number"/>
 </div>
 </div>
 </div>
@@ -1292,11 +1238,10 @@ textarea[aria-invalid="true"] {
                 </p>
 <h3 class="reg-step__subtitle">الجزء الأول: المهارات</h3>
 <div class="form-group">
-<label>المهارات التقنية (Technical Skills) (اجبارى)
-</label>
+<label for="technicalSkillCategory">المهارات التقنية (Technical Skills)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div id="technicalSkillsContainer">
 <div class="skill-row-inline">
-<select class="skill-category" name="technicalSkillCategory[]">
+<select class="skill-category" id="technicalSkillCategory" name="technicalSkillCategory[]">
 <option value="">اختر الفئة</option>
 <option value="programming">برمجة</option>
 <option value="web">تطوير ويب</option>
@@ -1318,11 +1263,10 @@ textarea[aria-invalid="true"] {
 <small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
 </div>
 <div class="form-group">
-<label>مهارات الحاسب الآلي (Computer Skills) (اجبارى)
-</label>
+<label for="computerSkillCategory">مهارات الحاسب الآلي (Computer Skills)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div id="computerSkillsContainer">
 <div class="skill-row-inline">
-<select class="skill-category" name="computerSkillCategory[]">
+<select class="skill-category" id="computerSkillCategory" name="computerSkillCategory[]">
 <option value="">اختر الفئة</option>
 <option value="office">حزمة الأوفيس</option>
 <option value="os">أنظمة التشغيل</option>
@@ -1347,11 +1291,10 @@ textarea[aria-invalid="true"] {
 <small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
 </div>
 <div class="form-group">
-<label>المهارات الشخصية (Soft Skills) (اجبارى)
-</label>
+<label for="softSkillCategory">المهارات الشخصية (Soft Skills)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div id="softSkillsContainer">
 <div class="skill-row-inline">
-<select class="skill-category" name="softSkillCategory[]">
+<select class="skill-category" id="softSkillCategory" name="softSkillCategory[]">
 <option value="">فئة المهارة</option>
 <option value="communication">التواصل</option>
 <option value="leadership">القيادة</option>
@@ -1375,8 +1318,7 @@ textarea[aria-invalid="true"] {
 <small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
 </div>
 <div class="form-group">
-<label>مهارات أخرى (Other Skills) (اختيارى)
-</label>
+<label for="otherSkillsFreeText">مهارات أخرى (Other Skills)</label>
 <input dir="auto" id="otherSkillsFreeText" name="otherSkillsFreeText" placeholder="نص حر، مثال: الطبخ، الحرف اليدوية، …" type="text"/>
 <small class="reg-step__desc">اختياري — وصف نصي لمهارات غير مدرجة أعلاه.</small>
 </div>
@@ -1409,8 +1351,7 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>لغات إضافية (حتى لغتين غير الإنجليزية) (اختيارى)
-</label>
+<h3 class="reg-step__subtitle">لغات إضافية</h3>
 <div id="additionalLanguagesContainer"></div>
 <button class="reg-btn reg-btn--outline" id="addAdditionalLanguageBtn" type="button">
                     + إضافة لغة إضافية
@@ -1443,13 +1384,11 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>وصف الاهتمامات (اجبارى)
-</label>
+<label for="interestsDescription">وصف الاهتمامات<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="rtl" id="interestsDescription" name="interestsDescription" placeholder="مثال: مؤلفك المفضل في القراءة، رياضتك المفضلة، …" type="text"/>
 </div>
 <div class="form-group">
-<label>هل تستخدم وسائل التواصل الاجتماعي؟ (اجبارى)
-</label>
+<label for="usesSocialMedia">هل تستخدم وسائل التواصل الاجتماعي؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="usesSocialMedia" name="usesSocialMedia" required="">
@@ -1460,10 +1399,9 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group" id="socialMediaPlatformsBlock" style="display: none">
-<label>منصات التواصل (تشغيل / إيقاف لكل منصة) (اجبارى)
-</label>
+<label for="socialPlatformFacebook">منصات التواصل (تشغيل / إيقاف لكل منصة)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="social-toggle-grid">
-<label class="social-toggle"><input name="socialPlatformFacebook" type="checkbox" value="1"/>
+<label class="social-toggle"><input id="socialPlatformFacebook" name="socialPlatformFacebook" type="checkbox" value="1"/>
                       Facebook</label>
 <label class="social-toggle"><input name="socialPlatformInstagram" type="checkbox" value="1"/>
                       Instagram</label>
@@ -1490,8 +1428,7 @@ textarea[aria-invalid="true"] {
                   الجزء الأول: الجوائز والتكريم
                 </h3>
 <div class="form-group">
-<label>هل حصلت على أي جوائز أو تكريمات؟ (اجبارى)
-</label>
+<label for="hasPrizesAwards">هل حصلت على أي جوائز أو تكريمات؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasPrizesAwards" name="hasPrizesAwards" required="">
@@ -1506,26 +1443,23 @@ textarea[aria-invalid="true"] {
 <div class="prize-entry-card academic-history-card">
 <div class="reg-form__row">
 <div class="form-group">
-<label>اسم الجائزة / التكريم (اختيارى)
-</label>
-<input name="prizeName[]" placeholder="اسم الجائزة" type="text"/>
+<label for="prizeName">اسم الجائزة / التكريم</label>
+<input id="prizeName" name="prizeName[]" placeholder="اسم الجائزة" type="text"/>
 </div>
 <div class="form-group">
-<label>تاريخ الحصول عليها (اختيارى)
-</label>
+<label for="prizeDateAchieved">تاريخ الحصول عليها</label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input name="prizeDateAchieved[]" type="date"/>
+<input id="prizeDateAchieved" name="prizeDateAchieved[]" type="date"/>
 </div>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>فئة الجائزة (اختيارى)
-</label>
+<label for="prizeCategory">فئة الجائزة</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="prizeCategory[]" class="optional-select">
+<select class="optional-select" id="prizeCategory" name="prizeCategory[]">
 <option value="">اختر</option>
 <option value="artistic">فنية</option>
 <option value="scientific">
@@ -1536,16 +1470,13 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>الجهة المانحة (اختيارى)
-</label>
-<input name="prizeIssuingBody[]" placeholder="اسم الجهة المانحة" type="text"/>
+<label for="prizeIssuingBody">الجهة المانحة</label>
+<input id="prizeIssuingBody" name="prizeIssuingBody[]" placeholder="اسم الجهة المانحة" type="text"/>
 </div>
 </div>
 <div class="form-group">
-<label>تحميل صورة الشهادة (PDF أو صورة) (اختيارى)
-</label>
-<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" class="prize-cert-input" name="prizeCertificate[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 3 ميجابايت — صورة أو وثيقة الجائزة/التكريم.</small>
-
+<label for="prizeCertificate">تحميل صورة الشهادة (PDF أو صورة)</label>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" class="prize-cert-input" id="prizeCertificate" name="prizeCertificate[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 3 ميجابايت — صورة أو وثيقة الجائزة/التكريم.</small>
 </div>
 <button class="reg-btn reg-btn--outline prize-remove-btn" style="display: none" type="button">
                         حذف هذه الجائزة
@@ -1561,8 +1492,7 @@ textarea[aria-invalid="true"] {
                   الجزء الثاني: المؤتمرات وورش العمل
                 </h3>
 <div class="form-group">
-<label>هل شاركت في أي مؤتمرات أو ورش عمل؟ (اجبارى)
-</label>
+<label for="hasConferencesWorkshops">هل شاركت في أي مؤتمرات أو ورش عمل؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasConferencesWorkshops" name="hasConferencesWorkshops" required="">
@@ -1577,10 +1507,10 @@ textarea[aria-invalid="true"] {
 <div class="cw-entry-card academic-history-card">
 <div class="reg-form__row">
 <div class="form-group">
-<label>النوع (اجبارى)</label>
+<label for="cwActivityType">النوع<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="cwActivityType[]">
+<select id="cwActivityType" name="cwActivityType[]">
 <option value="">اختر</option>
 <option value="conference">
                                 مؤتمر
@@ -1592,40 +1522,35 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>اسم الفعالية (اختيارى)
-</label>
-<input name="cwEventName[]" placeholder="اسم المؤتمر أو الورشة" type="text"/>
+<label for="cwEventName">اسم الفعالية</label>
+<input id="cwEventName" name="cwEventName[]" placeholder="اسم المؤتمر أو الورشة" type="text"/>
 </div>
 </div>
 <div class="form-group">
-<label>الجهة المنظمة (اختيارى)
-</label>
-<input name="cwOrganizingEntity[]" placeholder="اسم الجهة المنظمة" type="text"/>
+<label for="cwOrganizingEntity">الجهة المنظمة</label>
+<input id="cwOrganizingEntity" name="cwOrganizingEntity[]" placeholder="اسم الجهة المنظمة" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>تاريخ البدء (اجبارى)
-</label>
+<label for="cwStartDate">تاريخ البدء<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="cw-start-date" name="cwStartDate[]" type="date"/>
+<input class="cw-start-date" id="cwStartDate" name="cwStartDate[]" type="date"/>
 </div>
 </div>
 <div class="form-group">
-<label>تاريخ الانتهاء (اجبارى)
-</label>
+<label for="cwEndDate">تاريخ الانتهاء<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="cw-end-date" name="cwEndDate[]" type="date"/>
+<input class="cw-end-date" id="cwEndDate" name="cwEndDate[]" type="date"/>
 </div>
 </div>
 </div>
 <div class="form-group">
-<label>مستوى المشاركة (اختيارى)
-</label>
+<label for="cwParticipationLevel">مستوى المشاركة</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="cwParticipationLevel[]" class="optional-select">
+<select class="optional-select" id="cwParticipationLevel" name="cwParticipationLevel[]">
 <option value="">اختر</option>
 <option value="volunteer">متطوع</option>
 <option value="host">مضيف / منظم</option>
@@ -1646,31 +1571,25 @@ textarea[aria-invalid="true"] {
 <h3 class="reg-step__subtitle">
                   الأثر والجوائز الإضافية والقيادة المجتمعية
                 </h3>
-<div class="form-group">
-<label>الجوائز والتكريمات (Impact &amp; Awards) (اختيارى)
-</label>
-</div>
+<h3 class="reg-step__subtitle" id="section-------------------">الجوائز والتكريمات</h3>
 <div id="awardsContainer">
 <div class="academic-history-card">
 <div class="reg-form__row">
 <div class="form-group">
-<label>عنوان الجائزة / التكريم (Award / Recognition
-                          Title) (اختيارى)
-</label>
-<input class="optional-input" name="awardTitle[]" placeholder="مثال: جائزة الموظف المتميز على مستوى الشركة" type="text"/>
+<label for="awardTitle">عنوان الجائزة / التكريم (Award / Recognition
+                          Title)</label>
+<input class="optional-input" id="awardTitle" name="awardTitle[]" placeholder="مثال: جائزة الموظف المتميز على مستوى الشركة" type="text"/>
 </div>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>الجهة المانحة (Issuing Body) (اختيارى)
-</label>
-<input class="optional-input" name="issuingBody[]" placeholder="اسم الجهة أو المؤسسة المانحة" type="text"/>
+<label for="issuingBody">الجهة المانحة (Issuing Body)</label>
+<input class="optional-input" id="issuingBody" name="issuingBody[]" placeholder="اسم الجهة أو المؤسسة المانحة" type="text"/>
 </div>
 </div>
 <div class="form-group">
-<label>الإنجاز الرئيسي (حتى 100 كلمة) (Key Achievement) (اختيارى)
-</label>
-<textarea class="optional-input" name="keyAchievement[]" placeholder="وصف مختصر للإنجاز الذي تم تكريمه من أجله" rows="3"></textarea>
+<label for="keyAchievement">الإنجاز الرئيسي (حتى 100 كلمة) (Key Achievement)</label>
+<textarea class="optional-input" id="keyAchievement" name="keyAchievement[]" placeholder="وصف مختصر للإنجاز الذي تم تكريمه من أجله" rows="3"></textarea>
 </div>
 </div>
 </div>
@@ -1681,30 +1600,24 @@ textarea[aria-invalid="true"] {
                   يبرز هذا القسم أهم إنجازاتك وجوائزك المميزة.
                 </small>
 <div class="form-group">
-<label>القيادة المجتمعية / التطوع (Community / Volunteer
-                    Leadership) (اختيارى)
-</label>
-<textarea class="optional-input" name="communityLeadership" placeholder="أدوارك التطوعية أو القيادية في المجتمع" rows="3"></textarea>
+<label for="communityLeadership">القيادة المجتمعية / التطوع (Community / Volunteer
+                    Leadership)</label>
+<textarea class="optional-input" id="communityLeadership" name="communityLeadership" placeholder="أدوارك التطوعية أو القيادية في المجتمع" rows="3"></textarea>
 <small class="reg-step__desc">
                     يوضح هذا القسم مدى مشاركتك في خدمة المجتمع والمسؤولية
                     الاجتماعية.
                   </small>
 </div>
-<div class="form-group">
-<label>الأنشطة اللاصفية (Extracurricular Depth) (اختيارى)
-</label>
-</div>
+<h3 class="reg-step__subtitle" id="section-----------------">الأنشطة اللاصفية</h3>
 <div id="extracurricularContainer">
 <div class="reg-form__row extracurricular-row">
 <div class="form-group">
-<label>الدور (Role) (اختيارى)
-</label>
-<input class="optional-input" name="extracurricularRole[]" placeholder="مثال: عضو مجلس إدارة، قائد فريق، ..." type="text"/>
+<label for="extracurricularRole">الدور (Role)</label>
+<input class="optional-input" id="extracurricularRole" name="extracurricularRole[]" placeholder="مثال: عضو مجلس إدارة، قائد فريق، ..." type="text"/>
 </div>
 <div class="form-group">
-<label>مدة المشروع (Project Duration) (اختيارى)
-</label>
-<input class="optional-input" name="extracurricularDuration[]" placeholder="مثال: من 2022 إلى 2023" type="text"/>
+<label for="extracurricularDuration">مدة المشروع (Project Duration)</label>
+<input class="optional-input" id="extracurricularDuration" name="extracurricularDuration[]" placeholder="مثال: من 2022 إلى 2023" type="text"/>
 </div>
 </div>
 </div>
@@ -1715,11 +1628,10 @@ textarea[aria-invalid="true"] {
                   يبرز هذا القسم التزاماتك غير المهنية ذات الأثر الهام.
                 </small>
 <div class="form-group">
-<label>منشورات / ملف أعمال (Publication / Portfolio) (اختيارى)
-</label>
+<label for="portfolioUrl">منشورات / ملف أعمال (Publication / Portfolio)</label>
 <div class="reg-form__row">
 <div class="form-group">
-<input class="optional-input" name="portfolioUrl" placeholder="رابط URL لملف الأعمال أو منشوراتك" type="url"/>
+<input class="optional-input" id="portfolioUrl" name="portfolioUrl" placeholder="رابط URL لملف الأعمال أو منشوراتك" type="url"/>
 </div>
 <div class="form-group">
 <input class="optional-input" name="portfolioFile" type="file"/>
@@ -1742,8 +1654,7 @@ textarea[aria-invalid="true"] {
                   الجزء الأول: العمل العام والتطوعي
                 </h3>
 <div class="form-group">
-<label>هل شاركت في أي عمل عام أو تطوعي؟ (اجبارى)
-</label>
+<label for="hasPublicVoluntaryWork">هل شاركت في أي عمل عام أو تطوعي؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasPublicVoluntaryWork" name="hasPublicVoluntaryWork" required="">
@@ -1757,17 +1668,15 @@ textarea[aria-invalid="true"] {
 <div id="publicVoluntaryContainer">
 <div class="pv-work-card academic-history-card">
 <div class="form-group">
-<label>اسم المؤسسة أو الجمعية الخيرية (اجبارى)
-</label>
-<input name="pvFoundationName[]" placeholder="الاسم الكامل للمؤسسة" type="text"/>
+<label for="pvFoundationName">اسم المؤسسة أو الجمعية الخيرية<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="pvFoundationName" name="pvFoundationName[]" placeholder="الاسم الكامل للمؤسسة" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>المنصب / الدور الوظيفي (اجبارى)
-</label>
+<label for="pvPosition">المنصب / الدور الوظيفي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="pv-position" name="pvPosition[]">
+<select class="pv-position" id="pvPosition" name="pvPosition[]">
 <option value="">اختر</option>
 <option value="volunteer">
                                 متطوع
@@ -1787,11 +1696,10 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>سنة / تاريخ الالتحاق (اجبارى)
-</label>
+<label for="pvJoinDate">سنة / تاريخ الالتحاق<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="pv-join-date" name="pvJoinDate[]" type="date"/>
+<input class="pv-join-date" id="pvJoinDate" name="pvJoinDate[]" type="date"/>
 </div>
 </div>
 </div>
@@ -1802,26 +1710,23 @@ textarea[aria-invalid="true"] {
 </label>
 </div>
 <div class="form-group pv-leave-wrap">
-<label>سنة / تاريخ المغادرة (اختيارى)
-</label>
+<label for="pvLeaveDate">سنة / تاريخ المغادرة</label>
 <div class="reg-input-wrap reg-input-wrap--date">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
-<input class="pv-leave-date" name="pvLeaveDate[]" type="date"/>
+<input class="pv-leave-date" id="pvLeaveDate" name="pvLeaveDate[]" type="date"/>
 </div>
 <small class="reg-step__desc">اختياري إذا كنت ما زلت ضمن المؤسسة.</small>
 </div>
 <div class="form-group">
-<label>نطاق العمل ووصف الخبرة (اختيارى)
-</label>
-<input dir="auto" name="pvScope[]" placeholder="المسؤوليات والإنجازات" type="text"/>
+<label for="pvScope">نطاق العمل ووصف الخبرة</label>
+<input dir="auto" id="pvScope" name="pvScope[]" placeholder="المسؤوليات والإنجازات" type="text"/>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>مجال العمل (اختيارى)
-</label>
+<label for="pvWorkField">مجال العمل</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select name="pvWorkField[]" class="optional-select">
+<select class="optional-select" id="pvWorkField" name="pvWorkField[]">
 <option value="">اختر</option>
 <option value="medical">طبي</option>
 <option value="human_development">
@@ -1842,20 +1747,19 @@ textarea[aria-invalid="true"] {
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>دولة العمل (اختيارى)
-</label>
+<label for="pvCountry">دولة العمل</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="pv-country optional-select" name="pvCountry[]">
+<select class="pv-country optional-select" id="pvCountry" name="pvCountry[]">
 <option value="">اختر الدولة</option>
 </select>
 </div>
 </div>
 <div class="form-group">
-<label>المحافظة أو الولاية (اجبارى)</label>
+<label for="pvState">المحافظة أو الولاية<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
-<select class="pv-state optional-select" name="pvState[]">
+<select class="pv-state optional-select" id="pvState" name="pvState[]">
 <option value="">اختر المحافظة / الولاية</option>
 </select>
 </div>
@@ -1873,8 +1777,7 @@ textarea[aria-invalid="true"] {
 <hr class="reg-divider"/>
 <h3 class="reg-step__subtitle">الجزء الثاني: العمل السياسي</h3>
 <div class="form-group">
-<label>هل شاركت في أي عمل سياسي؟ (اجبارى)
-</label>
+<label for="hasPoliticalParticipation">هل شاركت في أي عمل سياسي؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasPoliticalParticipation" name="hasPoliticalParticipation" required="">
@@ -1886,15 +1789,15 @@ textarea[aria-invalid="true"] {
 </div>
 <div id="politicalWorkBlock" style="display: none">
 <div class="form-group">
-<label>اسم الحزب أو التنظيم السياسي (اجبارى)</label>
+<label for="politicalPartyName">اسم الحزب أو التنظيم السياسي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="politicalPartyName" name="politicalPartyName" placeholder="الاسم الكامل" type="text"/>
 </div>
 <div class="form-group">
-<label>الدور السياسي (اجبارى)</label>
+<label for="politicalRole">الدور السياسي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="politicalRole" name="politicalRole" placeholder="المنصب أو الدور" type="text"/>
 </div>
 <div class="form-group">
-<label>تفاصيل العمل السياسي (اجبارى)</label>
+<label for="politicalWorkDetails">تفاصيل العمل السياسي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="politicalWorkDetails" name="politicalWorkDetails" placeholder="التواريخ والأنشطة باختصار" type="text"/>
 </div>
 </div>
@@ -1903,7 +1806,7 @@ textarea[aria-invalid="true"] {
                   الجزء الثالث: الترشح للمناصب السياسية
                 </h3>
 <div class="form-group">
-<label>هل ترشحت لأي منصب سياسي؟ (اختيارى)</label>
+<label for="hasPoliticalCandidacy">هل ترشحت لأي منصب سياسي؟</label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasPoliticalCandidacy" name="hasPoliticalCandidacy">
@@ -1915,11 +1818,11 @@ textarea[aria-invalid="true"] {
 </div>
 <div id="politicalCandidacyBlock" style="display: none">
 <div class="form-group">
-<label>اسم المنصب السياسي (اجبارى)</label>
+<label for="candidacyPositionName">اسم المنصب السياسي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="candidacyPositionName" name="candidacyPositionName" placeholder="المسمى المرشح له" type="text"/>
 </div>
 <div class="form-group">
-<label>النتيجة (اجبارى)</label>
+<label for="candidacyResult">النتيجة<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="candidacyResult" name="candidacyResult">
@@ -1934,7 +1837,7 @@ textarea[aria-invalid="true"] {
 </div>
 </div>
 <div class="form-group">
-<label>وصف تجربة الترشح (اجبارى)</label>
+<label for="candidacyExperienceDescription">وصف تجربة الترشح<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="candidacyExperienceDescription" name="candidacyExperienceDescription" placeholder="تفاصيل التجربة" type="text"/>
 </div>
 </div>
@@ -1943,7 +1846,7 @@ textarea[aria-invalid="true"] {
                   الجزء الرابع: الوضع القانوني / السجل الجنائي
                 </h3>
 <div class="form-group">
-<label>هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟ (اجبارى)</label>
+<label for="hasPriorCriminalConvictions">هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <div class="reg-input-wrap reg-input-wrap--select">
 <span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
 <select id="hasPriorCriminalConvictions" name="hasPriorCriminalConvictions" required="">
@@ -1955,14 +1858,13 @@ textarea[aria-invalid="true"] {
 </div>
 <div id="legalStatusBlock" style="display: none">
 <div class="form-group">
-<label>وصف الحكم الجنائي (اجبارى)</label>
+<label for="priorConvictionDescription">وصف الحكم الجنائي<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="auto" id="priorConvictionDescription" name="priorConvictionDescription" placeholder="وصف إلزامي للحكم" type="text"/>
 </div>
 <div class="form-group">
-<label for="sectionSevenCriminalRecordCertificate">صحيفة الحالة الجنائية (الفيش والتشبيه) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="sectionSevenCriminalRecordCertificate">صحيفة الحالة الجنائية (الفيش والتشبيه) <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <small class="file-upload-hint" id="criminalCertHint7">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
 <input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" aria-describedby="criminalCertHint7" id="sectionSevenCriminalRecordCertificate" name="sectionSevenCriminalRecordCertificate" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
-
 </div>
 </div>
 </div>
@@ -1979,24 +1881,23 @@ textarea[aria-invalid="true"] {
 <!-- Upload documents -->
 <div class="reg-form__row">
 <div class="form-group">
-<label for="cvResume">السيرة الذاتية الشاملة (CV / Resume) <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="cvResume">السيرة الذاتية الشاملة (CV / Resume) <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <small class="file-upload-hint" id="cvResumeHint">الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت.</small>
 <input accept=".pdf,.doc,.docx" aria-describedby="cvResumeHint" id="cvResume" name="cvResume" required="" type="file"/>
 </div>
 <div class="form-group">
-  <label for="lettersOfRecommendation">خطابات التوصية (2) <span class="sr-only">(اختياري)</span></label>
-  <small class="file-upload-hint" id="lettersHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت لكل ملف.</small>
-  <input accept=".pdf,.doc,.docx,.jpg,.png" aria-describedby="lettersHint" id="lettersOfRecommendation" multiple="" name="lettersOfRecommendation" type="file"/>
-  <small class="reg-step__desc">
+<label for="lettersOfRecommendation">خطابات التوصية (2) <span class="sr-only">(اختياري)</span></label>
+<small class="file-upload-hint" id="lettersHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت لكل ملف.</small>
+<input accept=".pdf,.doc,.docx,.jpg,.png" aria-describedby="lettersHint" id="lettersOfRecommendation" multiple="" name="lettersOfRecommendation" type="file"/>
+<small class="reg-step__desc">
                         يمكنك رفع أكثر من ملف في هذا الحقل (ويُفضل خطابَي توصية) أو
                         إرسالها لاحقًا عبر البريد الإلكتروني.
                       </small>
-  </div>
 </div>
-
+</div>
 <div class="reg-form__row">
 <div class="form-group" id="step8CriminalRecordGroup">
-<label for="criminalRecord">فيش جنائي / شهادة خلو سوابق <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="criminalRecord">فيش جنائي / شهادة خلو سوابق <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <small class="file-upload-hint" id="criminalRecordHint">الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت.</small>
 <input accept=".pdf,.doc,.docx,.jpg,.png" aria-describedby="criminalRecordHint" id="criminalRecord" name="criminalRecord" required="" type="file"/>
 <small class="reg-step__desc" id="step8CriminalRecordPrefillHint" style="display: none">
@@ -2005,8 +1906,8 @@ textarea[aria-invalid="true"] {
                     </small>
 </div>
 <div class="form-group">
-<label>خطاب اعتماد من جهة العمل (Employer Acknowledgment / NOC) (إرشادات الرفع: يرجى رفع خطاب الاعتماد بصيغة PDF أو صورة واضحة بحجم أقصى 5 ميجابايت) (اختيارى)</label>
-<input accept=".pdf,.doc,.docx,.jpg,.png" multiple="" name="employerNoc" type="file"/>
+<label for="employerNoc">خطاب اعتماد من جهة العمل (Employer Acknowledgment / NOC)</label>
+<input accept=".pdf,.doc,.docx,.jpg,.png" id="employerNoc" multiple="" name="employerNoc" type="file"/>
 <small class="reg-step__desc">
                       يمكنك رفع أكثر من ملف في هذا الحقل.
                     </small>
@@ -2014,22 +1915,20 @@ textarea[aria-invalid="true"] {
 </div>
 <hr class="reg-divider"/>
 <!-- Professional References -->
-<div class="form-group">
-<label>المراجع المهنية (Professional References) (اجبارى)</label>
-</div>
+<h3 class="reg-step__subtitle" id="section----------------">المراجع المهنية</h3>
 <div id="referencesContainer">
 <div class="reg-form__row reference-row">
 <div class="form-group">
-<label>الاسم (Name) (اجبارى)</label>
-<input name="referenceName[]" placeholder="اسم المرجع" type="text"/>
+<label for="referenceName">الاسم (Name)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="referenceName" name="referenceName[]" placeholder="اسم المرجع" type="text"/>
 </div>
 <div class="form-group">
-<label>العلاقة / المسمى الوظيفي (Relationship / Title) (اجبارى)</label>
-<input name="referenceRelationship[]" placeholder="مثال: مدير مباشر، أستاذ جامعي" type="text"/>
+<label for="referenceRelationship">العلاقة / المسمى الوظيفي (Relationship / Title)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="referenceRelationship" name="referenceRelationship[]" placeholder="مثال: مدير مباشر، أستاذ جامعي" type="text"/>
 </div>
 <div class="form-group">
-<label>معلومات الاتصال (Contact Information) (اجبارى)</label>
-<input name="referenceContact[]" placeholder="بريد إلكتروني أو رقم هاتف" type="text"/>
+<label for="referenceContact">معلومات الاتصال (Contact Information)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<input id="referenceContact" name="referenceContact[]" placeholder="بريد إلكتروني أو رقم هاتف" type="text"/>
 </div>
 </div>
 </div>
@@ -2043,30 +1942,30 @@ textarea[aria-invalid="true"] {
 <hr class="reg-divider"/>
 <h3 class="reg-step__subtitle">دوافع الالتحاق والأهداف</h3>
 <div class="form-group">
-<label>الهدف التعليمي الرئيسي (Primary Learning Objective) (اجبارى)</label>
-<textarea name="primaryLearningObjective" placeholder="ما الذي تسعى لتعلمه أو تحقيقه من خلال هذا البرنامج؟" rows="3"></textarea>
+<label for="primaryLearningObjective">الهدف التعليمي الرئيسي (Primary Learning Objective)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<textarea id="primaryLearningObjective" name="primaryLearningObjective" placeholder="ما الذي تسعى لتعلمه أو تحقيقه من خلال هذا البرنامج؟" rows="3"></textarea>
 <small class="reg-step__desc">
                     يساعد هذا القسم على مواءمة توقعاتك مع مخرجات البرنامج.
                   </small>
 </div>
 <div class="form-group">
-<label>مساهمتك الفريدة للدفعة (Unique Contribution to Cohort) (اجبارى)</label>
-<textarea name="uniqueContribution" placeholder="ما الذي يمكنك إضافته لزملائك في البرنامج؟ خبرات، مهارات، منظور مختلف، ..." rows="3"></textarea>
+<label for="uniqueContribution">مساهمتك الفريدة للدفعة (Unique Contribution to Cohort)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<textarea id="uniqueContribution" name="uniqueContribution" placeholder="ما الذي يمكنك إضافته لزملائك في البرنامج؟ خبرات، مهارات، منظور مختلف، ..." rows="3"></textarea>
 <small class="reg-step__desc">
                     يوضح هذا القسم ما الذي يميزك عن غيرك من المتقدمين.
                   </small>
 </div>
 <div class="form-group">
-<label>هدفـك المهني خلال 5 سنوات (Future Career Goal - 5 Years) (اجبارى)</label>
-<textarea name="futureCareerGoal" placeholder="صف طموحاتك المهنية على المدى المتوسط (خمس سنوات)." rows="3"></textarea>
+<label for="futureCareerGoal">هدفـك المهني خلال 5 سنوات (Future Career Goal - 5 Years)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<textarea id="futureCareerGoal" name="futureCareerGoal" placeholder="صف طموحاتك المهنية على المدى المتوسط (خمس سنوات)." rows="3"></textarea>
 <small class="reg-step__desc">
                     يساعد هذا القسم على فهم رؤيتك المهنية طويلة المدى.
                   </small>
 </div>
 <div class="reg-form__row">
 <div class="form-group">
-<label>مصدر التمويل (Funding Source) (اجبارى)</label>
-<select name="fundingSource">
+<label for="fundingSource">مصدر التمويل (Funding Source)<span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
+<select id="fundingSource" name="fundingSource">
 <option value="">اختر مصدر التمويل</option>
 <option value="self_funded">
                         تمويل ذاتي (Self-Funded)
@@ -2087,9 +1986,9 @@ textarea[aria-invalid="true"] {
                     </small>
 </div>
 <div class="form-group">
-<label>مقال المنحة (Scholarship Essay) (اختياري) - الحد الأقصى 5000 حرف</label>
-<textarea maxlength="5000" name="scholarshipEssay" id="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
-<small id="essayWordCount" class="reg-step__desc" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
+<label for="scholarshipEssay">مقال المنحة (Scholarship Essay) - الحد الأقصى 5000 حرف</label>
+<textarea id="scholarshipEssay" maxlength="5000" name="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
+<small class="reg-step__desc" id="essayWordCount" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
 <small class="reg-step__desc">
                       يمكنك أيضًا رفع ملف يحتوي على مقال المنحة إن وجد.
                     </small>
@@ -2109,15 +2008,15 @@ textarea[aria-invalid="true"] {
                   </small>
 </div>
 <div class="form-group">
-<label>قيود النظام الغذائي (Dietary Restrictions) (اختيارى)</label>
-<textarea name="dietaryRestrictions" placeholder="أدخل أي احتياجات غذائية خاصة إن وجدت" rows="3"></textarea>
+<label for="dietaryRestrictions">قيود النظام الغذائي (Dietary Restrictions)</label>
+<textarea id="dietaryRestrictions" name="dietaryRestrictions" placeholder="أدخل أي احتياجات غذائية خاصة إن وجدت" rows="3"></textarea>
 <small class="reg-step__desc">
                     يساعد في توفير ما يناسبك خلال فعاليات البرنامج.
                   </small>
 </div>
 <div class="form-group">
-<label>متطلبات إمكانية الوصول (Accessibility Requirements) (اختيارى)</label>
-<textarea name="accessibilityRequirements" placeholder="أدخل أي احتياجات خاصة لإمكانية الوصول إن وجدت" rows="3"></textarea>
+<label for="accessibilityRequirements">متطلبات إمكانية الوصول (Accessibility Requirements)</label>
+<textarea id="accessibilityRequirements" name="accessibilityRequirements" placeholder="أدخل أي احتياجات خاصة لإمكانية الوصول إن وجدت" rows="3"></textarea>
 <small class="reg-step__desc">
                     يضمن أن بيئة البرنامج مناسبة لجميع المشاركين.
                   </small>
@@ -2138,9 +2037,7 @@ textarea[aria-invalid="true"] {
 <h3 class="cognition-section__title">
                     القسم 1: معالجة المعلومات (الكيفية)
                   </h3>
-<div class="cognition-question" dir="rtl">
-<label>تم تسليمك دليلاً مكوناً من 50 صفحة لبرنامج جديد ومعقد. ما هي خطوتك الأولى؟</label>
-<div class="cognition-options">
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">تم تسليمك دليلاً مكوناً من 50 صفحة لبرنامج جديد ومعقد. ما هي خطوتك الأولى؟</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog1" required="" type="radio" value="a"/>
 <span>أ) الانتقال إلى الفهرس لفهم الهيكل/التسلسل الهرمي أولاً.</span></label>
 <label class="cognition-option"><input name="cog1" required="" type="radio" value="b"/>
@@ -2149,11 +2046,8 @@ textarea[aria-invalid="true"] {
 <span>ج) البدء في تجربة البرنامج مباشرة والرجوع للدليل فقط عند مواجهة مشكلة.</span></label>
 <label class="cognition-option"><input name="cog1" required="" type="radio" value="d"/>
 <span>د) قراءة قسم "التاريخ/الفلسفة" لفهم سبب بناء البرنامج.</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>عند شرح مفهوم لصديق، فإنك بطبيعتك تقوم بـ:</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">عند شرح مفهوم لصديق، فإنك بطبيعتك تقوم بـ:</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog2" required="" type="radio" value="a"/>
 <span>أ) رسم مخطط تدفقي أو خريطة ذهنية.</span></label>
 <label class="cognition-option"><input name="cog2" required="" type="radio" value="b"/>
@@ -2162,11 +2056,8 @@ textarea[aria-invalid="true"] {
 <span>ج) تقديم المواصفات والبيانات الفنية.</span></label>
 <label class="cognition-option"><input name="cog2" required="" type="radio" value="d"/>
 <span>د) توضيح النتيجة النهائية لما ينتجه هذا المفهوم.</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>أي من لحظات الإدراك المفاجئ (لحظة الـ "aha!"‎) تشعرك بالرضا الأكبر؟</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">أي من لحظات الإدراك المفاجئ (لحظة الـ "aha!"‎) تشعرك بالرضا الأكبر؟</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog3" required="" type="radio" value="a"/>
 <span>أ) رؤية كيفية ترابط نظامين غير مرتبطين ببعضهما.</span></label>
 <label class="cognition-option"><input name="cog3" required="" type="radio" value="b"/>
@@ -2175,16 +2066,13 @@ textarea[aria-invalid="true"] {
 <span>ج) حل نزاع أو خلاف بين الأشخاص أو الأفكار.</span></label>
 <label class="cognition-option"><input name="cog3" required="" type="radio" value="d"/>
 <span>د) اكتشاف حقيقة عميقة أو "السبب الجذري" لمشكلة ما.</span></label>
-</div>
-</div>
+</div></fieldset></div>
 </div>
 <div class="cognition-section">
 <h3 class="cognition-section__title">
                     القسم 2: حل المشكلات (ماذا)
                   </h3>
-<div class="cognition-question" dir="rtl">
-<label>موقع إلكتروني يعمل بأداء ضعيف. حدسك يوجهك لإصلاح:</label>
-<div class="cognition-options">
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">موقع إلكتروني يعمل بأداء ضعيف. حدسك يوجهك لإصلاح:</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog4" required="" type="radio" value="a"/>
 <span>أ) الكود وقاعدة البيانات في الخلفية البرمجية (Backend).</span></label>
 <label class="cognition-option"><input name="cog4" required="" type="radio" value="b"/>
@@ -2193,11 +2081,8 @@ textarea[aria-invalid="true"] {
 <span>ج) النصوص التسويقية وزر "اتخاذ الإجراء" (Call to Action).</span></label>
 <label class="cognition-option"><input name="cog4" required="" type="radio" value="d"/>
 <span>د) نموذج العمل التجاري والهدف الذي من أجله أنشئ الموقع.</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>في لعبة استراتيجية، تفضل أن تكون:</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">في لعبة استراتيجية، تفضل أن تكون:</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog5" required="" type="radio" value="a"/>
 <span>أ) مدير الموارد (التحسين واللوجستيات).</span></label>
 <label class="cognition-option"><input name="cog5" required="" type="radio" value="b"/>
@@ -2206,11 +2091,8 @@ textarea[aria-invalid="true"] {
 <span>ج) الدبلوماسي (التفاوض وبناء التحالفات).</span></label>
 <label class="cognition-option"><input name="cog5" required="" type="radio" value="d"/>
 <span>د) المخطط الاستراتيجي (حساب أعلى احتمالية للفوز).</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>إذا كنت ستؤلف كتاباً، فمن المرجح أن يكون:</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">إذا كنت ستؤلف كتاباً، فمن المرجح أن يكون:</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog6" required="" type="radio" value="a"/>
 <span>أ) دليلاً تقنياً تعليمياً (دليل "خطوة بخطوة").</span></label>
 <label class="cognition-option"><input name="cog6" required="" type="radio" value="b"/>
@@ -2219,16 +2101,13 @@ textarea[aria-invalid="true"] {
 <span>ج) رؤية تطلعية لمستقبل قطاع أو صناعة معينة.</span></label>
 <label class="cognition-option"><input name="cog6" required="" type="radio" value="d"/>
 <span>د) نقداً للأنظمة الحالية وكيفية تغييرها.</span></label>
-</div>
-</div>
+</div></fieldset></div>
 </div>
 <div class="cognition-section">
 <h3 class="cognition-section__title">
                     القسم 3: الدوافع والمخرجات (لماذا)
                   </h3>
-<div class="cognition-question" dir="rtl">
-<label>أي العبارات التالية تبدو كأفضل إطراء بالنسبة لك؟</label>
-<div class="cognition-options">
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">أي العبارات التالية تبدو كأفضل إطراء بالنسبة لك؟</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog7" required="" type="radio" value="a"/>
 <span>أ) "أنت شخص فعال للغاية."</span></label>
 <label class="cognition-option"><input name="cog7" required="" type="radio" value="b"/>
@@ -2237,11 +2116,8 @@ textarea[aria-invalid="true"] {
 <span>ج) "أنت قائد/متحدث بالفطرة."</span></label>
 <label class="cognition-option"><input name="cog7" required="" type="radio" value="d"/>
 <span>د) "أنت مفكر عميق."</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>يبدأ "العمل العميق والتركيز" لديك عندما تقوم بـ:</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">يبدأ "العمل العميق والتركيز" لديك عندما تقوم بـ:</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog8" required="" type="radio" value="a"/>
 <span>أ) تنظيم بيانات مبعثرة في جدول مهيكل.</span></label>
 <label class="cognition-option"><input name="cog8" required="" type="radio" value="b"/>
@@ -2250,11 +2126,8 @@ textarea[aria-invalid="true"] {
 <span>ج) تبادل الأفكار (العصف الذهني) مع مجموعة مفعمة بالحيوية والنشاط.</span></label>
 <label class="cognition-option"><input name="cog8" required="" type="radio" value="d"/>
 <span>د) الكتابة أو البحث في عزلة تامة وهدوء.</span></label>
-</div>
-</div>
-<div class="cognition-question" dir="rtl">
-<label>عند الانتهاء من مشروع، ما الذي يجعلك تشعر بالفخر الأكبر؟</label>
-<div class="cognition-options">
+</div></fieldset></div>
+<div class="cognition-question" dir="rtl"><fieldset class="reg-fieldset cognition-fieldset"><legend class="cognition-question__legend">عند الانتهاء من مشروع، ما الذي يجعلك تشعر بالفخر الأكبر؟</legend><div class="cognition-options">
 <label class="cognition-option"><input name="cog9" required="" type="radio" value="a"/>
 <span>أ) معرفة أن "محرك العمل" قوي ومتين ولن يتعطل.</span></label>
 <label class="cognition-option"><input name="cog9" required="" type="radio" value="b"/>
@@ -2263,8 +2136,7 @@ textarea[aria-invalid="true"] {
 <span>ج) رؤية تأثير ملموس وحقيقي على حياة الناس.</span></label>
 <label class="cognition-option"><input name="cog9" required="" type="radio" value="d"/>
 <span>د) معرفة أنك وسعت حدود ما هو ممكن.</span></label>
-</div>
-</div>
+</div></fieldset></div>
 </div>
 </div>
 <!-- Step 10: Verify & Final Confirmation -->
@@ -2290,7 +2162,6 @@ textarea[aria-invalid="true"] {
 <h3>صورتك من الأمام (Photo - Front)</h3>
 <p>التحقق من الوجه من الأمام</p>
 <input accept="image/jpeg,image/png,image/jpg" aria-describedby="photoFrontHint" class="photo-input" id="photoFront" name="photoFront" required="" type="file"/><small class="file-upload-hint" id="photoFrontHint">📸 صيغ الصور: JPG أو PNG — الحجم الأقصى: 2 ميجابايت — صورة شخصية واضحة من الأمام بخلفية بيضاء.</small>
-
 <label class="reg-btn reg-btn--primary photo-upload-btn" for="photoFront">التقاط / رفع</label>
 <p aria-live="polite" class="photo-upload-filename" hidden=""></p>
 </div>
@@ -2305,19 +2176,19 @@ textarea[aria-invalid="true"] {
                 </p>
 <div id="socialVerifyUrlsBlock">
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformFacebook" style="display: none">
-<label for="socialProfileFacebookUrl">رابط حساب فيسبوك <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="socialProfileFacebookUrl">رابط حساب فيسبوك <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileFacebookUrl" name="socialProfileFacebookUrl" placeholder="https://facebook.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformInstagram" style="display: none">
-<label for="socialProfileInstagramUrl">رابط حساب إنستجرام <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="socialProfileInstagramUrl">رابط حساب إنستجرام <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileInstagramUrl" name="socialProfileInstagramUrl" placeholder="https://instagram.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformX" style="display: none">
-<label for="socialProfileXUrl">رابط حساب إكس / تويتر <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="socialProfileXUrl">رابط حساب إكس / تويتر <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileXUrl" name="socialProfileXUrl" placeholder="https://x.com/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformLinkedIn" style="display: none">
-<label for="socialProfileLinkedInUrl">رابط حساب لينكد إن <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
+<label for="socialProfileLinkedInUrl">رابط حساب لينكد إن <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
 <input dir="ltr" id="socialProfileLinkedInUrl" name="socialProfileLinkedInUrl" placeholder="https://linkedin.com/in/..." type="url"/>
 </div>
 <div class="form-group social-verify-row" data-requires-platform="socialPlatformTikTok" style="display: none">
@@ -2342,11 +2213,11 @@ textarea[aria-invalid="true"] {
 </form>
 </div>
 <div class="reg-actions">
-<button class="reg-btn reg-btn--outline" disabled="" id="btnPrev" type="button" aria-label="الخطوة السابقة">
+<button aria-label="الخطوة السابقة" class="reg-btn reg-btn--outline" disabled="" id="btnPrev" type="button">
 <span class="reg-btn__icon reg-btn__icon--prev">←</span>
 <span>السابق</span>
 </button>
-<button class="reg-btn reg-btn--primary" id="btnNext" type="button" aria-label="الخطوة التالية">
+<button aria-label="الخطوة التالية" class="reg-btn reg-btn--primary" id="btnNext" type="button">
 <span>التالي</span>
 <span class="reg-btn__icon reg-btn__icon--arrow">→</span>
 </button>
@@ -2362,5 +2233,4 @@ textarea[aria-invalid="true"] {
 <script src="header/header.js?v=2"></script>
 <script src="registration.js"></script>
 <script src="chat/chat.js"></script>
-</body>
 </html>
