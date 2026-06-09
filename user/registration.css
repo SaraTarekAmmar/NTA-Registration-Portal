@@ -856,13 +856,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 20px;
 }
 
-.reg-form input.error {
+.reg-form input.error,
+.reg-form input[aria-invalid="true"] {
     border-color: #ef4444 !important;
     background: rgba(239, 68, 68, 0.05) !important;
 }
 
 .reg-form select.error,
-.reg-form textarea.error {
+.reg-form select[aria-invalid="true"],
+.reg-form textarea.error,
+.reg-form textarea[aria-invalid="true"] {
     border-color: #ef4444 !important;
     background: rgba(239, 68, 68, 0.05) !important;
 }
@@ -908,6 +911,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     background: var(--admin-hover-surface, rgba(30, 41, 59, 0.85));
+}
+
+.reg-form input:focus:not(:focus-visible),
+.reg-form select:focus:not(:focus-visible),
+.reg-form textarea:focus:not(:focus-visible) {
+    box-shadow: none;
+    border-color: inherit;
 }
 
 .reg-form select {
@@ -2067,3 +2077,51 @@ html.light-mode .identity-doc-option__hint {
 
 
 
+
+/* ===== A11Y: Stepper keyboard nav ===== */
+.reg-stepper__item:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ===== A11Y: Inline error messages ===== */
+.field-inline-error {
+    display: block;
+    color: #f87171;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    padding-right: 4px;
+}
+
+/* ===== A11Y: High contrast mode support ===== */
+@media (forced-colors: active) {
+    .reg-form input.error,
+    .reg-form input[aria-invalid="true"],
+    .reg-form select[aria-invalid="true"] {
+        border: 3px solid ButtonText !important;
+    }
+    .reg-btn--primary {
+        border: 2px solid ButtonText;
+    }
+}
+
+/* ===== A11Y: fieldset legend as form label ===== */
+.reg-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.reg-fieldset__legend {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    padding: 0;
+    width: 100%;
+    float: left;
+}
+[dir="rtl"] .reg-fieldset__legend {
+    float: right;
+}
