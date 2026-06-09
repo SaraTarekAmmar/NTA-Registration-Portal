@@ -88,9 +88,11 @@
             if (sel.classList.contains('optional-select')) { sel.classList.remove('error'); return; }
             if (!String(sel.value || '').trim()) {
                 sel.classList.add('error');
+                sel.setAttribute('aria-invalid', 'true');
                 ok = false;
             } else {
                 sel.classList.remove('error');
+                sel.removeAttribute('aria-invalid');
             }
         });
 
@@ -100,12 +102,15 @@
             if (!String(ta.value || '').trim()) {
                 if (optionalTextareas.includes(ta.name) || ta.classList.contains('optional-input') || (ta.placeholder && ta.placeholder.includes('اختياري'))) {
                     ta.classList.remove('error');
+                    ta.removeAttribute('aria-invalid');
                 } else {
                     ta.classList.add('error');
+                    ta.setAttribute('aria-invalid', 'true');
                     ok = false;
                 }
             } else {
                 ta.classList.remove('error');
+                ta.removeAttribute('aria-invalid');
             }
         });
 
@@ -1099,6 +1104,31 @@
 
         if (currentStep === 10) syncStepTenSocialRows();
         disableNativeValidationAttributes();
+
+        // Update progressbar ARIA attributes
+        const bar = document.querySelector('.reg-stepper__bar');
+        if (bar) {
+            bar.setAttribute('aria-valuenow', currentStep);
+            bar.setAttribute('aria-label', 'تقدم التسجيل: الخطوة ' + currentStep + ' من ' + TOTAL_STEPS);
+        }
+
+        // Announce step change to screen readers and move focus
+        const announcer = document.getElementById('a11yAnnouncer');
+        const activeStep = document.querySelector('.reg-step.active');
+        if (activeStep) {
+            const heading = activeStep.querySelector('h2');
+            if (heading) {
+                if (announcer) {
+                    const stepLabel = document.querySelector('.reg-stepper__item.active .reg-stepper__label');
+                    announcer.textContent = '';
+                    setTimeout(() => {
+                        announcer.textContent = 'الخطوة ' + currentStep + ' من ' + TOTAL_STEPS + ': ' + (heading.textContent || '');
+                    }, 50);
+                }
+                heading.setAttribute('tabindex', '-1');
+                setTimeout(() => heading.focus(), 100);
+            }
+        }
     }
 
     function goNext() {
@@ -1110,6 +1140,16 @@
                 if (leaving === 5) skillsStep5Locked = true;
                 syncUrlToStep(currentStep);
                 updateUI();
+            }
+        } else {
+            // Focus first invalid field for screen reader users
+            const stepEl = document.querySelector('.reg-step.active');
+            if (stepEl) {
+                const firstErr = stepEl.querySelector('[aria-invalid="true"], .error input, .error select, .error textarea, input.error, select.error, textarea.error');
+                if (firstErr) {
+                    firstErr.setAttribute('tabindex', firstErr.tabIndex < 0 ? '0' : firstErr.tabIndex);
+                    firstErr.focus();
+                }
             }
         }
     }
