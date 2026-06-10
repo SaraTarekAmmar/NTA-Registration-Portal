@@ -240,9 +240,9 @@
         });
       }
 
-      // Close modal on Escape
+      // Close modal on Escape only when it is open
       document.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") closeSessionModal();
+        if (e.key === "Escape" && document.getElementById("sessionModal").style.display === "flex") closeSessionModal();
       });
     </script>
   </body>

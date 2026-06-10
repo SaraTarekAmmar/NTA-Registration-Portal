@@ -1141,7 +1141,7 @@
       id="modalBackdrop"
       style="display: none"
     >
-      <div class="courses-modal" role="dialog" aria-modal="true">
+      <div class="courses-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="courses-modal__header">
           <h2 class="courses-modal__title" id="modalTitle">إضافة دورة جديدة</h2>
           <button type="button" class="courses-modal__icon-btn" id="modalClose">
@@ -1169,7 +1169,7 @@
           <div class="step-pane active" id="pane1">
             <div class="fg">
               <div class="field">
-                <label class="lbl"
+                <label class="lbl" for="titleEn"
                   >اسم الدورة (EN) <span class="req">*</span></label
                 ><input
                   class="inp"
@@ -1179,7 +1179,7 @@
                 />
               </div>
               <div class="field">
-                <label class="lbl"
+                <label class="lbl" for="titleAr"
                   >اسم الدورة (AR) <span class="req">*</span></label
                 ><input
                   class="inp"
@@ -1191,7 +1191,7 @@
             </div>
             <div class="fg">
               <div class="field">
-                <label class="lbl">اسم مختصر <span class="req">*</span></label
+                <label class="lbl" for="shortNameInp">اسم مختصر <span class="req">*</span></label
                 ><input
                   class="inp"
                   id="shortNameInp"
@@ -1200,7 +1200,7 @@
                 />
               </div>
               <div class="field">
-                <label class="lbl">التصنيف <span class="req">*</span></label
+                <label class="lbl" for="classificationSel">التصنيف <span class="req">*</span></label
                 ><select
                   class="sel"
                   id="classificationSel"
@@ -1472,8 +1472,8 @@
               </div>
               <div style="display: flex; align-items: center; gap: 0.5rem">
                 <span class="vis-badge pub" id="visBadge">عام 🌐</span>
-                <label class="sw"
-                  ><input type="checkbox" id="privToggle" /><span
+                <label class="sw" aria-label="تبديل رؤية الدورة"
+                  ><input type="checkbox" id="privToggle" aria-describedby="visDesc" /><span
                     class="sw-track"
                   ></span
                 ></label>

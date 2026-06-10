@@ -192,7 +192,7 @@
           html+='<input type="text" class="editor-input" style="margin-bottom:0.75rem;" placeholder="نص السؤال" value="'+q.text+'" oninput="questions['+qi+'].text=this.value" />';
           q.options.forEach(function(opt,oi){
             html+='<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.4rem;">';
-            html+='<input type="radio" name="correct_'+qi+'" '+(q.correct===oi?"checked":"")+ ' onchange="questions['+qi+'].correct='+oi+'" style="width:16px;height:16px;flex-shrink:0;" />';
+            html+='<input type="radio" name="correct_'+qi+'" '+(q.correct===oi?"checked":"")+ ' aria-label="الإجابة الصحيحة للخيار '+(oi+1)+'" onchange="questions['+qi+'].correct='+oi+'" style="width:16px;height:16px;flex-shrink:0;" />';
             html+='<input type="text" class="editor-input" placeholder="الخيار '+(oi+1)+'" value="'+opt+'" oninput="questions['+qi+'].options['+oi+']=this.value" />';
             html+='</div>';
           });
@@ -228,7 +228,10 @@
           .then(function(ok){if(ok){exams.splice(idx,1);renderExams();showEditorToast("تم الحذف.","success");}});
       }
 
-      document.addEventListener("keydown",function(e){if(e.key==="Escape")closeExamModal();});
+      document.addEventListener("keydown",function(e){
+        var modal=document.getElementById("examModal");
+        if(e.key==="Escape" && modal && modal.style.display==="flex") closeExamModal();
+      });
     </script>
   </body>
 </html>

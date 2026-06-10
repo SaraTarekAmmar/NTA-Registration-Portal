@@ -693,7 +693,7 @@
 
   <body class="trainee-app" data-page="admin">
     <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
-    <div class="trainee-bg"></div>
+    <div class="trainee-bg" aria-hidden="true"></div>
     <div id="ntaHeader"></div>
 
     <main id="main-content" class="trainee-main admin-main">
@@ -1036,7 +1036,7 @@
           session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
         } catch (e) {}
         if (session.role !== "admin") {
-          window.location.href = "index.html";
+          window.location.href = "/admin/admin-login.html";
           return;
         }
 

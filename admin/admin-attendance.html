@@ -785,10 +785,10 @@
     </div>
 
     <!-- Camera Check-in Modal -->
-    <div class="adm-cam-modal" id="admCamModal">
+    <div class="adm-cam-modal" id="admCamModal" role="dialog" aria-modal="true" aria-labelledby="admCamModalTitle">
       <div class="adm-cam-modal__inner">
-        <button class="adm-cam-modal__close" id="closeCamBtn">✕</button>
-        <h3 style="color:var(--text-main); margin-top:0; margin-bottom:1rem; font-size:1.1rem;">تسجيل الدخول / الخروج (التعرف على الوجه)</h3>
+        <button class="adm-cam-modal__close" id="closeCamBtn" aria-label="إغلاق">✕</button>
+        <h3 id="admCamModalTitle" style="color:var(--text-main); margin-top:0; margin-bottom:1rem; font-size:1.1rem;">تسجيل الدخول / الخروج (التعرف على الوجه)</h3>
         <video id="admVideo" autoplay playsinline></video>
         <canvas id="admCanvas" style="display:none;"></canvas>
         <div style="display: flex; justify-content: center; gap: 10px;">

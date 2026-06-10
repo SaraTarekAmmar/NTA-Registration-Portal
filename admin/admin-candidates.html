@@ -887,10 +887,9 @@
                 return s.id === t.stage;
               }) || {}
             ).label || "—";
+          var profileUrl = "admin-candidate-profile.html?id=" + t.id + "&from=applicants";
           return (
-            "<tr onclick=\"window.location.href='admin-candidate-profile.html?id=" +
-            t.id +
-            "&from=applicants'\">" +
+            "<tr>" +
             "<td>" +
             i +
             "</td>" +
@@ -899,9 +898,9 @@
             '<span class="au-table__avatar-fallback" style="' + (t.image && t.image !== "null" ? 'display:none' : 'display:flex') + '">' +
             initials +
             "</span></div></td>" +
-            '<td><span class="au-table__name">' +
+            '<td><a class="au-table__name" href="' + profileUrl + '">' +
             t.name +
-            "</span></td>" +
+            "</a></td>" +
             "<td>" +
             (t.category || "عام") +
             "</td>" +

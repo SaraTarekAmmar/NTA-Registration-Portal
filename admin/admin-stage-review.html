@@ -109,20 +109,20 @@
 
                     <div class="stage-fields-grid">
                         <div class="stage-field">
-                            <label class="stage-field__label">نوع الاستعلام</label>
-                            <select class="stage-field__select" data-field="security_type">
+                            <label class="stage-field__label" for="s2-security_type">نوع الاستعلام</label>
+                            <select id="s2-security_type" class="stage-field__select" data-field="security_type">
                                 <option value="primary">أولي</option>
                                 <option value="detailed">تفصيلي</option>
                                 <option value="criminal">جنائي</option>
                             </select>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">الجهات المستعلمة</label>
-                            <input type="text" class="stage-field__input" data-field="security_entities" placeholder="أدخل الجهات">
+                            <label class="stage-field__label" for="s2-security_entities">الجهات المستعلمة</label>
+                            <input type="text" id="s2-security_entities" class="stage-field__input" data-field="security_entities" placeholder="أدخل الجهات">
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">مستوى الخطورة</label>
-                            <select class="stage-field__select" data-field="security_risk">
+                            <label class="stage-field__label" for="s2-security_risk">مستوى الخطورة</label>
+                            <select id="s2-security_risk" class="stage-field__select" data-field="security_risk">
                                 <option value="low">منخفض</option>
                                 <option value="medium">متوسط</option>
                                 <option value="high">مرتفع</option>
@@ -132,12 +132,12 @@
 
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">اسم المسؤول</span>
-                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                            <label class="stage-review-card__label" for="s2-reviewer-name">اسم المسؤول</label>
+                            <input type="text" id="s2-reviewer-name" class="stage-review-input" placeholder="اسم المسؤول">
                         </div>
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
-                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                            <label class="stage-review-card__label" for="s2-reviewer-notes">ملاحظات المراجعة والتقييم</label>
+                            <textarea id="s2-reviewer-notes" class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
                         </div>
                         <div class="stage-review-card">
                             <span class="stage-review-card__label">المرفقات</span>
@@ -171,33 +171,33 @@
 
                     <div class="stage-fields-grid">
                         <div class="stage-field">
-                            <label class="stage-field__label">درجة الذكاء (IQ)</label>
-                            <input type="number" class="stage-field__input" data-field="iq_score" placeholder="أدخل الدرجة">
+                            <label class="stage-field__label" for="s3-iq_score">درجة الذكاء (IQ)</label>
+                            <input type="number" id="s3-iq_score" class="stage-field__input" data-field="iq_score" placeholder="أدخل الدرجة">
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">الثبات الانفعالي</label>
+                            <label class="stage-field__label" for="s3-emotional_stability">الثبات الانفعالي</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="emotional_stability" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s3-emotional_stability" class="stage-field__range" data-field="emotional_stability" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">السمات القيادية</label>
+                            <label class="stage-field__label" for="s3-leadership_potential">السمات القيادية</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="leadership_potential" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s3-leadership_potential" class="stage-field__range" data-field="leadership_potential" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">اسم المسؤول</span>
-                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                            <label class="stage-review-card__label" for="s3-reviewer-name">اسم المسؤول</label>
+                            <input type="text" id="s3-reviewer-name" class="stage-review-input" placeholder="اسم المسؤول">
                         </div>
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
-                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                            <label class="stage-review-card__label" for="s3-reviewer-notes">ملاحظات المراجعة والتقييم</label>
+                            <textarea id="s3-reviewer-notes" class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
                         </div>
                         <div class="stage-review-card">
                             <span class="stage-review-card__label">المرفقات</span>
@@ -283,45 +283,45 @@
 
                     <div class="stage-fields-grid">
                         <div class="stage-field">
-                            <label class="stage-field__label">أعضاء لجنة المقابلة</label>
-                            <input type="text" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
+                            <label class="stage-field__label" for="s5-panel_members">أعضاء لجنة المقابلة</label>
+                            <input type="text" id="s5-panel_members" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">مهارات التواصل</label>
+                            <label class="stage-field__label" for="s5-comm_skills">مهارات التواصل</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s5-comm_skills" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">الثقة بالنفس</label>
+                            <label class="stage-field__label" for="s5-confidence">الثقة بالنفس</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s5-confidence" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">المظهر العام</label>
+                            <label class="stage-field__label" for="s5-appearance">المظهر العام</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s5-appearance" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">اسم المسؤول</span>
-                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                            <label class="stage-review-card__label" for="s5-reviewer-name">اسم المسؤول</label>
+                            <input type="text" id="s5-reviewer-name" class="stage-review-input" placeholder="اسم المسؤول">
                         </div>
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
-                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                            <label class="stage-review-card__label" for="s5-reviewer-notes">ملاحظات المراجعة والتقييم</label>
+                            <textarea id="s5-reviewer-notes" class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
                         </div>
                         <div class="stage-review-card">
                             <span class="stage-review-card__label">المرفقات</span>
                             <div class="stage-upload-box">
-                                <input type="file" class="stage-upload-input" style="display:none">
+                                <input type="file" class="stage-upload-input" style="display:none" aria-label="رفع مرفق للمقابلة الأولى">
                                 <button type="button" class="stage-upload-btn">اختر ملف</button>
                                 <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
                             </div>
@@ -350,45 +350,45 @@
 
                     <div class="stage-fields-grid">
                         <div class="stage-field">
-                            <label class="stage-field__label">أعضاء لجنة المقابلة</label>
-                            <input type="text" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
+                            <label class="stage-field__label" for="s6-panel_members">أعضاء لجنة المقابلة</label>
+                            <input type="text" id="s6-panel_members" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">مهارات التواصل</label>
+                            <label class="stage-field__label" for="s6-comm_skills">مهارات التواصل</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s6-comm_skills" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">الثقة بالنفس</label>
+                            <label class="stage-field__label" for="s6-confidence">الثقة بالنفس</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s6-confidence" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                         <div class="stage-field">
-                            <label class="stage-field__label">المظهر العام</label>
+                            <label class="stage-field__label" for="s6-appearance">المظهر العام</label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent = this.value">
-                                <span class="stage-score-display">3</span>
+                                <input type="range" id="s6-appearance" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
+                                <span class="stage-score-display" aria-hidden="true">3</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">اسم المسؤول</span>
-                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                            <label class="stage-review-card__label" for="s6-reviewer-name">اسم المسؤول</label>
+                            <input type="text" id="s6-reviewer-name" class="stage-review-input" placeholder="اسم المسؤول">
                         </div>
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
-                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                            <label class="stage-review-card__label" for="s6-reviewer-notes">ملاحظات المراجعة والتقييم</label>
+                            <textarea id="s6-reviewer-notes" class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
                         </div>
                         <div class="stage-review-card">
                             <span class="stage-review-card__label">المرفقات</span>
                             <div class="stage-upload-box">
-                                <input type="file" class="stage-upload-input" style="display:none">
+                                <input type="file" class="stage-upload-input" style="display:none" aria-label="رفع مرفق للمقابلة الثانية">
                                 <button type="button" class="stage-upload-btn">اختر ملف</button>
                                 <span class="stage-upload-text">ارفع التقارير أو صور المستندات هنا</span>
                             </div>
@@ -417,19 +417,19 @@
 
                     <div class="stage-fields-grid">
                         <div class="stage-field">
-                            <label class="stage-field__label">الدورة التدريبية</label>
+                            <label class="stage-field__label" for="assignedCourse">الدورة التدريبية</label>
                             <select class="stage-field__select" id="assignedCourse" data-field="assigned_course_id">
                                 <option value="">جاري تحميل الدورات...</option>
                             </select>
                         </div>
                         <div class="stage-field" id="batchSelectContainer" style="display:none">
-                            <label class="stage-field__label">الدفعة</label>
+                            <label class="stage-field__label" for="assignedBatch">الدفعة</label>
                             <select class="stage-field__select" id="assignedBatch" data-field="assigned_batch_id">
                                 <option value="">اختر الدفعة...</option>
                             </select>
                         </div>
                         <div class="stage-field" id="stageSelectContainer" style="display:none">
-                            <label class="stage-field__label">المرحلة</label>
+                            <label class="stage-field__label" for="assignedStage">المرحلة</label>
                             <select class="stage-field__select" id="assignedStage" data-field="assigned_stage_id">
                                 <option value="">اختر المرحلة...</option>
                             </select>
@@ -438,12 +438,12 @@
 
                     <div class="stage-review-grid" style="grid-template-columns: 1fr 2fr;">
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">اسم المسؤول</span>
-                            <input type="text" class="stage-review-input" placeholder="اسم المسؤول">
+                            <label class="stage-review-card__label" for="s7-reviewer-name">اسم المسؤول</label>
+                            <input type="text" id="s7-reviewer-name" class="stage-review-input" placeholder="اسم المسؤول">
                         </div>
                         <div class="stage-review-card">
-                            <span class="stage-review-card__label">ملاحظات المراجعة والتقييم</span>
-                            <textarea class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
+                            <label class="stage-review-card__label" for="s7-reviewer-notes">ملاحظات المراجعة والتقييم</label>
+                            <textarea id="s7-reviewer-notes" class="stage-review-textarea" placeholder="ملاحظات المراجعة والتقييم..."></textarea>
                         </div>
                         <div class="stage-review-card stage-review-card--final">
                             <span class="stage-review-card__label">النتيجة النهائية</span>

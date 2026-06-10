@@ -257,12 +257,15 @@
           ["titleArError","descriptionError","durationError","dateRangeError"].forEach(function(id) {
             var el = document.getElementById(id); if(el) el.style.display = "none";
           });
+          ["titleAr","description","durationWeeks"].forEach(function(id) {
+            var inp = document.getElementById(id); if(inp) inp.removeAttribute("aria-invalid");
+          });
         };
         hideAll();
 
-        if (!titleAr) { document.getElementById("titleArError").style.display = "block"; ok = false; }
-        if (!desc) { document.getElementById("descriptionError").style.display = "block"; ok = false; }
-        if (!dur || isNaN(+dur) || +dur < 1) { document.getElementById("durationError").style.display = "block"; ok = false; }
+        if (!titleAr) { document.getElementById("titleArError").style.display = "block"; document.getElementById("titleAr").setAttribute("aria-invalid","true"); ok = false; }
+        if (!desc) { document.getElementById("descriptionError").style.display = "block"; document.getElementById("description").setAttribute("aria-invalid","true"); ok = false; }
+        if (!dur || isNaN(+dur) || +dur < 1) { document.getElementById("durationError").style.display = "block"; document.getElementById("durationWeeks").setAttribute("aria-invalid","true"); ok = false; }
         if (startDate && endDate && endDate <= startDate) { document.getElementById("dateRangeError").style.display = "block"; ok = false; }
         return ok;
       }
