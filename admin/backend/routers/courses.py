@@ -38,7 +38,7 @@ async def get_courses(staff: dict = Depends(get_staff_user)):
         db.close()
 
 @router.post("", response_model=Course)
-async def create_course(course: CourseCreate, staff: dict = Depends(require_editor)):
+async def create_course(course: CourseCreate, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -248,7 +248,7 @@ async def get_course_sessions(course_id: int, staff: dict = Depends(get_staff_us
 
 
 @router.put("/{course_id}", response_model=Course)
-async def update_course(course_id: int, course: CourseCreate, staff: dict = Depends(require_editor)):
+async def update_course(course_id: int, course: CourseCreate, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -316,7 +316,7 @@ async def update_course(course_id: int, course: CourseCreate, staff: dict = Depe
         db.close()
 
 @router.delete("/{course_id}")
-async def delete_course(course_id: int, staff: dict = Depends(require_editor)):
+async def delete_course(course_id: int, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
