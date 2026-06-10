@@ -9,22 +9,39 @@ router = APIRouter(prefix="/api/exams", tags=["Exams"])
 
 
 class ExamCreate(BaseModel):
-    subject: str
+    subject: Optional[str] = None
     title: Optional[str] = None
     title_ar: Optional[str] = None
     questions: Optional[List[Dict[str, Any]]] = None
     duration_minutes: Optional[int] = 60
     pass_score: Optional[float] = 60.0
+    course_id: Optional[int] = None
 
 
 @router.get("")
-async def list_exams(editor: dict = Depends(require_editor)):
+async def list_exams(course_id: Optional[int] = None, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT id, subject, title, title_ar, duration_minutes, pass_score FROM exams ORDER BY id DESC")
-        rows = cursor.fetchall()
-        return rows
+        if course_id:
+            try:
+                cursor.execute(
+                    "SELECT id, subject, title, title_ar, duration_minutes, pass_score, course_id "
+                    "FROM exams WHERE course_id = %s ORDER BY id DESC",
+                    (course_id,)
+                )
+            except Exception:
+                # course_id column may not exist — fall back to full list
+                cursor.execute(
+                    "SELECT id, subject, title, title_ar, duration_minutes, pass_score "
+                    "FROM exams ORDER BY id DESC"
+                )
+        else:
+            cursor.execute(
+                "SELECT id, subject, title, title_ar, duration_minutes, pass_score "
+                "FROM exams ORDER BY id DESC"
+            )
+        return cursor.fetchall() or []
     except Exception:
         return []
     finally:
@@ -42,7 +59,8 @@ async def get_exam(subject: str, editor: dict = Depends(require_editor)):
         if not exam:
             raise HTTPException(status_code=404, detail="Exam not found")
         if exam.get("content_json"):
-            exam["content"] = json.loads(exam["content_json"])
+            content = json.loads(exam["content_json"])
+            exam["questions"] = content.get("questions", [])
         return exam
     finally:
         cursor.close()
@@ -54,18 +72,32 @@ async def create_exam(exam: ExamCreate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
+        subject = exam.subject or f"course_{exam.course_id or 0}_{id(exam)}"
         content = {"questions": exam.questions or [], "duration_minutes": exam.duration_minutes}
-        cursor.execute(
-            """INSERT INTO exams (subject, title, title_ar, content_json, duration_minutes, pass_score)
-               VALUES (%s,%s,%s,%s,%s,%s)""",
-            (
-                exam.subject, exam.title, exam.title_ar,
-                json.dumps(content, ensure_ascii=False),
-                exam.duration_minutes, exam.pass_score
+
+        # Try with course_id column first; fall back if column doesn't exist
+        try:
+            cursor.execute(
+                """INSERT INTO exams (subject, title, title_ar, content_json, duration_minutes, pass_score, course_id)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s)""",
+                (
+                    subject, exam.title, exam.title_ar,
+                    json.dumps(content, ensure_ascii=False),
+                    exam.duration_minutes, exam.pass_score, exam.course_id
+                )
             )
-        )
+        except Exception:
+            cursor.execute(
+                """INSERT INTO exams (subject, title, title_ar, content_json, duration_minutes, pass_score)
+                   VALUES (%s,%s,%s,%s,%s,%s)""",
+                (
+                    subject, exam.title, exam.title_ar,
+                    json.dumps(content, ensure_ascii=False),
+                    exam.duration_minutes, exam.pass_score
+                )
+            )
         db.commit()
-        return {"id": cursor.lastrowid, **exam.dict()}
+        return {"id": cursor.lastrowid, "subject": subject, **exam.dict(exclude={"subject"})}
     finally:
         cursor.close()
         db.close()
