@@ -125,7 +125,6 @@ async def global_debugger_middleware(request: Request, call_next):
 # In standalone mode, auth router is local
 app.include_router(auth.router)
 app.include_router(auth.admin_router)
-app.include_router(auth.editor_router)
 app.include_router(admin.router)
 app.include_router(courses.router)
 app.include_router(chat.router)
@@ -138,11 +137,6 @@ app.include_router(class_matrix.router)
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
     app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
-
-# Serve editor portal from /editor/
-editor_path = Path(__file__).parent.parent.parent / "editor"
-if os.path.exists(editor_path):
-    app.mount("/editor", StaticFiles(directory=str(editor_path), html=True), name="editor")
 
 # Serve static files (HTML, CSS, JS) from the admin directory
 # This allows opening http://localhost:8002/ directly
