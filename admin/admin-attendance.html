@@ -769,14 +769,14 @@
     </main>
 
     <!-- Lightbox -->
-    <div class="adm-lightbox" id="admLightbox" onclick="admCloseLightbox()">
+    <div class="adm-lightbox" id="admLightbox" role="dialog" aria-modal="true" aria-labelledby="admLbLabel" onclick="admCloseLightbox()">
       <div class="adm-lightbox__inner" onclick="event.stopPropagation()">
         <div class="adm-lightbox__header">
           <div class="adm-lightbox__title">
             <span id="admLbLabel">—</span>
             <span class="adm-lightbox__chip" id="admLbTime">—</span>
           </div>
-          <button class="adm-lightbox__close" onclick="admCloseLightbox()">
+          <button class="adm-lightbox__close" onclick="admCloseLightbox()" aria-label="إغلاق">
             ✕
           </button>
         </div>
@@ -1129,7 +1129,7 @@
                   if (a && a.status === "present") {
                     bodyHtml =
                       '<div class="adm-photo-row">' +
-                      '<div class="adm-photo-box" onclick="admOpenLightbox(this)" data-src="' +
+                      '<div class="adm-photo-box" role="button" tabindex="0" onclick="admOpenLightbox(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();admOpenLightbox(this);}" data-src="' +
                       a.entry_photo +
                       '" data-label="صورة الدخول" data-time="' +
                       a.entry_time +
@@ -1142,7 +1142,7 @@
                       a.entry_time +
                       "</span></div>" +
                       "</div>" +
-                      '<div class="adm-photo-box" onclick="admOpenLightbox(this)" data-src="' +
+                      '<div class="adm-photo-box" role="button" tabindex="0" onclick="admOpenLightbox(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();admOpenLightbox(this);}" data-src="' +
                       a.exit_photo +
                       '" data-label="صورة الخروج" data-time="' +
                       a.exit_time +
@@ -1210,7 +1210,12 @@
           }, 200);
         };
         document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") admCloseLightbox();
+          if (e.key === "Escape") {
+            var lb = document.getElementById("admLightbox");
+            if (lb && lb.classList.contains("is-open")) admCloseLightbox();
+            var cam = document.getElementById("admCamModal");
+            if (cam && cam.classList.contains("is-open")) document.getElementById("closeCamBtn").click();
+          }
         });
 
         /* ── Search ── */
