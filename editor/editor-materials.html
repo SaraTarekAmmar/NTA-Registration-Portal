@@ -157,8 +157,9 @@
           return;
         }
         document.getElementById("emptyState").style.display = "none";
-        var html = '<div class="editor-table-wrap"><table class="editor-table"><thead><tr>' +
-          '<th>اسم الملف</th><th>الحجم</th><th>تاريخ الرفع</th><th>الإجراءات</th>' +
+        var html = '<div class="editor-table-wrap"><table class="editor-table">
+  <caption class="sr-only">قائمة المواد التعليمية</caption><th scope="col"ead><tr>' +
+          '<th scope="col">اسم الملف</th><th scope="col">الحجم</th><th scope="col">تاريخ الرفع</th><th scope="col">الإجراءات</th>' +
           '</tr></thead><tbody>';
         uploadedMaterials.forEach(function(m, i) {
           html += '<tr><td>' + m.name + '</td><td>' + m.size + '</td><td>' + m.date + '</td>';
