@@ -7,7 +7,7 @@
     materials: "editor-materials.html",
     sessions:  "editor-sessions.html",
     exams:     "editor-exams.html",
-    final:     "editor-final.html",
+    final:     "editor-courses.html",
     login:     "editor-login.html"
   };
 

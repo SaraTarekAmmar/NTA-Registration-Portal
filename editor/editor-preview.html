@@ -173,7 +173,7 @@
         .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
         .then(function(){
           showEditorToast("تم حفظ المسودة.", "success");
-          setTimeout(function(){ window.location.replace("editor-final.html?action=draft&id="+courseId); }, 800);
+          setTimeout(function(){ window.location.replace("editor-courses.html"); }, 800);
         })
         .catch(function(){ showEditorToast("فشل الحفظ. حاول مرة أخرى.", "error"); });
       }
@@ -195,7 +195,7 @@
           })
           .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
           .then(function(){
-            window.location.replace("editor-final.html?action=published&id="+courseId);
+            window.location.replace("editor-courses.html");
           })
           .catch(function(){
             btn.disabled = false;
