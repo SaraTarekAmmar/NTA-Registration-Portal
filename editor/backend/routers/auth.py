@@ -12,9 +12,12 @@ router = APIRouter(prefix="/api/editor/auth", tags=["Editor Auth"])
 @router.post("/login")
 async def editor_login(req: Request, body: dict):
     email = body.get("email", "").strip()
+    national_id = body.get("nationalId", "").strip()
     password = body.get("password", "")
     if not email:
         raise HTTPException(status_code=422, detail="Email is required.")
+    if not national_id:
+        raise HTTPException(status_code=422, detail="National ID is required.")
     if not password:
         raise HTTPException(status_code=422, detail="Password is required.")
 
@@ -38,12 +41,17 @@ async def editor_login(req: Request, body: dict):
         if not user:
             record_login_attempt(cursor, client_ip, email, "editor", False)
             db.commit()
-            raise HTTPException(status_code=401, detail="Invalid email or password.")
+            raise HTTPException(status_code=401, detail="Invalid email, national ID, or password.")
+
+        if user.get("national_id") != national_id:
+            record_login_attempt(cursor, client_ip, email, "editor", False)
+            db.commit()
+            raise HTTPException(status_code=401, detail="Invalid email, national ID, or password.")
 
         if not password or not user.get("password_hash") or not verify_password(password, user["password_hash"]):
             record_login_attempt(cursor, client_ip, email, "editor", False)
             db.commit()
-            raise HTTPException(status_code=401, detail="Invalid email or password.")
+            raise HTTPException(status_code=401, detail="Invalid email, national ID, or password.")
 
         record_login_attempt(cursor, client_ip, email, "editor", True)
 

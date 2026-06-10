@@ -89,6 +89,21 @@
         </div>
 
         <div class="form-group">
+          <label for="editorNationalId">الرقم القومي</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z"/>
+              </svg>
+            </span>
+            <input type="text" id="editorNationalId" name="nationalId" required autocomplete="off"
+              placeholder="14 رقماً" maxlength="14" inputmode="numeric" pattern="[0-9]{14}"
+              aria-describedby="editorNationalIdError" />
+          </div>
+          <p id="editorNationalIdError" class="field-error" style="display:none;" aria-live="polite">الرقم القومي مطلوب (14 رقماً).</p>
+        </div>
+
+        <div class="form-group">
           <label for="editorPassword">كلمة المرور</label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
@@ -152,6 +167,7 @@
         function clearErrors() {
           errorBox.style.display = "none";
           hideFieldError("editorEmailError");
+          hideFieldError("editorNationalIdError");
           hideFieldError("editorPasswordError");
         }
 
@@ -160,10 +176,12 @@
           clearErrors();
 
           var email = document.getElementById("editorEmail").value.trim();
+          var nationalId = document.getElementById("editorNationalId").value.trim();
           var password = document.getElementById("editorPassword").value;
           var valid = true;
 
           if (!email) { showFieldError("editorEmailError", "البريد الإلكتروني مطلوب."); valid = false; }
+          if (!nationalId || !/^\d{14}$/.test(nationalId)) { showFieldError("editorNationalIdError", "الرقم القومي مطلوب (14 رقماً)."); valid = false; }
           if (!password) { showFieldError("editorPasswordError", "كلمة المرور مطلوبة."); valid = false; }
           if (!valid) return;
 
@@ -173,7 +191,7 @@
           fetch("/api/editor/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email, password: password })
+            body: JSON.stringify({ email: email, nationalId: nationalId, password: password })
           })
             .then(function (res) {
               if (!res.ok) return res.json().then(function (err) { throw new Error(err.detail || "فشل تسجيل الدخول"); });
