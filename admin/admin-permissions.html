@@ -381,9 +381,13 @@
     <script>
       setTimeout(function () {
         var session = {};
-        try {
-          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
-        } catch (e) {}
+        var _adminTok = sessionStorage.getItem("admin_token");
+        if (_adminTok) {
+          try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
+        }
+        if (!session.token) {
+          try { session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+        }
 
         console.log("=== HEADER DEBUG ===");
         console.log("Session:", session);
@@ -596,11 +600,15 @@
       // Guard: admin only
       (function () {
         var session = {};
-        try {
-          session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
-        } catch (e) {}
+        var _adminTok = sessionStorage.getItem("admin_token");
+        if (_adminTok) {
+          try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
+        }
+        if (!session.token) {
+          try { session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+        }
         if (session.role !== "admin") {
-          window.location.href = "index.html";
+          window.location.replace("admin-login.html");
           return;
         }
         fetchPermissions();
