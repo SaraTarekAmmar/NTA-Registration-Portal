@@ -20,7 +20,6 @@ def get_password_hash(password):
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 admin_router = APIRouter(prefix="/api/admin/auth", tags=["Admin Auth"])
-editor_router = APIRouter(prefix="/api/editor/auth", tags=["Editor Auth"])
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
@@ -283,14 +282,3 @@ async def admin_login(req: Request, body: dict):
     if not password:
         raise HTTPException(status_code=422, detail="Password is required.")
     return await _role_login(req, email, password, "admin")
-
-
-@editor_router.post("/login")
-async def editor_login(req: Request, body: dict):
-    email = body.get("email", "")
-    password = body.get("password", "")
-    if not email:
-        raise HTTPException(status_code=422, detail="Email is required.")
-    if not password:
-        raise HTTPException(status_code=422, detail="Password is required.")
-    return await _role_login(req, email, password, "editor")
