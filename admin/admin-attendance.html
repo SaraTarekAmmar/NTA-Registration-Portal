@@ -761,6 +761,7 @@
         </div>
         <div style="overflow-x: auto">
           <table class="adm-table" id="admTable">
+  <caption class="sr-only">جدول الحضور والغياب للمتدربين</caption>
             <thead id="admTableHead"></thead>
             <tbody id="admTableBody"></tbody>
           </table>
@@ -993,7 +994,7 @@
           var thead = document.getElementById("admTableHead");
           thead.innerHTML =
             "<tr>" +
-            "<th>المتدرب</th>" +
+            "<th scope='col'>المتدرب</th>" +
             sessions
               .map(function (s) {
                 return (
@@ -1003,8 +1004,8 @@
                 );
               })
               .join("") +
-            "<th>نسبة الحضور</th>" +
-            "<th></th>" +
+            "<th scope='col'>نسبة الحضور</th>" +
+            "<th scope='col'></th>" +
             "</tr>";
 
           // Body
