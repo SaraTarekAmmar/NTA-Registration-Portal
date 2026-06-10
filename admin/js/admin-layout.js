@@ -42,7 +42,7 @@
       ct = document.createElement("div");
       ct.id = "toastContainer";
       ct.className = "toast-container";
-      ct.style.cssText = "position:fixed;bottom:1.5rem;left:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem";
+      ct.style.cssText = "position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem";
       document.body.appendChild(ct);
     }
     var t = document.createElement("div");
