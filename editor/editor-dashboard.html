@@ -9,15 +9,524 @@
     <link rel="stylesheet" href="editor.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/editor-guard.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+
+      /* ══ Hero ══ */
+      .ed-hero {
+        padding: 1.85rem 2rem;
+        border-radius: 22px;
+        margin-bottom: 1.75rem;
+        background:
+          radial-gradient(circle at top right, rgba(16,185,129,0.14), transparent 55%),
+          radial-gradient(circle at bottom left, rgba(6,182,212,0.09), transparent 55%),
+          rgba(8,12,32,0.72);
+        border: 1px solid rgba(16,185,129,0.22);
+        box-shadow: 0 0 0 1px rgba(15,23,42,0.95), 0 0 48px rgba(16,185,129,0.07);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+      }
+      .ed-hero::before {
+        content: "";
+        position: absolute;
+        top: -70px; right: -70px;
+        width: 240px; height: 240px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(16,185,129,0.11) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .ed-hero::after {
+        content: "";
+        position: absolute;
+        bottom: -50px; left: 10%;
+        width: 180px; height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .ed-hero__greeting {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #6ee7b7;
+        margin: 0 0 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .ed-hero__greeting::before {
+        content: "";
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #6ee7b7;
+        box-shadow: 0 0 8px rgba(110,231,183,0.6);
+        animation: edGlowPulse 2s ease-in-out infinite;
+      }
+      @keyframes edGlowPulse {
+        0%,100% { opacity: 1; }
+        50%      { opacity: 0.4; }
+      }
+      .ed-hero__title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0 0 0.35rem;
+        color: var(--text-main);
+        letter-spacing: -0.025em;
+      }
+      .ed-hero__sub {
+        font-size: 0.88rem;
+        color: var(--text-subtle);
+        margin: 0;
+        line-height: 1.6;
+      }
+      .ed-hero__side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.6rem;
+        flex-shrink: 0;
+      }
+      .ed-hero__date {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        background: rgba(16,185,129,0.07);
+        border: 1px solid rgba(16,185,129,0.18);
+        border-radius: 999px;
+        padding: 0.32rem 0.9rem;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+      .ed-hero__live {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+      }
+      .ed-hero__live-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #6ee7b7;
+        animation: edLivePulse 2s infinite;
+      }
+      @keyframes edLivePulse {
+        0%   { box-shadow: 0 0 0 0 rgba(110,231,183,0.6); }
+        70%  { box-shadow: 0 0 0 7px rgba(110,231,183,0); }
+        100% { box-shadow: 0 0 0 0 rgba(110,231,183,0); }
+      }
+
+      /* ══ KPI Row ══ */
+      .ed-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 900px) { .ed-kpi-row { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 480px) { .ed-kpi-row { grid-template-columns: 1fr; } }
+
+      .ed-kpi {
+        padding: 1.4rem 1.5rem;
+        border-radius: 20px;
+        border: 1px solid var(--kpi-border, rgba(99,102,241,0.18));
+        background: rgba(8,12,32,0.42);
+        backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 350ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 350ms ease, border-color 350ms ease;
+        animation: edSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+      }
+      .ed-kpi::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--kpi-line), transparent);
+        opacity: 0;
+        transition: opacity 350ms;
+      }
+      .ed-kpi::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 30% 30%, var(--kpi-glow-bg, rgba(99,102,241,0.06)), transparent 65%);
+        opacity: 0;
+        transition: opacity 350ms;
+        pointer-events: none;
+      }
+      .ed-kpi:hover {
+        transform: translateY(-6px) scale(1.02);
+        border-color: var(--kpi-border-hover);
+        box-shadow: 0 14px 40px rgba(0,0,0,0.22), 0 0 30px var(--kpi-shadow);
+      }
+      .ed-kpi:hover::before { opacity: 1; }
+      .ed-kpi:hover::after  { opacity: 1; }
+
+      .ed-kpi--blue {
+        --kpi-line: var(--color-info-soft);
+        --kpi-border: rgba(59,130,246,0.2);
+        --kpi-border-hover: rgba(59,130,246,0.5);
+        --kpi-shadow: rgba(59,130,246,0.2);
+        --kpi-glow-bg: rgba(59,130,246,0.06);
+      }
+      .ed-kpi--yellow {
+        --kpi-line: #fbbf24;
+        --kpi-border: rgba(251,191,36,0.18);
+        --kpi-border-hover: rgba(251,191,36,0.5);
+        --kpi-shadow: rgba(251,191,36,0.18);
+        --kpi-glow-bg: rgba(251,191,36,0.05);
+      }
+      .ed-kpi--green {
+        --kpi-line: #6ee7b7;
+        --kpi-border: rgba(16,185,129,0.2);
+        --kpi-border-hover: rgba(16,185,129,0.55);
+        --kpi-shadow: rgba(16,185,129,0.2);
+        --kpi-glow-bg: rgba(16,185,129,0.06);
+      }
+      .ed-kpi--slate {
+        --kpi-line: #94a3b8;
+        --kpi-border: rgba(100,116,139,0.18);
+        --kpi-border-hover: rgba(100,116,139,0.45);
+        --kpi-shadow: rgba(100,116,139,0.15);
+        --kpi-glow-bg: rgba(100,116,139,0.04);
+      }
+
+      .ed-kpi__icon {
+        width: 46px; height: 46px;
+        border-radius: 13px;
+        display: flex; align-items: center; justify-content: center;
+        transition: transform 300ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 300ms;
+        flex-shrink: 0;
+      }
+      .ed-kpi:hover .ed-kpi__icon {
+        transform: scale(1.12) rotate(-4deg);
+        box-shadow: 0 0 20px var(--kpi-shadow);
+      }
+      .ed-kpi--blue .ed-kpi__icon   { background: rgba(59,130,246,0.14);  border: 1px solid rgba(59,130,246,0.3);   color: var(--color-info-soft); }
+      .ed-kpi--yellow .ed-kpi__icon { background: rgba(251,191,36,0.12);  border: 1px solid rgba(251,191,36,0.28);  color: #fde68a; }
+      .ed-kpi--green .ed-kpi__icon  { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.28);  color: #6ee7b7; }
+      .ed-kpi--slate .ed-kpi__icon  { background: rgba(100,116,139,0.12); border: 1px solid rgba(100,116,139,0.25); color: #94a3b8; }
+      .ed-kpi__icon svg { width: 20px; height: 20px; }
+
+      .ed-kpi__val {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+        letter-spacing: -0.035em;
+        transition: transform 300ms cubic-bezier(0.34,1.56,0.64,1);
+      }
+      .ed-kpi:hover .ed-kpi__val { transform: scale(1.06); }
+      .ed-kpi__lbl {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+      }
+
+      @keyframes edSlideUp {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ══ Section title ══ */
+      .ed-section {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        margin: 0 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .ed-section__left {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .ed-section__left::before {
+        content: "";
+        width: 3px; height: 15px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #6ee7b7, var(--color-info));
+        flex-shrink: 0;
+      }
+      .ed-section__link {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-info-soft);
+        text-decoration: none;
+        opacity: 0.75;
+        transition: opacity 0.2s;
+      }
+      .ed-section__link:hover { opacity: 1; }
+
+      /* ══ Stats strip ══ */
+      .ed-stats-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: rgba(8,12,32,0.35);
+        backdrop-filter: blur(12px);
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 600px) { .ed-stats-strip { grid-template-columns: repeat(2, 1fr); } }
+      .ed-stat-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 1rem 0.75rem;
+        border-left: 1px solid var(--border-main);
+        transition: background 0.2s;
+        text-decoration: none;
+      }
+      .ed-stat-cell:last-child { border-left: none; }
+      .ed-stat-cell:hover { background: rgba(16,185,129,0.04); }
+      .ed-stat-cell__num {
+        font-size: 1.7rem;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--text-main);
+      }
+      .ed-stat-cell--blue   .ed-stat-cell__num { color: var(--color-info-soft); }
+      .ed-stat-cell--yellow .ed-stat-cell__num { color: #fde68a; }
+      .ed-stat-cell--green  .ed-stat-cell__num { color: #6ee7b7; }
+      .ed-stat-cell--slate  .ed-stat-cell__num { color: #94a3b8; }
+      .ed-stat-cell__bar {
+        width: 32px; height: 2px;
+        border-radius: 999px;
+        opacity: 0.7;
+      }
+      .ed-stat-cell--blue   .ed-stat-cell__bar { background: var(--color-info-soft); }
+      .ed-stat-cell--yellow .ed-stat-cell__bar { background: #fbbf24; }
+      .ed-stat-cell--green  .ed-stat-cell__bar { background: #6ee7b7; }
+      .ed-stat-cell--slate  .ed-stat-cell__bar { background: #94a3b8; }
+      .ed-stat-cell__lbl {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        text-align: center;
+      }
+
+      /* ══ Quick Actions ══ */
+      .ed-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 580px) { .ed-actions-grid { grid-template-columns: 1fr; } }
+
+      .ed-action {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 1.05rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(8,12,32,0.48);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        text-decoration: none;
+        color: var(--text-main);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .ed-action::before {
+        content: "";
+        position: absolute; inset: 0;
+        border-radius: inherit;
+        background: var(--action-bg, rgba(16,185,129,0.04));
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+      .ed-action:hover { transform: translateY(-3px); }
+      .ed-action:hover::before { opacity: 1; }
+
+      .ed-action--create { --action-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.25); }
+      .ed-action--create:hover  { border-color: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.14), 0 0 18px rgba(16,185,129,0.08); color: #6ee7b7; }
+      .ed-action--list   { --action-bg: rgba(99,102,241,0.07);  border-color: rgba(99,102,241,0.25); }
+      .ed-action--list:hover    { border-color: rgba(99,102,241,0.55); box-shadow: 0 8px 28px rgba(99,102,241,0.14); color: var(--color-accent-pale); }
+      .ed-action--mat    { --action-bg: rgba(245,158,11,0.06);  border-color: rgba(245,158,11,0.22); }
+      .ed-action--mat:hover     { border-color: rgba(245,158,11,0.5);  box-shadow: 0 8px 28px rgba(245,158,11,0.12); color: #fde68a; }
+      .ed-action--exams  { --action-bg: rgba(239,68,68,0.05);   border-color: rgba(239,68,68,0.2); }
+      .ed-action--exams:hover   { border-color: rgba(239,68,68,0.48);  box-shadow: 0 8px 28px rgba(239,68,68,0.11); color: #fca5a5; }
+
+      .ed-action__icon {
+        width: 48px; height: 48px;
+        border-radius: 14px;
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        position: relative; z-index: 1;
+        transition: transform 0.25s ease;
+      }
+      .ed-action:hover .ed-action__icon { transform: scale(1.1) rotate(-4deg); }
+      .ed-action--create .ed-action__icon { background: rgba(16,185,129,0.14); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+      .ed-action--list   .ed-action__icon { background: rgba(99,102,241,0.14); border: 1px solid rgba(99,102,241,0.3); color: var(--color-accent-pale); }
+      .ed-action--mat    .ed-action__icon { background: rgba(245,158,11,0.13); border: 1px solid rgba(245,158,11,0.3); color: #fde68a; }
+      .ed-action--exams  .ed-action__icon { background: rgba(239,68,68,0.11); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+      .ed-action__icon svg { width: 21px; height: 21px; }
+
+      .ed-action__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+      .ed-action__title { font-size: 0.93rem; font-weight: 700; margin: 0 0 0.15rem; }
+      .ed-action__sub   { font-size: 0.73rem; color: var(--text-subtle); margin: 0; }
+
+      .ed-action__arrow {
+        font-size: 1.1rem;
+        opacity: 0.4;
+        position: relative; z-index: 1;
+        transition: transform 0.25s, opacity 0.25s;
+        flex-shrink: 0;
+      }
+      .ed-action:hover .ed-action__arrow { transform: translateX(-5px); opacity: 1; }
+
+      /* ══ Course cards ══ */
+      .ed-courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 1rem;
+      }
+      .ed-card {
+        border-radius: 18px;
+        border: 1px solid var(--border-main);
+        background: rgba(8,12,32,0.48);
+        backdrop-filter: blur(14px);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease, border-color 0.25s, box-shadow 0.25s;
+        animation: edSlideUp 0.5s ease both;
+      }
+      .ed-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(16,185,129,0.32);
+        box-shadow: 0 14px 36px rgba(0,0,0,0.22), 0 0 24px rgba(16,185,129,0.06);
+      }
+      .ed-card__stripe {
+        height: 3px;
+        background: linear-gradient(90deg, #6ee7b7, #3b82f6);
+      }
+      .ed-card__stripe--draft    { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+      .ed-card__stripe--archived { background: linear-gradient(90deg, #64748b, #94a3b8); }
+
+      .ed-card__body { padding: 1.1rem 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.65rem; }
+      .ed-card__top  { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+      .ed-card__title {
+        font-size: 0.93rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+        flex: 1;
+        line-height: 1.45;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .ed-badge {
+        display: inline-flex; align-items: center;
+        padding: 0.22rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.68rem; font-weight: 700;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .ed-badge--published { background: rgba(16,185,129,0.12);  border: 1px solid rgba(16,185,129,0.3);  color: #6ee7b7; }
+      .ed-badge--draft     { background: rgba(234,179,8,0.12);   border: 1px solid rgba(234,179,8,0.3);   color: #fde68a; }
+      .ed-badge--archived  { background: rgba(100,116,139,0.12); border: 1px solid rgba(100,116,139,0.3); color: #94a3b8; }
+
+      .ed-card__stats {
+        display: flex; gap: 1rem; flex-wrap: wrap;
+      }
+      .ed-card__stat {
+        display: inline-flex; align-items: center; gap: 0.32rem;
+        font-size: 0.74rem; color: var(--text-subtle);
+      }
+      .ed-card__stat svg { width: 13px; height: 13px; flex-shrink: 0; opacity: 0.7; }
+
+      .ed-card__footer {
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid var(--border-main);
+        display: flex; gap: 0.5rem;
+      }
+      .ed-card__footer .btn { flex: 1; justify-content: center; font-size: 0.78rem; }
+
+      /* ══ Empty state ══ */
+      .ed-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3.5rem 1.5rem;
+        gap: 1rem;
+        text-align: center;
+        border-radius: 18px;
+        border: 1px dashed var(--border-main);
+        background: rgba(8,12,32,0.22);
+      }
+      .ed-empty__icon {
+        width: 60px; height: 60px;
+        border-radius: 18px;
+        background: rgba(16,185,129,0.07);
+        border: 1px solid rgba(16,185,129,0.18);
+        display: flex; align-items: center; justify-content: center;
+        color: #6ee7b7;
+      }
+      .ed-empty__icon svg { width: 28px; height: 28px; }
+      .ed-empty__title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
+      .ed-empty__text  { font-size: 0.83rem; color: var(--text-subtle); margin: 0; max-width: 260px; line-height: 1.55; }
+
+      /* ══ Skeletons ══ */
+      .ed-skeleton {
+        border-radius: 18px;
+        background: linear-gradient(
+          90deg,
+          rgba(255,255,255,0.03) 25%,
+          rgba(255,255,255,0.07) 50%,
+          rgba(255,255,255,0.03) 75%
+        );
+        background-size: 200% 100%;
+        animation: edSkelShine 1.6s infinite;
+        height: 148px;
+      }
+      @keyframes edSkelShine {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+    </style>
   </head>
   <body data-page="dashboard">
     <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
     <div id="editorSidebar"></div>
 
     <main id="main-content" class="editor-main">
-      <div class="editor-page-header">
-        <h1 class="editor-page-header__title">لوحة تحكم المحرر</h1>
-        <p class="editor-page-header__sub">نظرة عامة على المحتوى التعليمي والدورات</p>
+
+      <!-- Hero -->
+      <div class="ed-hero">
+        <div>
+          <p class="ed-hero__greeting" id="editorGreeting">مرحباً</p>
+          <h1 class="ed-hero__title">لوحة تحكم المحرر</h1>
+          <p class="ed-hero__sub">نظرة عامة على المحتوى التعليمي والدورات المنشورة</p>
+        </div>
+        <div class="ed-hero__side">
+          <span class="ed-hero__date" id="heroDate"></span>
+          <div class="ed-hero__live">
+            <div class="ed-hero__live-dot"></div>
+            <span>متصل</span>
+          </div>
+        </div>
       </div>
 
       <!-- Banner for errors -->
@@ -28,74 +537,160 @@
       </div>
 
       <!-- KPI Cards -->
-      <div class="editor-kpi-row" id="kpiRow">
-        <a href="editor-courses.html" class="editor-kpi" style="text-decoration:none;">
-          <div class="editor-kpi__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      <div class="ed-kpi-row">
+        <a href="editor-courses.html" class="ed-kpi ed-kpi--blue" style="animation-delay:0.05s">
+          <div class="ed-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           </div>
-          <div class="editor-kpi__body">
-            <div class="editor-kpi__val" id="kpiTotal">—</div>
-            <div class="editor-kpi__lbl">إجمالي الدورات</div>
-          </div>
+          <div class="ed-kpi__val" id="kpiTotal">—</div>
+          <div class="ed-kpi__lbl">إجمالي الدورات</div>
         </a>
 
-        <a href="editor-courses.html?status=draft" class="editor-kpi" style="text-decoration:none;">
-          <div class="editor-kpi__icon" style="background:rgba(234,179,8,0.12);border-color:rgba(234,179,8,0.25);color:#fde68a;">
+        <a href="editor-courses.html?status=draft" class="ed-kpi ed-kpi--yellow" style="animation-delay:0.1s">
+          <div class="ed-kpi__icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           </div>
-          <div class="editor-kpi__body">
-            <div class="editor-kpi__val" id="kpiDraft">—</div>
-            <div class="editor-kpi__lbl">مسودات</div>
-          </div>
+          <div class="ed-kpi__val" id="kpiDraft">—</div>
+          <div class="ed-kpi__lbl">مسودات</div>
         </a>
 
-        <a href="editor-courses.html?status=published" class="editor-kpi" style="text-decoration:none;">
-          <div class="editor-kpi__icon">
+        <a href="editor-courses.html?status=published" class="ed-kpi ed-kpi--green" style="animation-delay:0.15s">
+          <div class="ed-kpi__icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <div class="editor-kpi__body">
-            <div class="editor-kpi__val" id="kpiPublished">—</div>
-            <div class="editor-kpi__lbl">منشورة</div>
-          </div>
+          <div class="ed-kpi__val" id="kpiPublished">—</div>
+          <div class="ed-kpi__lbl">منشورة</div>
         </a>
 
-        <a href="editor-courses.html?status=archived" class="editor-kpi" style="text-decoration:none;">
-          <div class="editor-kpi__icon" style="background:rgba(100,116,139,0.12);border-color:rgba(100,116,139,0.25);color:#94a3b8;">
+        <a href="editor-courses.html?status=archived" class="ed-kpi ed-kpi--slate" style="animation-delay:0.2s">
+          <div class="ed-kpi__icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
           </div>
-          <div class="editor-kpi__body">
-            <div class="editor-kpi__val" id="kpiArchived">—</div>
-            <div class="editor-kpi__lbl">مؤرشفة</div>
-          </div>
+          <div class="ed-kpi__val" id="kpiArchived">—</div>
+          <div class="ed-kpi__lbl">مؤرشفة</div>
+        </a>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="ed-stats-strip">
+        <a href="editor-courses.html" class="ed-stat-cell ed-stat-cell--blue">
+          <div class="ed-stat-cell__num" id="statTotal">—</div>
+          <div class="ed-stat-cell__bar"></div>
+          <div class="ed-stat-cell__lbl">إجمالي</div>
+        </a>
+        <a href="editor-courses.html?status=draft" class="ed-stat-cell ed-stat-cell--yellow">
+          <div class="ed-stat-cell__num" id="statDraft">—</div>
+          <div class="ed-stat-cell__bar"></div>
+          <div class="ed-stat-cell__lbl">مسودات</div>
+        </a>
+        <a href="editor-courses.html?status=published" class="ed-stat-cell ed-stat-cell--green">
+          <div class="ed-stat-cell__num" id="statPub">—</div>
+          <div class="ed-stat-cell__bar"></div>
+          <div class="ed-stat-cell__lbl">منشورة</div>
+        </a>
+        <a href="editor-courses.html?status=archived" class="ed-stat-cell ed-stat-cell--slate">
+          <div class="ed-stat-cell__num" id="statArch">—</div>
+          <div class="ed-stat-cell__bar"></div>
+          <div class="ed-stat-cell__lbl">مؤرشفة</div>
         </a>
       </div>
 
       <!-- Quick Actions -->
-      <div style="display:flex;gap:0.75rem;margin-bottom:2rem;flex-wrap:wrap;">
-        <a href="editor-course-form.html" class="btn btn--primary btn--lg">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-          إنشاء دورة جديدة
+      <div class="ed-section">
+        <div class="ed-section__left">إجراءات سريعة</div>
+      </div>
+      <div class="ed-actions-grid">
+        <a href="editor-course-form.html" class="ed-action ed-action--create">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">إنشاء دورة جديدة</div>
+            <div class="ed-action__sub">أضف دورة تدريبية إلى الكتالوج</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
         </a>
-        <a href="editor-courses.html" class="btn btn--secondary btn--lg">عرض كل الدورات</a>
+
+        <a href="editor-courses.html" class="ed-action ed-action--list">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">عرض كل الدورات</div>
+            <div class="ed-action__sub">تصفح وإدارة جميع الدورات</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
+
+        <a href="editor-materials.html" class="ed-action ed-action--mat">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">المواد التعليمية</div>
+            <div class="ed-action__sub">رفع وإدارة ملفات المحتوى</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
+
+        <a href="editor-exams.html" class="ed-action ed-action--exams">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">الاختبارات</div>
+            <div class="ed-action__sub">إنشاء وإدارة اختبارات الدورات</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
       </div>
 
-      <!-- Recent courses -->
-      <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0 0 1rem;">آخر الدورات المحدّثة</h2>
-
-      <div id="recentState" class="editor-state" style="display:none;">
-        <div class="editor-state__icon">📚</div>
-        <div class="editor-state__title" id="recentStateTitle">جاري التحميل...</div>
-        <div class="editor-state__text" id="recentStateText"></div>
+      <!-- Recent Courses -->
+      <div class="ed-section">
+        <div class="ed-section__left">آخر الدورات المحدّثة</div>
+        <a href="editor-courses.html" class="ed-section__link">عرض الكل ←</a>
       </div>
 
-      <div class="editor-cards-grid" id="recentCourses" style="display:none;"></div>
+      <div id="recentLoading" class="ed-courses-grid">
+        <div class="ed-skeleton" style="animation-delay:0s;height:158px"></div>
+        <div class="ed-skeleton" style="animation-delay:0.1s;height:158px"></div>
+        <div class="ed-skeleton" style="animation-delay:0.2s;height:158px"></div>
+      </div>
+
+      <div id="recentEmpty" class="ed-empty" style="display:none;">
+        <div class="ed-empty__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg>
+        </div>
+        <p class="ed-empty__title">لا توجد دورات بعد</p>
+        <p class="ed-empty__text">أنشئ أول دورة تدريبية وابدأ بنشر المحتوى للمتدربين</p>
+        <a href="editor-course-form.html" class="btn btn--primary">إنشاء دورة جديدة</a>
+      </div>
+
+      <div class="ed-courses-grid" id="recentCourses" style="display:none;"></div>
+
     </main>
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
-
     <script src="js/editor-layout.js"></script>
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
+
+      (function initHero() {
+        var days   = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+        var months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+        var now    = new Date();
+        var dateEl = document.getElementById("heroDate");
+        if (dateEl) dateEl.textContent = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
+        try {
+          var tok = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+          if (tok) {
+            var p    = JSON.parse(atob(tok.split(".")[1]));
+            var name = p.name || p.email || "";
+            var el   = document.getElementById("editorGreeting");
+            if (el && name) el.textContent = "مرحباً، " + name;
+          }
+        } catch(e) {}
+      })();
 
       function authFetch(url, opts) {
         opts = opts || {};
@@ -105,22 +700,23 @@
         return fetch(url, Object.assign({}, opts, {headers: headers}));
       }
 
-      function statusBadge(status) {
-        var map = {
-          draft: ["مسودة", "draft"],
-          published: ["منشورة", "published"],
-          archived: ["مؤرشفة", "archived"]
-        };
-        var s = map[status] || [status, "draft"];
-        return '<span class="editor-course-card__badge editor-course-card__badge--' + s[1] + '">' + s[0] + '</span>';
+      function countUp(el, target) {
+        if (!el || isNaN(target) || target === 0) { if (el) el.textContent = target; return; }
+        var current = 0;
+        var step    = Math.max(1, Math.ceil(target / 45));
+        function tick() {
+          current = Math.min(current + step, target);
+          el.textContent = current;
+          if (current < target) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
       }
 
       function loadDashboard() {
         document.getElementById("dashboardBanner").style.display = "none";
-        document.getElementById("recentState").style.display = "flex";
-        document.getElementById("recentStateTitle").textContent = "جاري التحميل...";
-        document.getElementById("recentStateText").textContent = "";
-        document.getElementById("recentCourses").style.display = "none";
+        document.getElementById("recentLoading").style.display  = "grid";
+        document.getElementById("recentEmpty").style.display    = "none";
+        document.getElementById("recentCourses").style.display  = "none";
 
         authFetch("/api/courses")
           .then(function(r) {
@@ -128,35 +724,51 @@
             return r.json();
           })
           .then(function(courses) {
-            // KPIs
-            var total = courses.length;
-            var draft = courses.filter(function(c){return c.status==="draft"||!c.status;}).length;
-            var published = courses.filter(function(c){return c.status==="published";}).length;
-            var archived = courses.filter(function(c){return c.status==="archived";}).length;
+            var total     = courses.length;
+            var draft     = courses.filter(function(c){ return c.status === "draft" || !c.status; }).length;
+            var published = courses.filter(function(c){ return c.status === "published"; }).length;
+            var archived  = courses.filter(function(c){ return c.status === "archived"; }).length;
 
-            document.getElementById("kpiTotal").textContent = total;
-            document.getElementById("kpiDraft").textContent = draft;
-            document.getElementById("kpiPublished").textContent = published;
-            document.getElementById("kpiArchived").textContent = archived;
+            countUp(document.getElementById("kpiTotal"),     total);
+            countUp(document.getElementById("kpiDraft"),     draft);
+            countUp(document.getElementById("kpiPublished"), published);
+            countUp(document.getElementById("kpiArchived"),  archived);
 
-            if (courses.length === 0) {
-              document.getElementById("recentState").style.display = "flex";
-              document.getElementById("recentStateTitle").textContent = "لا توجد دورات بعد";
-              document.getElementById("recentStateText").textContent = "أنشئ أول دورة للبدء.";
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statDraft").textContent = draft;
+            document.getElementById("statPub").textContent   = published;
+            document.getElementById("statArch").textContent  = archived;
+
+            document.getElementById("recentLoading").style.display = "none";
+
+            if (total === 0) {
+              document.getElementById("recentEmpty").style.display = "flex";
               return;
             }
 
             var recent = courses.slice(0, 6);
+            var stripeMap  = { draft: "ed-card__stripe--draft", archived: "ed-card__stripe--archived" };
+            var badgeMap   = { published: "منشورة", draft: "مسودة", archived: "مؤرشفة" };
             var html = "";
-            recent.forEach(function(c) {
-              html += '<div class="editor-course-card">';
-              html += '<h3 class="editor-course-card__title">' + (c.title_ar || c.title || "بدون عنوان") + '</h3>';
-              html += '<div class="editor-course-card__meta">' + statusBadge(c.status || "draft") + '</div>';
-              html += '<div class="editor-course-card__stats">';
-              if (c.duration_weeks) html += '<span>' + c.duration_weeks + ' أسابيع</span>';
-              if (c.total_sessions) html += '<span>' + c.total_sessions + ' جلسة</span>';
+
+            recent.forEach(function(c, i) {
+              var status    = c.status || "draft";
+              var stripeCls = stripeMap[status] || "";
+              html += '<div class="ed-card" style="animation-delay:' + (i * 0.06) + 's">';
+              html += '<div class="ed-card__stripe ' + stripeCls + '"></div>';
+              html += '<div class="ed-card__body">';
+              html += '<div class="ed-card__top">';
+              html += '<h3 class="ed-card__title">' + (c.title_ar || c.title || "بدون عنوان") + '</h3>';
+              html += '<span class="ed-badge ed-badge--' + status + '">' + (badgeMap[status] || "مسودة") + '</span>';
               html += '</div>';
-              html += '<div class="editor-course-card__actions">';
+              if (c.duration_weeks || c.total_sessions) {
+                html += '<div class="ed-card__stats">';
+                if (c.duration_weeks)  html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' + c.duration_weeks + ' أسبوع</span>';
+                if (c.total_sessions) html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' + c.total_sessions + ' جلسة</span>';
+                html += '</div>';
+              }
+              html += '</div>';
+              html += '<div class="ed-card__footer">';
               html += '<a href="editor-course-form.html?id=' + c.id + '" class="btn btn--secondary btn--sm">تعديل</a>';
               html += '<a href="editor-preview.html?id=' + c.id + '" class="btn btn--secondary btn--sm">معاينة</a>';
               html += '</div></div>';
@@ -164,12 +776,11 @@
 
             document.getElementById("recentCourses").innerHTML = html;
             document.getElementById("recentCourses").style.display = "grid";
-            document.getElementById("recentState").style.display = "none";
           })
           .catch(function(err) {
+            document.getElementById("recentLoading").style.display = "none";
             document.getElementById("dashboardBanner").style.display = "flex";
             document.getElementById("dashboardBannerText").textContent = "تعذّر تحميل الصفحة. " + (err.message || "");
-            document.getElementById("recentState").style.display = "none";
           });
       }
 

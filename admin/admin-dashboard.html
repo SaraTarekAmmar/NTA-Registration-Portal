@@ -179,11 +179,9 @@
         transform: scale(1.05);
       }
       .adm-kpi__lbl {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: rgba(140, 175, 230, 0.6);
+        color: var(--text-subtle);
       }
 
       @keyframes admKpiEnter {
@@ -669,23 +667,99 @@
 
       /* section title with accent */
       .adm-section-title {
-        font-size: 0.72rem;
+        font-size: 0.86rem;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         color: var(--text-subtle);
-        margin: 0 0 0.85rem;
+        margin: 0 0 0.9rem;
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.45rem;
       }
       .adm-section-title::before {
         content: "";
         width: 3px;
-        height: 14px;
+        height: 15px;
         border-radius: 999px;
         background: linear-gradient(180deg, var(--accent), var(--color-info));
         flex-shrink: 0;
+      }
+
+      /* ── 4-column KPI grid ── */
+      .adm-kpi-row {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+      @media (max-width: 1000px) { .adm-kpi-row { grid-template-columns: repeat(2, 1fr) !important; } }
+      @media (max-width: 480px)  { .adm-kpi-row { grid-template-columns: 1fr !important; } }
+
+      /* ── Yellow KPI variant ── */
+      .adm-kpi--yellow {
+        --kpi-accent: #fbbf24;
+        --kpi-glow: rgba(245,158,11,0.3);
+      }
+      .adm-kpi--yellow .adm-kpi__icon {
+        background: linear-gradient(135deg, rgba(245,158,11,0.22), rgba(245,158,11,0.08));
+        border: 1px solid rgba(245,158,11,0.3);
+        color: #fde68a;
+      }
+
+      /* ── Hero greeting & meta ── */
+      .adm-hero__greeting {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-info-soft);
+        margin: 0 0 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .adm-hero__greeting::before {
+        content: "";
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--color-info-soft);
+        box-shadow: 0 0 8px rgba(96,165,250,0.6);
+        animation: admGreetPulse 2s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+      @keyframes admGreetPulse {
+        0%,100% { opacity: 1; }
+        50%      { opacity: 0.35; }
+      }
+      .adm-hero__meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.55rem;
+        flex-shrink: 0;
+      }
+      .adm-hero__date {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        background: rgba(99,102,241,0.07);
+        border: 1px solid rgba(99,102,241,0.2);
+        border-radius: 999px;
+        padding: 0.32rem 0.9rem;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+      .adm-hero__live {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+      }
+      .adm-hero__live-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: var(--color-success);
+        animation: admLivePulse 2s infinite;
+        flex-shrink: 0;
+      }
+      @keyframes admLivePulse {
+        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+        70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
       }
     </style>
     <script src="js/admin-guard.js"></script>
@@ -700,11 +774,16 @@
       <!-- Hero -->
       <div class="adm-hero">
         <div>
+          <p class="adm-hero__greeting" id="adminGreeting">مرحباً</p>
           <h1 class="adm-hero__title">لوحة التحكم</h1>
-          <p class="adm-hero__sub">
-            Recruitment lifecycle &amp; candidate filtration tracking.<br />
-            دورة حياة التوظيف وتتبع فلترة المرشحين
-          </p>
+          <p class="adm-hero__sub">نظرة شاملة على دورة حياة التوظيف وتتبع فلترة المرشحين</p>
+        </div>
+        <div class="adm-hero__meta">
+          <span class="adm-hero__date" id="heroDate"></span>
+          <div class="adm-hero__live">
+            <div class="adm-hero__live-dot"></div>
+            <span>مباشر</span>
+          </div>
         </div>
       </div>
 
@@ -782,6 +861,29 @@
           </div>
           <div class="adm-kpi__val" id="kpiDropped">—</div>
           <div class="adm-kpi__lbl">المرفوضون</div>
+        </a>
+
+        <a
+          href="admin-candidates.html?stage=advanced"
+          class="adm-kpi adm-kpi--yellow"
+          style="animation-delay: 0.26s"
+        >
+          <div class="adm-kpi__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <div class="adm-kpi__val" id="kpiAdvanced">—</div>
+          <div class="adm-kpi__lbl">المراحل المتقدمة</div>
         </a>
       </div>
 
@@ -1044,6 +1146,36 @@
           return;
         }
 
+        // Hero greeting + date
+        (function() {
+          var days   = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+          var months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+          var now    = new Date();
+          var dateEl = document.getElementById("heroDate");
+          if (dateEl) dateEl.textContent = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
+          try {
+            var tok  = sessionStorage.getItem("admin_token");
+            if (tok) {
+              var p    = JSON.parse(atob(tok.split(".")[1]));
+              var name = p.name || p.email || "";
+              var grEl = document.getElementById("adminGreeting");
+              if (grEl && name) grEl.textContent = "مرحباً، " + name;
+            }
+          } catch(e) {}
+        })();
+
+        function countUp(el, target) {
+          if (!el || isNaN(target) || target === 0) { if (el) el.textContent = target; return; }
+          var current = 0;
+          var step    = Math.max(1, Math.ceil(target / 45));
+          function tick() {
+            current = Math.min(current + step, target);
+            el.textContent = current;
+            if (current < target) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+
         function getThemeColor(varName, fallback) {
           var val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
           return val || fallback;
@@ -1078,22 +1210,15 @@
         }
 
         function updateKpis() {
-          // Candidates are those in stages 1-6
-          var candidates = trainees.filter(function (t) {
-            return t.stage > 0 && t.stage < 7;
-          });
-          // Enrolled are those in stage 7
-          var enrolled = trainees.filter(function (t) {
-            return t.stage === 7;
-          });
-          // Dropped are those marked as rejected
-          var dropped = trainees.filter(function (t) {
-            return t.status === "rejected";
-          });
+          var candidates = trainees.filter(function (t) { return t.stage > 0 && t.stage < 7; });
+          var enrolled   = trainees.filter(function (t) { return t.stage === 7; });
+          var dropped    = trainees.filter(function (t) { return t.status === "rejected"; });
+          var advanced   = trainees.filter(function (t) { return t.stage >= 4 && t.stage <= 6; });
 
-          document.getElementById("kpiApplied").textContent = candidates.length;
-          document.getElementById("kpiEnrolled").textContent = enrolled.length;
-          document.getElementById("kpiDropped").textContent = dropped.length;
+          countUp(document.getElementById("kpiApplied"),  candidates.length);
+          countUp(document.getElementById("kpiEnrolled"), enrolled.length);
+          countUp(document.getElementById("kpiDropped"),  dropped.length);
+          countUp(document.getElementById("kpiAdvanced"), advanced.length);
         }
 
         function initCharts() {
