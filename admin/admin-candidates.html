@@ -618,6 +618,7 @@
                 class="au-view-btn active"
                 data-view="cards"
                 title="بطاقات"
+                aria-label="عرض بطاقات"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -636,6 +637,7 @@
                 class="au-view-btn"
                 data-view="table"
                 title="جدول"
+                aria-label="عرض جدول"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -704,15 +706,16 @@
         <div id="auViewTable" style="display: none">
           <div class="au-table-wrap">
             <table class="au-table">
-              <thead>
+  <caption class="sr-only">قائمة المرشحين - جدول بيانات المتدربين والمراحل</caption>
+              <th scope="col"ead>
                 <tr>
-                  <th>#</th>
-                  <th>الصورة</th>
-                  <th>الاسم</th>
-                  <th>التصنيف</th>
-                  <th>العمر</th>
-                  <th>التعليم</th>
-                  <th>المرحلة</th>
+                  <th scope="col">#</th>
+                  <th scope="col">الصورة</th>
+                  <th scope="col">الاسم</th>
+                  <th scope="col">التصنيف</th>
+                  <th scope="col">العمر</th>
+                  <th scope="col">التعليم</th>
+                  <th scope="col">المرحلة</th>
                 </tr>
               </thead>
               <tbody id="auTableBody"></tbody>
