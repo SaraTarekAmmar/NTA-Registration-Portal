@@ -125,7 +125,7 @@
           fd.append("file", f);
           fd.append("folder", "materials");
           var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
-          fetch("/api/admin/upload", {
+          fetch("/api/materials", {
             method:"POST",
             headers: {"Authorization": "Bearer " + token},
             body: fd
