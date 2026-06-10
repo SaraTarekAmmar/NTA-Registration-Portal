@@ -15,6 +15,7 @@ DB_CONFIG = {
     "charset": "utf8mb4"
 }
 
+connection_pool = None
 try:
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="editor_pool",
@@ -28,4 +29,6 @@ except mysql.connector.Error as err:
 
 
 def get_db_connection():
+    if connection_pool is None:
+        raise RuntimeError("Database connection pool is not available")
     return connection_pool.get_connection()

@@ -1,8 +1,8 @@
 (function () {
     const TOTAL_STEPS = 10;
-    const API_PREFIX = (window.location.protocol.startsWith('http')) 
-        ? '' 
-        : 'http://127.0.0.1:7771';
+    const API_PREFIX = (window.location.protocol.startsWith('http'))
+        ? ''
+        : 'http://127.0.0.1:8000';
     const MAX_IDENTITY_DOCUMENT_FILES = 3;
 
     // Parse role from URL query parameters (default to 'trainee')

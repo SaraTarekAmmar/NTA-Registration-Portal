@@ -392,6 +392,9 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
         
         db.commit()
         return {"message": "Review submitted successfully"}
+    except HTTPException:
+        db.rollback()
+        raise
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))

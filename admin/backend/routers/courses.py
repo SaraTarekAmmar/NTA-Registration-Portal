@@ -333,7 +333,7 @@ async def delete_course(course_id: int, staff: dict = Depends(get_admin_user)):
 async def bulk_enroll(
     course_id: int = Form(...),
     file: UploadFile = File(...),
-    staff: dict = Depends(get_staff_user)
+    staff: dict = Depends(get_admin_user)
 ):
     """
     Unified bulk enrollment/assignment endpoint.

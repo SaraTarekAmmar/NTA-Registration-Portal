@@ -139,7 +139,8 @@ async def login(req: Request, request: LoginRequest):
         # 2. Trainee without password_hash: Fallback to national_id (Stage 1-6)
         
         is_authenticated = False
-        
+        reason = "Authentication failed"
+
         if user["role"] in ["admin", "editor"] or user.get("password_hash"):
             if not request.password:
                 raise HTTPException(status_code=401, detail="كلمة المرور مطلوبة")

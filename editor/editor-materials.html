@@ -179,10 +179,25 @@
           cancelLabel: "إلغاء",
           danger: true
         }).then(function(ok) {
-          if (ok) {
+          if (!ok) return;
+          var mat = uploadedMaterials[idx];
+          var params = new URLSearchParams(window.location.search);
+          var courseId = parseInt(params.get("course_id")) || 0;
+          var deleteUrl = mat.path
+            ? "/api/materials/" + encodeURIComponent(mat.path)
+            : (courseId ? "/api/materials/" + courseId + "/" + idx : null);
+          var doRemove = function() {
             uploadedMaterials.splice(idx, 1);
             renderMaterials();
             showEditorToast("تم حذف الملف.", "success");
+          };
+          if (deleteUrl) {
+            authFetch(deleteUrl, { method: "DELETE" })
+              .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || "فشل الحذف"); }); })
+              .then(doRemove)
+              .catch(function(err) { showEditorToast(err.message || "فشل حذف الملف.", "error"); });
+          } else {
+            doRemove();
           }
         });
       }
