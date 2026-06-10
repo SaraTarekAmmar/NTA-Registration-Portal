@@ -2023,10 +2023,7 @@
                   أبرز المتدربين
                 </p>
                 <div style="display: flex; gap: 0.5rem">
-                  <button
-                    class="rec-carousel-btn"
-                    onclick="scrollCarousel(-280)"
-                  >
+                  <button class="rec-carousel-btn" onclick="scrollCarousel(-280)" aria-label="السابق" type="button">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -2036,10 +2033,7 @@
                       <polyline points="15 18 9 12 15 6" />
                     </svg>
                   </button>
-                  <button
-                    class="rec-carousel-btn"
-                    onclick="scrollCarousel(280)"
-                  >
+                  <button class="rec-carousel-btn" onclick="scrollCarousel(280)" aria-label="التالي" type="button">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -2070,13 +2064,14 @@
               </div>
               <div style="overflow-x: auto">
                 <table class="rec-table">
-                  <thead>
+  <caption class="sr-only">جدول التوصيات: المدربون والفصول والأداء</caption>
+                  <th scope="col"ead>
                     <tr>
-                      <th>المدرب</th>
-                      <th>الفصل / الموضوع</th>
-                      <th>عدد المتدربين</th>
-                      <th>متوسط الأداء</th>
-                      <th style="text-align: left">إجراء</th>
+                      <th scope="col">المدرب</th>
+                      <th scope="col">الفصل / الموضوع</th>
+                      <th scope="col">عدد المتدربين</th>
+                      <th scope="col">متوسط الأداء</th>
+                      <th scope="col" style="text-align: left">إجراء</th>
                     </tr>
                   </thead>
                   <tbody id="trainer-table-body"></tbody>
@@ -2306,14 +2301,14 @@
                 <h3 id="recDetailTitle">تفاصيل التوصيات</h3>
               </div>
               <div style="overflow-x: auto; background: var(--assign-card-bg); border-radius: 12px; padding: 1rem;">
-                <table class="rec-detail-table" style="width: 100%; min-width: 900px; text-align: right; border-spacing: 0 10px;">
-                  <thead>
+                <table class="rec-detail-table"><caption class="sr-only">تفاصيل توزيع المتدربين</caption style="width: 100%; min-width: 900px; text-align: right; border-spacing: 0 10px;">
+                  <th scope="col"ead>
                     <tr>
-                      <th style="padding: 1rem; color: var(--text-muted); width: 15%;">الاسم</th>
-                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط القوة</th>
-                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط الضعف</th>
-                      <th style="padding: 1rem; color: var(--text-muted); width: 25%;">مبرر التوزيع (AI)</th>
-                      <th style="padding: 1rem; color: var(--text-muted); width: 10%;">التوافق</th>
+                      <th scope="col" style="padding: 1rem; color: var(--text-muted); width: 15%;">الاسم</th>
+                      <th scope="col" style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط القوة</th>
+                      <th scope="col" style="padding: 1rem; color: var(--text-muted); width: 25%;">نقاط الضعف</th>
+                      <th scope="col" style="padding: 1rem; color: var(--text-muted); width: 25%;">مبرر التوزيع (AI)</th>
+                      <th scope="col" style="padding: 1rem; color: var(--text-muted); width: 10%;">التوافق</th>
                     </tr>
                   </thead>
                   <tbody id="recDetailBody">
