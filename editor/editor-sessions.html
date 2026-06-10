@@ -152,8 +152,9 @@
         }
         empty.style.display = "none";
         var statusMap = { scheduled:"مجدولة", completed:"مكتملة", cancelled:"ملغاة" };
-        var html = '<div class="editor-table-wrap"><table class="editor-table"><thead><tr>' +
-          '<th>#</th><th>عنوان الجلسة</th><th>التاريخ</th><th>الحالة</th><th>الإجراءات</th>' +
+        var html = '<div class="editor-table-wrap"><table class="editor-table">
+  <caption class="sr-only">قائمة الجلسات التدريبية</caption><th scope="col"ead><tr>' +
+          '<th scope="col">#</th><th scope="col">عنوان الجلسة</th><th scope="col">التاريخ</th><th scope="col">الحالة</th><th scope="col">الإجراءات</th>' +
           '</tr></thead><tbody>';
         sessions.forEach(function(s, i) {
           html += '<tr>';
