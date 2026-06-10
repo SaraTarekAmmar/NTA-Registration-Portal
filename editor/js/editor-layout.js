@@ -29,7 +29,8 @@
 
     nav.forEach(function (item) {
       var cls = "editor-nav__item" + (item.page === activePage ? " active" : "");
-      html += '<a href="' + item.href + '" class="' + cls + '" aria-current="' + (item.page === activePage ? "page" : "false") + '">';
+      html += '<a href="' + item.href + '" class="' + cls + '"' + (item.page === activePage ? ' aria-current="page"' : '') + '>';
+
       html += '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' + item.icon + '</svg>';
       html += item.label + '</a>';
     });
@@ -94,7 +95,12 @@
         '</div></div>';
       document.body.appendChild(overlay);
 
+      function keyHandler(e) {
+        if (e.key === "Escape") close(false);
+      }
+
       function close(result) {
+        document.removeEventListener("keydown", keyHandler);
         document.body.removeChild(overlay);
         resolve(result);
       }
@@ -102,9 +108,7 @@
       overlay.querySelector("#editorConfirmCancel").addEventListener("click", function () { close(false); });
       overlay.querySelector("#editorConfirmOk").addEventListener("click", function () { close(true); });
       overlay.addEventListener("click", function (e) { if (e.target === overlay) close(false); });
-      document.addEventListener("keydown", function handler(e) {
-        if (e.key === "Escape") { document.removeEventListener("keydown", handler); close(false); }
-      });
+      document.addEventListener("keydown", keyHandler);
       overlay.querySelector("#editorConfirmOk").focus();
     });
   };
