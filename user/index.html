@@ -109,11 +109,14 @@
             </span>
             <input
               type="email"
+              id="loginEmail"
               name="email"
               placeholder="name@example.com"
               autocomplete="email"
+              aria-describedby="loginEmailError"
               required
             />
+            <p id="loginEmailError" class="field-error sr-only" aria-live="polite"></p>
           </div>
         </div>
 
@@ -174,8 +177,8 @@
         <h3>إنشاء حساب جديد</h3>
         <p class="modal-desc">يرجى تحديد نوع الحساب للمتابعة في بوابة الأكاديمية الوطنية للتدريب</p>
         <div class="role-cards">
-          <div class="role-card" onclick="selectRole('trainee')">
-            <div class="role-icon">
+          <button type="button" class="role-card" onclick="selectRole('trainee')">
+            <div class="role-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                 <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
@@ -183,9 +186,9 @@
             </div>
             <div class="role-title">متدرب (Trainee)</div>
             <div class="role-text">سجل كمتدرب للالتحاق بالبرامج التدريبية ومتابعة طلبات قبولك ومسارك التعليمي.</div>
-          </div>
-          <div class="role-card" onclick="selectRole('trainer')">
-            <div class="role-icon">
+          </button>
+          <button type="button" class="role-card" onclick="selectRole('trainer')">
+            <div class="role-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                 <circle cx="9" cy="7" r="4"/>
@@ -195,22 +198,22 @@
             </div>
             <div class="role-title">مدرب (Trainer)</div>
             <div class="role-text">سجل كمدرب معتمد لإدارة البرامج، وضع الاختبارات، وتقييم وتوجيه الكوادر.</div>
-          </div>
+          </button>
         </div>
         <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
       </div>
     </div>
 
     <!-- Glassmorphic Success Notification Modal -->
-    <div id="successModal" class="modal-overlay">
+    <div id="successModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
       <div class="modal-content" style="border-color: #d4af37; background: rgba(26, 46, 64, 0.95); backdrop-filter: blur(20px);">
         <div class="role-icon" style="background: rgba(212, 175, 55, 0.2); color: #d4af37; width: 80px; height: 80px; margin: 0 auto 20px auto; border: 1px solid #d4af37;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 40px; height: 40px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 40px; height: 40px;" aria-hidden="true">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </div>
-        <h3 style="color: #d4af37; font-size: 26px; font-weight: 700; margin-bottom: 15px;">تم التسجيل بنجاح!</h3>
+        <h3 id="successModalTitle" style="color: #d4af37; font-size: 26px; font-weight: 700; margin-bottom: 15px;">تم التسجيل بنجاح!</h3>
         <p class="modal-desc" style="color: #e2e8f0; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">
           لقد تم استلام طلب تسجيلك بنجاح في بوابة الأكاديمية الوطنية للتدريب (NTA).<br>
           تم إرسال بريد إلكتروني لتأكيد التسجيل على بريدك الإلكتروني المسجل.
@@ -378,6 +381,18 @@
         color: var(--text-main);
         border-color: var(--border-accent);
       }
+      /* Reset button defaults for role-card buttons */
+      button.role-card {
+        background: var(--bg-input);
+        border: 1px solid var(--border-main);
+        font-family: 'Tajawal', sans-serif;
+        width: 100%;
+        text-align: center;
+      }
+      button.role-card:focus-visible {
+        outline: 2px solid var(--accent, #6366f1);
+        outline-offset: 2px;
+      }
 
       /* Light mode: registration overlay readability */
       html.light-mode #roleModal .modal-content h3 {
@@ -398,33 +413,104 @@
     </style>
 
     <script>
-      // Modal Show / Hide handlers
-      const modal = document.getElementById("roleModal");
-      const registerLink = document.getElementById("registerLink");
-
-      // Password Visibility Toggle
+      // ---- Password Visibility Toggle ----
       const togglePasswordBtn = document.getElementById("togglePasswordVisibility");
       const loginPasswordInput = document.getElementById("loginPassword");
       if (togglePasswordBtn && loginPasswordInput) {
         togglePasswordBtn.addEventListener("click", function() {
-          const type = loginPasswordInput.getAttribute("type") === "password" ? "text" : "password";
-          loginPasswordInput.setAttribute("type", type);
+          const isHidden = loginPasswordInput.getAttribute("type") === "password";
+          loginPasswordInput.setAttribute("type", isHidden ? "text" : "password");
+          this.setAttribute("aria-label", isHidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
           const eyeIcon = this.querySelector(".eye-icon");
           const eyeOffIcon = this.querySelector(".eye-off-icon");
-          if (type === "text") {
-            eyeIcon.style.display = "none";
-            eyeOffIcon.style.display = "block";
-          } else {
-            eyeIcon.style.display = "block";
-            eyeOffIcon.style.display = "none";
-          }
+          eyeIcon.style.display = isHidden ? "none" : "block";
+          eyeOffIcon.style.display = isHidden ? "block" : "none";
         });
+      }
+
+      // ---- Modal helpers ----
+      const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+      function trapFocus(modalEl) {
+        const focusable = [...modalEl.querySelectorAll(FOCUSABLE)];
+        if (!focusable.length) return;
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        modalEl._trapHandler = function(e) {
+          if (e.key !== 'Tab') return;
+          if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+          } else {
+            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        };
+        modalEl.addEventListener('keydown', modalEl._trapHandler);
+        focusable[0].focus();
+      }
+
+      function releaseFocus(modalEl, returnTo) {
+        if (modalEl._trapHandler) {
+          modalEl.removeEventListener('keydown', modalEl._trapHandler);
+          delete modalEl._trapHandler;
+        }
+        if (returnTo) returnTo.focus();
+      }
+
+      // ---- Role Selection Modal ----
+      const modal = document.getElementById("roleModal");
+      const registerLink = document.getElementById("registerLink");
+      let modalOpener = null;
+
+      function openModal() {
+        modalOpener = document.activeElement;
+        modal.classList.add("active");
+        trapFocus(modal);
+      }
+
+      function closeModal() {
+        modal.classList.remove("active");
+        releaseFocus(modal, modalOpener);
       }
 
       if (registerLink && modal) {
         registerLink.addEventListener("click", function(e) {
           e.preventDefault();
-          modal.classList.add("active");
+          openModal();
+        });
+      }
+
+      modal.addEventListener("click", function(e) {
+        if (e.target === modal) closeModal();
+      });
+
+      modal.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeModal();
+      });
+
+      function selectRole(role) {
+        window.location.href = `registration.html?role=${role}`;
+      }
+
+      // ---- Success Modal ----
+      const successModalEl = document.getElementById("successModal");
+      let successModalOpener = null;
+
+      function openSuccessModal() {
+        successModalOpener = document.activeElement;
+        successModalEl.classList.add("active");
+        trapFocus(successModalEl);
+      }
+
+      window.closeSuccessModal = function () {
+        successModalEl.classList.remove("active");
+        releaseFocus(successModalEl, successModalOpener);
+      };
+
+      if (successModalEl) {
+        successModalEl.addEventListener("click", function(e) {
+          if (e.target === successModalEl) closeSuccessModal();
+        });
+        successModalEl.addEventListener("keydown", function(e) {
+          if (e.key === "Escape") closeSuccessModal();
         });
       }
 
@@ -432,45 +518,12 @@
       window.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get("registered") === "1") {
-          const successModal = document.getElementById("successModal");
-          if (successModal) {
-            successModal.classList.add("active");
-            // Clear parameter from address bar
+          if (successModalEl) {
+            openSuccessModal();
             window.history.replaceState({}, document.title, window.location.pathname);
           }
         }
       });
-
-      window.closeSuccessModal = function () {
-        const successModal = document.getElementById("successModal");
-        if (successModal) {
-          successModal.classList.remove("active");
-        }
-      };
-
-      function closeModal() {
-        modal.classList.remove("active");
-      }
-
-      function selectRole(role) {
-        window.location.href = `registration.html?role=${role}`;
-      }
-
-      // Close modal when clicking outside content
-      modal.addEventListener("click", function(e) {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-
-      const successModalEl = document.getElementById("successModal");
-      if (successModalEl) {
-        successModalEl.addEventListener("click", function(e) {
-          if (e.target === successModalEl) {
-            closeSuccessModal();
-          }
-        });
-      }
 
       // Auto-redirect if already logged in
       if (sessionStorage.getItem("ntaTrainee")) {
@@ -478,17 +531,33 @@
         window.location.href = session.role === "trainer" ? "trainer-dashboard.html" : "courses.html";
       }
 
+      // ---- Login Form Submit ----
       (function () {
         var form = document.getElementById("loginForm");
         var btn = document.getElementById("loginBtn");
+        var errorDiv = document.getElementById("loginErrorMsg");
+
+        function showLoginError(msg) {
+          if (errorDiv) {
+            errorDiv.textContent = msg;
+            errorDiv.style.display = "block";
+          }
+        }
+
+        function clearLoginError() {
+          if (errorDiv) {
+            errorDiv.textContent = "";
+            errorDiv.style.display = "none";
+          }
+        }
+
         if (form && btn) {
           form.addEventListener("submit", function (e) {
             e.preventDefault();
+            clearLoginError();
             const checkedRole = form.querySelector('input[name="loginRole"]:checked');
             const role = checkedRole ? checkedRole.value : 'trainee';
-            
             btn.classList.add("loading");
-
 
             var nationalId = form.nationalId.value.trim();
             var email = form.email.value.trim();
@@ -497,46 +566,33 @@
             fetch("/api/auth/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: email,
-                nationalId: nationalId,
-                password: password,
-                role: role,
-              }),
+              body: JSON.stringify({ email, nationalId, password, role }),
             })
               .then((response) => {
                 if (!response.ok)
-                  return response.json().then((err) => {
-                    throw new Error(err.detail || "Login failed");
-                  });
+                  return response.json().then((err) => { throw new Error(err.detail || "Login failed"); });
                 return response.json();
               })
               .then((data) => {
-                sessionStorage.setItem(
-                  "ntaTrainee",
-                  JSON.stringify({
-                    token: data.access_token,
-                    userId: data.userId,
-                    role: data.role,
-                    email: email,
-                    nationalId: nationalId,
-                    fullName: data.fullName || "",
-                  }),
-                );
-                window.location.href =
-                  data.role === "trainer"
-                    ? "trainer-dashboard.html"
-                    : "courses.html";
+                sessionStorage.setItem("ntaTrainee", JSON.stringify({
+                  token: data.access_token,
+                  userId: data.userId,
+                  role: data.role,
+                  email,
+                  nationalId,
+                  fullName: data.fullName || "",
+                }));
+                window.location.href = data.role === "trainer" ? "trainer-dashboard.html" : "courses.html";
               })
               .catch((err) => {
                 btn.classList.remove("loading");
-                let userFriendlyMessage = "بيانات الدخول غير صحيحة"; // Default to incorrect details
+                let msg = "بيانات الدخول غير صحيحة";
                 if (err.message === "Failed to fetch" || err.message.toLowerCase().includes("network") || err.message.toLowerCase().includes("connection")) {
-                  userFriendlyMessage = "خطأ في الاتصال، يرجى المحاولة مرة أخرى لاحقاً";
+                  msg = "خطأ في الاتصال، يرجى المحاولة مرة أخرى لاحقاً";
                 } else if (err.message && err.message.includes("Unexpected token")) {
-                   userFriendlyMessage = "حدث خطأ غير متوقع في النظام، يرجى المحاولة لاحقاً";
+                  msg = "حدث خطأ غير متوقع في النظام، يرجى المحاولة لاحقاً";
                 }
-                alert(userFriendlyMessage);
+                showLoginError(msg);
               });
           });
         }

@@ -179,12 +179,15 @@
             if (!String(inp.value || '').trim()) {
                 if (optionalInputNames.includes(inp.name) || inp.classList.contains('optional-input')) {
                     inp.classList.remove('error');
+                    inp.removeAttribute('aria-invalid');
                 } else {
                     inp.classList.add('error');
+                    inp.setAttribute('aria-invalid', 'true');
                     ok = false;
                 }
             } else {
                 inp.classList.remove('error');
+                inp.removeAttribute('aria-invalid');
             }
         });
 
@@ -1338,7 +1341,7 @@
             if (err.message.includes('fetch') || err.message.includes('NetworkError') || err.message.includes('Failed to fetch')) {
                 errMsg += '\n\nملاحظة: يرجى التأكد من تشغيل الخادم الخلفي (Backend Server) وفتح الصفحة عبر الرابط:\nhttp://localhost:8001/registration.html\nوليس كملف محلي (file://) أو منفذ آخر.';
             }
-            alert(errMsg);
+            window.showDropdownMessage(errMsg, true);
             fetch(API_PREFIX + '/api/debug/log', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2438,7 +2441,7 @@
     if (phoneContainer && addPhoneBtn) {
         addPhoneBtn.addEventListener('click', function () {
             if (phoneContainer.querySelectorAll('.phone-row').length >= 3) {
-                alert("تم الوصول للحد الأقصى لأرقام الهواتف (3).");
+                window.showDropdownMessage("تم الوصول للحد الأقصى لأرقام الهواتف (3).", true);
                 return;
             }
             const row = document.createElement('div');
@@ -2735,21 +2738,21 @@
 
     if (addTechnicalSkillBtn && technicalSkillsContainer) {
         addTechnicalSkillBtn.addEventListener('click', function () {
-            if (technicalSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { alert("الحد الأقصى 20"); return; }
+            if (technicalSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { window.showDropdownMessage("الحد الأقصى 20 مهارة تقنية.", true); return; }
             technicalSkillsContainer.appendChild(createSkillRow('technicalSkill', 'اختر الفئة', 'اختر المهارة', 1));
         });
     }
 
     if (addComputerSkillBtn && computerSkillsContainer) {
         addComputerSkillBtn.addEventListener('click', function () {
-            if (computerSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { alert("الحد الأقصى 20"); return; }
+            if (computerSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { window.showDropdownMessage("الحد الأقصى 20 مهارة حاسوبية.", true); return; }
             computerSkillsContainer.appendChild(createSkillRow('computerSkill', 'اختر الفئة', 'اختر المهارة', 2));
         });
     }
 
     if (addSoftSkillBtn && softSkillsContainer) {
         addSoftSkillBtn.addEventListener('click', function () {
-            if (softSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { alert("الحد الأقصى 20"); return; }
+            if (softSkillsContainer.querySelectorAll('.skill-row-inline').length >= 20) { window.showDropdownMessage("الحد الأقصى 20 مهارة شخصية.", true); return; }
             softSkillsContainer.appendChild(createSkillRow('softSkill', 'Skill Domain / فئة المهارة', 'Specific Competency / المهارة', 3));
         });
     }
@@ -3058,7 +3061,7 @@
 
         addTestScoreBtn.addEventListener('click', function () {
             const count = testScoresContainer.querySelectorAll('.test-score-card').length;
-            if (count >= 5) { alert("الحد الأقصى 5"); return; }
+            if (count >= 5) { window.showDropdownMessage("الحد الأقصى 5 اختبارات معيارية.", true); return; }
 
             const card = document.createElement('div');
             card.className = 'test-score-card acc-item open mb-3';
@@ -3138,7 +3141,7 @@
 
     if (addAcademicHistoryBtn && academicHistoryContainer) {
         addAcademicHistoryBtn.addEventListener('click', function () {
-            if (academicHistoryContainer.querySelectorAll('.academic-history-card').length >= 5) { alert("تم الوصول للحد الأقصى (5)"); return; }
+            if (academicHistoryContainer.querySelectorAll('.academic-history-card').length >= 5) { window.showDropdownMessage("تم الوصول للحد الأقصى (5) سجلات أكاديمية.", true); return; }
             const card = document.createElement('div');
             card.className = 'academic-history-card';
             card.innerHTML = `
@@ -3198,7 +3201,7 @@
 
     if (addProfessionalHistoryBtn && professionalHistoryContainer) {
         addProfessionalHistoryBtn.addEventListener('click', function () {
-            if (professionalHistoryContainer.querySelectorAll('.professional-history-card').length >= 10) { alert("تم الوصول للحد الأقصى (10)"); return; }
+            if (professionalHistoryContainer.querySelectorAll('.professional-history-card').length >= 10) { window.showDropdownMessage("تم الوصول للحد الأقصى (10) سجلات مهنية.", true); return; }
             const card = document.createElement('div');
             card.className = 'professional-history-card';
             card.innerHTML = `
@@ -3247,7 +3250,7 @@
 
     if (addAwardBtn && awardsContainer) {
         addAwardBtn.addEventListener('click', function () {
-            if (awardsContainer.querySelectorAll('.academic-history-card').length >= 10) { alert("تم الوصول للحد الأقصى (10)"); return; }
+            if (awardsContainer.querySelectorAll('.academic-history-card').length >= 10) { window.showDropdownMessage("تم الوصول للحد الأقصى (10) جوائز.", true); return; }
             const card = document.createElement('div');
             card.className = 'academic-history-card';
             card.innerHTML = `
@@ -3274,7 +3277,7 @@
 
     if (addExtracurricularBtn && extracurricularContainer) {
         addExtracurricularBtn.addEventListener('click', function () {
-            if (extracurricularContainer.querySelectorAll('.extracurricular-row').length >= 10) { alert("الحد الأقصى 10"); return; }
+            if (extracurricularContainer.querySelectorAll('.extracurricular-row').length >= 10) { window.showDropdownMessage("الحد الأقصى 10 أنشطة إضافية.", true); return; }
             const row = document.createElement('div');
             row.className = 'reg-form__row extracurricular-row';
             row.innerHTML = `
@@ -3297,7 +3300,7 @@
 
     if (addReferenceBtn && referencesContainer) {
         addReferenceBtn.addEventListener('click', function () {
-            if (referencesContainer.querySelectorAll('.reference-row').length >= 5) { alert("تم الوصول للحد الأقصى (5)"); return; }
+            if (referencesContainer.querySelectorAll('.reference-row').length >= 5) { window.showDropdownMessage("تم الوصول للحد الأقصى (5) مراجع.", true); return; }
             const row = document.createElement('div');
             row.className = 'reg-form__row reference-row';
             row.innerHTML = `

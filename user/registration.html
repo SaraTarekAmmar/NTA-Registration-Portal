@@ -178,7 +178,7 @@ textarea[aria-invalid="true"] {
 
 </style>
 </head>
-
+<body>
 <a class="skip-link" href="#regForm">الانتقال إلى نموذج التسجيل</a>
 <div class="reg-bg"></div>
 <div class="reg-logo">
@@ -489,7 +489,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 2: Contact Details -->
 <div class="reg-step" data-step="2">
-<h2 class="reg-step__title">القسم الثاني - بيانات الاتصال</h2>
+<h2 class="reg-step__title" id="step2Heading" tabindex="-1">القسم الثاني - بيانات الاتصال</h2>
 <div class="reg-form__row">
 <div class="form-group">
 <label for="primaryEmail">البريد الإلكتروني <span aria-hidden="true" class="req-mark">*</span><span class="sr-only">مطلوب</span></label>
@@ -556,7 +556,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 3: Educational Background -->
 <div class="reg-step" data-step="3">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step3Heading" tabindex="-1">
                   القسم الثالث - الخلفية التعليمية
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -851,7 +851,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 4: Employment History -->
 <div class="reg-step" data-step="4">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step4Heading" tabindex="-1">
                   القسم الرابع - سجل التوظيف / الخبرة العملية
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -1230,7 +1230,7 @@ textarea[aria-invalid="true"] {
 <!-- Step 5: Skills, Languages & Interests -->
 <div class="reg-step reg-step--skills" data-step="5" style="position: relative">
 <div aria-hidden="true" class="skills-step-lock-overlay" id="skillsStep5LockOverlay" style="display: none" title="تم قفل هذا القسم بعد المتابعة — للعرض فقط"></div>
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step5Heading" tabindex="-1">
                   القسم الخامس - المهارات واللغات والاهتمامات
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -1418,7 +1418,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 6: Prizes, Conferences & Workshops -->
 <div class="reg-step" data-step="6">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step6Heading" tabindex="-1">
                   القسم السادس - الجوائز والمؤتمرات وورش العمل
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -1644,7 +1644,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 7: Public/Political Experience & Legal Status -->
 <div class="reg-step" data-step="7">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step7Heading" tabindex="-1">
                   القسم السابع - الخبرة في العمل العام والسياسي والوضع القانوني
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -1870,7 +1870,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 8: Logistics, documents & motivation (القسم الثامن) -->
 <div class="reg-step" data-step="8">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step8Heading" tabindex="-1">
                   القسم الثامن - اللوجستيات والالتزامات
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -2024,7 +2024,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 9: Cognition & Personality (Quiz) -->
 <div class="reg-step cognition-step" data-step="9">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step9Heading" tabindex="-1">
                   القسم التاسع - اختبار الإدراك والشخصية
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -2141,7 +2141,7 @@ textarea[aria-invalid="true"] {
 </div>
 <!-- Step 10: Verify & Final Confirmation -->
 <div class="reg-step" data-step="10">
-<h2 class="reg-step__title">
+<h2 class="reg-step__title" id="step10Heading" tabindex="-1">
                   القسم العاشر - التحقق والتأكيد النهائي
                 </h2>
 <p class="reg-step__desc" dir="ltr" lang="en">
@@ -2233,4 +2233,5 @@ textarea[aria-invalid="true"] {
 <script src="header/header.js?v=2"></script>
 <script src="registration.js"></script>
 <script src="chat/chat.js"></script>
+</body>
 </html>
