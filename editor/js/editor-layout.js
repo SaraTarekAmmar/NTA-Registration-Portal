@@ -1,17 +1,15 @@
-/* Injects the Editor sidebar and wires up shared utilities */
+/* Injects the Editor top-nav header and wires up shared utilities */
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
-  function getEditorName() {
-    try {
-      var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
-      if (!token) return "";
-      var p = JSON.parse(atob(token.split(".")[1]));
-      return p.name || p.email || "";
-    } catch (e) { return ""; }
-  }
+  (function injectHeaderCss() {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/admin/header/header.css";
+    document.head.appendChild(link);
+  })();
 
-  function buildSidebar(activePage) {
+  function buildHeader(activePage) {
     var nav = [
       { href: "editor-dashboard.html", page: "dashboard", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>', label: "لوحة التحكم" },
       { href: "editor-courses.html", page: "courses", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>', label: "الدورات" },
@@ -20,34 +18,42 @@
       { href: "editor-exams.html", page: "exams", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', label: "الاختبارات" },
     ];
 
-    var html = '<div class="editor-sidebar">';
-    html += '<a href="editor-dashboard.html" class="editor-sidebar__logo">';
-    html += '<img src="/images/logo2.png" class="editor-sidebar__logo-img" alt="" onerror="this.style.display=\'none\'">';
-    html += '<div><div class="editor-sidebar__logo-text">الأكاديمية الوطنية</div><span class="editor-sidebar__logo-role">Editor</span></div>';
-    html += '</a>';
-    html += '<nav class="editor-nav" aria-label="قائمة المحرر">';
-
+    var navChips = "";
     nav.forEach(function (item) {
-      var cls = "editor-nav__item" + (item.page === activePage ? " active" : "");
-      html += '<a href="' + item.href + '" class="' + cls + '"' + (item.page === activePage ? ' aria-current="page"' : '') + '>';
-
-      html += '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' + item.icon + '</svg>';
-      html += item.label + '</a>';
+      var isActive = item.page === activePage;
+      navChips +=
+        '<a href="' + item.href + '" class="nta-header__chip' + (isActive ? " active" : "") + '" data-page="' + item.page + '"' + (isActive ? ' aria-current="page"' : "") + ">" +
+        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' + item.icon + "</svg>" +
+        "<span>" + item.label + "</span></a>";
     });
 
-    html += '<div class="editor-nav__divider"></div>';
-    html += '<button type="button" class="editor-nav__item editor-nav__item--danger" id="editorLogoutBtn" aria-label="تسجيل الخروج">';
-    html += '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>';
-    html += 'تسجيل الخروج</button>';
-    html += '</nav></div>';
-    return html;
+    return (
+      '<header class="nta-header">' +
+      '<a href="editor-dashboard.html" class="nta-header__logo">' +
+      '<img src="/images/logo2.png" alt="" class="nta-header__logo-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+      '<span class="nta-header__logo-fallback">NTA</span>' +
+      '<div class="nta-header__logo-text">' +
+      '<span class="nta-header__logo-main">NTA</span>' +
+      '<span class="nta-header__logo-sub">NATIONAL TRAINING ACADEMY</span>' +
+      '<span class="nta-header__logo-ar">الأكاديمية الوطنية للتدريب</span>' +
+      "</div></a>" +
+      '<div class="nta-header__center">' +
+      '<span class="nta-header__section-label">بوابة المحرر</span>' +
+      '<nav class="nta-header__nav" aria-label="قائمة المحرر">' + navChips + "</nav>" +
+      "</div>" +
+      '<div class="nta-header__actions">' +
+      '<button type="button" class="nta-header__btn nta-header__btn--logout" id="editorLogoutBtn">تسجيل الخروج</button>' +
+      '<button type="button" class="nta-header__theme" id="editorThemeToggle" aria-label="تبديل الوضع">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>' +
+      "</button></div></header>"
+    );
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    var sidebarContainer = document.getElementById("editorSidebar");
-    if (sidebarContainer) {
+    var container = document.getElementById("editorSidebar");
+    if (container) {
       var activePage = document.body.getAttribute("data-page") || "";
-      sidebarContainer.innerHTML = buildSidebar(activePage);
+      container.innerHTML = buildHeader(activePage);
     }
 
     var logoutBtn = document.getElementById("editorLogoutBtn");
@@ -56,6 +62,10 @@
         sessionStorage.removeItem(EDITOR_TOKEN_KEY);
         window.location.replace("editor-login.html");
       });
+    }
+
+    if (window.NTATheme && typeof window.NTATheme.bindAllToggles === "function") {
+      window.NTATheme.bindAllToggles();
     }
   });
 
@@ -87,12 +97,12 @@
       overlay.className = "editor-modal-overlay";
       overlay.innerHTML =
         '<div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorConfirmTitle">' +
-        '<h2 class="editor-modal__title" id="editorConfirmTitle">' + (opts.title || "تأكيد") + '</h2>' +
-        '<div class="editor-modal__body">' + (opts.body || "") + '</div>' +
+        '<h2 class="editor-modal__title" id="editorConfirmTitle">' + (opts.title || "تأكيد") + "</h2>" +
+        '<div class="editor-modal__body">' + (opts.body || "") + "</div>" +
         '<div class="editor-modal__actions">' +
-        '<button type="button" class="btn btn--secondary" id="editorConfirmCancel">' + (opts.cancelLabel || "إلغاء") + '</button>' +
-        '<button type="button" class="btn ' + (opts.danger ? "btn--danger" : "btn--primary") + '" id="editorConfirmOk">' + (opts.okLabel || "تأكيد") + '</button>' +
-        '</div></div>';
+        '<button type="button" class="btn btn--secondary" id="editorConfirmCancel">' + (opts.cancelLabel || "إلغاء") + "</button>" +
+        '<button type="button" class="btn ' + (opts.danger ? "btn--danger" : "btn--primary") + '" id="editorConfirmOk">' + (opts.okLabel || "تأكيد") + "</button>" +
+        "</div></div>";
       document.body.appendChild(overlay);
 
       function keyHandler(e) {
