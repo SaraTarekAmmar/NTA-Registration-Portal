@@ -38,6 +38,7 @@ Thumbs.db
 
 # Logs
 *.log
+*.err
 data/log/
 
 # Uploaded user files
