@@ -117,9 +117,19 @@ app.include_router(materials.router)
 app.include_router(sessions.router)
 app.include_router(exams.router)
 
-data_path = Path(__file__).parent.parent.parent / "data"
+project_root = Path(__file__).parent.parent.parent
+
+data_path = project_root / "data"
 if os.path.exists(data_path):
     app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+
+common_path = project_root / "common"
+if os.path.exists(common_path):
+    app.mount("/common", StaticFiles(directory=str(common_path)), name="common")
+
+images_path = project_root / "admin" / "images"
+if os.path.exists(images_path):
+    app.mount("/images", StaticFiles(directory=str(images_path)), name="images")
 
 editor_path = Path(__file__).parent.parent
 app.mount("/", StaticFiles(directory=str(editor_path), html=True), name="editor_static")
