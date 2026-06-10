@@ -1137,14 +1137,14 @@
 
     <!-- Course editor modal -->
     <div
-      class="courses-modal-backdrop"
+      class="courses-modal-backdrop" aria-hidden="true"
       id="modalBackdrop"
       style="display: none"
     >
       <div class="courses-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="courses-modal__header">
           <h2 class="courses-modal__title" id="modalTitle">إضافة دورة جديدة</h2>
-          <button type="button" class="courses-modal__icon-btn" id="modalClose">
+          <button type="button" class="courses-modal__icon-btn" id="modalClose" aria-label="إغلاق">
             ✕
           </button>
         </div>
@@ -1215,7 +1215,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="lbl">وصف الدورة <span class="req">*</span></label
+              <label class="lbl" for="descTa">وصف الدورة <span class="req">*</span></label
               ><textarea
                 class="ta"
                 id="descTa"
@@ -1225,7 +1225,7 @@
               ></textarea>
             </div>
             <div class="field">
-              <label class="lbl">المستوى <span class="req">*</span></label
+              <label class="lbl" for="levelSel">المستوى <span class="req">*</span></label
               ><select class="sel" id="levelSel" onchange="clearInvalid(this)">
                 <option value="">اختر المستوى</option>
                 <option>مبتدئ</option>
@@ -1236,7 +1236,7 @@
             <!-- ══ صورة الدورة ══ -->
             <div class="fg">
               <div class="field" style="grid-column: 1/-1">
-                <label class="lbl"
+                <label class="lbl" for="imageFileInp"
                   >صورة الدورة <span class="req">*</span></label
                 >
                 <div class="file-upload-compact" style="width: 100%">
