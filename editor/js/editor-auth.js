@@ -1,4 +1,4 @@
-/* Editor auth utilities — non-enforcing helpers for reading session state */
+﻿/* Editor auth utilities — non-enforcing helpers for reading session state */
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
@@ -11,7 +11,7 @@
   }
 
   function getToken() {
-    return sessionStorage.getItem(EDITOR_TOKEN_KEY);
+    return localStorage.getItem(EDITOR_TOKEN_KEY);
   }
 
   function getPayload() {
@@ -30,7 +30,7 @@
   }
 
   function logout() {
-    sessionStorage.removeItem(EDITOR_TOKEN_KEY);
+    localStorage.removeItem(EDITOR_TOKEN_KEY);
     window.location.replace("editor-login.html");
   }
 

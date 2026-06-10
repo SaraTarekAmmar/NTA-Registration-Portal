@@ -546,7 +546,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         if (window.lucide) window.lucide.createIcons();
 
-        const sessionRaw = sessionStorage.getItem("ntaTrainee");
+        const sessionRaw = localStorage.getItem("ntaTrainee");
         if (!sessionRaw) {
           window.location.href = "index.html";
           return;

@@ -1,4 +1,4 @@
-/* Admin auth utilities — non-enforcing helpers for reading session state */
+﻿/* Admin auth utilities — non-enforcing helpers for reading session state */
 (function () {
   var ADMIN_TOKEN_KEY = "admin_token";
 
@@ -11,7 +11,7 @@
   }
 
   function getToken() {
-    return sessionStorage.getItem(ADMIN_TOKEN_KEY);
+    return localStorage.getItem(ADMIN_TOKEN_KEY);
   }
 
   function getPayload() {
@@ -30,7 +30,7 @@
   }
 
   function logout() {
-    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     window.location.replace("admin-login.html");
   }
 

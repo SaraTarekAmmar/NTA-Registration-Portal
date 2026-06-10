@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   document.addEventListener("DOMContentLoaded", function () {
     // Nuke the old header.html from cache
     if (window.caches) {
@@ -57,7 +57,7 @@
     var page = document.body.getAttribute("data-page");
     var session = {};
     // Support new separated tokens first, fall back to legacy ntaTrainee
-    var adminToken = sessionStorage.getItem("admin_token");
+    var adminToken = localStorage.getItem("admin_token");
     if (adminToken) {
       try {
         var ap = JSON.parse(atob(adminToken.split(".")[1]));
@@ -66,7 +66,7 @@
     }
     if (!session.token) {
       try {
-        session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}");
       } catch (e) {}
     }
 
@@ -148,8 +148,8 @@
       logoutBtn.dataset.ntaLogoutBound = "1";
       logoutBtn.addEventListener("click", function () {
         try {
-          sessionStorage.removeItem("admin_token");
-          sessionStorage.removeItem("ntaTrainee");
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("ntaTrainee");
         } catch (e) {}
         window.location.href = "admin-login.html";
       });
@@ -158,9 +158,9 @@
 
   window.authenticatedFetch = function (url, options) {
     options = options || {};
-    var token = sessionStorage.getItem("admin_token");
+    var token = localStorage.getItem("admin_token");
     if (!token) {
-      try { token = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}").token; } catch(e) {}
+      try { token = JSON.parse(localStorage.getItem("ntaTrainee") || "{}").token; } catch(e) {}
     }
     var headers = Object.assign(
       { "Content-Type": "application/json" },
@@ -170,8 +170,8 @@
     return fetch(url, Object.assign({}, options, { headers: headers })).then(
       function (res) {
         if (res.status === 401) {
-          sessionStorage.removeItem("admin_token");
-          sessionStorage.removeItem("ntaTrainee");
+          localStorage.removeItem("admin_token");
+          localStorage.removeItem("ntaTrainee");
           window.location.href = "admin-login.html";
           return Promise.reject("Session expired");
         }

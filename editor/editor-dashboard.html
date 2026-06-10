@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -682,7 +682,7 @@
         var dateEl = document.getElementById("heroDate");
         if (dateEl) dateEl.textContent = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
         try {
-          var tok = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+          var tok = localStorage.getItem(EDITOR_TOKEN_KEY);
           if (tok) {
             var p    = JSON.parse(atob(tok.split(".")[1]));
             var name = p.name || p.email || "";
@@ -694,7 +694,7 @@
 
       function authFetch(url, opts) {
         opts = opts || {};
-        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
         var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
         if (token) headers["Authorization"] = "Bearer " + token;
         return fetch(url, Object.assign({}, opts, {headers: headers}));

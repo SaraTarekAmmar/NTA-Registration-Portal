@@ -1762,7 +1762,7 @@
       (function () {
         // Read from new admin_token first, fall back to legacy ntaTrainee key
         var session = {};
-        var _adminTok = sessionStorage.getItem("admin_token");
+        var _adminTok = localStorage.getItem("admin_token");
         if (_adminTok) {
           try {
             var _ap = JSON.parse(atob(_adminTok.split(".")[1]));
@@ -1770,7 +1770,7 @@
           } catch (e) {}
         }
         if (!session.token) {
-          try { session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
         }
         // admin-guard.js already enforces admin-only access on this page.
         // Admins VIEW courses and run bulk-enroll but do NOT create/edit/delete.

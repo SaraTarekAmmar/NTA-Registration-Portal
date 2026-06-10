@@ -1,10 +1,10 @@
-/* Admin API client — authenticated fetch with JSON helpers */
+﻿/* Admin API client — authenticated fetch with JSON helpers */
 (function () {
   var ADMIN_TOKEN_KEY = "admin_token";
   var BASE = "/api";
 
   function getToken() {
-    return sessionStorage.getItem(ADMIN_TOKEN_KEY);
+    return localStorage.getItem(ADMIN_TOKEN_KEY);
   }
 
   function authHeaders(extra) {
@@ -16,7 +16,7 @@
 
   function handleResponse(res) {
     if (res.status === 401 || res.status === 403) {
-      sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+      localStorage.removeItem(ADMIN_TOKEN_KEY);
       window.location.replace("admin-login.html");
       return Promise.reject(new Error("Session expired or unauthorized"));
     }

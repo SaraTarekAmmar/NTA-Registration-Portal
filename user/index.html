@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -527,8 +527,8 @@
       });
 
       // Auto-redirect if already logged in
-      if (sessionStorage.getItem("ntaTrainee")) {
-        const session = JSON.parse(sessionStorage.getItem("ntaTrainee"));
+      if (localStorage.getItem("ntaTrainee")) {
+        const session = JSON.parse(localStorage.getItem("ntaTrainee"));
         window.location.href = session.role === "trainer" ? "trainer-dashboard.html" : "courses.html";
       }
 
@@ -575,7 +575,7 @@
                 return response.json();
               })
               .then((data) => {
-                sessionStorage.setItem("ntaTrainee", JSON.stringify({
+                localStorage.setItem("ntaTrainee", JSON.stringify({
                   token: data.access_token,
                   userId: data.userId,
                   role: data.role,

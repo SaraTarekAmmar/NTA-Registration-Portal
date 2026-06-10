@@ -1,4 +1,4 @@
-; (function () {
+﻿; (function () {
     document.addEventListener('DOMContentLoaded', function () {
         var container = document.getElementById('chatWidget');
         if (!container) {
@@ -69,11 +69,11 @@
         }
 
         async function loadHistory() {
-            const session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+            const session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
             const isGuest = !session.token;
 
             if (isGuest) {
-                const guestHistory = JSON.parse(sessionStorage.getItem('ntaChatGuestHistory') || '[]');
+                const guestHistory = JSON.parse(localStorage.getItem('ntaChatGuestHistory') || '[]');
                 if (guestHistory.length > 0) {
                     chatBody.innerHTML = '';
                     guestHistory.forEach(item => {
@@ -125,11 +125,11 @@
                         addBubble(data.reply, true);
                         
                         // Save to session storage if guest
-                        const session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+                        const session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
                         if (!session.token) {
-                            const guestHistory = JSON.parse(sessionStorage.getItem('ntaChatGuestHistory') || '[]');
+                            const guestHistory = JSON.parse(localStorage.getItem('ntaChatGuestHistory') || '[]');
                             guestHistory.push({ question: text, reply: data.reply });
-                            sessionStorage.setItem('ntaChatGuestHistory', JSON.stringify(guestHistory));
+                            localStorage.setItem('ntaChatGuestHistory', JSON.stringify(guestHistory));
                         }
                     }
                 } else if (response.status === 429) {

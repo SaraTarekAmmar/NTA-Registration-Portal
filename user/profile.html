@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -393,7 +393,7 @@
     <script src="header/header.js"></script>
     <script>
         (function () {
-            var session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+            var session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
             if (session.role !== 'trainee') {
                 window.location.href = 'index.html';
                 return;
@@ -1336,7 +1336,7 @@
                     alert('اختر ملفاً أولاً');
                     return Promise.reject();
                 }
-                var session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+                var session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
                 var fd = new FormData();
                 fd.append('file', f);
                 return fetch('/api/trainee/upload?folder=' + encodeURIComponent(folder), {
@@ -1345,7 +1345,7 @@
                     body: fd
                 }).then(function (res) {
                     if (res.status === 401) {
-                        sessionStorage.removeItem('ntaTrainee');
+                        localStorage.removeItem('ntaTrainee');
                         window.location.href = 'index.html';
                         return Promise.reject();
                     }

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -67,7 +67,7 @@
 
       function authFetch(url, opts) {
         opts = opts || {};
-        var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
         var headers = Object.assign({}, opts.headers || {});
         if (token) headers["Authorization"] = "Bearer " + token;
         return fetch(url, Object.assign({}, opts, {headers: headers}));
@@ -124,7 +124,7 @@
           var fd = new FormData();
           fd.append("file", f);
           fd.append("folder", "materials");
-          var token = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+          var token = localStorage.getItem(EDITOR_TOKEN_KEY);
           fetch("/api/materials", {
             method:"POST",
             headers: {"Authorization": "Bearer " + token},

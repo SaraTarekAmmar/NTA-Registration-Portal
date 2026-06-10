@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Course Details Page Logic — NTA Registration Portal
  * Fetches real data from the backend and populates the UI.
  */
@@ -112,7 +112,7 @@
       const res = await fetch(`/api/assignments/course/${courseId}`);
       const assignments = await res.json();
       
-      const sessionRaw = sessionStorage.getItem('ntaTrainee');
+      const sessionRaw = localStorage.getItem('ntaTrainee');
       const trainee = sessionRaw ? JSON.parse(sessionRaw) : null;
       const traineeId = trainee ? trainee.id : null;
 
@@ -183,7 +183,7 @@
     const file = event.target.files[0];
     if (!file) return;
 
-    const sessionRaw = sessionStorage.getItem('ntaTrainee');
+    const sessionRaw = localStorage.getItem('ntaTrainee');
     const trainee = sessionRaw ? JSON.parse(sessionRaw) : null;
     if (!trainee || !trainee.id) {
       alert('يجب تسجيل الدخول أولاً');

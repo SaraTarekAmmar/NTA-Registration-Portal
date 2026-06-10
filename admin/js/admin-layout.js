@@ -1,10 +1,10 @@
-/* Admin layout utilities — sets active nav chip and exposes page helpers */
+﻿/* Admin layout utilities — sets active nav chip and exposes page helpers */
 (function () {
   var ADMIN_TOKEN_KEY = "admin_token";
 
   function getPayload() {
     try {
-      var t = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+      var t = localStorage.getItem(ADMIN_TOKEN_KEY);
       return t ? JSON.parse(atob(t.split(".")[1])) : null;
     } catch (e) { return null; }
   }

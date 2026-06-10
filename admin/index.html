@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
@@ -7,8 +7,8 @@
     <script>
       // Redirect based on existing tokens, otherwise go to admin login
       (function () {
-        var adminToken = sessionStorage.getItem("admin_token");
-        var editorToken = sessionStorage.getItem("editor_token");
+        var adminToken = localStorage.getItem("admin_token");
+        var editorToken = localStorage.getItem("editor_token");
         if (adminToken) {
           window.location.replace("admin-dashboard.html");
         } else if (editorToken) {

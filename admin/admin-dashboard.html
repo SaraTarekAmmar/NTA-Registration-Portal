@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -1134,12 +1134,12 @@
     <script>
       (function () {
         var session = {};
-        var _adminTok = sessionStorage.getItem("admin_token");
+        var _adminTok = localStorage.getItem("admin_token");
         if (_adminTok) {
           try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
         }
         if (!session.token) {
-          try { session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
         }
         if (session.role !== "admin") {
           window.location.replace("admin-login.html");
@@ -1154,7 +1154,7 @@
           var dateEl = document.getElementById("heroDate");
           if (dateEl) dateEl.textContent = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
           try {
-            var tok  = sessionStorage.getItem("admin_token");
+            var tok  = localStorage.getItem("admin_token");
             if (tok) {
               var p    = JSON.parse(atob(tok.split(".")[1]));
               var name = p.name || p.email || "";

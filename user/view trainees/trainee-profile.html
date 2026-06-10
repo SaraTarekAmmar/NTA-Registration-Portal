@@ -448,7 +448,7 @@
   <script src="../header/header.js"></script>
   <script>
   (function(){
-    var session = JSON.parse(sessionStorage.getItem('ntaTrainee')||'{}');
+    var session = JSON.parse(localStorage.getItem('ntaTrainee')||'{}');
     if(session.role !== 'trainer'){ window.location.href='../index.html'; return; }
 
     var params = new URLSearchParams(window.location.search);

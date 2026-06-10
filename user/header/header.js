@@ -1,4 +1,4 @@
-; (function () {
+﻿; (function () {
     document.addEventListener('DOMContentLoaded', function () {
         var container = document.getElementById('ntaHeader');
         if (!container) return;
@@ -62,7 +62,7 @@
             // Auth-related visibility based on trainee session
             var session = {};
             try {
-                session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+                session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
             } catch (e) {
                 session = {};
             }
@@ -169,7 +169,7 @@
                 logoutBtn.dataset.ntaLogoutBound = '1';
                 logoutBtn.addEventListener('click', function () {
                     try {
-                        sessionStorage.removeItem('ntaTrainee');
+                        localStorage.removeItem('ntaTrainee');
                     } catch (e) {
                         console.warn('Unable to clear trainee session', e);
                     }
@@ -221,7 +221,7 @@
 
     // Global helper for authenticated API calls
     window.authenticatedFetch = function (url, options = {}) {
-        const session = JSON.parse(sessionStorage.getItem('ntaTrainee') || '{}');
+        const session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
         const token = session.token;
 
         const headers = {
@@ -239,7 +239,7 @@
         }).then(res => {
             if (res.status === 401) {
                 // Token expired or invalid
-                sessionStorage.removeItem('ntaTrainee');
+                localStorage.removeItem('ntaTrainee');
                 window.location.href = 'index.html';
                 return Promise.reject('Session expired');
             }

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -128,7 +128,7 @@
         var ADMIN_TOKEN_KEY = "admin_token";
 
         // If already logged in as admin, redirect to dashboard
-        var existingToken = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+        var existingToken = localStorage.getItem(ADMIN_TOKEN_KEY);
         if (existingToken) {
           try {
             var p = JSON.parse(atob(existingToken.split(".")[1]));
@@ -197,7 +197,7 @@
               if (!data.access_token || data.role !== "admin") {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
               }
-              sessionStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);
+              localStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);
               window.location.replace("admin-dashboard.html");
             })
             .catch(function (err) {

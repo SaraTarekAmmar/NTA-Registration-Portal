@@ -1,4 +1,4 @@
-/* Injects the Editor top-nav header and wires up shared utilities */
+﻿/* Injects the Editor top-nav header and wires up shared utilities */
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
@@ -59,7 +59,7 @@
     var logoutBtn = document.getElementById("editorLogoutBtn");
     if (logoutBtn) {
       logoutBtn.addEventListener("click", function () {
-        sessionStorage.removeItem(EDITOR_TOKEN_KEY);
+        localStorage.removeItem(EDITOR_TOKEN_KEY);
         window.location.replace("editor-login.html");
       });
     }

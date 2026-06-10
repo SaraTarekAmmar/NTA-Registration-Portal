@@ -1,10 +1,10 @@
-/* Editor API client — authenticated fetch with JSON helpers */
+﻿/* Editor API client — authenticated fetch with JSON helpers */
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
   var BASE = "/api";
 
   function getToken() {
-    return sessionStorage.getItem(EDITOR_TOKEN_KEY);
+    return localStorage.getItem(EDITOR_TOKEN_KEY);
   }
 
   function authHeaders(extra) {
@@ -16,7 +16,7 @@
 
   function handleResponse(res) {
     if (res.status === 401 || res.status === 403) {
-      sessionStorage.removeItem(EDITOR_TOKEN_KEY);
+      localStorage.removeItem(EDITOR_TOKEN_KEY);
       window.location.replace("editor-login.html");
       return Promise.reject(new Error("Session expired or unauthorized"));
     }

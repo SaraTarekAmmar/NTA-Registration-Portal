@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -132,7 +132,7 @@
       (function () {
         var EDITOR_TOKEN_KEY = "editor_token";
 
-        var existingToken = sessionStorage.getItem(EDITOR_TOKEN_KEY);
+        var existingToken = localStorage.getItem(EDITOR_TOKEN_KEY);
         if (existingToken) {
           try {
             var p = JSON.parse(atob(existingToken.split(".")[1]));
@@ -201,7 +201,7 @@
               if (!data.access_token || data.role !== "editor") {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المحرر.");
               }
-              sessionStorage.setItem(EDITOR_TOKEN_KEY, data.access_token);
+              localStorage.setItem(EDITOR_TOKEN_KEY, data.access_token);
               window.location.replace("editor-dashboard.html");
             })
             .catch(function (err) {
