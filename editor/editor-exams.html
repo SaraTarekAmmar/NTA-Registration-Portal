@@ -117,8 +117,10 @@
           return;
         }
         document.getElementById("pageBanner").style.display="none";
-        exams = [];
-        renderExams();
+        authFetch("/api/exams?course_id=" + cid)
+          .then(function(r){ return r.ok ? r.json() : []; })
+          .then(function(data){ exams = data || []; renderExams(); })
+          .catch(function(){ exams=[]; renderExams(); });
       }
 
       function renderExams(){
@@ -131,8 +133,9 @@
           return;
         }
         empty.style.display="none";
-        var html="<div class='editor-table-wrap'><table class='editor-table'>
-  <caption class="sr-only">قائمة الاختبارات</caption><th scope="col"ead><tr><th scope="col">العنوان</th><th scope="col">الأسئلة</th><th scope="col">المدة</th><th scope="col">الحالة</th><th scope="col">الإجراءات</th></tr></thead><tbody>";
+        var html="<div class='editor-table-wrap'><table class='editor-table'>" +
+          "<caption class='sr-only'>قائمة الاختبارات</caption>" +
+          "<thead><tr><th scope='col'>العنوان</th><th scope='col'>الأسئلة</th><th scope='col'>المدة</th><th scope='col'>الحالة</th><th scope='col'>الإجراءات</th></tr></thead><tbody>";
         exams.forEach(function(ex,i){
           html+="<tr><td style='font-weight:600;'>"+ex.title+"</td>";
           html+="<td>"+(ex.questions?ex.questions.length:0)+" سؤال</td>";
@@ -210,6 +213,7 @@
         document.getElementById("examTitleError").style.display="none";
         if(status==="published"&&!questions.length){document.getElementById("questionsError").style.display="block";return;}
         document.getElementById("questionsError").style.display="none";
+        var cid = parseInt(document.getElementById("courseSelect").value) || 0;
         var exam={
           title:title,
           duration:parseInt(document.getElementById("examDuration").value)||null,
@@ -217,16 +221,43 @@
           questions:JSON.parse(JSON.stringify(questions)),
           status:status
         };
-        if(editingExamIdx>=0) exams[editingExamIdx]=exam;
-        else exams.push(exam);
-        closeExamModal();
-        renderExams();
-        showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success");
+        var apiPayload={
+          subject: (editingExamIdx>=0 && exams[editingExamIdx].subject) || ("course_"+cid+"_"+Date.now()),
+          title: title,
+          title_ar: title,
+          questions: exam.questions,
+          duration_minutes: exam.duration || 60,
+          pass_score: exam.pass_score || 60,
+          course_id: cid
+        };
+        if(editingExamIdx>=0){
+          exam.subject = exams[editingExamIdx].subject;
+          exams[editingExamIdx]=exam;
+          if(exam.subject){
+            authFetch("/api/exams/"+exam.subject,{method:"PUT",body:JSON.stringify(apiPayload)}).catch(function(){});
+          }
+          closeExamModal(); renderExams();
+          showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success");
+        } else {
+          authFetch("/api/exams",{method:"POST",body:JSON.stringify(apiPayload)})
+            .then(function(r){ return r.ok ? r.json() : null; })
+            .then(function(data){ if(data) exam.subject=data.subject||apiPayload.subject; exams.push(exam); renderExams(); })
+            .catch(function(){ exams.push(exam); renderExams(); });
+          closeExamModal();
+          showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success");
+        }
       }
 
       function deleteExam(idx){
         editorConfirm({title:"حذف الاختبار؟",body:"هل تريد حذف <strong>"+exams[idx].title+"</strong>؟",okLabel:"حذف",cancelLabel:"إلغاء",danger:true})
-          .then(function(ok){if(ok){exams.splice(idx,1);renderExams();showEditorToast("تم الحذف.","success");}});
+          .then(function(ok){
+            if(ok){
+              var subj = exams[idx].subject;
+              if(subj) authFetch("/api/exams/"+subj,{method:"DELETE"}).catch(function(){});
+              exams.splice(idx,1); renderExams();
+              showEditorToast("تم الحذف.","success");
+            }
+          });
       }
 
       document.addEventListener("keydown",function(e){
