@@ -131,6 +131,10 @@ images_path = project_root / "admin" / "images"
 if os.path.exists(images_path):
     app.mount("/images", StaticFiles(directory=str(images_path)), name="images")
 
+admin_header_path = project_root / "admin" / "header"
+if os.path.exists(admin_header_path):
+    app.mount("/admin/header", StaticFiles(directory=str(admin_header_path)), name="admin_header")
+
 editor_path = Path(__file__).parent.parent
 app.mount("/", StaticFiles(directory=str(editor_path), html=True), name="editor_static")
 
