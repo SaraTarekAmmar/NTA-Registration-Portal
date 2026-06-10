@@ -316,7 +316,7 @@ async def update_course(course_id: int, course: CourseCreate, staff: dict = Depe
         db.close()
 
 @router.delete("/{course_id}")
-async def delete_course(course_id: int, staff: dict = Depends(get_staff_user)):
+async def delete_course(course_id: int, staff: dict = Depends(get_admin_user)):
     db = get_db_connection()
     cursor = db.cursor()
     try:

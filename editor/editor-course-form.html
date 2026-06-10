@@ -431,8 +431,9 @@
           .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
           .then(function(data) {
             courseId = data.id;
-            var dest = status === "published" ? "editor-final.html?action=published&id="+courseId : "editor-final.html?action=draft&id="+courseId;
-            window.location.replace(dest);
+            var msg = status === "published" ? "تم نشر الدورة بنجاح." : "تم حفظ المسودة بنجاح.";
+            showEditorToast(msg, "success");
+            setTimeout(function() { window.location.replace("editor-courses.html"); }, 1200);
           })
           .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
       }

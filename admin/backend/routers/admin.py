@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, Depends, File, UploadFile
 from typing import List, Optional
 from schemas.admin import TraineeSummary, StageReviewCreate
 from core.database import get_db_connection
-from core.auth import get_admin_user, get_staff_user, get_password_hash
+from core.auth import get_admin_user, get_staff_user, get_current_user, get_password_hash
 from core.upload_manager import save_upload_file, move_user_files_to_user_folder, move_admission_file_to_folder
 from core.security import generate_temp_password
 from core.notifications import send_credential_email
@@ -789,7 +789,7 @@ async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: d
         db.close()
 
 @router.get("/attendance/photo/{national_id}/{session_id}/{event_type}")
-async def get_attendance_photo(national_id: str, session_id: int, event_type: str):
+async def get_attendance_photo(national_id: str, session_id: int, event_type: str, staff: dict = Depends(get_current_user)):
     from fastapi.responses import FileResponse, RedirectResponse
     from pathlib import Path
     

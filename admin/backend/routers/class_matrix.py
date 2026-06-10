@@ -28,7 +28,7 @@ MATRIX_JOBS: Dict[int, Dict] = {}
 
 
 @router.post("/generate/{course_id}")
-async def generate_matrix(req: Request, course_id: int):
+async def generate_matrix(course_id: int, staff: dict = Depends(get_staff_user)):
     """
     Kicks off the AI matrix generation in a background thread and returns immediately.
     The caller can poll /status/{course_id} to track progress.
@@ -38,27 +38,6 @@ async def generate_matrix(req: Request, course_id: int):
             status_code=501,
             detail="AI Class Matrix Service is not available. Please ensure that the 'AI Services/Class Trainer Matrix' directory is correctly deployed on the server."
         )
-
-    # Auth: staff token OR internal localhost call
-    is_internal = req.client.host in ["127.0.0.1", "localhost", "::1"]
-
-    staff = None
-    auth_header = req.headers.get("Authorization")
-    if auth_header and auth_header.startswith("Bearer "):
-        try:
-            from core.auth import get_current_user
-            token = auth_header.split(" ")[1]
-            user = get_current_user(token)
-            if user["role"] in ["admin", "editor"]:
-                staff = user
-        except Exception:
-            # BUG 14 FIX: bare 'except' also catches SystemExit/KeyboardInterrupt.
-            # Using 'except Exception' limits the catch to application-level errors only,
-            # preventing a non-auth exception from silently allowing localhost bypass.
-            pass
-
-    if not staff and not is_internal:
-        raise HTTPException(status_code=401, detail="Unauthorized - Admin access required")
 
     # If already running for this course, return status
     job = MATRIX_JOBS.get(course_id, {})
@@ -98,25 +77,8 @@ async def generate_matrix(req: Request, course_id: int):
 
 
 @router.get("/status/{course_id}")
-async def get_matrix_status(req: Request, course_id: int):
+async def get_matrix_status(course_id: int, staff: dict = Depends(get_staff_user)):
     """Returns the current generation status for a course matrix job."""
-    is_internal = req.client.host in ["127.0.0.1", "localhost", "::1"]
-    auth_header = req.headers.get("Authorization")
-    staff = None
-    if auth_header and auth_header.startswith("Bearer "):
-        try:
-            from core.auth import get_current_user
-            token = auth_header.split(" ")[1]
-            user = get_current_user(token)
-            if user["role"] in ["admin", "editor"]:
-                staff = user
-        except Exception:
-            # Token is invalid or expired — staff stays None.
-            pass
-
-    if not staff and not is_internal:
-        raise HTTPException(status_code=401, detail="Unauthorized")
-
     job = MATRIX_JOBS.get(course_id)
     if not job:
         return {"status": "idle", "course_id": course_id}

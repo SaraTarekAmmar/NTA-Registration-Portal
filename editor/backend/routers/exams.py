@@ -24,18 +24,11 @@ async def list_exams(course_id: Optional[int] = None, editor: dict = Depends(req
     cursor = db.cursor(dictionary=True)
     try:
         if course_id:
-            try:
-                cursor.execute(
-                    "SELECT id, subject, title, title_ar, duration_minutes, pass_score, course_id "
-                    "FROM exams WHERE course_id = %s ORDER BY id DESC",
-                    (course_id,)
-                )
-            except Exception:
-                # course_id column may not exist — fall back to full list
-                cursor.execute(
-                    "SELECT id, subject, title, title_ar, duration_minutes, pass_score "
-                    "FROM exams ORDER BY id DESC"
-                )
+            cursor.execute(
+                "SELECT id, subject, title, title_ar, duration_minutes, pass_score, course_id "
+                "FROM exams WHERE course_id = %s ORDER BY id DESC",
+                (course_id,)
+            )
         else:
             cursor.execute(
                 "SELECT id, subject, title, title_ar, duration_minutes, pass_score "
@@ -43,7 +36,7 @@ async def list_exams(course_id: Optional[int] = None, editor: dict = Depends(req
             )
         return cursor.fetchall() or []
     except Exception:
-        return []
+        raise HTTPException(status_code=500, detail="Failed to load exams")
     finally:
         cursor.close()
         db.close()

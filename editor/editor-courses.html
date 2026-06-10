@@ -109,12 +109,26 @@
           html += '</div>';
           html += '<div class="editor-course-card__actions">';
           html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
-          html += '<a href="editor-preview.html?id='+c.id+'" class="btn btn--secondary btn--sm">معاينة</a>';
-          if(c.status !== "published") html += '<a href="editor-preview.html?id='+c.id+'&action=publish" class="btn btn--primary btn--sm">نشر</a>';
+          if(c.status !== "published") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
           html += '</div></div>';
         });
         grid.innerHTML = html;
         grid.style.display = "grid";
+      }
+
+      function publishCourse(id) {
+        authFetch("/api/courses/" + id)
+          .then(function(r) { return r.ok ? r.json() : Promise.reject("load failed"); })
+          .then(function(course) {
+            course.status = "published";
+            return authFetch("/api/courses/" + id, { method: "PUT", body: JSON.stringify(course) });
+          })
+          .then(function(r) { return r.ok ? r.json() : r.json().then(function(e) { throw new Error(e.detail || "فشل النشر"); }); })
+          .then(function() {
+            showEditorToast("تم نشر الدورة بنجاح.", "success");
+            loadCourses();
+          })
+          .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل النشر"), "error"); });
       }
 
       function filterCourses() {

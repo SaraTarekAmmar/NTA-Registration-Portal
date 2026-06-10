@@ -98,7 +98,10 @@ async def submit_exam(subject: str, req: ExamSubmitRequest, authorization: Optio
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
-    trainee_id = int(payload.get("sub"))
+    sub = payload.get("sub")
+    if not sub:
+        raise HTTPException(status_code=401, detail="Invalid token: missing subject")
+    trainee_id = int(sub)
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
@@ -115,12 +118,17 @@ async def submit_exam(subject: str, req: ExamSubmitRequest, authorization: Optio
         # 2. Run analysis
         analysis = ExamAnalyzer.analyze_submission(exam_content, answers)
         
-        # 3. Store submission
+        # 3. Store submission — upsert so a trainee can only have one result per exam
         cursor.execute("""
             INSERT INTO trainee_exam_submissions (trainee_id, subject, answers_json, score, processed_results)
             VALUES (%s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                answers_json = VALUES(answers_json),
+                score = VALUES(score),
+                processed_results = VALUES(processed_results),
+                submitted_at = NOW()
         """, (trainee_id, subject, json.dumps(answers, ensure_ascii=False), analysis['score'], json.dumps(analysis, ensure_ascii=False)))
-        
+
         db.commit()
         return {"message": "Exam submitted successfully", "score": analysis['score']}
     finally:

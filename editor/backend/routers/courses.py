@@ -133,8 +133,6 @@ async def get_course_sessions(course_id: int, editor: dict = Depends(require_edi
             (course_id,)
         )
         return cursor.fetchall() or []
-    except Exception:
-        return []
     finally:
         cursor.close()
         db.close()

@@ -22,7 +22,8 @@ async def upload_material(
             cursor.execute("SELECT title FROM courses WHERE id = %s", (course_id,))
             row = cursor.fetchone()
             if row:
-                move_course_files_to_course_folder(course_id, row["title"], [rel_path])
+                mapping = move_course_files_to_course_folder(course_id, row["title"], [rel_path])
+                rel_path = mapping.get(rel_path, rel_path)
         finally:
             cursor.close()
             db.close()

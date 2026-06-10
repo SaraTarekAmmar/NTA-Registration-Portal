@@ -232,19 +232,20 @@
         };
         if(editingExamIdx>=0){
           exam.subject = exams[editingExamIdx].subject;
-          exams[editingExamIdx]=exam;
           if(exam.subject){
-            authFetch("/api/exams/"+exam.subject,{method:"PUT",body:JSON.stringify(apiPayload)}).catch(function(){});
+            authFetch("/api/exams/"+exam.subject,{method:"PUT",body:JSON.stringify(apiPayload)})
+              .then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw new Error(e.detail||"فشل الحفظ"); }); })
+              .then(function(){ exams[editingExamIdx]=exam; closeExamModal(); renderExams(); showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success"); })
+              .catch(function(err){ showEditorToast(err.message||"فشل حفظ الاختبار.","error"); });
+          } else {
+            exams[editingExamIdx]=exam; closeExamModal(); renderExams();
+            showEditorToast("تم الحفظ محلياً.","success");
           }
-          closeExamModal(); renderExams();
-          showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success");
         } else {
           authFetch("/api/exams",{method:"POST",body:JSON.stringify(apiPayload)})
-            .then(function(r){ return r.ok ? r.json() : null; })
-            .then(function(data){ if(data) exam.subject=data.subject||apiPayload.subject; exams.push(exam); renderExams(); })
-            .catch(function(){ exams.push(exam); renderExams(); });
-          closeExamModal();
-          showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success");
+            .then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw new Error(e.detail||"فشل الإنشاء"); }); })
+            .then(function(data){ if(data) exam.subject=data.subject||apiPayload.subject; exams.push(exam); renderExams(); closeExamModal(); showEditorToast(status==="published"?"تم نشر الاختبار.":"تم حفظ المسودة.","success"); })
+            .catch(function(err){ showEditorToast(err.message||"فشل إنشاء الاختبار.","error"); });
         }
       }
 

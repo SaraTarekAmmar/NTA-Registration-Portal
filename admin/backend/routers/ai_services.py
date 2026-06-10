@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 import requests
 from pydantic import BaseModel
 import os
 import json
 from core.database import get_db_connection
+from core.auth import get_staff_user
 
 router = APIRouter(prefix="/api/ai", tags=["AI Services"])
 
@@ -20,7 +21,7 @@ class FaceActionRequest(BaseModel):
 
 
 @router.post("/face/enroll")
-async def face_enroll(request: FaceEnrollRequest):
+async def face_enroll(request: FaceEnrollRequest, staff: dict = Depends(get_staff_user)):
     try:
         response = requests.post(f"{FACE_URL}/enroll", json={"image_b64": request.image_b64, "label": request.label}, timeout=30)
         if response.status_code == 200:
@@ -31,7 +32,7 @@ async def face_enroll(request: FaceEnrollRequest):
         raise HTTPException(status_code=503, detail=f"Failed to connect to Face service: {str(e)}")
 
 @router.post("/face/checkin")
-async def face_checkin(request: FaceActionRequest):
+async def face_checkin(request: FaceActionRequest, staff: dict = Depends(get_staff_user)):
     try:
         response = requests.post(f"{FACE_URL}/checkin", json={"image_b64": request.image_b64}, timeout=30)
         if response.status_code == 200:
@@ -99,7 +100,7 @@ async def generate_quiz(course_id: int = Form(...), file: UploadFile = File(...)
 
 
 @router.post("/admission/full-check")
-async def run_full_admission_check(trainee_id: int, course_id: int = 1):
+async def run_full_admission_check(trainee_id: int, course_id: int = 1, staff: dict = Depends(get_staff_user)):
     import sys
     from pathlib import Path
     
@@ -125,6 +126,6 @@ async def run_full_admission_check(trainee_id: int, course_id: int = 1):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/id/extract")
-async def extract_id_data(trainee_id: int, course_id: int = 1):
+async def extract_id_data(trainee_id: int, course_id: int = 1, staff: dict = Depends(get_staff_user)):
     # For backwards compatibility, redirects to the full multi-step AI check
     return await run_full_admission_check(trainee_id, course_id)

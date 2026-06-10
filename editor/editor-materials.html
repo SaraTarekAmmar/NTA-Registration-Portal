@@ -157,8 +157,8 @@
           return;
         }
         document.getElementById("emptyState").style.display = "none";
-        var html = '<div class="editor-table-wrap"><table class="editor-table">
-  <caption class="sr-only">قائمة المواد التعليمية</caption><th scope="col"ead><tr>' +
+        var html = '<div class="editor-table-wrap"><table class="editor-table">' +
+          '<caption class="sr-only">قائمة المواد التعليمية</caption><thead><tr>' +
           '<th scope="col">اسم الملف</th><th scope="col">الحجم</th><th scope="col">تاريخ الرفع</th><th scope="col">الإجراءات</th>' +
           '</tr></thead><tbody>';
         uploadedMaterials.forEach(function(m, i) {
@@ -187,9 +187,29 @@
         });
       }
 
-      // Initial render
-      document.getElementById("loadingState").style.display = "none";
-      renderMaterials();
+      function loadMaterials() {
+        var params = new URLSearchParams(window.location.search);
+        var courseId = parseInt(params.get("course_id")) || 0;
+        if (!courseId) {
+          document.getElementById("loadingState").style.display = "none";
+          renderMaterials();
+          return;
+        }
+        authFetch("/api/materials/" + courseId)
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(function(data) {
+            uploadedMaterials = (data || []).map(function(m) {
+              return { name: m.filename || m.file_path || "ملف", size: "—", path: m.file_path, date: m.uploaded_at || "" };
+            });
+            document.getElementById("loadingState").style.display = "none";
+            renderMaterials();
+          })
+          .catch(function() {
+            document.getElementById("loadingState").style.display = "none";
+            renderMaterials();
+          });
+      }
+      loadMaterials();
     </script>
   </body>
 </html>

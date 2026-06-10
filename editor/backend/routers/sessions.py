@@ -29,9 +29,7 @@ async def list_sessions(course_id: int, editor: dict = Depends(require_editor)):
             "SELECT * FROM course_sessions WHERE course_id = %s ORDER BY session_number",
             (course_id,)
         )
-        return cursor.fetchall()
-    except Exception:
-        return []
+        return cursor.fetchall() or []
     finally:
         cursor.close()
         db.close()
