@@ -126,7 +126,7 @@
         document.getElementById("emptyState").style.display = "none";
         document.getElementById("sessionsList").style.display = "none";
 
-        authFetch("/api/courses/" + courseId + "/sessions")
+        authFetch("/api/sessions?course_id=" + courseId)
           .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
           .then(function(data) {
             sessions = data || [];
@@ -152,8 +152,9 @@
         }
         empty.style.display = "none";
         var statusMap = { scheduled:"مجدولة", completed:"مكتملة", cancelled:"ملغاة" };
-        var html = '<div class="editor-table-wrap"><table class="editor-table">
-  <caption class="sr-only">قائمة الجلسات التدريبية</caption><th scope="col"ead><tr>' +
+        var html = '<div class="editor-table-wrap"><table class="editor-table">' +
+          '<caption class="sr-only">قائمة الجلسات التدريبية</caption>' +
+          '<thead><tr>' +
           '<th scope="col">#</th><th scope="col">عنوان الجلسة</th><th scope="col">التاريخ</th><th scope="col">الحالة</th><th scope="col">الإجراءات</th>' +
           '</tr></thead><tbody>';
         sessions.forEach(function(s, i) {
@@ -207,21 +208,42 @@
           return;
         }
         document.getElementById("sessionTitleError").style.display = "none";
+        var courseId = parseInt(document.getElementById("courseSelect").value);
         var obj = {
           topic: title,
           title: title,
           session_date: document.getElementById("sessionDate").value || null,
           status: document.getElementById("sessionStatus").value
         };
+        var apiPayload = {
+          course_id: courseId,
+          title: title,
+          scheduled_date: obj.session_date || null,
+          status: obj.status
+        };
         if (editingIdx >= 0) {
+          var existingId = sessions[editingIdx].id;
           sessions[editingIdx] = Object.assign(sessions[editingIdx], obj);
+          if (existingId) {
+            authFetch("/api/sessions/" + existingId, {
+              method: "PUT", body: JSON.stringify(Object.assign({}, apiPayload))
+            }).catch(function() {});
+          }
           showEditorToast("تم تحديث الجلسة.", "success");
+          closeSessionModal();
+          renderSessions();
         } else {
-          sessions.push(obj);
+          authFetch("/api/sessions", { method: "POST", body: JSON.stringify(apiPayload) })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+              if (data && data.id) obj.id = data.id;
+              sessions.push(obj);
+              renderSessions();
+            })
+            .catch(function() { sessions.push(obj); renderSessions(); });
           showEditorToast("تمت إضافة الجلسة.", "success");
+          closeSessionModal();
         }
-        closeSessionModal();
-        renderSessions();
       }
 
       function deleteSession(idx) {
@@ -234,6 +256,10 @@
           danger: true
         }).then(function(ok) {
           if (ok) {
+            var existingId = sessions[idx].id;
+            if (existingId) {
+              authFetch("/api/sessions/" + existingId, { method: "DELETE" }).catch(function() {});
+            }
             sessions.splice(idx, 1);
             renderSessions();
             showEditorToast("تم حذف الجلسة.", "success");
