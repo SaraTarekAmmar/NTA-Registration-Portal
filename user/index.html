@@ -32,7 +32,7 @@
       <h1>تسجيل الدخول</h1>
       <p class="subtitle">مرحباً بك في الأكاديمية الوطنية للتدريب</p>
 
-      <form id="loginForm">
+      <form id="loginForm" novalidate>
 
         <div class="form-group login-role-group">
           <fieldset class="login-role-fieldset">
@@ -174,7 +174,7 @@
     <!-- Glassmorphic Role Selection Modal -->
     <div id="roleModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
       <div class="modal-content">
-        <h3>إنشاء حساب جديد</h3>
+        <h3 id="roleModalTitle">إنشاء حساب جديد</h3>
         <p class="modal-desc">يرجى تحديد نوع الحساب للمتابعة في بوابة الأكاديمية الوطنية للتدريب</p>
         <div class="role-cards">
           <button type="button" class="role-card" onclick="selectRole('trainee')">
