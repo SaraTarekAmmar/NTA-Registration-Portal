@@ -31,7 +31,11 @@
     if (body !== undefined && body !== null) {
       opts.body = JSON.stringify(body);
     }
-    return fetch(BASE + path, opts).then(handleResponse);
+    return fetch(BASE + path, opts).then(handleResponse).catch(function (err) {
+      if (err && err.message === "Session expired or unauthorized") return Promise.reject(err);
+      console.error("API request failed:", err);
+      return Promise.reject(err);
+    });
   }
 
   window.EditorAPI = {
@@ -56,7 +60,12 @@
       var t = getToken();
       if (t) headers["Authorization"] = "Bearer " + t;
       return fetch(BASE + path, { method: "POST", headers: headers, body: formData })
-        .then(handleResponse);
+        .then(handleResponse)
+        .catch(function (err) {
+          if (err && err.message === "Session expired or unauthorized") return Promise.reject(err);
+          console.error("Upload failed:", err);
+          return Promise.reject(err);
+        });
     },
     fetch: function (url, options) {
       options = options || {};
