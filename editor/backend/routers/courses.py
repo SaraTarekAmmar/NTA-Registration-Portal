@@ -122,6 +122,24 @@ async def delete_course(course_id: int, editor: dict = Depends(require_editor)):
         db.close()
 
 
+@router.get("/{course_id}/sessions")
+async def get_course_sessions(course_id: int, editor: dict = Depends(require_editor)):
+    """Alias used by editor-sessions.html to load sessions for a course."""
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            "SELECT * FROM course_sessions WHERE course_id = %s ORDER BY session_number",
+            (course_id,)
+        )
+        return cursor.fetchall() or []
+    except Exception:
+        return []
+    finally:
+        cursor.close()
+        db.close()
+
+
 @router.post("/upload-image")
 async def upload_course_image(
     file: UploadFile = File(...),
