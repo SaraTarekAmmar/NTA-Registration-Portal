@@ -483,7 +483,7 @@
           <form id="newAssignmentForm">
             <input type="hidden" id="targetCourseId" />
             <div class="form-group">
-              <label>عنوان التكليف</label>
+              <label for="assignTitle">عنوان التكليف <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
               <input
                 type="text"
                 id="assignTitle"
@@ -492,7 +492,7 @@
               />
             </div>
             <div class="form-group">
-              <label>الوصف</label>
+              <label for="assignDesc">الوصف</label>
               <textarea
                 id="assignDesc"
                 rows="4"
@@ -500,15 +500,15 @@
               ></textarea>
             </div>
             <div class="form-group">
-              <label>الموعد النهائي</label>
+              <label for="assignDeadline">الموعد النهائي <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
               <input type="datetime-local" id="assignDeadline" required />
             </div>
             <div class="form-group">
-              <label>الدرجة القصوى</label>
+              <label for="assignMaxGrade">الدرجة القصوى</label>
               <input type="number" id="assignMaxGrade" value="10" step="0.5" />
             </div>
             <div class="form-group">
-              <label>ملف التعليمات (اختياري)</label>
+              <label for="assignFile">ملف التعليمات <span class="sr-only">(اختياري)</span></label>
               <input type="file" id="assignFile" />
             </div>
             <div style="display: flex; gap: 12px; margin-top: 30px">
