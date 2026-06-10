@@ -21,6 +21,21 @@
       "runtimeArgs": ["main:app", "--reload", "--port", "8002"],
       "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\superadmin\\backend",
       "port": 8002
+    },
+    {
+      "name": "editor-portal",
+      "runtimeExecutable": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\editor\\backend\\venv\\Scripts\\uvicorn.exe",
+      "runtimeArgs": ["main:app", "--reload", "--port", "8003"],
+      "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\editor\\backend",
+      "port": 8003,
+      "autoPort": false
+    },
+    {
+      "name": "website-redesign",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5173"],
+      "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\Website-Redesign-Enhancement",
+      "port": 5173
     }
   ]
 }
