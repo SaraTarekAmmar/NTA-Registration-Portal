@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منشئ تدفق التسجيل</title>
+  <link rel="stylesheet" href="trainee.css" />
+  <link rel="stylesheet" href="header/header.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-portal.css" />
+  <link rel="stylesheet" href="admin-theme.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/admin-guard.js"></script>
+  <script src="common/js/icons.js"></script>
+  <style>
+    .fb-layout { display: grid; grid-template-columns: 300px 1fr 340px; gap: 1.25rem; max-width: 1400px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; align-items: start; }
+    @media(max-width:1100px){ .fb-layout { grid-template-columns: 260px 1fr; } .fb-editor { display:none; } }
+    @media(max-width:720px){ .fb-layout { grid-template-columns: 1fr; } }
+
+    .fb-panel { background: var(--bg-card,rgba(15,23,42,.7)); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; }
+    .fb-panel__head { padding: .9rem 1.1rem; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: .6rem; }
+    .fb-panel__title { font-size: .88rem; font-weight: 700; color: var(--text-main); flex: 1; margin: 0; }
+    .fb-panel__body { padding: 1rem; }
+
+    /* Template list */
+    .fb-tpl-item { display: flex; align-items: center; gap: .6rem; padding: .65rem .85rem; border-radius: 10px; cursor: pointer; margin-bottom: .35rem; border: 1px solid transparent; transition: all .2s; }
+    .fb-tpl-item:hover { background: rgba(185,28,28,.07); border-color: rgba(185,28,28,.2); }
+    .fb-tpl-item.active { background: rgba(185,28,28,.12); border-color: rgba(185,28,28,.35); }
+    .fb-tpl-item__icon { font-size: 1.1rem; flex-shrink: 0; }
+    .fb-tpl-item__name { font-size: .85rem; font-weight: 600; color: var(--text-main); flex: 1; }
+    .fb-tpl-item__count { font-size: .7rem; color: var(--text-subtle); background: var(--border-subtle); padding: .15rem .45rem; border-radius: 999px; }
+    .fb-tpl-item__toggle { font-size: .7rem; padding: .15rem .5rem; border-radius: 999px; font-weight: 700; }
+    .fb-tpl-item__toggle--on  { background: rgba(16,185,129,.12); color: #34d399; }
+    .fb-tpl-item__toggle--off { background: rgba(239,68,68,.12); color: #f87171; }
+
+    /* Step list */
+    .fb-step-card { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border-radius: 12px; border: 1px solid var(--border-subtle); margin-bottom: .5rem; cursor: pointer; transition: all .2s; background: rgba(255,255,255,.02); }
+    .fb-step-card:hover { border-color: rgba(185,28,28,.3); background: rgba(185,28,28,.05); }
+    .fb-step-card.selected { border-color: rgba(185,28,28,.5); background: rgba(185,28,28,.1); }
+    .fb-step-card__drag { color: var(--text-subtle); cursor: grab; font-size: 1rem; flex-shrink: 0; }
+    .fb-step-card__num { width: 26px; height: 26px; border-radius: 50%; background: rgba(185,28,28,.15); border: 1px solid rgba(185,28,28,.3); font-size: .72rem; font-weight: 800; color: #fca5a5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .fb-step-card__body { flex: 1; min-width: 0; }
+    .fb-step-card__title { font-size: .85rem; font-weight: 700; color: var(--text-main); }
+    .fb-step-card__key { font-size: .7rem; color: var(--text-subtle); }
+    .fb-step-card__badges { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .2rem; }
+    .fb-badge { font-size: .63rem; font-weight: 700; padding: .1rem .4rem; border-radius: 999px; }
+    .fb-badge--type { background: rgba(59,130,246,.12); color: #60a5fa; }
+    .fb-badge--req  { background: rgba(239,68,68,.1); color: #f87171; }
+    .fb-badge--opt  { background: rgba(107,114,128,.1); color: #9ca3af; }
+    .fb-badge--age  { background: rgba(245,158,11,.1); color: #fbbf24; }
+    .fb-badge--lock { background: rgba(236,72,153,.1); color: #f472b6; }
+    .fb-step-card__del { color: var(--text-subtle); font-size: .85rem; opacity: 0; transition: opacity .15s; background: none; border: none; cursor: pointer; padding: .25rem; }
+    .fb-step-card:hover .fb-step-card__del { opacity: 1; }
+
+    /* Editor panel */
+    .fb-editor { position: sticky; top: 1rem; }
+    .fb-field { margin-bottom: 1rem; }
+    .fb-field label { display: block; font-size: .77rem; font-weight: 600; color: var(--text-subtle); margin-bottom: .35rem; }
+    .fb-input, .fb-select, .fb-textarea { width: 100%; box-sizing: border-box; padding: .6rem .8rem; border-radius: 8px; background: var(--surface-input,rgba(30,41,59,.8)); border: 1px solid var(--border-subtle); color: var(--text-main); font-family: inherit; font-size: .85rem; outline: none; transition: border-color .2s; }
+    .fb-input:focus, .fb-select:focus, .fb-textarea:focus { border-color: var(--border-accent,rgba(185,28,28,.5)); }
+    .fb-textarea { resize: vertical; min-height: 60px; }
+    .fb-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .fb-toggle-row { display: flex; align-items: center; gap: .6rem; padding: .5rem 0; }
+    .fb-toggle-row label { font-size: .82rem; font-weight: 600; color: var(--text-main); cursor: pointer; }
+    .fb-rules-section { border: 1px solid var(--border-subtle); border-radius: 10px; padding: .85rem; margin-bottom: 1rem; }
+    .fb-rules-section__title { font-size: .75rem; font-weight: 700; color: var(--text-subtle); margin: 0 0 .65rem; }
+
+    .fb-btn { display: inline-flex; align-items: center; gap: .45rem; padding: .6rem 1.1rem; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; font-size: .82rem; font-weight: 700; transition: opacity .2s; }
+    .fb-btn--primary { background: linear-gradient(180deg,#b91c1c,#991b1b); color: #fecaca; }
+    .fb-btn--primary:hover { opacity: .9; }
+    .fb-btn--danger { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #f87171; }
+    .fb-btn--secondary { background: rgba(185,28,28,.1); border: 1px solid rgba(185,28,28,.25); color: #fca5a5; }
+    .fb-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .fb-btn-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+
+    /* Preview strip */
+    .fb-preview-strip { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+    .fb-preview-chip { padding: .35rem .75rem; border-radius: 999px; font-size: .72rem; font-weight: 700; border: 1px solid var(--border-subtle); display: flex; align-items: center; gap: .35rem; }
+    .fb-preview-chip--ok   { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #34d399; }
+    .fb-preview-chip--lock { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.25); color: #f87171; }
+    .fb-preview-chip--hide { background: rgba(107,114,128,.08); border-color: rgba(107,114,128,.2); color: #9ca3af; text-decoration: line-through; }
+
+    /* Override panel */
+    .fb-override-form { background: rgba(255,255,255,.02); border-radius: 10px; padding: .85rem; border: 1px solid var(--border-subtle); margin-bottom: .85rem; }
+
+    /* Toast */
+    .fb-toast-area { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: .5rem; pointer-events: none; }
+    .fb-toast { padding: .65rem 1.25rem; border-radius: 12px; font-size: .82rem; font-weight: 600; pointer-events: auto; }
+    .fb-toast--ok  { background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.35); color: #34d399; }
+    .fb-toast--err { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.35); color: #f87171; }
+
+    /* Empty state */
+    .fb-empty { text-align: center; padding: 3rem 1rem; color: var(--text-subtle); font-size: .88rem; }
+
+    .fb-page-hero { max-width:1400px; margin: 1.5rem auto 0; padding: 0 1.25rem; }
+    .fb-page-hero__title { font-size: 1.55rem; font-weight: 800; color: var(--text-main); margin: 0 0 .25rem; }
+    .fb-page-hero__sub { font-size: .88rem; color: var(--text-subtle); margin: 0 0 1.25rem; }
+
+    /* Drag ghost */
+    .fb-step-card.dragging { opacity: .4; }
+  </style>
+</head>
+<body data-page="flow-builder">
+  <div id="ntaHeader"></div>
+  <div class="fb-toast-area" id="toastArea"></div>
+
+  <div class="fb-page-hero">
+    <h1 class="fb-page-hero__title">منشئ تدفق التسجيل</h1>
+    <p class="fb-page-hero__sub">صمِّم مسار تسجيل مخصص لكل نوع دورة — خطوات مرئية، مقفلة، مشروطة بالعمر أو بترتيب الإكمال</p>
+  </div>
+
+  <div class="fb-layout">
+    <!-- LEFT: Template list -->
+    <div class="fb-panel">
+      <div class="fb-panel__head">
+        <span id="_iconTpl"></span>
+        <h2 class="fb-panel__title">أنواع الدورات</h2>
+        <button class="fb-btn fb-btn--secondary" style="padding:.35rem .7rem;font-size:.72rem;" onclick="openNewTemplateModal()">+ جديد</button>
+      </div>
+      <div class="fb-panel__body" id="templateList">
+        <div class="fb-empty">جاري التحميل...</div>
+      </div>
+    </div>
+
+    <!-- CENTER: Steps for selected template -->
+    <div class="fb-panel">
+      <div class="fb-panel__head">
+        <span id="_iconSteps"></span>
+        <h2 class="fb-panel__title" id="stepsHeading">اختر نوع دورة</h2>
+        <div style="display:flex;gap:.5rem;align-items:center;">
+          <button class="fb-btn fb-btn--secondary" style="padding:.35rem .7rem;font-size:.72rem;" id="previewBtn" onclick="openPreview()" disabled>معاينة</button>
+          <button class="fb-btn fb-btn--primary" style="padding:.35rem .7rem;font-size:.72rem;" id="addStepBtn" onclick="openAddStep()" disabled>+ خطوة</button>
+        </div>
+      </div>
+      <div class="fb-panel__body">
+        <div id="stepsList"><div class="fb-empty">اختر نوع دورة من القائمة اليمين</div></div>
+        <div id="previewStrip" style="display:none;">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-subtle);margin-bottom:.5rem;">معاينة التدفق</div>
+          <div class="fb-preview-strip" id="previewChips"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Step editor + override -->
+    <div class="fb-panel fb-editor" id="editorPanel">
+      <div class="fb-panel__head">
+        <span id="_iconEditor"></span>
+        <h2 class="fb-panel__title" id="editorTitle">محرر الخطوة</h2>
+      </div>
+      <div class="fb-panel__body" id="editorBody">
+        <div class="fb-empty">اختر خطوة لتعديلها</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Template Modal -->
+  <div id="newTplModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;">
+    <div style="background:var(--bg-card,rgba(15,23,42,.95));border:1px solid var(--border-subtle);border-radius:20px;padding:1.75rem;width:360px;max-width:90vw;">
+      <h3 style="font-size:1.05rem;font-weight:800;margin:0 0 1.25rem;color:var(--text-main);">قالب جديد</h3>
+      <div class="fb-field">
+        <label>نوع الدورة (مفتاح فريد)</label>
+        <input class="fb-input" id="newTplType" placeholder="مثال: technical_2025" />
+      </div>
+      <div class="fb-field">
+        <label>الاسم</label>
+        <input class="fb-input" id="newTplName" placeholder="مثال: الدورة التقنية 2025" />
+      </div>
+      <div style="display:flex;gap:.75rem;margin-top:1rem;">
+        <button class="fb-btn fb-btn--primary" style="flex:1;" onclick="createTemplate()">إنشاء</button>
+        <button class="fb-btn fb-btn--secondary" onclick="closeModal('newTplModal')">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Step Modal -->
+  <div id="addStepModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;">
+    <div style="background:var(--bg-card,rgba(15,23,42,.95));border:1px solid var(--border-subtle);border-radius:20px;padding:1.75rem;width:420px;max-width:94vw;">
+      <h3 style="font-size:1.05rem;font-weight:800;margin:0 0 1.25rem;color:var(--text-main);">إضافة خطوة جديدة</h3>
+      <div class="fb-row">
+        <div class="fb-field">
+          <label>المفتاح (step_key)</label>
+          <input class="fb-input" id="asKey" placeholder="step_11" />
+        </div>
+        <div class="fb-field">
+          <label>الترتيب</label>
+          <input class="fb-input" type="number" id="asOrder" value="99" min="1" />
+        </div>
+      </div>
+      <div class="fb-field">
+        <label>العنوان بالعربية</label>
+        <input class="fb-input" id="asTitle" placeholder="اسم الخطوة" />
+      </div>
+      <div class="fb-field">
+        <label>نوع الخطوة</label>
+        <select class="fb-select" id="asType"></select>
+      </div>
+      <div class="fb-row">
+        <div class="fb-field">
+          <label>حد العمر الأدنى (اختياري)</label>
+          <input class="fb-input" type="number" id="asAgeMin" placeholder="18" />
+        </div>
+        <div class="fb-field">
+          <label>حد العمر الأقصى (اختياري)</label>
+          <input class="fb-input" type="number" id="asAgeMax" placeholder="65" />
+        </div>
+      </div>
+      <div class="fb-field">
+        <label>تفتح بعد إكمال (step_key)</label>
+        <input class="fb-input" id="asRequires" placeholder="step_1" />
+      </div>
+      <div class="fb-toggle-row">
+        <input type="checkbox" id="asRequired" checked />
+        <label for="asRequired">إجبارية</label>
+        <input type="checkbox" id="asManual" style="margin-right:.75rem;" />
+        <label for="asManual">تفتح يدوياً فقط</label>
+      </div>
+      <div style="display:flex;gap:.75rem;margin-top:1rem;">
+        <button class="fb-btn fb-btn--primary" style="flex:1;" onclick="submitAddStep()">إضافة</button>
+        <button class="fb-btn fb-btn--secondary" onclick="closeModal('addStepModal')">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:center;justify-content:center;">
+    <div style="background:var(--bg-card,rgba(15,23,42,.95));border:1px solid var(--border-subtle);border-radius:20px;padding:1.75rem;width:540px;max-width:94vw;max-height:80vh;overflow-y:auto;">
+      <h3 style="font-size:1.05rem;font-weight:800;margin:0 0 .75rem;color:var(--text-main);">معاينة التدفق</h3>
+      <div style="display:flex;gap:.75rem;align-items:flex-end;margin-bottom:1rem;">
+        <div class="fb-field" style="margin:0;flex:1;">
+          <label style="font-size:.75rem;font-weight:600;color:var(--text-subtle);display:block;margin-bottom:.3rem;">العمر للمعاينة</label>
+          <input class="fb-input" type="number" id="previewAge" placeholder="اتركه فارغاً لتجاهل العمر" style="height:36px;" />
+        </div>
+        <button class="fb-btn fb-btn--primary" style="height:36px;" onclick="runPreview()">تحديث</button>
+      </div>
+      <div id="previewResult"><div class="fb-empty">اضغط تحديث لرؤية التدفق</div></div>
+      <button class="fb-btn fb-btn--secondary" onclick="closeModal('previewModal')" style="margin-top:1rem;width:100%;">إغلاق</button>
+    </div>
+  </div>
+
+  <script src="header/header.js?v=2"></script>
+  <script>
+    var API = '/api/flow-builder';
+    var adminToken = localStorage.getItem('admin_token');
+
+    function authFetch(url, opts) {
+      opts = opts || {};
+      var h = Object.assign({'Content-Type':'application/json'}, opts.headers || {});
+      if (adminToken) h['Authorization'] = 'Bearer ' + adminToken;
+      return fetch(url, Object.assign({}, opts, {headers: h}));
+    }
+
+    function toast(msg, ok) {
+      var area = document.getElementById('toastArea');
+      var el = document.createElement('div');
+      el.className = 'fb-toast fb-toast--' + (ok !== false ? 'ok' : 'err');
+      el.textContent = msg;
+      area.appendChild(el);
+      setTimeout(function(){ el.remove(); }, 3000);
+    }
+
+    function closeModal(id) {
+      var m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    }
+
+    var STATE = { templates: [], selectedTplId: null, steps: [], selectedStepId: null, stepTypes: [] };
+
+    // ── Bootstrap ──────────────────────────────────────────────
+
+    Promise.all([
+      authFetch(API + '/templates').then(function(r){ return r.json(); }),
+      authFetch(API + '/step-types').then(function(r){ return r.json(); }),
+    ]).then(function(res) {
+      STATE.templates = res[0] || [];
+      STATE.stepTypes = res[1] || [];
+      renderTemplates();
+      populateStepTypeSelects();
+    }).catch(function(){ toast('فشل التحميل', false); });
+
+    // ── Templates ──────────────────────────────────────────────
+
+    var COURSE_ICONS = {
+      default:   NTAIcons('clipboard', 18),
+      youth:     NTAIcons('graduation', 18),
+      financial: NTAIcons('coin', 18),
+      political: NTAIcons('building', 18),
+      technical: NTAIcons('gear', 18),
+      workshop:  NTAIcons('wrench', 18),
+      bootcamp:  NTAIcons('tent', 18),
+      online:    NTAIcons('laptop', 18)
+    };
+    // Inject panel header icons after NTAIcons is available
+    document.getElementById('_iconTpl').innerHTML    = NTAIcons('clipboard', 18);
+    document.getElementById('_iconSteps').innerHTML  = NTAIcons('clipboard', 18);
+    document.getElementById('_iconEditor').innerHTML = NTAIcons('gear', 18);
+
+    function renderTemplates() {
+      var list = document.getElementById('templateList');
+      if (!STATE.templates.length) { list.innerHTML = '<div class="fb-empty">لا توجد قوالب</div>'; return; }
+      list.innerHTML = STATE.templates.map(function(t) {
+        return '<div class="fb-tpl-item' + (t.id === STATE.selectedTplId ? ' active' : '') + '" onclick="selectTemplate(' + t.id + ')">' +
+          '<span class="fb-tpl-item__icon">' + (COURSE_ICONS[t.course_type] || NTAIcons('clipboard', 18)) + '</span>' +
+          '<span class="fb-tpl-item__name">' + t.name + '</span>' +
+          '<span class="fb-tpl-item__count">' + (t.step_count || 0) + '</span>' +
+          '<span class="fb-tpl-item__toggle fb-tpl-item__toggle--' + (t.is_active ? 'on' : 'off') + '">' + (t.is_active ? 'نشط' : 'معطل') + '</span>' +
+        '</div>';
+      }).join('');
+    }
+
+    function selectTemplate(id) {
+      STATE.selectedTplId = id;
+      STATE.selectedStepId = null;
+      document.getElementById('addStepBtn').disabled = false;
+      document.getElementById('previewBtn').disabled = false;
+      renderTemplates();
+      loadSteps(id);
+      document.getElementById('editorBody').innerHTML = '<div class="fb-empty">اختر خطوة لتعديلها</div>';
+    }
+
+    function loadSteps(templateId) {
+      authFetch(API + '/templates/' + templateId)
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          var tmpl = STATE.templates.find(function(t){ return t.id === templateId; });
+          document.getElementById('stepsHeading').textContent = (tmpl ? tmpl.name : '') + ' — الخطوات';
+          STATE.steps = data.steps || [];
+          renderSteps();
+        });
+    }
+
+    function renderSteps() {
+      var list = document.getElementById('stepsList');
+      if (!STATE.steps.length) { list.innerHTML = '<div class="fb-empty">لا توجد خطوات — أضف خطوة جديدة</div>'; return; }
+      list.innerHTML = STATE.steps.map(function(s, i) {
+        var vis  = s.visibility_rules || {};
+        var unl  = s.unlock_rules     || {};
+        var badges = '<span class="fb-badge fb-badge--type">' + s.step_type + '</span>';
+        if (s.is_required) badges += '<span class="fb-badge fb-badge--req">إجباري</span>';
+        else               badges += '<span class="fb-badge fb-badge--opt">اختياري</span>';
+        if (vis.age_min || vis.age_max) badges += '<span class="fb-badge fb-badge--age">عمر</span>';
+        if (unl.requires_step_key || unl.manual_only) badges += '<span class="fb-badge fb-badge--lock">مشروط</span>';
+        return '<div class="fb-step-card' + (s.id === STATE.selectedStepId ? ' selected' : '') + '" draggable="true" data-id="' + s.id + '" data-order="' + s.step_order + '" onclick="selectStep(' + s.id + ')">' +
+          '<span class="fb-step-card__drag">⠿</span>' +
+          '<span class="fb-step-card__num">' + s.step_order + '</span>' +
+          '<div class="fb-step-card__body">' +
+            '<div class="fb-step-card__title">' + s.title_ar + '</div>' +
+            '<div class="fb-step-card__key">' + s.step_key + '</div>' +
+            '<div class="fb-step-card__badges">' + badges + '</div>' +
+          '</div>' +
+          '<button class="fb-step-card__del" onclick="event.stopPropagation();deleteStep(' + s.id + ')" title="حذف">' + NTAIcons('x', 14) + '</button>' +
+        '</div>';
+      }).join('');
+      initDragDrop();
+    }
+
+    // ── Step Editor ─────────────────────────────────────────────
+
+    function selectStep(id) {
+      STATE.selectedStepId = id;
+      renderSteps();
+      var step = STATE.steps.find(function(s){ return s.id === id; });
+      if (!step) return;
+      document.getElementById('editorTitle').textContent = step.title_ar;
+      var vis = step.visibility_rules || {};
+      var unl = step.unlock_rules     || {};
+      document.getElementById('editorBody').innerHTML =
+        '<div class="fb-field"><label>العنوان بالعربية</label><input class="fb-input" id="eTitle" value="' + _esc(step.title_ar) + '" /></div>' +
+        '<div class="fb-field"><label>المفتاح (step_key)</label><input class="fb-input" id="eKey" value="' + _esc(step.step_key) + '" /></div>' +
+        '<div class="fb-row">' +
+          '<div class="fb-field"><label>نوع الخطوة</label><select class="fb-select" id="eType">' + buildStepTypeOptions(step.step_type) + '</select></div>' +
+          '<div class="fb-field"><label>الترتيب</label><input class="fb-input" type="number" id="eOrder" value="' + step.step_order + '" min="1" /></div>' +
+        '</div>' +
+        '<div class="fb-field"><label>الوصف (اختياري)</label><textarea class="fb-textarea" id="eDesc">' + _esc(step.description_ar || '') + '</textarea></div>' +
+        '<div class="fb-toggle-row"><input type="checkbox" id="eRequired" ' + (step.is_required ? 'checked' : '') + ' /><label for="eRequired">إجبارية</label>' +
+          '<input type="checkbox" id="eActive" ' + (step.is_active ? 'checked' : '') + ' style="margin-right:.75rem;" /><label for="eActive">نشطة</label></div>' +
+
+        '<div class="fb-rules-section">' +
+          '<div class="fb-rules-section__title">قواعد الرؤية (العمر)</div>' +
+          '<div class="fb-row">' +
+            '<div class="fb-field"><label>العمر الأدنى</label><input class="fb-input" type="number" id="eAgeMin" value="' + (vis.age_min || '') + '" placeholder="لا يوجد" /></div>' +
+            '<div class="fb-field"><label>العمر الأقصى</label><input class="fb-input" type="number" id="eAgeMax" value="' + (vis.age_max || '') + '" placeholder="لا يوجد" /></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="fb-rules-section">' +
+          '<div class="fb-rules-section__title">قواعد الفتح</div>' +
+          '<div class="fb-field"><label>تفتح بعد إكمال (step_key)</label><input class="fb-input" id="eRequires" value="' + _esc(unl.requires_step_key || '') + '" placeholder="step_1" /></div>' +
+          '<div class="fb-toggle-row"><input type="checkbox" id="eManual" ' + (unl.manual_only ? 'checked' : '') + ' /><label for="eManual">تفتح يدوياً فقط من الإدارة</label></div>' +
+        '</div>' +
+
+        '<div class="fb-btn-row">' +
+          '<button class="fb-btn fb-btn--primary" onclick="saveStep(' + id + ')">' + NTAIcons('save', 15) + ' حفظ</button>' +
+          '<button class="fb-btn fb-btn--danger" onclick="deleteStep(' + id + ')">' + NTAIcons('trash', 15) + ' حذف</button>' +
+        '</div>' +
+
+        '<hr style="border:none;border-top:1px solid var(--border-subtle);margin:1.25rem 0;" />' +
+        '<div style="font-size:.8rem;font-weight:700;color:var(--text-subtle);margin-bottom:.75rem;">تجاوز لمتقدم بعينه</div>' +
+        '<div class="fb-override-form">' +
+          '<div class="fb-field"><label>رقم المتقدم (ID)</label><input class="fb-input" type="number" id="ovApplicantId" placeholder="12345" /></div>' +
+          '<div class="fb-row">' +
+            '<div class="fb-field"><label>مرئية</label><select class="fb-select" id="ovVisible"><option value="">بدون تغيير</option><option value="1">نعم</option><option value="0">لا</option></select></div>' +
+            '<div class="fb-field"><label>مقفلة</label><select class="fb-select" id="ovLocked"><option value="">بدون تغيير</option><option value="1">نعم</option><option value="0">لا</option></select></div>' +
+          '</div>' +
+          '<div class="fb-field"><label>السبب</label><input class="fb-input" id="ovReason" placeholder="اختياري" /></div>' +
+          '<button class="fb-btn fb-btn--secondary" onclick="saveOverride(' + id + ')">تطبيق التجاوز</button>' +
+        '</div>';
+    }
+
+    function buildStepTypeOptions(current) {
+      return STATE.stepTypes.map(function(t) {
+        return '<option value="' + t.type + '"' + (t.type === current ? ' selected' : '') + '>' + t.label_ar + '</option>';
+      }).join('');
+    }
+
+    function saveStep(id) {
+      var vis = {};
+      var ageMin = parseInt(document.getElementById('eAgeMin').value);
+      var ageMax = parseInt(document.getElementById('eAgeMax').value);
+      if (!isNaN(ageMin) && ageMin > 0) vis.age_min = ageMin;
+      if (!isNaN(ageMax) && ageMax > 0) vis.age_max = ageMax;
+
+      var unl = {};
+      var req = document.getElementById('eRequires').value.trim();
+      if (req) unl.requires_step_key = req;
+      if (document.getElementById('eManual').checked) unl.manual_only = true;
+
+      authFetch(API + '/steps/' + id, {
+        method: 'PUT',
+        body: JSON.stringify({
+          title_ar:         document.getElementById('eTitle').value.trim(),
+          step_key:         document.getElementById('eKey').value.trim(),
+          step_type:        document.getElementById('eType').value,
+          description_ar:   document.getElementById('eDesc').value.trim() || null,
+          step_order:       parseInt(document.getElementById('eOrder').value),
+          is_required:      document.getElementById('eRequired').checked,
+          is_active:        document.getElementById('eActive').checked,
+          visibility_rules: Object.keys(vis).length ? vis : {},
+          unlock_rules:     Object.keys(unl).length ? unl : {},
+        }),
+      }).then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
+      .then(function(){ toast('تم الحفظ'); loadSteps(STATE.selectedTplId); })
+      .catch(function(e){ toast(e.detail || 'فشل الحفظ', false); });
+    }
+
+    function deleteStep(id) {
+      if (!confirm('حذف هذه الخطوة؟')) return;
+      authFetch(API + '/steps/' + id, { method: 'DELETE' })
+        .then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
+        .then(function(){ toast('تم الحذف'); loadSteps(STATE.selectedTplId); document.getElementById('editorBody').innerHTML = '<div class="fb-empty">اختر خطوة لتعديلها</div>'; })
+        .catch(function(e){ toast(e.detail || 'فشل الحذف', false); });
+    }
+
+    function saveOverride(stepId) {
+      var appId = parseInt(document.getElementById('ovApplicantId').value);
+      if (!appId) { toast('أدخل رقم المتقدم', false); return; }
+      var vis = document.getElementById('ovVisible').value;
+      var lck = document.getElementById('ovLocked').value;
+      authFetch(API + '/overrides', {
+        method: 'POST',
+        body: JSON.stringify({
+          applicant_id: appId, step_id: stepId,
+          is_visible: vis === '' ? null : vis === '1',
+          is_locked:  lck === '' ? null : lck === '1',
+          reason: document.getElementById('ovReason').value.trim() || null,
+        }),
+      }).then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
+      .then(function(){ toast('تم تطبيق التجاوز'); })
+      .catch(function(e){ toast(e.detail || 'فشل', false); });
+    }
+
+    // ── New Template ────────────────────────────────────────────
+
+    function openNewTemplateModal() {
+      document.getElementById('newTplModal').style.display = 'flex';
+      document.getElementById('newTplType').value = '';
+      document.getElementById('newTplName').value = '';
+    }
+
+    function createTemplate() {
+      var ct   = document.getElementById('newTplType').value.trim();
+      var name = document.getElementById('newTplName').value.trim();
+      if (!ct || !name) { toast('أدخل النوع والاسم', false); return; }
+      authFetch(API + '/templates', { method: 'POST', body: JSON.stringify({ course_type: ct, name: name }) })
+        .then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
+        .then(function(t){
+          toast('تم إنشاء القالب');
+          closeModal('newTplModal');
+          STATE.templates.push(Object.assign(t, { step_count: 0 }));
+          renderTemplates();
+        })
+        .catch(function(e){ toast(e.detail || 'فشل الإنشاء', false); });
+    }
+
+    // ── Add Step ────────────────────────────────────────────────
+
+    function populateStepTypeSelects() {
+      ['asType'].forEach(function(id) {
+        var sel = document.getElementById(id);
+        if (!sel) return;
+        sel.innerHTML = STATE.stepTypes.map(function(t) {
+          return '<option value="' + t.type + '">' + t.label_ar + '</option>';
+        }).join('');
+      });
+    }
+
+    function openAddStep() {
+      if (!STATE.selectedTplId) return;
+      document.getElementById('addStepModal').style.display = 'flex';
+      document.getElementById('asKey').value = 'step_' + (STATE.steps.length + 1);
+      document.getElementById('asOrder').value = STATE.steps.length + 1;
+      document.getElementById('asTitle').value = '';
+      document.getElementById('asAgeMin').value = '';
+      document.getElementById('asAgeMax').value = '';
+      document.getElementById('asRequires').value = '';
+      document.getElementById('asRequired').checked = true;
+      document.getElementById('asManual').checked = false;
+    }
+
+    function submitAddStep() {
+      var key   = document.getElementById('asKey').value.trim();
+      var title = document.getElementById('asTitle').value.trim();
+      var type  = document.getElementById('asType').value;
+      var order = parseInt(document.getElementById('asOrder').value) || 99;
+      if (!key || !title) { toast('أدخل المفتاح والعنوان', false); return; }
+
+      var vis = {};
+      var ageMin = parseInt(document.getElementById('asAgeMin').value);
+      var ageMax = parseInt(document.getElementById('asAgeMax').value);
+      if (!isNaN(ageMin) && ageMin > 0) vis.age_min = ageMin;
+      if (!isNaN(ageMax) && ageMax > 0) vis.age_max = ageMax;
+
+      var unl = {};
+      var req = document.getElementById('asRequires').value.trim();
+      if (req) unl.requires_step_key = req;
+      if (document.getElementById('asManual').checked) unl.manual_only = true;
+
+      authFetch(API + '/templates/' + STATE.selectedTplId + '/steps', {
+        method: 'POST',
+        body: JSON.stringify({
+          step_key: key, step_type: type, title_ar: title,
+          step_order: order, is_required: document.getElementById('asRequired').checked,
+          visibility_rules: Object.keys(vis).length ? vis : null,
+          unlock_rules: Object.keys(unl).length ? unl : null,
+        }),
+      }).then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
+      .then(function(){
+        toast('تمت الإضافة');
+        closeModal('addStepModal');
+        loadSteps(STATE.selectedTplId);
+      })
+      .catch(function(e){ toast(e.detail || 'فشل الإضافة', false); });
+    }
+
+    // ── Preview ─────────────────────────────────────────────────
+
+    function openPreview() {
+      if (!STATE.selectedTplId) return;
+      document.getElementById('previewModal').style.display = 'flex';
+      document.getElementById('previewResult').innerHTML = '<div class="fb-empty">اضغط تحديث</div>';
+    }
+
+    function runPreview() {
+      var tmpl = STATE.templates.find(function(t){ return t.id === STATE.selectedTplId; });
+      if (!tmpl) return;
+      var age = document.getElementById('previewAge').value;
+      var url = API + '/preview?course_type=' + encodeURIComponent(tmpl.course_type) + (age ? '&age=' + age : '');
+      authFetch(url).then(function(r){ return r.json(); }).then(function(data) {
+        var steps = data.steps || [];
+        if (!steps.length) { document.getElementById('previewResult').innerHTML = '<div class="fb-empty">لا توجد خطوات مرئية</div>'; return; }
+        var html = steps.map(function(s, i) {
+          var cls = s.preview_locked ? 'fb-preview-chip--lock' : 'fb-preview-chip--ok';
+          return '<div class="fb-preview-chip ' + cls + '">' +
+            '<b>' + (i + 1) + '.</b> ' + s.title_ar +
+            (s.preview_locked ? NTAIcons('lock', 14) : NTAIcons('check_circle', 14)) + '</div>';
+        }).join('');
+        document.getElementById('previewResult').innerHTML = html;
+      });
+    }
+
+    // ── Drag & Drop reorder ──────────────────────────────────────
+
+    function initDragDrop() {
+      var cards = document.querySelectorAll('.fb-step-card[draggable]');
+      var dragSrc = null;
+      cards.forEach(function(card) {
+        card.addEventListener('dragstart', function(e) { dragSrc = card; card.classList.add('dragging'); });
+        card.addEventListener('dragend',   function()  { card.classList.remove('dragging'); });
+        card.addEventListener('dragover',  function(e) { e.preventDefault(); });
+        card.addEventListener('drop', function(e) {
+          e.preventDefault();
+          if (!dragSrc || dragSrc === card) return;
+          var list = card.parentNode;
+          var allCards = Array.from(list.querySelectorAll('.fb-step-card'));
+          var srcIdx  = allCards.indexOf(dragSrc);
+          var dstIdx  = allCards.indexOf(card);
+          if (srcIdx < dstIdx) list.insertBefore(dragSrc, card.nextSibling);
+          else                 list.insertBefore(dragSrc, card);
+          saveOrder();
+        });
+      });
+    }
+
+    function saveOrder() {
+      var cards = Array.from(document.querySelectorAll('.fb-step-card'));
+      var items = cards.map(function(c, i) { return { step_id: parseInt(c.dataset.id), step_order: i + 1 }; });
+      authFetch(API + '/steps/reorder', { method: 'POST', body: JSON.stringify(items) })
+        .then(function(){ toast('تم ترتيب الخطوات'); loadSteps(STATE.selectedTplId); })
+        .catch(function(){ toast('فشل الترتيب', false); });
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────
+
+    function _esc(s) {
+      return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Close modals on backdrop click
+    ['newTplModal', 'addStepModal', 'previewModal'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('click', function(e) { if (e.target === el) closeModal(id); });
+    });
+  </script>
+</body>
+</html>

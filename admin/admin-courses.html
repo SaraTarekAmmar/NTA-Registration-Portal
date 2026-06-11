@@ -1145,7 +1145,7 @@
         <div class="courses-modal__header">
           <h2 class="courses-modal__title" id="modalTitle">إضافة دورة جديدة</h2>
           <button type="button" class="courses-modal__icon-btn" id="modalClose" aria-label="إغلاق">
-            ✕
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
@@ -1253,7 +1253,7 @@
                     onclick="document.getElementById('imageFileInp').click()"
                     ondragover="
                       event.preventDefault();
-                      this.style.borderColor = 'rgba(99,102,241,.75)';
+                      this.style.borderColor = 'rgba(185,28,28,.75)';
                     "
                     ondragleave="this.style.borderColor = ''"
                     ondrop="
@@ -1419,7 +1419,7 @@
                   class="btn btn-ghost file-label-btn"
                   ondragover="
                     event.preventDefault();
-                    this.style.borderColor = 'rgba(99,102,241,.75)';
+                    this.style.borderColor = 'rgba(185,28,28,.75)';
                   "
                   ondragleave="this.style.borderColor = ''"
                   ondrop="
@@ -1471,7 +1471,7 @@
                 <span class="vis-desc" id="visDesc">مرئية لجميع المتدربين</span>
               </div>
               <div style="display: flex; align-items: center; gap: 0.5rem">
-                <span class="vis-badge pub" id="visBadge">عام 🌐</span>
+                <span class="vis-badge pub" id="visBadge"></span>
                 <label class="sw" aria-label="تبديل رؤية الدورة"
                   ><input type="checkbox" id="privToggle" aria-describedby="visDesc" /><span
                     class="sw-track"
@@ -1758,6 +1758,11 @@
     </div>
 
     <script src="header/header.js?v=2"></script>
+    <script src="common/js/icons.js"></script>
+    <script>
+      var _vb = document.getElementById('visBadge');
+      if (_vb) _vb.innerHTML = NTAIcons('globe',14) + ' عام';
+    </script>
     <script>
       (function () {
         // Read from new admin_token first, fall back to legacy ntaTrainee key
@@ -1981,9 +1986,9 @@
           .getElementById("privToggle")
           .addEventListener("change", function () {
             var p = this.checked;
-            document.getElementById("visBadge").textContent = p
-              ? "🔒 خاص"
-              : "🌐 عام";
+            document.getElementById("visBadge").innerHTML = p
+              ? NTAIcons('lock',14) + ' خاص'
+              : NTAIcons('globe',14) + ' عام';
             document.getElementById("visBadge").className =
               "vis-badge " + (p ? "prv" : "pub");
             document.getElementById("visDesc").textContent = p
@@ -2311,8 +2316,8 @@
           var bd = ensureBD(sid, bi);
           var panel = document.createElement("div");
           panel.className = "batch-panel" + (isFirst ? " active" : "");
-          var trainerVal = bd.trainerFile ? (typeof bd.trainerFile === 'string' ? '✓ ملف محفوظ' : '✓ ' + bd.trainerFile.name) : '';
-          var traineeVal = bd.traineeFile ? (typeof bd.traineeFile === 'string' ? '✓ ملف محفوظ' : '✓ ' + bd.traineeFile.name) : '';
+          var trainerVal = bd.trainerFile ? (typeof bd.trainerFile === 'string' ? 'ملف محفوظ' : bd.trainerFile.name) : '';
+          var traineeVal = bd.traineeFile ? (typeof bd.traineeFile === 'string' ? 'ملف محفوظ' : bd.traineeFile.name) : '';
           var trainerCls = bd.trainerFile ? 'vmsg ok' : 'vmsg';
           var traineeCls = bd.traineeFile ? 'vmsg ok' : 'vmsg';
 
@@ -2362,12 +2367,12 @@
           var f = input.files[0];
           if (!f) return;
           if (!/\.(xlsx|xls)$/i.test(f.name)) {
-            vm.textContent = "⚠ يُقبل فقط .xlsx أو .xls";
+            vm.innerHTML = NTAIcons('warning',14) + ' يُقبل فقط .xlsx أو .xls';
             vm.className = "vmsg err";
             input.value = "";
             return;
           }
-          vm.textContent = "✓ " + f.name;
+          vm.textContent = f.name;
           vm.className = "vmsg ok";
           if (batchData[k]) {
             if (role === "trainer") batchData[k].trainerFile = f;
@@ -2633,7 +2638,7 @@
             // Replace "Add Course" button with a link to the editor portal
             cet.innerHTML =
               '<div class="courses-editor-toolbar__left" style="width:100%;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">' +
-              '<a href="/editor/editor-dashboard.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.5rem 1.1rem;border-radius:10px;font-size:0.85rem;font-weight:700;font-family:inherit;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(99,102,241,0.22)\'" onmouseout="this.style.background=\'rgba(99,102,241,0.12)\'">' +
+              '<a href="/editor/editor-dashboard.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.5rem 1.1rem;border-radius:10px;font-size:0.85rem;font-weight:700;font-family:inherit;background:rgba(185,28,28,0.12);border:1px solid rgba(185,28,28,0.35);color:#fca5a5;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(185,28,28,0.22)\'" onmouseout="this.style.background=\'rgba(185,28,28,0.12)\'">' +
               '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>' +
               'بوابة المحرر — إنشاء وتعديل الدورات' +
               '</a>' +
@@ -2876,7 +2881,7 @@
           var field = document.getElementById("visibilityField");
           var isPrivate = toggle.checked;
 
-          badge.textContent = isPrivate ? "🔒 خاص" : "🌐 عام";
+          badge.innerHTML = isPrivate ? NTAIcons('lock',14) + ' خاص' : NTAIcons('globe',14) + ' عام';
           badge.className =
             "course-visibility-badge course-visibility-badge--" +
             (isPrivate ? "private" : "public");
@@ -3042,7 +3047,7 @@
               '" alt="' +
               c.title +
               '" class="course-card__image" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
-              '<div class="course-card__image-placeholder" style="display:none"><span>📚</span></div>' +
+              '<div class="course-card__image-placeholder" style="display:none"><span>' + NTAIcons('books',32) + '</span></div>' +
               '<span class="course-card__badge">' +
               c.status +
               "</span></div>" +
@@ -3312,7 +3317,7 @@
           overlay.innerHTML = '<div style="background:#0f1628;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:2rem 2.5rem;max-width:380px;width:90%;text-align:center;font-family:Tajawal,sans-serif;">'
             + '<p style="color:#e2e8f0;font-size:1rem;font-weight:600;margin:0 0 1.5rem;">هل أنت متأكد من رغبتك في التقدم لهذه الدورة؟</p>'
             + '<div style="display:flex;gap:0.75rem;justify-content:center;">'
-            + '<button id="_applyConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(99,102,241,0.5);background:rgba(99,102,241,0.2);color:#a5b4fc;font-weight:700;cursor:pointer;font-family:inherit;">تأكيد التقديم</button>'
+            + '<button id="_applyConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(185,28,28,0.5);background:rgba(185,28,28,0.2);color:#fca5a5;font-weight:700;cursor:pointer;font-family:inherit;">تأكيد التقديم</button>'
             + '<button id="_applyConfirmCancel" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#94a3b8;font-weight:600;cursor:pointer;font-family:inherit;">إلغاء</button>'
             + '</div></div>';
           document.body.appendChild(overlay);

@@ -54,12 +54,12 @@
       }
       .at-course-pill:hover {
         border-color: rgba(99, 102, 241, 0.45);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .at-course-pill.active {
         background: rgba(99, 102, 241, 0.18);
         border-color: rgba(99, 102, 241, 0.6);
-        color: #c7d2fe;
+        color: #fecaca;
         box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
       }
 
@@ -181,7 +181,7 @@
           rgba(99, 102, 241, 0.1)
         );
         border: 1px solid rgba(99, 102, 241, 0.3);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .at-kpi--att .at-kpi__icon {
         background: linear-gradient(
@@ -320,7 +320,7 @@
         justify-content: center;
         font-size: 2.5rem;
         font-weight: 800;
-        color: #c7d2fe;
+        color: #fecaca;
         background: linear-gradient(
           135deg,
           rgba(99, 102, 241, 0.2),
@@ -379,7 +379,7 @@
         font-weight: 700;
         background: rgba(99, 102, 241, 0.15);
         border: 1px solid rgba(99, 102, 241, 0.35);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .at-card__meta {
         font-size: 0.72rem;
@@ -438,7 +438,7 @@
         border-radius: 10px;
         border: 1px solid rgba(99, 102, 241, 0.4);
         background: rgba(99, 102, 241, 0.12);
-        color: #a5b4fc;
+        color: #fca5a5;
         font-size: 0.78rem;
         font-weight: 700;
         font-family: inherit;
@@ -506,7 +506,7 @@
         border-radius: 999px;
         background: rgba(99, 102, 241, 0.12);
         border: 1px solid rgba(99, 102, 241, 0.3);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .at-search {
         display: flex;
@@ -543,7 +543,7 @@
           border-radius: 10px;
           border: 1px solid rgba(99, 102, 241, 0.45);
           background: rgba(99, 102, 241, 0.15);
-          color: #a5b4fc;
+          color: #fca5a5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -691,7 +691,7 @@
         justify-content: center;
         font-size: 1.2rem;
         font-weight: 800;
-        color: #c7d2fe;
+        color: #fecaca;
         background: linear-gradient(
           135deg,
           rgba(99, 102, 241, 0.3),
@@ -844,7 +844,7 @@
         gap: 0.4rem;
       }
       .at-flags-list li::before {
-        content: "⚠";
+        content: "!";
         font-size: 0.68rem;
       }
       .at-flags-none {
@@ -900,7 +900,7 @@
         font-weight: 700;
         background: rgba(99, 102, 241, 0.1);
         border: 1px solid rgba(99, 102, 241, 0.28);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
 
       /* Charts row */
@@ -1227,6 +1227,7 @@
 
     <div class="toast-container" id="toastContainer"></div>
     <script src="header/header.js?v=3"></script>
+    <script src="common/js/icons.js"></script>
     <script>
       (function () {
         var session = {};
@@ -1481,10 +1482,10 @@
             "animation:fadeSlideIn 0.3s ease;max-width:360px;",
             type === "error"
               ? "background:linear-gradient(135deg,#ef4444,#b91c1c);border:1px solid rgba(239,68,68,0.4);"
-              : "background:linear-gradient(135deg,#6366f1,#4338ca);border:1px solid rgba(99,102,241,0.4);"
+              : "background:linear-gradient(135deg,#b91c1c,#7f1d1d);border:1px solid rgba(185,28,28,0.4);"
           ].join("");
-          t.innerHTML = (type === "error" ? "⚠ " : "ℹ ") + msg +
-            '<button onclick="this.parentNode.remove()" style="margin-right:auto;background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;line-height:1;padding:0 0 0 0.5rem;">✕</button>';
+          t.innerHTML = (type === "error" ? NTAIcons('warning',16) + ' ' : NTAIcons('info',16) + ' ') + msg +
+            '<button onclick="this.parentNode.remove()" style="margin-right:auto;background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;line-height:1;padding:0 0 0 0.5rem;">' + NTAIcons('x',16) + '</button>';
           tc.appendChild(t);
           setTimeout(function () { if (t.parentNode) t.remove(); }, 6000);
         }
@@ -1542,10 +1543,10 @@
                 grid.style.display = "";
                 grid.innerHTML =
                   '<div class="at-empty" style="border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.05);">' +
-                  '<div style="font-size:2rem;margin-bottom:0.75rem;">⚠</div>' +
+                  '<div style="margin-bottom:0.75rem;">' + NTAIcons('warning',36) + '</div>' +
                   '<div style="color:#fca5a5;font-weight:700;margin-bottom:0.35rem;">تعذّر تحميل بيانات المتدربين</div>' +
                   '<div style="font-size:0.8rem;color:var(--text-subtle);margin-bottom:1.1rem;">' + (err.message || "خطأ في الاتصال بالخادم") + '</div>' +
-                  '<button onclick="fetchData()" style="padding:0.55rem 1.4rem;border-radius:10px;background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff;border:none;cursor:pointer;font-size:0.84rem;font-weight:700;">إعادة المحاولة</button>' +
+                  '<button onclick="fetchData()" style="padding:0.55rem 1.4rem;border-radius:10px;background:linear-gradient(135deg,#b91c1c,#7f1d1d);color:#fecaca;border:none;cursor:pointer;font-size:0.84rem;font-weight:700;">إعادة المحاولة</button>' +
                   '</div>';
               }
               // 3. Fire a dismissible toast

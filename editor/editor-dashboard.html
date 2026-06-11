@@ -18,11 +18,11 @@
         border-radius: 22px;
         margin-bottom: 1.75rem;
         background:
-          radial-gradient(circle at top right, rgba(16,185,129,0.14), transparent 55%),
-          radial-gradient(circle at bottom left, rgba(6,182,212,0.09), transparent 55%),
-          rgba(8,12,32,0.72);
-        border: 1px solid rgba(16,185,129,0.22);
-        box-shadow: 0 0 0 1px rgba(15,23,42,0.95), 0 0 48px rgba(16,185,129,0.07);
+          radial-gradient(circle at top right, rgba(185,28,28,0.1), transparent 52%),
+          radial-gradient(circle at bottom left, rgba(30,50,100,0.12), transparent 55%),
+          rgba(4,6,18,0.78);
+        border: 1px solid rgba(185,28,28,0.18);
+        box-shadow: 0 0 0 1px rgba(5,8,20,0.95), 0 0 48px rgba(185,28,28,0.05);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -37,7 +37,7 @@
         top: -70px; right: -70px;
         width: 240px; height: 240px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(16,185,129,0.11) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(185,28,28,0.09) 0%, transparent 70%);
         pointer-events: none;
       }
       .ed-hero::after {
@@ -46,13 +46,13 @@
         bottom: -50px; left: 10%;
         width: 180px; height: 180px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(30,50,100,0.1) 0%, transparent 70%);
         pointer-events: none;
       }
       .ed-hero__greeting {
         font-size: 0.8rem;
         font-weight: 600;
-        color: #6ee7b7;
+        color: #fca5a5;
         margin: 0 0 0.3rem;
         display: flex;
         align-items: center;
@@ -62,8 +62,8 @@
         content: "";
         width: 6px; height: 6px;
         border-radius: 50%;
-        background: #6ee7b7;
-        box-shadow: 0 0 8px rgba(110,231,183,0.6);
+        background: #ef4444;
+        box-shadow: 0 0 8px rgba(239,68,68,0.6);
         animation: edGlowPulse 2s ease-in-out infinite;
       }
       @keyframes edGlowPulse {
@@ -93,8 +93,8 @@
       .ed-hero__date {
         font-size: 0.78rem;
         color: var(--text-subtle);
-        background: rgba(16,185,129,0.07);
-        border: 1px solid rgba(16,185,129,0.18);
+        background: rgba(185,28,28,0.07);
+        border: 1px solid rgba(185,28,28,0.2);
         border-radius: 999px;
         padding: 0.32rem 0.9rem;
         white-space: nowrap;
@@ -110,13 +110,13 @@
       .ed-hero__live-dot {
         width: 7px; height: 7px;
         border-radius: 50%;
-        background: #6ee7b7;
+        background: #16a34a;
         animation: edLivePulse 2s infinite;
       }
       @keyframes edLivePulse {
-        0%   { box-shadow: 0 0 0 0 rgba(110,231,183,0.6); }
-        70%  { box-shadow: 0 0 0 7px rgba(110,231,183,0); }
-        100% { box-shadow: 0 0 0 0 rgba(110,231,183,0); }
+        0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.6); }
+        70%  { box-shadow: 0 0 0 7px rgba(22,163,74,0); }
+        100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
       }
 
       /* ══ KPI Row ══ */
@@ -132,7 +132,7 @@
       .ed-kpi {
         padding: 1.4rem 1.5rem;
         border-radius: 20px;
-        border: 1px solid var(--kpi-border, rgba(99,102,241,0.18));
+        border: 1px solid var(--kpi-border, rgba(185,28,28,0.18));
         background: rgba(8,12,32,0.42);
         backdrop-filter: blur(16px);
         display: flex;
@@ -158,7 +158,7 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at 30% 30%, var(--kpi-glow-bg, rgba(99,102,241,0.06)), transparent 65%);
+        background: radial-gradient(circle at 30% 30%, var(--kpi-glow-bg, rgba(185,28,28,0.06)), transparent 65%);
         opacity: 0;
         transition: opacity 350ms;
         pointer-events: none;
@@ -257,77 +257,29 @@
         content: "";
         width: 3px; height: 15px;
         border-radius: 999px;
-        background: linear-gradient(180deg, #6ee7b7, var(--color-info));
+        background: linear-gradient(180deg, #f87171, #b91c1c);
+        box-shadow: 0 0 8px rgba(248,113,113,0.35);
         flex-shrink: 0;
       }
       .ed-section__link {
         font-size: 0.75rem;
         font-weight: 600;
-        color: var(--color-info-soft);
+        color: #fca5a5;
         text-decoration: none;
         opacity: 0.75;
         transition: opacity 0.2s;
       }
       .ed-section__link:hover { opacity: 1; }
 
-      /* ══ Stats strip ══ */
-      .ed-stats-strip {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid var(--border-main);
-        background: rgba(8,12,32,0.35);
-        backdrop-filter: blur(12px);
-        margin-bottom: 1.75rem;
-      }
-      @media (max-width: 600px) { .ed-stats-strip { grid-template-columns: repeat(2, 1fr); } }
-      .ed-stat-cell {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.3rem;
-        padding: 1rem 0.75rem;
-        border-left: 1px solid var(--border-main);
-        transition: background 0.2s;
-        text-decoration: none;
-      }
-      .ed-stat-cell:last-child { border-left: none; }
-      .ed-stat-cell:hover { background: rgba(16,185,129,0.04); }
-      .ed-stat-cell__num {
-        font-size: 1.7rem;
-        font-weight: 800;
-        line-height: 1;
-        color: var(--text-main);
-      }
-      .ed-stat-cell--blue   .ed-stat-cell__num { color: var(--color-info-soft); }
-      .ed-stat-cell--yellow .ed-stat-cell__num { color: #fde68a; }
-      .ed-stat-cell--green  .ed-stat-cell__num { color: #6ee7b7; }
-      .ed-stat-cell--slate  .ed-stat-cell__num { color: #94a3b8; }
-      .ed-stat-cell__bar {
-        width: 32px; height: 2px;
-        border-radius: 999px;
-        opacity: 0.7;
-      }
-      .ed-stat-cell--blue   .ed-stat-cell__bar { background: var(--color-info-soft); }
-      .ed-stat-cell--yellow .ed-stat-cell__bar { background: #fbbf24; }
-      .ed-stat-cell--green  .ed-stat-cell__bar { background: #6ee7b7; }
-      .ed-stat-cell--slate  .ed-stat-cell__bar { background: #94a3b8; }
-      .ed-stat-cell__lbl {
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: var(--text-subtle);
-        text-align: center;
-      }
-
       /* ══ Quick Actions ══ */
       .ed-actions-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.85rem;
         margin-bottom: 1.75rem;
       }
-      @media (max-width: 580px) { .ed-actions-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 900px) { .ed-actions-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 520px)  { .ed-actions-grid { grid-template-columns: 1fr; } }
 
       .ed-action {
         display: flex;
@@ -357,12 +309,16 @@
 
       .ed-action--create { --action-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.25); }
       .ed-action--create:hover  { border-color: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.14), 0 0 18px rgba(16,185,129,0.08); color: #6ee7b7; }
-      .ed-action--list   { --action-bg: rgba(99,102,241,0.07);  border-color: rgba(99,102,241,0.25); }
-      .ed-action--list:hover    { border-color: rgba(99,102,241,0.55); box-shadow: 0 8px 28px rgba(99,102,241,0.14); color: var(--color-accent-pale); }
+      .ed-action--list   { --action-bg: rgba(59,130,246,0.07);  border-color: rgba(59,130,246,0.22); }
+      .ed-action--list:hover    { border-color: rgba(59,130,246,0.5); box-shadow: 0 8px 28px rgba(59,130,246,0.14); color: #93c5fd; }
       .ed-action--mat    { --action-bg: rgba(245,158,11,0.06);  border-color: rgba(245,158,11,0.22); }
       .ed-action--mat:hover     { border-color: rgba(245,158,11,0.5);  box-shadow: 0 8px 28px rgba(245,158,11,0.12); color: #fde68a; }
       .ed-action--exams  { --action-bg: rgba(239,68,68,0.05);   border-color: rgba(239,68,68,0.2); }
       .ed-action--exams:hover   { border-color: rgba(239,68,68,0.48);  box-shadow: 0 8px 28px rgba(239,68,68,0.11); color: #fca5a5; }
+      .ed-action--sessions { --action-bg: rgba(167,139,250,0.06); border-color: rgba(167,139,250,0.2); }
+      .ed-action--sessions:hover { border-color: rgba(167,139,250,0.5); box-shadow: 0 8px 28px rgba(167,139,250,0.13); color: #c4b5fd; }
+      .ed-action--plan   { --action-bg: rgba(20,184,166,0.06);  border-color: rgba(20,184,166,0.2); }
+      .ed-action--plan:hover    { border-color: rgba(20,184,166,0.5);  box-shadow: 0 8px 28px rgba(20,184,166,0.12); color: #5eead4; }
 
       .ed-action__icon {
         width: 48px; height: 48px;
@@ -373,10 +329,12 @@
         transition: transform 0.25s ease;
       }
       .ed-action:hover .ed-action__icon { transform: scale(1.1) rotate(-4deg); }
-      .ed-action--create .ed-action__icon { background: rgba(16,185,129,0.14); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
-      .ed-action--list   .ed-action__icon { background: rgba(99,102,241,0.14); border: 1px solid rgba(99,102,241,0.3); color: var(--color-accent-pale); }
-      .ed-action--mat    .ed-action__icon { background: rgba(245,158,11,0.13); border: 1px solid rgba(245,158,11,0.3); color: #fde68a; }
-      .ed-action--exams  .ed-action__icon { background: rgba(239,68,68,0.11); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+      .ed-action--create   .ed-action__icon { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.3);  color: #6ee7b7; }
+      .ed-action--list     .ed-action__icon { background: rgba(59,130,246,0.14);  border: 1px solid rgba(59,130,246,0.3);  color: #93c5fd; }
+      .ed-action--mat      .ed-action__icon { background: rgba(245,158,11,0.13);  border: 1px solid rgba(245,158,11,0.3);  color: #fde68a; }
+      .ed-action--exams    .ed-action__icon { background: rgba(239,68,68,0.11);   border: 1px solid rgba(239,68,68,0.25);  color: #fca5a5; }
+      .ed-action--sessions .ed-action__icon { background: rgba(167,139,250,0.13); border: 1px solid rgba(167,139,250,0.3); color: #c4b5fd; }
+      .ed-action--plan     .ed-action__icon { background: rgba(20,184,166,0.13);  border: 1px solid rgba(20,184,166,0.3);  color: #5eead4; }
       .ed-action__icon svg { width: 21px; height: 21px; }
 
       .ed-action__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
@@ -411,12 +369,12 @@
       }
       .ed-card:hover {
         transform: translateY(-5px);
-        border-color: rgba(16,185,129,0.32);
-        box-shadow: 0 14px 36px rgba(0,0,0,0.22), 0 0 24px rgba(16,185,129,0.06);
+        border-color: rgba(185,28,28,0.3);
+        box-shadow: 0 14px 36px rgba(0,0,0,0.22), 0 0 24px rgba(185,28,28,0.06);
       }
       .ed-card__stripe {
         height: 3px;
-        background: linear-gradient(90deg, #6ee7b7, #3b82f6);
+        background: linear-gradient(90deg, #f87171, #b91c1c);
       }
       .ed-card__stripe--draft    { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
       .ed-card__stripe--archived { background: linear-gradient(90deg, #64748b, #94a3b8); }
@@ -479,10 +437,10 @@
       .ed-empty__icon {
         width: 60px; height: 60px;
         border-radius: 18px;
-        background: rgba(16,185,129,0.07);
-        border: 1px solid rgba(16,185,129,0.18);
+        background: rgba(185,28,28,0.07);
+        border: 1px solid rgba(185,28,28,0.18);
         display: flex; align-items: center; justify-content: center;
-        color: #6ee7b7;
+        color: #fca5a5;
       }
       .ed-empty__icon svg { width: 28px; height: 28px; }
       .ed-empty__title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
@@ -571,30 +529,6 @@
         </a>
       </div>
 
-      <!-- Stats Strip -->
-      <div class="ed-stats-strip">
-        <a href="editor-courses.html" class="ed-stat-cell ed-stat-cell--blue">
-          <div class="ed-stat-cell__num" id="statTotal">—</div>
-          <div class="ed-stat-cell__bar"></div>
-          <div class="ed-stat-cell__lbl">إجمالي</div>
-        </a>
-        <a href="editor-courses.html?status=draft" class="ed-stat-cell ed-stat-cell--yellow">
-          <div class="ed-stat-cell__num" id="statDraft">—</div>
-          <div class="ed-stat-cell__bar"></div>
-          <div class="ed-stat-cell__lbl">مسودات</div>
-        </a>
-        <a href="editor-courses.html?status=published" class="ed-stat-cell ed-stat-cell--green">
-          <div class="ed-stat-cell__num" id="statPub">—</div>
-          <div class="ed-stat-cell__bar"></div>
-          <div class="ed-stat-cell__lbl">منشورة</div>
-        </a>
-        <a href="editor-courses.html?status=archived" class="ed-stat-cell ed-stat-cell--slate">
-          <div class="ed-stat-cell__num" id="statArch">—</div>
-          <div class="ed-stat-cell__bar"></div>
-          <div class="ed-stat-cell__lbl">مؤرشفة</div>
-        </a>
-      </div>
-
       <!-- Quick Actions -->
       <div class="ed-section">
         <div class="ed-section__left">إجراءات سريعة</div>
@@ -640,6 +574,28 @@
           <div class="ed-action__body">
             <div class="ed-action__title">الاختبارات</div>
             <div class="ed-action__sub">إنشاء وإدارة اختبارات الدورات</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
+
+        <a href="editor-sessions.html" class="ed-action ed-action--sessions">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">الجلسات</div>
+            <div class="ed-action__sub">جدولة وإدارة الجلسات التدريبية</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
+
+        <a href="editor-planning.html" class="ed-action ed-action--plan">
+          <div class="ed-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">التخطيط</div>
+            <div class="ed-action__sub">خطط المحتوى والجداول الزمنية</div>
           </div>
           <span class="ed-action__arrow">←</span>
         </a>
@@ -733,11 +689,6 @@
             countUp(document.getElementById("kpiDraft"),     draft);
             countUp(document.getElementById("kpiPublished"), published);
             countUp(document.getElementById("kpiArchived"),  archived);
-
-            document.getElementById("statTotal").textContent = total;
-            document.getElementById("statDraft").textContent = draft;
-            document.getElementById("statPub").textContent   = published;
-            document.getElementById("statArch").textContent  = archived;
 
             document.getElementById("recentLoading").style.display = "none";
 

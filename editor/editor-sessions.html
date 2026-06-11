@@ -38,11 +38,11 @@
       </div>
 
       <div id="loadingState" class="editor-state" style="display:none;">
-        <div class="editor-state__icon">⏳</div>
+        <div class="editor-state__icon" id="_loadIcon"></div>
         <div class="editor-state__title">جاري التحميل...</div>
       </div>
       <div id="emptyState" class="editor-state">
-        <div class="editor-state__icon">📅</div>
+        <div class="editor-state__icon" id="_stateIcon"></div>
         <div class="editor-state__title">اختر دورة أولاً</div>
         <div class="editor-state__text">اختر دورة من القائمة أعلاه لعرض وإدارة جلساتها.</div>
       </div>
@@ -79,6 +79,9 @@
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
     <script src="js/editor-layout.js"></script>
+    <script src="js/icons.js"></script>
+    <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('calendar', 36);</script>
+    <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
       var sessions = [];

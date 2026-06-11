@@ -1,230 +1,488 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <script src="/common/js/theme.js"></script>
-    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>المواد التعليمية - بوابة المحرر</title>
-    <link rel="stylesheet" href="editor.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <script src="js/editor-guard.js"></script>
-  </head>
-  <body data-page="materials">
-    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
-    <div id="editorSidebar"></div>
-    <main id="main-content" class="editor-main">
-      <div class="editor-page-header">
-        <h1 class="editor-page-header__title">المواد التعليمية</h1>
-        <p class="editor-page-header__sub">رفع وإدارة ملفات الدورات</p>
-      </div>
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المواد التعليمية - بوابة المحرر</title>
+  <link rel="stylesheet" href="editor.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/editor-guard.js"></script>
+  <style>
+    .mat-page { max-width: 1080px; margin: 2rem auto; padding: 0 1.25rem; }
 
-      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
-        <span id="pageBannerText"></span>
-      </div>
+    /* Hero */
+    .mat-hero { margin-bottom: 1.75rem; }
+    .mat-hero__title { font-size: 1.55rem; font-weight: 800; color: var(--text-main); margin: 0 0 .35rem; }
+    .mat-hero__sub { color: var(--text-subtle); font-size: .9rem; margin: 0; }
 
-      <!-- Upload area -->
-      <div class="editor-upload-area" id="uploadArea"
-           ondragover="event.preventDefault();this.classList.add('dragover')"
-           ondragleave="this.classList.remove('dragover')"
-           ondrop="handleDrop(event)">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40" style="margin-bottom:0.75rem;opacity:0.6;">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-        </svg>
-        <p style="margin:0 0 0.5rem;font-weight:700;color:var(--text-main);">اسحب الملفات هنا أو انقر للاختيار</p>
-        <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('fileInput').click()">اختر ملفات</button>
-        <p style="margin:0.6rem 0 0;font-size:0.75rem;color:var(--text-subtle);">PDF, Word, PowerPoint, MP4 — أقصى حجم 50MB لكل ملف</p>
-        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.mp4,.ppt,.pptx" style="display:none;" onchange="handleFiles(this.files)" />
-      </div>
+    /* Course selector bar */
+    .mat-filter-bar {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .mat-filter-bar label { font-size: .84rem; font-weight: 600; color: var(--text-subtle); flex-shrink: 0; }
+    .mat-filter-bar select {
+      flex: 1; min-width: 220px; max-width: 360px;
+      padding: .6rem .9rem; border-radius: 10px;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .88rem; outline: none;
+      transition: border-color .2s;
+    }
+    .mat-filter-bar select:focus { border-color: var(--border-accent); }
 
-      <!-- Upload progress -->
-      <div id="uploadProgress" style="display:none;margin-top:1rem;">
-        <div style="font-size:0.84rem;color:var(--text-subtle);margin-bottom:0.4rem;" id="uploadProgressLabel">جاري الرفع...</div>
-        <div class="upload-progress"><div class="upload-progress__fill" id="uploadProgressFill" style="width:0%"></div></div>
-      </div>
+    /* Category tabs */
+    .mat-cat-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .mat-cat-tab {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .38rem 1rem; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      background: transparent; color: var(--text-subtle);
+      font-family: inherit; font-size: .82rem; font-weight: 500;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .mat-cat-tab:hover { border-color: var(--border-accent); color: var(--text-main); }
+    .mat-cat-tab.active {
+      border-color: rgba(59,130,246,.8); background: rgba(59,130,246,.1);
+      color: var(--text-main); font-weight: 600;
+    }
+    .mat-cat-tab .mat-cat-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .mat-cat-tab[data-cat="all"] .mat-cat-dot { background: #94a3b8; }
+    .mat-cat-tab[data-cat="technical"] .mat-cat-dot { background: #60a5fa; }
+    .mat-cat-tab[data-cat="financial"] .mat-cat-dot { background: #fbbf24; }
+    .mat-cat-tab[data-cat="political"] .mat-cat-dot { background: #a78bfa; }
+    .mat-cat-tab[data-cat="supporting"] .mat-cat-dot { background: #34d399; }
+    .mat-cat-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      font-size: .65rem; font-weight: 700;
+      background: rgba(255,255,255,.08); color: var(--text-subtle);
+    }
 
-      <!-- Materials list -->
-      <div style="margin-top:1.75rem;">
-        <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0 0 1rem;">الملفات المرفوعة</h2>
-        <div id="loadingState" class="editor-state">
-          <div class="editor-state__icon">⏳</div>
-          <div class="editor-state__title">جاري التحميل...</div>
+    /* Upload zone */
+    .mat-upload-zone {
+      border: 2px dashed var(--border-accent); border-radius: 20px;
+      padding: 2rem; text-align: center; cursor: pointer;
+      transition: background .2s, border-color .2s;
+      margin-bottom: 1.75rem;
+    }
+    .mat-upload-zone:hover, .mat-upload-zone.dragover {
+      background: rgba(59,130,246,.06); border-color: rgba(96,165,250,.8);
+    }
+    .mat-upload-zone__icon { font-size: 2rem; margin-bottom: .5rem; }
+    .mat-upload-zone__title { font-size: .96rem; font-weight: 700; color: var(--text-main); margin: 0 0 .4rem; }
+    .mat-upload-zone__sub { font-size: .78rem; color: var(--text-subtle); margin: 0 0 .9rem; }
+    .mat-upload-meta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+    .mat-meta-field { display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; }
+    .mat-meta-field label { font-size: .75rem; font-weight: 600; color: var(--text-subtle); }
+    .mat-meta-field select,
+    .mat-meta-field input {
+      padding: .45rem .75rem; border-radius: 8px;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
+    }
+
+    /* Upload progress */
+    .mat-progress { margin-bottom: 1.25rem; display: none; }
+    .mat-progress__label { font-size: .82rem; color: var(--text-subtle); margin-bottom: .4rem; }
+    .mat-progress__bar { height: 6px; background: var(--border-subtle); border-radius: 999px; overflow: hidden; }
+    .mat-progress__fill { height: 100%; background: linear-gradient(90deg, rgba(185,28,28,0.7), #b91c1c); width: 0; transition: width .3s; border-radius: 999px; }
+
+    /* Stats strip */
+    .mat-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; margin-bottom: 1.75rem; }
+    @media(max-width:700px){ .mat-stats { grid-template-columns: repeat(3, 1fr); } }
+    .mat-stat-card {
+      padding: .85rem 1rem; border-radius: 14px;
+      background: var(--bg-card, rgba(15,23,42,.6));
+      border: 1px solid var(--border-subtle); text-align: center;
+    }
+    .mat-stat-card__val { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+    .mat-stat-card__lbl { font-size: .72rem; color: var(--text-subtle); margin-top: .15rem; }
+    .mat-stat-card--blue .mat-stat-card__val { color: #60a5fa; }
+    .mat-stat-card--yellow .mat-stat-card__val { color: #fbbf24; }
+    .mat-stat-card--purple .mat-stat-card__val { color: #a78bfa; }
+    .mat-stat-card--green .mat-stat-card__val { color: #34d399; }
+
+    /* Files grid */
+    .mat-files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .mat-file-card {
+      border-radius: 16px; padding: 1rem 1.1rem;
+      background: var(--bg-card, rgba(15,23,42,.6));
+      border: 1px solid var(--border-subtle);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .mat-file-card:hover { border-color: var(--border-accent); box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+
+    .mat-file-header { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: .75rem; }
+    .mat-file-icon {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    }
+    .mat-file-icon--pdf { background: rgba(239,68,68,.15); }
+    .mat-file-icon--word { background: rgba(59,130,246,.15); }
+    .mat-file-icon--excel { background: rgba(16,185,129,.15); }
+    .mat-file-icon--ppt { background: rgba(245,158,11,.15); }
+    .mat-file-icon--video { background: rgba(168,85,247,.15); }
+    .mat-file-icon--image { background: rgba(6,182,212,.15); }
+    .mat-file-icon--other { background: rgba(107,114,128,.15); }
+
+    .mat-file-info { flex: 1; min-width: 0; }
+    .mat-file-name { font-size: .88rem; font-weight: 700; color: var(--text-main); margin: 0 0 .2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mat-file-size { font-size: .72rem; color: var(--text-subtle); margin: 0; }
+
+    .mat-file-cat {
+      display: inline-block; margin-bottom: .6rem;
+      padding: .2rem .65rem; border-radius: 999px; font-size: .7rem; font-weight: 600;
+    }
+    .mat-file-cat--technical { background: rgba(96,165,250,.15); color: #60a5fa; }
+    .mat-file-cat--financial { background: rgba(251,191,36,.15); color: #fbbf24; }
+    .mat-file-cat--political { background: rgba(167,139,250,.15); color: #a78bfa; }
+    .mat-file-cat--supporting { background: rgba(52,211,153,.15); color: #34d399; }
+
+    .mat-file-desc { font-size: .78rem; color: var(--text-subtle); margin: 0 0 .75rem; line-height: 1.5; }
+    .mat-file-footer { display: flex; align-items: center; justify-content: space-between; }
+    .mat-file-date { font-size: .7rem; color: var(--text-subtle); }
+    .mat-file-actions { display: flex; gap: .35rem; }
+    .mat-action-btn {
+      width: 30px; height: 30px; border-radius: 8px; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.05); color: var(--text-subtle);
+      transition: background .2s, color .2s;
+    }
+    .mat-action-btn:hover { background: rgba(59,130,246,.15); color: #60a5fa; }
+    .mat-action-btn--danger:hover { background: rgba(248,113,113,.15); color: #f87171; }
+
+    .mat-empty { text-align: center; padding: 3.5rem 1rem; }
+    .mat-empty__icon { font-size: 2.75rem; margin-bottom: .75rem; }
+    .mat-empty__title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 .4rem; }
+    .mat-empty__text { font-size: .84rem; color: var(--text-subtle); margin: 0; }
+  </style>
+</head>
+<body data-page="materials">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+  <div id="editorSidebar"></div>
+  <main id="main-content" class="mat-page">
+
+    <div class="mat-hero">
+      <h1 class="mat-hero__title">المواد التعليمية</h1>
+      <p class="mat-hero__sub">رفع وإدارة ملفات الدورات مصنّفةً حسب المجال</p>
+    </div>
+
+    <!-- Course selector -->
+    <div class="mat-filter-bar">
+      <label>الدورة:</label>
+      <select id="courseSelect" onchange="onCourseChange()">
+        <option value="">— اختر دورة —</option>
+      </select>
+    </div>
+
+    <!-- Upload zone -->
+    <div class="mat-upload-zone" id="uploadZone"
+         ondragover="event.preventDefault();this.classList.add('dragover')"
+         ondragleave="this.classList.remove('dragover')"
+         ondrop="handleDrop(event)">
+      <div class="mat-upload-zone__icon" id="_uploadZoneIcon"></div>
+      <p class="mat-upload-zone__title">اسحب الملفات هنا أو انقر للاختيار</p>
+      <p class="mat-upload-zone__sub">PDF, Word, Excel, PowerPoint, صور, فيديو, ZIP — أقصى حجم 50MB لكل ملف</p>
+      <button type="button" onclick="document.getElementById('fileInput').click()"
+        style="padding:.5rem 1.4rem;border-radius:999px;border:1px solid rgba(59,130,246,.6);
+               background:transparent;color:#60a5fa;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">
+        اختر ملفات
+      </button>
+      <input type="file" id="fileInput" multiple
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.zip"
+        style="display:none;" onchange="handleFiles(this.files)" />
+      <div class="mat-upload-meta" id="uploadMeta" style="display:none;">
+        <div class="mat-meta-field">
+          <label>التصنيف</label>
+          <select id="uploadCategory">
+            <option value="technical">تقني</option>
+            <option value="financial">مالي</option>
+            <option value="political">سياسي</option>
+            <option value="supporting" selected>داعم</option>
+          </select>
         </div>
-        <div id="emptyState" class="editor-state" style="display:none;">
-          <div class="editor-state__icon">📂</div>
-          <div class="editor-state__title">لا توجد مواد بعد</div>
-          <div class="editor-state__text">ارفع أول ملف باستخدام المنطقة أعلاه.</div>
+        <div class="mat-meta-field">
+          <label>وصف اختياري</label>
+          <input type="text" id="uploadDesc" placeholder="ملاحظة مختصرة..." style="width:220px;" />
         </div>
-        <div id="materialsList"></div>
+        <div class="mat-meta-field" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button type="button" id="uploadConfirmBtn"
+            style="padding:.45rem 1.1rem;border-radius:8px;border:none;background:linear-gradient(180deg,#3b82f6,#1d4ed8);
+                   color:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;"
+            onclick="uploadPendingFiles()">
+            رفع الملفات
+          </button>
+        </div>
       </div>
-    </main>
+      <div id="pendingLabel" style="font-size:.78rem;color:var(--text-subtle);margin-top:.5rem;display:none;"></div>
+    </div>
 
-    <div id="editorToastContainer" class="editor-toast-container"></div>
-    <script src="js/editor-layout.js"></script>
-    <script>
-      var EDITOR_TOKEN_KEY = "editor_token";
-      var uploadedMaterials = [];
+    <!-- Progress -->
+    <div class="mat-progress" id="uploadProgress">
+      <div class="mat-progress__label" id="progressLabel">جاري الرفع...</div>
+      <div class="mat-progress__bar"><div class="mat-progress__fill" id="progressFill"></div></div>
+    </div>
 
-      function authFetch(url, opts) {
-        opts = opts || {};
-        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
-        var headers = Object.assign({}, opts.headers || {});
-        if (token) headers["Authorization"] = "Bearer " + token;
-        return fetch(url, Object.assign({}, opts, {headers: headers}));
-      }
+    <!-- Stats -->
+    <div class="mat-stats" id="statsStrip">
+      <div class="mat-stat-card"><div class="mat-stat-card__val" id="statTotal">—</div><div class="mat-stat-card__lbl">الإجمالي</div></div>
+      <div class="mat-stat-card mat-stat-card--blue"><div class="mat-stat-card__val" id="statTech">—</div><div class="mat-stat-card__lbl">تقني</div></div>
+      <div class="mat-stat-card mat-stat-card--yellow"><div class="mat-stat-card__val" id="statFin">—</div><div class="mat-stat-card__lbl">مالي</div></div>
+      <div class="mat-stat-card mat-stat-card--purple"><div class="mat-stat-card__val" id="statPol">—</div><div class="mat-stat-card__lbl">سياسي</div></div>
+      <div class="mat-stat-card mat-stat-card--green"><div class="mat-stat-card__val" id="statSup">—</div><div class="mat-stat-card__lbl">داعم</div></div>
+    </div>
 
-      function handleDrop(e) {
-        e.preventDefault();
-        document.getElementById("uploadArea").classList.remove("dragover");
-        handleFiles(e.dataTransfer.files);
-      }
+    <!-- Category tabs -->
+    <div class="mat-cat-tabs" id="catTabs">
+      <button class="mat-cat-tab active" data-cat="all" onclick="filterCat('all')">
+        <span class="mat-cat-dot"></span>الكل <span class="mat-cat-badge" id="badge_all">0</span>
+      </button>
+      <button class="mat-cat-tab" data-cat="technical" onclick="filterCat('technical')">
+        <span class="mat-cat-dot"></span>تقني <span class="mat-cat-badge" id="badge_technical">0</span>
+      </button>
+      <button class="mat-cat-tab" data-cat="financial" onclick="filterCat('financial')">
+        <span class="mat-cat-dot"></span>مالي <span class="mat-cat-badge" id="badge_financial">0</span>
+      </button>
+      <button class="mat-cat-tab" data-cat="political" onclick="filterCat('political')">
+        <span class="mat-cat-dot"></span>سياسي <span class="mat-cat-badge" id="badge_political">0</span>
+      </button>
+      <button class="mat-cat-tab" data-cat="supporting" onclick="filterCat('supporting')">
+        <span class="mat-cat-dot"></span>داعم <span class="mat-cat-badge" id="badge_supporting">0</span>
+      </button>
+    </div>
 
-      function formatSize(bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1048576) return (bytes/1024).toFixed(1) + " KB";
-        return (bytes/1048576).toFixed(1) + " MB";
-      }
+    <!-- Files grid -->
+    <div id="filesArea">
+      <div class="mat-empty">
+        <div class="mat-empty__icon" id="_emptyIcon"></div>
+        <p class="mat-empty__title">اختر دورة لعرض ملفاتها</p>
+        <p class="mat-empty__text">اختر دورة من القائمة أعلاه لعرض المواد المرفوعة وإدارتها</p>
+      </div>
+    </div>
 
-      function handleFiles(files) {
-        var allowed = ["application/pdf","application/msword",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          "video/mp4","application/vnd.ms-powerpoint",
-          "application/vnd.openxmlformats-officedocument.presentationml.presentation"];
-        var validFiles = [];
-        Array.from(files).forEach(function(f) {
-          if (f.size > 50*1024*1024) {
-            showEditorToast("الملف أكبر من 50MB: " + f.name, "error"); return;
-          }
-          if (allowed.indexOf(f.type) === -1 && f.type !== "") {
-            showEditorToast("نوع غير مدعوم: " + f.name, "error"); return;
-          }
-          validFiles.push(f);
-        });
-        if (!validFiles.length) return;
-        uploadFiles(validFiles);
-      }
+  </main>
 
-      function uploadFiles(files) {
-        var prog = document.getElementById("uploadProgress");
-        var fill = document.getElementById("uploadProgressFill");
-        var label = document.getElementById("uploadProgressLabel");
-        prog.style.display = "block";
-        fill.style.width = "0%";
-        label.textContent = "جاري رفع " + files.length + " ملف...";
+  <script src="js/editor-layout.js"></script>
+  <script src="js/icons.js"></script>
+  <script>
+    var API = '/api';
+    var materials = [];
+    var activeCat = 'all';
+    var selectedCourseId = 0;
+    var pendingFiles = [];
 
-        var done = 0;
-        function next() {
-          if (done >= files.length) {
-            prog.style.display = "none";
-            showEditorToast("تم رفع " + files.length + " ملف بنجاح.", "success");
-            renderMaterials();
-            return;
-          }
-          var f = files[done];
-          var fd = new FormData();
-          fd.append("file", f);
-          fd.append("folder", "materials");
-          var token = localStorage.getItem(EDITOR_TOKEN_KEY);
-          fetch("/api/materials", {
-            method:"POST",
-            headers: {"Authorization": "Bearer " + token},
-            body: fd
-          })
-          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
-          .then(function(data) {
-            uploadedMaterials.push({ name: f.name, size: formatSize(f.size), path: data.file_path, date: new Date().toLocaleDateString("ar-EG") });
-            done++;
-            fill.style.width = Math.round(done/files.length*100) + "%";
-            label.textContent = "تم رفع " + done + " من " + files.length;
-            next();
-          })
-          .catch(function() {
-            uploadedMaterials.push({ name: f.name, size: formatSize(f.size), path: null, date: new Date().toLocaleDateString("ar-EG") });
-            done++;
-            fill.style.width = Math.round(done/files.length*100) + "%";
-            next();
+    var CAT_LABELS = { technical: 'تقني', financial: 'مالي', political: 'سياسي', supporting: 'داعم' };
+    var CAT_COLORS = { technical: 'blue', financial: 'yellow', political: 'purple', supporting: 'green' };
+
+    document.getElementById('_uploadZoneIcon').innerHTML = NTAIcons('folder', 32);
+    document.getElementById('_emptyIcon').innerHTML      = NTAIcons('folder_open', 32);
+
+    function fileIcon(ext) {
+      if (!ext) return { icon: NTAIcons('document', 20), cls: 'other' };
+      ext = ext.toLowerCase();
+      if (ext === 'pdf')                                        return { icon: NTAIcons('document', 20),  cls: 'pdf' };
+      if (['doc', 'docx'].includes(ext))                        return { icon: NTAIcons('document', 20),  cls: 'word' };
+      if (['xls', 'xlsx'].includes(ext))                        return { icon: NTAIcons('chart', 20),     cls: 'excel' };
+      if (['ppt', 'pptx'].includes(ext))                        return { icon: NTAIcons('clipboard', 20), cls: 'ppt' };
+      if (['mp4', 'avi', 'mov', 'mkv'].includes(ext))           return { icon: NTAIcons('film', 20),      cls: 'video' };
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext))  return { icon: NTAIcons('image', 20),     cls: 'image' };
+      if (ext === 'zip')                                        return { icon: NTAIcons('archive', 20),   cls: 'other' };
+      return { icon: NTAIcons('document', 20), cls: 'other' };
+    }
+
+    function formatSize(bytes) {
+      if (!bytes) return '';
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    function loadCourses() {
+      editorAuth.fetch(API + '/courses')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var sel = document.getElementById('courseSelect');
+          sel.innerHTML = '<option value="">— اختر دورة —</option>';
+          data.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = (c.title_ar || c.title) + (c.status ? ' — ' + c.status : '');
+            sel.appendChild(opt);
           });
-        }
-        next();
-      }
-
-      function renderMaterials() {
-        document.getElementById("loadingState").style.display = "none";
-        var list = document.getElementById("materialsList");
-        if (!uploadedMaterials.length) {
-          document.getElementById("emptyState").style.display = "flex";
-          list.innerHTML = "";
-          return;
-        }
-        document.getElementById("emptyState").style.display = "none";
-        var html = '<div class="editor-table-wrap"><table class="editor-table">' +
-          '<caption class="sr-only">قائمة المواد التعليمية</caption><thead><tr>' +
-          '<th scope="col">اسم الملف</th><th scope="col">الحجم</th><th scope="col">تاريخ الرفع</th><th scope="col">الإجراءات</th>' +
-          '</tr></thead><tbody>';
-        uploadedMaterials.forEach(function(m, i) {
-          html += '<tr><td>' + m.name + '</td><td>' + m.size + '</td><td>' + m.date + '</td>';
-          html += '<td style="display:flex;gap:0.5rem;">';
-          html += '<button type="button" class="btn btn--secondary btn--sm" onclick="deleteMaterial('+i+')">حذف</button>';
-          html += '</td></tr>';
         });
-        html += '</tbody></table></div>';
-        list.innerHTML = html;
-      }
+    }
 
-      function deleteMaterial(idx) {
-        editorConfirm({
-          title: "حذف المادة؟",
-          body: "أنت على وشك حذف: <strong>" + uploadedMaterials[idx].name + "</strong><br>لا يمكن التراجع عن هذا الإجراء.",
-          okLabel: "حذف المادة",
-          cancelLabel: "إلغاء",
-          danger: true
-        }).then(function(ok) {
+    function onCourseChange() {
+      var val = document.getElementById('courseSelect').value;
+      selectedCourseId = parseInt(val) || 0;
+      if (selectedCourseId) loadMaterials(selectedCourseId);
+      else {
+        materials = [];
+        renderFiles();
+        updateStats();
+      }
+      document.getElementById('uploadMeta').style.display = selectedCourseId ? 'flex' : 'none';
+    }
+
+    function loadMaterials(courseId) {
+      editorAuth.fetch(API + '/materials/' + courseId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) { materials = data; renderFiles(); updateStats(); })
+        .catch(function() { materials = []; renderFiles(); });
+    }
+
+    function renderFiles() {
+      var area = document.getElementById('filesArea');
+      var filtered = activeCat === 'all' ? materials : materials.filter(function(m){ return m.category === activeCat; });
+      if (!filtered.length) {
+        area.innerHTML = '<div class="mat-empty"><div class="mat-empty__icon">' +
+          NTAIcons(selectedCourseId ? 'folder' : 'folder_open', 32) + '</div>' +
+          '<p class="mat-empty__title">' + (selectedCourseId ? 'لا توجد ملفات في هذا التصنيف' : 'اختر دورة لعرض ملفاتها') + '</p>' +
+          '<p class="mat-empty__text">' + (selectedCourseId ? 'ارفع أول مادة تعليمية باستخدام منطقة الرفع أعلاه' : 'اختر دورة من القائمة أعلاه') + '</p></div>';
+        return;
+      }
+      var html = '<div class="mat-files-grid">';
+      filtered.forEach(function(m) {
+        var ext = m.file_type || (m.file_name || '').split('.').pop();
+        var ic = fileIcon(ext);
+        var cat = m.category || 'supporting';
+        var dateStr = m.created_at ? new Date(m.created_at).toLocaleDateString('ar-EG') : '';
+        html += '<div class="mat-file-card">' +
+          '<div class="mat-file-header">' +
+            '<div class="mat-file-icon mat-file-icon--' + ic.cls + '">' + ic.icon + '</div>' +
+            '<div class="mat-file-info">' +
+              '<p class="mat-file-name" title="' + (m.file_name || '') + '">' + (m.file_name || 'ملف') + '</p>' +
+              '<p class="mat-file-size">' + formatSize(m.file_size) + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<span class="mat-file-cat mat-file-cat--' + cat + '">' + (CAT_LABELS[cat] || cat) + '</span>' +
+          (m.description ? '<p class="mat-file-desc">' + m.description + '</p>' : '') +
+          '<div class="mat-file-footer">' +
+            '<span class="mat-file-date">' + dateStr + '</span>' +
+            '<div class="mat-file-actions">' +
+              '<a href="' + (m.file_path || '#') + '" target="_blank" class="mat-action-btn" title="تحميل">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>' +
+              '</a>' +
+              '<button class="mat-action-btn mat-action-btn--danger" title="حذف" onclick="deleteMaterial(' + m.id + ')">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+      area.innerHTML = html;
+    }
+
+    function updateStats() {
+      var counts = { total: materials.length, technical: 0, financial: 0, political: 0, supporting: 0 };
+      materials.forEach(function(m){ if (counts[m.category] !== undefined) counts[m.category]++; });
+      document.getElementById('statTotal').textContent = counts.total;
+      document.getElementById('statTech').textContent = counts.technical;
+      document.getElementById('statFin').textContent = counts.financial;
+      document.getElementById('statPol').textContent = counts.political;
+      document.getElementById('statSup').textContent = counts.supporting;
+      document.getElementById('badge_all').textContent = counts.total;
+      document.getElementById('badge_technical').textContent = counts.technical;
+      document.getElementById('badge_financial').textContent = counts.financial;
+      document.getElementById('badge_political').textContent = counts.political;
+      document.getElementById('badge_supporting').textContent = counts.supporting;
+    }
+
+    function filterCat(cat) {
+      activeCat = cat;
+      document.querySelectorAll('.mat-cat-tab').forEach(function(t){
+        t.classList.toggle('active', t.dataset.cat === cat);
+      });
+      renderFiles();
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('uploadZone').classList.remove('dragover');
+      if (!selectedCourseId) { showEditorToast('اختر دورة أولاً', 'error'); return; }
+      queueFiles(e.dataTransfer.files);
+    }
+
+    function handleFiles(fileList) {
+      if (!selectedCourseId) { showEditorToast('اختر دورة أولاً', 'error'); return; }
+      queueFiles(fileList);
+    }
+
+    function queueFiles(fileList) {
+      pendingFiles = Array.from(fileList);
+      if (!pendingFiles.length) return;
+      document.getElementById('uploadMeta').style.display = 'flex';
+      document.getElementById('pendingLabel').style.display = '';
+      document.getElementById('pendingLabel').textContent = pendingFiles.length + ' ملف(ات) جاهزة للرفع';
+      document.getElementById('fileInput').value = '';
+    }
+
+    async function uploadPendingFiles() {
+      if (!pendingFiles.length) { showEditorToast('لم يتم اختيار ملفات', 'error'); return; }
+      if (!selectedCourseId) { showEditorToast('اختر دورة أولاً', 'error'); return; }
+
+      var category = document.getElementById('uploadCategory').value;
+      var desc = document.getElementById('uploadDesc').value;
+      var prog = document.getElementById('uploadProgress');
+      var fill = document.getElementById('progressFill');
+      var lbl = document.getElementById('progressLabel');
+      prog.style.display = '';
+      var btn = document.getElementById('uploadConfirmBtn');
+      btn.disabled = true;
+
+      var done = 0;
+      for (var i = 0; i < pendingFiles.length; i++) {
+        lbl.textContent = 'جاري رفع ' + (i + 1) + ' من ' + pendingFiles.length + '...';
+        fill.style.width = Math.round(((i) / pendingFiles.length) * 100) + '%';
+        var formData = new FormData();
+        formData.append('file', pendingFiles[i]);
+        formData.append('course_id', selectedCourseId);
+        formData.append('category', category);
+        formData.append('description', desc);
+        try {
+          var token = localStorage.getItem('editor_token');
+          var res = await fetch(API + '/materials', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: formData,
+          });
+          if (!res.ok) throw new Error(res.status);
+          done++;
+        } catch(e) {
+          showEditorToast('فشل رفع: ' + pendingFiles[i].name, 'error');
+        }
+      }
+      fill.style.width = '100%';
+      lbl.textContent = 'تم الرفع! (' + done + '/' + pendingFiles.length + ')';
+      setTimeout(function(){ prog.style.display = 'none'; fill.style.width = '0'; }, 2000);
+      pendingFiles = [];
+      btn.disabled = false;
+      document.getElementById('pendingLabel').style.display = 'none';
+      document.getElementById('uploadDesc').value = '';
+      showEditorToast('تم رفع ' + done + ' ملف(ات) بنجاح', 'success');
+      loadMaterials(selectedCourseId);
+    }
+
+    function deleteMaterial(id) {
+      editorConfirm({ title: 'حذف المادة', body: 'هل أنت متأكد من أرشفة هذا الملف؟', okLabel: 'نعم، أرشفة', danger: true })
+        .then(function(ok) {
           if (!ok) return;
-          var mat = uploadedMaterials[idx];
-          var params = new URLSearchParams(window.location.search);
-          var courseId = parseInt(params.get("course_id")) || 0;
-          var deleteUrl = mat.path
-            ? "/api/materials/" + encodeURIComponent(mat.path)
-            : (courseId ? "/api/materials/" + courseId + "/" + idx : null);
-          var doRemove = function() {
-            uploadedMaterials.splice(idx, 1);
-            renderMaterials();
-            showEditorToast("تم حذف الملف.", "success");
-          };
-          if (deleteUrl) {
-            authFetch(deleteUrl, { method: "DELETE" })
-              .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || "فشل الحذف"); }); })
-              .then(doRemove)
-              .catch(function(err) { showEditorToast(err.message || "فشل حذف الملف.", "error"); });
-          } else {
-            doRemove();
-          }
+          editorAuth.fetch(API + '/materials/' + id, { method: 'DELETE' })
+            .then(function(r) { return r.json(); })
+            .then(function() { loadMaterials(selectedCourseId); showEditorToast('تم الأرشفة بنجاح', 'success'); })
+            .catch(function() { showEditorToast('فشل في الحذف', 'error'); });
         });
-      }
+    }
 
-      function loadMaterials() {
-        var params = new URLSearchParams(window.location.search);
-        var courseId = parseInt(params.get("course_id")) || 0;
-        if (!courseId) {
-          document.getElementById("loadingState").style.display = "none";
-          renderMaterials();
-          return;
-        }
-        authFetch("/api/materials/" + courseId)
-          .then(function(r) { return r.ok ? r.json() : []; })
-          .then(function(data) {
-            uploadedMaterials = (data || []).map(function(m) {
-              return { name: m.filename || m.file_path || "ملف", size: "—", path: m.file_path, date: m.uploaded_at || "" };
-            });
-            document.getElementById("loadingState").style.display = "none";
-            renderMaterials();
-          })
-          .catch(function() {
-            document.getElementById("loadingState").style.display = "none";
-            renderMaterials();
-          });
-      }
-      loadMaterials();
-    </script>
-  </body>
+    document.addEventListener('DOMContentLoaded', loadCourses);
+  </script>
+</body>
 </html>

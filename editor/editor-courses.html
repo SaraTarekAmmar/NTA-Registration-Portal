@@ -45,11 +45,11 @@
 
       <!-- States -->
       <div id="loadingState" class="editor-state">
-        <div class="editor-state__icon">⏳</div>
+        <div class="editor-state__icon" id="_loadIcon"></div>
         <div class="editor-state__title">جاري تحميل الدورات...</div>
       </div>
       <div id="emptyState" class="editor-state" style="display:none;">
-        <div class="editor-state__icon">📚</div>
+        <div class="editor-state__icon" id="_stateIcon"></div>
         <div class="editor-state__title">لا توجد دورات</div>
         <div class="editor-state__text">جرّب تغيير الفلتر أو البحث. أو أنشئ أول دورة الآن.</div>
         <a href="editor-course-form.html" class="btn btn--primary">إنشاء دورة جديدة</a>
@@ -61,6 +61,9 @@
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
     <script src="js/editor-layout.js"></script>
+    <script src="js/icons.js"></script>
+    <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('books', 36);</script>
+    <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
       var allCourses = [];
@@ -109,6 +112,7 @@
           html += '</div>';
           html += '<div class="editor-course-card__actions">';
           html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
+          html += '<a href="editor-planning.html?id='+c.id+'" class="btn btn--secondary btn--sm" title="التخطيط والتصنيف">' + NTAIcons('calendar',14) + ' تخطيط</a>';
           if(c.status !== "published") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
           html += '</div></div>';
         });

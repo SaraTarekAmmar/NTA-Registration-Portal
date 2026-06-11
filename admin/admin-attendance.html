@@ -97,12 +97,12 @@
       }
       .adm-course-pill:hover {
         border-color: rgba(99, 102, 241, 0.45);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .adm-course-pill.active {
         background: rgba(99, 102, 241, 0.18);
         border-color: rgba(99, 102, 241, 0.65);
-        color: #c7d2fe;
+        color: #fecaca;
         box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
       }
 
@@ -170,7 +170,7 @@
         border-color: rgba(59, 130, 246, 0.2);
       }
       .adm-kpi--sessions .adm-kpi__val {
-        color: #c7d2fe;
+        color: #fecaca;
         text-shadow: 0 0 18px rgba(99, 102, 241, 0.3);
       }
       .adm-kpi--sessions {
@@ -198,12 +198,12 @@
       }
       .adm-session-tab:hover {
         border-color: rgba(99, 102, 241, 0.4);
-        color: #a5b4fc;
+        color: #fca5a5;
       }
       .adm-session-tab.active {
         background: rgba(99, 102, 241, 0.15);
         border-color: rgba(99, 102, 241, 0.6);
-        color: #c7d2fe;
+        color: #fecaca;
         box-shadow: 0 0 12px rgba(99, 102, 241, 0.18);
       }
 
@@ -494,7 +494,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #a5b4fc;
+        color: #fca5a5;
         opacity: 0;
         transition: opacity 0.2s;
       }
@@ -777,9 +777,7 @@
             <span id="admLbLabel">—</span>
             <span class="adm-lightbox__chip" id="admLbTime">—</span>
           </div>
-          <button class="adm-lightbox__close" onclick="admCloseLightbox()" aria-label="إغلاق">
-            ✕
-          </button>
+          <button class="adm-lightbox__close" onclick="admCloseLightbox()" aria-label="إغلاق"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         <img id="admLbImg" class="adm-lightbox__img" src="" alt="" />
       </div>
@@ -802,6 +800,17 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="header/header.js?v=2"></script>
+    <script src="common/js/icons.js"></script>
+    <script>
+      (function() {
+        var ob = document.getElementById('openCamBtn');
+        if (ob) ob.innerHTML = NTAIcons('camera',16) + ' تسجيل الدخول كاميرا (Face AI)';
+        var cb = document.getElementById('captureCamBtn');
+        if (cb) cb.innerHTML = 'تحقق وتسجيل ' + NTAIcons('camera',16);
+        var cc = document.getElementById('closeCamBtn');
+        if (cc) cc.innerHTML = NTAIcons('x',16);
+      })();
+    </script>
     <script>
       (function () {
         /* ── Auth ── */
@@ -886,7 +895,7 @@
                 '" onclick="selectCourse(' +
                 c.id +
                 ')">' +
-                (c.icon || "🏛️") +
+                NTAIcons(c.icon || 'building', 16) +
                 " " +
                 c.name +
                 "</button>"
@@ -1114,7 +1123,7 @@
             inner.classList.add("is-open");
             row.classList.add("is-expanded");
             chevron.style.transform = "rotate(180deg)";
-            chevron.setAttribute("stroke", "#a5b4fc");
+            chevron.setAttribute("stroke", "#fca5a5");
 
             // Build expand content
             inner.innerHTML =
@@ -1125,10 +1134,10 @@
                   var statusBadge = !a
                     ? '<span class="adm-status-badge adm-status-badge--absent">—</span>'
                     : a.status === "present"
-                      ? '<span class="adm-status-badge adm-status-badge--present">✓ حاضر</span>'
+                      ? '<span class="adm-status-badge adm-status-badge--present">' + NTAIcons('check',14) + ' حاضر</span>'
                       : a.status === "excused"
-                        ? '<span class="adm-status-badge adm-status-badge--excused">⏳ مُعذر</span>'
-                        : '<span class="adm-status-badge adm-status-badge--absent">✕ غائب</span>';
+                        ? '<span class="adm-status-badge adm-status-badge--excused">مُعذر</span>'
+                        : '<span class="adm-status-badge adm-status-badge--absent">' + NTAIcons('x',14) + ' غائب</span>';
 
                   var bodyHtml = "";
                   if (a && a.status === "present") {

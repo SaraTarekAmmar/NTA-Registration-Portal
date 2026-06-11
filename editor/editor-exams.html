@@ -31,7 +31,7 @@
       <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;"><span id="pageBannerText"></span></div>
 
       <div id="emptyState" class="editor-state">
-        <div class="editor-state__icon">📝</div>
+        <div class="editor-state__icon" id="_stateIcon"></div>
         <div class="editor-state__title">اختر دورة أولاً</div>
         <div class="editor-state__text">اختر دورة لعرض وإدارة اختباراتها.</div>
       </div>
@@ -79,6 +79,8 @@
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
     <script src="js/editor-layout.js"></script>
+    <script src="js/icons.js"></script>
+    <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('clipboard', 36);</script>
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
       var exams = [];

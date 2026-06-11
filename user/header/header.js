@@ -40,6 +40,7 @@
                     '      <a href="index.html" class="nta-header__btn nta-header__chip" data-page="login" id="headerHomeChip"><span>الرئيسية</span></a>' +
                     '      <a href="courses.html" class="nta-header__btn nta-header__chip" data-page="enrolled-courses" id="headerCoursesChip"><span>دوراتي</span></a>' +
                     '      <a href="admin-users.html" class="nta-header__btn nta-header__chip" data-page="admin-users" id="headerUsersChip" style="display:none"><span>قائمة المرشحين</span></a>' +
+                    '      <a href="admissions.html" class="nta-header__btn nta-header__chip" data-page="admissions" id="headerAdmissionsChip" style="display:none"><span>مراحل القبول</span></a>' +
                     '      <a href="profile.html" class="nta-header__btn nta-header__chip" data-page="profile" id="headerProfileChip">' +
                     '        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
                     '          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" ' +
@@ -73,6 +74,7 @@
             var profileChip = container.querySelector('#headerProfileChip');
             var homeChip = container.querySelector('#headerHomeChip') || container.querySelector('[data-page="login"]');
             var usersChip = container.querySelector('#headerUsersChip');
+            var admissionsChip = container.querySelector('#headerAdmissionsChip');
             var adminChip = container.querySelector('#headerAdminChip');
             var sectionLabel = container.querySelector('#headerSectionLabel');
 
@@ -126,6 +128,10 @@
                     coursesChip.style.display = isTrainee ? 'inline-flex' : 'none';
                     coursesChip.href = prefix + 'courses.html?filter=my';
                     coursesChip.setAttribute('data-page', 'enrolled-courses');
+                }
+                if (admissionsChip) {
+                    admissionsChip.style.display = isTrainee ? 'inline-flex' : 'none';
+                    admissionsChip.href = prefix + 'admissions.html';
                 }
                 if (profileChip) {
                     profileChip.style.display = isTrainee ? 'inline-flex' : 'none';

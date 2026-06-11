@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مراحل القبول - الأكاديمية الوطنية للتدريب</title>
+  <link rel="stylesheet" href="header/header.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { min-height: 100vh; }
+    .adm-wrap { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+    /* Hero */
+    .adm-hero {
+      background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,.12) 0%, transparent 70%);
+      border: 1px solid var(--border-subtle); border-radius: 20px;
+      padding: 2rem 2rem 1.75rem; margin-bottom: 2rem; text-align: center;
+    }
+    .adm-hero__badge {
+      display: inline-block; padding: .3rem .9rem; border-radius: 999px;
+      font-size: .72rem; font-weight: 700; letter-spacing: .05em;
+      background: rgba(59,130,246,.12); color: #60a5fa;
+      border: 1px solid rgba(59,130,246,.25); margin-bottom: .75rem;
+    }
+    .adm-hero__title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 0 0 .5rem; }
+    .adm-hero__sub { font-size: .9rem; color: var(--text-subtle); margin: 0; }
+
+    /* Progress */
+    .adm-progress { margin-bottom: 2rem; }
+    .adm-progress__bar-wrap {
+      height: 6px; border-radius: 999px;
+      background: var(--border-subtle); margin-bottom: .5rem; overflow: hidden;
+    }
+    .adm-progress__fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, #3b82f6, #818cf8);
+      transition: width .4s ease;
+    }
+    .adm-progress__label { font-size: .78rem; color: var(--text-subtle); text-align: center; }
+
+    /* Section cards (timeline) */
+    .adm-timeline { display: flex; flex-direction: column; gap: 1.25rem; position: relative; }
+    .adm-timeline::before {
+      content: ''; position: absolute; right: 27px; top: 0; bottom: 0;
+      width: 2px; background: var(--border-subtle); border-radius: 999px;
+    }
+    .adm-section-card {
+      display: flex; gap: 1rem; position: relative; z-index: 1;
+    }
+    .adm-section-dot {
+      flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem; border: 3px solid var(--border-subtle);
+      background: var(--bg-card, rgba(15,23,42,.8));
+      transition: border-color .3s;
+    }
+    .adm-section-dot--done { border-color: #34d399; background: rgba(16,185,129,.1); }
+    .adm-section-dot--active { border-color: #60a5fa; background: rgba(59,130,246,.1); }
+    .adm-section-dot--locked { border-color: rgba(107,114,128,.3); filter: grayscale(.5); }
+
+    .adm-section-body {
+      flex: 1; background: var(--bg-card, rgba(15,23,42,.6));
+      border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden;
+      transition: border-color .3s;
+    }
+    .adm-section-body.active { border-color: rgba(59,130,246,.4); }
+    .adm-section-body.done { border-color: rgba(16,185,129,.3); }
+
+    .adm-section-header {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .9rem 1.25rem; cursor: pointer;
+    }
+    .adm-section-header:hover { background: rgba(255,255,255,.02); }
+    .adm-section-title { font-size: .98rem; font-weight: 700; color: var(--text-main); flex: 1; }
+    .adm-section-status {
+      font-size: .72rem; font-weight: 600; padding: .2rem .65rem;
+      border-radius: 999px;
+    }
+    .adm-section-status--pending { background: rgba(107,114,128,.12); color: #9ca3af; }
+    .adm-section-status--submitted { background: rgba(59,130,246,.12); color: #60a5fa; }
+    .adm-section-status--done { background: rgba(16,185,129,.12); color: #34d399; }
+    .adm-section-chevron {
+      width: 18px; height: 18px; color: var(--text-subtle);
+      transition: transform .25s;
+    }
+    .adm-section-chevron.open { transform: rotate(180deg); }
+
+    .adm-section-content {
+      display: none; padding: 1.25rem; border-top: 1px solid var(--border-subtle);
+    }
+    .adm-section-content.open { display: block; }
+
+    /* Quiz form */
+    .adm-quiz-info {
+      background: rgba(59,130,246,.07); border: 1px solid rgba(59,130,246,.2);
+      border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+    }
+    .adm-quiz-info p { margin: 0 0 .35rem; font-size: .84rem; color: var(--text-subtle); }
+    .adm-quiz-info p:last-child { margin: 0; }
+    .adm-quiz-info strong { color: var(--text-main); }
+
+    /* Documents checklist */
+    .adm-doc-list { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-direction: column; gap: .5rem; }
+    .adm-doc-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .65rem 1rem; border-radius: 10px;
+      background: rgba(255,255,255,.03); border: 1px solid var(--border-subtle);
+    }
+    .adm-doc-check { font-size: 1rem; }
+    .adm-doc-name { flex: 1; font-size: .88rem; color: var(--text-main); }
+    .adm-doc-upload { font-size: .78rem; color: #60a5fa; cursor: pointer; }
+
+    /* Essay textarea */
+    .adm-essay-prompt {
+      background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.2);
+      border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+      font-size: .88rem; color: var(--text-subtle); line-height: 1.6;
+    }
+    .adm-essay-counter { font-size: .72rem; color: var(--text-subtle); text-align: left; margin-top: .3rem; }
+
+    /* Interview */
+    .adm-interview-note {
+      background: rgba(236,72,153,.06); border: 1px solid rgba(236,72,153,.2);
+      border-radius: 12px; padding: 1rem 1.25rem; font-size: .88rem; color: var(--text-subtle); line-height: 1.6;
+    }
+
+    /* Common inputs */
+    .adm-textarea {
+      width: 100%; box-sizing: border-box;
+      padding: .75rem; border-radius: 10px;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .88rem;
+      resize: vertical; outline: none; transition: border-color .2s;
+    }
+    .adm-textarea:focus { border-color: var(--border-accent); }
+
+    .adm-submit-btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.75rem; border-radius: 12px; border: none; cursor: pointer;
+      background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+      color: white; font-family: inherit; font-weight: 700; font-size: .9rem;
+      transition: opacity .2s; margin-top: 1rem;
+    }
+    .adm-submit-btn:hover { opacity: .9; }
+    .adm-submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* Submitted state */
+    .adm-submitted-banner {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1.1rem; border-radius: 12px; margin-top: .75rem;
+      background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25);
+      font-size: .85rem; color: #34d399;
+    }
+
+    /* Empty & loading */
+    .adm-empty { text-align: center; padding: 4rem 1rem; color: var(--text-subtle); }
+    .adm-empty__icon { font-size: 2.5rem; margin-bottom: .75rem; }
+    .adm-empty__text { font-size: .9rem; }
+
+    /* File input helper */
+    .adm-file-wrap { display: flex; align-items: center; gap: .75rem; }
+    .adm-file-wrap input[type=file] { display: none; }
+    .adm-file-label {
+      padding: .5rem 1rem; border-radius: 8px; cursor: pointer; font-size: .82rem;
+      border: 1px solid rgba(59,130,246,.4); color: #60a5fa; background: transparent;
+      transition: background .2s;
+    }
+    .adm-file-label:hover { background: rgba(59,130,246,.08); }
+    .adm-file-name { font-size: .78rem; color: var(--text-subtle); }
+  </style>
+</head>
+<body data-page="admissions">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+  <div id="ntaHeader"></div>
+
+  <main id="main-content" class="adm-wrap">
+    <div class="adm-hero">
+      <div class="adm-hero__badge">مراحل القبول</div>
+      <h1 class="adm-hero__title">إتمام إجراءات التقديم</h1>
+      <p class="adm-hero__sub">أكمل كل مرحلة بالترتيب للتقدم نحو القبول النهائي</p>
+    </div>
+
+    <div class="adm-progress" id="progressSection" style="display:none;">
+      <div class="adm-progress__bar-wrap">
+        <div class="adm-progress__fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="adm-progress__label" id="progressLabel">0 من 0 مراحل مكتملة</div>
+    </div>
+
+    <div id="sectionsArea">
+      <div class="adm-empty">
+        <div class="adm-empty__icon" id="_loadIcon"></div>
+        <p class="adm-empty__text">جاري تحميل مراحل القبول...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="header/header.js"></script>
+  <script src="common/js/icons.js"></script>
+  <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 40);</script>
+  <script>
+    var API = '/api/admissions-builder';
+    var sections = [];
+    var mySubmissions = {};
+    var token = null;
+
+    function getToken() {
+      try {
+        var s = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
+        return s.token || null;
+      } catch(e) { return null; }
+    }
+
+    function authFetch(url, opts) {
+      opts = opts || {};
+      token = token || getToken();
+      var headers = Object.assign({'Content-Type':'application/json'}, opts.headers || {});
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      return fetch(url, Object.assign({}, opts, {headers: headers}));
+    }
+
+    var TYPE_ICONS = { quiz: NTAIcons('pen',28), documents: NTAIcons('document',28), essay: NTAIcons('pen',28), interview: NTAIcons('mic',28), info: NTAIcons('info',28) };
+    var TYPE_LABELS = { quiz: 'اختبار', documents: 'مستندات', essay: 'مقال', interview: 'مقابلة', info: 'معلومات' };
+
+    function loadData() {
+      var p1 = fetch(API + '/sections').then(function(r){ return r.json(); });
+      var p2 = authFetch(API + '/my-submissions').then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; });
+      Promise.all([p1, p2]).then(function(results) {
+        sections = (results[0] || []).filter(function(s){ return s.is_active; });
+        var subs = results[1] || [];
+        mySubmissions = {};
+        subs.forEach(function(s) { mySubmissions[s.section_id] = s; });
+        renderSections();
+      }).catch(function() {
+        document.getElementById('sectionsArea').innerHTML =
+          '<div class="adm-empty"><div class="adm-empty__icon">' + NTAIcons('warning',40) + '</div><p class="adm-empty__text">فشل في تحميل المراحل</p></div>';
+      });
+    }
+
+    function renderSections() {
+      var area = document.getElementById('sectionsArea');
+      if (!sections.length) {
+        area.innerHTML = '<div class="adm-empty"><div class="adm-empty__icon">' + NTAIcons('wrench',40) + '</div><p class="adm-empty__text">لا توجد مراحل قبول محددة حالياً. يرجى المراجعة لاحقاً.</p></div>';
+        return;
+      }
+
+      var done = 0;
+      sections.forEach(function(s) { if (mySubmissions[s.id]) done++; });
+      var pct = sections.length ? Math.round((done / sections.length) * 100) : 0;
+      document.getElementById('progressSection').style.display = '';
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = done + ' من ' + sections.length + ' مراحل مكتملة (' + pct + '%)';
+
+      var html = '<div class="adm-timeline">';
+      sections.forEach(function(sec, i) {
+        var sub = mySubmissions[sec.id];
+        var isDone = !!sub;
+        var isFirst = i === 0;
+        var prevDone = i === 0 || !!mySubmissions[sections[i - 1].id];
+        var isActive = !isDone && prevDone;
+        var dotClass = isDone ? 'adm-section-dot--done' : (isActive ? 'adm-section-dot--active' : 'adm-section-dot--locked');
+        var bodyClass = isDone ? 'done' : (isActive ? 'active' : '');
+        var statusHtml = isDone
+          ? '<span class="adm-section-status adm-section-status--done" style="display:inline-flex;align-items:center;gap:.25rem;">' + NTAIcons('check',12) + ' مكتمل</span>'
+          : (isActive ? '<span class="adm-section-status adm-section-status--submitted">جاهز للتقديم</span>'
+                      : '<span class="adm-section-status adm-section-status--pending">في الانتظار</span>');
+        var icon = TYPE_ICONS[sec.section_type] || NTAIcons('clipboard',28);
+        var cfg = sec.config_json || {};
+
+        html += '<div class="adm-section-card">' +
+          '<div class="adm-section-dot ' + dotClass + '">' + (isDone ? NTAIcons('check_circle',28) : icon) + '</div>' +
+          '<div class="adm-section-body ' + bodyClass + '">' +
+            '<div class="adm-section-header" onclick="toggleSection(' + sec.id + ', this)">' +
+              '<div class="adm-section-title">' + (i + 1) + '. ' + sec.title_ar + '</div>' +
+              statusHtml +
+              '<svg class="adm-section-chevron' + (isActive ? ' open' : '') + '" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>' +
+            '</div>' +
+            '<div class="adm-section-content' + (isActive ? ' open' : '') + '" id="content_' + sec.id + '">' +
+              buildSectionContent(sec, cfg, sub, isActive) +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+      area.innerHTML = html;
+    }
+
+    function buildSectionContent(sec, cfg, sub, isActive) {
+      if (!isActive && !sub) {
+        return '<p style="font-size:.85rem;color:var(--text-subtle);margin:0 0 .5rem;">أكمل المراحل السابقة للوصول إلى هذه المرحلة.</p>';
+      }
+
+      var type = sec.section_type;
+      var html = '';
+
+      if (sub) {
+        html += '<div class="adm-submitted-banner"><span>' + NTAIcons('check_circle',20) + '</span><span>تم تقديم هذه المرحلة بنجاح.</span></div>';
+        return html;
+      }
+
+      if (type === 'quiz') {
+        var dur = cfg.duration || 60;
+        var qcnt = cfg.question_count || 20;
+        var pass = cfg.passing_score || 60;
+        html += '<div class="adm-quiz-info">' +
+          '<p>' + NTAIcons('calendar',14) + ' المدة: <strong>' + dur + ' دقيقة</strong></p>' +
+          '<p>' + NTAIcons('clipboard',14) + ' عدد الأسئلة: <strong>' + qcnt + ' سؤال</strong></p>' +
+          '<p>' + NTAIcons('target',14) + ' درجة النجاح: <strong>' + pass + '%</strong></p>' +
+        '</div>' +
+        '<p style="font-size:.84rem;color:var(--text-subtle);margin:0 0 .5rem;">سيتم توجيهك إلى صفحة الاختبار عند الضغط على بدء.</p>' +
+        '<button class="adm-submit-btn" onclick="submitSection(' + sec.id + ', \'quiz\', {started: true})">' +
+          NTAIcons('pen',16) + ' بدء الاختبار' +
+        '</button>';
+      } else if (type === 'documents') {
+        var docs = cfg.required_docs || [];
+        html += '<p style="font-size:.84rem;color:var(--text-subtle);margin:0 0 .75rem;">يرجى رفع المستندات المطلوبة التالية:</p>';
+        html += '<ul class="adm-doc-list">';
+        docs.forEach(function(d, i) {
+          html += '<li class="adm-doc-item">' +
+            '<span class="adm-doc-check">' + NTAIcons('document',16) + '</span>' +
+            '<span class="adm-doc-name">' + d + '</span>' +
+            '<div class="adm-file-wrap">' +
+              '<label class="adm-file-label" for="docFile_' + sec.id + '_' + i + '">رفع</label>' +
+              '<input type="file" id="docFile_' + sec.id + '_' + i + '" />' +
+              '<span class="adm-file-name" id="docName_' + sec.id + '_' + i + '">لم يُرفع</span>' +
+            '</div>' +
+          '</li>';
+        });
+        html += '</ul>' +
+          '<button class="adm-submit-btn" onclick="submitSection(' + sec.id + ', \'documents\', {})">' +
+            NTAIcons('paperclip',16) + ' تأكيد الرفع' +
+          '</button>';
+        // Wire up file name display
+        html += '<script>document.addEventListener("DOMContentLoaded",function(){' +
+          docs.map(function(d, i) {
+            return 'var fi_' + sec.id + '_' + i + '=document.getElementById("docFile_' + sec.id + '_' + i + '");' +
+              'if(fi_' + sec.id + '_' + i + ')fi_' + sec.id + '_' + i + '.addEventListener("change",function(){' +
+              'var nm=document.getElementById("docName_' + sec.id + '_' + i + '");' +
+              'if(nm)nm.textContent=this.files[0]?this.files[0].name:"لم يُرفع";});';
+          }).join('') +
+        '});<\/script>';
+      } else if (type === 'essay') {
+        var prompt = cfg.prompt || '';
+        var maxW = cfg.max_words || 500;
+        html += (prompt ? '<div class="adm-essay-prompt">' + prompt + '</div>' : '') +
+          '<label style="font-size:.82rem;font-weight:600;color:var(--text-subtle);display:block;margin-bottom:.4rem;">إجابتك (حتى ' + maxW + ' كلمة)</label>' +
+          '<textarea class="adm-textarea" id="essay_' + sec.id + '" rows="8" placeholder="اكتب مقالتك هنا..." ' +
+            'oninput="updateWordCount(this,' + maxW + ',\'counter_' + sec.id + '\')"></textarea>' +
+          '<div class="adm-essay-counter" id="counter_' + sec.id + '">0 / ' + maxW + ' كلمة</div>' +
+          '<button class="adm-submit-btn" onclick="submitEssay(' + sec.id + ')">' +
+            NTAIcons('pen',16) + ' تقديم المقال' +
+          '</button>';
+      } else if (type === 'interview') {
+        var note = cfg.note || 'سيتم التواصل معك لتحديد موعد المقابلة.';
+        html += '<div class="adm-interview-note" style="display:flex;align-items:flex-start;gap:.5rem;">' + NTAIcons('mic',16) + '<span>' + note + '</span></div>' +
+          '<button class="adm-submit-btn" onclick="submitSection(' + sec.id + ', \'interview\', {confirmed: true})">' +
+            NTAIcons('check_circle',16) + ' تأكيد الاستلام' +
+          '</button>';
+      } else {
+        html += '<p style="font-size:.88rem;color:var(--text-subtle);margin:0 0 .75rem;">' +
+          (cfg.note || 'يرجى قراءة التعليمات والمتابعة.') + '</p>' +
+          '<button class="adm-submit-btn" onclick="submitSection(' + sec.id + ', \'info\', {acknowledged: true})">' +
+            NTAIcons('check_circle',16) + ' تأكيد القراءة' +
+          '</button>';
+      }
+      return html;
+    }
+
+    function toggleSection(id, headerEl) {
+      var content = document.getElementById('content_' + id);
+      var chevron = headerEl.querySelector('.adm-section-chevron');
+      if (!content) return;
+      var isOpen = content.classList.contains('open');
+      content.classList.toggle('open', !isOpen);
+      if (chevron) chevron.classList.toggle('open', !isOpen);
+    }
+
+    function updateWordCount(ta, max, counterId) {
+      var words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      var el = document.getElementById(counterId);
+      if (el) el.textContent = words + ' / ' + max + ' كلمة';
+      if (words > max) ta.style.borderColor = '#f87171';
+      else ta.style.borderColor = '';
+    }
+
+    function submitEssay(sectionId) {
+      var ta = document.getElementById('essay_' + sectionId);
+      if (!ta || !ta.value.trim()) { alert('يرجى كتابة المقال أولاً.'); return; }
+      submitSection(sectionId, 'essay', { essay_text: ta.value.trim() });
+    }
+
+    function submitSection(sectionId, type, answers) {
+      var btn = event.target;
+      if (btn) { btn.disabled = true; btn.textContent = 'جاري التقديم...'; }
+      authFetch(API + '/submit', {
+        method: 'POST',
+        body: JSON.stringify({ section_id: sectionId, answers_json: answers }),
+      })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(e){ throw new Error(e.detail || 'فشل التقديم'); });
+        return r.json();
+      })
+      .then(function() {
+        var content = document.getElementById('content_' + sectionId);
+        if (content) {
+          content.innerHTML = '<div class="adm-submitted-banner"><span>' + NTAIcons('check_circle',20) + '</span><span>تم تقديم هذه المرحلة بنجاح. يمكنك المتابعة للمرحلة التالية.</span></div>';
+        }
+        mySubmissions[sectionId] = { section_id: sectionId };
+        setTimeout(function() { loadData(); }, 1200);
+      })
+      .catch(function(e) {
+        if (btn) { btn.disabled = false; btn.textContent = 'إعادة المحاولة'; }
+        alert(e.message || 'حدث خطأ. يرجى المحاولة مجدداً.');
+      });
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

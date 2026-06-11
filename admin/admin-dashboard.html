@@ -229,21 +229,13 @@
         border-radius: 20px;
         margin-bottom: 1.75rem;
         background:
-          radial-gradient(
-            circle at top right,
-            rgba(99, 102, 241, 0.15),
-            transparent 55%
-          ),
-          radial-gradient(
-            circle at bottom left,
-            rgba(6, 182, 212, 0.1),
-            transparent 55%
-          ),
-          rgba(8, 12, 32, 0.7);
-        border: 1px solid rgba(99, 102, 241, 0.2);
+          radial-gradient(circle at top right, rgba(185,28,28,0.1), transparent 52%),
+          radial-gradient(circle at bottom left, rgba(30,50,100,0.12), transparent 55%),
+          rgba(4, 6, 18, 0.78);
+        border: 1px solid rgba(185,28,28,0.18);
         box-shadow:
-          0 0 0 1px rgba(15, 23, 42, 0.95),
-          0 0 40px rgba(99, 102, 241, 0.06);
+          0 0 0 1px rgba(5, 8, 20, 0.95),
+          0 0 40px rgba(185,28,28,0.05);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -260,11 +252,7 @@
         width: 220px;
         height: 220px;
         border-radius: 50%;
-        background: radial-gradient(
-          circle,
-          rgba(99, 102, 241, 0.12) 0%,
-          transparent 70%
-        );
+        background: radial-gradient(circle, rgba(185,28,28,0.09) 0%, transparent 70%);
         pointer-events: none;
       }
       .adm-hero__title {
@@ -309,10 +297,10 @@
         overflow: hidden;
       }
       .adm-chart-card:hover {
-        border-color: rgba(99, 102, 241, 0.3);
+        border-color: rgba(185,28,28,0.28);
         box-shadow:
           0 8px 24px rgba(0, 0, 0, 0.25),
-          0 0 20px rgba(99, 102, 241, 0.07);
+          0 0 20px rgba(185,28,28,0.07);
       }
       .adm-chart-card--wide {
         grid-column: 1 / -1;
@@ -336,7 +324,7 @@
         background: transparent;
       }
       .adm-chart-legend-scroll::-webkit-scrollbar-thumb {
-        background: rgba(99, 102, 241, 0.4);
+        background: rgba(185,28,28,0.4);
         border-radius: 999px;
       }
       .adm-chart-legend-item {
@@ -374,9 +362,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(99, 102, 241, 0.12);
-        border: 1px solid rgba(99, 102, 241, 0.25);
-        color: var(--accent-hover);
+        background: rgba(185,28,28,0.1);
+        border: 1px solid rgba(185,28,28,0.22);
+        color: #fca5a5;
       }
       .adm-chart-card__icon svg {
         width: 14px;
@@ -445,9 +433,9 @@
         transition: all 0.2s;
       }
       .adm-stage-item:hover {
-        border-color: rgba(99, 102, 241, 0.5);
-        color: var(--color-accent-pale);
-        background: rgba(99, 102, 241, 0.08);
+        border-color: rgba(185,28,28,0.45);
+        color: #fca5a5;
+        background: rgba(185,28,28,0.07);
       }
       .adm-stage-item__dot {
         width: 8px;
@@ -680,7 +668,8 @@
         width: 3px;
         height: 15px;
         border-radius: 999px;
-        background: linear-gradient(180deg, var(--accent), var(--color-info));
+        background: linear-gradient(180deg, #f87171, #b91c1c);
+        box-shadow: 0 0 8px rgba(248,113,113,0.35);
         flex-shrink: 0;
       }
 
@@ -706,7 +695,7 @@
       .adm-hero__greeting {
         font-size: 0.8rem;
         font-weight: 600;
-        color: var(--color-info-soft);
+        color: #fca5a5;
         margin: 0 0 0.3rem;
         display: flex;
         align-items: center;
@@ -716,8 +705,8 @@
         content: "";
         width: 6px; height: 6px;
         border-radius: 50%;
-        background: var(--color-info-soft);
-        box-shadow: 0 0 8px rgba(96,165,250,0.6);
+        background: #ef4444;
+        box-shadow: 0 0 8px rgba(239,68,68,0.6);
         animation: admGreetPulse 2s ease-in-out infinite;
         flex-shrink: 0;
       }
@@ -735,8 +724,8 @@
       .adm-hero__date {
         font-size: 0.78rem;
         color: var(--text-subtle);
-        background: rgba(99,102,241,0.07);
-        border: 1px solid rgba(99,102,241,0.2);
+        background: rgba(185,28,28,0.07);
+        border: 1px solid rgba(185,28,28,0.2);
         border-radius: 999px;
         padding: 0.32rem 0.9rem;
         white-space: nowrap;
@@ -761,6 +750,182 @@
         70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
         100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
       }
+
+      /* ══ Pipeline Funnel ══ */
+      .adm-pipeline {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        margin-bottom: 1.75rem;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: rgba(8,12,32,0.35);
+        backdrop-filter: blur(12px);
+      }
+      @media (max-width: 800px) { .adm-pipeline { grid-template-columns: repeat(3, 1fr); } }
+      @media (max-width: 480px) { .adm-pipeline { grid-template-columns: repeat(2, 1fr); } }
+
+      .adm-pipe-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 1.2rem 0.5rem 1rem;
+        border-left: 1px solid var(--border-main);
+        text-decoration: none;
+        transition: background 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .adm-pipe-step:first-child { border-left: none; }
+      .adm-pipe-step:hover { background: rgba(185,28,28,0.05); }
+      .adm-pipe-step::after {
+        content: "";
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 3px;
+        opacity: 0;
+        transition: opacity 0.25s;
+        border-radius: 3px 3px 0 0;
+      }
+      .adm-pipe-step:hover::after { opacity: 1; }
+      .adm-pipe-step[data-stage="1"]::after { background: #ef4444; }
+      .adm-pipe-step[data-stage="2"]::after { background: #60a5fa; }
+      .adm-pipe-step[data-stage="3"]::after { background: #3b82f6; }
+      .adm-pipe-step[data-stage="4"]::after { background: #c084fc; }
+      .adm-pipe-step[data-stage="5"]::after { background: #fbbf24; }
+      .adm-pipe-step[data-stage="6"]::after { background: #34d399; }
+
+      .adm-pipe-step__icon {
+        width: 36px; height: 36px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        border: 1px solid;
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      }
+      .adm-pipe-step:hover .adm-pipe-step__icon { transform: scale(1.1); }
+      .adm-pipe-step[data-stage="1"] .adm-pipe-step__icon { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+      .adm-pipe-step[data-stage="2"] .adm-pipe-step__icon { background: rgba(96,165,250,0.1); border-color: rgba(96,165,250,0.3); color: #93c5fd; }
+      .adm-pipe-step[data-stage="3"] .adm-pipe-step__icon { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #7dd3fc; }
+      .adm-pipe-step[data-stage="4"] .adm-pipe-step__icon { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); color: #d8b4fe; }
+      .adm-pipe-step[data-stage="5"] .adm-pipe-step__icon { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: #fde68a; }
+      .adm-pipe-step[data-stage="6"] .adm-pipe-step__icon { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: #6ee7b7; }
+      .adm-pipe-step__icon svg { width: 15px; height: 15px; }
+
+      .adm-pipe-step__val {
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      }
+      .adm-pipe-step:hover .adm-pipe-step__val { transform: scale(1.08); }
+      .adm-pipe-step__lbl {
+        font-size: 0.62rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+        text-align: center;
+        line-height: 1.35;
+      }
+      .adm-pipe-step__tag {
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.12rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid;
+        white-space: nowrap;
+      }
+      .adm-pipe-step[data-stage="1"] .adm-pipe-step__tag { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #fca5a5; }
+      .adm-pipe-step[data-stage="2"] .adm-pipe-step__tag { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.25); color: #93c5fd; }
+      .adm-pipe-step[data-stage="3"] .adm-pipe-step__tag { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); color: #7dd3fc; }
+      .adm-pipe-step[data-stage="4"] .adm-pipe-step__tag { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); color: #d8b4fe; }
+      .adm-pipe-step[data-stage="5"] .adm-pipe-step__tag { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fde68a; }
+      .adm-pipe-step[data-stage="6"] .adm-pipe-step__tag { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.25); color: #6ee7b7; }
+
+      /* ══ Quick Actions Grid (3×3) ══ */
+      .adm-quick-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.85rem;
+        margin-bottom: 1.75rem;
+      }
+      @media (max-width: 900px) { .adm-quick-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 520px)  { .adm-quick-grid { grid-template-columns: 1fr; } }
+
+      .adm-quick {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 1.05rem 1.2rem;
+        border-radius: 16px;
+        background: rgba(8,12,32,0.48);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        text-decoration: none;
+        color: var(--text-main);
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .adm-quick::before {
+        content: "";
+        position: absolute; inset: 0;
+        border-radius: inherit;
+        background: var(--q-bg, transparent);
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+      .adm-quick:hover { transform: translateY(-4px) scale(1.01); }
+      .adm-quick:hover::before { opacity: 1; }
+
+      .adm-quick--cands   { --q-bg: rgba(185,28,28,0.08);   border-color: rgba(185,28,28,0.2); }
+      .adm-quick--cands:hover   { border-color: rgba(185,28,28,0.52); box-shadow: 0 10px 32px rgba(185,28,28,0.14); color: #fca5a5; }
+      .adm-quick--train   { --q-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.2); }
+      .adm-quick--train:hover   { border-color: rgba(16,185,129,0.55); box-shadow: 0 10px 32px rgba(16,185,129,0.14); color: #6ee7b7; }
+      .adm-quick--attend  { --q-bg: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); }
+      .adm-quick--attend:hover  { border-color: rgba(167,139,250,0.5); box-shadow: 0 10px 32px rgba(167,139,250,0.13); color: #c4b5fd; }
+      .adm-quick--steps   { --q-bg: rgba(236,72,153,0.07);  border-color: rgba(236,72,153,0.2); }
+      .adm-quick--steps:hover   { border-color: rgba(236,72,153,0.55); box-shadow: 0 10px 32px rgba(236,72,153,0.12); color: #f9a8d4; }
+      .adm-quick--admit   { --q-bg: rgba(20,184,166,0.07);  border-color: rgba(20,184,166,0.2); }
+      .adm-quick--admit:hover   { border-color: rgba(20,184,166,0.55); box-shadow: 0 10px 32px rgba(20,184,166,0.12); color: #5eead4; }
+      .adm-quick--flow    { --q-bg: rgba(30,58,138,0.1);    border-color: rgba(30,58,138,0.22); }
+      .adm-quick--flow:hover    { border-color: rgba(59,130,246,0.5); box-shadow: 0 10px 32px rgba(59,130,246,0.12); color: #93c5fd; }
+      .adm-quick--courses { --q-bg: rgba(245,158,11,0.07);  border-color: rgba(245,158,11,0.2); }
+      .adm-quick--courses:hover { border-color: rgba(245,158,11,0.5); box-shadow: 0 10px 32px rgba(245,158,11,0.12); color: #fde68a; }
+      .adm-quick--perms   { --q-bg: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.2); }
+      .adm-quick--perms:hover   { border-color: rgba(248,113,113,0.5); box-shadow: 0 10px 32px rgba(248,113,113,0.12); color: #fca5a5; }
+      .adm-quick--recs    { --q-bg: rgba(251,191,36,0.07);  border-color: rgba(251,191,36,0.2); }
+      .adm-quick--recs:hover    { border-color: rgba(251,191,36,0.5); box-shadow: 0 10px 32px rgba(251,191,36,0.12); color: #fde68a; }
+
+      .adm-quick__icon {
+        width: 46px; height: 46px;
+        border-radius: 13px;
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        position: relative; z-index: 1;
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        border: 1px solid;
+      }
+      .adm-quick:hover .adm-quick__icon { transform: scale(1.12) rotate(-5deg); }
+      .adm-quick--cands   .adm-quick__icon { background: rgba(185,28,28,0.14);   border-color: rgba(185,28,28,0.32);   color: #fca5a5; }
+      .adm-quick--train   .adm-quick__icon { background: rgba(16,185,129,0.15);  border-color: rgba(16,185,129,0.35);  color: #6ee7b7; }
+      .adm-quick--attend  .adm-quick__icon { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.35); color: #c4b5fd; }
+      .adm-quick--steps   .adm-quick__icon { background: rgba(236,72,153,0.15);  border-color: rgba(236,72,153,0.35);  color: #f9a8d4; }
+      .adm-quick--admit   .adm-quick__icon { background: rgba(20,184,166,0.15);  border-color: rgba(20,184,166,0.35);  color: #5eead4; }
+      .adm-quick--flow    .adm-quick__icon { background: rgba(59,130,246,0.14);  border-color: rgba(59,130,246,0.3);   color: #93c5fd; }
+      .adm-quick--courses .adm-quick__icon { background: rgba(245,158,11,0.15);  border-color: rgba(245,158,11,0.35);  color: #fde68a; }
+      .adm-quick--perms   .adm-quick__icon { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.35); color: #fca5a5; }
+      .adm-quick--recs    .adm-quick__icon { background: rgba(251,191,36,0.15);  border-color: rgba(251,191,36,0.35);  color: #fde68a; }
+
+      .adm-quick__icon svg { width: 20px; height: 20px; }
+      .adm-quick__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+      .adm-quick__title { font-size: 0.89rem; font-weight: 700; margin: 0 0 0.18rem; line-height: 1.3; }
+      .adm-quick__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
+      .adm-quick__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
+      .adm-quick:hover .adm-quick__arrow { transform: translateX(-5px); opacity: 1; }
     </style>
     <script src="js/admin-guard.js"></script>
 </head>
@@ -1002,130 +1167,161 @@
         </div>
       </div>
 
-      <!-- Stages legend -->
-      <div class="adm-stages-wrap">
-        <span class="adm-stages-label">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"
-            />
-            <rect x="9" y="3" width="6" height="4" rx="2" />
-          </svg>
-          المراحل:
-        </span>
-        <a
-          href="admin-candidates.html?stage=1"
-          class="adm-stage-item"
-          data-stage="1"
-        >
-          <span class="adm-stage-item__dot"></span><b>1</b> الفرز الإلكتروني
+      <!-- Pipeline Funnel -->
+      <p class="adm-section-title">مسار خط الفلترة</p>
+      <div class="adm-pipeline">
+        <a href="admin-candidates.html?stage=1" class="adm-pipe-step" data-stage="1">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount1">—</div>
+          <div class="adm-pipe-step__lbl">الفرز الإلكتروني</div>
+          <div class="adm-pipe-step__tag">المرحلة 1</div>
         </a>
-        <a
-          href="admin-candidates.html?stage=2"
-          class="adm-stage-item"
-          data-stage="2"
-        >
-          <span class="adm-stage-item__dot"></span><b>2</b> الاستعلام الأمني
+        <a href="admin-candidates.html?stage=2" class="adm-pipe-step" data-stage="2">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount2">—</div>
+          <div class="adm-pipe-step__lbl">الاستعلام الأمني</div>
+          <div class="adm-pipe-step__tag">المرحلة 2</div>
         </a>
-        <a
-          href="admin-candidates.html?stage=3"
-          class="adm-stage-item"
-          data-stage="3"
-        >
-          <span class="adm-stage-item__dot"></span><b>3</b> الاختبار النفسي
+        <a href="admin-candidates.html?stage=3" class="adm-pipe-step" data-stage="3">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount3">—</div>
+          <div class="adm-pipe-step__lbl">الاختبار النفسي</div>
+          <div class="adm-pipe-step__tag">المرحلة 3</div>
         </a>
-        <a
-          href="admin-candidates.html?stage=4"
-          class="adm-stage-item"
-          data-stage="4"
-        >
-          <span class="adm-stage-item__dot"></span><b>4</b> اختبارات المعلومات
-          العامة
+        <a href="admin-candidates.html?stage=4" class="adm-pipe-step" data-stage="4">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount4">—</div>
+          <div class="adm-pipe-step__lbl">اختبار المعلومات</div>
+          <div class="adm-pipe-step__tag">المرحلة 4</div>
         </a>
-        <a
-          href="admin-candidates.html?stage=5"
-          class="adm-stage-item"
-          data-stage="5"
-        >
-          <span class="adm-stage-item__dot"></span><b>5</b> المقابلة الأولى
+        <a href="admin-candidates.html?stage=5" class="adm-pipe-step" data-stage="5">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount5">—</div>
+          <div class="adm-pipe-step__lbl">المقابلة الأولى</div>
+          <div class="adm-pipe-step__tag">المرحلة 5</div>
         </a>
-        <a
-          href="admin-candidates.html?stage=6"
-          class="adm-stage-item"
-          data-stage="6"
-        >
-          <span class="adm-stage-item__dot"></span><b>6</b> المقابلة الثانية
+        <a href="admin-candidates.html?stage=6" class="adm-pipe-step" data-stage="6">
+          <div class="adm-pipe-step__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="adm-pipe-step__val" id="pipeCount6">—</div>
+          <div class="adm-pipe-step__lbl">المقابلة الثانية</div>
+          <div class="adm-pipe-step__tag">المرحلة 6</div>
         </a>
       </div>
 
-      <!-- CTA Buttons -->
-      <p class="adm-section-title">روابط سريعة</p>
-      <div class="adm-cta-row">
-        <a href="admin-candidates.html" class="adm-cta adm-cta--candidates">
-          <div class="adm-cta__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
+      <!-- Quick Actions Grid -->
+      <p class="adm-section-title">إجراءات سريعة</p>
+      <div class="adm-quick-grid">
+        <a href="admin-candidates.html" class="adm-quick adm-quick--cands">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           </div>
-          <div class="adm-cta__body">
-            <div class="adm-cta__title">عرض قائمة المرشحين</div>
-            <div class="adm-cta__sub">المراحل 1–6 من خط التقديم</div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">المرشحون</div>
+            <div class="adm-quick__sub">المراحل 1–6 من خط التقديم</div>
           </div>
-          <span class="adm-cta__arrow">←</span>
+          <span class="adm-quick__arrow">←</span>
         </a>
 
-        <a href="admin-trainees.html" class="adm-cta adm-cta--trainees">
-          <div class="adm-cta__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
+        <a href="admin-trainees.html" class="adm-quick adm-quick--train">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           </div>
-          <div class="adm-cta__body">
-            <div class="adm-cta__title">عرض قائمة المتدربين</div>
-            <div class="adm-cta__sub">المسجلون النشطون في الدورات</div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">المتدربون</div>
+            <div class="adm-quick__sub">المسجلون النشطون في الدورات</div>
           </div>
-          <span class="adm-cta__arrow">←</span>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-attendance.html" class="adm-quick adm-quick--attend">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14l2 2 4-4"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">الحضور والغياب</div>
+            <div class="adm-quick__sub">متابعة الجلسات والتقارير</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-reg-steps.html" class="adm-quick adm-quick--steps">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">خطوات التسجيل</div>
+            <div class="adm-quick__sub">قفل / فتح مراحل التقديم</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-admissions-builder.html" class="adm-quick adm-quick--admit">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">منشئ القبول</div>
+            <div class="adm-quick__sub">مراحل الاختبار والمستندات</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-flow-builder.html" class="adm-quick adm-quick--flow">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h8m-8 6h16"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">منشئ التدفق</div>
+            <div class="adm-quick__sub">تدفقات مخصصة لكل نوع دورة</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-courses.html" class="adm-quick adm-quick--courses">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">البرامج والدورات</div>
+            <div class="adm-quick__sub">إدارة كتالوج البرامج</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-permissions.html" class="adm-quick adm-quick--perms">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">الصلاحيات</div>
+            <div class="adm-quick__sub">إدارة المستخدمين والأدوار</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
+        </a>
+
+        <a href="admin-final.html" class="adm-quick adm-quick--recs">
+          <div class="adm-quick__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="adm-quick__body">
+            <div class="adm-quick__title">لوحة القرارات</div>
+            <div class="adm-quick__sub">القبول والرفض النهائي</div>
+          </div>
+          <span class="adm-quick__arrow">←</span>
         </a>
       </div>
-
-      <!-- Courses CTA -->
-      <a href="admin-courses.html" class="adm-courses-cta">
-        <div class="adm-courses-cta__icon">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
-        </div>
-        <span class="adm-courses-cta__text">إدارة كتالوج البرامج والدورات</span>
-        <span class="adm-courses-cta__arrow">←</span>
-      </a>
     </main>
 
     <div id="chatWidget"></div>
@@ -1185,7 +1381,7 @@
           { id: 1, label: "الفرز الإلكتروني", colorVar: "--color-error", fallback: "#ef4444" },
           { id: 2, label: "الاستعلام الأمني", colorVar: "--color-info-soft", fallback: "#60a5fa" },
           { id: 3, label: "الاختبار النفسي", colorVar: "--color-info",      fallback: "#3b82f6" },
-          { id: 4, label: "اختبارات المعلومات", colorVar: "--accent-hover", fallback: "#818cf8" },
+          { id: 4, label: "اختبارات المعلومات", colorVar: "--color-purple", fallback: "#c084fc" },
           { id: 5, label: "المقابلة الأولى", colorVar: "--theme-btn-color", fallback: "#fbbf24" },
           { id: 6, label: "المقابلة الثانية", colorVar: "--color-success-soft", fallback: "#34d399" },
         ];
@@ -1240,15 +1436,15 @@
           var CHART_GRID_COLOR = "rgba(51,65,85,0.35)";
           var cInfo = getThemeColor("--color-info", "#3b82f6");
           var cPurple = getThemeColor("--color-purple", "#8b5cf6");
-          var cAccent = getThemeColor("--accent", "#6366f1");
-          var cAccentHover = getThemeColor("--accent-hover", "#818cf8");
-          var cAccentPale = getThemeColor("--color-accent-pale", "#a5b4fc");
-          var cAccentPale2 = getThemeColor("--color-accent-pale-2", "#c7d2fe");
+          var cAccent = getThemeColor("--accent", "#b91c1c");
+          var cAccentHover = getThemeColor("--accent-hover", "#ef4444");
+          var cAccentPale = getThemeColor("--color-accent-pale", "#fca5a5");
+          var cAccentPale2 = getThemeColor("--color-accent-pale-2", "#fecaca");
 
           function sharedTooltip() {
             return {
               backgroundColor: "rgba(8,12,32,0.92)",
-              borderColor: "rgba(99,102,241,0.3)",
+              borderColor: "rgba(185,28,28,0.3)",
               borderWidth: 1,
               textStyle: {
                 color: getThemeColor("--text-main", "#e2e8f0"),
@@ -1278,6 +1474,12 @@
             var deg = t.category || "غير محدد";
             eduCounts[deg] = (eduCounts[deg] || 0) + 1;
           });
+
+          // Populate pipeline funnel counts
+          for (var _s = 1; _s <= 6; _s++) {
+            var _el = document.getElementById("pipeCount" + _s);
+            if (_el) _el.textContent = stageCounts[_s] !== undefined ? stageCounts[_s] : 0;
+          }
 
           // ── Stage donut ──
           var elStage = document.getElementById("admChartStage");
@@ -1427,7 +1629,7 @@
                   emphasis: {
                     itemStyle: {
                       shadowBlur: 12,
-                      shadowColor: "rgba(99,102,241,0.4)",
+                      shadowColor: "rgba(185,28,28,0.4)",
                     },
                   },
                 },
@@ -1573,8 +1775,8 @@
                   },
                   areaStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                      { offset: 0, color: "rgba(99,102,241,0.3)" },
-                      { offset: 1, color: "rgba(99,102,241,0.02)" },
+                      { offset: 0, color: "rgba(185,28,28,0.3)" },
+                      { offset: 1, color: "rgba(185,28,28,0.02)" },
                     ]),
                   },
                   label: {

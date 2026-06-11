@@ -472,7 +472,7 @@
                   <div class="mat-tags">
                     <span class="mat-tag tag-type">${t.label}</span>
                     <span class="mat-tag tag-dur">${mat.dur}</span>
-                    ${isDone ? '<span class="mat-tag tag-done">✓ مكتمل</span>' : ''}
+                    ${isDone ? '<span class="mat-tag tag-done">مكتمل</span>' : ''}
                   </div>
                 </div>
                 <div class="mat-right">

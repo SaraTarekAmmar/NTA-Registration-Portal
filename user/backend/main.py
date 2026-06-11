@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, admin
+from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, admin, reg_steps, registration_flow
 from fastapi import Request
 
 load_dotenv()
@@ -99,6 +99,8 @@ app.include_router(exams.router)
 app.include_router(assignments.router)
 app.include_router(trainer.router)
 app.include_router(admin.router)
+app.include_router(reg_steps.router)
+app.include_router(registration_flow.router)
 
 
 

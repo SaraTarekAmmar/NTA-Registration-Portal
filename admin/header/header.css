@@ -1,259 +1,295 @@
-/* ===== NTA Header - Neon Glow Style ===== */
-.nta-header {
-    position: relative;
-    z-index: 100;
-    margin: 1.25rem auto;
-    width: 95%;
-    padding: 0.6rem 1.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 55%),
-        var(--bg-header, rgba(10, 20, 40, 0.96));
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border-accent);
-    border-radius: 999px;
-    box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 1),
-        0 0 24px rgba(37, 99, 235, 0.45),
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 var(--surface-glass-border);
-}
-div#ntaHeader {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-.nta-header__logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    color: inherit;
+/* ═══════════════════════════════════════════════════════════════
+   NTA PREMIUM SIDEBAR — Dark Navy Government Design System
+   Loaded by admin/header.js and editor/js/editor-layout.js
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --sb-w: 256px;
 }
 
-.nta-header__logo-img {
-    height: 48px;
-    width: auto;
+/* ── Override legacy horizontal-header containers ── */
+#ntaHeader,
+#editorSidebar {
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  left: auto !important;
+  width: var(--sb-w) !important;
+  height: 100vh !important;
+  z-index: 9000 !important;
+  display: block !important;
+  flex-direction: unset !important;
+  justify-content: unset !important;
+  padding: 0 !important;
 }
 
-.nta-header__logo-text {
-    display: flex;
-    flex-direction: column;
+/* ── Body: make room for sidebar on all content pages ── */
+body[data-page] {
+  padding-right: var(--sb-w) !important;
+  padding-top: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  min-height: 100vh !important;
 }
 
-.nta-header__logo-main {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--text-main);
+/* ════════════════════════════════════════
+   SIDEBAR SHELL
+   ════════════════════════════════════════ */
+.nta-sidebar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.05), transparent 52%),
+    rgba(3,5,14,0.99);
+  backdrop-filter: blur(52px) saturate(130%);
+  -webkit-backdrop-filter: blur(52px) saturate(130%);
+  border-left: 1px solid rgba(255,255,255,0.052);
+  overflow: hidden;
 }
 
-.nta-header__logo-sub {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
+/* Crimson top accent line */
+.nta-sidebar::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #b91c1c 0%, rgba(185,28,28,0.45) 55%, transparent 100%);
+  z-index: 2;
 }
 
-.nta-header__logo-ar {
-    font-size: 0.7rem;
-    color: var(--text-subtle);
+/* Ambient glow at top-right */
+.nta-sidebar::after {
+  content: "";
+  position: absolute;
+  top: -80px; right: -50px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(185,28,28,0.055), transparent 70%);
+  pointer-events: none;
 }
 
-.nta-header__nav {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+/* ════════════════════════════════════════
+   BRAND ZONE
+   ════════════════════════════════════════ */
+.nta-sidebar__brand {
+  padding: 1.5rem 1.2rem 1.05rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
-.nta-header__center {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    text-align: center;
+.nta-sidebar__logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  text-decoration: none;
+  color: inherit;
 }
 
-.nta-header__section-label {
-    display: inline-block;
-    color: var(--text-main);
-    font-size: 0.85rem;
-    opacity: 0.85;
+.nta-sidebar__logo-img {
+  height: 38px;
+  width: auto;
+  flex-shrink: 0;
 }
 
-.nta-header__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.25rem;
-    background: linear-gradient(180deg, var(--color-info-soft) 0%, var(--color-info) 100%);
-    border: none;
-    border-radius: 14px;
-    color: white;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+.nta-sidebar__logo-fallback {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #991b1b, #450a0a);
+  display: none;
+  align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.82rem;
+  color: #fecaca;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(185,28,28,0.42);
+  flex-shrink: 0;
 }
 
-.nta-header__btn:hover {
-    background: linear-gradient(180deg, var(--color-info-soft) 0%, var(--color-info) 100%);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+.nta-sidebar__logo-text {
+  display: flex; flex-direction: column;
+  gap: 0.14rem; line-height: 1; min-width: 0;
 }
 
-.nta-header__btn.active {
-    box-shadow: 0 0 12px var(--chip-border);
+.nta-sidebar__logo-main {
+  font-size: 0.9rem; font-weight: 800;
+  color: #f1f5f9; letter-spacing: 0.1em;
 }
 
-/* Center tabs inside nav: show as outlined pills even if they use nta-header__btn */
-.nta-header__nav .nta-header__btn {
-    padding: 0.38rem 1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8);
-    background: transparent;
-    color: var(--chip-text);
-    font-size: 0.8rem;
-    box-shadow: none;
+.nta-sidebar__logo-sub {
+  font-size: 0.47rem;
+  color: rgba(148,163,184,0.36);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.nta-header__nav .nta-header__btn:hover,
-.nta-header__nav .nta-header__btn.active {
-    border-color: rgba(96, 165, 250, 1);
-    background: transparent;
-    color: var(--text-main);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+.nta-sidebar__logo-ar {
+  font-size: 0.58rem;
+  color: rgba(148,163,184,0.4);
 }
 
-.nta-header__btn svg {
-    width: 20px;
-    height: 20px;
+/* Role badge */
+.nta-sidebar__role {
+  margin-top: 0.78rem;
+  display: inline-flex; align-items: center; gap: 0.34rem;
+  padding: 0.2rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.58rem; font-weight: 700;
+  background: rgba(185,28,28,0.08);
+  border: 1px solid rgba(185,28,28,0.18);
+  color: #fca5a5; letter-spacing: 0.04em;
 }
 
-/* Center tabs (simple chips) */
-.nta-header__chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.38rem 1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8);
-    background: transparent;
-    color: var(--chip-text);
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+.nta-sidebar__role-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #ef4444; flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(239,68,68,0.55);
+  animation: ntaSbPulse 2.8s ease-in-out infinite;
 }
 
-.nta-header__chip:hover {
-    border-color: rgba(96, 165, 250, 1);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+@keyframes ntaSbPulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  50%      { opacity: 0.25; box-shadow: none; }
 }
 
-.nta-header__chip.active {
-    border-color: rgba(59, 130, 246, 1);
-    background: transparent;
-    color: var(--text-main);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(37, 99, 235, 0.75);
+/* ════════════════════════════════════════
+   NAVIGATION
+   ════════════════════════════════════════ */
+.nta-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.55rem 0.58rem;
+  display: flex; flex-direction: column; gap: 0.1rem;
+  scrollbar-width: none;
+  position: relative; z-index: 1;
+}
+.nta-sidebar__nav::-webkit-scrollbar { display: none; }
+
+.nta-sidebar__nav-lbl {
+  font-size: 0.54rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(100,116,139,0.36);
+  padding: 0.72rem 0.65rem 0.26rem;
+  user-select: none;
 }
 
-.nta-header__chip svg {
-    width: 17px;
-    height: 17px;
+.nta-sidebar__item {
+  position: relative;
+  display: flex; align-items: center; gap: 0.68rem;
+  padding: 0.64rem 0.78rem;
+  border-radius: 9px;
+  text-decoration: none;
+  color: rgba(100,116,139,0.82);
+  font-size: 0.81rem; font-weight: 600;
+  transition: color 0.16s ease, background 0.16s ease;
+  white-space: nowrap; overflow: hidden;
 }
 
-.nta-header__label {
-    color: var(--text-main);
-    font-size: 1rem;
-    font-weight: 500;
+.nta-sidebar__item:hover {
+  color: #cbd5e1;
+  background: rgba(255,255,255,0.03);
 }
 
-.nta-header__theme {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--theme-btn-bg, rgba(251, 191, 36, 0.15));
-    border: 1px solid var(--theme-btn-border, rgba(251, 191, 36, 0.4));
-    color: var(--theme-btn-color);
-    cursor: pointer;
-    transition: background 0.25s ease, box-shadow 0.25s ease;
-    flex-shrink: 0;
-    z-index: 2;
+.nta-sidebar__item.active {
+  color: #fecaca;
+  background: rgba(185,28,28,0.08);
 }
 
-.nta-header__theme:hover {
-    background: rgba(251, 191, 36, 0.25);
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+/* Active indicator stripe on left (inner edge of RTL sidebar) */
+.nta-sidebar__item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 18%; bottom: 18%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #f87171, #b91c1c);
+  box-shadow: 0 0 10px rgba(248,113,113,0.42);
 }
 
-.nta-header__theme svg {
-    width: 22px;
-    height: 22px;
+.nta-sidebar__item svg {
+  width: 15px; height: 15px; flex-shrink: 0;
+  opacity: 0.58; transition: opacity 0.16s;
+}
+.nta-sidebar__item:hover svg  { opacity: 0.82; }
+.nta-sidebar__item.active svg { opacity: 1; color: #fca5a5; }
+
+.nta-sidebar__item-lbl { flex: 1; }
+
+.nta-sidebar__divider {
+  height: 1px;
+  background: rgba(255,255,255,0.044);
+  margin: 0.3rem 0.6rem;
 }
 
-.nta-header__btn--logout {
-    padding: 0.4rem 1.2rem;
-    border-radius: 999px;
-    background: transparent;
-    border: 1px solid rgba(248, 113, 113, 0.8);
-    color: var(--color-error-pale);
-    box-shadow: none;
+/* ════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════ */
+.nta-sidebar__footer {
+  flex-shrink: 0;
+  padding: 0.82rem 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; gap: 0.55rem;
+  position: relative; z-index: 1;
 }
 
-.nta-header__btn--logout:hover {
-    background: rgba(127, 29, 29, 0.25);
-    border-color: rgba(248, 113, 113, 1);
-    box-shadow: 0 0 16px rgba(248, 113, 113, 0.55);
+.nta-sidebar__user {
+  display: flex; align-items: center; gap: 0.56rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.016);
+  border: 1px solid rgba(255,255,255,0.044);
 }
 
-/* Login button style (left big pill) */
-.nta-header__btn--login {
-    padding-inline: 1.4rem;
+.nta-sidebar__avatar {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: linear-gradient(135deg, #1b2d4f, #0b1930);
+  border: 1px solid rgba(255,255,255,0.065);
+  display: flex; align-items: center; justify-content: center;
+  color: #334155; flex-shrink: 0;
+}
+.nta-sidebar__avatar svg { width: 13px; height: 13px; }
+
+.nta-sidebar__user-info { flex: 1; min-width: 0; }
+
+.nta-sidebar__user-name {
+  font-size: 0.71rem; font-weight: 700; color: #cbd5e1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.nta-header__btn--login svg {
-    width: 18px;
-    height: 18px;
+.nta-sidebar__user-role-lbl {
+  font-size: 0.57rem; color: rgba(51,65,85,0.9);
 }
 
-/* Actions container (left side) */
-.nta-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.nta-sidebar__logout {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.38rem; padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239,68,68,0.13);
+  background: rgba(239,68,68,0.03);
+  color: rgba(252,165,165,0.52);
+  font-family: inherit; font-size: 0.73rem; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
+.nta-sidebar__logout:hover {
+  background: rgba(239,68,68,0.09);
+  border-color: rgba(239,68,68,0.34);
+  color: #fca5a5;
+}
+.nta-sidebar__logout svg { width: 13px; height: 13px; }
 
-/* Trainee app: reuse same pill header layout as login (no overrides) */
-
-/* Responsive header */
-@media (max-width: 768px) {
-    .nta-header {
-        flex-wrap: wrap;
-        padding: 0.75rem 1rem;
-        gap: 0.75rem;
-    }
-
-    .nta-header__logo-text .nta-header__logo-sub,
-    .nta-header__logo-ar {
-        display: none;
-    }
-
-    .nta-header__nav {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+@media (max-width: 1024px) { :root { --sb-w: 220px; } }
+@media (max-width: 700px) {
+  :root { --sb-w: 0px; }
+  #ntaHeader, #editorSidebar { display: none !important; }
+  body[data-page] { padding-right: 0 !important; }
 }

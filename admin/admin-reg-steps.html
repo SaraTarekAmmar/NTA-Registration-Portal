@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة خطوات التسجيل</title>
+  <link rel="stylesheet" href="trainee.css" />
+  <link rel="stylesheet" href="header/header.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-portal.css" />
+  <link rel="stylesheet" href="admin-theme.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/admin-guard.js"></script>
+  <script src="common/js/icons.js"></script>
+  <style>
+    .rs-page { max-width: 860px; margin: 2rem auto; padding: 0 1.25rem; }
+    .rs-hero { margin-bottom: 2rem; }
+    .rs-hero__title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 0 0 .4rem; }
+    .rs-hero__sub { color: var(--text-subtle); font-size: .9rem; margin: 0; }
+
+    .rs-info-bar {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1.25rem; border-radius: 14px;
+      background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.25);
+      color: var(--color-info, #60a5fa); font-size: .85rem;
+      margin-bottom: 1.75rem;
+    }
+    .rs-info-bar svg { flex-shrink: 0; width: 18px; height: 18px; }
+
+    .rs-grid { display: flex; flex-direction: column; gap: .75rem; }
+
+    .rs-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem; border-radius: 16px;
+      background: var(--bg-card, rgba(15,23,42,.6));
+      border: 1px solid var(--border-subtle);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .rs-card:hover { border-color: var(--border-accent); box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+    .rs-card.locked { border-color: rgba(248,113,113,.4); background: rgba(127,29,29,.12); }
+
+    .rs-card__order {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700; flex-shrink: 0;
+      background: rgba(59,130,246,.15); color: var(--color-info, #60a5fa);
+      border: 1px solid rgba(59,130,246,.25);
+    }
+    .rs-card.locked .rs-card__order {
+      background: rgba(248,113,113,.15); color: #f87171;
+      border-color: rgba(248,113,113,.3);
+    }
+
+    .rs-card__info { flex: 1; }
+    .rs-card__title { font-size: .98rem; font-weight: 700; color: var(--text-main); margin: 0 0 .2rem; }
+    .rs-card__key { font-size: .75rem; color: var(--text-subtle); margin: 0; font-family: monospace; direction: ltr; }
+
+    .rs-card__badge {
+      font-size: .72rem; font-weight: 600; padding: .25rem .65rem;
+      border-radius: 999px; flex-shrink: 0;
+    }
+    .rs-card__badge--open {
+      background: rgba(16,185,129,.15); color: #34d399;
+      border: 1px solid rgba(16,185,129,.3);
+    }
+    .rs-card__badge--locked {
+      background: rgba(248,113,113,.15); color: #f87171;
+      border: 1px solid rgba(248,113,113,.3);
+    }
+
+    .rs-toggle {
+      position: relative; width: 48px; height: 26px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .rs-toggle input { opacity: 0; width: 0; height: 0; }
+    .rs-toggle__track {
+      position: absolute; inset: 0;
+      border-radius: 999px; transition: background .25s;
+      background: rgba(16,185,129,.3); border: 1px solid rgba(16,185,129,.4);
+    }
+    input:checked + .rs-toggle__track {
+      background: rgba(248,113,113,.3); border-color: rgba(248,113,113,.4);
+    }
+    .rs-toggle__thumb {
+      position: absolute; top: 3px; right: 3px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #34d399; transition: transform .25s, background .25s;
+    }
+    input:checked ~ .rs-toggle__thumb { transform: translateX(-22px); background: #f87171; }
+
+    .rs-saving { font-size: .8rem; color: var(--text-subtle); margin-right: .5rem; opacity: 0; transition: opacity .3s; }
+    .rs-saving.show { opacity: 1; }
+
+    .rs-summary-bar {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .rs-summary-chip {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .5rem 1rem; border-radius: 999px; font-size: .82rem; font-weight: 600;
+    }
+    .rs-summary-chip--open { background: rgba(16,185,129,.1); color: #34d399; border: 1px solid rgba(16,185,129,.25); }
+    .rs-summary-chip--locked { background: rgba(248,113,113,.1); color: #f87171; border: 1px solid rgba(248,113,113,.25); }
+  </style>
+</head>
+<body data-page="reg-steps">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+  <div id="ntaHeader"></div>
+  <main id="main-content" class="rs-page">
+    <div class="rs-hero">
+      <h1 class="rs-hero__title">إدارة خطوات التسجيل</h1>
+      <p class="rs-hero__sub">تحكم في قفل وفتح كل خطوة من خطوات نموذج تسجيل المتدربين</p>
+    </div>
+
+    <div class="rs-info-bar">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      الخطوات المقفولة لن يتمكن المتدربون من التقدم إليها أو إكمالها. يُطبَّق القفل فورياً.
+    </div>
+
+    <div class="rs-summary-bar" id="summaryBar">
+      <div class="rs-summary-chip rs-summary-chip--open" id="openCount">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+        <span id="openCountVal">—</span> مفتوح
+      </div>
+      <div class="rs-summary-chip rs-summary-chip--locked" id="lockedCount">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zM12 7a4 4 0 00-4 4v1h8V11a4 4 0 00-4-4z"/></svg>
+        <span id="lockedCountVal">—</span> مقفول
+      </div>
+    </div>
+
+    <div class="rs-grid" id="stepsGrid">
+      <div style="text-align:center;padding:3rem;color:var(--text-subtle);">جاري التحميل...</div>
+    </div>
+  </main>
+
+  <script src="header/header.js"></script>
+  <script src="js/admin-layout.js"></script>
+  <script>
+    var API = '/api/registration-steps';
+    var steps = [];
+
+    function renderSteps() {
+      var grid = document.getElementById('stepsGrid');
+      var open = 0, locked = 0;
+      var html = '';
+      steps.forEach(function(s) {
+        var isLocked = !!s.is_locked;
+        if (isLocked) locked++; else open++;
+        var checked = isLocked ? 'checked' : '';
+        html += '<div class="rs-card' + (isLocked ? ' locked' : '') + '" id="card_' + s.step_key + '">' +
+          '<div class="rs-card__order">' + s.step_order + '</div>' +
+          '<div class="rs-card__info">' +
+            '<p class="rs-card__title">' + s.title_ar + '</p>' +
+            '<p class="rs-card__key">' + s.step_key + '</p>' +
+          '</div>' +
+          '<span class="rs-card__badge ' + (isLocked ? 'rs-card__badge--locked' : 'rs-card__badge--open') + '" id="badge_' + s.step_key + '">' +
+            (isLocked ? NTAIcons('lock',14) + ' مقفول' : NTAIcons('unlock',14) + ' مفتوح') +
+          '</span>' +
+          '<span class="rs-saving" id="saving_' + s.step_key + '">جاري الحفظ...</span>' +
+          '<label class="rs-toggle" title="' + (isLocked ? 'إلغاء القفل' : 'قفل الخطوة') + '">' +
+            '<input type="checkbox" ' + checked + ' onchange="toggleStep(\'' + s.step_key + '\', this.checked)" />' +
+            '<span class="rs-toggle__track"></span>' +
+            '<span class="rs-toggle__thumb"></span>' +
+          '</label>' +
+        '</div>';
+      });
+      grid.innerHTML = html;
+      document.getElementById('openCountVal').textContent = open;
+      document.getElementById('lockedCountVal').textContent = locked;
+    }
+
+    function toggleStep(key, isChecked) {
+      var savingEl = document.getElementById('saving_' + key);
+      savingEl.classList.add('show');
+      var token = localStorage.getItem('admin_token');
+      fetch(API + '/' + key, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ is_locked: isChecked })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var idx = steps.findIndex(function(s) { return s.step_key === key; });
+        if (idx >= 0) steps[idx].is_locked = data.is_locked ? 1 : 0;
+        renderSteps();
+      })
+      .catch(function() {
+        alert('فشل في الحفظ، يرجى المحاولة مجدداً.');
+        loadSteps();
+      })
+      .finally(function() {
+        savingEl.classList.remove('show');
+      });
+    }
+
+    function loadSteps() {
+      var token = localStorage.getItem('admin_token');
+      fetch(API, { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { steps = data; renderSteps(); })
+        .catch(function() {
+          document.getElementById('stepsGrid').innerHTML =
+            '<div style="text-align:center;padding:2rem;color:#f87171;">فشل في تحميل الخطوات</div>';
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSteps);
+  </script>
+</body>
+</html>

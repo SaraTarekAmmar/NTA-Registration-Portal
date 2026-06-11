@@ -50,7 +50,7 @@ async def get_admin_courses(current_user: dict = Depends(get_staff_user)):
         cursor.execute("SELECT id, title as name FROM courses")
         courses = cursor.fetchall()
         # Add simple icons for the UI
-        icons = ["🏛️", "🛡️", "🎯", "📊", "💻", "🚀"]
+        icons = ["building", "shield", "target", "chart", "laptop", "rocket"]
         for i, c in enumerate(courses):
             c["icon"] = icons[i % len(icons)]
         # Map IDs to strings for frontend compatibility

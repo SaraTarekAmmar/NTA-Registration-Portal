@@ -360,7 +360,7 @@ async function generate() {
     if (all.length) {
       state.quiz = { questions: all };
       state.showPreview = true;
-      showToast(`تم توليد ${all.length} سؤالاً بنجاح ✓`, "success");
+      showToast(`تم توليد ${all.length} سؤالاً بنجاح`, "success");
     }
   } catch {
     showToast("حدث خطأ تقني أثناء التوليد — حاول مرة أخرى", "error");
@@ -857,7 +857,7 @@ function renderPreview() {
                         .map(
                           (v) => `
                         <div class="tf-item ${String(q.answer).toLowerCase() === v.toLowerCase() ? "correct" : ""}">
-                          ${v === "True" ? "صح ✓" : "خطأ ✗"}
+                          ${v === "True" ? "صح" : "خطأ"}
                         </div>
                       `,
                         )

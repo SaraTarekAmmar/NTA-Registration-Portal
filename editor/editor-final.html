@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="editor.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/editor-guard.js"></script>
+    <script src="js/icons.js"></script>
     <style>
       .final-card {
         max-width: 520px;
@@ -40,7 +41,7 @@
     <div id="editorSidebar"></div>
     <main id="main-content" class="editor-main">
       <div id="finalCard" class="final-card">
-        <div class="final-icon" id="finalIcon">✅</div>
+        <div class="final-icon" id="finalIcon"></div>
         <h1 class="final-title" id="finalTitle">تمت العملية بنجاح</h1>
         <p class="final-sub" id="finalSub"></p>
         <div class="final-actions" id="finalActions"></div>
@@ -65,7 +66,7 @@
 
         if (action === "published") {
           icon.className = "final-icon final-icon--success";
-          icon.textContent = "🎉";
+          icon.innerHTML = NTAIcons('sparkles', 48);
           title.textContent = "تم نشر الدورة بنجاح";
           sub.textContent = "الدورة الآن مرئية للمتدربين ويمكنهم الاطلاع عليها.";
           actions.innerHTML =
@@ -75,7 +76,7 @@
 
         } else if (action === "draft") {
           icon.className = "final-icon final-icon--draft";
-          icon.textContent = "💾";
+          icon.innerHTML = NTAIcons('save', 48);
           title.textContent = "تم حفظ المسودة بنجاح";
           sub.textContent = "تم حفظ الدورة كمسودة. يمكنك الاستمرار في التعديل ونشرها لاحقاً.";
           actions.innerHTML =
@@ -84,7 +85,7 @@
 
         } else if (action === "archived") {
           icon.className = "final-icon final-icon--archive";
-          icon.textContent = "📦";
+          icon.innerHTML = NTAIcons('box', 48);
           title.textContent = "تم أرشفة الدورة";
           sub.textContent = "الدورة لم تعد نشطة. يمكنك إلغاء الأرشفة في أي وقت.";
           actions.innerHTML =

@@ -893,3 +893,40 @@ html.light-mode .au-table__avatar {
 html.light-mode .au-table__avatar-fallback {
   color: var(--accent-solid);
 }
+
+/* ═══════════════════════════════════════════════════════
+   NTA Admin — Crimson brand palette (dark mode)
+   Overrides the default indigo accent from theme.css
+   ═══════════════════════════════════════════════════════ */
+:root:not(.light-mode) {
+  --accent:                 #b91c1c;
+  --accent-hover:           #ef4444;
+  --accent-solid:           #b91c1c;
+  --accent-glow:            rgba(185,28,28,0.4);
+  --border-accent:          rgba(185,28,28,0.35);
+  --quiz-accent-tint-bg:    rgba(185,28,28,0.1);
+  --quiz-accent-tint-border:rgba(185,28,28,0.25);
+  --quiz-accent-text:       #f87171;
+  --shadow-accent:          0 8px 24px rgba(185,28,28,0.22);
+  --admin-toggle-active:    rgba(185,28,28,0.12);
+  --admin-focus-ring:       rgba(185,28,28,0.18);
+  --admin-border-focus:     rgba(185,28,28,0.45);
+}
+
+/* ═══════════════════════════════════════════════════════
+   NTA Admin — Crimson brand palette (light mode)
+   ═══════════════════════════════════════════════════════ */
+html.light-mode {
+  --accent:                 #b91c1c;
+  --accent-hover:           #dc2626;
+  --accent-solid:           #991b1b;
+  --accent-glow:            rgba(185,28,28,0.2);
+  --border-accent:          rgba(185,28,28,0.35);
+  --quiz-accent-tint-bg:    rgba(185,28,28,0.08);
+  --quiz-accent-tint-border:rgba(185,28,28,0.2);
+  --quiz-accent-text:       #b91c1c;
+  --shadow-accent:          0 8px 24px rgba(185,28,28,0.15);
+  --admin-toggle-active:    rgba(185,28,28,0.1);
+  --admin-focus-ring:       rgba(185,28,28,0.12);
+  --admin-border-focus:     rgba(185,28,28,0.4);
+}

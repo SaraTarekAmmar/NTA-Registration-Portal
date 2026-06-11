@@ -9,45 +9,138 @@
     <link rel="stylesheet" href="/styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
+      /* ══ Premium dark navy background ══ */
+      body.has-header {
+        background: #030712 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 100vh !important;
+        padding: 2rem 1rem !important;
+      }
+
+      .login-bg {
+        background:
+          radial-gradient(ellipse 80% 55% at 15% 10%, rgba(185,28,28,0.06), transparent 55%),
+          radial-gradient(ellipse 55% 40% at 90% 85%, rgba(185,28,28,0.04), transparent 60%),
+          radial-gradient(ellipse 60% 35% at 80% 5%,  rgba(20,30,70,0.35), transparent 65%) !important;
+        animation: none !important;
+      }
+
+      /* ══ Premium glass card ══ */
+      .login-card {
+        max-width: 480px !important;
+        background: rgba(5,8,20,0.88) !important;
+        backdrop-filter: blur(42px) saturate(140%) !important;
+        -webkit-backdrop-filter: blur(42px) saturate(140%) !important;
+        border: 1px solid rgba(255,255,255,0.065) !important;
+        border-top-color: rgba(185,28,28,0.38) !important;
+        border-radius: 18px !important;
+        box-shadow:
+          0 0 0 1px rgba(185,28,28,0.06),
+          0 32px 80px rgba(0,0,0,0.55),
+          0 8px 24px rgba(0,0,0,0.4) !important;
+      }
+
+
+      /* ══ Background orbs ══ */
+      .login-bg::before {
+        content: "";
+        position: fixed;
+        top: -18%; right: -10%;
+        width: 560px; height: 560px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(185,28,28,0.06) 0%, transparent 65%);
+        pointer-events: none;
+        animation: loginOrbA 12s ease-in-out infinite alternate;
+      }
+      .login-bg::after {
+        content: "";
+        position: fixed;
+        bottom: -14%; left: -10%;
+        width: 460px; height: 460px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20,30,90,0.1) 0%, transparent 65%);
+        pointer-events: none;
+        animation: loginOrbA 15s ease-in-out infinite alternate-reverse;
+      }
+      @keyframes loginOrbA {
+        from { transform: translate(0, 0) scale(1); }
+        to   { transform: translate(32px, 20px) scale(1.1); }
+      }
+
+      /* ══ Role badge ══ */
       .login-role-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.45rem;
-        padding: 0.35rem 0.9rem;
+        padding: 0.28rem 0.78rem;
         border-radius: 999px;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.35);
-        color: #6ee7b7;
+        background: rgba(185,28,28,0.1);
+        border: 1px solid rgba(185,28,28,0.28);
+        color: #fca5a5;
         margin-bottom: 0.5rem;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.06em;
       }
-      .login-role-badge svg { width: 14px; height: 14px; }
+      .login-role-badge svg { width: 13px; height: 13px; }
+
+      /* ══ Heading override ══ */
+      .login-card h1 {
+        background: linear-gradient(135deg, #f87171 0%, #fca5a5 60%, #fecaca 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        font-size: 1.28rem !important;
+      }
+
+      /* ══ Submit button — crimson ══ */
+      .login-btn {
+        background: linear-gradient(135deg, #991b1b 0%, #b91c1c 50%, #dc2626 100%) !important;
+        box-shadow: 0 4px 20px rgba(185,28,28,0.38) !important;
+      }
+      .login-btn::before {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+      }
+      .login-btn:hover:not(.loading) {
+        box-shadow: 0 8px 28px rgba(185,28,28,0.52) !important;
+      }
+
+
+      /* ══ Error / bottom link / field-error ══ */
+      .login-error-msg {
+        background: rgba(239,68,68,0.1);
+        border: 1px solid rgba(239,68,68,0.35);
+        border-radius: 10px;
+        padding: 0.65rem 1rem;
+        font-size: 0.84rem;
+        color: #fca5a5;
+        margin-top: 0.75rem;
+      }
+      .field-error {
+        font-size: 0.76rem;
+        color: #fca5a5;
+        margin-top: 0.3rem;
+      }
       .login-admin-link {
         display: block;
         text-align: center;
         margin-top: 1.25rem;
         font-size: 0.82rem;
-        color: var(--text-subtle);
+        color: rgba(148,163,184,0.55);
         text-decoration: none;
         transition: color 0.2s;
       }
-      .login-admin-link:hover { color: var(--accent-hover); }
-      .login-error-msg {
-        background: rgba(239,68,68,0.1);
-        border: 1px solid rgba(239,68,68,0.35);
-        border-radius: 12px;
-        padding: 0.7rem 1rem;
-        font-size: 0.85rem;
-        color: var(--color-error-soft, #fca5a5);
-        margin-top: 0.75rem;
+      .login-admin-link:hover { color: #fca5a5; }
+
+      /* ══ Input focus: crimson glow ══ */
+      .login-input-wrap:focus-within {
+        border-color: rgba(185,28,28,0.55) !important;
+        box-shadow: 0 0 0 2px rgba(185,28,28,0.18) !important;
       }
-      .field-error {
-        font-size: 0.78rem;
-        color: var(--color-error-soft, #fca5a5);
-        margin-top: 0.3rem;
-      }
+      .login-input-wrap:focus-within .login-input-icon { color: #f87171 !important; }
     </style>
   </head>
 
@@ -72,6 +165,7 @@
 
       <h1>تسجيل دخول محرر المحتوى</h1>
       <p class="subtitle">بوابة إدارة الدورات والمواد التعليمية</p>
+
 
       <form id="editorLoginForm" novalidate>
         <div class="form-group">

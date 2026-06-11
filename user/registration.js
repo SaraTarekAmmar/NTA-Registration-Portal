@@ -3,6 +3,97 @@
     const API_PREFIX = (window.location.protocol.startsWith('http'))
         ? ''
         : 'http://127.0.0.1:8000';
+
+    // Dynamic flow: keyed by step_key ("step_1" … "step_10")
+    // Each entry: { is_visible, is_locked, locked_reason, status, id }
+    const dynamicFlow = {};
+    const urlParams0 = new URLSearchParams(window.location.search);
+    const flowCourseType = urlParams0.get('course_type') || 'default';
+
+    function _loadDynamicFlow() {
+        var session = {};
+        try { session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}'); } catch(e) {}
+        var token = session.token;
+        var headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+        fetch(API_PREFIX + '/api/registration-flow?course_type=' + encodeURIComponent(flowCourseType), { headers: headers })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+                if (!data || !data.steps) return;
+                // Mark every step_1..step_10 hidden by default, then overlay resolved flow
+                for (var i = 1; i <= TOTAL_STEPS; i++) {
+                    dynamicFlow['step_' + i] = { is_visible: false, is_locked: false, locked_reason: null };
+                }
+                data.steps.forEach(function(s) {
+                    dynamicFlow[s.step_key] = {
+                        is_visible:    true,
+                        is_locked:     s.is_locked,
+                        locked_reason: s.locked_reason,
+                        status:        s.status,
+                        id:            s.id,
+                    };
+                });
+                _applyDynamicFlow();
+            })
+            .catch(function() {
+                // Fallback: all steps visible, none locked
+                for (var i = 1; i <= TOTAL_STEPS; i++) {
+                    dynamicFlow['step_' + i] = { is_visible: true, is_locked: false, locked_reason: null };
+                }
+            });
+    }
+
+    function _applyDynamicFlow() {
+        var stepperItems = document.querySelectorAll('.reg-stepper__item');
+        stepperItems.forEach(function(item, idx) {
+            var key = 'step_' + (idx + 1);
+            var fd = dynamicFlow[key];
+            if (fd && !fd.is_visible) {
+                item.style.display = 'none';
+                item.setAttribute('aria-hidden', 'true');
+            }
+        });
+        // Hide form step panels that are not in flow
+        document.querySelectorAll('.reg-step').forEach(function(panel) {
+            var num = parseInt(panel.getAttribute('data-step'), 10);
+            if (!num) return;
+            var key = 'step_' + num;
+            var fd = dynamicFlow[key];
+            if (fd && !fd.is_visible) {
+                panel.setAttribute('data-flow-hidden', 'true');
+            }
+        });
+        updateUI();
+    }
+
+    function _getVisibleStepCount() {
+        var count = 0;
+        for (var i = 1; i <= TOTAL_STEPS; i++) {
+            var fd = dynamicFlow['step_' + i];
+            if (!fd || fd.is_visible !== false) count++;
+        }
+        return count;
+    }
+
+    function _nextVisibleStep(from) {
+        for (var i = from + 1; i <= TOTAL_STEPS; i++) {
+            var fd = dynamicFlow['step_' + i];
+            if (!fd || fd.is_visible !== false) return i;
+        }
+        return null;
+    }
+
+    function _prevVisibleStep(from) {
+        for (var i = from - 1; i >= 1; i--) {
+            var fd = dynamicFlow['step_' + i];
+            if (!fd || fd.is_visible !== false) return i;
+        }
+        return null;
+    }
+
+    _loadDynamicFlow();
+
+    // Legacy locked-step set (kept for backward compat, superseded by dynamicFlow)
+    const lockedStepOrders = new Set();
     const MAX_IDENTITY_DOCUMENT_FILES = 3;
 
     // Parse role from URL query parameters (default to 'trainee')
@@ -20,7 +111,7 @@
             if (registrationRole === "trainer") {
                 banner.classList.add("trainer");
                 label.innerText = "مدرب معتمد (Trainer)";
-                if (icon) icon.innerText = "👨‍🏫";
+                if (icon) icon.innerHTML = NTAIcons('teacher', 20);
             } else {
                 banner.classList.add("trainee");
                 label.innerText = "متدرب جديد (Trainee)";
@@ -1080,18 +1171,28 @@
 
         stepperItems.forEach((item, i) => {
             const stepNum = i + 1;
+            const fd = dynamicFlow['step_' + stepNum];
+            if (fd && !fd.is_visible) return; // already hidden
             item.classList.toggle('active', stepNum === currentStep);
             item.classList.toggle('completed', stepNum < currentStep);
         });
 
-        const progress = ((currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+        const visibleCount = _getVisibleStepCount();
+        const visibleSteps = [];
+        for (let i = 1; i <= TOTAL_STEPS; i++) {
+            const fd = dynamicFlow['step_' + i];
+            if (!fd || fd.is_visible !== false) visibleSteps.push(i);
+        }
+        const posInVisible = visibleSteps.indexOf(currentStep);
+        const progress = visibleSteps.length > 1 ? (posInVisible / (visibleSteps.length - 1)) * 100 : 100;
         progressBar.style.setProperty('--progress', progress + '%');
         const stepperSteps = document.querySelector('.reg-stepper__steps');
         if (stepperSteps) stepperSteps.style.setProperty('--progress', progress + '%');
 
-        btnPrev.disabled = currentStep === 1;
+        btnPrev.disabled = _prevVisibleStep(currentStep) === null;
 
-        if (currentStep === TOTAL_STEPS) {
+        const lastVisible = visibleSteps[visibleSteps.length - 1];
+        if (currentStep === lastVisible) {
             btnNext.style.display = 'none';
             btnSubmit.style.display = '';
         } else {
@@ -1111,8 +1212,8 @@
         // Update progressbar ARIA attributes
         const bar = document.querySelector('.reg-stepper__bar');
         if (bar) {
-            bar.setAttribute('aria-valuenow', currentStep);
-            bar.setAttribute('aria-label', 'تقدم التسجيل: الخطوة ' + currentStep + ' من ' + TOTAL_STEPS);
+            bar.setAttribute('aria-valuenow', posInVisible + 1);
+            bar.setAttribute('aria-label', 'تقدم التسجيل: الخطوة ' + (posInVisible + 1) + ' من ' + visibleSteps.length);
         }
 
         // Announce step change to screen readers and move focus
@@ -1136,14 +1237,19 @@
 
     function goNext() {
         if (validateCurrentStep()) {
-            if (currentStep < TOTAL_STEPS) {
-                const leaving = currentStep;
-                saveFormState();
-                currentStep++;
-                if (leaving === 5) skillsStep5Locked = true;
-                syncUrlToStep(currentStep);
-                updateUI();
+            const nextStep = _nextVisibleStep(currentStep);
+            if (nextStep === null) return;
+            const fd = dynamicFlow['step_' + nextStep];
+            if (fd && fd.is_locked) {
+                showDropdownMessage(fd.locked_reason || 'هذه الخطوة مغلقة مؤقتاً من قِبَل الإدارة. يرجى المحاولة لاحقاً.', true);
+                return;
             }
+            const leaving = currentStep;
+            saveFormState();
+            currentStep = nextStep;
+            if (leaving === 5) skillsStep5Locked = true;
+            syncUrlToStep(currentStep);
+            updateUI();
         } else {
             // Focus first invalid field for screen reader users
             const stepEl = document.querySelector('.reg-step.active');
@@ -1158,9 +1264,10 @@
     }
 
     function goPrev() {
-        if (currentStep > 1) {
+        const prevStep = _prevVisibleStep(currentStep);
+        if (prevStep !== null) {
             saveFormState();
-            currentStep--;
+            currentStep = prevStep;
             if (currentStep === 5) skillsStep5Locked = false;
             syncUrlToStep(currentStep);
             updateUI();

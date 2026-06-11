@@ -46,7 +46,7 @@ body { overflow-x: hidden; }
   padding: 1.25rem 1.5rem;
   border-radius: 16px;
   background: rgba(8, 12, 32, 0.5);
-  border: 1px solid rgba(16,185,129,0.12);
+  border: 1px solid rgba(185,28,28,0.12);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   display: flex;
@@ -57,17 +57,17 @@ body { overflow-x: hidden; }
   cursor: pointer;
 }
 .editor-kpi:hover {
-  border-color: rgba(16,185,129,0.3);
+  border-color: rgba(185,28,28,0.35);
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(16,185,129,0.1);
+  box-shadow: 0 8px 24px rgba(185,28,28,0.12);
 }
 .editor-kpi__icon {
   width: 44px; height: 44px;
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(16,185,129,0.12);
-  border: 1px solid rgba(16,185,129,0.25);
-  color: #6ee7b7;
+  background: rgba(185,28,28,0.1);
+  border: 1px solid rgba(185,28,28,0.22);
+  color: #fca5a5;
   flex-shrink: 0;
 }
 .editor-kpi__icon svg { width: 22px; height: 22px; }
@@ -105,7 +105,7 @@ body { overflow-x: hidden; }
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .editor-course-card:hover {
-  border-color: rgba(16,185,129,0.25);
+  border-color: rgba(185,28,28,0.25);
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 .editor-course-card__title {
@@ -178,14 +178,14 @@ body { overflow-x: hidden; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn--primary {
-  background: linear-gradient(135deg, rgba(16,185,129,0.25), rgba(16,185,129,0.1));
-  border-color: rgba(16,185,129,0.4);
-  color: #6ee7b7;
+  background: linear-gradient(135deg, rgba(185,28,28,0.22), rgba(185,28,28,0.08));
+  border-color: rgba(185,28,28,0.4);
+  color: #fca5a5;
 }
 .btn--primary:hover:not(:disabled) {
-  background: rgba(16,185,129,0.25);
-  border-color: rgba(16,185,129,0.6);
-  box-shadow: 0 4px 14px rgba(16,185,129,0.2);
+  background: rgba(185,28,28,0.28);
+  border-color: rgba(185,28,28,0.62);
+  box-shadow: 0 4px 14px rgba(185,28,28,0.2);
 }
 
 .btn--secondary {
@@ -286,7 +286,7 @@ body { overflow-x: hidden; }
   vertical-align: middle;
 }
 .editor-table tr:last-child td { border-bottom: none; }
-.editor-table tr:hover td { background: rgba(16,185,129,0.04); }
+.editor-table tr:hover td { background: rgba(185,28,28,0.04); }
 
 /* State messages */
 .editor-state {
@@ -435,9 +435,9 @@ body { overflow-x: hidden; }
   transition: border-color 0.2s;
 }
 .editor-input:focus-visible, .editor-textarea:focus-visible, .editor-select:focus-visible {
-  border-color: rgba(16,185,129,0.6);
+  border-color: rgba(185,28,28,0.6);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 0 3px rgba(185,28,28,0.15);
 }
 .editor-input.error, .editor-textarea.error { border-color: rgba(239,68,68,0.5); }
 .editor-textarea { resize: vertical; min-height: 100px; }
@@ -465,15 +465,15 @@ body { overflow-x: hidden; }
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
 }
-.editor-step.active { color: #6ee7b7; }
+.editor-step.active { color: #fca5a5; }
 .editor-step.active .editor-step__num {
-  background: rgba(16,185,129,0.2);
-  border-color: rgba(16,185,129,0.5);
+  background: rgba(185,28,28,0.2);
+  border-color: rgba(185,28,28,0.5);
 }
 .editor-step.done { color: var(--text-subtle); }
 .editor-step.done .editor-step__num {
-  background: rgba(16,185,129,0.12);
-  border-color: rgba(16,185,129,0.2);
+  background: rgba(185,28,28,0.12);
+  border-color: rgba(185,28,28,0.2);
 }
 .editor-step__connector {
   flex: 1;
@@ -485,7 +485,7 @@ body { overflow-x: hidden; }
 
 /* Upload area */
 .editor-upload-area {
-  border: 2px dashed rgba(16,185,129,0.25);
+  border: 2px dashed rgba(185,28,28,0.25);
   border-radius: 14px;
   padding: 2.5rem;
   text-align: center;
@@ -495,9 +495,9 @@ body { overflow-x: hidden; }
   font-size: 0.85rem;
 }
 .editor-upload-area:hover, .editor-upload-area.dragover {
-  border-color: rgba(16,185,129,0.5);
-  background: rgba(16,185,129,0.05);
-  color: #6ee7b7;
+  border-color: rgba(185,28,28,0.5);
+  background: rgba(185,28,28,0.05);
+  color: #fca5a5;
 }
 
 /* Progress bar */
@@ -512,7 +512,7 @@ body { overflow-x: hidden; }
 }
 .upload-progress__fill {
   height: 100%;
-  background: linear-gradient(90deg, rgba(16,185,129,0.7), rgba(16,185,129,1));
+  background: linear-gradient(90deg, rgba(185,28,28,0.7), rgba(185,28,28,1));
   border-radius: 3px;
   transition: width 0.3s;
 }
@@ -582,19 +582,19 @@ html.light-mode .editor-main {
 
 html.light-mode .editor-kpi {
   background: var(--bg-card, #ffffff);
-  border-color: rgba(16, 185, 129, 0.15);
+  border-color: rgba(185, 28, 28, 0.15);
   box-shadow: var(--shadow-soft);
 }
 
 html.light-mode .editor-kpi:hover {
-  border-color: rgba(16, 185, 129, 0.35);
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08);
+  border-color: rgba(185, 28, 28, 0.35);
+  box-shadow: 0 8px 24px rgba(185, 28, 28, 0.08);
 }
 
 html.light-mode .editor-kpi__icon {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.2);
-  color: #059669;
+  background: rgba(185, 28, 28, 0.1);
+  border-color: rgba(185, 28, 28, 0.2);
+  color: #b91c1c;
 }
 
 html.light-mode .editor-kpi__val {
@@ -612,7 +612,7 @@ html.light-mode .editor-course-card {
 }
 
 html.light-mode .editor-course-card:hover {
-  border-color: rgba(16, 185, 129, 0.25);
+  border-color: rgba(185, 28, 28, 0.25);
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
 }
 
@@ -635,14 +635,14 @@ html.light-mode .editor-course-card__badge--archived {
 }
 
 html.light-mode .btn--primary {
-  background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05));
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #059669;
+  background: linear-gradient(135deg, rgba(185,28,28,0.12), rgba(185,28,28,0.04));
+  border-color: rgba(185, 28, 28, 0.35);
+  color: #b91c1c;
 }
 
 html.light-mode .btn--primary:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(185, 28, 28, 0.15);
+  border-color: rgba(185, 28, 28, 0.5);
 }
 
 html.light-mode .btn--secondary {
@@ -691,7 +691,7 @@ html.light-mode .editor-table td {
 }
 
 html.light-mode .editor-table tr:hover td {
-  background: rgba(16, 185, 129, 0.04);
+  background: rgba(185, 28, 28, 0.04);
 }
 
 html.light-mode .editor-input,
@@ -705,8 +705,8 @@ html.light-mode .editor-select {
 html.light-mode .editor-input:focus-visible,
 html.light-mode .editor-textarea:focus-visible,
 html.light-mode .editor-select:focus-visible {
-  border-color: rgba(16, 185, 129, 0.5);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  border-color: rgba(185, 28, 28, 0.5);
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1);
 }
 
 html.light-mode .editor-modal {
@@ -747,15 +747,15 @@ html.light-mode .editor-banner--error {
 }
 
 html.light-mode .editor-upload-area {
-  border-color: rgba(16, 185, 129, 0.3);
+  border-color: rgba(185, 28, 28, 0.3);
   color: var(--text-muted);
 }
 
 html.light-mode .editor-upload-area:hover,
 html.light-mode .editor-upload-area.dragover {
-  border-color: rgba(16, 185, 129, 0.5);
-  background: rgba(16, 185, 129, 0.04);
-  color: #059669;
+  border-color: rgba(185, 28, 28, 0.5);
+  background: rgba(185, 28, 28, 0.04);
+  color: #b91c1c;
 }
 
 html.light-mode .editor-step { color: var(--text-muted); }
@@ -763,10 +763,10 @@ html.light-mode .editor-step__num {
   background: var(--bg-input);
   border-color: var(--border-main);
 }
-html.light-mode .editor-step.active { color: #059669; }
+html.light-mode .editor-step.active { color: #b91c1c; }
 html.light-mode .editor-step.active .editor-step__num {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(185, 28, 28, 0.12);
+  border-color: rgba(185, 28, 28, 0.4);
 }
 html.light-mode .editor-step__connector { background: var(--border-main); }
 @keyframes spin { to { transform: rotate(360deg); } }

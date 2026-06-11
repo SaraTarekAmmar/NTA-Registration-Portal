@@ -222,7 +222,7 @@ class StaffLoginRequest(BaseModel):
     password: str
 
 
-async def _role_login(req: Request, email: str, password: str, required_role: str):
+async def _role_login(req: Request, email: str, password: str, required_role: str, national_id: str = None):
     client_ip = req.client.host if req.client else "unknown"
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
@@ -237,12 +237,17 @@ async def _role_login(req: Request, email: str, password: str, required_role: st
         if not user:
             record_login_attempt(cursor, client_ip, email, required_role, False)
             db.commit()
-            raise HTTPException(status_code=401, detail="Invalid email or password.")
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
+
+        if national_id and user.get("national_id") != national_id:
+            record_login_attempt(cursor, client_ip, email, required_role, False)
+            db.commit()
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
 
         if not password or not user.get("password_hash") or not verify_password(password, user["password_hash"]):
             record_login_attempt(cursor, client_ip, email, required_role, False)
             db.commit()
-            raise HTTPException(status_code=401, detail="Invalid email or password.")
+            raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
 
         record_login_attempt(cursor, client_ip, email, required_role, True)
 
@@ -276,10 +281,13 @@ async def _role_login(req: Request, email: str, password: str, required_role: st
 
 @admin_router.post("/login")
 async def admin_login(req: Request, body: dict):
-    email = body.get("email", "")
+    email = body.get("email", "").strip()
+    national_id = body.get("nationalId", "").strip()
     password = body.get("password", "")
     if not email:
-        raise HTTPException(status_code=422, detail="Email is required.")
+        raise HTTPException(status_code=422, detail="البريد الإلكتروني مطلوب.")
+    if not national_id:
+        raise HTTPException(status_code=422, detail="الرقم القومي مطلوب.")
     if not password:
-        raise HTTPException(status_code=422, detail="Password is required.")
-    return await _role_login(req, email, password, "admin")
+        raise HTTPException(status_code=422, detail="كلمة المرور مطلوبة.")
+    return await _role_login(req, email, password, "admin", national_id=national_id)

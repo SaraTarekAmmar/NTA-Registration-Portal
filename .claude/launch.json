@@ -13,7 +13,8 @@
       "runtimeExecutable": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\admin\\backend\\venv\\Scripts\\uvicorn.exe",
       "runtimeArgs": ["main:app", "--reload", "--port", "8001"],
       "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\admin\\backend",
-      "port": 8001
+      "port": 8001,
+      "autoPort": false
     },
     {
       "name": "superadmin-portal",
@@ -36,6 +37,13 @@
       "runtimeArgs": ["run", "dev", "--", "--port", "5173"],
       "cwd": "C:\\Users\\test9\\Downloads\\NTA-Regestration-Portal - Final (5)\\Website-Redesign-Enhancement",
       "port": 5173
+    },
+    {
+      "name": "task-dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5174"],
+      "cwd": "C:\\Users\\test9\\OneDrive\\Desktop\\Task-Management-Dashboard",
+      "port": 5174
     }
   ]
 }
