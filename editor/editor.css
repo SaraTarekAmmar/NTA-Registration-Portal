@@ -770,3 +770,29 @@ html.light-mode .editor-step.active .editor-step__num {
 }
 html.light-mode .editor-step__connector { background: var(--border-main); }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ══ Editor dashboard light-mode overrides ══ */
+html.light-mode .ed-kpi {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+  backdrop-filter: blur(8px) !important;
+}
+html.light-mode .ed-kpi__val  { color: var(--text-main) !important; text-shadow: none !important; }
+html.light-mode .ed-kpi__lbl  { color: var(--text-muted) !important; }
+html.light-mode .ed-action {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .ed-action__title { color: var(--text-main) !important; }
+html.light-mode .ed-action__sub   { color: var(--text-muted) !important; }
+html.light-mode .ed-card {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .ed-card__title { color: var(--text-main) !important; }
+html.light-mode .ed-card__meta  { color: var(--text-muted) !important; }
+html.light-mode .ed-empty {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+  color: var(--text-muted) !important;
+}

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منشئ تدفق التسجيل</title>
   <link rel="stylesheet" href="trainee.css" />
-  <link rel="stylesheet" href="header/header.css" />
+  <link rel="stylesheet" href="header/header.css?v=4" />
   <link rel="stylesheet" href="admin.css" />
   <link rel="stylesheet" href="admin-portal.css" />
   <link rel="stylesheet" href="admin-theme.css" />
@@ -102,7 +102,7 @@
     .fb-step-card.dragging { opacity: .4; }
   </style>
 </head>
-<body data-page="flow-builder">
+<body class="trainee-app" data-page="flow-builder">
   <div id="ntaHeader"></div>
   <div class="fb-toast-area" id="toastArea"></div>
 
@@ -239,7 +239,7 @@
     </div>
   </div>
 
-  <script src="header/header.js?v=2"></script>
+  <script src="header/header.js?v=3"></script>
   <script>
     var API = '/api/flow-builder';
     var adminToken = localStorage.getItem('admin_token');

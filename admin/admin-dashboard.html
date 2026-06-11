@@ -1,1812 +1,1309 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <script src="/common/js/theme.js"></script>
-    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
-    <!-- data-nta-theme-injected -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة التحكم - الأكاديمية الوطنية للتدريب</title>
-    <link rel="stylesheet" href="trainee.css" />
-    <link rel="stylesheet" href="header/header.css" />
-    <link rel="stylesheet" href="chat/chat.css?v=3" />
-    <link rel="stylesheet" href="admin.css" />
-    <link rel="stylesheet" href="admin-portal.css" />
-    <link rel="stylesheet" href="admin-theme.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        overflow-x: hidden;
-      }
-      /* ══ KPI Cards — rec-dashboard style ══ */
-      .adm-kpi-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        margin-bottom: 1.75rem;
-      }
-      @media (max-width: 800px) {
-        .adm-kpi-row {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-      @media (max-width: 480px) {
-        .adm-kpi-row {
-          grid-template-columns: 1fr;
-        }
-      }
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم - الأكاديمية الوطنية للتدريب</title>
+  <link rel="stylesheet" href="trainee.css" />
+  <link rel="stylesheet" href="header/header.css?v=4" />
+  <link rel="stylesheet" href="chat/chat.css?v=3" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-portal.css" />
+  <link rel="stylesheet" href="admin-theme.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body { overflow-x: hidden; }
 
-      .adm-kpi {
-        min-width: 130px;
-        padding: 1.25rem 1.5rem;
-        border-radius: 20px;
-        border: 1px solid transparent;
-        background: rgba(8, 12, 32, 0.35);
-        backdrop-filter: blur(16px);
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        position: relative;
-        overflow: hidden;
-        text-decoration: none;
-        transition:
-          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
-          box-shadow 350ms ease,
-          border-color 350ms ease;
-        animation:
-          admKpiEnter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
-          admKpiGlow 7s ease-in-out infinite;
-      }
-      .adm-kpi::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--kpi-accent, var(--accent)),
-          transparent
-        );
-        opacity: 0;
-        transition: opacity 350ms ease;
-      }
-      .adm-kpi::after {
-        content: "";
-        position: absolute;
-        top: -40%;
-        bottom: -40%;
-        width: 35%;
-        background: linear-gradient(
-          120deg,
-          transparent,
-          rgba(255, 255, 255, 0.22),
-          transparent
-        );
-        opacity: 0;
-        transform: translateX(-130%) skewX(-12deg);
-        pointer-events: none;
-        animation: admKpiShine 8s ease-in-out infinite;
-      }
-      .adm-kpi:hover {
-        transform: translateY(-6px) scale(1.02);
-        border-color: var(--surface-glass-strong);
-      }
-      .adm-kpi:hover::before {
-        opacity: 1;
-      }
-      .adm-kpi:hover {
-        box-shadow:
-          0 12px 40px rgba(0, 0, 0, 0.25),
-          0 0 30px var(--kpi-glow, rgba(99, 102, 241, 0.2));
-      }
+    /* ══ Top Bar ══ */
+    .dash-topbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 18px;
+      background: rgba(8,12,32,0.55);
+      backdrop-filter: blur(24px) saturate(130%);
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .dash-topbar__user {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .dash-topbar__avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(185,28,28,0.35), rgba(185,28,28,0.15));
+      border: 2px solid rgba(185,28,28,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800; color: #fca5a5;
+      flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(185,28,28,0.25);
+    }
+    .dash-topbar__name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .dash-topbar__role {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #fca5a5;
+      background: rgba(185,28,28,0.12);
+      border: 1px solid rgba(185,28,28,0.25);
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      white-space: nowrap;
+    }
+    .dash-topbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+    .dash-topbar__date {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      padding: 0.3rem 0.85rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .dash-topbar__btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-subtle);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .dash-topbar__btn:hover {
+      border-color: rgba(185,28,28,0.4);
+      color: #fca5a5;
+      background: rgba(185,28,28,0.08);
+    }
+    .dash-topbar__btn svg { width: 16px; height: 16px; }
+    .dash-topbar__badge {
+      position: absolute;
+      top: -3px; left: -3px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #ef4444;
+      font-size: 0.55rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(5,8,20,0.9);
+    }
+    .dash-topbar__export {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.45rem 1rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(185,28,28,0.3), rgba(185,28,28,0.12));
+      border: 1px solid rgba(185,28,28,0.4);
+      color: #fca5a5;
+      font-size: 0.78rem; font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .dash-topbar__export:hover {
+      border-color: rgba(185,28,28,0.65);
+      box-shadow: 0 4px 18px rgba(185,28,28,0.22);
+    }
+    .dash-topbar__export svg { width: 14px; height: 14px; }
 
-      .adm-kpi--blue {
-        --kpi-accent: var(--color-info-soft);
-        --kpi-glow: var(--border-accent);
-      }
-      .adm-kpi--green {
-        --kpi-accent: var(--color-success);
-        --kpi-glow: rgba(16, 185, 129, 0.35);
-      }
-      .adm-kpi--red {
-        --kpi-accent: var(--color-error-soft);
-        --kpi-glow: rgba(239, 68, 68, 0.35);
-      }
+    /* ══ Hero ══ */
+    .dash-hero {
+      padding: 1.5rem 1.8rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      background:
+        radial-gradient(circle at top right, rgba(185,28,28,0.11), transparent 52%),
+        radial-gradient(circle at bottom left, rgba(30,50,100,0.1), transparent 55%),
+        rgba(4,6,18,0.78);
+      border: 1px solid rgba(185,28,28,0.18);
+      box-shadow: 0 0 40px rgba(185,28,28,0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .dash-hero::before {
+      content: "";
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(185,28,28,0.09), transparent 70%);
+      pointer-events: none;
+    }
+    .dash-hero__breadcrumb {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+      margin: 0 0 0.4rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .dash-hero__breadcrumb span { color: #fca5a5; }
+    .dash-hero__title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin: 0 0 0.25rem;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    .dash-hero__sub {
+      font-size: 0.84rem;
+      color: var(--text-subtle);
+      margin: 0;
+    }
+    .dash-hero__meta {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 0.55rem;
+      flex-shrink: 0;
+    }
+    .dash-hero__live {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; color: var(--text-subtle);
+    }
+    .dash-hero__live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--color-success);
+      animation: livePulse 2s infinite;
+    }
+    @keyframes livePulse {
+      0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+      70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
 
-      .adm-kpi__icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0.15rem;
-        transition:
-          transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
-          box-shadow 350ms ease;
-      }
-      .adm-kpi:hover .adm-kpi__icon {
-        transform: scale(1.1);
-        box-shadow: 0 0 20px var(--kpi-glow, rgba(99, 102, 241, 0.4));
-      }
-      .adm-kpi--blue .adm-kpi__icon {
-        background: linear-gradient(
-          135deg,
-          rgba(59, 130, 246, 0.25),
-          rgba(59, 130, 246, 0.1)
-        );
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        color: var(--color-info-soft);
-      }
-      .adm-kpi--green .adm-kpi__icon {
-        background: linear-gradient(
-          135deg,
-          rgba(16, 185, 129, 0.25),
-          rgba(16, 185, 129, 0.1)
-        );
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: var(--color-kpi-mint);
-      }
-      .adm-kpi--red .adm-kpi__icon {
-        background: linear-gradient(
-          135deg,
-          rgba(239, 68, 68, 0.25),
-          rgba(239, 68, 68, 0.1)
-        );
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: var(--color-error-pale);
-      }
+    /* ══ KPI Row  5 cards ══ */
+    .dash-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1100px) { .dash-kpi-row { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .dash-kpi-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px)  { .dash-kpi-row { grid-template-columns: 1fr; } }
 
-      .adm-kpi__val {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: var(--text-on-accent);
-        line-height: 1;
-        letter-spacing: -0.5px;
-        text-shadow: 0 0 24px var(--kpi-glow, rgba(99, 102, 241, 0.35));
-        transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-      .adm-kpi:hover .adm-kpi__val {
-        transform: scale(1.05);
-      }
-      .adm-kpi__lbl {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--text-subtle);
-      }
+    .dash-kpi {
+      padding: 1.2rem 1.3rem;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(8,12,32,0.4);
+      backdrop-filter: blur(18px);
+      display: flex; flex-direction: column; gap: 0.45rem;
+      position: relative; overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
+      animation: kpiEnter 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .dash-kpi::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--kpi-accent, var(--accent)), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .dash-kpi:hover { transform: translateY(-5px) scale(1.02); }
+    .dash-kpi:hover::before { opacity: 1; }
+    .dash-kpi:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.28), 0 0 24px var(--kpi-glow, rgba(185,28,28,0.2)); }
 
-      @keyframes admKpiEnter {
-        from {
-          opacity: 0;
-          transform: translateY(24px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes admKpiGlow {
-        0%,
-        100% {
-          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-        }
-        50% {
-          box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.4),
-            0 0 26px var(--kpi-glow, rgba(99, 102, 241, 0.35));
-        }
-      }
-      @keyframes admKpiShine {
-        0% {
-          opacity: 0;
-          transform: translateX(-130%) skewX(-12deg);
-        }
-        10% {
-          opacity: 0.18;
-        }
-        30% {
-          opacity: 0;
-          transform: translateX(140%) skewX(-12deg);
-        }
-        100% {
-          opacity: 0;
-          transform: translateX(140%) skewX(-12deg);
-        }
-      }
+    @keyframes kpiEnter {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-      /* ══ Hero ══ */
-      .adm-hero {
-        padding: 1.6rem 1.8rem;
-        border-radius: 20px;
-        margin-bottom: 1.75rem;
-        background:
-          radial-gradient(circle at top right, rgba(185,28,28,0.1), transparent 52%),
-          radial-gradient(circle at bottom left, rgba(30,50,100,0.12), transparent 55%),
-          rgba(4, 6, 18, 0.78);
-        border: 1px solid rgba(185,28,28,0.18);
-        box-shadow:
-          0 0 0 1px rgba(5, 8, 20, 0.95),
-          0 0 40px rgba(185,28,28,0.05);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-      .adm-hero::before {
-        content: "";
-        position: absolute;
-        top: -60px;
-        right: -60px;
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(185,28,28,0.09) 0%, transparent 70%);
-        pointer-events: none;
-      }
-      .adm-hero__title {
-        font-size: 1.9rem;
-        font-weight: 800;
-        margin: 0 0 0.3rem;
-        color: var(--text-main);
-        letter-spacing: -0.02em;
-      }
-      .adm-hero__sub {
-        font-size: 0.88rem;
-        color: var(--text-subtle);
-        margin: 0;
-        line-height: 1.65;
-      }
+    .dash-kpi--purple  { --kpi-accent: #a78bfa; --kpi-glow: rgba(139,92,246,0.25); }
+    .dash-kpi--green   { --kpi-accent: #34d399; --kpi-glow: rgba(16,185,129,0.25); }
+    .dash-kpi--crimson { --kpi-accent: #f87171; --kpi-glow: rgba(185,28,28,0.3);
+      background: linear-gradient(135deg, rgba(185,28,28,0.18), rgba(185,28,28,0.06));
+      border-color: rgba(185,28,28,0.35);
+      box-shadow: 0 0 28px rgba(185,28,28,0.12);
+    }
+    .dash-kpi--amber   { --kpi-accent: #fbbf24; --kpi-glow: rgba(245,158,11,0.25); }
+    .dash-kpi--blue    { --kpi-accent: #60a5fa; --kpi-glow: rgba(59,130,246,0.25); }
 
-      /* ══ Charts grid ══ */
-      .adm-charts-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 1rem;
-        margin-bottom: 1.75rem;
-        min-width: 0;
-      }
-      @media (max-width: 900px) {
-        .adm-charts-grid {
-          grid-template-columns: 1fr;
-        }
-      }
+    .dash-kpi__icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 0.1rem; border: 1px solid;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .dash-kpi:hover .dash-kpi__icon { transform: scale(1.1); }
+    .dash-kpi--purple .dash-kpi__icon  { background: rgba(139,92,246,0.15);  border-color: rgba(139,92,246,0.3);  color: #c4b5fd; }
+    .dash-kpi--green .dash-kpi__icon   { background: rgba(16,185,129,0.15);  border-color: rgba(16,185,129,0.3);  color: #6ee7b7; }
+    .dash-kpi--crimson .dash-kpi__icon { background: rgba(185,28,28,0.2);    border-color: rgba(185,28,28,0.4);   color: #fca5a5; }
+    .dash-kpi--amber .dash-kpi__icon   { background: rgba(245,158,11,0.15);  border-color: rgba(245,158,11,0.3);  color: #fde68a; }
+    .dash-kpi--blue .dash-kpi__icon    { background: rgba(59,130,246,0.15);  border-color: rgba(59,130,246,0.3);  color: #93c5fd; }
+    .dash-kpi__icon svg { width: 18px; height: 18px; }
 
-      .adm-chart-card {
-        padding: 1.15rem 1.25rem;
-        border-radius: 16px;
-        background: rgba(8, 12, 32, 0.5);
-        backdrop-filter: blur(14px);
-        border: 1px solid var(--border-main);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        transition:
-          border-color 0.25s,
-          box-shadow 0.25s;
-        min-width: 0;
-        overflow: hidden;
-      }
-      .adm-chart-card:hover {
-        border-color: rgba(185,28,28,0.28);
-        box-shadow:
-          0 8px 24px rgba(0, 0, 0, 0.25),
-          0 0 20px rgba(185,28,28,0.07);
-      }
-      .adm-chart-card--wide {
-        grid-column: 1 / -1;
-      }
-      .adm-chart-card--scroll-legend .adm-chart {
-        height: 195px;
-      }
-      .adm-chart-legend-scroll {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 0.5rem;
-        overflow-x: auto;
-        padding: 0.55rem 0 0.15rem;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(99, 102, 241, 0.35) transparent;
-      }
-      .adm-chart-legend-scroll::-webkit-scrollbar {
-        height: 3px;
-      }
-      .adm-chart-legend-scroll::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .adm-chart-legend-scroll::-webkit-scrollbar-thumb {
-        background: rgba(185,28,28,0.4);
-        border-radius: 999px;
-      }
-      .adm-chart-legend-item {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: 0.68rem;
-        font-weight: 600;
-        color: var(--text-subtle);
-        white-space: nowrap;
-        flex-shrink: 0;
-        padding: 0.18rem 0.55rem;
-        border-radius: 999px;
-        background: var(--assign-card-hover-bg);
-        border: 1px solid var(--border-main);
-      }
-      .adm-chart-legend-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
+    .dash-kpi__val {
+      font-size: 2rem; font-weight: 800;
+      color: var(--text-on-accent); line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .dash-kpi--crimson .dash-kpi__val { color: #fecaca; }
+    .dash-kpi__lbl { font-size: 0.74rem; font-weight: 600; color: var(--text-subtle); line-height: 1.3; }
+    .dash-kpi--crimson .dash-kpi__lbl { color: rgba(252,165,165,0.75); }
 
-      .adm-chart-card__header {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-        margin-bottom: 0.85rem;
-      }
-      .adm-chart-card__icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(185,28,28,0.1);
-        border: 1px solid rgba(185,28,28,0.22);
-        color: #fca5a5;
-      }
-      .adm-chart-card__icon svg {
-        width: 14px;
-        height: 14px;
-      }
-      .adm-chart-card__title {
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: var(--text-main);
-        margin: 0;
-      }
+    .dash-kpi__delta {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 0.15rem 0.5rem; border-radius: 999px;
+      align-self: flex-start; margin-top: 0.1rem;
+    }
+    .dash-kpi__delta--up   { background: rgba(16,185,129,0.12);  color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+    .dash-kpi__delta--down { background: rgba(239,68,68,0.12);   color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .dash-kpi__delta--flat { background: rgba(100,116,139,0.12); color: var(--text-subtle); border: 1px solid rgba(100,116,139,0.2); }
 
-      .adm-chart {
-        width: 100%;
-        height: 260px;
-        min-width: 0;
-      }
-      .adm-chart-card--wide .adm-chart {
-        height: 240px;
-      }
-      .adm-chart-card--scroll-legend .adm-chart {
-        height: 195px;
-        min-width: 0;
-      }
+    /* ══ Shared Panel ══ */
+    .dash-panel {
+      padding: 1.2rem 1.3rem;
+      border-radius: 18px;
+      background: rgba(8,12,32,0.5);
+      backdrop-filter: blur(18px) saturate(130%);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      transition: border-color 0.25s;
+      display: flex; flex-direction: column;
+    }
+    .dash-panel:hover { border-color: rgba(185,28,28,0.22); }
+    .dash-panel__header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; gap: 0.5rem;
+    }
+    .dash-panel__title-wrap { display: flex; align-items: center; gap: 0.55rem; }
+    .dash-panel__icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(185,28,28,0.1); border: 1px solid rgba(185,28,28,0.22);
+      color: #fca5a5; flex-shrink: 0;
+    }
+    .dash-panel__icon svg { width: 12px; height: 12px; }
+    .dash-panel__title { font-size: 0.82rem; font-weight: 700; color: var(--text-main); margin: 0; }
+    .dash-panel__sub   { font-size: 0.68rem; color: var(--text-subtle); margin: 0.15rem 0 0; }
 
-      /* ══ Stages legend ══ */
-      .adm-stages-wrap {
-        padding: 1rem 1.25rem;
-        border-radius: 16px;
-        background: rgba(8, 12, 32, 0.45);
-        backdrop-filter: blur(14px);
-        border: 1px solid var(--border-main);
-        margin-bottom: 1.75rem;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.65rem 0.9rem;
-      }
-      .adm-stages-label {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: var(--text-subtle);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-      }
-      .adm-stages-label svg {
-        width: 14px;
-        height: 14px;
-      }
-      .adm-stage-item {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.32rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.74rem;
-        font-weight: 600;
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid var(--border-main);
-        color: var(--text-subtle);
-        text-decoration: none;
-        transition: all 0.2s;
-      }
-      .adm-stage-item:hover {
-        border-color: rgba(185,28,28,0.45);
-        color: #fca5a5;
-        background: rgba(185,28,28,0.07);
-      }
-      .adm-stage-item__dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .adm-stage-item[data-stage="1"] .adm-stage-item__dot {
-        background: var(--color-error);
-        box-shadow: 0 0 5px rgba(225, 29, 72, 0.5);
-      }
-      .adm-stage-item[data-stage="2"] .adm-stage-item__dot {
-        background: var(--color-info-soft);
-        box-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
-      }
-      .adm-stage-item[data-stage="3"] .adm-stage-item__dot {
-        background: var(--color-info-soft);
-        box-shadow: 0 0 5px rgba(96, 165, 250, 0.5);
-      }
-      .adm-stage-item[data-stage="4"] .adm-stage-item__dot {
-        background: var(--accent-hover);
-        box-shadow: 0 0 5px rgba(129, 140, 248, 0.5);
-      }
-      .adm-stage-item[data-stage="5"] .adm-stage-item__dot {
-        background: var(--theme-btn-color);
-        box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
-      }
-      .adm-stage-item[data-stage="6"] .adm-stage-item__dot {
-        background: var(--color-success-soft);
-        box-shadow: 0 0 5px rgba(52, 211, 153, 0.5);
-      }
+    /* ══ Charts Row  3 columns ══ */
+    .dash-charts-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 1000px) { .dash-charts-row { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 650px)  { .dash-charts-row { grid-template-columns: 1fr; } }
 
-      /* ══ CTA buttons ══ */
-      .adm-cta-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.85rem;
-        margin-bottom: 1.5rem;
-      }
-      @media (max-width: 600px) {
-        .adm-cta-row {
-          grid-template-columns: 1fr;
-        }
-      }
+    .dash-chart { width: 100%; }
 
-      .adm-cta {
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
-        padding: 1rem 1.25rem;
-        border-radius: 16px;
-        background: rgba(8, 12, 32, 0.5);
-        backdrop-filter: blur(14px);
-        border: 1px solid var(--border-main);
-        text-decoration: none;
-        color: var(--text-main);
-        transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease,
-          border-color 0.25s ease;
-        position: relative;
-        overflow: hidden;
-      }
-      .adm-cta::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: var(--cta-bg, rgba(99, 102, 241, 0.05));
-        opacity: 0;
-        transition: opacity 0.25s;
-      }
-      .adm-cta:hover {
-        transform: translateY(-3px);
-      }
-      .adm-cta:hover::before {
-        opacity: 1;
-      }
+    /* Gender donut overlay total */
+    .dash-donut-wrap { position: relative; }
+    .dash-donut-total {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+    .dash-donut-total__num  { font-size: 1.45rem; font-weight: 800; color: var(--text-main); line-height: 1; }
+    .dash-donut-total__lbl  { font-size: 0.62rem; font-weight: 600; color: var(--text-subtle); margin-top: 0.15rem; }
 
-      .adm-cta--candidates {
-        --cta-bg: rgba(99, 102, 241, 0.08);
-        border-color: rgba(99, 102, 241, 0.3);
-      }
-      .adm-cta--candidates:hover {
-        border-color: rgba(99, 102, 241, 0.6);
-        box-shadow:
-          0 8px 28px rgba(99, 102, 241, 0.15),
-          0 0 20px rgba(99, 102, 241, 0.1);
-        color: var(--color-accent-pale-2);
-      }
-      .adm-cta--trainees {
-        --cta-bg: rgba(16, 185, 129, 0.07);
-        border-color: rgba(16, 185, 129, 0.3);
-      }
-      .adm-cta--trainees:hover {
-        border-color: rgba(16, 185, 129, 0.6);
-        box-shadow:
-          0 8px 28px rgba(16, 185, 129, 0.15),
-          0 0 20px rgba(16, 185, 129, 0.1);
-        color: var(--color-success-pale-2);
-      }
+    .dash-donut-legend {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 0.75rem; justify-content: center;
+    }
+    .dash-donut-legend__item {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.7rem; font-weight: 600; color: var(--text-subtle);
+    }
+    .dash-donut-legend__dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
 
-      .adm-cta__icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 1;
-        transition: transform 0.25s ease;
-      }
-      .adm-cta:hover .adm-cta__icon {
-        transform: scale(1.08);
-      }
-      .adm-cta--candidates .adm-cta__icon {
-        background: rgba(99, 102, 241, 0.15);
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        color: var(--color-accent-pale);
-      }
-      .adm-cta--trainees .adm-cta__icon {
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: var(--color-kpi-mint);
-      }
-      .adm-cta__icon svg {
-        width: 20px;
-        height: 20px;
-      }
+    /* Performance chart period tabs */
+    .dash-perf-tabs {
+      display: flex; gap: 0.35rem;
+    }
+    .dash-perf-tab {
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.65rem; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-subtle);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dash-perf-tab.active,
+    .dash-perf-tab:hover {
+      background: rgba(185,28,28,0.15);
+      border-color: rgba(185,28,28,0.4);
+      color: #fca5a5;
+    }
 
-      .adm-cta__body {
-        flex: 1;
-        min-width: 0;
-        position: relative;
-        z-index: 1;
-      }
-      .adm-cta__title {
-        font-size: 0.92rem;
-        font-weight: 700;
-        margin: 0 0 0.15rem;
-      }
-      .adm-cta__sub {
-        font-size: 0.72rem;
-        color: var(--text-subtle);
-        margin: 0;
-      }
+    /* Status donut legend */
+    .dash-status-legend {
+      margin-top: 0.75rem;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .dash-status-legend__row {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.68rem;
+    }
+    .dash-status-legend__left { display: flex; align-items: center; gap: 0.4rem; color: var(--text-subtle); }
+    .dash-status-legend__dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .dash-status-legend__val { font-weight: 700; color: var(--text-main); }
 
-      .adm-cta__arrow {
-        font-size: 1.1rem;
-        opacity: 0.5;
-        position: relative;
-        z-index: 1;
-        transition:
-          transform 0.25s ease,
-          opacity 0.25s;
-      }
-      .adm-cta:hover .adm-cta__arrow {
-        transform: translateX(-4px);
-        opacity: 1;
-      }
+    /* ══ Bottom Row  3 columns ══ */
+    .dash-bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1000px) { .dash-bottom-row { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 650px)  { .dash-bottom-row { grid-template-columns: 1fr; } }
 
-      /* ══ Courses CTA ══ */
-      .adm-courses-cta {
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
-        padding: 0.85rem 1.25rem;
-        border-radius: 14px;
-        background: rgba(245, 158, 11, 0.07);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(245, 158, 11, 0.25);
-        text-decoration: none;
-        color: var(--color-kpi-gold);
-        margin-bottom: 1.5rem;
-        transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease,
-          border-color 0.25s;
-      }
-      .adm-courses-cta:hover {
-        transform: translateY(-2px);
-        border-color: rgba(245, 158, 11, 0.5);
-        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
-      }
-      .adm-courses-cta__icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(245, 158, 11, 0.15);
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        color: var(--theme-btn-color);
-      }
-      .adm-courses-cta__icon svg {
-        width: 18px;
-        height: 18px;
-      }
-      .adm-courses-cta__text {
-        font-size: 0.88rem;
-        font-weight: 600;
-        flex: 1;
-      }
-      .adm-courses-cta__arrow {
-        font-size: 1rem;
-        opacity: 0.6;
-        transition: transform 0.25s;
-      }
-      .adm-courses-cta:hover .adm-courses-cta__arrow {
-        transform: translateX(-4px);
-        opacity: 1;
-      }
+    /* Activity Feed */
+    .dash-activity { display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
+    .dash-activity__item {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .dash-activity__item:last-child { border-bottom: none; padding-bottom: 0; }
+    .dash-activity__icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; border: 1px solid;
+    }
+    .dash-activity__icon svg { width: 13px; height: 13px; }
+    .dash-activity__icon--green  { background: rgba(16,185,129,0.1);  border-color: rgba(16,185,129,0.25);  color: #6ee7b7; }
+    .dash-activity__icon--crimson { background: rgba(185,28,28,0.1); border-color: rgba(185,28,28,0.25);   color: #fca5a5; }
+    .dash-activity__icon--blue   { background: rgba(59,130,246,0.1);  border-color: rgba(59,130,246,0.25);  color: #93c5fd; }
+    .dash-activity__icon--amber  { background: rgba(245,158,11,0.1);  border-color: rgba(245,158,11,0.25);  color: #fde68a; }
+    .dash-activity__icon--purple { background: rgba(139,92,246,0.1);  border-color: rgba(139,92,246,0.25);  color: #c4b5fd; }
+    .dash-activity__body { flex: 1; min-width: 0; }
+    .dash-activity__text { font-size: 0.76rem; font-weight: 600; color: var(--text-main); line-height: 1.4; }
+    .dash-activity__time { font-size: 0.65rem; color: var(--text-subtle); margin-top: 0.15rem; }
 
-      /* section title with accent */
-      .adm-section-title {
-        font-size: 0.86rem;
-        font-weight: 700;
-        color: var(--text-subtle);
-        margin: 0 0 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 0.45rem;
-      }
-      .adm-section-title::before {
-        content: "";
-        width: 3px;
-        height: 15px;
-        border-radius: 999px;
-        background: linear-gradient(180deg, #f87171, #b91c1c);
-        box-shadow: 0 0 8px rgba(248,113,113,0.35);
-        flex-shrink: 0;
-      }
+    /* Programs Table */
+    .dash-prog-table { display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+    .dash-prog-row {
+      display: grid; grid-template-columns: 1fr auto auto;
+      align-items: center; gap: 0.5rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s;
+    }
+    .dash-prog-row:hover { background: rgba(185,28,28,0.06); border-color: rgba(185,28,28,0.18); }
+    .dash-prog-name { font-size: 0.75rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+    .dash-prog-trainees { font-size: 0.68rem; color: var(--text-subtle); white-space: nowrap; }
+    .dash-prog-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; }
+    .dash-prog-pct { font-size: 0.68rem; font-weight: 700; color: #fca5a5; }
+    .dash-prog-stars { font-size: 0.6rem; color: #fde68a; letter-spacing: -1px; }
+    .dash-prog-bar-wrap { grid-column: 1 / -1; }
+    .dash-prog-bar-track {
+      height: 3px; border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .dash-prog-bar-fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, #b91c1c, #ef4444);
+      transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
+    }
 
-      /* ── 4-column KPI grid ── */
-      .adm-kpi-row {
-        grid-template-columns: repeat(4, 1fr) !important;
-      }
-      @media (max-width: 1000px) { .adm-kpi-row { grid-template-columns: repeat(2, 1fr) !important; } }
-      @media (max-width: 480px)  { .adm-kpi-row { grid-template-columns: 1fr !important; } }
+    /* Calendar Events */
+    .dash-calendar { display: flex; flex-direction: column; gap: 0.65rem; flex: 1; }
+    .dash-cal-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .dash-cal-item:hover { background: rgba(185,28,28,0.06); border-color: rgba(185,28,28,0.18); }
+    .dash-cal-date {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      background: rgba(185,28,28,0.12);
+      border: 1px solid rgba(185,28,28,0.25);
+      flex-shrink: 0; min-width: 40px;
+    }
+    .dash-cal-date__day  { font-size: 1.1rem; font-weight: 800; color: #fca5a5; line-height: 1; }
+    .dash-cal-date__mon  { font-size: 0.55rem; font-weight: 700; color: rgba(252,165,165,0.6); text-transform: uppercase; }
+    .dash-cal-info { flex: 1; min-width: 0; }
+    .dash-cal-title { font-size: 0.76rem; font-weight: 700; color: var(--text-main); line-height: 1.3; }
+    .dash-cal-time  { font-size: 0.65rem; color: var(--text-subtle); margin-top: 0.1rem; }
 
-      /* ── Yellow KPI variant ── */
-      .adm-kpi--yellow {
-        --kpi-accent: #fbbf24;
-        --kpi-glow: rgba(245,158,11,0.3);
-      }
-      .adm-kpi--yellow .adm-kpi__icon {
-        background: linear-gradient(135deg, rgba(245,158,11,0.22), rgba(245,158,11,0.08));
-        border: 1px solid rgba(245,158,11,0.3);
-        color: #fde68a;
-      }
+    /* ══ Section title ══ */
+    .adm-section-title {
+      font-size: 0.86rem; font-weight: 700;
+      color: var(--text-subtle);
+      margin: 0 0 0.9rem;
+      display: flex; align-items: center; gap: 0.45rem;
+    }
+    .adm-section-title::before {
+      content: "";
+      width: 3px; height: 15px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #f87171, #b91c1c);
+      box-shadow: 0 0 8px rgba(248,113,113,0.35);
+      flex-shrink: 0;
+    }
 
-      /* ── Hero greeting & meta ── */
-      .adm-hero__greeting {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #fca5a5;
-        margin: 0 0 0.3rem;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-      }
-      .adm-hero__greeting::before {
-        content: "";
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        background: #ef4444;
-        box-shadow: 0 0 8px rgba(239,68,68,0.6);
-        animation: admGreetPulse 2s ease-in-out infinite;
-        flex-shrink: 0;
-      }
-      @keyframes admGreetPulse {
-        0%,100% { opacity: 1; }
-        50%      { opacity: 0.35; }
-      }
-      .adm-hero__meta {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.55rem;
-        flex-shrink: 0;
-      }
-      .adm-hero__date {
-        font-size: 0.78rem;
-        color: var(--text-subtle);
-        background: rgba(185,28,28,0.07);
-        border: 1px solid rgba(185,28,28,0.2);
-        border-radius: 999px;
-        padding: 0.32rem 0.9rem;
-        white-space: nowrap;
-        backdrop-filter: blur(8px);
-      }
-      .adm-hero__live {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-size: 0.72rem;
-        color: var(--text-subtle);
-      }
-      .adm-hero__live-dot {
-        width: 7px; height: 7px;
-        border-radius: 50%;
-        background: var(--color-success);
-        animation: admLivePulse 2s infinite;
-        flex-shrink: 0;
-      }
-      @keyframes admLivePulse {
-        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
-        70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
-        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-      }
+    /* ══ Pipeline Funnel ══ */
+    .adm-pipeline {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      margin-bottom: 1.75rem;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border-main);
+      background: rgba(8,12,32,0.35);
+      backdrop-filter: blur(12px);
+    }
+    @media (max-width: 800px) { .adm-pipeline { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .adm-pipeline { grid-template-columns: repeat(2, 1fr); } }
+    .adm-pipe-step {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.45rem; padding: 1.2rem 0.5rem 1rem;
+      border-left: 1px solid var(--border-main);
+      text-decoration: none;
+      transition: background 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .adm-pipe-step:first-child { border-left: none; }
+    .adm-pipe-step:hover { background: rgba(185,28,28,0.05); }
+    .adm-pipe-step::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; opacity: 0; transition: opacity 0.25s;
+      border-radius: 3px 3px 0 0;
+    }
+    .adm-pipe-step:hover::after { opacity: 1; }
+    .adm-pipe-step[data-stage="1"]::after { background: #ef4444; }
+    .adm-pipe-step[data-stage="2"]::after { background: #60a5fa; }
+    .adm-pipe-step[data-stage="3"]::after { background: #3b82f6; }
+    .adm-pipe-step[data-stage="4"]::after { background: #c084fc; }
+    .adm-pipe-step[data-stage="5"]::after { background: #fbbf24; }
+    .adm-pipe-step[data-stage="6"]::after { background: #34d399; }
+    .adm-pipe-step__icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; border: 1px solid;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .adm-pipe-step:hover .adm-pipe-step__icon { transform: scale(1.1); }
+    .adm-pipe-step[data-stage="1"] .adm-pipe-step__icon { background: rgba(239,68,68,0.1);   border-color: rgba(239,68,68,0.3);   color: #fca5a5; }
+    .adm-pipe-step[data-stage="2"] .adm-pipe-step__icon { background: rgba(96,165,250,0.1);  border-color: rgba(96,165,250,0.3);  color: #93c5fd; }
+    .adm-pipe-step[data-stage="3"] .adm-pipe-step__icon { background: rgba(59,130,246,0.1);  border-color: rgba(59,130,246,0.3);  color: #7dd3fc; }
+    .adm-pipe-step[data-stage="4"] .adm-pipe-step__icon { background: rgba(168,85,247,0.1);  border-color: rgba(168,85,247,0.3);  color: #d8b4fe; }
+    .adm-pipe-step[data-stage="5"] .adm-pipe-step__icon { background: rgba(251,191,36,0.1);  border-color: rgba(251,191,36,0.3);  color: #fde68a; }
+    .adm-pipe-step[data-stage="6"] .adm-pipe-step__icon { background: rgba(52,211,153,0.1);  border-color: rgba(52,211,153,0.3);  color: #6ee7b7; }
+    .adm-pipe-step__icon svg { width: 15px; height: 15px; }
+    .adm-pipe-step__val {
+      font-size: 1.55rem; font-weight: 800; color: var(--text-main);
+      line-height: 1;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .adm-pipe-step:hover .adm-pipe-step__val { transform: scale(1.08); }
+    .adm-pipe-step__lbl { font-size: 0.62rem; font-weight: 600; color: var(--text-subtle); text-align: center; line-height: 1.35; }
+    .adm-pipe-step__tag {
+      font-size: 0.55rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.12rem 0.45rem;
+      border-radius: 999px; border: 1px solid; white-space: nowrap;
+    }
+    .adm-pipe-step[data-stage="1"] .adm-pipe-step__tag { background: rgba(239,68,68,0.08);   border-color: rgba(239,68,68,0.25);   color: #fca5a5; }
+    .adm-pipe-step[data-stage="2"] .adm-pipe-step__tag { background: rgba(96,165,250,0.08);  border-color: rgba(96,165,250,0.25);  color: #93c5fd; }
+    .adm-pipe-step[data-stage="3"] .adm-pipe-step__tag { background: rgba(59,130,246,0.08);  border-color: rgba(59,130,246,0.25);  color: #7dd3fc; }
+    .adm-pipe-step[data-stage="4"] .adm-pipe-step__tag { background: rgba(168,85,247,0.08);  border-color: rgba(168,85,247,0.25);  color: #d8b4fe; }
+    .adm-pipe-step[data-stage="5"] .adm-pipe-step__tag { background: rgba(251,191,36,0.08);  border-color: rgba(251,191,36,0.25);  color: #fde68a; }
+    .adm-pipe-step[data-stage="6"] .adm-pipe-step__tag { background: rgba(52,211,153,0.08);  border-color: rgba(52,211,153,0.25);  color: #6ee7b7; }
 
-      /* ══ Pipeline Funnel ══ */
-      .adm-pipeline {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        margin-bottom: 1.75rem;
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid var(--border-main);
-        background: rgba(8,12,32,0.35);
-        backdrop-filter: blur(12px);
-      }
-      @media (max-width: 800px) { .adm-pipeline { grid-template-columns: repeat(3, 1fr); } }
-      @media (max-width: 480px) { .adm-pipeline { grid-template-columns: repeat(2, 1fr); } }
-
-      .adm-pipe-step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 1.2rem 0.5rem 1rem;
-        border-left: 1px solid var(--border-main);
-        text-decoration: none;
-        transition: background 0.2s ease;
-        position: relative;
-        overflow: hidden;
-      }
-      .adm-pipe-step:first-child { border-left: none; }
-      .adm-pipe-step:hover { background: rgba(185,28,28,0.05); }
-      .adm-pipe-step::after {
-        content: "";
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        height: 3px;
-        opacity: 0;
-        transition: opacity 0.25s;
-        border-radius: 3px 3px 0 0;
-      }
-      .adm-pipe-step:hover::after { opacity: 1; }
-      .adm-pipe-step[data-stage="1"]::after { background: #ef4444; }
-      .adm-pipe-step[data-stage="2"]::after { background: #60a5fa; }
-      .adm-pipe-step[data-stage="3"]::after { background: #3b82f6; }
-      .adm-pipe-step[data-stage="4"]::after { background: #c084fc; }
-      .adm-pipe-step[data-stage="5"]::after { background: #fbbf24; }
-      .adm-pipe-step[data-stage="6"]::after { background: #34d399; }
-
-      .adm-pipe-step__icon {
-        width: 36px; height: 36px;
-        border-radius: 10px;
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        border: 1px solid;
-        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      }
-      .adm-pipe-step:hover .adm-pipe-step__icon { transform: scale(1.1); }
-      .adm-pipe-step[data-stage="1"] .adm-pipe-step__icon { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
-      .adm-pipe-step[data-stage="2"] .adm-pipe-step__icon { background: rgba(96,165,250,0.1); border-color: rgba(96,165,250,0.3); color: #93c5fd; }
-      .adm-pipe-step[data-stage="3"] .adm-pipe-step__icon { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #7dd3fc; }
-      .adm-pipe-step[data-stage="4"] .adm-pipe-step__icon { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); color: #d8b4fe; }
-      .adm-pipe-step[data-stage="5"] .adm-pipe-step__icon { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: #fde68a; }
-      .adm-pipe-step[data-stage="6"] .adm-pipe-step__icon { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: #6ee7b7; }
-      .adm-pipe-step__icon svg { width: 15px; height: 15px; }
-
-      .adm-pipe-step__val {
-        font-size: 1.55rem;
-        font-weight: 800;
-        color: var(--text-main);
-        line-height: 1;
-        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      }
-      .adm-pipe-step:hover .adm-pipe-step__val { transform: scale(1.08); }
-      .adm-pipe-step__lbl {
-        font-size: 0.62rem;
-        font-weight: 600;
-        color: var(--text-subtle);
-        text-align: center;
-        line-height: 1.35;
-      }
-      .adm-pipe-step__tag {
-        font-size: 0.55rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: 0.12rem 0.45rem;
-        border-radius: 999px;
-        border: 1px solid;
-        white-space: nowrap;
-      }
-      .adm-pipe-step[data-stage="1"] .adm-pipe-step__tag { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #fca5a5; }
-      .adm-pipe-step[data-stage="2"] .adm-pipe-step__tag { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.25); color: #93c5fd; }
-      .adm-pipe-step[data-stage="3"] .adm-pipe-step__tag { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); color: #7dd3fc; }
-      .adm-pipe-step[data-stage="4"] .adm-pipe-step__tag { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); color: #d8b4fe; }
-      .adm-pipe-step[data-stage="5"] .adm-pipe-step__tag { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fde68a; }
-      .adm-pipe-step[data-stage="6"] .adm-pipe-step__tag { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.25); color: #6ee7b7; }
-
-      /* ══ Quick Actions Grid (3×3) ══ */
-      .adm-quick-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.85rem;
-        margin-bottom: 1.75rem;
-      }
-      @media (max-width: 900px) { .adm-quick-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (max-width: 520px)  { .adm-quick-grid { grid-template-columns: 1fr; } }
-
-      .adm-quick {
-        display: flex;
-        align-items: center;
-        gap: 0.9rem;
-        padding: 1.05rem 1.2rem;
-        border-radius: 16px;
-        background: rgba(8,12,32,0.48);
-        backdrop-filter: blur(14px);
-        border: 1px solid var(--border-main);
-        text-decoration: none;
-        color: var(--text-main);
-        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s;
-        position: relative;
-        overflow: hidden;
-      }
-      .adm-quick::before {
-        content: "";
-        position: absolute; inset: 0;
-        border-radius: inherit;
-        background: var(--q-bg, transparent);
-        opacity: 0;
-        transition: opacity 0.25s;
-      }
-      .adm-quick:hover { transform: translateY(-4px) scale(1.01); }
-      .adm-quick:hover::before { opacity: 1; }
-
-      .adm-quick--cands   { --q-bg: rgba(185,28,28,0.08);   border-color: rgba(185,28,28,0.2); }
-      .adm-quick--cands:hover   { border-color: rgba(185,28,28,0.52); box-shadow: 0 10px 32px rgba(185,28,28,0.14); color: #fca5a5; }
-      .adm-quick--train   { --q-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.2); }
-      .adm-quick--train:hover   { border-color: rgba(16,185,129,0.55); box-shadow: 0 10px 32px rgba(16,185,129,0.14); color: #6ee7b7; }
-      .adm-quick--attend  { --q-bg: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); }
-      .adm-quick--attend:hover  { border-color: rgba(167,139,250,0.5); box-shadow: 0 10px 32px rgba(167,139,250,0.13); color: #c4b5fd; }
-      .adm-quick--steps   { --q-bg: rgba(236,72,153,0.07);  border-color: rgba(236,72,153,0.2); }
-      .adm-quick--steps:hover   { border-color: rgba(236,72,153,0.55); box-shadow: 0 10px 32px rgba(236,72,153,0.12); color: #f9a8d4; }
-      .adm-quick--admit   { --q-bg: rgba(20,184,166,0.07);  border-color: rgba(20,184,166,0.2); }
-      .adm-quick--admit:hover   { border-color: rgba(20,184,166,0.55); box-shadow: 0 10px 32px rgba(20,184,166,0.12); color: #5eead4; }
-      .adm-quick--flow    { --q-bg: rgba(30,58,138,0.1);    border-color: rgba(30,58,138,0.22); }
-      .adm-quick--flow:hover    { border-color: rgba(59,130,246,0.5); box-shadow: 0 10px 32px rgba(59,130,246,0.12); color: #93c5fd; }
-      .adm-quick--courses { --q-bg: rgba(245,158,11,0.07);  border-color: rgba(245,158,11,0.2); }
-      .adm-quick--courses:hover { border-color: rgba(245,158,11,0.5); box-shadow: 0 10px 32px rgba(245,158,11,0.12); color: #fde68a; }
-      .adm-quick--perms   { --q-bg: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.2); }
-      .adm-quick--perms:hover   { border-color: rgba(248,113,113,0.5); box-shadow: 0 10px 32px rgba(248,113,113,0.12); color: #fca5a5; }
-      .adm-quick--recs    { --q-bg: rgba(251,191,36,0.07);  border-color: rgba(251,191,36,0.2); }
-      .adm-quick--recs:hover    { border-color: rgba(251,191,36,0.5); box-shadow: 0 10px 32px rgba(251,191,36,0.12); color: #fde68a; }
-
-      .adm-quick__icon {
-        width: 46px; height: 46px;
-        border-radius: 13px;
-        flex-shrink: 0;
-        display: flex; align-items: center; justify-content: center;
-        position: relative; z-index: 1;
-        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-        border: 1px solid;
-      }
-      .adm-quick:hover .adm-quick__icon { transform: scale(1.12) rotate(-5deg); }
-      .adm-quick--cands   .adm-quick__icon { background: rgba(185,28,28,0.14);   border-color: rgba(185,28,28,0.32);   color: #fca5a5; }
-      .adm-quick--train   .adm-quick__icon { background: rgba(16,185,129,0.15);  border-color: rgba(16,185,129,0.35);  color: #6ee7b7; }
-      .adm-quick--attend  .adm-quick__icon { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.35); color: #c4b5fd; }
-      .adm-quick--steps   .adm-quick__icon { background: rgba(236,72,153,0.15);  border-color: rgba(236,72,153,0.35);  color: #f9a8d4; }
-      .adm-quick--admit   .adm-quick__icon { background: rgba(20,184,166,0.15);  border-color: rgba(20,184,166,0.35);  color: #5eead4; }
-      .adm-quick--flow    .adm-quick__icon { background: rgba(59,130,246,0.14);  border-color: rgba(59,130,246,0.3);   color: #93c5fd; }
-      .adm-quick--courses .adm-quick__icon { background: rgba(245,158,11,0.15);  border-color: rgba(245,158,11,0.35);  color: #fde68a; }
-      .adm-quick--perms   .adm-quick__icon { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.35); color: #fca5a5; }
-      .adm-quick--recs    .adm-quick__icon { background: rgba(251,191,36,0.15);  border-color: rgba(251,191,36,0.35);  color: #fde68a; }
-
-      .adm-quick__icon svg { width: 20px; height: 20px; }
-      .adm-quick__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
-      .adm-quick__title { font-size: 0.89rem; font-weight: 700; margin: 0 0 0.18rem; line-height: 1.3; }
-      .adm-quick__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
-      .adm-quick__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
-      .adm-quick:hover .adm-quick__arrow { transform: translateX(-5px); opacity: 1; }
-    </style>
-    <script src="js/admin-guard.js"></script>
+    /* ══ Quick Actions Grid ══ */
+    .adm-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (max-width: 900px) { .adm-quick-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .adm-quick-grid { grid-template-columns: 1fr; } }
+    .adm-quick {
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 1.05rem 1.2rem; border-radius: 16px;
+      background: rgba(8,12,32,0.48); backdrop-filter: blur(14px);
+      border: 1px solid var(--border-main);
+      text-decoration: none; color: var(--text-main);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .adm-quick::before {
+      content: ""; position: absolute; inset: 0;
+      border-radius: inherit; background: var(--q-bg, transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .adm-quick:hover { transform: translateY(-4px) scale(1.01); }
+    .adm-quick:hover::before { opacity: 1; }
+    .adm-quick--cands   { --q-bg: rgba(185,28,28,0.08);   border-color: rgba(185,28,28,0.2); }
+    .adm-quick--cands:hover   { border-color: rgba(185,28,28,0.52); box-shadow: 0 10px 32px rgba(185,28,28,0.14); color: #fca5a5; }
+    .adm-quick--train   { --q-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.2); }
+    .adm-quick--train:hover   { border-color: rgba(16,185,129,0.55); box-shadow: 0 10px 32px rgba(16,185,129,0.14); color: #6ee7b7; }
+    .adm-quick--attend  { --q-bg: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); }
+    .adm-quick--attend:hover  { border-color: rgba(167,139,250,0.5); box-shadow: 0 10px 32px rgba(167,139,250,0.13); color: #c4b5fd; }
+    .adm-quick--steps   { --q-bg: rgba(236,72,153,0.07);  border-color: rgba(236,72,153,0.2); }
+    .adm-quick--steps:hover   { border-color: rgba(236,72,153,0.55); box-shadow: 0 10px 32px rgba(236,72,153,0.12); color: #f9a8d4; }
+    .adm-quick--admit   { --q-bg: rgba(20,184,166,0.07);  border-color: rgba(20,184,166,0.2); }
+    .adm-quick--admit:hover   { border-color: rgba(20,184,166,0.55); box-shadow: 0 10px 32px rgba(20,184,166,0.12); color: #5eead4; }
+    .adm-quick--flow    { --q-bg: rgba(30,58,138,0.1);    border-color: rgba(30,58,138,0.22); }
+    .adm-quick--flow:hover    { border-color: rgba(59,130,246,0.5); box-shadow: 0 10px 32px rgba(59,130,246,0.12); color: #93c5fd; }
+    .adm-quick--courses { --q-bg: rgba(245,158,11,0.07);  border-color: rgba(245,158,11,0.2); }
+    .adm-quick--courses:hover { border-color: rgba(245,158,11,0.5); box-shadow: 0 10px 32px rgba(245,158,11,0.12); color: #fde68a; }
+    .adm-quick--perms   { --q-bg: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.2); }
+    .adm-quick--perms:hover   { border-color: rgba(248,113,113,0.5); box-shadow: 0 10px 32px rgba(248,113,113,0.12); color: #fca5a5; }
+    .adm-quick--recs    { --q-bg: rgba(251,191,36,0.07);  border-color: rgba(251,191,36,0.2); }
+    .adm-quick--recs:hover    { border-color: rgba(251,191,36,0.5); box-shadow: 0 10px 32px rgba(251,191,36,0.12); color: #fde68a; }
+    .adm-quick__icon {
+      width: 46px; height: 46px; border-radius: 13px;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      border: 1px solid;
+    }
+    .adm-quick:hover .adm-quick__icon { transform: scale(1.12) rotate(-5deg); }
+    .adm-quick--cands   .adm-quick__icon { background: rgba(185,28,28,0.14);   border-color: rgba(185,28,28,0.32);   color: #fca5a5; }
+    .adm-quick--train   .adm-quick__icon { background: rgba(16,185,129,0.15);  border-color: rgba(16,185,129,0.35);  color: #6ee7b7; }
+    .adm-quick--attend  .adm-quick__icon { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.35); color: #c4b5fd; }
+    .adm-quick--steps   .adm-quick__icon { background: rgba(236,72,153,0.15);  border-color: rgba(236,72,153,0.35);  color: #f9a8d4; }
+    .adm-quick--admit   .adm-quick__icon { background: rgba(20,184,166,0.15);  border-color: rgba(20,184,166,0.35);  color: #5eead4; }
+    .adm-quick--flow    .adm-quick__icon { background: rgba(59,130,246,0.14);  border-color: rgba(59,130,246,0.3);   color: #93c5fd; }
+    .adm-quick--courses .adm-quick__icon { background: rgba(245,158,11,0.15);  border-color: rgba(245,158,11,0.35);  color: #fde68a; }
+    .adm-quick--perms   .adm-quick__icon { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.35); color: #fca5a5; }
+    .adm-quick--recs    .adm-quick__icon { background: rgba(251,191,36,0.15);  border-color: rgba(251,191,36,0.35);  color: #fde68a; }
+    .adm-quick__icon svg { width: 20px; height: 20px; }
+    .adm-quick__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .adm-quick__title { font-size: 0.89rem; font-weight: 700; margin: 0 0 0.18rem; line-height: 1.3; }
+    .adm-quick__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
+    .adm-quick__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
+    .adm-quick:hover .adm-quick__arrow { transform: translateX(-5px); opacity: 1; }
+  </style>
+  <script src="js/admin-guard.js"></script>
 </head>
 
-  <body class="trainee-app" data-page="admin">
-    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
-    <div class="trainee-bg" aria-hidden="true"></div>
-    <div id="ntaHeader"></div>
+<body class="trainee-app" data-page="admin">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
 
-    <main id="main-content" class="trainee-main admin-main">
-      <!-- Hero -->
-      <div class="adm-hero">
+  <div id="ntaHeader"></div>
+
+  <main id="main-content" class="trainee-main admin-main">
+
+    <!-- Top Bar -->
+    <div class="dash-topbar">
+      <div class="dash-topbar__user">
+        <div class="dash-topbar__avatar" id="topbarAvatar">م</div>
         <div>
-          <p class="adm-hero__greeting" id="adminGreeting">مرحباً</p>
-          <h1 class="adm-hero__title">لوحة التحكم</h1>
-          <p class="adm-hero__sub">نظرة شاملة على دورة حياة التوظيف وتتبع فلترة المرشحين</p>
+          <div class="dash-topbar__name" id="topbarName">المدير</div>
+          <span class="dash-topbar__role">مدير النظام</span>
         </div>
-        <div class="adm-hero__meta">
-          <span class="adm-hero__date" id="heroDate"></span>
-          <div class="adm-hero__live">
-            <div class="adm-hero__live-dot"></div>
-            <span>مباشر</span>
+      </div>
+      <div class="dash-topbar__actions">
+        <span class="dash-topbar__date" id="topbarDate"></span>
+        <button class="dash-topbar__btn" title="الإشعارات" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="dash-topbar__badge">3</span>
+        </button>
+        <a href="admin-permissions.html" class="dash-topbar__btn" title="الإعدادات">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12H4M20 12h2"/></svg>
+        </a>
+        <button class="dash-topbar__export" type="button" onclick="window.print()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          تصدير التقرير
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="dash-hero">
+      <div>
+        <p class="dash-hero__breadcrumb">الرئيسية ›&nbsp;<span id="heroBreadcrumb">لوحة التحكم</span></p>
+        <h1 class="dash-hero__title">نظرة عامة على المنصة</h1>
+        <p class="dash-hero__sub">متابعة شاملة لمسار التدريب، المرشحين، والبرامج النشطة</p>
+      </div>
+      <div class="dash-hero__meta">
+        <div class="dash-hero__live">
+          <div class="dash-hero__live-dot"></div>
+          <span>بيانات مباشرة</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 KPI Cards -->
+    <div class="dash-kpi-row">
+      <a href="admin-trainees.html" class="dash-kpi dash-kpi--purple" style="animation-delay:0.05s">
+        <div class="dash-kpi__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="dash-kpi__val" id="kpiTrainees"></div>
+        <div class="dash-kpi__lbl">إجمالي المتدربين</div>
+        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 8%</span>
+      </a>
+
+      <a href="admin-trainees.html?status=active" class="dash-kpi dash-kpi--green" style="animation-delay:0.1s">
+        <div class="dash-kpi__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="dash-kpi__val" id="kpiActive"></div>
+        <div class="dash-kpi__lbl">المتدربون النشطون</div>
+        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 12%</span>
+      </a>
+
+      <div class="dash-kpi dash-kpi--crimson" style="animation-delay:0.15s">
+        <div class="dash-kpi__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="dash-kpi__val">48</div>
+        <div class="dash-kpi__lbl">إجمالي البرامج</div>
+        <span class="dash-kpi__delta dash-kpi__delta--flat"> ثابت</span>
+      </div>
+
+      <div class="dash-kpi dash-kpi--amber" style="animation-delay:0.2s">
+        <div class="dash-kpi__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <div class="dash-kpi__val">32</div>
+        <div class="dash-kpi__lbl">البرامج المكتملة</div>
+        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 4%</span>
+      </div>
+
+      <a href="admin-candidates.html" class="dash-kpi dash-kpi--blue" style="animation-delay:0.25s">
+        <div class="dash-kpi__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="dash-kpi__val" id="kpiCandidates"></div>
+        <div class="dash-kpi__lbl">المرشحون الجدد</div>
+        <span class="dash-kpi__delta dash-kpi__delta--down">↓ 3%</span>
+      </a>
+    </div>
+
+    <!-- 3-Column Charts Row -->
+    <div class="dash-charts-row">
+
+      <!-- Gender Donut -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg>
+            </div>
+            <div>
+              <p class="dash-panel__title">توزيع الجنس</p>
+              <p class="dash-panel__sub">المتدربون المسجلون</p>
+            </div>
+          </div>
+        </div>
+        <div class="dash-donut-wrap">
+          <div id="dashChartGender" class="dash-chart" style="height:160px;"></div>
+          <div class="dash-donut-total">
+            <div class="dash-donut-total__num" id="genderTotal"></div>
+            <div class="dash-donut-total__lbl">إجمالي</div>
+          </div>
+        </div>
+        <div class="dash-donut-legend" id="genderLegend">
+          <div class="dash-donut-legend__item">
+            <span class="dash-donut-legend__dot" style="background:#3b82f6;"></span>
+            <span id="genderMaleLabel">ذكور</span>
+          </div>
+          <div class="dash-donut-legend__item">
+            <span class="dash-donut-legend__dot" style="background:#a78bfa;"></span>
+            <span id="genderFemaleLabel">إناث</span>
           </div>
         </div>
       </div>
 
-      <!-- KPI Cards -->
-      <div class="adm-kpi-row">
-        <a
-          href="admin-candidates.html"
-          class="adm-kpi adm-kpi--blue"
-          style="animation-delay: 0.05s"
-        >
-          <div class="adm-kpi__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              width="20"
-              height="20"
-            >
-              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-            </svg>
+      <!-- Performance Line -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <p class="dash-panel__title">أداء التسجيل</p>
+              <p class="dash-panel__sub">المتدربون الجدد شهريًا</p>
+            </div>
           </div>
-          <div class="adm-kpi__val" id="kpiApplied">—</div>
-          <div class="adm-kpi__lbl">إجمالي المتقدمين</div>
-        </a>
-
-        <a
-          href="admin-trainees.html"
-          class="adm-kpi adm-kpi--green"
-          style="animation-delay: 0.12s"
-        >
-          <div class="adm-kpi__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              width="20"
-              height="20"
-            >
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
+          <div class="dash-perf-tabs">
+            <button class="dash-perf-tab active" data-period="6m" type="button">6 أشهر</button>
+            <button class="dash-perf-tab" data-period="3m" type="button">3 أشهر</button>
           </div>
-          <div class="adm-kpi__val" id="kpiEnrolled">—</div>
-          <div class="adm-kpi__lbl">المسجلون بالبرنامج</div>
-        </a>
-
-        <a
-          href="admin-candidates.html?status=rejected"
-          class="adm-kpi adm-kpi--red"
-          style="animation-delay: 0.19s"
-        >
-          <div class="adm-kpi__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              width="20"
-              height="20"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-          </div>
-          <div class="adm-kpi__val" id="kpiDropped">—</div>
-          <div class="adm-kpi__lbl">المرفوضون</div>
-        </a>
-
-        <a
-          href="admin-candidates.html?stage=advanced"
-          class="adm-kpi adm-kpi--yellow"
-          style="animation-delay: 0.26s"
-        >
-          <div class="adm-kpi__icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              width="20"
-              height="20"
-            >
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-            </svg>
-          </div>
-          <div class="adm-kpi__val" id="kpiAdvanced">—</div>
-          <div class="adm-kpi__lbl">المراحل المتقدمة</div>
-        </a>
+        </div>
+        <div id="dashChartPerf" class="dash-chart" style="height:200px;"></div>
       </div>
 
-      <!-- Charts -->
-      <p class="adm-section-title">تحليلات خط التقديم</p>
-      <div class="adm-charts-grid">
-        <div class="adm-chart-card adm-chart-card--scroll-legend">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M21.21 15.89A10 10 0 118 2.83" />
-                <path d="M22 12A10 10 0 0012 2v10z" />
-              </svg>
+      <!-- Status Donut -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
             </div>
-            <h3 class="adm-chart-card__title">توزيع المرشحين حسب المرحلة</h3>
+            <div>
+              <p class="dash-panel__title">توزيع الحالات</p>
+              <p class="dash-panel__sub">جميع المتدربين</p>
+            </div>
           </div>
-          <div id="admChartStage" class="adm-chart"></div>
-          <div class="adm-chart-legend-scroll" id="admStageLegend"></div>
         </div>
+        <div id="dashChartStatus" class="dash-chart" style="height:140px;"></div>
+        <div class="dash-status-legend" id="statusLegend"></div>
+      </div>
+    </div>
 
-        <div class="adm-chart-card">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-              </svg>
+    <!-- 3-Column Bottom Row -->
+    <div class="dash-bottom-row">
+
+      <!-- Activity Feed -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <h3 class="adm-chart-card__title">توزيع حسب الجنس</h3>
+            <p class="dash-panel__title">آخر الأنشطة</p>
           </div>
-          <div id="admChartGender" class="adm-chart"></div>
         </div>
-
-        <div class="adm-chart-card adm-chart-card--wide">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M18 20V10M12 20V4M6 20v-6" />
-              </svg>
+        <div class="dash-activity">
+          <div class="dash-activity__item">
+            <div class="dash-activity__icon dash-activity__icon--green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            <h3 class="adm-chart-card__title">أعداد المرشحين في كل مرحلة</h3>
-          </div>
-          <div id="admChartBar" class="adm-chart"></div>
-        </div>
-
-        <div class="adm-chart-card">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <rect x="3" y="4" width="18" height="18" rx="2" />
-                <path d="M16 2v4M8 2v4M3 10h18" />
-              </svg>
+            <div class="dash-activity__body">
+              <div class="dash-activity__text">تم قبول مرشح جديد في البرنامج</div>
+              <div class="dash-activity__time">منذ 10 دقائق</div>
             </div>
-            <h3 class="adm-chart-card__title">توزيع الأعمار</h3>
           </div>
-          <div id="admChartAge" class="adm-chart"></div>
-        </div>
-
-        <div class="adm-chart-card adm-chart-card--scroll-legend">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="m22 7-10-5L2 7l10 5 10-5Z" />
-                <path d="M6 10v6c0 1.1 2.7 2 6 2s6-.9 6-2v-6" />
-              </svg>
+          <div class="dash-activity__item">
+            <div class="dash-activity__icon dash-activity__icon--blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
             </div>
-            <h3 class="adm-chart-card__title">توزيع المستوى التعليمي</h3>
-          </div>
-          <div id="admChartEducation" class="adm-chart"></div>
-          <div class="adm-chart-legend-scroll" id="admEduLegend"></div>
-        </div>
-
-        <div class="adm-chart-card adm-chart-card--wide">
-          <div class="adm-chart-card__header">
-            <div class="adm-chart-card__icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-              </svg>
+            <div class="dash-activity__body">
+              <div class="dash-activity__text">اجتياز اختبار المرحلة الثالثة بنجاح</div>
+              <div class="dash-activity__time">منذ 35 دقيقة</div>
             </div>
-            <h3 class="adm-chart-card__title">
-              مسار خط التقديم (تقديم → مقابلة → تسجيل)
-            </h3>
           </div>
-          <div id="admChartPipeline" class="adm-chart"></div>
+          <div class="dash-activity__item">
+            <div class="dash-activity__icon dash-activity__icon--purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="dash-activity__body">
+              <div class="dash-activity__text">تسجيل 3 متدربين في دورة القيادة الاستراتيجية</div>
+              <div class="dash-activity__time">منذ ساعة</div>
+            </div>
+          </div>
+          <div class="dash-activity__item">
+            <div class="dash-activity__icon dash-activity__icon--amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="dash-activity__body">
+              <div class="dash-activity__text">طلب مراجعة وثائق المرشح #142</div>
+              <div class="dash-activity__time">منذ 2 ساعة</div>
+            </div>
+          </div>
+          <div class="dash-activity__item">
+            <div class="dash-activity__icon dash-activity__icon--crimson">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l2 2 4-4"/></svg>
+            </div>
+            <div class="dash-activity__body">
+              <div class="dash-activity__text">اكتمل تسجيل الحضور ليوم الاثنين</div>
+              <div class="dash-activity__time">منذ 3 ساعات</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Pipeline Funnel -->
-      <p class="adm-section-title">مسار خط الفلترة</p>
-      <div class="adm-pipeline">
-        <a href="admin-candidates.html?stage=1" class="adm-pipe-step" data-stage="1">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      <!-- Top Programs Table -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            </div>
+            <p class="dash-panel__title">أعلى البرامج</p>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount1">—</div>
-          <div class="adm-pipe-step__lbl">الفرز الإلكتروني</div>
-          <div class="adm-pipe-step__tag">المرحلة 1</div>
-        </a>
-        <a href="admin-candidates.html?stage=2" class="adm-pipe-step" data-stage="2">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <a href="admin-courses.html" style="font-size:0.7rem;color:#fca5a5;text-decoration:none;opacity:0.8;">عرض الكل ←</a>
+        </div>
+        <div class="dash-prog-table">
+          <div class="dash-prog-row">
+            <div class="dash-prog-name">برنامج القيادة الاستراتيجية</div>
+            <div class="dash-prog-trainees">48 متدرب</div>
+            <div class="dash-prog-meta">
+              <span class="dash-prog-pct">78%</span>
+              <span class="dash-prog-stars">★★★★★</span>
+            </div>
+            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:78%"></div></div></div>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount2">—</div>
-          <div class="adm-pipe-step__lbl">الاستعلام الأمني</div>
-          <div class="adm-pipe-step__tag">المرحلة 2</div>
-        </a>
-        <a href="admin-candidates.html?stage=3" class="adm-pipe-step" data-stage="3">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/></svg>
+          <div class="dash-prog-row">
+            <div class="dash-prog-name">إدارة المشاريع الحكومية</div>
+            <div class="dash-prog-trainees">36 متدرب</div>
+            <div class="dash-prog-meta">
+              <span class="dash-prog-pct">65%</span>
+              <span class="dash-prog-stars">★★★★☆</span>
+            </div>
+            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:65%"></div></div></div>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount3">—</div>
-          <div class="adm-pipe-step__lbl">الاختبار النفسي</div>
-          <div class="adm-pipe-step__tag">المرحلة 3</div>
-        </a>
-        <a href="admin-candidates.html?stage=4" class="adm-pipe-step" data-stage="4">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <div class="dash-prog-row">
+            <div class="dash-prog-name">التخطيط المؤسسي</div>
+            <div class="dash-prog-trainees">29 متدرب</div>
+            <div class="dash-prog-meta">
+              <span class="dash-prog-pct">91%</span>
+              <span class="dash-prog-stars">★★★★★</span>
+            </div>
+            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:91%"></div></div></div>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount4">—</div>
-          <div class="adm-pipe-step__lbl">اختبار المعلومات</div>
-          <div class="adm-pipe-step__tag">المرحلة 4</div>
-        </a>
-        <a href="admin-candidates.html?stage=5" class="adm-pipe-step" data-stage="5">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <div class="dash-prog-row">
+            <div class="dash-prog-name">الحوكمة والامتثال المؤسسي</div>
+            <div class="dash-prog-trainees">22 متدرب</div>
+            <div class="dash-prog-meta">
+              <span class="dash-prog-pct">54%</span>
+              <span class="dash-prog-stars">★★★★☆</span>
+            </div>
+            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:54%"></div></div></div>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount5">—</div>
-          <div class="adm-pipe-step__lbl">المقابلة الأولى</div>
-          <div class="adm-pipe-step__tag">المرحلة 5</div>
-        </a>
-        <a href="admin-candidates.html?stage=6" class="adm-pipe-step" data-stage="6">
-          <div class="adm-pipe-step__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <div class="dash-prog-row">
+            <div class="dash-prog-name">تنمية المهارات القيادية</div>
+            <div class="dash-prog-trainees">41 متدرب</div>
+            <div class="dash-prog-meta">
+              <span class="dash-prog-pct">38%</span>
+              <span class="dash-prog-stars">★★★★☆</span>
+            </div>
+            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:38%"></div></div></div>
           </div>
-          <div class="adm-pipe-step__val" id="pipeCount6">—</div>
-          <div class="adm-pipe-step__lbl">المقابلة الثانية</div>
-          <div class="adm-pipe-step__tag">المرحلة 6</div>
-        </a>
+        </div>
       </div>
 
-      <!-- Quick Actions Grid -->
-      <p class="adm-section-title">إجراءات سريعة</p>
-      <div class="adm-quick-grid">
-        <a href="admin-candidates.html" class="adm-quick adm-quick--cands">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <!-- Upcoming Events Calendar -->
+      <div class="dash-panel">
+        <div class="dash-panel__header">
+          <div class="dash-panel__title-wrap">
+            <div class="dash-panel__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            </div>
+            <p class="dash-panel__title">الأحداث القادمة</p>
           </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">المرشحون</div>
-            <div class="adm-quick__sub">المراحل 1–6 من خط التقديم</div>
+        </div>
+        <div class="dash-calendar">
+          <div class="dash-cal-item">
+            <div class="dash-cal-date"><div class="dash-cal-date__day">11</div><div class="dash-cal-date__mon">يون</div></div>
+            <div class="dash-cal-info">
+              <div class="dash-cal-title">اختبار المرحلة الثالثة</div>
+              <div class="dash-cal-time">اليوم  15:00</div>
+            </div>
           </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-trainees.html" class="adm-quick adm-quick--train">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="dash-cal-item">
+            <div class="dash-cal-date"><div class="dash-cal-date__day">12</div><div class="dash-cal-date__mon">يون</div></div>
+            <div class="dash-cal-info">
+              <div class="dash-cal-title">مقابلات المرشحين الجدد</div>
+              <div class="dash-cal-time">غداً  10:00</div>
+            </div>
           </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">المتدربون</div>
-            <div class="adm-quick__sub">المسجلون النشطون في الدورات</div>
+          <div class="dash-cal-item">
+            <div class="dash-cal-date"><div class="dash-cal-date__day">14</div><div class="dash-cal-date__mon">يون</div></div>
+            <div class="dash-cal-info">
+              <div class="dash-cal-title">مراجعة تقارير الحضور</div>
+              <div class="dash-cal-time">الأربعاء  09:00</div>
+            </div>
           </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-attendance.html" class="adm-quick adm-quick--attend">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14l2 2 4-4"/></svg>
+          <div class="dash-cal-item">
+            <div class="dash-cal-date"><div class="dash-cal-date__day">15</div><div class="dash-cal-date__mon">يون</div></div>
+            <div class="dash-cal-info">
+              <div class="dash-cal-title">اجتماع لجنة القبول</div>
+              <div class="dash-cal-time">الخميس  14:00</div>
+            </div>
           </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">الحضور والغياب</div>
-            <div class="adm-quick__sub">متابعة الجلسات والتقارير</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-reg-steps.html" class="adm-quick adm-quick--steps">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">خطوات التسجيل</div>
-            <div class="adm-quick__sub">قفل / فتح مراحل التقديم</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-admissions-builder.html" class="adm-quick adm-quick--admit">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">منشئ القبول</div>
-            <div class="adm-quick__sub">مراحل الاختبار والمستندات</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-flow-builder.html" class="adm-quick adm-quick--flow">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h8m-8 6h16"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">منشئ التدفق</div>
-            <div class="adm-quick__sub">تدفقات مخصصة لكل نوع دورة</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-courses.html" class="adm-quick adm-quick--courses">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">البرامج والدورات</div>
-            <div class="adm-quick__sub">إدارة كتالوج البرامج</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-permissions.html" class="adm-quick adm-quick--perms">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">الصلاحيات</div>
-            <div class="adm-quick__sub">إدارة المستخدمين والأدوار</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
-
-        <a href="admin-final.html" class="adm-quick adm-quick--recs">
-          <div class="adm-quick__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div class="adm-quick__body">
-            <div class="adm-quick__title">لوحة القرارات</div>
-            <div class="adm-quick__sub">القبول والرفض النهائي</div>
-          </div>
-          <span class="adm-quick__arrow">←</span>
-        </a>
+        </div>
       </div>
-    </main>
+    </div>
 
-    <div id="chatWidget"></div>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script src="header/header.js?v=2"></script>
-    <script>
-      (function () {
-        var session = {};
-        var _adminTok = localStorage.getItem("admin_token");
-        if (_adminTok) {
-          try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
-        }
-        if (!session.token) {
-          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
-        }
-        if (session.role !== "admin") {
-          window.location.replace("admin-login.html");
-          return;
-        }
+    <!-- Pipeline Funnel -->
+    <p class="adm-section-title">مسار خط الفلترة</p>
+    <div class="adm-pipeline">
+      <a href="admin-candidates.html?stage=1" class="adm-pipe-step" data-stage="1">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount1"></div>
+        <div class="adm-pipe-step__lbl">الفرز الإلكتروني</div>
+        <div class="adm-pipe-step__tag">المرحلة 1</div>
+      </a>
+      <a href="admin-candidates.html?stage=2" class="adm-pipe-step" data-stage="2">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount2"></div>
+        <div class="adm-pipe-step__lbl">الاستعلام الأمني</div>
+        <div class="adm-pipe-step__tag">المرحلة 2</div>
+      </a>
+      <a href="admin-candidates.html?stage=3" class="adm-pipe-step" data-stage="3">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount3"></div>
+        <div class="adm-pipe-step__lbl">الاختبار النفسي</div>
+        <div class="adm-pipe-step__tag">المرحلة 3</div>
+      </a>
+      <a href="admin-candidates.html?stage=4" class="adm-pipe-step" data-stage="4">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount4"></div>
+        <div class="adm-pipe-step__lbl">اختبار المعلومات</div>
+        <div class="adm-pipe-step__tag">المرحلة 4</div>
+      </a>
+      <a href="admin-candidates.html?stage=5" class="adm-pipe-step" data-stage="5">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount5"></div>
+        <div class="adm-pipe-step__lbl">المقابلة الأولى</div>
+        <div class="adm-pipe-step__tag">المرحلة 5</div>
+      </a>
+      <a href="admin-candidates.html?stage=6" class="adm-pipe-step" data-stage="6">
+        <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="adm-pipe-step__val" id="pipeCount6"></div>
+        <div class="adm-pipe-step__lbl">المقابلة الثانية</div>
+        <div class="adm-pipe-step__tag">المرحلة 6</div>
+      </a>
+    </div>
 
-        // Hero greeting + date
-        (function() {
-          var days   = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
-          var months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-          var now    = new Date();
-          var dateEl = document.getElementById("heroDate");
-          if (dateEl) dateEl.textContent = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
-          try {
-            var tok  = localStorage.getItem("admin_token");
-            if (tok) {
-              var p    = JSON.parse(atob(tok.split(".")[1]));
-              var name = p.name || p.email || "";
-              var grEl = document.getElementById("adminGreeting");
-              if (grEl && name) grEl.textContent = "مرحباً، " + name;
-            }
-          } catch(e) {}
-        })();
+    <!-- Quick Actions -->
+    <p class="adm-section-title">إجراءات سريعة</p>
+    <div class="adm-quick-grid">
+      <a href="admin-candidates.html" class="adm-quick adm-quick--cands">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">المرشحون</div><div class="adm-quick__sub">المراحل 1–6 من خط التقديم</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-trainees.html" class="adm-quick adm-quick--train">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">المتدربون</div><div class="adm-quick__sub">المسجلون النشطون في الدورات</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-attendance.html" class="adm-quick adm-quick--attend">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l2 2 4-4"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">الحضور والغياب</div><div class="adm-quick__sub">متابعة الجلسات والتقارير</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-reg-steps.html" class="adm-quick adm-quick--steps">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">خطوات التسجيل</div><div class="adm-quick__sub">قفل / فتح مراحل التقديم</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-admissions-builder.html" class="adm-quick adm-quick--admit">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">منشئ القبول</div><div class="adm-quick__sub">مراحل الاختبار والمستندات</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-flow-builder.html" class="adm-quick adm-quick--flow">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h8m-8 6h16"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">منشئ التدفق</div><div class="adm-quick__sub">تدفقات مخصصة لكل نوع دورة</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-courses.html" class="adm-quick adm-quick--courses">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">البرامج والدورات</div><div class="adm-quick__sub">إدارة كتالوج البرامج</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-permissions.html" class="adm-quick adm-quick--perms">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">الصلاحيات</div><div class="adm-quick__sub">إدارة المستخدمين والأدوار</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+      <a href="admin-final.html" class="adm-quick adm-quick--recs">
+        <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">لوحة القرارات</div><div class="adm-quick__sub">القبول والرفض النهائي</div></div>
+        <span class="adm-quick__arrow">←</span>
+      </a>
+    </div>
 
-        function countUp(el, target) {
-          if (!el || isNaN(target) || target === 0) { if (el) el.textContent = target; return; }
-          var current = 0;
-          var step    = Math.max(1, Math.ceil(target / 45));
-          function tick() {
-            current = Math.min(current + step, target);
-            el.textContent = current;
-            if (current < target) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-        }
+  </main>
 
-        function getThemeColor(varName, fallback) {
-          var val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-          return val || fallback;
-        }
+  <div id="chatWidget"></div>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="header/header.js?v=3"></script>
+  <script>
+  (function () {
+    var session = {};
+    var _adminTok = localStorage.getItem("admin_token");
+    if (_adminTok) {
+      try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null, name: _ap.name || _ap.email || "" }; } catch (e) {}
+    }
+    if (!session.token) {
+      try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
+    }
+    if (session.role !== "admin") { window.location.replace("admin-login.html"); return; }
 
-        var stages = [
-          { id: 1, label: "الفرز الإلكتروني", colorVar: "--color-error", fallback: "#ef4444" },
-          { id: 2, label: "الاستعلام الأمني", colorVar: "--color-info-soft", fallback: "#60a5fa" },
-          { id: 3, label: "الاختبار النفسي", colorVar: "--color-info",      fallback: "#3b82f6" },
-          { id: 4, label: "اختبارات المعلومات", colorVar: "--color-purple", fallback: "#c084fc" },
-          { id: 5, label: "المقابلة الأولى", colorVar: "--theme-btn-color", fallback: "#fbbf24" },
-          { id: 6, label: "المقابلة الثانية", colorVar: "--color-success-soft", fallback: "#34d399" },
-        ];
+    // Top bar & hero populate
+    (function () {
+      var days   = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+      var months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+      var now    = new Date();
+      var dateStr = days[now.getDay()] + "، " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear();
+      var elDate = document.getElementById("topbarDate");
+      if (elDate) elDate.textContent = dateStr;
 
-        var trainees = [];
-        var chStage, chGender, chBar, chAge, chEdu, chPipe;
+      var name = session.name || "";
+      var firstName = name.split(" ")[0] || "المدير";
+      var elName = document.getElementById("topbarName");
+      if (elName) elName.textContent = name || "المدير";
+      var elAvatar = document.getElementById("topbarAvatar");
+      if (elAvatar && firstName) elAvatar.textContent = firstName.charAt(0);
+      var elBread = document.getElementById("heroBreadcrumb");
+      if (elBread && firstName) elBread.textContent = firstName;
+    })();
 
-        function fetchData() {
-          window
-            .authenticatedFetch("/api/admin/trainees")
-            .then(function (res) {
-              return res.json();
+    function countUp(el, target) {
+      if (!el || isNaN(target) || target === 0) { if (el) el.textContent = target || 0; return; }
+      var current = 0;
+      var step = Math.max(1, Math.ceil(target / 45));
+      function tick() {
+        current = Math.min(current + step, target);
+        el.textContent = current;
+        if (current < target) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function getThemeColor(v, fb) {
+      var val = getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+      return val || fb;
+    }
+
+    var trainees = [];
+    var chGender, chPerf, chStatus;
+    var currentPeriod = "6m";
+
+    var perfData6m = { labels: ["يناير","فبراير","مارس","أبريل","مايو","يونيو"], values: [45,62,58,78,71,89] };
+    var perfData3m = { labels: ["أبريل","مايو","يونيو"], values: [78,71,89] };
+
+    var statusConfig = [
+      { key: "active",    label: "قيد التدريب",  color: "#34d399" },
+      { key: "completed", label: "مكتمل",         color: "#60a5fa" },
+      { key: "suspended", label: "معلق",           color: "#fbbf24" },
+      { key: "review",    label: "قيد التقييم",   color: "#c084fc" },
+      { key: "rejected",  label: "منسحب",          color: "#f87171" },
+    ];
+
+    function fetchData() {
+      window.authenticatedFetch("/api/admin/trainees")
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          trainees = data;
+          updateKpis();
+          initCharts();
+        })
+        .catch(function (err) { console.error("Dashboard fetch error:", err); });
+    }
+
+    function updateKpis() {
+      var enrolled   = trainees.filter(function (t) { return t.stage === 7; });
+      var active     = enrolled.filter(function (t) { return t.status === "active"; });
+      var candidates = trainees.filter(function (t) { return t.stage > 0 && t.stage < 7; });
+
+      countUp(document.getElementById("kpiTrainees"),   enrolled.length);
+      countUp(document.getElementById("kpiActive"),     active.length);
+      countUp(document.getElementById("kpiCandidates"), candidates.length);
+    }
+
+    function buildStatusCounts() {
+      var counts = { active: 0, completed: 0, suspended: 0, review: 0, rejected: 0 };
+      trainees.forEach(function (t) {
+        if (t.stage === 7 && t.status === "active") counts.active++;
+        else if (t.status === "completed") counts.completed++;
+        else if (t.status === "suspended") counts.suspended++;
+        else if (t.stage >= 4 && t.stage <= 6) counts.review++;
+        else if (t.status === "rejected") counts.rejected++;
+      });
+      return counts;
+    }
+
+    function buildPipelineCounts() {
+      var counts = {};
+      for (var s = 1; s <= 6; s++) counts[s] = 0;
+      trainees.forEach(function (t) {
+        if (t.stage >= 1 && t.stage <= 6 && t.status === "active") counts[t.stage]++;
+      });
+      return counts;
+    }
+
+    function sharedTooltip() {
+      return {
+        backgroundColor: "rgba(8,12,32,0.92)",
+        borderColor: "rgba(185,28,28,0.3)",
+        borderWidth: 1,
+        textStyle: { color: getThemeColor("--text-main","#e2e8f0"), fontFamily: "Tajawal", fontSize: 12 }
+      };
+    }
+
+    function initCharts() {
+      if (typeof echarts === "undefined") return;
+      [chGender, chPerf, chStatus].forEach(function (c) { if (c && c.dispose) try { c.dispose(); } catch(e){} });
+
+      var CHART_TEXT = getThemeColor("--text-subtle","#64748b");
+      var CHART_GRID = "rgba(51,65,85,0.3)";
+
+      // Gender counts
+      var gM = 0, gF = 0;
+      trainees.forEach(function (t) {
+        if (t.gender === "male") gM++;
+        else if (t.gender === "female") gF++;
+      });
+      var gTotal = gM + gF;
+      var elGTotal = document.getElementById("genderTotal");
+      if (elGTotal) elGTotal.textContent = gTotal;
+      var elGM = document.getElementById("genderMaleLabel");
+      if (elGM) elGM.textContent = "ذكور (" + gM + ")";
+      var elGF = document.getElementById("genderFemaleLabel");
+      if (elGF) elGF.textContent = "إناث (" + gF + ")";
+
+      // ── Gender donut ──
+      var elG = document.getElementById("dashChartGender");
+      if (elG) {
+        chGender = echarts.init(elG);
+        chGender.setOption({
+          backgroundColor: "transparent",
+          tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
+          series: [{
+            type: "pie", radius: ["52%","78%"], center: ["50%","50%"],
+            label: { show: false },
+            emphasis: { label: { show: true, fontFamily:"Tajawal", color: getThemeColor("--text-main","#e2e8f0"), fontSize:12, fontWeight:700 } },
+            data: [
+              { value: gM, name: "ذكور",  itemStyle: { color: "#3b82f6" } },
+              { value: gF, name: "إناث", itemStyle: { color: "#a78bfa" } }
+            ]
+          }]
+        });
+      }
+
+      // ── Performance line ──
+      var elP = document.getElementById("dashChartPerf");
+      if (elP) {
+        chPerf = echarts.init(elP);
+        renderPerfChart();
+      }
+
+      // ── Status donut ──
+      var statusCounts = buildStatusCounts();
+      var elS = document.getElementById("dashChartStatus");
+      if (elS) {
+        chStatus = echarts.init(elS);
+        chStatus.setOption({
+          backgroundColor: "transparent",
+          tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
+          series: [{
+            type: "pie", radius: ["48%","72%"], center: ["50%","50%"],
+            label: { show: false },
+            data: statusConfig.map(function (s) {
+              return { value: statusCounts[s.key], name: s.label, itemStyle: { color: s.color } };
             })
-            .then(function (data) {
-              trainees = data;
-              updateKpis();
-              initCharts();
-            })
-            .catch(function (err) {
-              console.error("Dashboard fetch error:", err);
-            });
+          }]
+        });
+        // Status legend
+        var legEl = document.getElementById("statusLegend");
+        if (legEl) {
+          var total = Object.values(statusCounts).reduce(function(a,b){return a+b;},0);
+          legEl.innerHTML = statusConfig.map(function (s) {
+            var cnt = statusCounts[s.key];
+            var pct = total > 0 ? Math.round(cnt / total * 100) : 0;
+            return '<div class="dash-status-legend__row">' +
+              '<div class="dash-status-legend__left">' +
+                '<span class="dash-status-legend__dot" style="background:'+s.color+'"></span>' +
+                s.label +
+              '</div>' +
+              '<span class="dash-status-legend__val">' + cnt + ' <span style="color:var(--text-subtle);font-weight:400;">(' + pct + '%)</span></span>' +
+            '</div>';
+          }).join("");
         }
+      }
 
-        function updateKpis() {
-          var candidates = trainees.filter(function (t) { return t.stage > 0 && t.stage < 7; });
-          var enrolled   = trainees.filter(function (t) { return t.stage === 7; });
-          var dropped    = trainees.filter(function (t) { return t.status === "rejected"; });
-          var advanced   = trainees.filter(function (t) { return t.stage >= 4 && t.stage <= 6; });
+      // Pipeline funnel counts
+      var pipeCounts = buildPipelineCounts();
+      for (var _s = 1; _s <= 6; _s++) {
+        var _el = document.getElementById("pipeCount" + _s);
+        if (_el) _el.textContent = pipeCounts[_s] || 0;
+      }
 
-          countUp(document.getElementById("kpiApplied"),  candidates.length);
-          countUp(document.getElementById("kpiEnrolled"), enrolled.length);
-          countUp(document.getElementById("kpiDropped"),  dropped.length);
-          countUp(document.getElementById("kpiAdvanced"), advanced.length);
-        }
+      window.addEventListener("resize", function () {
+        [chGender, chPerf, chStatus].forEach(function (c) { if (c) c.resize(); });
+      });
+    }
 
-        function initCharts() {
-          if (typeof echarts === "undefined") return;
+    function renderPerfChart() {
+      if (!chPerf) return;
+      var pd = currentPeriod === "3m" ? perfData3m : perfData6m;
+      var cAccent = getThemeColor("--accent","#b91c1c");
+      var cHover  = getThemeColor("--accent-hover","#ef4444");
+      var CHART_TEXT = getThemeColor("--text-subtle","#64748b");
+      chPerf.setOption({
+        backgroundColor: "transparent",
+        tooltip: Object.assign({ trigger: "axis" }, sharedTooltip()),
+        grid: { top: 12, bottom: 28, left: 36, right: 12 },
+        xAxis: {
+          type: "category", data: pd.labels,
+          axisLabel: { color: CHART_TEXT, fontFamily: "Tajawal", fontSize: 10 },
+          axisLine: { lineStyle: { color: "rgba(255,255,255,0.08)" } }
+        },
+        yAxis: {
+          type: "value",
+          axisLabel: { color: CHART_TEXT, fontFamily: "Tajawal", fontSize: 10 },
+          splitLine: { lineStyle: { color: "rgba(51,65,85,0.3)" } }
+        },
+        series: [{
+          type: "line", smooth: true,
+          data: pd.values,
+          symbol: "circle", symbolSize: 7,
+          lineStyle: { width: 3, color: cAccent },
+          itemStyle: { color: cHover, borderWidth: 2, borderColor: "rgba(252,165,165,0.6)" },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0,0,0,1,[
+              { offset: 0, color: "rgba(185,28,28,0.28)" },
+              { offset: 1, color: "rgba(185,28,28,0.02)" }
+            ])
+          },
+          label: { show: true, position: "top", color: "#fca5a5", fontFamily: "Tajawal", fontSize: 10, fontWeight: 700 }
+        }]
+      });
+    }
 
-          // Dispose existing charts if any
-          [chStage, chGender, chBar, chAge, chEdu, chPipe].forEach(function (c) {
-            if (c && typeof c.dispose === "function") {
-              try { c.dispose(); } catch (e) {}
-            }
-          });
+    // Period tab switching
+    document.querySelectorAll(".dash-perf-tab").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".dash-perf-tab").forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        currentPeriod = btn.dataset.period;
+        renderPerfChart();
+      });
+    });
 
-          // Resolve dynamic theme colors
-          stages.forEach(function (s) {
-            s.color = getThemeColor(s.colorVar, s.fallback);
-          });
+    window.addEventListener("nta-theme-changed", function () {
+      if (chPerf) renderPerfChart();
+      initCharts();
+    });
 
-          var CHART_TEXT_COLOR = getThemeColor("--text-subtle", "#64748b");
-          var CHART_GRID_COLOR = "rgba(51,65,85,0.35)";
-          var cInfo = getThemeColor("--color-info", "#3b82f6");
-          var cPurple = getThemeColor("--color-purple", "#8b5cf6");
-          var cAccent = getThemeColor("--accent", "#b91c1c");
-          var cAccentHover = getThemeColor("--accent-hover", "#ef4444");
-          var cAccentPale = getThemeColor("--color-accent-pale", "#fca5a5");
-          var cAccentPale2 = getThemeColor("--color-accent-pale-2", "#fecaca");
-
-          function sharedTooltip() {
-            return {
-              backgroundColor: "rgba(8,12,32,0.92)",
-              borderColor: "rgba(185,28,28,0.3)",
-              borderWidth: 1,
-              textStyle: {
-                color: getThemeColor("--text-main", "#e2e8f0"),
-                fontFamily: "Tajawal",
-                fontSize: 12,
-              },
-            };
-          }
-
-          var stageCounts = {};
-          stages.forEach(function (s) {
-            stageCounts[s.id] = 0;
-          });
-          var genderCounts = { male: 0, female: 0 };
-          var ageBuckets = { "20-25": 0, "26-30": 0, "31-35": 0, "36+": 0 };
-          var eduCounts = {};
-
-          trainees.forEach(function (t) {
-            if (stageCounts[t.stage] !== undefined && t.status === 'active') stageCounts[t.stage]++;
-            if (t.gender === "male") genderCounts.male++;
-            else if (t.gender === "female") genderCounts.female++;
-            var age = new Date().getFullYear() - new Date(t.dob).getFullYear();
-            if (age <= 25) ageBuckets["20-25"]++;
-            else if (age <= 30) ageBuckets["26-30"]++;
-            else if (age <= 35) ageBuckets["31-35"]++;
-            else ageBuckets["36+"]++;
-            var deg = t.category || "غير محدد";
-            eduCounts[deg] = (eduCounts[deg] || 0) + 1;
-          });
-
-          // Populate pipeline funnel counts
-          for (var _s = 1; _s <= 6; _s++) {
-            var _el = document.getElementById("pipeCount" + _s);
-            if (_el) _el.textContent = stageCounts[_s] !== undefined ? stageCounts[_s] : 0;
-          }
-
-          // ── Stage donut ──
-          var elStage = document.getElementById("admChartStage");
-          if (elStage) {
-            chStage = echarts.init(elStage);
-            chStage.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
-              series: [
-                {
-                  type: "pie",
-                  radius: ["42%", "70%"],
-                  center: ["50%", "50%"],
-                  label: { show: false },
-                  emphasis: {
-                    label: {
-                      show: true,
-                      fontFamily: "Tajawal",
-                      color: getThemeColor("--text-main", "#e2e8f0"),
-                      fontSize: 13,
-                      fontWeight: 700,
-                    },
-                  },
-                  data: stages.map(function (s) {
-                    return {
-                      value: stageCounts[s.id],
-                      name: s.label,
-                      itemStyle: { color: s.color },
-                    };
-                  }),
-                },
-              ],
-            });
-            var stageLegendEl = document.getElementById("admStageLegend");
-            if (stageLegendEl) {
-              stageLegendEl.innerHTML = stages
-                .map(function (s) {
-                  return (
-                    '<span class="adm-chart-legend-item">' +
-                    '<span class="adm-chart-legend-dot" style="background:' +
-                    s.color +
-                    ";box-shadow:0 0 5px " +
-                    s.color +
-                    '88"></span>' +
-                    s.label +
-                    " (" +
-                    stageCounts[s.id] +
-                    ")" +
-                    "</span>"
-                  );
-                })
-                .join("");
-            }
-          }
-
-          // ── Gender pie ──
-          var elGender = document.getElementById("admChartGender");
-          if (elGender) {
-            chGender = echarts.init(elGender);
-            chGender.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
-              legend: {
-                bottom: 10,
-                textStyle: {
-                  color: CHART_TEXT_COLOR,
-                  fontFamily: "Tajawal",
-                  fontSize: 11,
-                },
-              },
-              series: [
-                {
-                  type: "pie",
-                  radius: ["38%", "65%"],
-                  center: ["50%", "45%"],
-                  label: { show: false },
-                  emphasis: {
-                    label: {
-                      show: true,
-                      fontFamily: "Tajawal",
-                      color: getThemeColor("--text-main", "#e2e8f0"),
-                      fontSize: 13,
-                      fontWeight: 700,
-                    },
-                  },
-                  data: [
-                    {
-                      value: genderCounts.male,
-                      name: "ذكور",
-                      itemStyle: { color: cInfo },
-                    },
-                    {
-                      value: genderCounts.female,
-                      name: "إناث",
-                      itemStyle: { color: cPurple },
-                    },
-                  ],
-                },
-              ],
-            });
-          }
-
-          // ── Stage bar ──
-          var elBar = document.getElementById("admChartBar");
-          if (elBar) {
-            chBar = echarts.init(elBar);
-            chBar.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign(
-                { trigger: "axis", axisPointer: { type: "shadow" } },
-                sharedTooltip(),
-              ),
-              grid: { top: 10, bottom: 40, left: 160, right: 20 },
-              xAxis: {
-                type: "value",
-                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
-                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
-              },
-              yAxis: {
-                type: "category",
-                data: stages
-                  .map(function (s) {
-                    return s.label;
-                  })
-                  .reverse(),
-                axisLabel: {
-                  color: CHART_TEXT_COLOR,
-                  fontFamily: "Tajawal",
-                  fontSize: 11,
-                },
-              },
-              series: [
-                {
-                  type: "bar",
-                  barMaxWidth: 22,
-                  data: stages
-                    .map(function (s) {
-                      return stageCounts[s.id];
-                    })
-                    .reverse(),
-                  itemStyle: {
-                    color: function (params) {
-                      return stages[stages.length - 1 - params.dataIndex].color;
-                    },
-                    borderRadius: [0, 8, 8, 0],
-                  },
-                  emphasis: {
-                    itemStyle: {
-                      shadowBlur: 12,
-                      shadowColor: "rgba(185,28,28,0.4)",
-                    },
-                  },
-                },
-              ],
-            });
-          }
-
-          // ── Age bar ──
-          var elAge = document.getElementById("admChartAge");
-          if (elAge) {
-            chAge = echarts.init(elAge);
-            chAge.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign({ trigger: "axis" }, sharedTooltip()),
-              grid: { top: 10, bottom: 30, left: 30, right: 10 },
-              xAxis: {
-                type: "category",
-                data: Object.keys(ageBuckets),
-                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
-              },
-              yAxis: {
-                type: "value",
-                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
-                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
-              },
-              series: [
-                {
-                  type: "bar",
-                  barMaxWidth: 40,
-                  data: Object.values(ageBuckets),
-                  itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                      { offset: 0, color: cAccentHover },
-                      { offset: 1, color: "rgba(129,140,248,0.25)" },
-                    ]),
-                    borderRadius: [6, 6, 0, 0],
-                  },
-                },
-              ],
-            });
-          }
-
-          // ── Education donut ──
-          var elEdu = document.getElementById("admChartEducation");
-          if (elEdu) {
-            var eduColors = [
-              getThemeColor("--color-success", "#10b981"),
-              getThemeColor("--color-info", "#3b82f6"),
-              getThemeColor("--color-warning", "#f59e0b"),
-              getThemeColor("--color-error", "#ef4444"),
-              getThemeColor("--color-purple", "#8b5cf6"),
-              getThemeColor("--color-cyan", "#06b6d4"),
-            ];
-            chEdu = echarts.init(elEdu);
-            chEdu.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign({ trigger: "item" }, sharedTooltip()),
-              series: [
-                {
-                  type: "pie",
-                  radius: ["42%", "68%"],
-                  center: ["50%", "50%"],
-                  label: { show: false },
-                  data: Object.keys(eduCounts).map(function (k, i) {
-                    return {
-                      value: eduCounts[k],
-                      name: k,
-                      itemStyle: { color: eduColors[i % eduColors.length] },
-                    };
-                  }),
-                },
-              ],
-            });
-            var eduLegendEl = document.getElementById("admEduLegend");
-            if (eduLegendEl) {
-              eduLegendEl.innerHTML = Object.keys(eduCounts)
-                .map(function (k, i) {
-                  var color = eduColors[i % eduColors.length];
-                  return (
-                    '<span class="adm-chart-legend-item">' +
-                    '<span class="adm-chart-legend-dot" style="background:' +
-                    color +
-                    ";box-shadow:0 0 5px " +
-                    color +
-                    '88"></span>' +
-                    k +
-                    " (" +
-                    eduCounts[k] +
-                    ")" +
-                    "</span>"
-                  );
-                })
-                .join("");
-            }
-          }
-
-          // ── Pipeline funnel line ──
-          var elPipe = document.getElementById("admChartPipeline");
-          if (elPipe) {
-            chPipe = echarts.init(elPipe);
-            var pipeData = [
-              trainees.length,
-              trainees.filter(function (t) {
-                return t.stage >= 3;
-              }).length,
-              trainees.filter(function (t) {
-                return t.stage >= 5;
-              }).length,
-              trainees.filter(function (t) {
-                return t.stage === 7;
-              }).length,
-            ];
-            chPipe.setOption({
-              backgroundColor: "transparent",
-              tooltip: Object.assign({ trigger: "axis" }, sharedTooltip()),
-              grid: { top: 15, bottom: 35, left: 40, right: 20 },
-              xAxis: {
-                type: "category",
-                data: ["التقديم", "اجتاز الفرز", "المقابلات", "التسجيل"],
-                axisLabel: {
-                  color: CHART_TEXT_COLOR,
-                  fontFamily: "Tajawal",
-                  fontSize: 11,
-                },
-              },
-              yAxis: {
-                type: "value",
-                axisLabel: { color: CHART_TEXT_COLOR, fontFamily: "Tajawal" },
-                splitLine: { lineStyle: { color: CHART_GRID_COLOR } },
-              },
-              series: [
-                {
-                  type: "line",
-                  smooth: true,
-                  data: pipeData,
-                  symbol: "circle",
-                  symbolSize: 8,
-                  lineStyle: { width: 3, color: cAccent },
-                  itemStyle: {
-                    color: cAccentHover,
-                    borderWidth: 2,
-                    borderColor: cAccentPale2,
-                  },
-                  areaStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                      { offset: 0, color: "rgba(185,28,28,0.3)" },
-                      { offset: 1, color: "rgba(185,28,28,0.02)" },
-                    ]),
-                  },
-                  label: {
-                    show: true,
-                    position: "top",
-                    color: cAccentPale,
-                    fontFamily: "Tajawal",
-                    fontSize: 11,
-                    fontWeight: 700,
-                  },
-                },
-              ],
-            });
-          }
-
-          // Resize on window change
-          window.addEventListener("resize", function () {
-            [chStage, chGender, chBar, chAge, chEdu, chPipe].forEach(
-              function (c) {
-                if (c) c.resize();
-              },
-            );
-          });
-        }
-
-        // Register theme-change listener once using the stable initCharts reference
-        window.addEventListener("nta-theme-changed", initCharts);
-        fetchData();
-      })();
-    </script>
-    <script src="chat/chat.js"></script>
-  </body>
+    fetchData();
+  })();
+  </script>
+  <script src="chat/chat.js"></script>
+</body>
 </html>

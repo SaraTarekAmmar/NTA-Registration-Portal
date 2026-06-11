@@ -141,7 +141,28 @@
         box-shadow: 0 0 0 2px rgba(185,28,28,0.18) !important;
       }
       .login-input-wrap:focus-within .login-input-icon { color: #f87171 !important; }
-    </style>
+    
+      /* ══ Light mode overrides ══ */
+      html.light-mode body.has-header {
+        background: #f1f5f9 !important;
+      }
+      html.light-mode .login-bg {
+        background:
+          radial-gradient(ellipse 80% 55% at 15% 10%, rgba(185,28,28,0.04), transparent 55%),
+          radial-gradient(ellipse 55% 40% at 90% 85%, rgba(185,28,28,0.03), transparent 60%) !important;
+      }
+      html.light-mode .login-card {
+        background: rgba(255,255,255,0.97) !important;
+        border: 1px solid rgba(0,0,0,0.08) !important;
+        border-top-color: rgba(185,28,28,0.2) !important;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06) !important;
+      }
+      html.light-mode .login-card h1 {
+        background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+      }
+      </style>
   </head>
 
   <body class="has-header">

@@ -51,15 +51,6 @@ body[data-page] {
   overflow: hidden;
 }
 
-/* Crimson top accent line */
-.nta-sidebar::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #b91c1c 0%, rgba(185,28,28,0.45) 55%, transparent 100%);
-  z-index: 2;
-}
 
 /* Ambient glow at top-right */
 .nta-sidebar::after {
@@ -122,7 +113,7 @@ body[data-page] {
 
 .nta-sidebar__logo-sub {
   font-size: 0.47rem;
-  color: rgba(148,163,184,0.36);
+  color: rgba(148,163,184,0.7);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -130,7 +121,7 @@ body[data-page] {
 
 .nta-sidebar__logo-ar {
   font-size: 0.58rem;
-  color: rgba(148,163,184,0.4);
+  color: rgba(148,163,184,0.7);
 }
 
 /* Role badge */
@@ -171,9 +162,9 @@ body[data-page] {
 .nta-sidebar__nav::-webkit-scrollbar { display: none; }
 
 .nta-sidebar__nav-lbl {
-  font-size: 0.54rem; font-weight: 700;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(100,116,139,0.36);
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #94a3b8;
   padding: 0.72rem 0.65rem 0.26rem;
   user-select: none;
 }
@@ -272,7 +263,7 @@ body[data-page] {
   border-radius: 8px;
   border: 1px solid rgba(239,68,68,0.13);
   background: rgba(239,68,68,0.03);
-  color: rgba(252,165,165,0.52);
+  color: rgba(252,165,165,0.82);
   font-family: inherit; font-size: 0.73rem; font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
@@ -283,6 +274,42 @@ body[data-page] {
   color: #fca5a5;
 }
 .nta-sidebar__logout svg { width: 13px; height: 13px; }
+
+.nta-sidebar__bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.nta-sidebar__bottom-row .nta-sidebar__logout {
+  flex: 1;
+}
+.nta-sidebar__theme-btn {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: rgba(148,163,184,0.6);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.nta-sidebar__theme-btn:hover {
+  background: rgba(185,28,28,0.1);
+  border-color: rgba(185,28,28,0.35);
+  color: #fca5a5;
+}
+html.light-mode .nta-sidebar__theme-btn {
+  border-color: rgba(185,28,28,0.2);
+  color: #b91c1c;
+}
+
+
+/* Hide the floating FAB on sidebar pages — sidebar footer has #themeToggle */
+body[data-page] .nta-theme-fab,
+body[data-page] #ntaThemeFab {
+  display: none !important;
+}
 
 /* ════════════════════════════════════════
    RESPONSIVE

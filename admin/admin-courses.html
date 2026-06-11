@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="admin-portal.css" />
     <link rel="stylesheet" href="admin-theme.css" />
     <link rel="stylesheet" href="editor-theme.css" />
-    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="header/header.css?v=4" />
     <link rel="stylesheet" href="chat/chat.css?v=3" />
     <link rel="stylesheet" href="course-modal.css" />
     <link
@@ -1061,9 +1061,9 @@
     <script src="js/admin-guard.js"></script>
 </head>
 
-  <body class="trainee-app" data-page="courses">
+  <body class="trainee-app" data-page="admin-courses">
     <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
-    <div class="trainee-bg"></div>
+
     <div id="ntaHeader"></div>
 
     <main id="main-content" class="trainee-main">
@@ -1757,7 +1757,7 @@
       </div>
     </div>
 
-    <script src="header/header.js?v=2"></script>
+    <script src="header/header.js?v=3"></script>
     <script src="common/js/icons.js"></script>
     <script>
       var _vb = document.getElementById('visBadge');
@@ -2634,16 +2634,7 @@
           if (ah) ah.style.display = "block";
           if (th) th.style.display = "none";
           if (cet) {
-            cet.style.display = "flex";
-            // Replace "Add Course" button with a link to the editor portal
-            cet.innerHTML =
-              '<div class="courses-editor-toolbar__left" style="width:100%;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">' +
-              '<a href="/editor/editor-dashboard.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.5rem 1.1rem;border-radius:10px;font-size:0.85rem;font-weight:700;font-family:inherit;background:rgba(185,28,28,0.12);border:1px solid rgba(185,28,28,0.35);color:#fca5a5;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(185,28,28,0.22)\'" onmouseout="this.style.background=\'rgba(185,28,28,0.12)\'">' +
-              '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>' +
-              'بوابة المحرر — إنشاء وتعديل الدورات' +
-              '</a>' +
-              '<span style="font-size:0.78rem;color:var(--text-subtle);">لإنشاء دورة جديدة أو تعديل محتوى موجود، استخدم بوابة المحرر.</span>' +
-              '</div>';
+            cet.style.display = "none";
           }
         }
 

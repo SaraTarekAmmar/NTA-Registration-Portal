@@ -930,3 +930,109 @@ html.light-mode {
   --admin-focus-ring:       rgba(185,28,28,0.12);
   --admin-border-focus:     rgba(185,28,28,0.4);
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT-MODE OVERRIDES — pages with hardcoded dark rgba
+   ═══════════════════════════════════════════════════════ */
+
+/* Candidates page */
+html.light-mode .au-stage-pill     { background: rgba(15,23,42,0.06) !important; }
+html.light-mode .au-search         { background: #f1f5f9 !important; border-color: #e2e8f0 !important; }
+html.light-mode .au-skel-card      { background: rgba(15,23,42,0.05) !important; }
+html.light-mode .au-empty          { background: rgba(15,23,42,0.02) !important; }
+
+/* Trainees page */
+html.light-mode .at-course-pill    { background: rgba(15,23,42,0.06) !important; }
+html.light-mode .at-search         { background: #f1f5f9 !important; border-color: #e2e8f0 !important; }
+html.light-mode .at-skel-card      { background: rgba(15,23,42,0.05) !important; }
+html.light-mode .at-empty          { background: rgba(15,23,42,0.02) !important; }
+html.light-mode .at-score-chip     { background: rgba(15,23,42,0.06) !important; }
+html.light-mode .at-panel          { background: rgba(15,23,42,0.03) !important; }
+html.light-mode .at-att-table th   { background: rgba(15,23,42,0.04) !important; }
+html.light-mode .at-att-summary    { background: rgba(15,23,42,0.03) !important; }
+html.light-mode .at-card__img-prog { background: rgba(15,23,42,0.04) !important; }
+
+/* Attendance page */
+html.light-mode .adm-course-pill       { background: rgba(15,23,42,0.06) !important; }
+html.light-mode .adm-session-tab       { background: rgba(15,23,42,0.06) !important; }
+html.light-mode .adm-table-search      { background: #f1f5f9 !important; border-color: #e2e8f0 !important; }
+html.light-mode .adm-table th          { background: rgba(15,23,42,0.04) !important; }
+html.light-mode .adm-session-card__head{ background: rgba(15,23,42,0.04) !important; }
+html.light-mode .adm-absence-note      { background: rgba(15,23,42,0.04) !important; }
+
+/* Candidate profile page */
+html.light-mode .ap-qs-item        { background: rgba(15,23,42,0.04) !important; }
+html.light-mode .ap-att-summary    { background: rgba(15,23,42,0.03) !important; }
+html.light-mode .ap-att-table th   { background: rgba(15,23,42,0.04) !important; }
+html.light-mode .ap-sess-card__head{ background: rgba(15,23,42,0.04) !important; }
+html.light-mode .admin-profile__tab{ background: rgba(15,23,42,0.05) !important; }
+
+/* ══ Dashboard (admin-dashboard.html) light-mode ══ */
+html.light-mode .dash-topbar {
+  background: rgba(255,255,255,0.88) !important;
+  border-color: var(--border-main) !important;
+  backdrop-filter: blur(12px) !important;
+}
+html.light-mode .dash-topbar__name   { color: var(--text-main) !important; }
+html.light-mode .dash-topbar__date   { color: var(--text-muted) !important; border-color: var(--border-main) !important; }
+html.light-mode .dash-topbar__btn {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+  color: var(--text-muted) !important;
+}
+html.light-mode .dash-topbar__export {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+  color: var(--text-muted) !important;
+}
+html.light-mode .dash-hero {
+  background: rgba(255,255,255,0.82) !important;
+  border-color: var(--border-main) !important;
+  backdrop-filter: blur(12px) !important;
+}
+html.light-mode .dash-hero__title    { color: var(--text-main) !important; }
+html.light-mode .dash-hero__sub      { color: var(--text-muted) !important; }
+html.light-mode .dash-hero__breadcrumb { color: var(--text-muted) !important; }
+html.light-mode .dash-kpi {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+  backdrop-filter: blur(8px) !important;
+}
+html.light-mode .dash-kpi__val       { color: var(--text-main) !important; text-shadow: none !important; }
+html.light-mode .dash-kpi__lbl       { color: var(--text-muted) !important; }
+html.light-mode .dash-panel {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .dash-prog-row {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .dash-prog-row:hover {
+  background: var(--admin-toggle-active) !important;
+}
+html.light-mode .dash-prog-bar {
+  background: var(--bg-input) !important;
+}
+html.light-mode .dash-act-entry {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+  color: var(--text-main) !important;
+}
+html.light-mode .adm-pipe-step {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .adm-pipe-step__label { color: var(--text-muted) !important; }
+html.light-mode .dash-cal-item {
+  background: var(--bg-input) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .dash-cal-item__title { color: var(--text-main) !important; }
+html.light-mode .adm-quick {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: var(--border-main) !important;
+}
+html.light-mode .adm-quick__title { color: var(--text-main) !important; }
+html.light-mode .adm-quick__sub   { color: var(--text-muted) !important; }
