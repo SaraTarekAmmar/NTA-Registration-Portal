@@ -7,6 +7,20 @@ from schemas.course import CourseBase
 
 router = APIRouter(prefix="/api/courses", tags=["Courses"])
 
+# DB enums are ('Upcoming','Ongoing','Completed') / ('Beginner','Intermediate','Advanced');
+# the editor UI speaks draft/published/archived and Arabic skill levels.
+STATUS_TO_DB = {"draft": "Upcoming", "published": "Ongoing", "archived": "Completed", "قادم": "Upcoming"}
+DB_TO_STATUS = {"Upcoming": "draft", "Ongoing": "published", "Completed": "archived"}
+SKILL_TO_DB = {"مبتدئ": "Beginner", "متوسط": "Intermediate", "متقدم": "Advanced"}
+
+
+def status_to_db(value):
+    return STATUS_TO_DB.get(value, value if value in DB_TO_STATUS else "Upcoming")
+
+
+def skill_to_db(value):
+    return SKILL_TO_DB.get(value, value if value in ("Beginner", "Intermediate", "Advanced") else "Intermediate")
+
 
 @router.get("")
 async def list_courses(editor: dict = Depends(require_editor)):
@@ -23,6 +37,7 @@ async def list_courses(editor: dict = Depends(require_editor)):
         for row in rows:
             row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
             row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+            row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
         return rows
     finally:
         cursor.close()
@@ -45,6 +60,7 @@ async def get_course(course_id: int, editor: dict = Depends(require_editor)):
             raise HTTPException(status_code=404, detail="Course not found")
         row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
         row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+        row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
         return row
     finally:
         cursor.close()
@@ -64,8 +80,8 @@ async def create_course(course: CourseBase, editor: dict = Depends(require_edito
                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
             (
                 course.title, course.title_ar, course.short_name, course.classification,
-                course.description, course.image_url, course.duration_weeks,
-                course.total_sessions, course.skill_level, course.status, course.is_public,
+                course.description, course.image_url or "", course.duration_weeks,
+                course.total_sessions, skill_to_db(course.skill_level), status_to_db(course.status), course.is_public,
                 json.dumps(course.stages, ensure_ascii=False) if course.stages is not None else None,
                 json.dumps(course.batch_data, ensure_ascii=False) if course.batch_data is not None else None,
             )
@@ -91,8 +107,8 @@ async def update_course(course_id: int, course: CourseBase, editor: dict = Depen
                WHERE id=%s""",
             (
                 course.title, course.title_ar, course.short_name, course.classification,
-                course.description, course.image_url, course.duration_weeks,
-                course.total_sessions, course.skill_level, course.status, course.is_public,
+                course.description, course.image_url or "", course.duration_weeks,
+                course.total_sessions, skill_to_db(course.skill_level), status_to_db(course.status), course.is_public,
                 json.dumps(course.stages, ensure_ascii=False) if course.stages is not None else None,
                 json.dumps(course.batch_data, ensure_ascii=False) if course.batch_data is not None else None,
                 course_id,

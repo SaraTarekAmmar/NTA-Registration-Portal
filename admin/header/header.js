@@ -2,6 +2,7 @@
   /* ── Inject sidebar CSS ── */
   (function () {
     if (document.getElementById('ntaSbCss')) return;
+    if (document.querySelector('link[href*="header/header.css"]')) return;
     var l = document.createElement('link');
     l.id = 'ntaSbCss';
     l.rel = 'stylesheet';

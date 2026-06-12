@@ -1083,6 +1083,7 @@
         if (current < target) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
+      setTimeout(function () { el.textContent = target; }, 1500);
     }
 
     function getThemeColor(v, fb) {

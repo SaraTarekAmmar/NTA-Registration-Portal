@@ -707,7 +707,7 @@
           <div class="au-table-wrap">
             <table class="au-table">
   <caption class="sr-only">قائمة المرشحين - جدول بيانات المتدربين والمراحل</caption>
-              <th scope="col"ead>
+              <thead>
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">الصورة</th>
@@ -838,10 +838,12 @@
             idx * 0.05 +
             's">' +
             '<div class="au-card__img-wrap">' +
-            '<img src="' +
-            t.image +
-            '" alt="" class="au-card__img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
-            '<div class="au-card__img-placeholder" style="display:none">' +
+            (t.image
+              ? '<img src="' +
+                t.image +
+                '" alt="" class="au-card__img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+                '<div class="au-card__img-placeholder" style="display:none">'
+              : '<div class="au-card__img-placeholder" style="display:flex">') +
             initials +
             "</div>" +
             '<span class="au-card__stage-badge">المرحلة ' +

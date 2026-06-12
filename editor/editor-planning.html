@@ -261,13 +261,37 @@
       var params = new URLSearchParams(window.location.search);
       courseId = parseInt(params.get('id')) || null;
       if (!courseId) {
-        showEditorToast('لم يتم تحديد دورة', 'error');
-        setTimeout(function(){ window.location.href = 'editor-courses.html'; }, 1500);
+        showCoursePicker();
         return;
       }
       loadCourse();
       loadPlanning();
     })();
+
+    function showCoursePicker() {
+      document.querySelectorAll('.pl-card, .pl-save-bar').forEach(function(el){ el.style.display = 'none'; });
+      document.getElementById('breadcrumbCourse').textContent = '—';
+      document.getElementById('heroTitle').textContent = 'اختر دورة للتخطيط';
+      var card = document.createElement('div');
+      card.className = 'pl-card';
+      card.innerHTML = '<h2 class="pl-card__title">الدورات المتاحة</h2><div class="pl-field"><label>الدورة</label><select id="pickCourse"><option value="">— اختر دورة —</option></select></div>';
+      document.querySelector('.pl-hero').after(card);
+      editorAuth.fetch('/api/courses')
+        .then(function(r){ return r.json(); })
+        .then(function(list) {
+          var sel = document.getElementById('pickCourse');
+          (Array.isArray(list) ? list : (list.courses || [])).forEach(function(c) {
+            var o = document.createElement('option');
+            o.value = c.id;
+            o.textContent = c.title_ar || c.title || ('دورة #' + c.id);
+            sel.appendChild(o);
+          });
+          sel.addEventListener('change', function() {
+            if (sel.value) window.location.href = 'editor-planning.html?id=' + sel.value;
+          });
+        })
+        .catch(function(){ showEditorToast('تعذر تحميل الدورات', 'error'); });
+    }
 
     function loadCourse() {
       editorAuth.fetch('/api/courses/' + courseId)

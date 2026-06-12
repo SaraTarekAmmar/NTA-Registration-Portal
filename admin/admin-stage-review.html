@@ -488,6 +488,10 @@
 
             var params = new URLSearchParams(window.location.search);
             var traineeId = parseInt(params.get('id') || '0', 10);
+            if (!traineeId) {
+                window.location.replace('admin-candidates.html');
+                return;
+            }
             window.traineeId = traineeId;  // expose for triggerStage1AI
             var currentStageId = parseInt(params.get('stage') || '1', 10);
 
