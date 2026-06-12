@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
   function parseJwt(token) {
@@ -30,6 +30,17 @@
     }
   }
 
+  function buildHeaders(options) {
+    options = options || {};
+    var headers = Object.assign({}, options.headers || {});
+    var token = localStorage.getItem(EDITOR_TOKEN_KEY);
+    if (token) headers.Authorization = "Bearer " + token;
+    if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+      headers["Content-Type"] = "application/json";
+    }
+    return headers;
+  }
+
   requireEditor();
 
   window.editorAuth = {
@@ -42,10 +53,7 @@
     },
     fetch: function (url, options) {
       options = options || {};
-      var token = localStorage.getItem(EDITOR_TOKEN_KEY);
-      var headers = Object.assign({ "Content-Type": "application/json" }, options.headers || {});
-      if (token) headers["Authorization"] = "Bearer " + token;
-      return fetch(url, Object.assign({}, options, { headers: headers })).then(function (res) {
+      return fetch(url, Object.assign({}, options, { headers: buildHeaders(options) })).then(function (res) {
         if (res.status === 401 || res.status === 403) {
           localStorage.removeItem(EDITOR_TOKEN_KEY);
           window.location.replace("editor-login.html");
