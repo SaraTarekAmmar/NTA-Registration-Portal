@@ -5,7 +5,7 @@ Egyptian trainee registration portal for the National Training Academy (NTA).
 Live domain: `https://academy.nta.eg`
 
 ## Architecture
-Three independent FastAPI backends + shared SQLite DB + vanilla JS/HTML frontend.
+Four independent FastAPI backends + shared MySQL DB + vanilla JS/HTML frontend.
 
 | Backend     | Entry point               | Default port | Purpose                        |
 |-------------|---------------------------|--------------|-------------------------------|
@@ -20,7 +20,7 @@ Static assets served by FastAPI's `StaticFiles`.
 ## Stack
 - **Runtime**: Python 3.10+
 - **Framework**: FastAPI + Uvicorn
-- **DB**: SQLite via `aiosqlite` / `databases`
+- **DB**: MySQL via `mysql-connector-python` (pool in each backend's `core/database.py`; root password synced from `deploy/credentials.txt`)
 - **Auth**: JWT (python-jose) + bcrypt
 - **File uploads**: custom `upload_manager.py` in each backend's `core/`
 - **Frontend**: Vanilla HTML/CSS/JS — no bundler, no npm
@@ -31,7 +31,7 @@ admin/backend/routers/   # admin API routes
 user/backend/routers/    # user API routes
 admin/backend/core/      # auth, security, upload_manager, chat_engine
 deploy/                  # migration & seed scripts (run manually)
-data/                    # SQLite database file(s)
+data/                    # static data folders (admins, trainees, uploads…)
 uploads/                 # user-uploaded files
 common/                  # shared utilities (if present)
 ```
