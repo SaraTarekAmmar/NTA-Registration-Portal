@@ -1,5 +1,4 @@
 (function () {
-  /* ── Inject sidebar CSS ── */
   (function () {
     if (document.getElementById('ntaSbCss')) return;
     if (document.querySelector('link[href*="header/header.css"]')) return;
@@ -10,12 +9,10 @@
     document.head.appendChild(l);
   })();
 
-  /* ── SVG icon helper ── */
   function ic(path) {
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg>';
   }
 
-  /* ── Nav item ── */
   function navItem(href, page, icon, label, cur) {
     var cls = 'nta-sidebar__item' + (cur === page ? ' active' : '');
     return '<a href="' + href + '" class="' + cls + '" data-page="' + page + '">' +
@@ -25,7 +22,6 @@
   function navLbl(t) { return '<div class="nta-sidebar__nav-lbl">' + t + '</div>'; }
   function divider() { return '<div class="nta-sidebar__divider"></div>'; }
 
-  /* ── Build complete sidebar HTML ── */
   function buildSidebar(page, name, roleLabel) {
     var ICONS = {
       home:    ic('<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>'),
@@ -89,7 +85,6 @@
     var container = document.getElementById('ntaHeader');
     if (!container) return;
 
-    /* Read session */
     var session = {};
     var tok = localStorage.getItem('admin_token');
     if (tok) {
@@ -107,7 +102,6 @@
     var page = document.body.getAttribute('data-page') || '';
     container.innerHTML = buildSidebar(page, session.name, 'مدير النظام');
 
-    /* Logout */
     var logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn && !logoutBtn.dataset.ntaBound) {
       logoutBtn.dataset.ntaBound = '1';
@@ -122,15 +116,17 @@
     }
   });
 
-  /* ── Authenticated fetch (unchanged) ── */
   window.authenticatedFetch = function (url, options) {
     options = options || {};
     var token = localStorage.getItem('admin_token');
     if (!token) {
       try { token = JSON.parse(localStorage.getItem('ntaTrainee') || '{}').token; } catch (e) {}
     }
-    var headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
-    if (token) headers['Authorization'] = 'Bearer ' + token;
+    var headers = Object.assign({}, options.headers || {});
+    if (token) headers.Authorization = 'Bearer ' + token;
+    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
     return fetch(url, Object.assign({}, options, { headers: headers })).then(function (res) {
       if (res.status === 401) {
         localStorage.removeItem('admin_token');
