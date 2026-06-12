@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  static-checks:
+    name: Python and frontend syntax checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check Python syntax
+        shell: bash
+        run: |
+          python - <<'PY'
+          import py_compile
+          import sys
+          from pathlib import Path
+
+          roots = [Path(p) for p in ["admin", "editor", "user", "superadmin", "deploy", "tools"] if Path(p).exists()]
+          ignored = {"venv", ".venv", "__pycache__", "node_modules"}
+          failures = []
+          for root in roots:
+              for path in root.rglob("*.py"):
+                  if any(part in ignored for part in path.parts):
+                      continue
+                  try:
+                      py_compile.compile(str(path), doraise=True)
+                  except py_compile.PyCompileError as exc:
+                      failures.append(f"{path}\n{exc}")
+          if failures:
+              print("\n\n".join(failures), file=sys.stderr)
+              sys.exit(1)
+          print("Python syntax check passed")
+          PY
+      - name: Check standalone JavaScript syntax
+        shell: bash
+        run: |
+          find admin editor user superadmin common -type f -name '*.js' \
+            -not -path '*/venv/*' -not -path '*/.venv/*' -not -path '*/node_modules/*' \
+            -print0 | xargs -0 -r -n 1 node --check
+      - name: Check inline HTML scripts
+        run: python tools/check_inline_scripts.py .
