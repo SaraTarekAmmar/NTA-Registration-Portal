@@ -1,7 +1,6 @@
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
-  /* -- Inject sidebar CSS -- */
   (function () {
     if (document.getElementById('ntaSbCss')) return;
     if (document.querySelector('link[href*="header/header.css"]')) return;
@@ -12,7 +11,6 @@
     document.head.appendChild(l);
   })();
 
-  /* -- SVG icon helper -- */
   function ic(path) {
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg>';
   }
@@ -71,202 +69,13 @@
     '</aside>';
   }
 
-  function apiFetch(url, options) {
-    options = options || {};
-    var token = localStorage.getItem(EDITOR_TOKEN_KEY);
-    var headers = Object.assign({}, options.headers || {});
-    if (token) headers.Authorization = 'Bearer ' + token;
-    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
-      headers['Content-Type'] = 'application/json';
-    }
-    return fetch(url, Object.assign({}, options, { headers: headers })).then(function (res) {
-      if (res.status === 401 || res.status === 403) {
-        localStorage.removeItem(EDITOR_TOKEN_KEY);
-        window.location.replace('editor-login.html');
-        throw new Error('Session expired or unauthorized');
-      }
-      return res;
-    });
-  }
-
-  function checkOk(res) {
-    if (res.ok) return res;
-    return res.json().catch(function () { return {}; }).then(function (body) {
-      throw new Error(body.detail || body.message || 'Request failed');
-    });
-  }
-
-  function escapeHtml(value) {
-    return String(value || '').replace(/[&<>"]/g, function (ch) {
-      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch];
-    });
-  }
-
-  function formatFileSize(bytes) {
-    bytes = Number(bytes) || 0;
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / 1024 / 1024).toFixed(1) + ' MB';
-  }
-
-  function setCourseFormBusy(isBusy) {
-    document.querySelectorAll('#step1 button, #step2 button, #step3 button, #step4 button, #step5 button').forEach(function (btn) {
-      btn.disabled = !!isBusy;
-    });
-  }
-
-  function installCourseFormPersistence() {
-    if (!document.getElementById('basicInfoForm') || typeof window.submitCourse !== 'function') return;
-    if (window.__ntaCoursePersistenceInstalled) return;
-    window.__ntaCoursePersistenceInstalled = true;
-
-    function refreshLinkedData() {
-      var id = window.courseId;
-      if (!id) return;
-
-      apiFetch('/api/sessions?course_id=' + encodeURIComponent(id))
-        .then(checkOk)
-        .then(function (res) { return res.json(); })
-        .then(function (list) {
-          window.sessions = (Array.isArray(list) ? list : []).map(function (s) {
-            return {
-              id: s.id,
-              title: s.title_ar || s.title || '',
-              date: s.scheduled_date || ''
-            };
-          });
-          if (typeof window.renderSessions === 'function') window.renderSessions();
-        })
-        .catch(function () { showEditorToast('تعذّر تحميل جلسات الدورة.', 'error'); });
-
-      apiFetch('/api/materials/' + encodeURIComponent(id))
-        .then(checkOk)
-        .then(function (res) { return res.json(); })
-        .then(function (list) {
-          window.materials = (Array.isArray(list) ? list : []).map(function (m) {
-            return {
-              id: m.id,
-              name: m.file_name || m.filename || 'ملف',
-              size: formatFileSize(m.file_size),
-              type: m.file_type || '',
-              path: m.file_path || ''
-            };
-          });
-          if (typeof window.renderMaterials === 'function') window.renderMaterials();
-        })
-        .catch(function () { showEditorToast('تعذّر تحميل مواد الدورة.', 'error'); });
-    }
-
-    function saveSessions(courseId) {
-      var list = (window.sessions || []).filter(function (s) { return s.title || s.date || s.id; });
-      return Promise.all(list.map(function (s, index) {
-        var body = {
-          course_id: Number(courseId),
-          session_number: index + 1,
-          title: s.title || ('Session ' + (index + 1)),
-          title_ar: s.title || ('الجلسة ' + (index + 1)),
-          scheduled_date: s.date || null,
-          duration_minutes: 90,
-          location: null,
-          notes: null,
-          status: 'scheduled'
-        };
-        return apiFetch(s.id ? '/api/sessions/' + encodeURIComponent(s.id) : '/api/sessions', {
-          method: s.id ? 'PUT' : 'POST',
-          body: JSON.stringify(body)
-        }).then(checkOk);
-      }));
-    }
-
-    function saveMaterials(courseId) {
-      var pending = (window.materials || []).filter(function (m) { return m.file && !m.id; });
-      return Promise.all(pending.map(function (m) {
-        var form = new FormData();
-        form.append('file', m.file);
-        form.append('course_id', courseId);
-        form.append('category', 'supporting');
-        form.append('description', '');
-        return apiFetch('/api/materials', { method: 'POST', body: form }).then(checkOk);
-      }));
-    }
-
-    window.submitCourse = function (status) {
-      var payload = {
-        title: document.getElementById('titleEn').value.trim() || document.getElementById('titleAr').value.trim(),
-        title_ar: document.getElementById('titleAr').value.trim(),
-        description: document.getElementById('description').value.trim(),
-        duration_weeks: parseInt(document.getElementById('durationWeeks').value, 10) || null,
-        total_sessions: parseInt(document.getElementById('totalSessions').value, 10) || (window.sessions || []).length || null,
-        status: status,
-        short_name: '',
-        classification: '',
-        image_url: null,
-        skill_level: null,
-        is_public: true,
-        stages: null,
-        batch_data: null
-      };
-
-      var method = window.courseId ? 'PUT' : 'POST';
-      var url = window.courseId ? '/api/courses/' + encodeURIComponent(window.courseId) : '/api/courses';
-      setCourseFormBusy(true);
-      apiFetch(url, { method: method, body: JSON.stringify(payload) })
-        .then(checkOk)
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          window.courseId = data.id;
-          return Promise.all([saveSessions(data.id), saveMaterials(data.id)]).then(function () { return data; });
-        })
-        .then(function () {
-          var msg = status === 'published' ? 'تم نشر الدورة وحفظ الجلسات والمواد بنجاح.' : 'تم حفظ المسودة والجلسات والمواد بنجاح.';
-          showEditorToast(msg, 'success');
-          setTimeout(function () { window.location.replace('editor-courses.html'); }, 1200);
-        })
-        .catch(function (err) {
-          setCourseFormBusy(false);
-          showEditorToast(err.message || 'حدث خطأ أثناء الحفظ.', 'error');
-        });
-    };
-
-    window.removeSession = function (idx) {
-      var item = (window.sessions || [])[idx];
-      if (!item) return;
-      editorConfirm({
-        title: 'حذف الجلسة؟',
-        body: 'هل تريد حذف هذه الجلسة؟',
-        okLabel: 'حذف الجلسة',
-        cancelLabel: 'إلغاء',
-        danger: true
-      }).then(function (ok) {
-        if (!ok) return;
-        var action = item.id ? apiFetch('/api/sessions/' + encodeURIComponent(item.id), { method: 'DELETE' }).then(checkOk) : Promise.resolve();
-        action.then(function () {
-          window.sessions.splice(idx, 1);
-          if (typeof window.renderSessions === 'function') window.renderSessions();
-        }).catch(function () { showEditorToast('تعذّر حذف الجلسة.', 'error'); });
-      });
-    };
-
-    window.removeMaterial = function (idx) {
-      var item = (window.materials || [])[idx];
-      if (!item) return;
-      editorConfirm({
-        title: 'حذف المادة؟',
-        body: 'هل تريد حذف <strong>' + escapeHtml(item.name) + '</strong>؟ لا يمكن التراجع عن هذا الإجراء.',
-        okLabel: 'حذف المادة',
-        cancelLabel: 'إلغاء',
-        danger: true
-      }).then(function (ok) {
-        if (!ok) return;
-        var action = item.id ? apiFetch('/api/materials/' + encodeURIComponent(item.id), { method: 'DELETE' }).then(checkOk) : Promise.resolve();
-        action.then(function () {
-          window.materials.splice(idx, 1);
-          if (typeof window.renderMaterials === 'function') window.renderMaterials();
-        }).catch(function () { showEditorToast('تعذّر حذف المادة.', 'error'); });
-      });
-    };
-
-    setTimeout(refreshLinkedData, 0);
+  function loadCourseFormEnhancements() {
+    if (!document.getElementById('basicInfoForm')) return;
+    if (document.getElementById('editorCourseFormEnhancements')) return;
+    var script = document.createElement('script');
+    script.id = 'editorCourseFormEnhancements';
+    script.src = 'js/editor-course-form.js?v=1';
+    document.body.appendChild(script);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -297,10 +106,9 @@
       window.NTATheme.bindAllToggles();
     }
 
-    installCourseFormPersistence();
+    loadCourseFormEnhancements();
   });
 
-  /* -- Toast utility (preserved) -- */
   window.showEditorToast = function (msg, type) {
     type = type || "success";
     var container = document.getElementById("editorToastContainer");
@@ -321,7 +129,6 @@
     }, 3500);
   };
 
-  /* -- Confirm modal utility (preserved) -- */
   window.editorConfirm = function (opts) {
     return new Promise(function (resolve) {
       var overlay = document.createElement("div");
