@@ -145,7 +145,7 @@ async def get_course_sessions(course_id: int, editor: dict = Depends(require_edi
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute(
-            "SELECT * FROM course_sessions WHERE course_id = %s ORDER BY session_number",
+            "SELECT * FROM course_sessions WHERE course_id = %s ORDER BY session_date, id",
             (course_id,)
         )
         return cursor.fetchall() or []

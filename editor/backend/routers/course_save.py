@@ -94,37 +94,20 @@ def update_course(cursor, course_id, course):
 
 
 def upsert_session(cursor, course_id, session, index):
-    title = session.title or session.title_ar or f"Session {index + 1}"
-    title_ar = session.title_ar or session.title or f"الجلسة {index + 1}"
-    values = (
-        course_id,
-        session.session_number or index + 1,
-        title,
-        title_ar,
-        session.scheduled_date,
-        session.duration_minutes or 90,
-        session.location,
-        session.notes,
-        session.status or "scheduled",
-    )
+    # course_sessions is (id, course_id, session_date, topic, materials).
+    topic = session.title or session.title_ar or f"الجلسة {index + 1}"
+    session_date = session.scheduled_date
     if session.id:
         cursor.execute("SELECT id FROM course_sessions WHERE id=%s AND course_id=%s", (session.id, course_id))
         if cursor.fetchone():
             cursor.execute(
-                """UPDATE course_sessions SET
-                   course_id=%s, session_number=%s, title=%s, title_ar=%s,
-                   scheduled_date=%s, duration_minutes=%s, location=%s,
-                   notes=%s, status=%s
-                   WHERE id=%s""",
-                (*values, session.id),
+                "UPDATE course_sessions SET course_id=%s, session_date=%s, topic=%s WHERE id=%s",
+                (course_id, session_date, topic, session.id),
             )
             return session.id
     cursor.execute(
-        """INSERT INTO course_sessions
-           (course_id, session_number, title, title_ar, scheduled_date,
-            duration_minutes, location, notes, status)
-           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-        values,
+        "INSERT INTO course_sessions (course_id, session_date, topic) VALUES (%s,%s,%s)",
+        (course_id, session_date, topic),
     )
     return cursor.lastrowid
 

@@ -15,7 +15,25 @@ class ExamCreate(BaseModel):
     questions: Optional[List[Dict[str, Any]]] = None
     duration_minutes: Optional[int] = 60
     pass_score: Optional[float] = 60.0
+    status: Optional[str] = "draft"
     course_id: Optional[int] = None
+
+
+def _hydrate(row):
+    """Parse content_json into questions and expose a `duration` alias the UI reads."""
+    if not row:
+        return row
+    content = row.get("content_json")
+    if isinstance(content, str):
+        try:
+            content = json.loads(content)
+        except (ValueError, TypeError):
+            content = {}
+    content = content or {}
+    row["questions"] = content.get("questions", [])
+    row["duration"] = row.get("duration_minutes")
+    row.pop("content_json", None)
+    return row
 
 
 @router.get("")
@@ -25,18 +43,12 @@ async def list_exams(course_id: Optional[int] = None, editor: dict = Depends(req
     try:
         if course_id:
             cursor.execute(
-                "SELECT id, subject, title, title_ar, duration_minutes, pass_score, course_id "
-                "FROM exams WHERE course_id = %s ORDER BY id DESC",
+                "SELECT * FROM course_exams WHERE course_id = %s ORDER BY id DESC",
                 (course_id,)
             )
         else:
-            cursor.execute(
-                "SELECT id, subject, title, title_ar, duration_minutes, pass_score "
-                "FROM exams ORDER BY id DESC"
-            )
-        return cursor.fetchall() or []
-    except Exception:
-        raise HTTPException(status_code=500, detail="Failed to load exams")
+            cursor.execute("SELECT * FROM course_exams ORDER BY id DESC")
+        return [_hydrate(r) for r in (cursor.fetchall() or [])]
     finally:
         cursor.close()
         db.close()
@@ -47,14 +59,11 @@ async def get_exam(subject: str, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT * FROM exams WHERE subject = %s", (subject,))
+        cursor.execute("SELECT * FROM course_exams WHERE subject = %s", (subject,))
         exam = cursor.fetchone()
         if not exam:
             raise HTTPException(status_code=404, detail="Exam not found")
-        if exam.get("content_json"):
-            content = json.loads(exam["content_json"])
-            exam["questions"] = content.get("questions", [])
-        return exam
+        return _hydrate(exam)
     finally:
         cursor.close()
         db.close()
@@ -65,30 +74,18 @@ async def create_exam(exam: ExamCreate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
-        subject = exam.subject or f"course_{exam.course_id or 0}_{id(exam)}"
-        content = {"questions": exam.questions or [], "duration_minutes": exam.duration_minutes}
-
-        # Try with course_id column first; fall back if column doesn't exist
-        try:
-            cursor.execute(
-                """INSERT INTO exams (subject, title, title_ar, content_json, duration_minutes, pass_score, course_id)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s)""",
-                (
-                    subject, exam.title, exam.title_ar,
-                    json.dumps(content, ensure_ascii=False),
-                    exam.duration_minutes, exam.pass_score, exam.course_id
-                )
+        subject = exam.subject or f"course_{exam.course_id or 0}_{cursor.lastrowid or 0}"
+        content = {"questions": exam.questions or []}
+        cursor.execute(
+            """INSERT INTO course_exams
+               (subject, course_id, title, title_ar, duration_minutes, pass_score, status, content_json)
+               VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+            (
+                subject, exam.course_id, exam.title, exam.title_ar,
+                exam.duration_minutes, exam.pass_score, exam.status,
+                json.dumps(content, ensure_ascii=False),
             )
-        except Exception:
-            cursor.execute(
-                """INSERT INTO exams (subject, title, title_ar, content_json, duration_minutes, pass_score)
-                   VALUES (%s,%s,%s,%s,%s,%s)""",
-                (
-                    subject, exam.title, exam.title_ar,
-                    json.dumps(content, ensure_ascii=False),
-                    exam.duration_minutes, exam.pass_score
-                )
-            )
+        )
         db.commit()
         return {"id": cursor.lastrowid, "subject": subject, **exam.dict(exclude={"subject"})}
     finally:
@@ -101,14 +98,14 @@ async def update_exam(subject: str, exam: ExamCreate, editor: dict = Depends(req
     db = get_db_connection()
     cursor = db.cursor()
     try:
-        content = {"questions": exam.questions or [], "duration_minutes": exam.duration_minutes}
+        content = {"questions": exam.questions or []}
         cursor.execute(
-            """UPDATE exams SET title=%s, title_ar=%s, content_json=%s,
-               duration_minutes=%s, pass_score=%s WHERE subject=%s""",
+            """UPDATE course_exams SET title=%s, title_ar=%s, duration_minutes=%s,
+               pass_score=%s, status=%s, content_json=%s WHERE subject=%s""",
             (
-                exam.title, exam.title_ar,
-                json.dumps(content, ensure_ascii=False),
-                exam.duration_minutes, exam.pass_score, subject
+                exam.title, exam.title_ar, exam.duration_minutes,
+                exam.pass_score, exam.status,
+                json.dumps(content, ensure_ascii=False), subject,
             )
         )
         db.commit()
@@ -125,7 +122,7 @@ async def delete_exam(subject: str, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
-        cursor.execute("DELETE FROM exams WHERE subject=%s", (subject,))
+        cursor.execute("DELETE FROM course_exams WHERE subject=%s", (subject,))
         db.commit()
         if cursor.rowcount == 0:
             raise HTTPException(status_code=404, detail="Exam not found")
