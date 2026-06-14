@@ -54,7 +54,7 @@ async def get_permissions(current_user: dict = Depends(get_current_user)):
 
 @router.put("/{permission_id}", response_model=Permission)
 async def update_permission(permission_id: int, update: PermissionUpdate, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "superadmin"]:
         raise HTTPException(status_code=403, detail="مراجعة الإذونات متاحة للمشرفين فقط")
     
     db = get_db_connection()

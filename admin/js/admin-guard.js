@@ -17,7 +17,7 @@
       return;
     }
     var payload = parseJwt(token);
-    if (!payload || payload.role !== "admin") {
+    if (!payload || !["admin", "superadmin"].includes(payload.role)) {
       localStorage.removeItem(ADMIN_TOKEN_KEY);
       window.location.replace("admin-login.html");
       return;

@@ -236,7 +236,7 @@
         if (existingToken) {
           try {
             var p = JSON.parse(atob(existingToken.split(".")[1]));
-            if (p && p.role === "admin" && (!p.exp || p.exp > Date.now() / 1000)) {
+            if (p && ["admin", "superadmin"].includes(p.role) && (!p.exp || p.exp > Date.now() / 1000)) {
               window.location.replace("admin-dashboard.html");
             }
           } catch (e) {}
@@ -292,13 +292,14 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, nationalId: nationalId, password: password, role: "admin" })
+            // Note: superadmin users should log in via the superadmin portal
           })
             .then(function (res) {
               if (!res.ok) return res.json().then(function (err) { throw new Error(err.detail || "فشل تسجيل الدخول"); });
               return res.json();
             })
             .then(function (data) {
-              if (!data.access_token || data.role !== "admin") {
+              if (!data.access_token || !["admin", "superadmin"].includes(data.role)) {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
               }
               localStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);

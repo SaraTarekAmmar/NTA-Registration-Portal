@@ -8,11 +8,11 @@ Live at `https://academy.nta.eg`. Python FastAPI backends + **MySQL** + vanilla 
 
 ## Architecture at a Glance
 ```
-admin/backend/      → FastAPI (port 8001) — admin operations, AI services, course mgmt
-user/backend/       → FastAPI (port 8000) — trainee self-service
-superadmin/backend/ → FastAPI (port 8002) — system oversight, reports
-editor/backend/     → FastAPI (port 8003) — content editor role
-deploy/             → migration & seed scripts (Python, run manually)
+admin/backend/      → FastAPI (port 8002) — admin operations, AI services, course mgmt
+user/backend/       → FastAPI (port 7771) — trainee self-service
+superadmin/backend/ → FastAPI (port 8003) — system oversight, reports
+editor/backend/     → FastAPI (port 8004) — content editor role
+deploy/             → migration & seed scripts (run manually)
 uploads/            → user-uploaded files
 ```
 Frontend pages live next to their backend (`admin/*.html`, `editor/*.html`, `user/*.html`)
@@ -33,9 +33,9 @@ admin server mounts `admin/` at `/` (so `header/header.css` works, `/admin/heade
 
 ## Running the App
 ```bash
-cd admin/backend  && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8001
-cd editor/backend && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8003
-cd user/backend   && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000
+cd admin/backend  && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8002
+cd editor/backend && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8004
+cd user/backend   && ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 7771
 ```
 Each backend has its own `venv/`. `.claude/launch.json` has launch configs for all four.
 Note: uvicorn `--reload` (StatReload) is unreliable on this Windows box — after editing
@@ -43,9 +43,9 @@ backend Python, restart the server instead of trusting the auto-reload.
 
 ## Test Accounts (dev seeds — defined in admin/apply_default_credentials.py)
 Login requires email + 14-digit national ID + password.
-- Admin:  admin@nta.edu.eg  / 29001011234567 / NTA@Admin2026  → POST /api/admin/auth/login (port 8001)
-- Editor: editor@nta.edu.eg / 29505051234567 / NTA@Editor2026 → POST /api/editor/auth/login (port 8003)
-- Super:  superadmin@nta.edu.eg / 10000000000000 / NTA@Super2026 (port 8002)
+- Admin:  admin@nta.edu.eg  / 29001011234567 / NTA@Admin2026  → POST /api/admin/auth/login (port 8002)
+- Editor: editor@nta.edu.eg / 29505051234567 / NTA@Editor2026 → POST /api/editor/auth/login (port 8004)
+- Super:  superadmin@nta.edu.eg / 10000000000000 / NTA@Super2026 (port 8003)
 Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 
 ## Frontend Conventions

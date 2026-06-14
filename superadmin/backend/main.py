@@ -54,7 +54,8 @@ async def global_debugger_middleware(request: Request, call_next):
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             sid = payload.get("sid")
             role = payload.get("role", "superadmin")
-        except: pass
+        except Exception:
+            pass
     
     session_token = session_context.set(sid)
     
@@ -127,10 +128,7 @@ app.include_router(alerts.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(management.router, prefix="/api")
 
-# Static Files - Frontend
-frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
-app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
-
+@app.get("/api/status")
 @app.get("/status")
 async def root():
     return {
@@ -138,6 +136,10 @@ async def root():
         "service": "Super Admin AI Proxy",
         "description": "Functional proxy for AI services and attendance webhooks"
     }
+
+# Static Files - Frontend
+frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn

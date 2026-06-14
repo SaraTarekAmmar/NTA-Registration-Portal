@@ -9,10 +9,10 @@ Four independent FastAPI backends + shared MySQL DB + vanilla JS/HTML frontend.
 
 | Backend     | Entry point               | Default port | Purpose                        |
 |-------------|---------------------------|--------------|-------------------------------|
-| admin       | `admin/backend/main.py`   | 8001         | Admin CRUD, course mgmt, AI    |
-| user        | `user/backend/main.py`    | 8000         | Trainee self-service portal    |
-| superadmin  | `superadmin/backend/main.py` | 8002      | System-wide oversight, reports |
-| editor      | `editor/`                 | 8003         | Content editor role            |
+| admin       | `admin/backend/main.py`   | 8002         | Admin CRUD, course mgmt, AI    |
+| user        | `user/backend/main.py`    | 7771         | Trainee self-service portal    |
+| superadmin  | `superadmin/backend/main.py` | 8003      | System-wide oversight, reports |
+| editor      | `editor/`                 | 8004         | Content editor role            |
 
 Frontend pages live alongside their backend (`admin/*.html`, `user/*.html`).  
 Static assets served by FastAPI's `StaticFiles`.
@@ -39,13 +39,16 @@ common/                  # shared utilities (if present)
 ## How to Run
 ```bash
 # Admin backend
-cd admin/backend && uvicorn main:app --reload --port 8001
+cd admin/backend && uvicorn main:app --reload --port 8002
 
 # User backend
-cd user/backend && uvicorn main:app --reload --port 8000
+cd user/backend && uvicorn main:app --reload --port 7771
 
 # Superadmin backend
-cd superadmin/backend && uvicorn main:app --reload --port 8002
+cd superadmin/backend && uvicorn main:app --reload --port 8003
+
+# Editor backend
+cd editor/backend && uvicorn main:app --reload --port 8004
 ```
 
 ## Coding Rules (FOLLOW EXACTLY)

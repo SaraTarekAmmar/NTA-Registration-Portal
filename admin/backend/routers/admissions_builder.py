@@ -106,7 +106,7 @@ def _assert_section_available_for_user(cursor, section_id: int, current_user: di
     section = _hydrate_section(section)
     if not section["is_active"]:
         raise HTTPException(status_code=403, detail="This admissions section is inactive")
-    if current_user.get("role") != "admin":
+    if current_user.get("role") not in ["admin", "superadmin"]:
         user_course_type = _get_applicant_course_type(cursor, current_user["id"])
         if section["course_type"] not in (user_course_type, "default"):
             raise HTTPException(status_code=403, detail="This admissions section is not assigned to your course flow")

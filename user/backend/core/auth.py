@@ -5,7 +5,9 @@ from jose import JWTError, jwt
 from schemas.auth import LoginRequest, TokenResponse
 from .database import get_db_connection
 from .logger_util import log_activity
+from .mail_service import send_email_background
 import os
+import uuid
 from passlib.context import CryptContext
 
 # Setup password hashing (using pbkdf2_sha256 for pure-python compatibility on Windows)
@@ -98,6 +100,102 @@ def record_login_attempt(cursor, ip_address, email, role, is_successful):
         VALUES (%s, %s, %s, %s)
     """
     cursor.execute(query, (ip_address, email, role, is_successful))
+
+@router.post("/recover")
+async def recover_password(req: Request, body: dict):
+    """
+    POST /api/auth/recover
+    Accepts { email } and sends a password-reset link.
+    Always returns a generic success message to prevent user enumeration.
+    """
+    email = (body.get("email") or "").strip().lower()
+    if not email:
+        raise HTTPException(status_code=422, detail="البريد الإلكتروني مطلوب")
+
+    client_ip = req.client.host if req.client else "unknown"
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            "SELECT id, full_name_ar, email FROM users WHERE email = %s AND role IN ('trainee', 'trainer')",
+            (email,)
+        )
+        user = cursor.fetchone()
+
+        if user:
+            reset_token = str(uuid.uuid4())
+            expires_at = datetime.utcnow() + timedelta(hours=1)
+
+            # Store the token — create table if it doesn't exist yet
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    token VARCHAR(64) NOT NULL UNIQUE,
+                    expires_at DATETIME NOT NULL,
+                    used TINYINT(1) NOT NULL DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_token (token),
+                    INDEX idx_user_id (user_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            """)
+            cursor.execute(
+                "INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (%s, %s, %s)",
+                (user["id"], reset_token, expires_at)
+            )
+            db.commit()
+
+            # Build the reset URL — uses the same origin the request came from
+            origin = req.headers.get("origin") or req.base_url
+            reset_url = f"{origin}/reset-password.html?token={reset_token}"
+
+            html_body = f"""
+            <!DOCTYPE html>
+            <html lang="ar" dir="rtl">
+            <head><meta charset="UTF-8"><title>استعادة كلمة المرور</title>
+            <style>
+                body{{font-family:'Tajawal',Arial,sans-serif;background:#f7f9fc;color:#333;direction:rtl;text-align:right;margin:0;padding:0;}}
+                .container{{max-width:600px;margin:30px auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;}}
+                .header{{background:#1a2e40;padding:30px;text-align:center;border-bottom:4px solid #d4af37;}}
+                .content{{padding:40px 30px;line-height:1.8;}}
+                .button{{display:inline-block;background:#1a2e40;color:#fff!important;text-decoration:none;padding:12px 30px;border-radius:30px;font-weight:bold;margin:20px 0;border:1px solid #d4af37;}}
+                .footer{{background:#f1f5f9;padding:20px;text-align:center;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0;}}
+            </style></head>
+            <body><div class="container">
+                <div class="header"><h2 style="color:#fff;margin:0;">الأكاديمية الوطنية للتدريب</h2></div>
+                <div class="content">
+                    <p>مرحباً <strong>{user['full_name_ar']}</strong>،</p>
+                    <p>تلقينا طلباً لاستعادة كلمة المرور الخاصة بحسابك. اضغط على الزر أدناه لتعيين كلمة مرور جديدة. ينتهي صلاحية هذا الرابط خلال ساعة واحدة.</p>
+                    <div style="text-align:center;"><a href="{reset_url}" class="button">استعادة كلمة المرور</a></div>
+                    <p style="font-size:13px;color:#64748b;">إذا لم تطلب استعادة كلمة المرور، يمكنك تجاهل هذا البريد.</p>
+                </div>
+                <div class="footer">هذا البريد مرسل تلقائياً. يرجى عدم الرد عليه مباشرة.</div>
+            </div></body></html>
+            """
+
+            send_email_background(
+                to_email=user["email"],
+                subject="استعادة كلمة المرور - بوابة الأكاديمية الوطنية للتدريب",
+                html_body=html_body
+            )
+
+            log_activity(
+                category="AUTH",
+                event_type="PASSWORD_RESET_REQUESTED",
+                user_id=user["id"],
+                ip_address=client_ip,
+                user_agent=req.headers.get("user-agent"),
+                request_path=req.url.path,
+                details={"email": email}
+            )
+    finally:
+        cursor.close()
+        db.close()
+
+    # Always return success to prevent user enumeration
+    return {"detail": "تم إرسال رابط الاستعادة إلى بريدك الإلكتروني بنجاح."}
+
 
 @router.post("/login", response_model=TokenResponse)
 async def login(req: Request, request: LoginRequest):

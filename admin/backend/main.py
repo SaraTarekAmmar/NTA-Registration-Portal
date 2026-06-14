@@ -58,7 +58,8 @@ async def global_debugger_middleware(request: Request, call_next):
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             sid = payload.get("sid")
             role = payload.get("role")
-        except: pass
+        except Exception:
+            pass
     
     session_token = session_context.set(sid)
     

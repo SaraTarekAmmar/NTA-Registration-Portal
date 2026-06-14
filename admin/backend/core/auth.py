@@ -61,17 +61,17 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
 
 def get_admin_user(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "superadmin"]:
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمشرفين فقط")
     return current_user
 
 def get_staff_user(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] not in ["admin", "editor"]:
+    if current_user["role"] not in ["admin", "superadmin", "editor"]:
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمشرفين والمحررين فقط")
     return current_user
 
 def require_admin(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "superadmin"]:
         raise HTTPException(status_code=403, detail="Admin access only")
     return current_user
 
@@ -290,4 +290,10 @@ async def admin_login(req: Request, body: dict):
         raise HTTPException(status_code=422, detail="الرقم القومي مطلوب.")
     if not password:
         raise HTTPException(status_code=422, detail="كلمة المرور مطلوبة.")
-    return await _role_login(req, email, password, "admin", national_id=national_id)
+    # Try admin first; if not found, try superadmin (superadmins have full admin access)
+    try:
+        return await _role_login(req, email, password, "admin", national_id=national_id)
+    except HTTPException as exc:
+        if exc.status_code == 401:
+            return await _role_login(req, email, password, "superadmin", national_id=national_id)
+        raise

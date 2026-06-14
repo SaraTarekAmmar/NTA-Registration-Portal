@@ -29,8 +29,10 @@ app.add_middleware(
     allow_origins=[
         "https://academy.nta.eg",
         "https://reg.nta.eg",
-        "http://localhost:8001",
-        "http://localhost:8002"
+        "http://localhost:7771",
+        "http://localhost:8002",
+        "http://localhost:8003",
+        "http://localhost:8004"
     ],
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
@@ -146,6 +148,6 @@ app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static"
 
 if __name__ == "__main__":
     import uvicorn
-    # Default to 8001 for standalone user portal
-    port = int(os.getenv("PORT", 8001))
+    # Default to 7771 to match run_system.py launcher
+    port = int(os.getenv("PORT", 7771))
     uvicorn.run(app, host="0.0.0.0", port=port)
