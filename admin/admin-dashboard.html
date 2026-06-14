@@ -609,6 +609,59 @@
     .adm-quick__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
     .adm-quick__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
     .adm-quick:hover .adm-quick__arrow { transform: translateX(-5px); opacity: 1; }
+
+    /* ══ Print / Export report ══ */
+    @media print {
+      @page { size: A4 portrait; margin: 1.4cm; }
+
+      html, body, body.trainee-app {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+      .trainee-bg, #ntaHeader, .nta-sidebar,
+      .dash-topbar__actions, .dash-hero__live,
+      .skip-to-main, .adm-quick-row, .adm-quick-grid,
+      [id*="chat" i], [class*="chat" i],
+      .dash-perf-tabs, .dash-perf-tab { display: none !important; }
+
+      #main-content, .trainee-main, .admin-main {
+        margin: 0 !important; padding: 0 !important;
+        max-width: 100% !important; width: 100% !important;
+      }
+
+      /* Print header */
+      .dash-hero { border-bottom: 2px solid #111827; padding-bottom: 0.6rem; margin-bottom: 1rem; }
+      .dash-hero__title, .dash-hero__sub, .dash-hero__breadcrumb,
+      .dash-hero__breadcrumb span { color: #111827 !important; }
+      .dash-topbar { border: none !important; background: none !important; box-shadow: none !important; padding: 0 0 0.5rem !important; }
+      .dash-topbar__name, .dash-topbar__role, .dash-topbar__date { color: #111827 !important; }
+      .dash-topbar__avatar { background: #e5e7eb !important; color: #111827 !important; }
+
+      /* Cards & panels — rely on borders, not backgrounds */
+      .dash-kpi, .dash-panel {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        animation: none !important;
+        transform: none !important;
+        break-inside: avoid; page-break-inside: avoid;
+      }
+      .dash-kpi__val, .dash-panel__title, .dash-donut-total__num,
+      .dash-status-legend__val, .dash-status-legend__left,
+      .pipe-stage__count, .pipe-stage__label,
+      .dash-top__name, .dash-top__count {
+        color: #111827 !important;
+      }
+      .dash-kpi__lbl, .dash-panel__sub, .dash-donut-total__lbl { color: #374151 !important; }
+      .dash-kpi__delta { display: none !important; }
+
+      .dash-charts-row { gap: 1rem !important; }
+      .dash-panel { break-inside: avoid; page-break-inside: avoid; }
+
+      /* Make sure echarts canvases keep their pixels when printing */
+      .dash-chart canvas { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
   </style>
   <script src="js/admin-guard.js"></script>
 </head>
@@ -1296,6 +1349,20 @@
     window.addEventListener("nta-theme-changed", function () {
       if (chPerf) renderPerfChart();
       initCharts();
+    });
+
+    // Recolor the line chart for a readable printed report, then restore on screen.
+    window.addEventListener("beforeprint", function () {
+      if (chPerf) chPerf.setOption({
+        xAxis: { axisLabel: { color: "#374151" }, axisLine: { lineStyle: { color: "#cbd5e1" } } },
+        yAxis: { axisLabel: { color: "#374151" }, splitLine: { lineStyle: { color: "#e5e7eb" } } },
+        series: [{ label: { color: "#b91c1c" } }]
+      }, false);
+      [chGender, chPerf, chStatus].forEach(function (c) { if (c) c.resize(); });
+    });
+    window.addEventListener("afterprint", function () {
+      if (chPerf) renderPerfChart();
+      [chGender, chPerf, chStatus].forEach(function (c) { if (c) c.resize(); });
     });
 
     fetchData();
