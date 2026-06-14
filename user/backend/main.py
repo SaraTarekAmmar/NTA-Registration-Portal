@@ -3,15 +3,17 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import JSONResponse
 import os
 from dotenv import load_dotenv
+import secrets
 
 # Add current directory to sys.path for standalone portability
 sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, admin, reg_steps, registration_flow
+from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, reg_steps, registration_flow
 from fastapi import Request
 
 load_dotenv()
@@ -36,24 +38,46 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
 
-import secrets
 
 @app.middleware("http")
 async def csrf_middleware(request: Request, call_next):
     token = request.cookies.get("csrf_token")
-    if not token:
+    should_create_cookie = not token
+    if should_create_cookie:
         token = secrets.token_hex(32)
-        
+
+    unsafe_method = request.method.upper() in {"POST", "PUT", "PATCH", "DELETE"}
+    path = request.url.path
+
+    # The public registration submit is the highest-risk browser form endpoint.
+    # Require the double-submit token that registration.js sends from the csrf_token cookie.
+    if unsafe_method and path == "/api/trainee/register":
+        header_token = request.headers.get("X-CSRF-Token")
+        if request.cookies.get("csrf_token") is None or not header_token or header_token != request.cookies.get("csrf_token"):
+            response = JSONResponse(
+                status_code=403,
+                content={"detail": "Invalid or missing CSRF token"},
+            )
+            if should_create_cookie:
+                response.set_cookie(
+                    key="csrf_token",
+                    value=token,
+                    samesite="strict",
+                    httponly=False,
+                )
+            return response
+
     response = await call_next(request)
-    
-    if not request.cookies.get("csrf_token"):
+
+    if should_create_cookie:
         response.set_cookie(
             key="csrf_token",
             value=token,
             samesite="strict",
-            httponly=False  # Must be readable by JS for the double-submit cookie pattern
+            httponly=False,  # Must be readable by JS for the double-submit cookie pattern
         )
     return response
+
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -64,26 +88,27 @@ async def log_requests(request: Request, call_next):
 
     ip = request.client.host if request.client else "unknown"
     ua = request.headers.get("user-agent", "unknown")
-    
+
     response = await call_next(request)
-    
+
     # Log HTML visits and API calls
     category = "PASSIVE"
     event_type = "PAGE_VIEW"
-    
+
     if path.startswith("/api/"):
         event_type = "API_CALL"
-    
+
     log_activity(
         category=category,
         event_type=event_type,
         ip_address=ip,
         user_agent=ua,
         request_path=path,
-        status_code=response.status_code
+        status_code=response.status_code,
     )
-    
+
     return response
+
 
 # In standalone mode, auth router is local
 app.include_router(auth.router)
@@ -98,10 +123,8 @@ app.include_router(lookups.router)
 app.include_router(exams.router)
 app.include_router(assignments.router)
 app.include_router(trainer.router)
-app.include_router(admin.router)
 app.include_router(reg_steps.router)
 app.include_router(registration_flow.router)
-
 
 
 @app.post("/api/debug/log")
