@@ -74,7 +74,7 @@
     if (document.getElementById('editorCourseFormEnhancements')) return;
     var script = document.createElement('script');
     script.id = 'editorCourseFormEnhancements';
-    script.src = 'js/editor-course-form.js?v=2';
+    script.src = 'js/editor-course-form.js?v=3';
     document.body.appendChild(script);
   }
 

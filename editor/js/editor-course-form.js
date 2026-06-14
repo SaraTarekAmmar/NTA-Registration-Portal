@@ -54,10 +54,11 @@
       .then(function (res) { return res.json(); })
       .then(function (list) {
         window.sessions = (Array.isArray(list) ? list : []).map(function (s) {
+          var d = s.session_date || s.scheduled_date || '';
           return {
             id: s.id,
-            title: s.title_ar || s.title || '',
-            date: s.scheduled_date || ''
+            title: s.topic || s.title_ar || s.title || '',
+            date: typeof d === 'string' ? d.slice(0, 10) : ''
           };
         });
         if (typeof window.renderSessions === 'function') window.renderSessions();
