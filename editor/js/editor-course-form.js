@@ -166,9 +166,8 @@
           return saveMaterials(data.id).then(function () { return data; });
         })
         .then(function () {
-          var msg = status === 'published' ? 'تم نشر الدورة وحفظ الجلسات والمواد بنجاح.' : 'تم حفظ المسودة والجلسات والمواد بنجاح.';
-          showEditorToast(msg, 'success');
-          setTimeout(function () { window.location.replace('editor-courses.html'); }, 1200);
+          var action = status === 'published' ? 'published' : 'draft';
+          window.location.replace('editor-final.html?action=' + action + '&id=' + (savedCourseId || ''));
         })
         .catch(function (err) {
           var cleanup = wasNewCourse && savedCourseId ? rollbackNewCourse(savedCourseId) : Promise.resolve();

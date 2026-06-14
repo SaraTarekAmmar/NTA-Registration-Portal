@@ -110,29 +110,79 @@
           if(c.duration_weeks) html += '<span>'+c.duration_weeks+' أسابيع</span>';
           if(c.total_sessions) html += '<span>'+c.total_sessions+' جلسة</span>';
           html += '</div>';
+          var status = c.status || "draft";
           html += '<div class="editor-course-card__actions">';
           html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
+          html += '<a href="editor-preview.html?id='+c.id+'" class="btn btn--secondary btn--sm">معاينة</a>';
           html += '<a href="editor-planning.html?id='+c.id+'" class="btn btn--secondary btn--sm" title="التخطيط والتصنيف">' + NTAIcons('calendar',14) + ' تخطيط</a>';
-          if(c.status !== "published") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
+          if(status !== "published" && status !== "archived") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
+          if(status === "archived") html += '<button type="button" class="btn btn--secondary btn--sm" onclick="unarchiveCourse('+c.id+')">إلغاء الأرشفة</button>';
+          else html += '<button type="button" class="btn btn--secondary btn--sm" onclick="archiveCourse('+c.id+')">أرشفة</button>';
+          html += '<button type="button" class="btn btn--danger btn--sm" onclick="deleteCourse('+c.id+')">حذف</button>';
           html += '</div></div>';
         });
         grid.innerHTML = html;
         grid.style.display = "grid";
       }
 
-      function publishCourse(id) {
-        authFetch("/api/courses/" + id)
+      function setCourseStatus(id, newStatus) {
+        return authFetch("/api/courses/" + id)
           .then(function(r) { return r.ok ? r.json() : Promise.reject("load failed"); })
           .then(function(course) {
-            course.status = "published";
+            course.status = newStatus;
             return authFetch("/api/courses/" + id, { method: "PUT", body: JSON.stringify(course) });
           })
-          .then(function(r) { return r.ok ? r.json() : r.json().then(function(e) { throw new Error(e.detail || "فشل النشر"); }); })
+          .then(function(r) { return r.ok ? r.json() : r.json().then(function(e) { throw new Error(e.detail || "فشل العملية"); }); });
+      }
+
+      function publishCourse(id) {
+        setCourseStatus(id, "published")
+          .then(function() { window.location.href = "editor-final.html?action=published&id=" + id; })
+          .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل النشر"), "error"); });
+      }
+
+      function archiveCourse(id) {
+        editorConfirm({
+          title: "أرشفة الدورة؟",
+          body: "ستُنقل الدورة إلى الأرشيف ولن تظهر للمتدربين. يمكنك إلغاء الأرشفة لاحقاً.",
+          okLabel: "أرشفة",
+          cancelLabel: "إلغاء"
+        }).then(function(ok) {
+          if (!ok) return;
+          setCourseStatus(id, "archived")
+            .then(function() { window.location.href = "editor-final.html?action=archived&id=" + id; })
+            .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل الأرشفة"), "error"); });
+        });
+      }
+
+      function unarchiveCourse(id) {
+        setCourseStatus(id, "draft")
           .then(function() {
-            showEditorToast("تم نشر الدورة بنجاح.", "success");
+            showEditorToast("تم إلغاء أرشفة الدورة. أصبحت الآن مسودة.", "success");
             loadCourses();
           })
-          .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل النشر"), "error"); });
+          .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل العملية"), "error"); });
+      }
+
+      function deleteCourse(id) {
+        var course = allCourses.filter(function(c){ return c.id === id; })[0];
+        var name = course ? (course.title_ar || course.title || "هذه الدورة") : "هذه الدورة";
+        editorConfirm({
+          title: "حذف الدورة؟",
+          body: "سيتم حذف <strong>" + name + "</strong> وكل جلساتها واختباراتها نهائياً. لا يمكن التراجع.",
+          okLabel: "حذف نهائي",
+          cancelLabel: "إلغاء",
+          danger: true
+        }).then(function(ok) {
+          if (!ok) return;
+          authFetch("/api/courses/" + id, { method: "DELETE" })
+            .then(function(r) { return r.ok ? r.json() : r.json().then(function(e) { throw new Error(e.detail || "فشل الحذف"); }); })
+            .then(function() {
+              showEditorToast("تم حذف الدورة.", "success");
+              loadCourses();
+            })
+            .catch(function(err) { showEditorToast(typeof err === "string" ? err : (err.message || "فشل الحذف"), "error"); });
+        });
       }
 
       function filterCourses() {

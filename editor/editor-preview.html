@@ -195,7 +195,7 @@
           })
           .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
           .then(function(){
-            window.location.replace("editor-courses.html");
+            window.location.replace("editor-final.html?action=published&id=" + courseId);
           })
           .catch(function(){
             btn.disabled = false;
