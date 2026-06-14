@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="admin.css" />
     <link rel="stylesheet" href="admin-portal.css" />
     <link rel="stylesheet" href="admin-theme.css" />
-    <link rel="stylesheet" href="header/header.css?v=4" />
+    <link rel="stylesheet" href="header/header.css?v=5" />
     <link
       href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -2324,7 +2324,7 @@
       </div> <!-- Closes rec-layout -->
     </main>
 
-    <script src="header/header.js?v=4"></script>
+    <script src="header/header.js?v=5"></script>
     <script src="common/js/icons.js"></script>
     <script>
       /* Toast Helper */
@@ -2606,6 +2606,15 @@
           }
       }
 
+      // Never surface raw backend/vLLM stack traces to the UI.
+      function friendlyAiError(raw) {
+        const s = (raw || "").toString().toLowerCase();
+        if (/vllm|unreachable|connection|refused|10061|classify|timeout|httpconnection|max retries|actively refused/.test(s)) {
+          return "خدمة الذكاء الاصطناعي غير متاحة حالياً. يرجى المحاولة لاحقاً.";
+        }
+        return "تعذّر إكمال التحليل الذكي. يرجى المحاولة لاحقاً.";
+      }
+
       async function triggerMatrixGeneration() {
         const btn = document.getElementById("btnGenerateMatrix");
         if (!activeCourseId) return;
@@ -2630,7 +2639,7 @@
                 // Start polling
                 pollMatrixStatus(activeCourseId, btn, originalHTML);
             } else {
-                showToast(data.error || "فشل توليد المصفوفة", "error");
+                showToast(data.error ? friendlyAiError(data.error) : "فشل توليد المصفوفة", "error");
                 btn.disabled = false;
                 btn.classList.remove("loading");
                 btn.innerHTML = originalHTML;
@@ -2655,7 +2664,7 @@
                       await fetchMatrixSummary();
                       resetBtn();
                   } else if (data.status === "error") {
-                      showToast(data.error || "حدث خطأ أثناء التحليل", "error");
+                      showToast(data.error ? friendlyAiError(data.error) : "حدث خطأ أثناء التحليل", "error");
                       resetBtn();
                   } else {
                       // Still processing, poll again in 3 seconds
