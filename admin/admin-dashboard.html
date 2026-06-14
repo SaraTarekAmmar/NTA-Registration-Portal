@@ -631,10 +631,10 @@
       </div>
       <div class="dash-topbar__actions">
         <span class="dash-topbar__date" id="topbarDate"></span>
-        <button class="dash-topbar__btn" title="الإشعارات" type="button">
+        <a href="admin-permissions.html" class="dash-topbar__btn" title="طلبات الإذونات">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="dash-topbar__badge">3</span>
-        </button>
+          <span class="dash-topbar__badge" id="notifBadge" style="display:none;">0</span>
+        </a>
         <a href="admin-permissions.html" class="dash-topbar__btn" title="الإعدادات">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12H4M20 12h2"/></svg>
         </a>
@@ -668,7 +668,6 @@
         </div>
         <div class="dash-kpi__val" id="kpiTrainees"></div>
         <div class="dash-kpi__lbl">إجمالي المتدربين</div>
-        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 8%</span>
       </a>
 
       <a href="admin-trainees.html?status=active" class="dash-kpi dash-kpi--green" style="animation-delay:0.1s">
@@ -677,26 +676,23 @@
         </div>
         <div class="dash-kpi__val" id="kpiActive"></div>
         <div class="dash-kpi__lbl">المتدربون النشطون</div>
-        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 12%</span>
       </a>
 
-      <div class="dash-kpi dash-kpi--crimson" style="animation-delay:0.15s">
+      <a href="admin-courses.html" class="dash-kpi dash-kpi--crimson" style="animation-delay:0.15s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <div class="dash-kpi__val">48</div>
+        <div class="dash-kpi__val" id="kpiPrograms">—</div>
         <div class="dash-kpi__lbl">إجمالي البرامج</div>
-        <span class="dash-kpi__delta dash-kpi__delta--flat"> ثابت</span>
-      </div>
+      </a>
 
-      <div class="dash-kpi dash-kpi--amber" style="animation-delay:0.2s">
+      <a href="admin-trainees.html" class="dash-kpi dash-kpi--amber" style="animation-delay:0.2s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
         </div>
-        <div class="dash-kpi__val">32</div>
-        <div class="dash-kpi__lbl">البرامج المكتملة</div>
-        <span class="dash-kpi__delta dash-kpi__delta--up">↑ 4%</span>
-      </div>
+        <div class="dash-kpi__val" id="kpiEnrolled">—</div>
+        <div class="dash-kpi__lbl">المسجلون في الدورات</div>
+      </a>
 
       <a href="admin-candidates.html" class="dash-kpi dash-kpi--blue" style="animation-delay:0.25s">
         <div class="dash-kpi__icon">
@@ -704,7 +700,6 @@
         </div>
         <div class="dash-kpi__val" id="kpiCandidates"></div>
         <div class="dash-kpi__lbl">المرشحون الجدد</div>
-        <span class="dash-kpi__delta dash-kpi__delta--down">↓ 3%</span>
       </a>
     </div>
 
@@ -791,56 +786,10 @@
             <div class="dash-panel__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <p class="dash-panel__title">آخر الأنشطة</p>
+            <p class="dash-panel__title">توزيع مراحل خط التقديم</p>
           </div>
         </div>
-        <div class="dash-activity">
-          <div class="dash-activity__item">
-            <div class="dash-activity__icon dash-activity__icon--green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
-            <div class="dash-activity__body">
-              <div class="dash-activity__text">تم قبول مرشح جديد في البرنامج</div>
-              <div class="dash-activity__time">منذ 10 دقائق</div>
-            </div>
-          </div>
-          <div class="dash-activity__item">
-            <div class="dash-activity__icon dash-activity__icon--blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-            </div>
-            <div class="dash-activity__body">
-              <div class="dash-activity__text">اجتياز اختبار المرحلة الثالثة بنجاح</div>
-              <div class="dash-activity__time">منذ 35 دقيقة</div>
-            </div>
-          </div>
-          <div class="dash-activity__item">
-            <div class="dash-activity__icon dash-activity__icon--purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            </div>
-            <div class="dash-activity__body">
-              <div class="dash-activity__text">تسجيل 3 متدربين في دورة القيادة الاستراتيجية</div>
-              <div class="dash-activity__time">منذ ساعة</div>
-            </div>
-          </div>
-          <div class="dash-activity__item">
-            <div class="dash-activity__icon dash-activity__icon--amber">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </div>
-            <div class="dash-activity__body">
-              <div class="dash-activity__text">طلب مراجعة وثائق المرشح #142</div>
-              <div class="dash-activity__time">منذ 2 ساعة</div>
-            </div>
-          </div>
-          <div class="dash-activity__item">
-            <div class="dash-activity__icon dash-activity__icon--crimson">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l2 2 4-4"/></svg>
-            </div>
-            <div class="dash-activity__body">
-              <div class="dash-activity__text">اكتمل تسجيل الحضور ليوم الاثنين</div>
-              <div class="dash-activity__time">منذ 3 ساعات</div>
-            </div>
-          </div>
-        </div>
+        <div class="dash-activity" id="dashPipeline"></div>
       </div>
 
       <!-- Top Programs Table -->
@@ -854,53 +803,7 @@
           </div>
           <a href="admin-courses.html" style="font-size:0.7rem;color:#fca5a5;text-decoration:none;opacity:0.8;">عرض الكل ←</a>
         </div>
-        <div class="dash-prog-table">
-          <div class="dash-prog-row">
-            <div class="dash-prog-name">برنامج القيادة الاستراتيجية</div>
-            <div class="dash-prog-trainees">48 متدرب</div>
-            <div class="dash-prog-meta">
-              <span class="dash-prog-pct">78%</span>
-              <span class="dash-prog-stars">★★★★★</span>
-            </div>
-            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:78%"></div></div></div>
-          </div>
-          <div class="dash-prog-row">
-            <div class="dash-prog-name">إدارة المشاريع الحكومية</div>
-            <div class="dash-prog-trainees">36 متدرب</div>
-            <div class="dash-prog-meta">
-              <span class="dash-prog-pct">65%</span>
-              <span class="dash-prog-stars">★★★★☆</span>
-            </div>
-            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:65%"></div></div></div>
-          </div>
-          <div class="dash-prog-row">
-            <div class="dash-prog-name">التخطيط المؤسسي</div>
-            <div class="dash-prog-trainees">29 متدرب</div>
-            <div class="dash-prog-meta">
-              <span class="dash-prog-pct">91%</span>
-              <span class="dash-prog-stars">★★★★★</span>
-            </div>
-            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:91%"></div></div></div>
-          </div>
-          <div class="dash-prog-row">
-            <div class="dash-prog-name">الحوكمة والامتثال المؤسسي</div>
-            <div class="dash-prog-trainees">22 متدرب</div>
-            <div class="dash-prog-meta">
-              <span class="dash-prog-pct">54%</span>
-              <span class="dash-prog-stars">★★★★☆</span>
-            </div>
-            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:54%"></div></div></div>
-          </div>
-          <div class="dash-prog-row">
-            <div class="dash-prog-name">تنمية المهارات القيادية</div>
-            <div class="dash-prog-trainees">41 متدرب</div>
-            <div class="dash-prog-meta">
-              <span class="dash-prog-pct">38%</span>
-              <span class="dash-prog-stars">★★★★☆</span>
-            </div>
-            <div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:38%"></div></div></div>
-          </div>
-        </div>
+        <div class="dash-prog-table" id="dashTopPrograms"></div>
       </div>
 
       <!-- Upcoming Events Calendar -->
@@ -1092,8 +995,18 @@
     }
 
     var trainees = [];
+    var courses = [];
     var chGender, chPerf, chStatus;
     var currentPeriod = "6m";
+
+    var STAGE_NAMES = {
+      1: "الفرز الإلكتروني",
+      2: "الاستعلام الأمني",
+      3: "الاختبار النفسي",
+      4: "اختبارات المعلومات",
+      5: "المقابلة الشخصية",
+      6: "القبول النهائي"
+    };
 
     var perfData6m = { labels: ["يناير","فبراير","مارس","أبريل","مايو","يونيو"], values: [45,62,58,78,71,89] };
     var perfData3m = { labels: ["أبريل","مايو","يونيو"], values: [78,71,89] };
@@ -1107,24 +1020,96 @@
     ];
 
     function fetchData() {
-      window.authenticatedFetch("/api/admin/trainees")
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          trainees = data;
-          updateKpis();
-          initCharts();
+      Promise.all([
+        window.authenticatedFetch("/api/admin/trainees").then(function (r) { return r.json(); }).catch(function () { return []; }),
+        window.authenticatedFetch("/api/admin/courses").then(function (r) { return r.json(); }).catch(function () { return []; })
+      ]).then(function (res) {
+        trainees = Array.isArray(res[0]) ? res[0] : [];
+        courses = Array.isArray(res[1]) ? res[1] : [];
+        updateKpis();
+        renderPipeline();
+        renderTopPrograms();
+        initCharts();
+      }).catch(function (err) { console.error("Dashboard fetch error:", err); });
+      refreshNotifications();
+    }
+
+    function refreshNotifications() {
+      window.authenticatedFetch("/api/permissions")
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (list) {
+          var pending = (Array.isArray(list) ? list : []).filter(function (p) { return p.status === "pending"; }).length;
+          var badge = document.getElementById("notifBadge");
+          if (!badge) return;
+          if (pending > 0) { badge.textContent = pending; badge.style.display = ""; }
+          else { badge.style.display = "none"; }
         })
-        .catch(function (err) { console.error("Dashboard fetch error:", err); });
+        .catch(function () {});
     }
 
     function updateKpis() {
       var enrolled   = trainees.filter(function (t) { return t.stage === 7; });
       var active     = enrolled.filter(function (t) { return t.status === "active"; });
       var candidates = trainees.filter(function (t) { return t.stage > 0 && t.stage < 7; });
+      var inCourses  = trainees.filter(function (t) { return t.course_id != null; });
 
       countUp(document.getElementById("kpiTrainees"),   enrolled.length);
       countUp(document.getElementById("kpiActive"),     active.length);
       countUp(document.getElementById("kpiCandidates"), candidates.length);
+      countUp(document.getElementById("kpiPrograms"),   courses.length);
+      countUp(document.getElementById("kpiEnrolled"),   inCourses.length);
+    }
+
+    function renderPipeline() {
+      var el = document.getElementById("dashPipeline");
+      if (!el) return;
+      var iconCls = ["green", "blue", "purple", "amber", "crimson", "green"];
+      var html = "";
+      for (var s = 1; s <= 6; s++) {
+        var count = trainees.filter(function (t) { return t.stage === s; }).length;
+        html +=
+          '<div class="dash-activity__item">' +
+            '<div class="dash-activity__icon dash-activity__icon--' + iconCls[s - 1] + '">' +
+              '<span style="font-size:0.7rem;font-weight:800;">' + s + '</span>' +
+            '</div>' +
+            '<div class="dash-activity__body">' +
+              '<div class="dash-activity__text">' + STAGE_NAMES[s] + '</div>' +
+              '<div class="dash-activity__time">' + count + ' مرشّح في هذه المرحلة</div>' +
+            '</div>' +
+          '</div>';
+      }
+      el.innerHTML = html;
+    }
+
+    function renderTopPrograms() {
+      var el = document.getElementById("dashTopPrograms");
+      if (!el) return;
+      var nameById = {};
+      courses.forEach(function (c) { nameById[c.id] = c.name || c.title_ar || c.title || ("دورة #" + c.id); });
+      var countById = {};
+      trainees.forEach(function (t) {
+        if (t.course_id != null) countById[t.course_id] = (countById[t.course_id] || 0) + 1;
+      });
+      var rows = Object.keys(countById).map(function (id) {
+        return { id: id, name: nameById[id] || ("دورة #" + id), count: countById[id] };
+      }).sort(function (a, b) { return b.count - a.count; });
+
+      if (!rows.length) {
+        el.innerHTML = '<div class="dash-prog-row" style="justify-content:center;"><div class="dash-prog-name" style="color:var(--text-subtle);">لا يوجد متدربون مسجّلون في دورات بعد</div></div>';
+        return;
+      }
+      var max = rows[0].count || 1;
+      el.innerHTML = rows.map(function (r) {
+        var pct = Math.round((r.count / max) * 100);
+        return (
+          '<div class="dash-prog-row">' +
+            '<div class="dash-prog-name">' + r.name + '</div>' +
+            '<div class="dash-prog-trainees">' + r.count + ' متدرب</div>' +
+            '<div class="dash-prog-meta"><span class="dash-prog-pct">' + r.count + '</span></div>' +
+            '<div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:' + pct + '%"></div></div></div>' +
+          '</div>'
+        );
+      }).join("");
     }
 
     function buildStatusCounts() {
