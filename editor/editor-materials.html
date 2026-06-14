@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>المواد التعليمية - بوابة المحرر</title>
-  <link rel="stylesheet" href="editor.css" />
+  <link rel="stylesheet" href="editor.css?v=2" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="js/editor-guard.js"></script>
   <style>
@@ -85,6 +85,47 @@
       background: var(--surface-input, rgba(30,41,59,.8));
       border: 1px solid var(--border-subtle);
       color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
+    }
+
+    /* Default category — always visible */
+    .mat-default-cat {
+      display: flex; align-items: center; justify-content: center;
+      gap: .6rem; flex-wrap: wrap; margin-top: 1.1rem;
+    }
+    .mat-default-cat label { font-size: .8rem; font-weight: 600; color: var(--text-subtle); }
+    .mat-default-cat select {
+      padding: .45rem .85rem; border-radius: 8px;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
+      transition: border-color .2s, opacity .2s;
+    }
+    .mat-default-cat select:disabled { opacity: .45; cursor: not-allowed; }
+    .mat-cat-hint { font-size: .74rem; color: #fbbf24; font-weight: 600; }
+    .mat-upload-zone__note { font-size: .76rem; color: var(--text-subtle); margin: .55rem 0 0; opacity: .9; }
+
+    /* Pending files queue — per-file category */
+    .mat-queue { margin-top: 1.1rem; display: none; flex-direction: column; gap: .6rem; }
+    .mat-queue__desc label { display: block; font-size: .75rem; font-weight: 600; color: var(--text-subtle); margin-bottom: .25rem; text-align: right; }
+    .mat-queue__desc input {
+      width: 100%; padding: .5rem .75rem; border-radius: 8px; box-sizing: border-box;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
+    }
+    .mat-pending-row {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .5rem .7rem; border-radius: 10px;
+      background: var(--surface-glass, rgba(30,41,59,.4));
+      border: 1px solid var(--border-subtle);
+    }
+    .mat-pending-row__name { flex: 1; min-width: 0; font-size: .8rem; color: var(--text-main); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mat-pending-row__size { font-size: .7rem; color: var(--text-subtle); flex-shrink: 0; }
+    .mat-pending-row select {
+      padding: .35rem .6rem; border-radius: 7px; flex-shrink: 0;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .78rem; outline: none;
     }
 
     /* Upload progress */
@@ -189,37 +230,40 @@
       <div class="mat-upload-zone__icon" id="_uploadZoneIcon"></div>
       <p class="mat-upload-zone__title">اسحب الملفات هنا أو انقر للاختيار</p>
       <p class="mat-upload-zone__sub">PDF, Word, Excel, PowerPoint, صور, فيديو, ZIP — أقصى حجم 50MB لكل ملف</p>
+
+      <div class="mat-default-cat">
+        <label for="uploadCategory">التصنيف الافتراضي</label>
+        <select id="uploadCategory" disabled onchange="syncPendingDefault()">
+          <option value="technical">تقني</option>
+          <option value="financial">مالي</option>
+          <option value="political">سياسي</option>
+          <option value="supporting" selected>داعم</option>
+        </select>
+        <span class="mat-cat-hint" id="catHint">اختر دورة أولاً</span>
+      </div>
+      <p class="mat-upload-zone__note">سيُصنَّف كل ملف حسب التصنيف المختار — تأكد منه قبل الرفع</p>
+
       <button type="button" onclick="document.getElementById('fileInput').click()"
-        style="padding:.5rem 1.4rem;border-radius:999px;border:1px solid rgba(59,130,246,.6);
+        style="margin-top:.9rem;padding:.5rem 1.4rem;border-radius:999px;border:1px solid rgba(59,130,246,.6);
                background:transparent;color:#60a5fa;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">
         اختر ملفات
       </button>
       <input type="file" id="fileInput" multiple
         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.zip"
         style="display:none;" onchange="handleFiles(this.files)" />
-      <div class="mat-upload-meta" id="uploadMeta" style="display:none;">
-        <div class="mat-meta-field">
-          <label>التصنيف</label>
-          <select id="uploadCategory">
-            <option value="technical">تقني</option>
-            <option value="financial">مالي</option>
-            <option value="political">سياسي</option>
-            <option value="supporting" selected>داعم</option>
-          </select>
+
+      <div class="mat-queue" id="uploadMeta">
+        <div class="mat-queue__desc">
+          <label>وصف اختياري (يُطبَّق على كل الملفات)</label>
+          <input type="text" id="uploadDesc" placeholder="ملاحظة مختصرة..." />
         </div>
-        <div class="mat-meta-field">
-          <label>وصف اختياري</label>
-          <input type="text" id="uploadDesc" placeholder="ملاحظة مختصرة..." style="width:220px;" />
-        </div>
-        <div class="mat-meta-field" style="justify-content:flex-end;">
-          <label>&nbsp;</label>
-          <button type="button" id="uploadConfirmBtn"
-            style="padding:.45rem 1.1rem;border-radius:8px;border:none;background:linear-gradient(180deg,#3b82f6,#1d4ed8);
-                   color:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;"
-            onclick="uploadPendingFiles()">
-            رفع الملفات
-          </button>
-        </div>
+        <div id="pendingFilesList"></div>
+        <button type="button" id="uploadConfirmBtn"
+          style="align-self:center;padding:.5rem 1.5rem;border-radius:8px;border:none;background:linear-gradient(180deg,#3b82f6,#1d4ed8);
+                 color:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;"
+          onclick="uploadPendingFiles()">
+          رفع الملفات
+        </button>
       </div>
       <div id="pendingLabel" style="font-size:.78rem;color:var(--text-subtle);margin-top:.5rem;display:none;"></div>
     </div>
@@ -328,7 +372,14 @@
         renderFiles();
         updateStats();
       }
-      document.getElementById('uploadMeta').style.display = selectedCourseId ? 'flex' : 'none';
+      // Enable the always-visible default category once a course is chosen
+      document.getElementById('uploadCategory').disabled = !selectedCourseId;
+      document.getElementById('catHint').style.display = selectedCourseId ? 'none' : '';
+      if (!selectedCourseId) {
+        pendingFiles = [];
+        document.getElementById('uploadMeta').style.display = 'none';
+        document.getElementById('pendingLabel').style.display = 'none';
+      }
     }
 
     function loadMaterials(courseId) {
@@ -416,9 +467,36 @@
       queueFiles(fileList);
     }
 
+    function catOptions(selected) {
+      return [['technical','تقني'],['financial','مالي'],['political','سياسي'],['supporting','داعم']]
+        .map(function(c){ return '<option value="' + c[0] + '"' + (c[0] === selected ? ' selected' : '') + '>' + c[1] + '</option>'; })
+        .join('');
+    }
+
+    function renderPendingList() {
+      var def = document.getElementById('uploadCategory').value || 'supporting';
+      var list = document.getElementById('pendingFilesList');
+      list.innerHTML = pendingFiles.map(function(f, i) {
+        var ic = fileIcon((f.name || '').split('.').pop());
+        return '<div class="mat-pending-row">' +
+          '<div class="mat-file-icon mat-file-icon--' + ic.cls + '" style="width:30px;height:30px;font-size:.9rem;border-radius:8px;">' + ic.icon + '</div>' +
+          '<span class="mat-pending-row__name" title="' + (f.name || '') + '">' + (f.name || 'ملف') + '</span>' +
+          '<span class="mat-pending-row__size">' + formatSize(f.size) + '</span>' +
+          '<select class="mat-row-cat" data-idx="' + i + '">' + catOptions(def) + '</select>' +
+        '</div>';
+      }).join('');
+    }
+
+    // Re-apply the default category to any queued rows the user hasn't touched
+    function syncPendingDefault() {
+      if (!pendingFiles.length) return;
+      renderPendingList();
+    }
+
     function queueFiles(fileList) {
       pendingFiles = Array.from(fileList);
       if (!pendingFiles.length) return;
+      renderPendingList();
       document.getElementById('uploadMeta').style.display = 'flex';
       document.getElementById('pendingLabel').style.display = '';
       document.getElementById('pendingLabel').textContent = pendingFiles.length + ' ملف(ات) جاهزة للرفع';
@@ -429,7 +507,8 @@
       if (!pendingFiles.length) { showEditorToast('لم يتم اختيار ملفات', 'error'); return; }
       if (!selectedCourseId) { showEditorToast('اختر دورة أولاً', 'error'); return; }
 
-      var category = document.getElementById('uploadCategory').value;
+      var defaultCat = document.getElementById('uploadCategory').value;
+      var rowSelects = document.querySelectorAll('.mat-row-cat');
       var desc = document.getElementById('uploadDesc').value;
       var prog = document.getElementById('uploadProgress');
       var fill = document.getElementById('progressFill');
@@ -440,6 +519,7 @@
 
       var done = 0;
       for (var i = 0; i < pendingFiles.length; i++) {
+        var category = (rowSelects[i] && rowSelects[i].value) || defaultCat || 'supporting';
         lbl.textContent = 'جاري رفع ' + (i + 1) + ' من ' + pendingFiles.length + '...';
         fill.style.width = Math.round(((i) / pendingFiles.length) * 100) + '%';
         var formData = new FormData();
@@ -465,6 +545,8 @@
       setTimeout(function(){ prog.style.display = 'none'; fill.style.width = '0'; }, 2000);
       pendingFiles = [];
       btn.disabled = false;
+      document.getElementById('uploadMeta').style.display = 'none';
+      document.getElementById('pendingFilesList').innerHTML = '';
       document.getElementById('pendingLabel').style.display = 'none';
       document.getElementById('uploadDesc').value = '';
       showEditorToast('تم رفع ' + done + ' ملف(ات) بنجاح', 'success');
