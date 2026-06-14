@@ -1774,9 +1774,9 @@
             session = { token: _adminTok, role: _ap.role };
           } catch (e) {}
         }
-        if (!session.token) {
-          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
-        }
+        // SECURITY FIX: Removed ntaTrainee fallback. If no admin token is present,
+        // the user is not authenticated as an admin and must log in.
+        // The role check below will redirect them to admin-login.html.
         // admin-guard.js already enforces admin-only access on this page.
         // Admins VIEW courses and run bulk-enroll but do NOT create/edit/delete.
         // Editors manage content via the dedicated editor portal (/editor/).

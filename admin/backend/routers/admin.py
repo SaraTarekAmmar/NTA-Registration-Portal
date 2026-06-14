@@ -192,15 +192,19 @@ async def get_trainees(stage: Optional[int] = Query(None), role: Optional[str] =
         db.close()
 @router.post("/stage-review")
 async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_admin_user)):
+    # SECURITY FIX: Override client-supplied reviewer_id with the verified identity
+    # from the JWT token. This prevents audit trail forgery where a client could
+    # submit a review on behalf of a different administrator.
+    review.reviewer_id = admin["id"]
     db = get_db_connection()
     cursor = db.cursor(buffered=True)
     try:
-        # ── NEW: Move attachment to admission folder ({trainee_nid}_{admin_nid}) ──
+        # ── Move attachment to admission folder ({trainee_nid}_{admin_nid}) ──
         if review.attachment_path:
             # Fetch Trainee NID
             cursor.execute("SELECT national_id FROM users WHERE id = %s", (review.trainee_id,))
             t_row = cursor.fetchone()
-            # Fetch Admin NID
+            # Fetch Admin NID (always the authenticated admin from JWT)
             cursor.execute("SELECT national_id FROM users WHERE id = %s", (review.reviewer_id,))
             a_row = cursor.fetchone()
             

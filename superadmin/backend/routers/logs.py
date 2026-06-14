@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Query
 from core.database import get_db_connection
+from core.security import get_superadmin_user
 from typing import Optional, List
 import mysql.connector
 from datetime import datetime, timedelta
@@ -11,7 +12,8 @@ router = APIRouter(prefix="/logs", tags=["Activity Logs"])
 async def get_activity_logs(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    category: Optional[str] = None
+    category: Optional[str] = None,
+    current_user: dict = Depends(get_superadmin_user)
 ):
     """
     Fetch paginated activity logs from the database.
@@ -55,7 +57,7 @@ async def get_activity_logs(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/stats")
-async def get_log_stats():
+async def get_log_stats(current_user: dict = Depends(get_superadmin_user)):
     """
     Fetch aggregated log statistics for dashboard charts.
     """
@@ -129,7 +131,7 @@ async def get_log_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/notifications")
-async def get_notifications(limit: int = 20):
+async def get_notifications(limit: int = 20, current_user: dict = Depends(get_superadmin_user)):
     """
     Fetch specific events for the notifications dashboard.
     """
@@ -182,7 +184,7 @@ async def get_notifications(limit: int = 20):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/trace/{trace_id}")
-async def get_trace_details(trace_id: str):
+async def get_trace_details(trace_id: str, current_user: dict = Depends(get_superadmin_user)):
     """
     Fetch all related logs for a specific trace ID for cross-service debugging.
     """

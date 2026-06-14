@@ -11,7 +11,8 @@ class StepUpdate(BaseModel):
 
 
 @router.get("")
-async def list_steps(current_user: dict = Depends(get_current_user)):
+async def list_steps(admin: dict = Depends(get_admin_user)):
+    """List all registration steps. Requires admin authentication."""
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -41,7 +42,11 @@ async def update_step(step_key: str, body: StepUpdate, admin: dict = Depends(get
 
 
 @router.get("/locked")
-async def get_locked_steps():
+async def get_locked_steps(current_user: dict = Depends(get_current_user)):
+    """
+    Returns locked registration steps. Requires a valid authenticated session.
+    Consumed by the registration flow to enforce step gating.
+    """
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:

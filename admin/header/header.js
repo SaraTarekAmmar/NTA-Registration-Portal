@@ -93,10 +93,9 @@
         session = { token: tok, role: p.role, name: p.name || p.email || '' };
       } catch (e) {}
     }
-    if (!session.token) {
-      try { session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}'); } catch (e) {}
-    }
-
+    // SECURITY FIX: Removed ntaTrainee fallback. The admin portal must only accept
+    // admin_token. If no valid admin token exists, the sidebar will not render,
+    // and the page-level role check will redirect to admin-login.html.
     if (session.role !== 'admin') return;
 
     var page = document.body.getAttribute('data-page') || '';
@@ -106,7 +105,7 @@
     if (logoutBtn && !logoutBtn.dataset.ntaBound) {
       logoutBtn.dataset.ntaBound = '1';
       logoutBtn.addEventListener('click', function () {
-        try { localStorage.removeItem('admin_token'); localStorage.removeItem('ntaTrainee'); } catch (e) {}
+        localStorage.removeItem('admin_token');
         window.location.href = 'admin-login.html';
       });
     }
@@ -118,10 +117,8 @@
 
   window.authenticatedFetch = function (url, options) {
     options = options || {};
+    // SECURITY FIX: Only use admin_token. Never fall back to ntaTrainee.
     var token = localStorage.getItem('admin_token');
-    if (!token) {
-      try { token = JSON.parse(localStorage.getItem('ntaTrainee') || '{}').token; } catch (e) {}
-    }
     var headers = Object.assign({}, options.headers || {});
     if (token) headers.Authorization = 'Bearer ' + token;
     if (!(options.body instanceof FormData) && !headers['Content-Type']) {
@@ -130,7 +127,6 @@
     return fetch(url, Object.assign({}, options, { headers: headers })).then(function (res) {
       if (res.status === 401) {
         localStorage.removeItem('admin_token');
-        localStorage.removeItem('ntaTrainee');
         window.location.href = 'admin-login.html';
         return Promise.reject('Session expired');
       }

@@ -74,20 +74,54 @@ async def create_exam(exam: ExamCreate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
-        subject = exam.subject or f"course_{exam.course_id or 0}_{cursor.lastrowid or 0}"
+        # BUG FIX: The old code evaluated cursor.lastrowid BEFORE the INSERT, which
+        # always returned 0, causing every auto-generated subject to be identical
+        # (e.g., "course_1_0") and triggering unique constraint violations.
+        #
+        # Fix: If a subject is not provided, INSERT with a temporary placeholder,
+        # then UPDATE the subject using the real lastrowid after the INSERT.
+        provided_subject = exam.subject
         content = {"questions": exam.questions or []}
-        cursor.execute(
-            """INSERT INTO course_exams
-               (subject, course_id, title, title_ar, duration_minutes, pass_score, status, content_json)
-               VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
-            (
-                subject, exam.course_id, exam.title, exam.title_ar,
-                exam.duration_minutes, exam.pass_score, exam.status,
-                json.dumps(content, ensure_ascii=False),
+
+        if provided_subject:
+            # Subject explicitly provided — use it directly.
+            cursor.execute(
+                """INSERT INTO course_exams
+                   (subject, course_id, title, title_ar, duration_minutes, pass_score, status, content_json)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (
+                    provided_subject, exam.course_id, exam.title, exam.title_ar,
+                    exam.duration_minutes, exam.pass_score, exam.status,
+                    json.dumps(content, ensure_ascii=False),
+                )
             )
-        )
-        db.commit()
-        return {"id": cursor.lastrowid, "subject": subject, **exam.dict(exclude={"subject"})}
+            db.commit()
+            new_id = cursor.lastrowid
+            subject = provided_subject
+        else:
+            # No subject provided — insert with a temporary NULL-safe placeholder,
+            # then derive the subject from the real auto-increment ID.
+            import uuid
+            temp_subject = f"__tmp_{uuid.uuid4().hex}"
+            cursor.execute(
+                """INSERT INTO course_exams
+                   (subject, course_id, title, title_ar, duration_minutes, pass_score, status, content_json)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (
+                    temp_subject, exam.course_id, exam.title, exam.title_ar,
+                    exam.duration_minutes, exam.pass_score, exam.status,
+                    json.dumps(content, ensure_ascii=False),
+                )
+            )
+            new_id = cursor.lastrowid
+            subject = f"course_{exam.course_id or 0}_{new_id}"
+            cursor.execute(
+                "UPDATE course_exams SET subject = %s WHERE id = %s",
+                (subject, new_id)
+            )
+            db.commit()
+
+        return {"id": new_id, "subject": subject, **exam.dict(exclude={"subject"})}
     finally:
         cursor.close()
         db.close()

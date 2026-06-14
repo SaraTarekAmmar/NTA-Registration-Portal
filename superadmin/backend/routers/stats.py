@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException, Depends
 from core.database import get_db_connection
+from core.security import get_superadmin_user
 import mysql.connector
 import os
 
 router = APIRouter(prefix="/stats", tags=["System Statistics"])
 
 @router.get("/overview")
-async def get_overview_stats():
+async def get_overview_stats(current_user: dict = Depends(get_superadmin_user)):
     print("[STATS] Fetching system overview metrics...")
     try:
         conn = get_db_connection()
@@ -99,7 +100,7 @@ async def get_overview_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/files")
-async def get_lecture_files():
+async def get_lecture_files(current_user: dict = Depends(get_superadmin_user)):
     base_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "user", "uploads", "files")
     files = []
     
@@ -115,12 +116,12 @@ async def get_lecture_files():
     return {"files": files}
 
 @router.get("/config")
-async def get_config():
+async def get_config(current_user: dict = Depends(get_superadmin_user)):
     from routers.ai_proxy import SERVICE_REGISTRY
     return {"registry": SERVICE_REGISTRY}
 
 @router.get("/courses")
-async def get_courses():
+async def get_courses(current_user: dict = Depends(get_superadmin_user)):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -133,7 +134,7 @@ async def get_courses():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/sessions/{course_id}")
-async def get_sessions(course_id: int):
+async def get_sessions(course_id: int, current_user: dict = Depends(get_superadmin_user)):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -146,7 +147,7 @@ async def get_sessions(course_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/trainees")
-async def list_all_trainees():
+async def list_all_trainees(current_user: dict = Depends(get_superadmin_user)):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)

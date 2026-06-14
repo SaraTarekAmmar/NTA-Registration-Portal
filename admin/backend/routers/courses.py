@@ -127,9 +127,33 @@ def sync_course_sessions(db, course_id, course_title, batch_data):
     
     cursor = db.cursor(dictionary=True)
     try:
-        # 1. Clear existing sessions for this course to re-sync
-        cursor.execute("DELETE FROM course_sessions WHERE course_id = %s", (course_id,))
-        
+        # BUG FIX: Previously this function ran DELETE FROM course_sessions WHERE course_id = %s
+        # before re-inserting. Because attendance_logs has ON DELETE CASCADE linked to course_sessions,
+        # this wiped all attendance records every time a course was saved.
+        #
+        # Fix: Use an UPSERT strategy instead.
+        # 1. Collect all new session keys (batch_key + index) from batch_data.
+        # 2. For each session, INSERT or UPDATE using a stable unique key (batch_key + session_index).
+        # 3. DELETE only sessions that are no longer present in the new batch_data.
+        # This preserves existing session IDs and their linked attendance_logs.
+
+        # Fetch existing sessions keyed by (batch_key, session_index) if that column exists,
+        # otherwise fall back to topic-based matching.
+        cursor.execute(
+            "SELECT id, topic, batch_key, session_index FROM course_sessions WHERE course_id = %s",
+            (course_id,)
+        )
+        existing_rows = cursor.fetchall()
+        # Build a lookup: (batch_key, session_index) -> session_id
+        existing_map = {}
+        for row in existing_rows:
+            bk = row.get("batch_key") or ""
+            si = row.get("session_index")
+            if bk and si is not None:
+                existing_map[(bk, si)] = row["id"]
+
+        new_keys = set()  # track which (batch_key, session_index) pairs exist in new data
+
         # 2. Iterate through batches and sessions
         # batchData structure: key = 's{stageId}b{bIdx}' -> {sessionNames:[], sessionMaterials:[], sessionDates:[]}
         for key, bd in batch_data.items():
@@ -183,12 +207,38 @@ def sync_course_sessions(db, course_id, course_title, batch_data):
                         else:
                             materials_json["file_path"] = current_rel_path
                 
-                # 3. Insert into course_sessions
-                cursor.execute("""
-                    INSERT INTO course_sessions (course_id, session_date, topic, materials)
-                    VALUES (%s, %s, %s, %s)
-                """, (course_id, s_date, topic, json.dumps(materials_json, ensure_ascii=False)))
-        
+                # 3. UPSERT into course_sessions
+                # If a session with this (batch_key, session_index) already exists, UPDATE it
+                # to preserve its primary key (id) and linked attendance_logs.
+                # Otherwise INSERT a new row.
+                new_keys.add((key, i))
+                existing_id = existing_map.get((key, i))
+                if existing_id:
+                    cursor.execute("""
+                        UPDATE course_sessions
+                        SET session_date = %s, topic = %s, materials = %s
+                        WHERE id = %s
+                    """, (s_date, topic, json.dumps(materials_json, ensure_ascii=False), existing_id))
+                else:
+                    cursor.execute("""
+                        INSERT INTO course_sessions (course_id, session_date, topic, materials, batch_key, session_index)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                    """, (course_id, s_date, topic, json.dumps(materials_json, ensure_ascii=False), key, i))
+
+        # 4. Remove sessions that are no longer in batch_data.
+        # Only delete sessions that have a batch_key (i.e., managed by this sync).
+        # Sessions without a batch_key are manually created and must not be touched.
+        stale_ids = [
+            sid for (bk, si), sid in existing_map.items()
+            if (bk, si) not in new_keys
+        ]
+        if stale_ids:
+            placeholders = ",".join(["%s"] * len(stale_ids))
+            cursor.execute(
+                f"DELETE FROM course_sessions WHERE id IN ({placeholders})",
+                tuple(stale_ids)
+            )
+
         db.commit()
     finally:
         cursor.close()

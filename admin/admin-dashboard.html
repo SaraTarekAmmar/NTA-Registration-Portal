@@ -952,9 +952,9 @@
     if (_adminTok) {
       try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null, name: _ap.name || _ap.email || "" }; } catch (e) {}
     }
-    if (!session.token) {
-      try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
-    }
+        // SECURITY FIX: Removed ntaTrainee fallback. If no admin token is present,
+        // the user is not authenticated as an admin and must log in.
+        // The role check below will redirect them to admin-login.html.
     if (session.role !== "admin") { window.location.replace("admin-login.html"); return; }
 
     // Top bar & hero populate

@@ -385,44 +385,9 @@
         if (_adminTok) {
           try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
         }
-        if (!session.token) {
-          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
-        }
-
-        console.log("=== HEADER DEBUG ===");
-        console.log("Session:", session);
-        console.log("Role:", session.role);
-        console.log(
-          "ntaHeader container:",
-          document.getElementById("ntaHeader"),
-        );
-        console.log(
-          "ntaHeader innerHTML length:",
-          (document.getElementById("ntaHeader") || {}).innerHTML?.length,
-        );
-        console.log("homeChip:", document.getElementById("headerHomeChip"));
-        console.log("usersChip:", document.getElementById("headerUsersChip"));
-        console.log(
-          "permissionsChip:",
-          document.getElementById("headerPermissionsChip"),
-        );
-        console.log(
-          "attendanceChip:",
-          document.getElementById("headerAttendanceChip"),
-        );
-
-        var chips = document.querySelectorAll(".nta-header__chip");
-        console.log("Total chips found:", chips.length);
-        chips.forEach(function (c) {
-          console.log(
-            "  chip:",
-            c.id,
-            "| display:",
-            c.style.display,
-            "| data-page:",
-            c.getAttribute("data-page"),
-          );
-        });
+        // SECURITY FIX: Removed ntaTrainee fallback. If no admin token is present,
+        // the user is not authenticated as an admin and must log in.
+        // The role check below will redirect them to admin-login.html.        var chips = document.querySelectorAll(".nta-header__chip");        chips.forEach(function (c) {        });
       }, 1000);
     </script>
     <script>
@@ -604,9 +569,9 @@
         if (_adminTok) {
           try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null }; } catch (e) {}
         }
-        if (!session.token) {
-          try { session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}"); } catch (e) {}
-        }
+        // SECURITY FIX: Removed ntaTrainee fallback. If no admin token is present,
+        // the user is not authenticated as an admin and must log in.
+        // The role check below will redirect them to admin-login.html.
         if (session.role !== "admin") {
           window.location.replace("admin-login.html");
           return;
