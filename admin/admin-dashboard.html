@@ -1022,16 +1022,27 @@
     function fetchData() {
       Promise.all([
         window.authenticatedFetch("/api/admin/trainees").then(function (r) { return r.json(); }).catch(function () { return []; }),
-        window.authenticatedFetch("/api/admin/courses").then(function (r) { return r.json(); }).catch(function () { return []; })
+        window.authenticatedFetch("/api/admin/courses").then(function (r) { return r.json(); }).catch(function () { return []; }),
+        window.authenticatedFetch("/api/admin/registration-stats?months=6").then(function (r) { return r.json(); }).catch(function () { return null; })
       ]).then(function (res) {
         trainees = Array.isArray(res[0]) ? res[0] : [];
         courses = Array.isArray(res[1]) ? res[1] : [];
+        applyRegistrationStats(res[2]);
         updateKpis();
         renderPipeline();
         renderTopPrograms();
         initCharts();
       }).catch(function (err) { console.error("Dashboard fetch error:", err); });
       refreshNotifications();
+    }
+
+    function applyRegistrationStats(stats) {
+      if (!stats || !Array.isArray(stats.labels) || !Array.isArray(stats.values)) return;
+      perfData6m = { labels: stats.labels, values: stats.values };
+      perfData3m = {
+        labels: stats.labels.slice(-3),
+        values: stats.values.slice(-3)
+      };
     }
 
     function refreshNotifications() {

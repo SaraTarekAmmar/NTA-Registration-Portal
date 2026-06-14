@@ -60,6 +60,55 @@ async def get_admin_courses(current_user: dict = Depends(get_staff_user)):
     finally:
         cursor.close()
         db.close()
+
+
+# Arabic month names indexed 1-12
+_AR_MONTHS = ["", "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+              "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
+
+
+@router.get("/registration-stats")
+async def registration_stats(months: int = Query(6), current_user: dict = Depends(get_staff_user)):
+    """Real new-trainee registrations per month for the dashboard chart.
+
+    Counts users (role trainee/applicant) by users.created_at, returning the
+    last `months` calendar buckets ending at the current month, zero-filled.
+    """
+    months = max(1, min(months, 24))
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT NOW() AS now")
+        now = cursor.fetchone()["now"]
+
+        # Build the ordered list of (year, month) buckets ending at the current month.
+        buckets = []
+        y, m = now.year, now.month
+        for _ in range(months):
+            buckets.append((y, m))
+            m -= 1
+            if m == 0:
+                m = 12
+                y -= 1
+        buckets.reverse()
+
+        oldest_y, oldest_m = buckets[0]
+        cursor.execute(
+            """SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym, COUNT(*) AS cnt
+               FROM users
+               WHERE role IN ('trainee', 'applicant')
+                 AND created_at >= %s
+               GROUP BY ym""",
+            (f"{oldest_y:04d}-{oldest_m:02d}-01",)
+        )
+        counts = {row["ym"]: row["cnt"] for row in cursor.fetchall()}
+
+        labels = [_AR_MONTHS[m] for (y, m) in buckets]
+        values = [counts.get(f"{y:04d}-{m:02d}", 0) for (y, m) in buckets]
+        return {"labels": labels, "values": values}
+    finally:
+        cursor.close()
+        db.close()
 @router.get("/trainees", response_model=List[TraineeSummary])
 async def get_trainees(stage: Optional[int] = Query(None), role: Optional[str] = Query(None), course_id: Optional[int] = Query(None), staff: dict = Depends(get_staff_user)):
     db = get_db_connection()
