@@ -45,7 +45,6 @@ def _json_or_none(value):
 
 
 def _ensure_admissions_schema(cursor):
-    """Add scoping columns when older deployments still have the global admissions table."""
     required = {
         "course_type": "ALTER TABLE admission_sections ADD COLUMN course_type VARCHAR(100) NOT NULL DEFAULT 'default' AFTER id",
         "visibility_rules": "ALTER TABLE admission_sections ADD COLUMN visibility_rules LONGTEXT NULL AFTER config_json",
@@ -84,10 +83,9 @@ def _hydrate_section(row):
 def _get_applicant_course_type(cursor, user_id: int) -> str:
     cursor.execute(
         """
-        SELECT COALESCE(NULLIF(caa.nature, ''), NULLIF(c.classification, ''), NULLIF(c.short_name, '')) AS course_type
+        SELECT COALESCE(NULLIF(c.classification, ''), NULLIF(c.short_name, '')) AS course_type
         FROM applications a
         LEFT JOIN courses c ON c.id = a.course_id
-        LEFT JOIN course_ai_analysis caa ON caa.course_id = c.id
         WHERE a.user_id = %s
         ORDER BY a.id DESC
         LIMIT 1
@@ -108,13 +106,10 @@ def _assert_section_available_for_user(cursor, section_id: int, current_user: di
     section = _hydrate_section(section)
     if not section["is_active"]:
         raise HTTPException(status_code=403, detail="This admissions section is inactive")
-
-    # Admin can review/test the section, applicants must match their assigned course type.
     if current_user.get("role") != "admin":
         user_course_type = _get_applicant_course_type(cursor, current_user["id"])
         if section["course_type"] not in (user_course_type, "default"):
             raise HTTPException(status_code=403, detail="This admissions section is not assigned to your course flow")
-
     return section
 
 
@@ -162,16 +157,9 @@ async def create_section(body: SectionBase, admin: dict = Depends(get_admin_user
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
-                _normalize_course_type(body.course_type),
-                body.title_ar,
-                body.section_type,
-                _json_or_none(body.config_json),
-                _json_or_none(body.visibility_rules),
-                _json_or_none(body.unlock_rules),
-                body.sort_order or 0,
-                1 if body.is_required else 0,
-                1 if body.is_active else 0,
-                admin["id"],
+                _normalize_course_type(body.course_type), body.title_ar, body.section_type,
+                _json_or_none(body.config_json), _json_or_none(body.visibility_rules), _json_or_none(body.unlock_rules),
+                body.sort_order or 0, 1 if body.is_required else 0, 1 if body.is_active else 0, admin["id"],
             ),
         )
         db.commit()
@@ -197,16 +185,9 @@ async def update_section(section_id: int, body: SectionBase, admin: dict = Depen
             WHERE id=%s
             """,
             (
-                _normalize_course_type(body.course_type),
-                body.title_ar,
-                body.section_type,
-                _json_or_none(body.config_json),
-                _json_or_none(body.visibility_rules),
-                _json_or_none(body.unlock_rules),
-                body.sort_order or 0,
-                1 if body.is_required else 0,
-                1 if body.is_active else 0,
-                section_id,
+                _normalize_course_type(body.course_type), body.title_ar, body.section_type,
+                _json_or_none(body.config_json), _json_or_none(body.visibility_rules), _json_or_none(body.unlock_rules),
+                body.sort_order or 0, 1 if body.is_required else 0, 1 if body.is_active else 0, section_id,
             ),
         )
         db.commit()
@@ -258,10 +239,7 @@ async def reorder_sections(orders: List[Dict[str, int]], admin: dict = Depends(g
     try:
         _ensure_admissions_schema(cursor)
         for item in orders:
-            cursor.execute(
-                "UPDATE admission_sections SET sort_order=%s WHERE id=%s",
-                (item["sort_order"], item["id"]),
-            )
+            cursor.execute("UPDATE admission_sections SET sort_order=%s WHERE id=%s", (item["sort_order"], item["id"]))
         db.commit()
         return {"reordered": True}
     finally:
