@@ -41,13 +41,11 @@ def _normalize_course_type(value: Optional[str]) -> str:
 
 
 def _get_applicant_course_type(cursor, applicant_id: int) -> Optional[str]:
-    """Return the applicant's real course type from the latest application, if available."""
     cursor.execute(
         """
-        SELECT COALESCE(NULLIF(caa.nature, ''), NULLIF(c.classification, ''), NULLIF(c.short_name, '')) AS course_type
+        SELECT COALESCE(NULLIF(c.classification, ''), NULLIF(c.short_name, '')) AS course_type
         FROM applications a
         LEFT JOIN courses c ON c.id = a.course_id
-        LEFT JOIN course_ai_analysis caa ON caa.course_id = c.id
         WHERE a.user_id = %s
         ORDER BY a.id DESC
         LIMIT 1
@@ -67,52 +65,30 @@ def _get_user_age(cursor, user_id: int) -> Optional[int]:
 
 
 def _resolve_effective_course_type(cursor, applicant_id: int, requested_course_type: Optional[str]) -> str:
-    # The applicant's actual application/course wins over query params.
     return _get_applicant_course_type(cursor, applicant_id) or _normalize_course_type(requested_course_type)
 
 
 def _resolve_flow(cursor, applicant_id: int, course_type: str, age: Optional[int]):
-    """
-    Priority: applicant override > age rule > template step default.
-    Returns only visible steps, with status and lock info.
-    """
     course_type = _normalize_course_type(course_type)
-
-    # 1. Find active template for course_type; fall back to 'default'
-    cursor.execute(
-        "SELECT * FROM flow_templates WHERE course_type=%s AND is_active=1 LIMIT 1",
-        (course_type,),
-    )
+    cursor.execute("SELECT * FROM flow_templates WHERE course_type=%s AND is_active=1 LIMIT 1", (course_type,))
     tmpl = cursor.fetchone()
     if not tmpl:
-        cursor.execute(
-            "SELECT * FROM flow_templates WHERE course_type='default' AND is_active=1 LIMIT 1"
-        )
+        cursor.execute("SELECT * FROM flow_templates WHERE course_type='default' AND is_active=1 LIMIT 1")
         tmpl = cursor.fetchone()
     if not tmpl:
         return []
 
-    # 2. Load ordered active steps
-    cursor.execute(
-        "SELECT * FROM flow_steps WHERE flow_template_id=%s AND is_active=1 ORDER BY step_order",
-        (tmpl["id"],),
-    )
+    cursor.execute("SELECT * FROM flow_steps WHERE flow_template_id=%s AND is_active=1 ORDER BY step_order", (tmpl["id"],))
     steps = cursor.fetchall()
     for s in steps:
         s["visibility_rules"] = _parse_json(s.get("visibility_rules"))
         s["unlock_rules"] = _parse_json(s.get("unlock_rules"))
         s["config_json"] = _parse_json(s.get("config_json"))
 
-    # 3. Applicant-specific overrides keyed by step_id
-    cursor.execute(
-        "SELECT * FROM applicant_step_overrides WHERE applicant_id=%s", (applicant_id,)
-    )
+    cursor.execute("SELECT * FROM applicant_step_overrides WHERE applicant_id=%s", (applicant_id,))
     overrides = {row["step_id"]: row for row in cursor.fetchall()}
 
-    # 4. Current step statuses
-    cursor.execute(
-        "SELECT * FROM applicant_step_status WHERE applicant_id=%s", (applicant_id,)
-    )
+    cursor.execute("SELECT * FROM applicant_step_status WHERE applicant_id=%s", (applicant_id,))
     statuses = {row["step_id"]: row for row in cursor.fetchall()}
     done_step_keys = set()
     for sid, rec in statuses.items():
@@ -126,8 +102,6 @@ def _resolve_flow(cursor, applicant_id: int, course_type: str, age: Optional[int
     for step in steps:
         vis_rules = step["visibility_rules"]
         unl_rules = step["unlock_rules"]
-
-        # Visibility
         is_visible = True
         if age is not None:
             if vis_rules.get("age_min") and age < vis_rules["age_min"]:
@@ -138,29 +112,23 @@ def _resolve_flow(cursor, applicant_id: int, course_type: str, age: Optional[int
         ov = overrides.get(step["id"])
         if ov and ov["is_visible"] is not None:
             is_visible = bool(ov["is_visible"])
-
         if not is_visible:
             continue
 
-        # Lock status
         is_locked = False
         locked_reason = None
-
         req_key = unl_rules.get("requires_step_key")
         if req_key and req_key not in done_step_keys:
             is_locked = True
-            locked_reason = "يجب إكمال الخطوة السابقة أولاً"
-
+            locked_reason = "Previous step must be completed first"
         if unl_rules.get("manual_only"):
             admin_unlocked = ov and ov["is_locked"] is not None and not bool(ov["is_locked"])
             if not admin_unlocked:
                 is_locked = True
-                locked_reason = "تحتاج إلى فتح يدوي من الإدارة"
-
-        # Override can force-lock or force-unlock
+                locked_reason = "Manual admin unlock required"
         if ov and ov["is_locked"] is not None:
             is_locked = bool(ov["is_locked"])
-            locked_reason = ov.get("reason") or ("مقفلة من قِبَل الإدارة" if is_locked else None)
+            locked_reason = ov.get("reason") or ("Locked by admin" if is_locked else None)
 
         rec = statuses.get(step["id"])
         current_status = rec["status"] if rec else "pending"
@@ -181,15 +149,11 @@ def _resolve_flow(cursor, applicant_id: int, course_type: str, age: Optional[int
             "locked_reason": locked_reason,
             "config": _parse_json(ov.get("custom_config")) if ov and ov.get("custom_config") else step["config_json"],
         })
-
     return result
 
 
 @router.get("")
-async def get_my_flow(
-    course_type: str = "default",
-    current_user: dict = Depends(get_current_user),
-):
+async def get_my_flow(course_type: str = "default", current_user: dict = Depends(get_current_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -213,22 +177,18 @@ async def submit_step(body: StepSubmit, current_user: dict = Depends(get_current
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute(
-            "SELECT * FROM flow_steps WHERE id=%s AND is_active=1", (body.step_id,)
-        )
+        cursor.execute("SELECT * FROM flow_steps WHERE id=%s AND is_active=1", (body.step_id,))
         step = cursor.fetchone()
         if not step:
-            raise HTTPException(404, "الخطوة غير موجودة أو غير نشطة")
-
+            raise HTTPException(404, "Step not found or inactive")
         age = _get_user_age(cursor, current_user["id"])
         effective_course_type = _resolve_effective_course_type(cursor, current_user["id"], body.course_type)
         flow = _resolve_flow(cursor, current_user["id"], effective_course_type, age)
         step_in_flow = next((s for s in flow if s["id"] == body.step_id), None)
         if not step_in_flow:
-            raise HTTPException(403, "هذه الخطوة ليست جزءاً من تدفق تسجيلك")
+            raise HTTPException(403, "Step is not assigned to your registration flow")
         if step_in_flow["is_locked"]:
-            raise HTTPException(403, step_in_flow["locked_reason"] or "هذه الخطوة مقفلة")
-
+            raise HTTPException(403, step_in_flow["locked_reason"] or "Step is locked")
         data_json = json.dumps(body.submitted_data, ensure_ascii=False) if body.submitted_data else None
         cursor.execute(
             """
