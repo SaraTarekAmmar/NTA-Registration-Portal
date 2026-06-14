@@ -315,8 +315,50 @@ body[data-page] #ntaThemeFab {
    RESPONSIVE
    ════════════════════════════════════════ */
 @media (max-width: 1024px) { :root { --sb-w: 220px; } }
+
+/* Mobile hamburger + backdrop are hidden on desktop */
+.nta-nav-toggle { display: none; }
+.nta-nav-backdrop { display: none; }
+
 @media (max-width: 700px) {
   :root { --sb-w: 0px; }
-  #ntaHeader, #editorSidebar { display: none !important; }
   body[data-page] { padding-right: 0 !important; }
+
+  /* Sidebar slides in as a drawer instead of disappearing */
+  #ntaHeader, #editorSidebar {
+    width: 260px !important;
+    transform: translateX(100%);
+    transition: transform 0.28s ease;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.55);
+  }
+  body.nta-nav-open #ntaHeader,
+  body.nta-nav-open #editorSidebar { transform: translateX(0); }
+
+  /* Hamburger toggle */
+  .nta-nav-toggle {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 0.7rem; right: 0.7rem; z-index: 9600;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(3,5,14,0.92);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff; cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    transition: right 0.28s ease;
+  }
+  .nta-nav-toggle svg { width: 22px; height: 22px; }
+  body.nta-nav-open .nta-nav-toggle { right: calc(260px + 0.7rem); }
+
+  /* Backdrop */
+  .nta-nav-backdrop {
+    display: block; position: fixed; inset: 0; z-index: 8900;
+    background: rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+  }
+  body.nta-nav-open .nta-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+html.light-mode .nta-nav-toggle {
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(0,0,0,0.1);
+  color: #b91c1c;
 }

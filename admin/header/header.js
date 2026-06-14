@@ -5,7 +5,7 @@
     var l = document.createElement('link');
     l.id = 'ntaSbCss';
     l.rel = 'stylesheet';
-    l.href = '/admin/header/header.css?v=4';
+    l.href = '/admin/header/header.css?v=5';
     document.head.appendChild(l);
   })();
 
@@ -112,7 +112,33 @@
     if (window.NTATheme && typeof window.NTATheme.bindAllToggles === 'function') {
       window.NTATheme.bindAllToggles();
     }
+
+    setupMobileNav(container);
   });
+
+  function setupMobileNav(container) {
+    if (document.getElementById('ntaNavToggle')) return;
+    var btn = document.createElement('button');
+    btn.id = 'ntaNavToggle';
+    btn.className = 'nta-nav-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'فتح القائمة');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    var backdrop = document.createElement('div');
+    backdrop.id = 'ntaNavBackdrop';
+    backdrop.className = 'nta-nav-backdrop';
+    document.body.appendChild(btn);
+    document.body.appendChild(backdrop);
+    function setOpen(open) {
+      document.body.classList.toggle('nta-nav-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function () { setOpen(!document.body.classList.contains('nta-nav-open')); });
+    backdrop.addEventListener('click', function () { setOpen(false); });
+    if (container) container.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+  }
 
   window.authenticatedFetch = function (url, options) {
     options = options || {};
