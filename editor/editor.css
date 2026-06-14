@@ -796,3 +796,21 @@ html.light-mode .ed-empty {
   border-color: var(--border-main) !important;
   color: var(--text-muted) !important;
 }
+html.light-mode .ed-hero {
+  background:
+    radial-gradient(circle at top right, rgba(185,28,28,0.06), transparent 52%),
+    radial-gradient(circle at bottom left, rgba(30,50,100,0.05), transparent 55%),
+    rgba(255,255,255,0.92) !important;
+  border-color: var(--border-main) !important;
+  box-shadow: 0 4px 20px rgba(15,23,42,0.06) !important;
+}
+html.light-mode .ed-hero__title    { color: var(--text-main) !important; }
+html.light-mode .ed-hero__sub      { color: var(--text-muted) !important; }
+html.light-mode .ed-hero__greeting { color: #b91c1c !important; }
+html.light-mode .ed-hero__date {
+  color: var(--text-muted) !important;
+  background: rgba(185,28,28,0.06) !important;
+  border-color: rgba(185,28,28,0.18) !important;
+}
+html.light-mode .ed-hero__live     { color: var(--text-muted) !important; }
+html.light-mode .ed-section__link  { color: #b91c1c !important; }
