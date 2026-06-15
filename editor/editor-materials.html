@@ -302,6 +302,24 @@
       </button>
     </div>
 
+    <!-- Type + attachment filters -->
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+      <select id="matTypeFilter" class="editor-select" style="max-width:200px;" onchange="renderFiles()">
+        <option value="">كل الأنواع</option>
+        <option value="pdf">PDF</option>
+        <option value="doc">Word</option>
+        <option value="ppt">PowerPoint</option>
+        <option value="xls">Excel</option>
+        <option value="image">صور</option>
+        <option value="video">فيديو</option>
+      </select>
+      <select id="matLinkFilter" class="editor-select" style="max-width:220px;" onchange="renderFiles()">
+        <option value="">الكل (مرتبطة وغير مرتبطة)</option>
+        <option value="linked">المرتبطة بجلسات</option>
+        <option value="unlinked">غير المستخدمة في أي جلسة</option>
+      </select>
+    </div>
+
     <!-- Files grid -->
     <div id="filesArea">
       <div class="mat-empty">
@@ -389,9 +407,27 @@
         .catch(function() { materials = []; renderFiles(); });
     }
 
+    function matTypeGroup(ext) {
+      ext = (ext || '').toLowerCase();
+      if (['doc','docx'].indexOf(ext) >= 0) return 'doc';
+      if (['ppt','pptx'].indexOf(ext) >= 0) return 'ppt';
+      if (['xls','xlsx'].indexOf(ext) >= 0) return 'xls';
+      if (['jpg','jpeg','png','gif','webp'].indexOf(ext) >= 0) return 'image';
+      if (['mp4','avi','mov','mkv'].indexOf(ext) >= 0) return 'video';
+      return ext;
+    }
+
     function renderFiles() {
       var area = document.getElementById('filesArea');
-      var filtered = activeCat === 'all' ? materials : materials.filter(function(m){ return m.category === activeCat; });
+      var typeF = (document.getElementById('matTypeFilter') || {}).value || '';
+      var linkF = (document.getElementById('matLinkFilter') || {}).value || '';
+      var filtered = materials.filter(function(m) {
+        if (activeCat !== 'all' && m.category !== activeCat) return false;
+        if (typeF && matTypeGroup(m.file_type || (m.file_name || '').split('.').pop()) !== typeF) return false;
+        if (linkF === 'linked' && !(m.linked_sessions > 0)) return false;
+        if (linkF === 'unlinked' && (m.linked_sessions > 0)) return false;
+        return true;
+      });
       if (!filtered.length) {
         area.innerHTML = '<div class="mat-empty"><div class="mat-empty__icon">' +
           NTAIcons(selectedCourseId ? 'folder' : 'folder_open', 32) + '</div>' +
