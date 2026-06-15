@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=4" />
+    <link rel="stylesheet" href="coordinator.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الحضور والغياب | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      .att-cell { min-width: 120px; text-align: center; }
+      .att-time { font-size: 0.72rem; color: var(--text-subtle); display: block; margin-top: 0.2rem; }
+      .att-photo { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; vertical-align: middle; margin: 0 0.15rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+      .att-photo:hover { transform: scale(1.5); position: relative; z-index: 10; }
+    </style>
+  </head>
+  <body data-page="attendance">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">الحضور والغياب</h1>
+        <p class="coord-page-header__sub">متابعة سجلات الحضور للجلسات التدريبية</p>
+      </header>
+
+      <div class="coord-filters">
+        <select id="courseSelect" class="coord-select" style="min-width: 250px" onchange="loadAttendance()">
+          <option value="">جارٍ تحميل الدورات...</option>
+        </select>
+        <div class="coord-search">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="searchInput" placeholder="ابحث باسم المتدرب أو الرقم القومي..." onkeyup="filterTable()" />
+        </div>
+      </div>
+
+      <div class="coord-table-wrap">
+        <table class="coord-table" id="attTable">
+          <thead>
+            <tr id="attHeaders">
+              <th>المتدرب</th>
+              <th>الرقم القومي</th>
+              <!-- Session columns injected here -->
+            </tr>
+          </thead>
+          <tbody id="attBody">
+            <tr><td colspan="10" style="text-align:center; padding: 3rem;">الرجاء اختيار الدورة التدريبية</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      var currentData = null;
+
+      function loadCourses() {
+        window.coordinatorAuth.fetch("/api/coordinator/attendance/courses")
+          .then(function(r) { return r.json(); })
+          .then(function(courses) {
+            var sel = document.getElementById("courseSelect");
+            sel.innerHTML = '<option value="">-- اختر الدورة التدريبية --</option>';
+            courses.forEach(function(c) {
+              sel.innerHTML += '<option value="' + c.id + '">' + (c.title_ar || c.title) + '</option>';
+            });
+          })
+          .catch(function(e) { console.error("Error loading courses:", e); });
+      }
+
+      function loadAttendance() {
+        var courseId = document.getElementById("courseSelect").value;
+        var tbody = document.getElementById("attBody");
+        var thead = document.getElementById("attHeaders");
+
+        if (!courseId) {
+          thead.innerHTML = '<th>المتدرب</th><th>الرقم القومي</th>';
+          tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 3rem;">الرجاء اختيار الدورة التدريبية</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 3rem;">جارٍ التحميل...</td></tr>';
+
+        window.coordinatorAuth.fetch("/api/coordinator/attendance?course_id=" + courseId)
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            currentData = data;
+            renderTable();
+          })
+          .catch(function(e) {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #fca5a5;">فشل تحميل البيانات</td></tr>';
+          });
+      }
+
+      function renderTable() {
+        if (!currentData) return;
+        var tbody = document.getElementById("attBody");
+        var thead = document.getElementById("attHeaders");
+        var sessions = currentData.sessions || [];
+        var students = currentData.students || [];
+
+        // Build headers
+        var hHtml = '<th>المتدرب</th><th>الرقم القومي</th>';
+        sessions.forEach(function(s) {
+          hHtml += '<th class="att-cell" title="' + s.name + '">' + s.date + '</th>';
+        });
+        thead.innerHTML = hHtml;
+
+        if (students.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="' + (sessions.length + 2) + '" style="text-align:center; padding: 3rem;">لا يوجد متدربين في هذه الدورة</td></tr>';
+          return;
+        }
+
+        var bHtml = '';
+        var search = document.getElementById("searchInput").value.toLowerCase();
+
+        students.forEach(function(st) {
+          if (search && st.name.toLowerCase().indexOf(search) === -1 && st.nationalId.indexOf(search) === -1) {
+            return;
+          }
+          bHtml += '<tr>';
+          bHtml += '<td><strong>' + st.name + '</strong></td>';
+          bHtml += '<td style="font-family: monospace; letter-spacing: 1px;">' + st.nationalId + '</td>';
+
+          sessions.forEach(function(s) {
+            var att = st.attendance[s.id] || { status: 'absent' };
+            bHtml += '<td class="att-cell">';
+            if (att.status === 'present') {
+              bHtml += '<span class="coord-badge coord-badge--present">حاضر</span>';
+              bHtml += '<div class="att-time">';
+              if (att.entry_photo) bHtml += '<img src="' + att.entry_photo + '" class="att-photo" onclick="window.open(this.src)" title="صورة الدخول" />';
+              bHtml += att.entry_time;
+              if (att.exit_time) {
+                bHtml += ' - ' + att.exit_time;
+                if (att.exit_photo) bHtml += '<img src="' + att.exit_photo + '" class="att-photo" onclick="window.open(this.src)" title="صورة الانصراف" />';
+              }
+              bHtml += '</div>';
+            } else if (att.status === 'excused') {
+              bHtml += '<span class="coord-badge coord-badge--excused" title="' + (att.permission_reason || '') + '">مستأذن (' + (att.permission_type === 'full_day' ? 'يوم كامل' : 'تأخير') + ')</span>';
+            } else {
+              bHtml += '<span class="coord-badge coord-badge--absent">غائب</span>';
+            }
+            bHtml += '</td>';
+          });
+          bHtml += '</tr>';
+        });
+
+        tbody.innerHTML = bHtml || '<tr><td colspan="' + (sessions.length + 2) + '" style="text-align:center; padding: 3rem;">لا توجد نتائج بحث</td></tr>';
+      }
+
+      function filterTable() {
+        renderTable();
+      }
+
+      // Init
+      loadCourses();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نتائج الاختبارات - بوابة الإدارة</title>
+  <link rel="stylesheet" href="trainee.css" />
+  <link rel="stylesheet" href="header/header.css?v=5" />
+  <link rel="stylesheet" href="admin.css?v=2" />
+  <link rel="stylesheet" href="admin-portal.css" />
+  <link rel="stylesheet" href="admin-theme.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/admin-guard.js"></script>
+  <style>
+    .qr-page { max-width: 1200px; margin: 2rem auto; padding: 0 1.25rem; }
+    .qr-header { margin-bottom: 2rem; }
+    .qr-header__title { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 0 0 .5rem; }
+    .qr-header__sub { color: var(--text-subtle); font-size: .95rem; margin: 0; }
+    
+    .qr-filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center; flex-wrap: wrap; }
+    .qr-filters select, .qr-filters input {
+      padding: .6rem 1rem; border-radius: 10px;
+      background: var(--surface-input, rgba(30,41,59,.8));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: inherit; font-size: .9rem; outline: none;
+    }
+    
+    .qr-table-wrap { overflow-x: auto; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-subtle); }
+    .qr-table { width: 100%; border-collapse: collapse; text-align: right; }
+    .qr-table th { padding: 1rem; font-size: .85rem; font-weight: 700; color: var(--text-subtle); border-bottom: 1px solid var(--border-subtle); }
+    .qr-table td { padding: 1rem; font-size: .9rem; color: var(--text-main); border-bottom: 1px solid var(--border-subtle); }
+    .qr-table tr:last-child td { border-bottom: none; }
+    .qr-table tr:hover { background: rgba(255,255,255,.02); }
+    
+    .qr-score { font-weight: 700; }
+    .qr-score--high { color: #10b981; }
+    .qr-score--med { color: #f59e0b; }
+    .qr-score--low { color: #ef4444; }
+  </style>
+</head>
+<body data-page="quiz-results">
+  <div class="dashboard-container">
+    <div id="ntaHeader"></div>
+    <main class="main-content">
+      <div class="qr-page">
+        <div class="qr-header">
+          <h1 class="qr-header__title">نتائج الاختبارات</h1>
+          <p class="qr-header__sub">عرض سجل درجات المتدربين في الاختبارات.</p>
+        </div>
+
+        <div class="qr-filters">
+          <select id="courseSelect" onchange="loadResults()">
+            <option value="">كل الدورات</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="بحث بالاسم أو الرقم القومي..." oninput="filterResults()" style="flex: 1; max-width: 300px;" />
+        </div>
+
+        <div class="qr-table-wrap">
+          <table class="qr-table">
+            <thead>
+              <tr>
+                <th>اسم المتدرب</th>
+                <th>الرقم القومي</th>
+                <th>الدورة</th>
+                <th>الاختبار</th>
+                <th>الدرجة</th>
+                <th>النسبة</th>
+                <th>تاريخ المحاولة</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-subtle);">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="header/header.js?v=5"></script>
+  <script>
+    var allResults = [];
+    
+    function loadCourses() {
+      adminAuth.fetch("/api/admin/courses")
+        .then(r => r.json())
+        .then(data => {
+          var sel = document.getElementById("courseSelect");
+          data.forEach(c => {
+            var opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.name;
+            sel.appendChild(opt);
+          });
+        });
+    }
+
+    function loadResults() {
+      var courseId = document.getElementById("courseSelect").value;
+      var url = "/api/admin/quiz-results" + (courseId ? "?course_id=" + courseId : "");
+      
+      document.getElementById("resultsBody").innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-subtle);">جاري التحميل...</td></tr>';
+      
+      adminAuth.fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          allResults = data;
+          filterResults();
+        })
+        .catch(err => {
+          document.getElementById("resultsBody").innerHTML = '<tr><td colspan="7" style="text-align:center;color:#ef4444;">حدث خطأ أثناء تحميل البيانات.</td></tr>';
+        });
+    }
+
+    function filterResults() {
+      var q = document.getElementById("searchInput").value.trim().toLowerCase();
+      var filtered = allResults;
+      if (q) {
+        filtered = allResults.filter(r => 
+          (r.trainee_name && r.trainee_name.toLowerCase().includes(q)) || 
+          (r.national_id && r.national_id.includes(q))
+        );
+      }
+      
+      var tbody = document.getElementById("resultsBody");
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-subtle);">لا توجد نتائج مطابقة.</td></tr>';
+        return;
+      }
+      
+      var html = "";
+      filtered.forEach(r => {
+        var pct = parseFloat(r.percentage) || 0;
+        var scoreCls = pct >= 85 ? "qr-score--high" : (pct >= 60 ? "qr-score--med" : "qr-score--low");
+        var dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString("ar-EG") : "—";
+        var scoreStr = r.raw_score !== null ? r.raw_score + " / " + (r.max_grade || "?") : "—";
+        
+        html += '<tr>';
+        html += '<td><strong>' + (r.trainee_name || "—") + '</strong></td>';
+        html += '<td>' + (r.national_id || "—") + '</td>';
+        html += '<td>' + (r.course_name || "—") + '</td>';
+        html += '<td>' + (r.quiz_name || "اختبار") + '</td>';
+        html += '<td>' + scoreStr + '</td>';
+        html += '<td class="qr-score ' + scoreCls + '">' + pct + '%</td>';
+        html += '<td>' + dateStr + '</td>';
+        html += '</tr>';
+      });
+      tbody.innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      loadCourses();
+      loadResults();
+    });
+  </script>
+</body>
+</html>

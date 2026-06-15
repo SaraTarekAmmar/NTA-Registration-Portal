@@ -58,6 +58,18 @@ def apply_defaults():
             "marital_status": "single",
             "password": "NTA@Editor2026",
         },
+        # ── Coordinator Portal Staff ─────────────────────────────────────────
+        {
+            "full_name_ar": "منسق التدريب",
+            "full_name_en": "Training Coordinator",
+            "email": "coordinator@nta.edu.eg",
+            "national_id": "29304041234567",
+            "role": "coordinator",
+            "dob": "1993-04-04",
+            "gender": "male",
+            "marital_status": "single",
+            "password": "NTA@Coord2026",
+        },
         # ── Trainers ─────────────────────────────────────────────────────────
         {
             "full_name_ar": "غادة عبد اللطيف",

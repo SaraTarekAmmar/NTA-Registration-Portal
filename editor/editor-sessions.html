@@ -123,7 +123,11 @@
             <div id="sdMaterialsBody">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
                 <span style="font-size:.85rem;font-weight:700;color:var(--text-main);">المواد المرتبطة</span>
-                <button type="button" class="btn btn--secondary btn--sm" onclick="openMaterialPicker()">ربط مواد تعليمية</button>
+                <div style="display:flex; gap:0.5rem">
+                  <button type="button" class="btn btn--secondary btn--sm" onclick="openMaterialPicker()">ربط مواد موجودة</button>
+                  <button type="button" class="btn btn--primary btn--sm" id="sessionUploadBtn" onclick="document.getElementById('sessionUploadInput').click()">رفع مادة جديدة</button>
+                  <input type="file" id="sessionUploadInput" style="display:none;" onchange="uploadSessionMaterial(event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip,.rar,.mp4,.avi,.mov,.webm,.mkv" />
+                </div>
               </div>
               <div id="sdLinkedList"></div>
 
@@ -432,6 +436,58 @@
 
       function openMaterialPicker() { document.getElementById("sdPicker").style.display = "block"; renderPicker(); }
       function closeMaterialPicker() { document.getElementById("sdPicker").style.display = "none"; }
+
+      function uploadSessionMaterial(event) {
+        var file = event.target.files[0];
+        if (!file) return;
+        event.target.value = ""; // reset
+
+        var sess = sessions[editingIdx];
+        var sid = sess && sess.id;
+        var courseId = document.getElementById("courseSelect").value;
+        if (!sid || !courseId) return;
+
+        var btn = document.getElementById("sessionUploadBtn");
+        var origText = btn.textContent;
+        btn.textContent = "جاري الرفع...";
+        btn.disabled = true;
+
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append("course_id", courseId);
+        formData.append("category", "supporting");
+
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = {};
+        if (token) headers["Authorization"] = "Bearer " + token;
+
+        fetch("/api/materials", {
+          method: "POST",
+          headers: headers,
+          body: formData
+        })
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(r); })
+        .then(function(data) {
+          if (!data || !data.id) throw new Error();
+          var mid = data.id;
+          return authFetch("/api/sessions/" + sid + "/materials", {
+            method: "POST",
+            body: JSON.stringify({ material_id: mid })
+          });
+        })
+        .then(function() {
+          showEditorToast("تم رفع وربط المادة بنجاح.", "success");
+          loadSessionMaterials(sid);
+        })
+        .catch(function(err) {
+          console.error(err);
+          showEditorToast("فشل رفع المادة. قد يكون الملف كبيراً جداً أو بصيغة غير مدعومة.", "error");
+        })
+        .finally(function() {
+          btn.textContent = origText;
+          btn.disabled = false;
+        });
+      }
 
       function typeGroup(ext) {
         ext = (ext || "").toLowerCase();

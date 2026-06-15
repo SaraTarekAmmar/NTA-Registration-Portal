@@ -12,7 +12,8 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {
     '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
-    '.jpg', '.jpeg', '.png', '.zip', '.rar'
+    '.jpg', '.jpeg', '.png', '.zip', '.rar',
+    '.mp4', '.avi', '.mov', '.webm', '.mkv'
 }
 ALLOWED_MIMETYPES = {
     'application/pdf',
@@ -28,6 +29,11 @@ ALLOWED_MIMETYPES = {
     'application/zip',
     'application/x-rar-compressed',
     'application/x-zip-compressed',
+    'video/mp4',
+    'video/x-msvideo',
+    'video/quicktime',
+    'video/webm',
+    'video/x-matroska',
 }
 
 # Mapping of categories to subfolders
@@ -86,7 +92,7 @@ async def save_upload_file(file: UploadFile, category: str = "temp", identifier:
     file_path = target_dir / unique_filename
 
     # Save the file
-    MAX_FILE_SIZE = 20 * 1024 * 1024 # 20MB
+    MAX_FILE_SIZE = 100 * 1024 * 1024 # 100MB
     file_size = 0
 
     with open(file_path, "wb") as buffer:
@@ -96,7 +102,7 @@ async def save_upload_file(file: UploadFile, category: str = "temp", identifier:
                 buffer.close()
                 os.remove(file_path)
                 from fastapi import HTTPException
-                raise HTTPException(status_code=413, detail="File too large. Maximum size is 20MB.")
+                raise HTTPException(status_code=413, detail="File too large. Maximum size is 100MB.")
             buffer.write(chunk)
 
     # Return the relative path (e.g., 'data/reviews/...')

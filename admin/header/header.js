@@ -46,12 +46,10 @@
       navLbl('الأفراد') +
       navItem('admin-candidates.html', 'admin-candidates', ICONS.cands, 'المرشحون', page) +
       navItem('admin-trainees.html',   'admin-trainees',   ICONS.train, 'المتدربون', page) +
-      navItem('admin-attendance.html', 'admin-attendance', ICONS.attend,'الحضور والغياب', page) +
       divider() +
       navLbl('الإدارة') +
       navItem('admin-courses.html',            'admin-courses',      ICONS.courses,'البرامج والدورات', page) +
-      navItem('admin-admissions-builder.html', 'admissions-builder', ICONS.admit,  'منشئ القبول', page) +
-      navItem('admin-permissions.html',        'admin-permissions',  ICONS.shield, 'الإذونات', page);
+      navItem('admin-quiz-results.html',       'quiz-results',       ICONS.chart,  'نتائج الاختبارات', page);
 
     return '<aside class="nta-sidebar">' +
       '<div class="nta-sidebar__brand">' +

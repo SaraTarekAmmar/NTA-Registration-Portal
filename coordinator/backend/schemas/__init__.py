@@ -1,0 +1,1 @@
+# Coordinator backend schemas package

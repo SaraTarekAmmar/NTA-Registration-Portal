@@ -13,7 +13,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import admin, courses, chat, ai_services, exams, permissions, class_matrix, admissions_builder
+from routers import admin, courses, chat, ai_services, exams, class_matrix, quiz_results
 from fastapi import Request
 
 load_dotenv()
@@ -131,9 +131,8 @@ app.include_router(courses.router)
 app.include_router(chat.router)
 app.include_router(ai_services.router)
 app.include_router(exams.router)
-app.include_router(permissions.router)
 app.include_router(class_matrix.router)
-app.include_router(admissions_builder.router)
+app.include_router(quiz_results.router)
 
 # Serve the centralized data folder
 data_path = Path(__file__).parent.parent.parent / "data"

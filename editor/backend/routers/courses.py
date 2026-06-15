@@ -74,6 +74,9 @@ async def create_course(course: CourseBase, editor: dict = Depends(require_edito
     db = get_db_connection()
     cursor = db.cursor()
     try:
+        if status_to_db(course.status) == "Ongoing":
+            raise HTTPException(status_code=400, detail="لا يمكن إنشاء الدورة كمنشورة مباشرة. يجب إنشاؤها كمسودة أولاً وإضافة الجلسات والمواد.")
+            
         cursor.execute(
             """INSERT INTO courses
                (title, title_ar, short_name, classification, description, image_url,
@@ -101,6 +104,16 @@ async def update_course(course_id: int, course: CourseBase, editor: dict = Depen
     db = get_db_connection()
     cursor = db.cursor()
     try:
+        if status_to_db(course.status) == "Ongoing":
+            cursor.execute("SELECT id FROM course_sessions WHERE course_id=%s", (course_id,))
+            sessions = cursor.fetchall()
+            if not sessions:
+                raise HTTPException(status_code=400, detail="لا يمكن نشر الدورة: يجب إضافة جلسة واحدة على الأقل.")
+            for sess in sessions:
+                cursor.execute("SELECT id FROM session_materials WHERE session_id=%s", (sess[0],))
+                if not cursor.fetchone():
+                    raise HTTPException(status_code=400, detail="لا يمكن نشر الدورة: جميع الجلسات يجب أن تحتوي على مادة تعليمية واحدة على الأقل.")
+
         cursor.execute(
             """UPDATE courses SET
                title=%s, title_ar=%s, short_name=%s, classification=%s,
@@ -156,11 +169,11 @@ async def get_course_sessions(course_id: int, editor: dict = Depends(require_edi
         db.close()
 
 
-@router.post("/upload-image")
-async def upload_course_image(
+@router.post("/cover-image")
+async def upload_course_cover(
     file: UploadFile = File(...),
-    course_id: int = Form(0),
     editor: dict = Depends(require_editor)
 ):
-    rel_path = await save_upload_file(file, "course_image", str(course_id))
-    return {"file_path": rel_path}
+    # Pass "0" as ref_id since course_id might not exist yet
+    rel_path = await save_upload_file(file, "course_image", "0")
+    return {"image_url": rel_path}

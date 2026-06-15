@@ -2553,12 +2553,12 @@
 
       async function fetchCourses() {
           try {
-              const resp = await authenticatedFetch('/api/courses');
+              const resp = await authenticatedFetch('/api/admin/courses');
               const data = await resp.json();
               COURSES = data.map(c => ({
                   id: 'c' + c.id,
                   dbId: c.id,
-                  name: c.title_ar || c.title,
+                  name: c.title_ar || c.name || c.title,
                   category: c.classification || "عام",
                   level: c.skill_level || "متوسط",
                   course_type: c.course_type

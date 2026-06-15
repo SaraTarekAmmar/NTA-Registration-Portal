@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=4" />
+    <link rel="stylesheet" href="coordinator.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+  </head>
+  <body data-page="dashboard">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">نظرة عامة</h1>
+        <p class="coord-page-header__sub" id="coordDate"></p>
+      </header>
+
+      <div class="coord-kpi-row" id="dashboardKpis">
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+      </div>
+
+      <div class="coord-actions-grid">
+        <a href="coordinator-attendance.html" class="coord-action coord-action--att">
+          <div class="coord-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <div class="coord-action__body">
+            <h3 class="coord-action__title">سجل الحضور</h3>
+            <p class="coord-action__sub">متابعة الحضور والغياب اليومي للمتدربين</p>
+          </div>
+          <div class="coord-action__arrow">←</div>
+        </a>
+
+        <a href="coordinator-permissions.html" class="coord-action coord-action--perm">
+          <div class="coord-action__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <div class="coord-action__body">
+            <h3 class="coord-action__title">إدارة الإذونات</h3>
+            <p class="coord-action__sub">مراجعة واعتماد طلبات الاستئذان</p>
+          </div>
+          <div class="coord-action__arrow">←</div>
+        </a>
+      </div>
+    </main>
+
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      document.getElementById("coordDate").textContent = new Date().toLocaleDateString("ar-EG", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      function renderKPIs(data) {
+        var html = '';
+        var kpis = [
+          { val: data.present_today || 0, lbl: "حضور اليوم", variant: "coord-kpi--green", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />' },
+          { val: data.absent_today || 0, lbl: "غياب اليوم", variant: "coord-kpi--red", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />' },
+          { val: data.pending_excuses || 0, lbl: "إذونات معلقة", variant: "coord-kpi--yellow", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />' },
+          { val: data.total_enrolled || 0, lbl: "إجمالي المتدربين", variant: "coord-kpi--blue", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />' }
+        ];
+
+        kpis.forEach(function(k) {
+          html += '<div class="coord-kpi ' + k.variant + '">';
+          html += '  <div class="coord-kpi__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">' + k.icon + '</svg></div>';
+          html += '  <div class="coord-kpi__body">';
+          html += '    <div class="coord-kpi__val">' + k.val + '</div>';
+          html += '    <div class="coord-kpi__lbl">' + k.lbl + '</div>';
+          html += '  </div>';
+          html += '</div>';
+        });
+
+        document.getElementById("dashboardKpis").innerHTML = html;
+      }
+
+      window.coordinatorAuth.fetch("/api/coordinator/attendance/summary")
+        .then(function(r) { return r.json(); })
+        .then(renderKPIs)
+        .catch(function() {
+          document.getElementById("dashboardKpis").innerHTML = '<div class="coord-state"><div class="coord-state__text" style="color:#fca5a5">فشل تحميل الإحصائيات</div></div>';
+        });
+    </script>
+  </body>
+</html>
