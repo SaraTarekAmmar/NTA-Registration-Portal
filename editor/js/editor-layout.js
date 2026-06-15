@@ -27,6 +27,7 @@
       courses:  ic('<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>'),
       materials:ic('<path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>'),
       sessions: ic('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
+      flow:     ic('<path d="M4 6h16M4 12h8m-8 6h16"/>'),
       exams:    ic('<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>'),
       planning: ic('<path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 0a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2"/>'),
       user:     ic('<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>'),
@@ -39,7 +40,8 @@
       navItem('editor-dashboard.html', 'dashboard',  ICONS.home,      'لوحة التحكم',    activePage) +
       navItem('editor-courses.html',   'courses',    ICONS.courses,   'الدورات',         activePage) +
       navItem('editor-materials.html', 'materials',  ICONS.materials, 'المواد التعليمية',activePage) +
-      navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage);
+      navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage) +
+      navItem('editor-flow-builder.html', 'flow-builder', ICONS.flow,  'تدفق التسجيل',    activePage);
 
     return '<aside class="nta-sidebar">' +
       '<div class="nta-sidebar__brand">' +

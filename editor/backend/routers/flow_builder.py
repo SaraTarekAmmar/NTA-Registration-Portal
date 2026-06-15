@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional, List
-from core.auth import get_admin_user
+from core.auth import require_editor
 from core.database import get_db_connection
 import json
 
@@ -91,7 +91,7 @@ class OverrideUpsert(BaseModel):
 # ── Templates ─────────────────────────────────────────────────────
 
 @router.get("/templates")
-async def list_templates(admin: dict = Depends(get_admin_user)):
+async def list_templates(editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -108,7 +108,7 @@ async def list_templates(admin: dict = Depends(get_admin_user)):
 
 
 @router.post("/templates", status_code=201)
-async def create_template(body: TemplateCreate, admin: dict = Depends(get_admin_user)):
+async def create_template(body: TemplateCreate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -117,7 +117,7 @@ async def create_template(body: TemplateCreate, admin: dict = Depends(get_admin_
             raise HTTPException(400, "قالب لهذا النوع موجود بالفعل")
         cursor.execute(
             "INSERT INTO flow_templates (course_type, name, description, created_by) VALUES (%s,%s,%s,%s)",
-            (body.course_type, body.name, body.description, admin["id"]),
+            (body.course_type, body.name, body.description, editor["id"]),
         )
         db.commit()
         cursor.execute("SELECT * FROM flow_templates WHERE id=%s", (cursor.lastrowid,))
@@ -127,7 +127,7 @@ async def create_template(body: TemplateCreate, admin: dict = Depends(get_admin_
 
 
 @router.get("/templates/{template_id}")
-async def get_template(template_id: int, admin: dict = Depends(get_admin_user)):
+async def get_template(template_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -147,7 +147,7 @@ async def get_template(template_id: int, admin: dict = Depends(get_admin_user)):
 
 
 @router.put("/templates/{template_id}")
-async def update_template(template_id: int, body: TemplateUpdate, admin: dict = Depends(get_admin_user)):
+async def update_template(template_id: int, body: TemplateUpdate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -157,7 +157,7 @@ async def update_template(template_id: int, body: TemplateUpdate, admin: dict = 
         if body.is_active is not None:   fields.append("is_active=%s");   vals.append(1 if body.is_active else 0)
         if not fields:
             raise HTTPException(422, "لا توجد حقول للتحديث")
-        fields.append("updated_by=%s"); vals.append(admin["id"])
+        fields.append("updated_by=%s"); vals.append(editor["id"])
         vals.append(template_id)
         cursor.execute(f"UPDATE flow_templates SET {', '.join(fields)} WHERE id=%s", vals)
         db.commit()
@@ -167,7 +167,7 @@ async def update_template(template_id: int, body: TemplateUpdate, admin: dict = 
 
 
 @router.delete("/templates/{template_id}")
-async def delete_template(template_id: int, admin: dict = Depends(get_admin_user)):
+async def delete_template(template_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -183,7 +183,7 @@ async def delete_template(template_id: int, admin: dict = Depends(get_admin_user
 # ── Steps ──────────────────────────────────────────────────────────
 
 @router.post("/templates/{template_id}/steps", status_code=201)
-async def add_step(template_id: int, body: StepCreate, admin: dict = Depends(get_admin_user)):
+async def add_step(template_id: int, body: StepCreate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -199,7 +199,7 @@ async def add_step(template_id: int, body: StepCreate, admin: dict = Depends(get
                step_order, is_required, visibility_rules, unlock_rules, config_json, created_by)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """, (template_id, body.step_key, body.step_type, body.title_ar, body.description_ar,
-              body.step_order, 1 if body.is_required else 0, vis, unl, cfg, admin["id"]))
+              body.step_order, 1 if body.is_required else 0, vis, unl, cfg, editor["id"]))
         db.commit()
         cursor.execute("SELECT * FROM flow_steps WHERE id=%s", (cursor.lastrowid,))
         return _parse_json_cols(cursor.fetchone())
@@ -208,7 +208,7 @@ async def add_step(template_id: int, body: StepCreate, admin: dict = Depends(get
 
 
 @router.put("/steps/{step_id}")
-async def update_step(step_id: int, body: StepUpdate, admin: dict = Depends(get_admin_user)):
+async def update_step(step_id: int, body: StepUpdate, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -225,7 +225,7 @@ async def update_step(step_id: int, body: StepUpdate, admin: dict = Depends(get_
         if body.config_json      is not None: fields.append("config_json=%s");      vals.append(json.dumps(body.config_json))
         if not fields:
             raise HTTPException(422, "لا توجد حقول للتحديث")
-        fields.append("updated_by=%s"); vals.append(admin["id"])
+        fields.append("updated_by=%s"); vals.append(editor["id"])
         vals.append(step_id)
         cursor.execute(f"UPDATE flow_steps SET {', '.join(fields)} WHERE id=%s", vals)
         db.commit()
@@ -237,7 +237,7 @@ async def update_step(step_id: int, body: StepUpdate, admin: dict = Depends(get_
 
 
 @router.delete("/steps/{step_id}")
-async def delete_step(step_id: int, admin: dict = Depends(get_admin_user)):
+async def delete_step(step_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -251,14 +251,14 @@ async def delete_step(step_id: int, admin: dict = Depends(get_admin_user)):
 
 
 @router.post("/steps/reorder")
-async def reorder_steps(items: List[ReorderItem], admin: dict = Depends(get_admin_user)):
+async def reorder_steps(items: List[ReorderItem], editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
         for item in items:
             cursor.execute(
                 "UPDATE flow_steps SET step_order=%s, updated_by=%s WHERE id=%s",
-                (item.step_order, admin["id"], item.step_id),
+                (item.step_order, editor["id"], item.step_id),
             )
         db.commit()
         return {"reordered": len(items)}
@@ -269,7 +269,7 @@ async def reorder_steps(items: List[ReorderItem], admin: dict = Depends(get_admi
 # ── Overrides ──────────────────────────────────────────────────────
 
 @router.get("/overrides")
-async def list_overrides(applicant_id: int = None, admin: dict = Depends(get_admin_user)):
+async def list_overrides(applicant_id: int = None, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -296,7 +296,7 @@ async def list_overrides(applicant_id: int = None, admin: dict = Depends(get_adm
 
 
 @router.post("/overrides", status_code=201)
-async def upsert_override(body: OverrideUpsert, admin: dict = Depends(get_admin_user)):
+async def upsert_override(body: OverrideUpsert, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -312,7 +312,7 @@ async def upsert_override(body: OverrideUpsert, admin: dict = Depends(get_admin_
               is_visible=VALUES(is_visible), is_locked=VALUES(is_locked),
               is_required=VALUES(is_required), custom_config=VALUES(custom_config),
               reason=VALUES(reason), updated_by=%s
-        """, (body.applicant_id, body.step_id, iv, il, ir, cfg, body.reason, admin["id"], admin["id"]))
+        """, (body.applicant_id, body.step_id, iv, il, ir, cfg, body.reason, editor["id"], editor["id"]))
         db.commit()
         return {"saved": True}
     finally:
@@ -320,7 +320,7 @@ async def upsert_override(body: OverrideUpsert, admin: dict = Depends(get_admin_
 
 
 @router.delete("/overrides/{override_id}")
-async def delete_override(override_id: int, admin: dict = Depends(get_admin_user)):
+async def delete_override(override_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -336,7 +336,7 @@ async def delete_override(override_id: int, admin: dict = Depends(get_admin_user
 # ── Status management (admin side) ────────────────────────────────
 
 @router.get("/applicant-status/{applicant_id}")
-async def get_applicant_status(applicant_id: int, admin: dict = Depends(get_admin_user)):
+async def get_applicant_status(applicant_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -353,7 +353,7 @@ async def get_applicant_status(applicant_id: int, admin: dict = Depends(get_admi
 
 
 @router.patch("/applicant-status/{applicant_id}/{step_id}")
-async def set_step_status(applicant_id: int, step_id: int, body: dict, admin: dict = Depends(get_admin_user)):
+async def set_step_status(applicant_id: int, step_id: int, body: dict, editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -365,7 +365,7 @@ async def set_step_status(applicant_id: int, step_id: int, body: dict, admin: di
             ON DUPLICATE KEY UPDATE status=VALUES(status), reviewed_by=VALUES(reviewed_by),
               reviewed_at=NOW(), locked_reason=VALUES(locked_reason),
               completed_at=IF(VALUES(status) IN ('submitted','approved'), NOW(), completed_at)
-        """, (applicant_id, step_id, status, admin["id"], reason))
+        """, (applicant_id, step_id, status, editor["id"], reason))
         db.commit()
         return {"updated": True}
     finally:
@@ -378,7 +378,7 @@ async def set_step_status(applicant_id: int, step_id: int, body: dict, admin: di
 async def preview_flow(
     course_type: str = "default",
     age: int = None,
-    admin: dict = Depends(get_admin_user),
+    editor: dict = Depends(require_editor),
 ):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
@@ -417,12 +417,12 @@ async def preview_flow(
 # ── Reference data ─────────────────────────────────────────────────
 
 @router.get("/step-types")
-async def get_step_types(admin: dict = Depends(get_admin_user)):
+async def get_step_types(editor: dict = Depends(require_editor)):
     return [{"type": k, "label_ar": v} for k, v in STEP_TYPE_LABELS.items()]
 
 
 @router.get("/course-types")
-async def get_course_types(admin: dict = Depends(get_admin_user)):
+async def get_course_types(editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:

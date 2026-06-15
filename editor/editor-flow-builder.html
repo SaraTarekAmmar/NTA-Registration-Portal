@@ -6,14 +6,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منشئ تدفق التسجيل</title>
-  <link rel="stylesheet" href="trainee.css" />
-  <link rel="stylesheet" href="header/header.css?v=5" />
-  <link rel="stylesheet" href="admin.css" />
-  <link rel="stylesheet" href="admin-portal.css" />
-  <link rel="stylesheet" href="admin-theme.css" />
+  <link rel="stylesheet" href="editor.css?v=2" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="js/admin-guard.js"></script>
-  <script src="common/js/icons.js"></script>
+  <script src="js/editor-guard.js"></script>
+  <script src="js/icons.js"></script>
   <style>
     .fb-layout { display: grid; grid-template-columns: 300px 1fr 340px; gap: 1.25rem; max-width: 1400px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; align-items: start; }
     @media(max-width:1100px){ .fb-layout { grid-template-columns: 260px 1fr; } .fb-editor { display:none; } }
@@ -102,8 +98,9 @@
     .fb-step-card.dragging { opacity: .4; }
   </style>
 </head>
-<body class="trainee-app" data-page="flow-builder">
-  <div id="ntaHeader"></div>
+<body data-page="flow-builder">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+  <div id="editorSidebar"></div>
   <div class="fb-toast-area" id="toastArea"></div>
 
   <div class="fb-page-hero">
@@ -239,10 +236,10 @@
     </div>
   </div>
 
-  <script src="header/header.js?v=5"></script>
+  <script src="js/editor-layout.js?v=4"></script>
   <script>
     var API = '/api/flow-builder';
-    var adminToken = localStorage.getItem('admin_token');
+    var adminToken = localStorage.getItem('editor_token');
 
     function authFetch(url, opts) {
       opts = opts || {};

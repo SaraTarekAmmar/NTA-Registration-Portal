@@ -51,7 +51,6 @@
       navLbl('الإدارة') +
       navItem('admin-courses.html',            'admin-courses',      ICONS.courses,'البرامج والدورات', page) +
       navItem('admin-admissions-builder.html', 'admissions-builder', ICONS.admit,  'منشئ القبول', page) +
-      navItem('admin-flow-builder.html',       'flow-builder',       ICONS.flow,   'تدفق التسجيل', page) +
       navItem('admin-permissions.html',        'admin-permissions',  ICONS.shield, 'الإذونات', page);
 
     return '<aside class="nta-sidebar">' +
