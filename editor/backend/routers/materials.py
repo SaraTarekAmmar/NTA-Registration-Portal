@@ -57,7 +57,11 @@ async def list_materials(course_id: int, editor: dict = Depends(require_editor))
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute(
-            "SELECT * FROM course_materials WHERE course_id = %s AND status='active' ORDER BY id DESC",
+            """SELECT cm.*,
+                      (SELECT COUNT(*) FROM session_materials sm WHERE sm.material_id = cm.id) AS linked_sessions
+               FROM course_materials cm
+               WHERE cm.course_id = %s AND cm.status='active'
+               ORDER BY cm.id DESC""",
             (course_id,),
         )
         return cursor.fetchall() or []
@@ -74,7 +78,8 @@ async def list_all_materials(editor: dict = Depends(require_editor)):
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute(
-            """SELECT cm.*, c.title as course_title, c.title_ar
+            """SELECT cm.*, c.title as course_title, c.title_ar,
+                      (SELECT COUNT(*) FROM session_materials sm WHERE sm.material_id = cm.id) AS linked_sessions
                FROM course_materials cm
                LEFT JOIN courses c ON cm.course_id = c.id
                WHERE cm.status='active'
