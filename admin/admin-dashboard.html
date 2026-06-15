@@ -691,7 +691,7 @@
         <a href="admin-permissions.html" class="dash-topbar__btn" title="الإعدادات">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12H4M20 12h2"/></svg>
         </a>
-        <button class="dash-topbar__export" type="button" onclick="window.print()">
+        <button class="dash-topbar__export" type="button" onclick="exportReport()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           تصدير التقرير
         </button>
@@ -1362,6 +1362,91 @@
 
     fetchData();
   })();
+  </script>
+  <script>
+    // Build a clean, light, print-ready report from the live dashboard data
+    // (instead of printing the dark dashboard, which renders poorly on paper).
+    function exportReport() {
+      var txt = function (id) { var el = document.getElementById(id); return el ? el.textContent.trim() : ""; };
+      var esc = function (s) { return (s || "").replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); };
+      var dateStr = txt("topbarDate") || new Date().toLocaleDateString("ar-EG");
+
+      var kpis = [].map.call(document.querySelectorAll(".dash-kpi"), function (k) {
+        return {
+          val: (k.querySelector(".dash-kpi__val") || {}).textContent || "",
+          lbl: (k.querySelector(".dash-kpi__lbl") || {}).textContent || ""
+        };
+      }).filter(function (k) { return k.lbl.trim(); });
+
+      var pipeline = [].map.call(document.querySelectorAll(".adm-pipe-step"), function (s) {
+        return {
+          tag: ((s.querySelector(".adm-pipe-step__tag") || {}).textContent || "").trim(),
+          lbl: ((s.querySelector(".adm-pipe-step__lbl") || {}).textContent || "").trim(),
+          val: ((s.querySelector(".adm-pipe-step__val") || {}).textContent || "0").trim()
+        };
+      });
+
+      var status = [].map.call(document.querySelectorAll("#statusLegend .dash-status-legend__row"), function (r) {
+        return r.innerText.replace(/\s+/g, " ").trim();
+      });
+
+      var gTotal = txt("genderTotal"), gMale = txt("genderMaleLabel"), gFemale = txt("genderFemaleLabel");
+
+      var kpiCards = kpis.map(function (k) {
+        return '<div class="card"><div class="num">' + esc(k.val.trim()) + '</div><div class="lbl">' + esc(k.lbl.trim()) + '</div></div>';
+      }).join("");
+      var pipeRows = pipeline.map(function (p) {
+        return '<tr><td>' + esc(p.tag) + '</td><td>' + esc(p.lbl) + '</td><td class="n">' + esc(p.val) + '</td></tr>';
+      }).join("");
+      var statusRows = status.map(function (s) { return '<tr><td>' + esc(s) + '</td></tr>'; }).join("");
+
+      var genderBlock = gTotal ? ('<h2>توزيع الجنس</h2><table><tbody>' +
+        '<tr><td>الإجمالي</td><td class="n">' + esc(gTotal) + '</td></tr>' +
+        (gMale ? '<tr><td colspan="2">' + esc(gMale) + '</td></tr>' : '') +
+        (gFemale ? '<tr><td colspan="2">' + esc(gFemale) + '</td></tr>' : '') +
+        '</tbody></table>') : '';
+      var statusBlock = status.length ? ('<h2>توزيع حالات المتدربين</h2><table><tbody>' + statusRows + '</tbody></table>') : '';
+
+      var html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">' +
+        '<title>تقرير لوحة التحكم — الأكاديمية الوطنية للتدريب</title>' +
+        '<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">' +
+        '<style>' +
+        '@page{size:A4;margin:1.5cm;}' +
+        '*{box-sizing:border-box;}' +
+        'body{font-family:"Tajawal","Segoe UI",sans-serif;color:#111827;margin:0;padding:24px;background:#fff;}' +
+        '.head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #b91c1c;padding-bottom:12px;margin-bottom:8px;}' +
+        '.head h1{font-size:20px;margin:0 0 4px;color:#111827;}' +
+        '.head .sub{font-size:12px;color:#6b7280;}' +
+        '.head .date{font-size:12px;color:#374151;white-space:nowrap;}' +
+        'h2{font-size:14px;color:#b91c1c;margin:22px 0 10px;border-right:3px solid #b91c1c;padding-right:8px;}' +
+        '.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}' +
+        '.card{border:1px solid #d1d5db;border-radius:10px;padding:12px;text-align:center;}' +
+        '.card .num{font-size:24px;font-weight:800;color:#111827;line-height:1;}' +
+        '.card .lbl{font-size:11px;color:#6b7280;margin-top:6px;}' +
+        'table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;}' +
+        'th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:right;}' +
+        'th{background:#f9fafb;color:#374151;font-weight:700;}' +
+        'td.n{font-weight:700;text-align:center;width:80px;}' +
+        '.foot{margin-top:28px;font-size:11px;color:#9ca3af;text-align:center;border-top:1px solid #e5e7eb;padding-top:10px;}' +
+        '@media screen{body{max-width:820px;margin:0 auto;box-shadow:0 0 0 1px #eee;}}' +
+        '</style></head><body>' +
+        '<div class="head"><div><h1>تقرير لوحة التحكم</h1><div class="sub">الأكاديمية الوطنية للتدريب — نظرة عامة على المنصة</div></div>' +
+        '<div class="date">' + esc(dateStr) + '</div></div>' +
+        '<h2>المؤشرات الرئيسية</h2><div class="kpis">' + kpiCards + '</div>' +
+        '<h2>مسار خط الفلترة (المرشحون حسب المرحلة)</h2>' +
+        '<table><thead><tr><th>المرحلة</th><th>الوصف</th><th>العدد</th></tr></thead><tbody>' + pipeRows + '</tbody></table>' +
+        genderBlock + statusBlock +
+        '<div class="foot">تم إنشاء هذا التقرير تلقائياً من لوحة تحكم المشرف — ' + esc(dateStr) + '</div>' +
+        '</body></html>';
+
+      var w = window.open("", "_blank", "width=900,height=720");
+      if (!w) { alert("يرجى السماح بالنوافذ المنبثقة لتصدير التقرير."); return; }
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+      setTimeout(function () { try { w.print(); } catch (e) {} }, 500);
+    }
   </script>
   <script src="chat/chat.js"></script>
 </body>
