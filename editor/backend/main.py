@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity, session_context, trace_context, get_traceback
-from routers import auth as auth_router, courses, course_save, materials, sessions, exams, planning
+from routers import auth as auth_router, courses, course_save, materials, sessions
 from jose import jwt
 from core.auth import SECRET_KEY, ALGORITHM
 
@@ -116,8 +116,6 @@ app.include_router(course_save.router)
 app.include_router(courses.router)
 app.include_router(materials.router)
 app.include_router(sessions.router)
-app.include_router(exams.router)
-app.include_router(planning.router)
 
 project_root = Path(__file__).parent.parent.parent
 

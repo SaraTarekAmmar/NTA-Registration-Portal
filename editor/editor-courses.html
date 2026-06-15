@@ -60,7 +60,7 @@
     </main>
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
-    <script src="js/editor-layout.js?v=2"></script>
+    <script src="js/editor-layout.js?v=3"></script>
     <script src="js/icons.js"></script>
     <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('books', 36);</script>
     <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
@@ -114,7 +114,6 @@
           html += '<div class="editor-course-card__actions">';
           html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
           html += '<a href="editor-preview.html?id='+c.id+'" class="btn btn--secondary btn--sm">معاينة</a>';
-          html += '<a href="editor-planning.html?id='+c.id+'" class="btn btn--secondary btn--sm" title="التخطيط والتصنيف">' + NTAIcons('calendar',14) + ' تخطيط</a>';
           if(status !== "published" && status !== "archived") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
           if(status === "archived") html += '<button type="button" class="btn btn--secondary btn--sm" onclick="unarchiveCourse('+c.id+')">إلغاء الأرشفة</button>';
           else html += '<button type="button" class="btn btn--secondary btn--sm" onclick="archiveCourse('+c.id+')">أرشفة</button>';

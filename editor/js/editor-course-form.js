@@ -40,7 +40,7 @@
   }
 
   function setCourseFormBusy(isBusy) {
-    document.querySelectorAll('#step1 button, #step2 button, #step3 button, #step4 button, #step5 button').forEach(function (btn) {
+    document.querySelectorAll('#step1 button, #step2 button, #step3 button, #step4 button').forEach(function (btn) {
       btn.disabled = !!isBusy;
     });
   }

@@ -39,9 +39,7 @@
       navItem('editor-dashboard.html', 'dashboard',  ICONS.home,      'لوحة التحكم',    activePage) +
       navItem('editor-courses.html',   'courses',    ICONS.courses,   'الدورات',         activePage) +
       navItem('editor-materials.html', 'materials',  ICONS.materials, 'المواد التعليمية',activePage) +
-      navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage) +
-      navItem('editor-exams.html',     'exams',      ICONS.exams,     'الاختبارات',      activePage) +
-      navItem('editor-planning.html',  'planning',   ICONS.planning,  'التخطيط',         activePage);
+      navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage);
 
     return '<aside class="nta-sidebar">' +
       '<div class="nta-sidebar__brand">' +
@@ -74,7 +72,7 @@
     if (document.getElementById('editorCourseFormEnhancements')) return;
     var script = document.createElement('script');
     script.id = 'editorCourseFormEnhancements';
-    script.src = 'js/editor-course-form.js?v=3';
+    script.src = 'js/editor-course-form.js?v=4';
     document.body.appendChild(script);
   }
 
