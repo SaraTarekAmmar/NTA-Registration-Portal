@@ -93,7 +93,7 @@
       status: status,
       short_name: '',
       classification: '',
-      image_url: null,
+      image_url: (document.getElementById('coverImageUrl') || {}).value || null,
       skill_level: null,
       is_public: true,
       stages: null,

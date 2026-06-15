@@ -28,7 +28,9 @@ async def list_courses(editor: dict = Depends(require_editor)):
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT c.*, caa.nature as course_type
+            SELECT c.*, caa.nature as course_type,
+                   (SELECT COUNT(*) FROM course_materials cm WHERE cm.course_id = c.id AND cm.status='active') AS materials_count,
+                   (SELECT COUNT(*) FROM course_sessions cs WHERE cs.course_id = c.id) AS sessions_count
             FROM courses c
             LEFT JOIN course_ai_analysis caa ON c.id = caa.course_id
             ORDER BY c.id DESC

@@ -1,12 +1,22 @@
 import json
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from core.auth import require_editor
 from core.database import get_db_connection
+from core.upload_manager import save_upload_file
 from schemas.course import CourseBase
 
 router = APIRouter(prefix="/api/courses", tags=["Course Save"])
+
+
+@router.post("/cover-image")
+async def upload_cover_image(file: UploadFile = File(...), editor: dict = Depends(require_editor)):
+    # save_upload_file validates extension, MIME type and size (path-traversal safe).
+    if not (file.content_type or "").startswith("image/"):
+        raise HTTPException(status_code=400, detail="يجب أن يكون الملف صورة (JPG/PNG/WebP)")
+    rel_path = await save_upload_file(file, "course_image", str(editor.get("id", "editor")))
+    return {"image_url": rel_path}
 
 STATUS_TO_DB = {"draft": "Upcoming", "published": "Ongoing", "archived": "Completed", "قادم": "Upcoming"}
 SKILL_TO_DB = {"مبتدئ": "Beginner", "متوسط": "Intermediate", "متقدم": "Advanced"}

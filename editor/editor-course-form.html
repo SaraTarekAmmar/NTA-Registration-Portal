@@ -50,6 +50,19 @@
       <!-- Step 1: Basic Info -->
       <div id="step1" class="step-panel">
         <form id="basicInfoForm" novalidate>
+          <div class="editor-form-group">
+            <label>صورة غلاف الدورة</label>
+            <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+              <div id="coverPreview" style="width:150px;height:95px;border-radius:10px;border:1px solid var(--border-subtle);background:rgba(255,255,255,0.04);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--text-subtle);font-size:0.72rem;flex-shrink:0;">لا توجد صورة</div>
+              <div>
+                <input type="file" id="coverInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;" onchange="uploadCover(this.files)" />
+                <input type="hidden" id="coverImageUrl" />
+                <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('coverInput').click()">رفع صورة</button>
+                <button type="button" class="btn btn--secondary btn--sm" id="coverRemoveBtn" style="display:none;" onclick="clearCover()">إزالة</button>
+                <p style="font-size:0.72rem;color:var(--text-subtle);margin:0.45rem 0 0;">JPG، PNG، WebP — حد أقصى 20MB</p>
+              </div>
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="form-two-col">
             <div class="editor-form-group">
               <label for="titleAr">اسم الدورة (عربي) <span class="required">*</span></label>
@@ -194,6 +207,36 @@
         return fetch(url, Object.assign({}, opts, {headers: headers}));
       }
 
+      function notify(msg, type) {
+        if (window.showEditorToast) window.showEditorToast(msg, type || "success");
+      }
+
+      function setCover(url) {
+        var p = document.getElementById("coverPreview");
+        document.getElementById("coverImageUrl").value = url || "";
+        if (url) {
+          p.style.backgroundImage = "url('" + String(url).replace(/'/g, "%27") + "')";
+          p.textContent = "";
+          document.getElementById("coverRemoveBtn").style.display = "";
+        } else {
+          p.style.backgroundImage = "";
+          p.textContent = "لا توجد صورة";
+          document.getElementById("coverRemoveBtn").style.display = "none";
+        }
+      }
+      function clearCover() { setCover(""); }
+      function uploadCover(files) {
+        if (!files || !files.length) return;
+        var fd = new FormData();
+        fd.append("file", files[0]);
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
+        fetch("/api/courses/cover-image", { method: "POST", headers: { "Authorization": "Bearer " + token }, body: fd })
+          .then(function(r) { if (!r.ok) return r.json().then(function(e){ throw new Error(e.detail || ""); }); return r.json(); })
+          .then(function(d) { setCover(d.image_url); notify("تم رفع صورة الغلاف"); })
+          .catch(function(err) { notify(err.message || "تعذّر رفع الصورة", "error"); });
+        document.getElementById("coverInput").value = "";
+      }
+
       function loadCourseData(id) {
         authFetch("/api/courses/" + id)
           .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
@@ -204,6 +247,7 @@
             document.getElementById("durationWeeks").value = c.duration_weeks || "";
             document.getElementById("totalSessions").value = c.total_sessions || "";
             document.getElementById("courseStatus").value = c.status || "draft";
+            setCover(c.image_url || "");
           })
           .catch(function() { showBanner("تعذّر تحميل بيانات الدورة."); });
       }
