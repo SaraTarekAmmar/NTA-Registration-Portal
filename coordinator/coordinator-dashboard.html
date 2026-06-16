@@ -78,7 +78,10 @@
       }
 
       window.coordinatorAuth.fetch("/api/coordinator/attendance/summary")
-        .then(function(r) { return r.json(); })
+        .then(function(r) { 
+          if (!r.ok) throw new Error("Network response was not ok");
+          return r.json(); 
+        })
         .then(renderKPIs)
         .catch(function() {
           document.getElementById("dashboardKpis").innerHTML = '<div class="coord-state"><div class="coord-state__text" style="color:#fca5a5">فشل تحميل الإحصائيات</div></div>';

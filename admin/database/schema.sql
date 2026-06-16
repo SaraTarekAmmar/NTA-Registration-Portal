@@ -104,6 +104,8 @@ CREATE TABLE `attendance_logs` (
   `national_id` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
   `session_id` int NOT NULL,
   `match_score` decimal(5,2) NOT NULL,
+  `event_type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'ENTER',
+  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `recorded_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `national_id` (`national_id`),

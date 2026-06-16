@@ -6,8 +6,9 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import FileResponse, RedirectResponse
 from typing import Optional
 from pathlib import Path
-from core.auth import require_coordinator
+from core.auth import require_coordinator, SECRET_KEY, ALGORITHM
 from core.database import get_db_connection
+from jose import jwt
 
 router = APIRouter(prefix="/api/coordinator/attendance", tags=["Coordinator Attendance"])
 
@@ -202,9 +203,18 @@ async def get_attendance_photo(
     national_id: str,
     session_id: int,
     event_type: str,
-    coordinator: dict = Depends(require_coordinator),
+    token: Optional[str] = Query(None),
 ):
     """Serve check-in/check-out face photos from attendance_logs."""
+    if not token:
+        raise HTTPException(status_code=401, detail="Missing token")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "coordinator":
+            raise HTTPException(status_code=403, detail="Forbidden")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:

@@ -114,6 +114,9 @@
         var bHtml = '';
         var search = document.getElementById("searchInput").value.toLowerCase();
 
+        var token = localStorage.getItem("coordinator_token") || "";
+        var qs = token ? "?token=" + token : "";
+
         students.forEach(function(st) {
           if (search && st.name.toLowerCase().indexOf(search) === -1 && st.nationalId.indexOf(search) === -1) {
             return;
@@ -128,11 +131,11 @@
             if (att.status === 'present') {
               bHtml += '<span class="coord-badge coord-badge--present">حاضر</span>';
               bHtml += '<div class="att-time">';
-              if (att.entry_photo) bHtml += '<img src="' + att.entry_photo + '" class="att-photo" onclick="window.open(this.src)" title="صورة الدخول" />';
+              if (att.entry_photo) bHtml += '<img src="' + att.entry_photo + qs + '" class="att-photo" onclick="window.open(this.src)" title="صورة الدخول" />';
               bHtml += att.entry_time;
               if (att.exit_time) {
                 bHtml += ' - ' + att.exit_time;
-                if (att.exit_photo) bHtml += '<img src="' + att.exit_photo + '" class="att-photo" onclick="window.open(this.src)" title="صورة الانصراف" />';
+                if (att.exit_photo) bHtml += '<img src="' + att.exit_photo + qs + '" class="att-photo" onclick="window.open(this.src)" title="صورة الانصراف" />';
               }
               bHtml += '</div>';
             } else if (att.status === 'excused') {

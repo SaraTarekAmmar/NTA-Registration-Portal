@@ -37,8 +37,14 @@ async def list_courses(editor: dict = Depends(require_editor)):
         """)
         rows = cursor.fetchall()
         for row in rows:
-            row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
-            row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+            try:
+                row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
+            except json.JSONDecodeError:
+                row['stages'] = []
+            try:
+                row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+            except json.JSONDecodeError:
+                row['batch_data'] = {}
             row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
         return rows
     finally:
@@ -60,8 +66,14 @@ async def get_course(course_id: int, editor: dict = Depends(require_editor)):
         row = cursor.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Course not found")
-        row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
-        row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+        try:
+            row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
+        except json.JSONDecodeError:
+            row['stages'] = []
+        try:
+            row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
+        except json.JSONDecodeError:
+            row['batch_data'] = {}
         row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
         return row
     finally:

@@ -4,6 +4,16 @@
  * Same visual pattern as editor-layout.js but with coordinator nav items.
  */
 (function () {
+  (function () {
+    if (document.getElementById('ntaSbCss')) return;
+    if (document.querySelector('link[href*="header/header.css"]')) return;
+    var l = document.createElement('link');
+    l.id = 'ntaSbCss';
+    l.rel = 'stylesheet';
+    l.href = '/admin/header/header.css?v=5';
+    document.head.appendChild(l);
+  })();
+
   var page = document.body.getAttribute("data-page") || "";
 
   function ic(inner) {
@@ -18,11 +28,9 @@
   };
 
   function navItem(href, key, icon, label, activePage) {
-    var cls = activePage === key ? "sidebar__link sidebar__link--active" : "sidebar__link";
+    var cls = 'nta-sidebar__item' + (activePage === key ? ' active' : '');
     return '<a href="' + href + '" class="' + cls + '" data-page="' + key + '">' +
-      '<span class="sidebar__icon">' + icon + "</span>" +
-      '<span class="sidebar__label">' + label + "</span>" +
-      "</a>";
+      icon + '<span class="nta-sidebar__item-lbl">' + label + '</span></a>';
   }
 
   function buildSidebar(activePage) {
@@ -33,47 +41,48 @@
       }
     } catch (e) {}
 
-    var html = "";
-    html += '<aside class="sidebar" id="sidebarNav">';
-    html += '  <div class="sidebar__brand">';
-    html += '    <img src="/images/nta-logo.png" alt="NTA" class="sidebar__logo" onerror="this.style.display=\'none\'">';
-    html += '    <div>';
-    html += '      <div class="sidebar__brand-title">الأكاديمية الوطنية</div>';
-    html += '      <div class="sidebar__brand-sub">بوابة المنسّق</div>';
-    html += '    </div>';
-    html += '  </div>';
+    var onerr = "this.style.display='none';this.nextElementSibling.style.display='flex'";
 
-    html += '  <nav class="sidebar__nav">';
-    html += '    <div class="sidebar__section-label">الرئيسية</div>';
-    html += navItem("coordinator-dashboard.html", "dashboard", ICONS.dashboard, "لوحة التحكم", activePage);
-    html += '    <div class="sidebar__section-label" style="margin-top:1.2rem;">الإدارة</div>';
-    html += navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage);
-    html += navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage);
-    html += "  </nav>";
+    var nav = '<div class="nta-sidebar__nav-lbl">الرئيسية</div>' +
+      navItem("coordinator-dashboard.html", "dashboard", ICONS.dashboard, "لوحة التحكم", activePage) +
+      '<div class="nta-sidebar__divider"></div>' +
+      '<div class="nta-sidebar__nav-lbl">الإدارة</div>' +
+      navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage) +
+      navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage);
 
-    html += '  <div class="sidebar__footer">';
+    var html = '<aside class="nta-sidebar">' +
+      '<div class="nta-sidebar__brand">' +
+        '<a href="coordinator-dashboard.html" class="nta-sidebar__logo-link">' +
+          '<img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" id="ntaLogoImg" onerror="' + onerr + '">' +
+          '<span class="nta-sidebar__logo-fallback">NTA</span>' +
+          '<div class="nta-sidebar__logo-text">' +
+            '<span class="nta-sidebar__logo-main">NTA</span>' +
+            '<span class="nta-sidebar__logo-sub">بوابة المنسّق</span>' +
+            '<span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span>' +
+          '</div>' +
+        '</a>' +
+      '</div>' +
+      '<nav class="nta-sidebar__nav" aria-label="قائمة المنسّق">' + nav + '</nav>' +
+      '<div class="nta-sidebar__footer">';
+
     if (userName) {
-      html += '    <div class="sidebar__user">';
-      html += '      <div class="sidebar__user-avatar">' + (userName.charAt(0) || "م") + "</div>";
-      html += '      <div class="sidebar__user-info">';
-      html += '        <div class="sidebar__user-name">' + userName + "</div>";
-      html += '        <div class="sidebar__user-role">منسّق</div>';
-      html += "      </div>";
-      html += "    </div>";
+      html += '<div class="nta-sidebar__user">' +
+        '<div class="nta-sidebar__avatar">' + (userName.charAt(0) || "م") + '</div>' +
+        '<div class="nta-sidebar__user-info">' +
+          '<div class="nta-sidebar__user-name">' + userName + '</div>' +
+          '<div class="nta-sidebar__user-role-lbl">منسّق</div>' +
+        '</div>' +
+      '</div>';
     }
 
-    // Theme toggle
-    html += '    <button id="themeToggle" class="sidebar__theme-btn" title="تبديل المظهر">';
-    html += '      <svg class="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>';
-    html += '      <svg class="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>';
-    html += "    </button>";
-
-    html += '    <button class="sidebar__logout-btn" onclick="window.coordinatorAuth.logout()">';
-    html += '      <span class="sidebar__icon">' + ICONS.logout + "</span>";
-    html += '      <span class="sidebar__label">تسجيل الخروج</span>';
-    html += "    </button>";
-    html += "  </div>";
-    html += "</aside>";
+    html += '<div class="nta-sidebar__bottom-row">' +
+      '<button type="button" class="nta-sidebar__logout" onclick="window.coordinatorAuth.logout()">' +
+        ICONS.logout + 'تسجيل الخروج' +
+      '</button>' +
+      '<button type="button" class="nta-sidebar__theme-btn" id="themeToggle" aria-label="تبديل المظهر" title="تبديل المظهر">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>' +
+      '</button>' +
+    '</div></div></aside>';
 
     return html;
   }

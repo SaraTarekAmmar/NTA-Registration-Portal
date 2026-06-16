@@ -154,13 +154,7 @@
       background: radial-gradient(circle, rgba(185,28,28,0.09), transparent 70%);
       pointer-events: none;
     }
-    .dash-hero__breadcrumb {
-      font-size: 0.72rem;
-      color: var(--text-subtle);
-      margin: 0 0 0.4rem;
-      display: flex; align-items: center; gap: 0.4rem;
-    }
-    .dash-hero__breadcrumb span { color: #fca5a5; }
+
     .dash-hero__title {
       font-size: 1.9rem;
       font-weight: 800;
@@ -631,8 +625,7 @@
 
       /* Print header */
       .dash-hero { border-bottom: 2px solid #111827; padding-bottom: 0.6rem; margin-bottom: 1rem; }
-      .dash-hero__title, .dash-hero__sub, .dash-hero__breadcrumb,
-      .dash-hero__breadcrumb span { color: #111827 !important; }
+      .dash-hero__title, .dash-hero__sub { color: #111827 !important; }
       .dash-topbar { border: none !important; background: none !important; box-shadow: none !important; padding: 0 0 0.5rem !important; }
       .dash-topbar__name, .dash-topbar__role, .dash-topbar__date { color: #111827 !important; }
       .dash-topbar__avatar { background: #e5e7eb !important; color: #111827 !important; }
@@ -684,13 +677,6 @@
       </div>
       <div class="dash-topbar__actions">
         <span class="dash-topbar__date" id="topbarDate"></span>
-        <a href="admin-permissions.html" class="dash-topbar__btn" title="طلبات الإذونات">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="dash-topbar__badge" id="notifBadge" style="display:none;">0</span>
-        </a>
-        <a href="admin-permissions.html" class="dash-topbar__btn" title="الإعدادات">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12H4M20 12h2"/></svg>
-        </a>
         <button class="dash-topbar__export" type="button" onclick="exportReport()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           تصدير التقرير
@@ -701,7 +687,6 @@
     <!-- Hero -->
     <div class="dash-hero">
       <div>
-        <p class="dash-hero__breadcrumb">الرئيسية ›&nbsp;<span id="heroBreadcrumb">لوحة التحكم</span></p>
         <h1 class="dash-hero__title">نظرة عامة على المنصة</h1>
         <p class="dash-hero__sub">متابعة شاملة لمسار التدريب، المرشحين، والبرامج النشطة</p>
       </div>
