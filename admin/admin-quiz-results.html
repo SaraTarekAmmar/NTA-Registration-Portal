@@ -55,6 +55,12 @@
             <option value="">كل الدورات</option>
           </select>
           <input type="text" id="searchInput" placeholder="بحث بالاسم أو الرقم القومي..." oninput="filterResults()" style="flex: 1; max-width: 300px;" />
+          <input type="file" id="importInput" accept=".json,application/json" multiple style="display:none;" onchange="importResults(this.files)" />
+          <button type="button" class="btn btn--primary" onclick="document.getElementById('importInput').click()"
+            style="padding:.6rem 1.1rem;border-radius:10px;border:1px solid rgba(185,28,28,.4);background:rgba(185,28,28,.12);color:#fca5a5;font-family:inherit;font-weight:700;cursor:pointer;">
+            استيراد نتائج (JSON)
+          </button>
+          <span id="importMsg" style="font-size:.82rem;color:var(--text-subtle);"></span>
         </div>
 
         <div class="qr-table-wrap">
@@ -67,11 +73,12 @@
                 <th>الاختبار</th>
                 <th>الدرجة</th>
                 <th>النسبة</th>
+                <th>النتيجة</th>
                 <th>تاريخ المحاولة</th>
               </tr>
             </thead>
             <tbody id="resultsBody">
-              <tr><td colspan="7" style="text-align:center;color:var(--text-subtle);">جاري التحميل...</td></tr>
+              <tr><td colspan="8" style="text-align:center;color:var(--text-subtle);">جاري التحميل...</td></tr>
             </tbody>
           </table>
         </div>
@@ -91,7 +98,7 @@
           data.forEach(c => {
             var opt = document.createElement("option");
             opt.value = c.id;
-            opt.textContent = c.name;
+            opt.textContent = c.title_ar || c.title || c.name || ("دورة " + c.id);
             sel.appendChild(opt);
           });
         });
@@ -126,17 +133,19 @@
       
       var tbody = document.getElementById("resultsBody");
       if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-subtle);">لا توجد نتائج مطابقة.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-subtle);">لا توجد نتائج مطابقة.</td></tr>';
         return;
       }
-      
+
       var html = "";
       filtered.forEach(r => {
         var pct = parseFloat(r.percentage) || 0;
         var scoreCls = pct >= 85 ? "qr-score--high" : (pct >= 60 ? "qr-score--med" : "qr-score--low");
         var dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString("ar-EG") : "—";
-        var scoreStr = r.raw_score !== null ? r.raw_score + " / " + (r.max_grade || "?") : "—";
-        
+        var scoreStr = (r.raw_score !== null && r.raw_score !== undefined) ? r.raw_score + " / " + (r.max_grade || "?") : "—";
+        var pass = r.status === "pass";
+        var statusHtml = '<span style="font-weight:700;color:' + (pass ? "#10b981" : "#ef4444") + ';">' + (pass ? "ناجح" : "راسب") + '</span>';
+
         html += '<tr>';
         html += '<td><strong>' + (r.trainee_name || "—") + '</strong></td>';
         html += '<td>' + (r.national_id || "—") + '</td>';
@@ -144,10 +153,27 @@
         html += '<td>' + (r.quiz_name || "اختبار") + '</td>';
         html += '<td>' + scoreStr + '</td>';
         html += '<td class="qr-score ' + scoreCls + '">' + pct + '%</td>';
+        html += '<td>' + statusHtml + '</td>';
         html += '<td>' + dateStr + '</td>';
         html += '</tr>';
       });
       tbody.innerHTML = html;
+    }
+
+    function importResults(files) {
+      if (!files || !files.length) return;
+      var msg = document.getElementById("importMsg");
+      msg.textContent = "جاري الاستيراد...";
+      var fd = new FormData();
+      for (var i = 0; i < files.length; i++) fd.append("files", files[i]);
+      adminAuth.fetch("/api/admin/quiz-results/import", { method: "POST", body: fd })
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(s => {
+          msg.textContent = "تم استيراد " + s.inserted + " نتيجة (" + s.created_users + " متدرب جديد، تجاهل " + s.skipped + ").";
+          document.getElementById("importInput").value = "";
+          loadResults();
+        })
+        .catch(() => { msg.textContent = "تعذّر الاستيراد. تأكد من صيغة الملفات."; });
     }
 
     document.addEventListener("DOMContentLoaded", function() {
