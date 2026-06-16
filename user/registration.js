@@ -30,6 +30,7 @@
                         locked_reason: s.locked_reason,
                         status:        s.status,
                         id:            s.id,
+                        config:        s.config
                     };
                 });
                 _applyDynamicFlow();
@@ -58,8 +59,25 @@
             if (!num) return;
             var key = 'step_' + num;
             var fd = dynamicFlow[key];
-            if (fd && !fd.is_visible) {
+                    if (fd && !fd.is_visible) {
                 panel.setAttribute('data-flow-hidden', 'true');
+            } else if (fd && fd.config && fd.config.fields) {
+                // Hide specific fields if is_active is false
+                fd.config.fields.forEach(function(f) {
+                    if (f.is_active === false) {
+                        var fieldId = f.field_id;
+                        var els = panel.querySelectorAll('[name="' + fieldId + '"], [name="' + fieldId + '[]"], #' + fieldId);
+                        els.forEach(function(el) {
+                            var wrapper = el.closest('.editor-form-group') || el.closest('.form-group') || el.closest('div[style*="display: flex"]') || el.parentElement;
+                            if (wrapper) {
+                                wrapper.style.display = 'none';
+                                wrapper.setAttribute('data-flow-hidden', 'true');
+                            }
+                            // Also disable so it skips validation
+                            el.disabled = true;
+                        });
+                    }
+                });
             }
         });
         updateUI();

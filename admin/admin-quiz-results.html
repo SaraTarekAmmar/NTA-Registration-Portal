@@ -54,6 +54,9 @@
           <select id="courseSelect" onchange="loadResults()">
             <option value="">كل الدورات</option>
           </select>
+          <select id="quizSelect" onchange="filterResults()" style="max-width: 200px;">
+            <option value="">كل الاختبارات</option>
+          </select>
           <input type="text" id="searchInput" placeholder="بحث بالاسم أو الرقم القومي..." oninput="filterResults()" style="flex: 1; max-width: 300px;" />
           <input type="file" id="importInput" accept=".json,application/json" multiple style="display:none;" onchange="importResults(this.files)" />
           <button type="button" class="btn btn--primary" onclick="document.getElementById('importInput').click()"
@@ -114,6 +117,21 @@
         .then(r => r.json())
         .then(data => {
           allResults = data;
+          
+          // Populate quizSelect
+          var quizSel = document.getElementById("quizSelect");
+          quizSel.innerHTML = '<option value="">كل الاختبارات</option>';
+          var uniqueQuizzes = {};
+          data.forEach(r => {
+            if(r.quiz_name) uniqueQuizzes[r.quiz_name] = true;
+          });
+          Object.keys(uniqueQuizzes).forEach(q => {
+            var opt = document.createElement("option");
+            opt.value = q;
+            opt.textContent = q;
+            quizSel.appendChild(opt);
+          });
+          
           filterResults();
         })
         .catch(err => {
@@ -124,11 +142,13 @@
     function filterResults() {
       var q = document.getElementById("searchInput").value.trim().toLowerCase();
       var filtered = allResults;
-      if (q) {
-        filtered = allResults.filter(r => 
-          (r.trainee_name && r.trainee_name.toLowerCase().includes(q)) || 
-          (r.national_id && r.national_id.includes(q))
-        );
+      var qQuiz = document.getElementById("quizSelect").value;
+      if (q || qQuiz) {
+        filtered = allResults.filter(r => {
+          var matchQ = !q || (r.trainee_name && r.trainee_name.toLowerCase().includes(q)) || (r.national_id && r.national_id.includes(q));
+          var matchQuiz = !qQuiz || (r.quiz_name === qQuiz);
+          return matchQ && matchQuiz;
+        });
       }
       
       var tbody = document.getElementById("resultsBody");

@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مسار القبول - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css?v=2" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+    <style>
+      .adm-step-card {
+        background: rgba(8,12,32,0.4);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .adm-step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .adm-step-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text-main);
+      }
+      .adm-step-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .builder-container {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .builder-container {
+          grid-template-columns: 1fr;
+        }
+      }
+      .builder-settings-panel {
+        background: #0d1222;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 1.25rem;
+        position: sticky;
+        top: 2rem;
+      }
+      .builder-settings-panel h3 {
+        font-size: 1.05rem;
+        margin: 0 0 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .builder-settings-group {
+        margin-bottom: 1.25rem;
+      }
+      .builder-settings-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-subtle);
+        margin-bottom: 0.4rem;
+      }
+      .builder-steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .builder-step-card {
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .builder-step-card:hover {
+        background: #1f2937;
+        border-color: rgba(255,255,255,0.1);
+      }
+      .builder-step-card.selected {
+        background: rgba(59,130,246,0.05);
+        border-color: rgba(59,130,246,0.3);
+      }
+      .builder-step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #9ca3af;
+      }
+      .builder-step-card.selected .builder-step-num {
+        background: rgba(59,130,246,0.15);
+        color: #60a5fa;
+      }
+      .builder-step-info {
+        flex: 1;
+      }
+      .builder-step-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .builder-step-meta {
+        font-size: 0.75rem;
+        color: var(--text-subtle);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+      .badge--red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+      .badge--blue { background: rgba(59,130,246,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+      .badge--green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+      
+      .builder-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .builder-header-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    </style>
+  </head>
+  <body data-page="admission-builder">
+    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+    <div id="editorSidebar"></div>
+    <main id="main-content" class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">مسار القبول</h1>
+        <p class="editor-page-header__sub">إعداد وتكوين خطوات التقييم والقبول لكل دورة</p>
+      </div>
+
+      <!-- Course selector -->
+      <div class="editor-form-group" style="max-width:360px;margin-bottom:1.5rem;">
+        <label for="courseSelect">اختر الدورة</label>
+        <select id="courseSelect" class="editor-select" onchange="loadAdmissionSteps()">
+          <option value="">— اختر دورة —</option>
+        </select>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+        <button type="button" onclick="loadAdmissionSteps()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
+      </div>
+
+      <div id="loadingState" class="editor-state" style="display:none;">
+        <div class="editor-state__icon" id="_loadIcon"></div>
+        <div class="editor-state__title">جاري التحميل...</div>
+      </div>
+      <div id="emptyState" class="editor-state">
+        <div class="editor-state__icon" id="_stateIcon"></div>
+        <div class="editor-state__title">اختر دورة أولاً</div>
+        <div class="editor-state__text">اختر دورة من القائمة أعلاه لعرض مسار القبول الخاص بها وإدارته.</div>
+      </div>
+
+      <!-- Builder area -->
+      <div id="builderArea" style="display:none;">
+        <div class="builder-header">
+          <h2 class="builder-header-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            مسار القبول — الخطوات
+          </h2>
+          <div style="display:flex;gap:0.75rem;">
+            <button type="button" class="btn btn--primary" onclick="addAdmStep()">+ خطوة</button>
+          </div>
+        </div>
+
+        <div class="builder-container">
+          <!-- Left Pane: Step Settings -->
+          <div class="builder-settings-panel" id="stepSettingsPanel" style="display:none;">
+            <h3>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              المعلومات
+            </h3>
+            
+            <div class="builder-settings-group">
+              <label>العنوان بالعربية</label>
+              <input type="text" class="editor-input" id="settingTitle" oninput="updateSelectedStep('title_ar', this.value)" />
+            </div>
+            
+            <div style="display:flex;gap:1rem;margin-bottom:1.25rem;">
+              <div style="flex:1;">
+                <label>نوع الخطوة</label>
+                <select class="editor-select" id="settingType" onchange="updateSelectedStep('step_type', this.value)">
+                  <option value="admission_test">اختبار قبول</option>
+                  <option value="interview">مقابلة شخصية</option>
+                  <option value="essay">مقال / تقييم كتابي</option>
+                  <option value="background_check">فحص أمني / تدقيق</option>
+                  <option value="admin_review">مراجعة إدارية</option>
+                  <option value="acceptance_decision">قرار القبول النهائي</option>
+                </select>
+              </div>
+              <div style="width:80px;">
+                <label>الترتيب</label>
+                <input type="text" class="editor-input" id="settingOrder" readonly style="background:rgba(255,255,255,0.02);color:var(--text-subtle);text-align:center;" />
+              </div>
+            </div>
+            
+            <div class="builder-settings-group">
+              <label>المفتاح (step_key)</label>
+              <input type="text" class="editor-input" id="settingKey" oninput="updateSelectedStep('step_key', this.value)" style="direction:ltr;text-align:right;" />
+            </div>
+
+            <div class="builder-settings-group">
+              <label>الوصف (اختياري)</label>
+              <textarea class="editor-textarea" rows="2" id="settingDesc" oninput="updateSelectedStep('description_ar', this.value)"></textarea>
+            </div>
+            
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="display:flex;align-items:center;gap:1.5rem;">
+                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;margin:0;">
+                  <input type="checkbox" id="settingRequired" onchange="updateSelectedStep('is_required', this.checked)" />
+                  <span style="font-size:0.85rem;font-weight:600;">إجبارية</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;margin:0;">
+                  <input type="checkbox" id="settingActive" onchange="updateSelectedConfig('is_active', this.checked)" />
+                  <span style="font-size:0.85rem;font-weight:600;">نشطة</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="builder-settings-group">
+              <label style="font-weight:700;color:var(--text-main);margin-bottom:0.75rem;">قواعد الفتح</label>
+              <label>تفتح بعد إكمال (step_key)</label>
+              <select class="editor-select" id="settingDependsOn" onchange="updateSelectedConfig('depends_on', this.value)">
+                <option value="">لا يوجد (مفتوحة دائماً)</option>
+              </select>
+            </div>
+
+            <div style="display:flex;gap:0.5rem;margin-top:2rem;">
+              <button type="button" class="btn btn--primary" style="flex:1;background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);" onclick="removeSelectedStep()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                حذف
+              </button>
+            </div>
+
+          </div>
+          
+          <div id="noStepSelectedMsg" class="builder-settings-panel" style="display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:300px;text-align:center;color:var(--text-subtle);">
+              <svg width="48" height="48" fill="none" stroke="rgba(255,255,255,0.1)" viewBox="0 0 24 24" style="margin-bottom:1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+              <p style="margin:0;">اختر خطوة من القائمة لعرض إعداداتها</p>
+          </div>
+
+          <!-- Right Pane: Steps List -->
+          <div>
+              <div id="admStepsList" class="builder-steps-list"></div>
+              <div id="noAdmStepsMsg" style="text-align:center;padding:3rem 1rem;color:var(--text-subtle);font-size:0.9rem;background:rgba(255,255,255,0.02);border-radius:12px;border:1px dashed rgba(255,255,255,0.1);">
+                لم تتم إضافة خطوات. استخدم زر "+ خطوة" للبدء في بناء مسار القبول.
+              </div>
+              
+              <div style="display:flex;justify-content:flex-end;margin-top:2rem;">
+                <button type="button" class="btn btn--primary" onclick="saveAdmissionSteps()">حفظ مسار القبول</button>
+              </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js?v=4"></script>
+    <script src="js/icons.js"></script>
+    <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('exams', 36);</script>
+    <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var admissionSteps = [];
+      
+      var ADM_TYPE_LABELS = {
+        'admission_test': 'اختبار قبول',
+        'interview': 'مقابلة شخصية',
+        'essay': 'مقال / تقييم كتابي',
+        'background_check': 'فحص أمني / تدقيق',
+        'admin_review': 'مراجعة إدارية',
+        'acceptance_decision': 'قرار القبول النهائي'
+      };
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      function notify(msg, type) {
+        if (window.showEditorToast) window.showEditorToast(msg, type || "success");
+      }
+
+      // Load courses
+      authFetch("/api/courses")
+        .then(function(r) { return r.json(); })
+        .then(function(courses) {
+          var sel = document.getElementById("courseSelect");
+          courses.forEach(function(c) {
+            var opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.title_ar || c.title;
+            sel.appendChild(opt);
+          });
+          var params = new URLSearchParams(window.location.search);
+          var cid = params.get("course_id");
+          if (cid) { sel.value = cid; loadAdmissionSteps(); }
+        })
+        .catch(function() {});
+
+      function loadAdmissionSteps() {
+        var courseId = document.getElementById("courseSelect").value;
+        if (!courseId) {
+          admissionSteps = [];
+          document.getElementById("emptyState").style.display = "flex";
+          document.getElementById("builderArea").style.display = "none";
+          document.getElementById("emptyState").querySelector(".editor-state__title").textContent = "اختر دورة أولاً";
+          document.getElementById("emptyState").querySelector(".editor-state__text").textContent = "اختر دورة من القائمة أعلاه لعرض مسار القبول الخاص بها وإدارته.";
+          return;
+        }
+        document.getElementById("pageBanner").style.display = "none";
+        document.getElementById("loadingState").style.display = "flex";
+        document.getElementById("emptyState").style.display = "none";
+        document.getElementById("builderArea").style.display = "none";
+
+        authFetch("/api/courses/" + courseId + "/admission-steps")
+          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(data) {
+            admissionSteps = data || [];
+            if (admissionSteps.length === 0) {
+              admissionSteps = [
+                  { step_type: 'admission_test', step_key: 'step_1', title_ar: 'اختبار تقييم أولي', description_ar: '', is_required: true, config_json: { is_active: true } },
+                  { step_type: 'interview', step_key: 'step_2', title_ar: 'المقابلة الشخصية', description_ar: '', is_required: true, config_json: { is_active: true } },
+                  { step_type: 'background_check', step_key: 'step_3', title_ar: 'الفحص الأمني', description_ar: '', is_required: true, config_json: { is_active: true } },
+                  { step_type: 'admin_review', step_key: 'step_4', title_ar: 'المراجعة الإدارية', description_ar: '', is_required: true, config_json: { is_active: true } },
+                  { step_type: 'acceptance_decision', step_key: 'step_5', title_ar: 'قرار القبول النهائي', description_ar: '', is_required: true, config_json: { is_active: true } }
+              ];
+            }
+            selectedStepIndex = admissionSteps.length > 0 ? 0 : -1;
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("builderArea").style.display = "block";
+            renderAdmSteps();
+          })
+          .catch(function() {
+            admissionSteps = [
+                { step_type: 'admission_test', step_key: 'step_1', title_ar: 'اختبار تقييم أولي', description_ar: '', is_required: true, config_json: { is_active: true } },
+                { step_type: 'interview', step_key: 'step_2', title_ar: 'المقابلة الشخصية', description_ar: '', is_required: true, config_json: { is_active: true } },
+                { step_type: 'background_check', step_key: 'step_3', title_ar: 'الفحص الأمني', description_ar: '', is_required: true, config_json: { is_active: true } },
+                { step_type: 'admin_review', step_key: 'step_4', title_ar: 'المراجعة الإدارية', description_ar: '', is_required: true, config_json: { is_active: true } },
+                { step_type: 'acceptance_decision', step_key: 'step_5', title_ar: 'قرار القبول النهائي', description_ar: '', is_required: true, config_json: { is_active: true } }
+            ];
+            selectedStepIndex = 0;
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("builderArea").style.display = "block";
+            renderAdmSteps();
+          });
+      }
+
+      
+      var draggedIndex = -1;
+
+      function handleDragStart(e, index) {
+          draggedIndex = index;
+          e.dataTransfer.effectAllowed = 'move';
+      }
+
+      function handleDragOver(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+      }
+
+      function handleDrop(e, dropIndex) {
+          e.preventDefault();
+          if (draggedIndex === -1 || draggedIndex === dropIndex) return;
+
+          var item = admissionSteps.splice(draggedIndex, 1)[0];
+          admissionSteps.splice(dropIndex, 0, item);
+          
+          if (selectedStepIndex === draggedIndex) {
+              selectedStepIndex = dropIndex;
+          } else if (selectedStepIndex > draggedIndex && selectedStepIndex <= dropIndex) {
+              selectedStepIndex--;
+          } else if (selectedStepIndex < draggedIndex && selectedStepIndex >= dropIndex) {
+              selectedStepIndex++;
+          }
+
+          draggedIndex = -1;
+          renderAdmSteps();
+      }
+
+      var selectedStepIndex = -1;
+
+
+      function addAdmStep() {
+        var num = admissionSteps.length + 1;
+        var key = 'step_' + num;
+        admissionSteps.push({
+            step_type: 'admission_test',
+            step_key: key,
+            title_ar: 'اختبار قبول',
+            description_ar: '',
+            is_required: true,
+            config_json: {
+                is_active: true
+            }
+        });
+        selectedStepIndex = admissionSteps.length - 1;
+        renderAdmSteps();
+      }
+      
+      function selectStep(idx) {
+          selectedStepIndex = idx;
+          renderAdmSteps();
+      }
+      
+      function updateSelectedStep(field, value) {
+          if (selectedStepIndex === -1) return;
+          admissionSteps[selectedStepIndex][field] = value;
+          renderStepsListOnly();
+      }
+      
+      function updateSelectedConfig(field, value) {
+          if (selectedStepIndex === -1) return;
+          if (!admissionSteps[selectedStepIndex].config_json) {
+              admissionSteps[selectedStepIndex].config_json = {};
+          }
+          admissionSteps[selectedStepIndex].config_json[field] = value;
+          renderStepsListOnly();
+      }
+      
+      
+      function removeStepDirectly(e, idx) {
+          e.stopPropagation();
+          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+              admissionSteps.splice(idx, 1);
+              if (selectedStepIndex === idx) {
+                  selectedStepIndex = -1;
+              } else if (selectedStepIndex > idx) {
+                  selectedStepIndex--;
+              }
+              renderAdmSteps();
+          }
+      }
+
+      function removeSelectedStep() {
+          if (selectedStepIndex === -1) return;
+          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+              admissionSteps.splice(selectedStepIndex, 1);
+              selectedStepIndex = -1;
+              renderAdmSteps();
+          }
+      }
+
+      function renderAdmSteps() {
+        renderStepsListOnly();
+        renderStepSettings();
+      }
+      
+      function renderStepsListOnly() {
+        var list = document.getElementById("admStepsList");
+        var noMsg = document.getElementById("noAdmStepsMsg");
+        
+        if (!admissionSteps.length) { 
+            list.innerHTML = ""; 
+            noMsg.style.display = "block"; 
+            return; 
+        }
+        noMsg.style.display = "none";
+        
+        var html = "";
+        admissionSteps.forEach(function(s, i) {
+          var isSelected = i === selectedStepIndex;
+          var activeBadge = (s.config_json && s.config_json.is_active === false) 
+              ? '<span class="badge badge--red">غير نشط</span>' 
+              : '<span class="badge badge--green">نشط</span>';
+              
+          var reqBadge = s.is_required 
+              ? '<span class="badge badge--red">إجباري</span>' 
+              : '<span class="badge" style="background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.1)">اختياري</span>';
+              
+          var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
+          
+          html += '<div class="builder-step-card '+(isSelected?'selected':'')+'" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')" onclick="selectStep('+i+')">';
+          html += '  <div class="builder-step-num">'+(i+1)+'</div>';
+          html += '  <div class="builder-step-info">';
+          html += '    <div class="builder-step-title">';
+          html += '      ' + (s.title_ar || 'خطوة بدون عنوان');
+          html += '    </div>';
+          html += '    <div class="builder-step-meta">';
+          html += '      <span style="color:#60a5fa;font-family:monospace;">'+(s.step_key || 'step_'+(i+1))+'</span>';
+          html += '      <span style="opacity:0.5">•</span>';
+          html += '      <span>'+typeLabel+'</span>';
+          html += '    </div>';
+          html += '  </div>';
+          html += '  <div style="display:flex;gap:0.4rem;">';
+          html +=      reqBadge + activeBadge;
+          html += '  </div>';
+          html += '  <div style="display:flex; align-items:center; gap:0.75rem;">';
+          html += '    <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب">';
+          html += '      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="opacity:0.6;"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>';
+          html += '    </div>';
+          html += '    <button type="button" onclick="removeStepDirectly(event, '+i+')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:4px;color:#ef4444;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.background=\'rgba(239,68,68,0.2)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.1)\'" title="حذف الخطوة">';
+          html += '      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+          html += '    </button>';
+          html += '  </div>';
+          html += '</div>';
+        });
+        list.innerHTML = html;
+        
+        var dependsSelect = document.getElementById("settingDependsOn");
+        if (dependsSelect) {
+            var opts = '<option value="">لا يوجد (مفتوحة دائماً)</option>';
+            admissionSteps.forEach(function(s, idx) {
+                if (idx !== selectedStepIndex) {
+                    opts += '<option value="'+(s.step_key || 'step_'+(idx+1))+'">'+(s.title_ar || s.step_key)+'</option>';
+                }
+            });
+            dependsSelect.innerHTML = opts;
+            if (selectedStepIndex !== -1 && admissionSteps[selectedStepIndex].config_json && admissionSteps[selectedStepIndex].config_json.depends_on) {
+                dependsSelect.value = admissionSteps[selectedStepIndex].config_json.depends_on;
+            } else {
+                dependsSelect.value = "";
+            }
+        }
+      }
+
+      function renderStepSettings() {
+          var panel = document.getElementById("stepSettingsPanel");
+          var noMsg = document.getElementById("noStepSelectedMsg");
+          
+          if (selectedStepIndex === -1 || !admissionSteps[selectedStepIndex]) {
+              panel.style.display = "none";
+              noMsg.style.display = "flex";
+              return;
+          }
+          
+          panel.style.display = "block";
+          noMsg.style.display = "none";
+          
+          var s = admissionSteps[selectedStepIndex];
+          var cfg = s.config_json || {};
+          
+          document.getElementById("settingTitle").value = s.title_ar || "";
+          document.getElementById("settingType").value = s.step_type || "admission_test";
+          document.getElementById("settingOrder").value = selectedStepIndex + 1;
+          document.getElementById("settingKey").value = s.step_key || "";
+          document.getElementById("settingDesc").value = s.description_ar || "";
+          document.getElementById("settingRequired").checked = !!s.is_required;
+          document.getElementById("settingActive").checked = cfg.is_active !== false;
+      }
+
+      function saveAdmissionSteps() {
+        var courseId = document.getElementById("courseSelect").value;
+        if (!courseId) return;
+
+        // Re-assign step_order
+        admissionSteps.forEach(function(s, i) { s.step_order = i; if(!s.step_key) s.step_key = "step_" + (i+1); });
+          
+        fetch("/api/courses/" + courseId + "/admission-steps", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem(EDITOR_TOKEN_KEY) },
+          body: JSON.stringify(admissionSteps)
+        })
+          .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
+          .then(function() {
+            showEditorToast("تم حفظ مسار القبول بنجاح", "success");
+          })
+          .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
+      }
+    </script>
+  </body>
+</html>

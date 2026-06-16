@@ -364,3 +364,188 @@ html.light-mode .nta-nav-toggle {
   border-color: rgba(0,0,0,0.1);
   color: #b91c1c;
 }
+
+
+/* ════════════════════════════════════════
+   LIGHT MODE SIDEBAR (Overrides)
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.04), transparent 52%),
+    rgba(255, 255, 255, 0.99);
+  border-left: 1px solid rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar::after {
+  background: radial-gradient(circle, rgba(185,28,28,0.08), transparent 70%);
+}
+
+html.light-mode .nta-sidebar__logo-main {
+  color: #1e293b;
+}
+
+html.light-mode .nta-sidebar__logo-sub,
+html.light-mode .nta-sidebar__logo-ar {
+  color: rgba(71,85,105,0.8);
+}
+
+html.light-mode .nta-sidebar__nav-lbl {
+  color: #64748b;
+}
+
+html.light-mode .nta-sidebar__item {
+  color: rgba(51,65,85,0.82);
+}
+
+html.light-mode .nta-sidebar__item:hover {
+  color: #0f172a;
+  background: rgba(0,0,0,0.03);
+}
+
+html.light-mode .nta-sidebar__item.active {
+  color: #b91c1c;
+  background: rgba(185,28,28,0.06);
+}
+
+html.light-mode .nta-sidebar__item svg {
+  color: rgba(51,65,85,0.82);
+}
+
+html.light-mode .nta-sidebar__item.active svg {
+  color: #b91c1c;
+}
+
+html.light-mode .nta-sidebar__brand,
+html.light-mode .nta-sidebar__footer {
+  border-color: rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar__user {
+  background: rgba(0,0,0,0.016);
+  border-color: rgba(0,0,0,0.044);
+}
+
+html.light-mode .nta-sidebar__user-name {
+  color: #1e293b;
+}
+
+html.light-mode .nta-sidebar__divider {
+  background: rgba(0,0,0,0.044);
+}
+
+html.light-mode .nta-sidebar__logout {
+  border-color: rgba(239,68,68,0.2);
+  background: rgba(239,68,68,0.05);
+  color: rgba(220,38,38,0.9);
+}
+
+html.light-mode .nta-sidebar__logout:hover {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.4);
+  color: #b91c1c;
+}
+
+
+/* ════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.03), transparent 52%),
+    #ffffff;
+  border-left: 1px solid rgba(0,0,0,0.08);
+}
+
+html.light-mode .nta-sidebar__logo-main {
+  color: #1e293b;
+}
+
+html.light-mode .nta-sidebar__logo-sub,
+html.light-mode .nta-sidebar__logo-ar {
+  color: #64748b;
+}
+
+html.light-mode .nta-sidebar__nav-lbl {
+  color: #94a3b8;
+}
+
+html.light-mode .nta-sidebar__item {
+  color: #475569;
+}
+
+html.light-mode .nta-sidebar__item:hover {
+  color: #0f172a;
+  background: rgba(0,0,0,0.03);
+}
+
+html.light-mode .nta-sidebar__item.active {
+  color: #991b1b;
+  background: rgba(185,28,28,0.08);
+}
+
+html.light-mode .nta-sidebar__user-name {
+  color: #1e293b;
+}
+
+html.light-mode .nta-sidebar__user-email {
+  color: #64748b;
+}
+
+html.light-mode .nta-sidebar__brand,
+html.light-mode .nta-sidebar__footer {
+  border-color: rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar__theme-btn,
+html.light-mode .nta-sidebar__logout {
+  background: rgba(0,0,0,0.03);
+  color: #475569;
+  border-color: rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar__theme-btn:hover,
+html.light-mode .nta-sidebar__logout:hover {
+  background: rgba(0,0,0,0.06);
+  color: #0f172a;
+}
+
+
+/* ════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.02), transparent 52%),
+    rgba(255,255,255,0.98);
+  border-left: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-sidebar::after {
+  background: radial-gradient(circle, rgba(185,28,28,0.03), transparent 70%);
+}
+html.light-mode .nta-sidebar__brand {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-nav__link {
+  color: #475569;
+}
+html.light-mode .nta-nav__link:hover {
+  background: rgba(0,0,0,0.03);
+  color: #0f172a;
+}
+html.light-mode .nta-nav__link--active {
+  background: rgba(220,38,38,0.08);
+  color: #b91c1c;
+  border-right: 3px solid #dc2626;
+}
+html.light-mode .nta-nav__link--active .nta-nav__icon {
+  color: #b91c1c;
+}
+html.light-mode .nta-user__info {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-user__name {
+  color: #0f172a;
+}
+html.light-mode .nta-user__role {
+  color: #64748b;
+}

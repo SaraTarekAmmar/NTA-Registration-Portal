@@ -44,7 +44,7 @@ app.include_router(permissions.router)
 COORDINATOR_DIR = Path(__file__).parent.parent
 COMMON_DIR = COORDINATOR_DIR.parent / "common"
 ADMIN_HEADER_DIR = COORDINATOR_DIR.parent / "admin" / "header"
-IMAGES_DIR = COORDINATOR_DIR.parent / "images"
+IMAGES_DIR = COORDINATOR_DIR.parent / "admin" / "images"
 DATA_DIR = COORDINATOR_DIR.parent / "data"
 
 # Serve common assets

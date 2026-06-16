@@ -39,7 +39,8 @@
       navItem('editor-courses.html',   'courses',    ICONS.courses,   'الدورات',         activePage) +
       navItem('editor-materials.html', 'materials',  ICONS.materials, 'المواد التعليمية',activePage) +
       navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage) +
-      navItem('editor-flow-builder.html', 'flow-builder', ICONS.flow,  'تدفق التسجيل',    activePage);
+      navItem('editor-registration-builder.html?v=' + Date.now(), 'registration-builder', ICONS.flow, 'مسار التسجيل', activePage) +
+      navItem('editor-admission-builder.html', 'admission-builder', ICONS.exams,  'مسار القبول',    activePage);
 
     return '<aside class="nta-sidebar">' +
       '<div class="nta-sidebar__brand">' +

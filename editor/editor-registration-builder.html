@@ -1,0 +1,2909 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مسار التسجيل - بوابة المحرر</title>
+    <link rel="stylesheet" href="editor.css?v=2" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/editor-guard.js"></script>
+    <style>
+      .adm-step-card {
+        background: rgba(8,12,32,0.4);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .adm-step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .adm-step-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text-main);
+      }
+      .adm-step-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .builder-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .builder-container {
+          grid-template-columns: 1fr;
+        }
+      }
+      .builder-settings-panel {
+        background: #0d1222;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 1.25rem;
+        position: sticky;
+        top: 2rem;
+      }
+      .builder-settings-panel h3 {
+        font-size: 1.05rem;
+        margin: 0 0 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .builder-settings-group {
+        margin-bottom: 1.25rem;
+      }
+      .builder-settings-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-subtle);
+        margin-bottom: 0.4rem;
+      }
+      .builder-steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .builder-step-card {
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .builder-step-card:hover {
+        background: #1f2937;
+        border-color: rgba(255,255,255,0.1);
+      }
+      .builder-step-card.selected {
+        background: rgba(59,130,246,0.05);
+        border-color: rgba(59,130,246,0.3);
+      }
+      .builder-step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #9ca3af;
+      }
+      .builder-step-card.selected .builder-step-num {
+        background: rgba(59,130,246,0.15);
+        color: #60a5fa;
+      }
+      .builder-step-info {
+        flex: 1;
+      }
+      .builder-step-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .builder-step-meta {
+        font-size: 0.75rem;
+        color: var(--text-subtle);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+      .badge--red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+      .badge--blue { background: rgba(59,130,246,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+      .badge--green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+      
+      .builder-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .builder-header-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    </style>
+  </head>
+  <body data-page="registration-builder">
+    <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+    <div id="editorSidebar"></div>
+    <main id="main-content" class="editor-main">
+      <div class="editor-page-header">
+        <h1 class="editor-page-header__title">مسار التسجيل</h1>
+        <p class="editor-page-header__sub">إعداد وتكوين خطوات التقييم والقبول لكل دورة</p>
+      </div>
+
+      <!-- Course selector -->
+      <div class="editor-form-group" style="max-width:360px;margin-bottom:1.5rem;">
+        <label for="courseSelect">اختر الدورة</label>
+        <select id="courseSelect" class="editor-select" onchange="loadRegistrationSteps()">
+          <option value="">— اختر دورة —</option>
+        </select>
+      </div>
+
+      <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
+        <span id="pageBannerText"></span>
+        <button type="button" onclick="loadRegistrationSteps()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
+      </div>
+
+      <div id="loadingState" class="editor-state" style="display:none;">
+        <div class="editor-state__icon" id="_loadIcon"></div>
+        <div class="editor-state__title">جاري التحميل...</div>
+      </div>
+      <div id="emptyState" class="editor-state">
+        <div class="editor-state__icon" id="_stateIcon"></div>
+        <div class="editor-state__title">اختر دورة أولاً</div>
+        <div class="editor-state__text">اختر دورة من القائمة أعلاه لعرض مسار التسجيل الخاص بها وإدارته.</div>
+      </div>
+
+      <!-- Builder area -->
+      <div id="builderArea" style="display:none;">
+        <div class="builder-header">
+          <h2 class="builder-header-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            مسار التسجيل — الخطوات
+          </h2>
+          <div style="display:flex;gap:0.75rem;">
+            <button type="button" class="btn btn--primary" onclick="addAdmStep()">+ خطوة</button>
+          </div>
+        </div>
+
+        <div class="builder-container">
+          <!-- Left Pane removed -->
+
+          <!-- Right Pane: Steps List -->
+          <div>
+              <div id="admStepsList" class="builder-steps-list"></div>
+              <div id="noAdmStepsMsg" style="text-align:center;padding:3rem 1rem;color:var(--text-subtle);font-size:0.9rem;background:rgba(255,255,255,0.02);border-radius:12px;border:1px dashed rgba(255,255,255,0.1);">
+                لم تتم إضافة خطوات. استخدم زر "+ خطوة" للبدء في بناء مسار التسجيل.
+              </div>
+              
+              <div style="display:flex;justify-content:flex-end;margin-top:2rem;">
+                <button type="button" class="btn btn--primary" onclick="saveRegistrationSteps()">حفظ مسار التسجيل</button>
+              </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <div id="editorToastContainer" class="editor-toast-container"></div>
+    <script src="js/editor-layout.js?v=4"></script>
+    <script src="js/icons.js"></script>
+    <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('exams', 36);</script>
+    <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
+    <script>
+      var EDITOR_TOKEN_KEY = "editor_token";
+      var registrationSteps = [];
+      
+      var ADM_TYPE_LABELS = {
+        'fullName': 'الاسم الكامل',
+        'fullNameEn': 'الاسم بالإنجليزية',
+        'dob': 'تاريخ الميلاد',
+        'countryOfStay': 'دولة الإقامة',
+        'governmentOrState': 'المحافظة أو الولاية',
+        'city': 'المدينة',
+        'address': 'العنوان',
+        'maritalStatus': 'الحالة الاجتماعية',
+        'militaryStatus': 'الموقف من التجنيد',
+        'militaryReason': 'سبب الموقف من التجنيد',
+        'identityDocNationalId': 'البطاقة الشخصية National ID',
+        'identityDocPassport': 'جواز السفر Passport',
+        'nationalId': 'رقم البطاقة الشخصية',
+        'passportNumber': 'رقم جواز السفر',
+        'identityDocumentScan': 'صورة وثيقة الهوية',
+        'numberOfNationalities': 'عدد الجنسيات',
+        'nationality': 'الجنسية',
+        'secondNationality': 'الجنسية الثانية',
+        'thirdNationality': 'الجنسية الثالثة',
+        'mobileNumber1': 'رقم الموبايل الأول',
+        'mobileNumber2': 'رقم الموبايل الثاني',
+        'whatsappNumber': 'رقم الواتساب',
+        'whatsappSameAsMobile': 'هو نفس الموبايل الأول',
+        'monthlyAverageIncome': 'متوسط الدخل الشهري',
+        'primaryEmail': 'البريد الإلكتروني',
+        'secondaryEmail': 'البريد الإلكتروني الثانوي',
+        'emergencyContactsCount': 'عدد جهات اتصال الطوارئ',
+        'emergencyName1': 'جهة اتصال الطوارئ 1 - الاسم',
+        'emergencyPhone1': 'جهة اتصال الطوارئ 1 - الرقم',
+        'emergencyAddress1': 'جهة اتصال الطوارئ 1 - العنوان',
+        'emergencyId1': 'جهة اتصال الطوارئ 1 - رقم الهوية',
+        'emergencyName2': 'جهة اتصال الطوارئ 2 - الاسم',
+        'emergencyPhone2': 'جهة اتصال الطوارئ 2 - الرقم',
+        'emergencyAddress2': 'جهة اتصال الطوارئ 2 - العنوان',
+        'emergencyId2': 'جهة اتصال الطوارئ 2 - رقم الهوية',
+        'eduHighestDegree': 'أعلى مؤهل تعليمي تم الحصول عليه',
+        'eduDegreeCountry': 'الدولة / Country',
+        'eduInstitution': 'الجامعة / المعهد / University / Institute',
+        'eduInstituteName': 'اسم المعهد / Institute Name',
+        'eduSchoolName': 'اسم المدرسة / School Name',
+        'eduCollegeFacultySelect': 'الكلية / الكيان',
+        'eduCollegeFacultyText': 'الكلية / قسم الدراسة بالمعهد / الإدارة التعليمية',
+        'eduSpeciality': 'التخصص',
+        'eduGpa': 'المعدل التراكمي',
+        'eduTotalScore': 'المجموع',
+        'eduPercentage': 'النسبة المئوية',
+        'eduGraduationDate': 'تاريخ التخرج',
+        'graduationCertificateScan': 'صورة شهادة التخرج',
+        'eduHasPostgraduate': 'درجة علمية أعلى',
+        'eduPostgraduateDegreeType': 'الدرجة',
+        'eduDegreeIssuerEntity': 'اسم الجهة المانحة للدرجة',
+        'eduMainSpecialityPg': 'التخصص الرئيسي للدرجة',
+        'eduSecondarySpecialityPg': 'التخصص الفرعي',
+        'eduPgStartDate': 'تاريخ البدء',
+        'eduPgEndDate': 'تاريخ الانتهاء',
+        'eduFunding': 'تمويل شخصي أم جهة خارجية',
+        'eduRecommendingEntity': 'اسم الجهة التي رشحتك',
+        'eduScholarshipEntity': 'اسم جهة المنحة',
+        'standardizedTestName': 'الاختبارات والشهادات المعيارية',
+        'standardizedTestName': 'اسم الاختبار',
+        'standardizedTestScore': 'درجة الاختبار',
+        'standardizedTestAuthority': 'جهة الإصدار',
+        'standardizedTestDate': 'تاريخ الحصول',
+        'standardizedTestDocument': 'Attach Document',
+        'standardizedTestUrl': 'رابط التحقق من الشهادة',
+        'empExperienceStatus': 'هل لديك خبرة عملية؟',
+        'employmentSectionCv': 'تحميل السيرة الذاتية',
+        'empJobType': 'نوع الوظيفة',
+        'empWorkNature': 'طبيعة الوظيفة',
+        'empMinistry': 'الوزارة',
+        'empMinistrySub': 'الجهة التابعة للوزارة',
+        'empJoiningDate': 'تاريخ الالتحاق بالعمل',
+        'empCurrentlyWorking': 'ما زلت أعمل في هذه الوظيفة',
+        'empEndDate': 'تاريخ الانتهاء من العمل',
+        'empJobTitle': 'المسمى الوظيفي',
+        'empSeniority': 'المستوى الوظيفي / الأقدمية',
+        'empDepartment': 'القسم / الإدارة',
+        'empSpeciality': 'التخصص المهني',
+        'empJobDescription': 'وصف الوظيفة والمسؤوليات',
+        'empCompanyAddress': 'عنوان جهة العمل',
+        'empIndustryPrimary': 'مجال العمل / طبيعة النشاط',
+        'empIndustrySecondary': 'مجال العمل',
+        'empRefName': 'اسم المرجع',
+        'empRefPhone': 'رقم هاتف المرجع',
+        'empRefEmail': 'البريد الإلكتروني للمرجع',
+        'empRefPlaceIndex': 'مكان العمل المشترك',
+        'organizationIndustry': 'المنظمة / جهة العمل والقطاع (Organization &amp; Industry)',
+        'startDate': 'تاريخ البدء',
+        'endDate': 'تاريخ الانتهاء',
+        'keyResponsibilities': 'المسؤوليات الرئيسية',
+        'reasonForLeaving': 'سبب ترك العمل',
+        'currentJobTitle': 'المسمى الوظيفي الحالي',
+        'yearsManagementExperience': 'سنوات الخبرة الإدارية (Years of Management Experience)',
+        'organizationSize': 'حجم المنظمة',
+        'annualBudgetManaged': 'الميزانية السنوية المدارة',
+        'directReports': 'عدد المرؤوسين المباشرين (Direct Reports / Team Size)',
+        'globalExperience': 'الخبرة العالمية (Global Experience - سنوات في الخارج)',
+        'technicalSkillCategory': 'المهارات التقنية',
+        'computerSkillCategory': 'مهارات الحاسب الآلي',
+        'softSkillCategory': 'المهارات الشخصية',
+        'otherSkillsFreeText': 'مهارات أخرى',
+        'nativeLanguage': 'اللغة الأم',
+        'englishProficiency': 'اللغة الثانية — مستوى الإجادة فقط',
+        'interestsDescription': 'وصف الاهتمامات',
+        'usesSocialMedia': 'هل تستخدم وسائل التواصل الاجتماعي؟',
+        'socialPlatformFacebook': 'منصات التواصل',
+        'hasPrizesAwards': 'هل حصلت على أي جوائز أو تكريمات؟',
+        'prizeName': 'اسم الجائزة / التكريم',
+        'prizeDateAchieved': 'تاريخ الحصول عليها',
+        'prizeCategory': 'فئة الجائزة',
+        'prizeIssuingBody': 'الجهة المانحة',
+        'prizeCertificate': 'تحميل صورة الشهادة',
+        'hasConferencesWorkshops': 'هل شاركت في أي مؤتمرات أو ورش عمل؟',
+        'cwActivityType': 'النوع',
+        'cwEventName': 'اسم الفعالية',
+        'cwOrganizingEntity': 'الجهة المنظمة',
+        'cwStartDate': 'تاريخ البدء',
+        'cwEndDate': 'تاريخ الانتهاء',
+        'cwParticipationLevel': 'مستوى المشاركة',
+        'awardTitle': 'عنوان الجائزة / التكريم (Award / Recognition Title)',
+        'issuingBody': 'الجهة المانحة',
+        'keyAchievement': 'الإنجاز الرئيسي',
+        'communityLeadership': 'القيادة المجتمعية / التطوع (Community / Volunteer Leadership)',
+        'extracurricularRole': 'الدور',
+        'extracurricularDuration': 'مدة المشروع',
+        'portfolioUrl': 'منشورات / ملف أعمال',
+        'hasPublicVoluntaryWork': 'هل شاركت في أي عمل عام أو تطوعي؟',
+        'pvFoundationName': 'اسم المؤسسة أو الجمعية الخيرية',
+        'pvPosition': 'المنصب / الدور الوظيفي',
+        'pvJoinDate': 'سنة / تاريخ الالتحاق',
+        'pvLeaveDate': 'سنة / تاريخ المغادرة',
+        'pvScope': 'نطاق العمل ووصف الخبرة',
+        'pvWorkField': 'مجال العمل',
+        'pvCountry': 'دولة العمل',
+        'pvState': 'المحافظة أو الولاية',
+        'hasPoliticalParticipation': 'هل شاركت في أي عمل سياسي؟',
+        'politicalPartyName': 'اسم الحزب أو التنظيم السياسي',
+        'politicalRole': 'الدور السياسي',
+        'politicalWorkDetails': 'تفاصيل العمل السياسي',
+        'hasPoliticalCandidacy': 'هل ترشحت لأي منصب سياسي؟',
+        'candidacyPositionName': 'اسم المنصب السياسي',
+        'candidacyResult': 'النتيجة',
+        'candidacyExperienceDescription': 'وصف تجربة الترشح',
+        'hasPriorCriminalConvictions': 'هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟',
+        'priorConvictionDescription': 'وصف الحكم الجنائي',
+        'sectionSevenCriminalRecordCertificate': 'صحيفة الحالة الجنائية',
+        'cvResume': 'السيرة الذاتية الشاملة',
+        'lettersOfRecommendation': 'خطابات التوصية',
+        'criminalRecord': 'فيش جنائي / شهادة خلو سوابق',
+        'employerNoc': 'خطاب اعتماد من جهة العمل',
+        'referenceName': 'الاسم',
+        'referenceRelationship': 'العلاقة / المسمى الوظيفي',
+        'referenceContact': 'معلومات الاتصال',
+        'primaryLearningObjective': 'الهدف التعليمي الرئيسي',
+        'uniqueContribution': 'مساهمتك الفريدة للدفعة',
+        'futureCareerGoal': 'هدفـك المهني خلال 5 سنوات',
+        'fundingSource': 'مصدر التمويل',
+        'scholarshipEssay': 'مقال المنحة - الحد الأقصى 5000 حرف',
+        'dietaryRestrictions': 'قيود النظام الغذائي',
+        'accessibilityRequirements': 'متطلبات إمكانية الوصول',
+        'photoFront': 'التقاط / رفع',
+        'socialProfileFacebookUrl': 'رابط حساب فيسبوك',
+        'socialProfileInstagramUrl': 'رابط حساب إنستجرام',
+        'socialProfileXUrl': 'رابط حساب إكس / تويتر',
+        'socialProfileLinkedInUrl': 'رابط حساب لينكد إن',
+        'socialProfileTikTokUrl': 'رابط حساب تيك توك',
+        'dataAccuracyTermsConfirmed': 'أقر بصحة جميع البيانات المدخلة وأوافق على كافة الشروط والأحكام الخاصة بالبرنامج',
+      };
+
+      function authFetch(url, opts) {
+        opts = opts || {};
+        var token = localStorage.getItem(EDITOR_TOKEN_KEY);
+        var headers = Object.assign({"Content-Type":"application/json"}, opts.headers || {});
+        if (token) headers["Authorization"] = "Bearer " + token;
+        return fetch(url, Object.assign({}, opts, {headers: headers}));
+      }
+
+      function notify(msg, type) {
+        if (window.showEditorToast) window.showEditorToast(msg, type || "success");
+      }
+
+      // Load courses
+      authFetch("/api/courses")
+        .then(function(r) { return r.json(); })
+        .then(function(courses) {
+          var sel = document.getElementById("courseSelect");
+          courses.forEach(function(c) {
+            var opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.title_ar || c.title;
+            sel.appendChild(opt);
+          });
+          var params = new URLSearchParams(window.location.search);
+          var cid = params.get("course_id");
+          if (cid) { sel.value = cid; loadRegistrationSteps(); }
+        })
+        .catch(function() {});
+
+      function loadRegistrationSteps() {
+        var courseId = document.getElementById("courseSelect").value;
+        if (!courseId) {
+          registrationSteps = [];
+          document.getElementById("emptyState").style.display = "flex";
+          document.getElementById("builderArea").style.display = "none";
+          document.getElementById("emptyState").querySelector(".editor-state__title").textContent = "اختر دورة أولاً";
+          document.getElementById("emptyState").querySelector(".editor-state__text").textContent = "اختر دورة من القائمة أعلاه لعرض مسار التسجيل الخاص بها وإدارته.";
+          return;
+        }
+        document.getElementById("pageBanner").style.display = "none";
+        document.getElementById("loadingState").style.display = "flex";
+        document.getElementById("emptyState").style.display = "none";
+        document.getElementById("builderArea").style.display = "none";
+
+        authFetch("/api/courses/" + courseId + "/registration-steps")
+          .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
+          .then(function(data) {
+            registrationSteps = data || [];
+            if (registrationSteps.length === 0) {
+              registrationSteps = [
+    {
+        "step_type": "personal_info",
+        "step_key": "step_1",
+        "title_ar": "البيانات الشخصية الأساسية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "countryOfStay",
+                    "label": "دولة الإقامة مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "governmentOrState",
+                    "label": "المحافظة أو الولاية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "city",
+                    "label": "المدينة مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "address",
+                    "label": "العنوان مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "maritalStatus",
+                    "label": "الحالة الاجتماعية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "militaryStatus",
+                    "label": "الموقف من التجنيد مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "militaryReason",
+                    "label": "سبب الموقف من التجنيد مطلوب عند الاختيار",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "contact_info",
+        "step_key": "step_2",
+        "title_ar": "القسم الثاني - بيانات الاتصال",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "identityDocNationalId",
+                    "label": "البطاقة الشخصية National ID",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "identityDocPassport",
+                    "label": "جواز السفر Passport",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nationalId",
+                    "label": "رقم البطاقة الشخصية (الرقم القومي) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "passportNumber",
+                    "label": "رقم جواز السفر (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "identityDocumentScan",
+                    "label": "صورة وثيقة الهوية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "numberOfNationalities",
+                    "label": "عدد الجنسيات مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nationality",
+                    "label": "الجنسية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "secondNationality",
+                    "label": "الجنسية الثانية (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "thirdNationality",
+                    "label": "الجنسية الثالثة (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "mobileNumber1",
+                    "label": "رقم الموبايل الأول مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "mobileNumber2",
+                    "label": "رقم الموبايل الثاني (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "whatsappNumber",
+                    "label": "رقم الواتساب مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "whatsappSameAsMobile",
+                    "label": "هو نفس الموبايل الأول",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "monthlyAverageIncome",
+                    "label": "متوسط الدخل الشهري مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "primaryEmail",
+                    "label": "البريد الإلكتروني مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "secondaryEmail",
+                    "label": "البريد الإلكتروني الثانوي (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyContactsCount",
+                    "label": "عدد جهات اتصال الطوارئ مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyName1",
+                    "label": "جهة اتصال الطوارئ 1 - الاسم مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyPhone1",
+                    "label": "جهة اتصال الطوارئ 1 - الرقم مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyAddress1",
+                    "label": "جهة اتصال الطوارئ 1 - العنوان مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyId1",
+                    "label": "جهة اتصال الطوارئ 1 - رقم الهوية (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyName2",
+                    "label": "جهة اتصال الطوارئ 2 - الاسم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyPhone2",
+                    "label": "جهة اتصال الطوارئ 2 - الرقم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyAddress2",
+                    "label": "جهة اتصال الطوارئ 2 - العنوان",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyId2",
+                    "label": "جهة اتصال الطوارئ 2 - رقم الهوية",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "education_bg",
+        "step_key": "step_3",
+        "title_ar": "المؤهلات العلمية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "eduHighestDegree",
+                    "label": "أعلى مؤهل تعليمي تم الحصول عليهمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduDegreeCountry",
+                    "label": "الدولة / Countryمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduInstitution",
+                    "label": "الجامعة / المعهد / University / Instituteمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduInstituteName",
+                    "label": "اسم المعهد / Institute Nameمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSchoolName",
+                    "label": "اسم المدرسة / School Nameمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduCollegeFacultySelect",
+                    "label": "الكلية / الكيان (قائمة)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduCollegeFacultyText",
+                    "label": "الكلية / قسم الدراسة بالمعهد / الإدارة التعليميةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSpeciality",
+                    "label": "التخصصمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduGpa",
+                    "label": "المعدل التراكمي (GPA)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduTotalScore",
+                    "label": "المجموعمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPercentage",
+                    "label": "النسبة المئويةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduGraduationDate",
+                    "label": "تاريخ التخرجمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "graduationCertificateScan",
+                    "label": "صورة شهادة التخرج",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduHasPostgraduate",
+                    "label": "درجة علمية أعلى (دراسات عليا)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPostgraduateDegreeType",
+                    "label": "الدرجة (ماجستير - دكتوراه)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduDegreeIssuerEntity",
+                    "label": "اسم الجهة المانحة للدرجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduMainSpecialityPg",
+                    "label": "التخصص الرئيسي للدرجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSecondarySpecialityPg",
+                    "label": "التخصص الفرعي",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPgStartDate",
+                    "label": "تاريخ البدءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPgEndDate",
+                    "label": "تاريخ الانتهاءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduFunding",
+                    "label": "تمويل شخصي أم جهة خارجية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduRecommendingEntity",
+                    "label": "اسم الجهة التي رشحتك",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduScholarshipEntity",
+                    "label": "اسم جهة المنحة",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "standardized_tests",
+        "step_key": "step_4",
+        "title_ar": "الاختبارات والشهادات المعيارية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "standardizedTestName",
+                    "label": "اسم الاختبار (Test Name)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestScore",
+                    "label": "درجة الاختبار (Test Score)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestAuthority",
+                    "label": "جهة الإصدار (Issuing Authority)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestDate",
+                    "label": "تاريخ الحصول (Date Obtained)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestDocument",
+                    "label": "Attach Document",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestUrl",
+                    "label": "رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "work_experience",
+        "step_key": "step_5",
+        "title_ar": "الخبرة العملية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "empExperienceStatus",
+                    "label": "هل لديك خبرة عملية؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "employmentSectionCv",
+                    "label": "تحميل السيرة الذاتية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobType",
+                    "label": "نوع الوظيفةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empWorkNature",
+                    "label": "طبيعة الوظيفةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empMinistry",
+                    "label": "الوزارةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empMinistrySub",
+                    "label": "الجهة التابعة للوزارة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJoiningDate",
+                    "label": "تاريخ الالتحاق بالعملمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empCurrentlyWorking",
+                    "label": "ما زلت أعمل في هذه الوظيفة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empEndDate",
+                    "label": "تاريخ الانتهاء من العملمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobTitle",
+                    "label": "المسمى الوظيفيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empSeniority",
+                    "label": "المستوى الوظيفي / الأقدمية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empDepartment",
+                    "label": "القسم / الإدارة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empSpeciality",
+                    "label": "التخصص المهني",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobDescription",
+                    "label": "وصف الوظيفة والمسؤوليات",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empCompanyAddress",
+                    "label": "عنوان جهة العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empIndustryPrimary",
+                    "label": "مجال العمل / طبيعة النشاط (أول)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empIndustrySecondary",
+                    "label": "مجال العمل (ثانٍ — اختياري، حتى مجالين)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefName",
+                    "label": "اسم المرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefPhone",
+                    "label": "رقم هاتف المرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefEmail",
+                    "label": "البريد الإلكتروني للمرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefPlaceIndex",
+                    "label": "مكان العمل المشترك",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "organizationIndustry",
+                    "label": "المنظمة / جهة العمل والقطاع (Organization &amp;                           Industry)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "startDate",
+                    "label": "تاريخ البدء (Start Date)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "endDate",
+                    "label": "تاريخ الانتهاء (End Date)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "keyResponsibilities",
+                    "label": "المسؤوليات الرئيسية (Key Responsibilities)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "reasonForLeaving",
+                    "label": "سبب ترك العمل (Reason for Leaving)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "currentJobTitle",
+                    "label": "المسمى الوظيفي الحالي (Current Job Title)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "yearsManagementExperience",
+                    "label": "سنوات الخبرة الإدارية (Years of Management                       Experience)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "organizationSize",
+                    "label": "حجم المنظمة (Organization Size)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "annualBudgetManaged",
+                    "label": "الميزانية السنوية المدارة (Annual Budget Managed)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "directReports",
+                    "label": "عدد المرؤوسين المباشرين (Direct Reports / Team                       Size)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "globalExperience",
+                    "label": "الخبرة العالمية (Global Experience - سنوات في                       الخارج)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "skills_languages",
+        "step_key": "step_6",
+        "title_ar": "المهارات واللغات والاهتمامات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "technicalSkillCategory",
+                    "label": "المهارات التقنية (Technical Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "computerSkillCategory",
+                    "label": "مهارات الحاسب الآلي (Computer Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "softSkillCategory",
+                    "label": "المهارات الشخصية (Soft Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "otherSkillsFreeText",
+                    "label": "مهارات أخرى (Other Skills)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nativeLanguage",
+                    "label": "اللغة الأم (Mother Language) (اجبارى)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "englishProficiency",
+                    "label": "اللغة الثانية (الإنجليزية) — مستوى الإجادة فقط (اجبارى)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "interestsDescription",
+                    "label": "وصف الاهتماماتمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "usesSocialMedia",
+                    "label": "هل تستخدم وسائل التواصل الاجتماعي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialPlatformFacebook",
+                    "label": "منصات التواصل (تشغيل / إيقاف لكل منصة)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "awards_conferences",
+        "step_key": "step_7",
+        "title_ar": "الجوائز والمؤتمرات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "hasPrizesAwards",
+                    "label": "هل حصلت على أي جوائز أو تكريمات؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeName",
+                    "label": "اسم الجائزة / التكريم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeDateAchieved",
+                    "label": "تاريخ الحصول عليها",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeCategory",
+                    "label": "فئة الجائزة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeIssuingBody",
+                    "label": "الجهة المانحة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeCertificate",
+                    "label": "تحميل صورة الشهادة (PDF أو صورة)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasConferencesWorkshops",
+                    "label": "هل شاركت في أي مؤتمرات أو ورش عمل؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwActivityType",
+                    "label": "النوعمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwEventName",
+                    "label": "اسم الفعالية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwOrganizingEntity",
+                    "label": "الجهة المنظمة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwStartDate",
+                    "label": "تاريخ البدءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwEndDate",
+                    "label": "تاريخ الانتهاءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwParticipationLevel",
+                    "label": "مستوى المشاركة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "awardTitle",
+                    "label": "عنوان الجائزة / التكريم (Award / Recognition                           Title)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "issuingBody",
+                    "label": "الجهة المانحة (Issuing Body)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "keyAchievement",
+                    "label": "الإنجاز الرئيسي (حتى 100 كلمة) (Key Achievement)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "communityLeadership",
+                    "label": "القيادة المجتمعية / التطوع (Community / Volunteer                     Leadership)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "extracurricularRole",
+                    "label": "الدور (Role)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "extracurricularDuration",
+                    "label": "مدة المشروع (Project Duration)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "portfolioUrl",
+                    "label": "منشورات / ملف أعمال (Publication / Portfolio)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "public_work_legal",
+        "step_key": "step_8",
+        "title_ar": "العمل العام والمشاركة السياسية والموقف القانوني",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "hasPublicVoluntaryWork",
+                    "label": "هل شاركت في أي عمل عام أو تطوعي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvFoundationName",
+                    "label": "اسم المؤسسة أو الجمعية الخيريةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvPosition",
+                    "label": "المنصب / الدور الوظيفيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvJoinDate",
+                    "label": "سنة / تاريخ الالتحاقمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvLeaveDate",
+                    "label": "سنة / تاريخ المغادرة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvScope",
+                    "label": "نطاق العمل ووصف الخبرة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvWorkField",
+                    "label": "مجال العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvCountry",
+                    "label": "دولة العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvState",
+                    "label": "المحافظة أو الولايةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPoliticalParticipation",
+                    "label": "هل شاركت في أي عمل سياسي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalPartyName",
+                    "label": "اسم الحزب أو التنظيم السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalRole",
+                    "label": "الدور السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalWorkDetails",
+                    "label": "تفاصيل العمل السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPoliticalCandidacy",
+                    "label": "هل ترشحت لأي منصب سياسي؟",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyPositionName",
+                    "label": "اسم المنصب السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyResult",
+                    "label": "النتيجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyExperienceDescription",
+                    "label": "وصف تجربة الترشحمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPriorCriminalConvictions",
+                    "label": "هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "priorConvictionDescription",
+                    "label": "وصف الحكم الجنائيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "sectionSevenCriminalRecordCertificate",
+                    "label": "صحيفة الحالة الجنائية (الفيش والتشبيه) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "motivations",
+        "step_key": "step_9",
+        "title_ar": "الدوافع والمخرجات واللوجستيات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "cvResume",
+                    "label": "السيرة الذاتية الشاملة (CV / Resume) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "lettersOfRecommendation",
+                    "label": "خطابات التوصية (2) (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "criminalRecord",
+                    "label": "فيش جنائي / شهادة خلو سوابق مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "employerNoc",
+                    "label": "خطاب اعتماد من جهة العمل (Employer Acknowledgment / NOC)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceName",
+                    "label": "الاسم (Name)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceRelationship",
+                    "label": "العلاقة / المسمى الوظيفي (Relationship / Title)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceContact",
+                    "label": "معلومات الاتصال (Contact Information)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "primaryLearningObjective",
+                    "label": "الهدف التعليمي الرئيسي (Primary Learning Objective)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "uniqueContribution",
+                    "label": "مساهمتك الفريدة للدفعة (Unique Contribution to Cohort)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "futureCareerGoal",
+                    "label": "هدفـك المهني خلال 5 سنوات (Future Career Goal - 5 Years)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "fundingSource",
+                    "label": "مصدر التمويل (Funding Source)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "scholarshipEssay",
+                    "label": "مقال المنحة (Scholarship Essay) - الحد الأقصى 5000 حرف",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "dietaryRestrictions",
+                    "label": "قيود النظام الغذائي (Dietary Restrictions)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "accessibilityRequirements",
+                    "label": "متطلبات إمكانية الوصول (Accessibility Requirements)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "final_verification",
+        "step_key": "step_10",
+        "title_ar": "القسم العاشر - التحقق والتأكيد النهائي",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "photoFront",
+                    "label": "التقاط / رفع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileFacebookUrl",
+                    "label": "رابط حساب فيسبوك مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileInstagramUrl",
+                    "label": "رابط حساب إنستجرام مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileXUrl",
+                    "label": "رابط حساب إكس / تويتر مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileLinkedInUrl",
+                    "label": "رابط حساب لينكد إن مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileTikTokUrl",
+                    "label": "رابط حساب تيك توك (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "dataAccuracyTermsConfirmed",
+                    "label": "أقر بصحة جميع البيانات المدخلة وأوافق على كافة الشروط                       والأحكام الخاصة بالبرنامج",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    }
+];
+            }
+            selectedStepIndex = registrationSteps.length > 0 ? 0 : -1;
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("builderArea").style.display = "block";
+            renderAdmSteps();
+          })
+          .catch(function() {
+            registrationSteps = [
+    {
+        "step_type": "personal_info",
+        "step_key": "step_1",
+        "title_ar": "البيانات الشخصية الأساسية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "countryOfStay",
+                    "label": "دولة الإقامة مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "governmentOrState",
+                    "label": "المحافظة أو الولاية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "city",
+                    "label": "المدينة مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "address",
+                    "label": "العنوان مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "maritalStatus",
+                    "label": "الحالة الاجتماعية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "militaryStatus",
+                    "label": "الموقف من التجنيد مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "militaryReason",
+                    "label": "سبب الموقف من التجنيد مطلوب عند الاختيار",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "contact_info",
+        "step_key": "step_2",
+        "title_ar": "القسم الثاني - بيانات الاتصال",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "identityDocNationalId",
+                    "label": "البطاقة الشخصية National ID",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "identityDocPassport",
+                    "label": "جواز السفر Passport",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nationalId",
+                    "label": "رقم البطاقة الشخصية (الرقم القومي) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "passportNumber",
+                    "label": "رقم جواز السفر (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "identityDocumentScan",
+                    "label": "صورة وثيقة الهوية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "numberOfNationalities",
+                    "label": "عدد الجنسيات مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nationality",
+                    "label": "الجنسية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "secondNationality",
+                    "label": "الجنسية الثانية (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "thirdNationality",
+                    "label": "الجنسية الثالثة (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "mobileNumber1",
+                    "label": "رقم الموبايل الأول مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "mobileNumber2",
+                    "label": "رقم الموبايل الثاني (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "whatsappNumber",
+                    "label": "رقم الواتساب مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "whatsappSameAsMobile",
+                    "label": "هو نفس الموبايل الأول",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "monthlyAverageIncome",
+                    "label": "متوسط الدخل الشهري مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "primaryEmail",
+                    "label": "البريد الإلكتروني مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "secondaryEmail",
+                    "label": "البريد الإلكتروني الثانوي (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyContactsCount",
+                    "label": "عدد جهات اتصال الطوارئ مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyName1",
+                    "label": "جهة اتصال الطوارئ 1 - الاسم مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyPhone1",
+                    "label": "جهة اتصال الطوارئ 1 - الرقم مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyAddress1",
+                    "label": "جهة اتصال الطوارئ 1 - العنوان مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyId1",
+                    "label": "جهة اتصال الطوارئ 1 - رقم الهوية (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyName2",
+                    "label": "جهة اتصال الطوارئ 2 - الاسم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyPhone2",
+                    "label": "جهة اتصال الطوارئ 2 - الرقم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyAddress2",
+                    "label": "جهة اتصال الطوارئ 2 - العنوان",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "emergencyId2",
+                    "label": "جهة اتصال الطوارئ 2 - رقم الهوية",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "education_bg",
+        "step_key": "step_3",
+        "title_ar": "المؤهلات العلمية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "eduHighestDegree",
+                    "label": "أعلى مؤهل تعليمي تم الحصول عليهمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduDegreeCountry",
+                    "label": "الدولة / Countryمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduInstitution",
+                    "label": "الجامعة / المعهد / University / Instituteمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduInstituteName",
+                    "label": "اسم المعهد / Institute Nameمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSchoolName",
+                    "label": "اسم المدرسة / School Nameمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduCollegeFacultySelect",
+                    "label": "الكلية / الكيان (قائمة)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduCollegeFacultyText",
+                    "label": "الكلية / قسم الدراسة بالمعهد / الإدارة التعليميةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSpeciality",
+                    "label": "التخصصمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduGpa",
+                    "label": "المعدل التراكمي (GPA)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduTotalScore",
+                    "label": "المجموعمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPercentage",
+                    "label": "النسبة المئويةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduGraduationDate",
+                    "label": "تاريخ التخرجمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "graduationCertificateScan",
+                    "label": "صورة شهادة التخرج",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduHasPostgraduate",
+                    "label": "درجة علمية أعلى (دراسات عليا)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPostgraduateDegreeType",
+                    "label": "الدرجة (ماجستير - دكتوراه)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduDegreeIssuerEntity",
+                    "label": "اسم الجهة المانحة للدرجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduMainSpecialityPg",
+                    "label": "التخصص الرئيسي للدرجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduSecondarySpecialityPg",
+                    "label": "التخصص الفرعي",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPgStartDate",
+                    "label": "تاريخ البدءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduPgEndDate",
+                    "label": "تاريخ الانتهاءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduFunding",
+                    "label": "تمويل شخصي أم جهة خارجية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduRecommendingEntity",
+                    "label": "اسم الجهة التي رشحتك",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "eduScholarshipEntity",
+                    "label": "اسم جهة المنحة",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "standardized_tests",
+        "step_key": "step_4",
+        "title_ar": "الاختبارات والشهادات المعيارية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "standardizedTestName",
+                    "label": "اسم الاختبار (Test Name)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestScore",
+                    "label": "درجة الاختبار (Test Score)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestAuthority",
+                    "label": "جهة الإصدار (Issuing Authority)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestDate",
+                    "label": "تاريخ الحصول (Date Obtained)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestDocument",
+                    "label": "Attach Document",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "standardizedTestUrl",
+                    "label": "رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "work_experience",
+        "step_key": "step_5",
+        "title_ar": "الخبرة العملية",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "empExperienceStatus",
+                    "label": "هل لديك خبرة عملية؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "employmentSectionCv",
+                    "label": "تحميل السيرة الذاتية مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobType",
+                    "label": "نوع الوظيفةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empWorkNature",
+                    "label": "طبيعة الوظيفةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empMinistry",
+                    "label": "الوزارةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empMinistrySub",
+                    "label": "الجهة التابعة للوزارة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJoiningDate",
+                    "label": "تاريخ الالتحاق بالعملمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empCurrentlyWorking",
+                    "label": "ما زلت أعمل في هذه الوظيفة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empEndDate",
+                    "label": "تاريخ الانتهاء من العملمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobTitle",
+                    "label": "المسمى الوظيفيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empSeniority",
+                    "label": "المستوى الوظيفي / الأقدمية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empDepartment",
+                    "label": "القسم / الإدارة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empSpeciality",
+                    "label": "التخصص المهني",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empJobDescription",
+                    "label": "وصف الوظيفة والمسؤوليات",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empCompanyAddress",
+                    "label": "عنوان جهة العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empIndustryPrimary",
+                    "label": "مجال العمل / طبيعة النشاط (أول)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empIndustrySecondary",
+                    "label": "مجال العمل (ثانٍ — اختياري، حتى مجالين)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefName",
+                    "label": "اسم المرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefPhone",
+                    "label": "رقم هاتف المرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefEmail",
+                    "label": "البريد الإلكتروني للمرجع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "empRefPlaceIndex",
+                    "label": "مكان العمل المشترك",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "organizationIndustry",
+                    "label": "المنظمة / جهة العمل والقطاع (Organization &amp;                           Industry)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "startDate",
+                    "label": "تاريخ البدء (Start Date)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "endDate",
+                    "label": "تاريخ الانتهاء (End Date)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "keyResponsibilities",
+                    "label": "المسؤوليات الرئيسية (Key Responsibilities)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "reasonForLeaving",
+                    "label": "سبب ترك العمل (Reason for Leaving)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "currentJobTitle",
+                    "label": "المسمى الوظيفي الحالي (Current Job Title)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "yearsManagementExperience",
+                    "label": "سنوات الخبرة الإدارية (Years of Management                       Experience)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "organizationSize",
+                    "label": "حجم المنظمة (Organization Size)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "annualBudgetManaged",
+                    "label": "الميزانية السنوية المدارة (Annual Budget Managed)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "directReports",
+                    "label": "عدد المرؤوسين المباشرين (Direct Reports / Team                       Size)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "globalExperience",
+                    "label": "الخبرة العالمية (Global Experience - سنوات في                       الخارج)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "skills_languages",
+        "step_key": "step_6",
+        "title_ar": "المهارات واللغات والاهتمامات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "technicalSkillCategory",
+                    "label": "المهارات التقنية (Technical Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "computerSkillCategory",
+                    "label": "مهارات الحاسب الآلي (Computer Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "softSkillCategory",
+                    "label": "المهارات الشخصية (Soft Skills)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "otherSkillsFreeText",
+                    "label": "مهارات أخرى (Other Skills)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "nativeLanguage",
+                    "label": "اللغة الأم (Mother Language) (اجبارى)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "englishProficiency",
+                    "label": "اللغة الثانية (الإنجليزية) — مستوى الإجادة فقط (اجبارى)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "interestsDescription",
+                    "label": "وصف الاهتماماتمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "usesSocialMedia",
+                    "label": "هل تستخدم وسائل التواصل الاجتماعي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialPlatformFacebook",
+                    "label": "منصات التواصل (تشغيل / إيقاف لكل منصة)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "awards_conferences",
+        "step_key": "step_7",
+        "title_ar": "الجوائز والمؤتمرات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "hasPrizesAwards",
+                    "label": "هل حصلت على أي جوائز أو تكريمات؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeName",
+                    "label": "اسم الجائزة / التكريم",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeDateAchieved",
+                    "label": "تاريخ الحصول عليها",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeCategory",
+                    "label": "فئة الجائزة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeIssuingBody",
+                    "label": "الجهة المانحة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "prizeCertificate",
+                    "label": "تحميل صورة الشهادة (PDF أو صورة)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasConferencesWorkshops",
+                    "label": "هل شاركت في أي مؤتمرات أو ورش عمل؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwActivityType",
+                    "label": "النوعمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwEventName",
+                    "label": "اسم الفعالية",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwOrganizingEntity",
+                    "label": "الجهة المنظمة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwStartDate",
+                    "label": "تاريخ البدءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwEndDate",
+                    "label": "تاريخ الانتهاءمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "cwParticipationLevel",
+                    "label": "مستوى المشاركة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "awardTitle",
+                    "label": "عنوان الجائزة / التكريم (Award / Recognition                           Title)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "issuingBody",
+                    "label": "الجهة المانحة (Issuing Body)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "keyAchievement",
+                    "label": "الإنجاز الرئيسي (حتى 100 كلمة) (Key Achievement)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "communityLeadership",
+                    "label": "القيادة المجتمعية / التطوع (Community / Volunteer                     Leadership)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "extracurricularRole",
+                    "label": "الدور (Role)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "extracurricularDuration",
+                    "label": "مدة المشروع (Project Duration)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "portfolioUrl",
+                    "label": "منشورات / ملف أعمال (Publication / Portfolio)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "public_work_legal",
+        "step_key": "step_8",
+        "title_ar": "العمل العام والمشاركة السياسية والموقف القانوني",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "hasPublicVoluntaryWork",
+                    "label": "هل شاركت في أي عمل عام أو تطوعي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvFoundationName",
+                    "label": "اسم المؤسسة أو الجمعية الخيريةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvPosition",
+                    "label": "المنصب / الدور الوظيفيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvJoinDate",
+                    "label": "سنة / تاريخ الالتحاقمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvLeaveDate",
+                    "label": "سنة / تاريخ المغادرة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvScope",
+                    "label": "نطاق العمل ووصف الخبرة",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvWorkField",
+                    "label": "مجال العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvCountry",
+                    "label": "دولة العمل",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "pvState",
+                    "label": "المحافظة أو الولايةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPoliticalParticipation",
+                    "label": "هل شاركت في أي عمل سياسي؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalPartyName",
+                    "label": "اسم الحزب أو التنظيم السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalRole",
+                    "label": "الدور السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "politicalWorkDetails",
+                    "label": "تفاصيل العمل السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPoliticalCandidacy",
+                    "label": "هل ترشحت لأي منصب سياسي؟",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyPositionName",
+                    "label": "اسم المنصب السياسيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyResult",
+                    "label": "النتيجةمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "candidacyExperienceDescription",
+                    "label": "وصف تجربة الترشحمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "hasPriorCriminalConvictions",
+                    "label": "هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "priorConvictionDescription",
+                    "label": "وصف الحكم الجنائيمطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "sectionSevenCriminalRecordCertificate",
+                    "label": "صحيفة الحالة الجنائية (الفيش والتشبيه) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "motivations",
+        "step_key": "step_9",
+        "title_ar": "الدوافع والمخرجات واللوجستيات",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "cvResume",
+                    "label": "السيرة الذاتية الشاملة (CV / Resume) مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "lettersOfRecommendation",
+                    "label": "خطابات التوصية (2) (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "criminalRecord",
+                    "label": "فيش جنائي / شهادة خلو سوابق مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "employerNoc",
+                    "label": "خطاب اعتماد من جهة العمل (Employer Acknowledgment / NOC)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceName",
+                    "label": "الاسم (Name)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceRelationship",
+                    "label": "العلاقة / المسمى الوظيفي (Relationship / Title)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "referenceContact",
+                    "label": "معلومات الاتصال (Contact Information)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "primaryLearningObjective",
+                    "label": "الهدف التعليمي الرئيسي (Primary Learning Objective)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "uniqueContribution",
+                    "label": "مساهمتك الفريدة للدفعة (Unique Contribution to Cohort)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "futureCareerGoal",
+                    "label": "هدفـك المهني خلال 5 سنوات (Future Career Goal - 5 Years)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "fundingSource",
+                    "label": "مصدر التمويل (Funding Source)مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "scholarshipEssay",
+                    "label": "مقال المنحة (Scholarship Essay) - الحد الأقصى 5000 حرف",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "dietaryRestrictions",
+                    "label": "قيود النظام الغذائي (Dietary Restrictions)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "accessibilityRequirements",
+                    "label": "متطلبات إمكانية الوصول (Accessibility Requirements)",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    },
+    {
+        "step_type": "final_verification",
+        "step_key": "step_10",
+        "title_ar": "القسم العاشر - التحقق والتأكيد النهائي",
+        "description_ar": "",
+        "is_required": true,
+        "config_json": {
+            "is_active": true,
+            "fields": [
+                {
+                    "field_id": "photoFront",
+                    "label": "التقاط / رفع",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileFacebookUrl",
+                    "label": "رابط حساب فيسبوك مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileInstagramUrl",
+                    "label": "رابط حساب إنستجرام مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileXUrl",
+                    "label": "رابط حساب إكس / تويتر مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileLinkedInUrl",
+                    "label": "رابط حساب لينكد إن مطلوب",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "socialProfileTikTokUrl",
+                    "label": "رابط حساب تيك توك (اختياري)",
+                    "is_active": true,
+                    "is_required": true
+                },
+                {
+                    "field_id": "dataAccuracyTermsConfirmed",
+                    "label": "أقر بصحة جميع البيانات المدخلة وأوافق على كافة الشروط                       والأحكام الخاصة بالبرنامج",
+                    "is_active": true,
+                    "is_required": true
+                }
+            ]
+        }
+    }
+];
+            selectedStepIndex = 0;
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("builderArea").style.display = "block";
+            renderAdmSteps();
+          });
+      }
+
+      
+      var draggedIndex = -1;
+
+      function handleDragStart(e, index) {
+          draggedIndex = index;
+          e.dataTransfer.effectAllowed = 'move';
+      }
+
+      function handleDragOver(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+      }
+
+      function handleDrop(e, dropIndex) {
+          e.preventDefault();
+          if (draggedIndex === -1 || draggedIndex === dropIndex) return;
+
+          var item = registrationSteps.splice(draggedIndex, 1)[0];
+          registrationSteps.splice(dropIndex, 0, item);
+          
+          if (selectedStepIndex === draggedIndex) {
+              selectedStepIndex = dropIndex;
+          } else if (selectedStepIndex > draggedIndex && selectedStepIndex <= dropIndex) {
+              selectedStepIndex--;
+          } else if (selectedStepIndex < draggedIndex && selectedStepIndex >= dropIndex) {
+              selectedStepIndex++;
+          }
+
+          draggedIndex = -1;
+          renderAdmSteps();
+      }
+
+      var selectedStepIndex = -1;
+
+
+      function addAdmStep() {
+        var num = registrationSteps.length + 1;
+        var key = 'step_' + num;
+        registrationSteps.push({
+            step_type: 'fullName',
+            step_key: key,
+            title_ar: 'الاسم الكامل',
+            description_ar: '',
+            is_required: true,
+            config_json: {
+                is_active: true
+            }
+        });
+        selectedStepIndex = registrationSteps.length - 1;
+        renderAdmSteps();
+      }
+      
+      function selectStep(idx) {
+          if (selectedStepIndex === idx) {
+              selectedStepIndex = -1;
+          } else {
+              selectedStepIndex = idx;
+          }
+          renderAdmSteps();
+      }
+      
+      function updateSelectedStep(field, value) {
+          if (selectedStepIndex === -1) return;
+          registrationSteps[selectedStepIndex][field] = value;
+          renderStepsListOnly();
+      }
+      
+      function updateSelectedConfig(field, value) {
+          if (selectedStepIndex === -1) return;
+          if (!registrationSteps[selectedStepIndex].config_json) {
+              registrationSteps[selectedStepIndex].config_json = {};
+          }
+          registrationSteps[selectedStepIndex].config_json[field] = value;
+          renderStepsListOnly();
+      }
+      
+      
+      function removeStepDirectly(e, idx) {
+          e.stopPropagation();
+          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+              registrationSteps.splice(idx, 1);
+              if (selectedStepIndex === idx) {
+                  selectedStepIndex = -1;
+              } else if (selectedStepIndex > idx) {
+                  selectedStepIndex--;
+              }
+              renderAdmSteps();
+          }
+      }
+
+      function removeSelectedStep() {
+          if (selectedStepIndex === -1) return;
+          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+              registrationSteps.splice(selectedStepIndex, 1);
+              selectedStepIndex = -1;
+              renderAdmSteps();
+          }
+      }
+
+      function renderAdmSteps() {
+        renderStepsListOnly();
+      }
+      
+      function renderStepsListOnly() {
+        var list = document.getElementById("admStepsList");
+        var noMsg = document.getElementById("noAdmStepsMsg");
+        
+        if (!registrationSteps.length) { 
+            list.innerHTML = ""; 
+            noMsg.style.display = "block"; 
+            return; 
+        }
+        noMsg.style.display = "none";
+        
+        var html = "";
+        registrationSteps.forEach(function(s, i) {
+          var isSelected = i === selectedStepIndex;
+          var activeBadge = (s.config_json && s.config_json.is_active === false) 
+              ? '<span class="badge badge--red">غير نشط</span>' 
+              : '<span class="badge badge--green">نشط</span>';
+              
+          var reqBadge = s.is_required 
+              ? '<span class="badge badge--red">إجباري</span>' 
+              : '<span class="badge" style="background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.1)">اختياري</span>';
+              
+          var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
+          
+          html += '<div class="builder-step-card '+(isSelected?'selected':'')+'" style="cursor:pointer;" onclick="selectStep('+i+')" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')">';
+          html += '  <div style="display:flex; justify-content:space-between; align-items:center;">';
+          html += '    <div style="display:flex; align-items:center; gap:1rem;">';
+          html += '      <div class="builder-step-num">'+(i+1)+'</div>';
+          html += '      <div class="builder-step-info">';
+          html += '        <div class="builder-step-title">';
+          html += '          ' + (s.title_ar || 'خطوة بدون عنوان');
+          html += '        </div>';
+          html += '        <div class="builder-step-meta">';
+          html += '          <span style="color:#60a5fa;font-family:monospace;">'+(s.step_key || 'step_'+(i+1))+'</span>';
+          html += '          <span style="opacity:0.5">•</span>';
+          html += '          <span>'+typeLabel+'</span>';
+          html += '        </div>';
+          html += '      </div>';
+          html += '    </div>';
+          html += '    <div style="display:flex; align-items:center; gap:0.75rem;">';
+          html += '      <div style="display:flex;gap:0.4rem;">' + reqBadge + activeBadge + '</div>';
+          html += '      <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب">';
+          html += '        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="opacity:0.6;"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>';
+          html += '      </div>';
+          html += '      <button type="button" onclick="removeStepDirectly(event, '+i+')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:4px;color:#ef4444;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.background=\'rgba(239,68,68,0.2)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.1)\'" title="حذف الخطوة">';
+          html += '        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+          html += '      </button>';
+          html += '      <div style="color:var(--text-subtle); margin-right: 0.5rem;">';
+          html += '        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition: transform 0.3s; transform: rotate('+(isSelected?180:0)+'deg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+          html += '      </div>';
+          html += '    </div>';
+          html += '  </div>';
+
+          // Render Fields Checklist inside the card if selected
+          if (isSelected) {
+            html += '  <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px dashed rgba(255,255,255,0.1);" onclick="event.stopPropagation()">';
+            html += '    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">';
+            html += '      <h4 style="font-size:0.9rem; color:var(--text-subtle); margin:0;">الحقول (اختر لإظهارها في هذه الخطوة):</h4>';
+            if (s.config_json && s.config_json.fields && s.config_json.fields.length > 0) {
+               var allSelected = s.config_json.fields.every(f => f.is_active !== false);
+               html += '      <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;" title="تحديد/إلغاء تحديد جميع الحقول">';
+               html += '        <input type="checkbox" onchange="toggleAllFields(' + i + ', this.checked)" ' + (allSelected ? 'checked' : '') + ' style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer;">';
+               html += '        <span style="font-size:0.85rem; color:var(--text-main);">تحديد الكل</span>';
+               html += '      </label>';
+            }
+            html += '    </div>';
+            html += '    <div style="display:flex; flex-direction:column; gap:0.5rem; max-height: 250px; overflow-y: auto; padding-right: 0.5rem;" class="custom-scrollbar">';
+            if (s.config_json && s.config_json.fields && s.config_json.fields.length > 0) {
+              s.config_json.fields.forEach(function(f, fIdx) {
+                  var isChecked = f.is_active !== false ? "checked" : "";
+                  html += '<label style="display:flex; align-items:center; gap:0.75rem; cursor:pointer; padding:0.6rem; border-radius:6px; background:rgba(255,255,255,0.02); transition:background 0.2s;" onmouseover="this.style.background=\'rgba(255,255,255,0.06)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.02)\'">';
+                  html += '  <input type="checkbox" onchange="toggleFieldActive(' + i + ', ' + fIdx + ', this.checked)" ' + isChecked + ' style="width:18px;height:18px;accent-color:var(--primary);cursor:pointer;">';
+                  html += '  <span style="font-size:0.9rem; color:var(--text-main); flex:1;">' + (f.label || f.field_id) + '</span>';
+                  html += '  <span style="font-size:0.75rem; color:var(--text-subtle); font-family:monospace;">' + f.field_id + '</span>';
+                  html += '</label>';
+              });
+            } else {
+              html += '      <span style="color:#9ca3af; font-size:0.85rem;">لا توجد حقول قابلة للتعديل في هذه الخطوة.</span>';
+            }
+            html += '    </div>';
+            html += '  </div>';
+          }
+          
+          html += '</div>';
+        });
+        list.innerHTML = html;
+        
+        var dependsSelect = document.getElementById("settingDependsOn");
+        if (dependsSelect) {
+            var opts = '<option value="">لا يوجد (مفتوحة دائماً)</option>';
+            registrationSteps.forEach(function(s, idx) {
+                if (idx !== selectedStepIndex) {
+                    opts += '<option value="'+(s.step_key || 'step_'+(idx+1))+'">'+(s.title_ar || s.step_key)+'</option>';
+                }
+            });
+            dependsSelect.innerHTML = opts;
+            if (selectedStepIndex !== -1 && registrationSteps[selectedStepIndex].config_json && registrationSteps[selectedStepIndex].config_json.depends_on) {
+                dependsSelect.value = registrationSteps[selectedStepIndex].config_json.depends_on;
+            } else {
+                dependsSelect.value = "";
+            }
+        }
+      }
+
+      
+      function toggleFieldActive(stepIdx, fieldIdx, isChecked) {
+          if(registrationSteps[stepIdx] && registrationSteps[stepIdx].config_json && registrationSteps[stepIdx].config_json.fields) {
+              registrationSteps[stepIdx].config_json.fields[fieldIdx].is_active = isChecked;
+              renderAdmSteps();
+          }
+      }
+
+      function toggleAllFields(stepIdx, isChecked) {
+          if(registrationSteps[stepIdx] && registrationSteps[stepIdx].config_json && registrationSteps[stepIdx].config_json.fields) {
+              registrationSteps[stepIdx].config_json.fields.forEach(function(f) {
+                  f.is_active = isChecked;
+              });
+              renderAdmSteps();
+          }
+      }
+
+
+
+      function saveRegistrationSteps() {
+        var courseId = document.getElementById("courseSelect").value;
+        if (!courseId) return;
+
+        // Re-assign step_order
+        registrationSteps.forEach(function(s, i) { s.step_order = i; if(!s.step_key) s.step_key = "step_" + (i+1); });
+          
+        fetch("/api/courses/" + courseId + "/registration-steps", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem(EDITOR_TOKEN_KEY) },
+          body: JSON.stringify(registrationSteps)
+        })
+          .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
+          .then(function() {
+            showEditorToast("تم حفظ مسار التسجيل بنجاح", "success");
+          })
+          .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
+      }
+    </script>
+  </body>
+</html>

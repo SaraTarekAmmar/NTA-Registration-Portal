@@ -17,6 +17,7 @@ class CourseBase(BaseModel):
     stages: Optional[List[Dict[str, Any]]] = None
     batch_data: Optional[Dict[str, Any]] = None
     course_type: Optional[str] = None
+    registration_steps: Optional[List[Dict[str, Any]]] = None
 
 
 class Course(CourseBase):

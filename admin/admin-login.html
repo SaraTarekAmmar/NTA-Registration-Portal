@@ -214,16 +214,9 @@
       (function () {
         var ADMIN_TOKEN_KEY = "admin_token";
 
-        // If already logged in as admin, redirect to dashboard
-        var existingToken = localStorage.getItem(ADMIN_TOKEN_KEY);
-        if (existingToken) {
-          try {
-            var p = JSON.parse(atob(existingToken.split(".")[1]));
-            if (p && ["admin", "superadmin"].includes(p.role) && (!p.exp || p.exp > Date.now() / 1000)) {
-              window.location.replace("admin-dashboard.html");
-            }
-          } catch (e) {}
-        }
+        // Always show the login form (no auto-skip): a fresh visit must log in.
+        // Clear any stale token so the session starts clean.
+        localStorage.removeItem(ADMIN_TOKEN_KEY);
 
         var form = document.getElementById("adminLoginForm");
         var btn = document.getElementById("adminLoginBtn");

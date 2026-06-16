@@ -390,19 +390,8 @@
         '<div class="fb-btn-row">' +
           '<button class="fb-btn fb-btn--primary" onclick="saveStep(' + id + ')">' + NTAIcons('save', 15) + ' حفظ</button>' +
           '<button class="fb-btn fb-btn--danger" onclick="deleteStep(' + id + ')">' + NTAIcons('trash', 15) + ' حذف</button>' +
-        '</div>' +
-
-        '<hr style="border:none;border-top:1px solid var(--border-subtle);margin:1.25rem 0;" />' +
-        '<div style="font-size:.8rem;font-weight:700;color:var(--text-subtle);margin-bottom:.75rem;">تجاوز لمتقدم بعينه</div>' +
-        '<div class="fb-override-form">' +
-          '<div class="fb-field"><label>رقم المتقدم (ID)</label><input class="fb-input" type="number" id="ovApplicantId" placeholder="12345" /></div>' +
-          '<div class="fb-row">' +
-            '<div class="fb-field"><label>مرئية</label><select class="fb-select" id="ovVisible"><option value="">بدون تغيير</option><option value="1">نعم</option><option value="0">لا</option></select></div>' +
-            '<div class="fb-field"><label>مقفلة</label><select class="fb-select" id="ovLocked"><option value="">بدون تغيير</option><option value="1">نعم</option><option value="0">لا</option></select></div>' +
-          '</div>' +
-          '<div class="fb-field"><label>السبب</label><input class="fb-input" id="ovReason" placeholder="اختياري" /></div>' +
-          '<button class="fb-btn fb-btn--secondary" onclick="saveOverride(' + id + ')">تطبيق التجاوز</button>' +
         '</div>';
+
     }
 
     function buildStepTypeOptions(current) {

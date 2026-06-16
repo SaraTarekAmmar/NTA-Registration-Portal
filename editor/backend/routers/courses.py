@@ -22,6 +22,72 @@ def skill_to_db(value):
     return SKILL_TO_DB.get(value, value if value in ("Beginner", "Intermediate", "Advanced") else "Intermediate")
 
 
+VALID_REGISTRATION_TYPES = {
+    'fullName', 'fullNameEn', 'dob', 'countryOfStay', 'governmentOrState',
+    'city', 'address', 'maritalStatus', 'militaryStatus', 'militaryReason',
+    'identityDocNationalId', 'identityDocPassport', 'nationalId', 'passportNumber', 'identityDocumentScan',
+    'numberOfNationalities', 'nationality', 'secondNationality', 'thirdNationality', 'mobileNumber1',
+    'mobileNumber2', 'whatsappNumber', 'whatsappSameAsMobile', 'monthlyAverageIncome', 'primaryEmail',
+    'secondaryEmail', 'emergencyContactsCount', 'emergencyName1', 'emergencyPhone1', 'emergencyAddress1',
+    'emergencyId1', 'emergencyName2', 'emergencyPhone2', 'emergencyAddress2', 'emergencyId2',
+    'eduHighestDegree', 'eduDegreeCountry', 'eduInstitution', 'eduInstituteName', 'eduSchoolName',
+    'eduCollegeFacultySelect', 'eduCollegeFacultyText', 'eduSpeciality', 'eduGpa', 'eduTotalScore',
+    'eduPercentage', 'eduGraduationDate', 'graduationCertificateScan', 'eduHasPostgraduate', 'eduPostgraduateDegreeType',
+    'eduDegreeIssuerEntity', 'eduMainSpecialityPg', 'eduSecondarySpecialityPg', 'eduPgStartDate', 'eduPgEndDate',
+    'eduFunding', 'eduRecommendingEntity', 'eduScholarshipEntity', 'standardizedTestName', 'standardizedTestName',
+    'standardizedTestScore', 'standardizedTestAuthority', 'standardizedTestDate', 'standardizedTestDocument', 'standardizedTestUrl',
+    'empExperienceStatus', 'employmentSectionCv', 'empJobType', 'empWorkNature', 'empMinistry',
+    'empMinistrySub', 'empJoiningDate', 'empCurrentlyWorking', 'empEndDate', 'empJobTitle',
+    'empSeniority', 'empDepartment', 'empSpeciality', 'empJobDescription', 'empCompanyAddress',
+    'empIndustryPrimary', 'empIndustrySecondary', 'empRefName', 'empRefPhone', 'empRefEmail',
+    'empRefPlaceIndex', 'organizationIndustry', 'startDate', 'endDate', 'keyResponsibilities',
+    'reasonForLeaving', 'currentJobTitle', 'yearsManagementExperience', 'organizationSize', 'annualBudgetManaged',
+    'directReports', 'globalExperience', 'technicalSkillCategory', 'computerSkillCategory', 'softSkillCategory',
+    'otherSkillsFreeText', 'nativeLanguage', 'englishProficiency', 'interestsDescription', 'usesSocialMedia',
+    'socialPlatformFacebook', 'hasPrizesAwards', 'prizeName', 'prizeDateAchieved', 'prizeCategory',
+    'prizeIssuingBody', 'prizeCertificate', 'hasConferencesWorkshops', 'cwActivityType', 'cwEventName',
+    'cwOrganizingEntity', 'cwStartDate', 'cwEndDate', 'cwParticipationLevel', 'awardTitle',
+    'issuingBody', 'keyAchievement', 'communityLeadership', 'extracurricularRole', 'extracurricularDuration',
+    'portfolioUrl', 'hasPublicVoluntaryWork', 'pvFoundationName', 'pvPosition', 'pvJoinDate',
+    'pvLeaveDate', 'pvScope', 'pvWorkField', 'pvCountry', 'pvState',
+    'hasPoliticalParticipation', 'politicalPartyName', 'politicalRole', 'politicalWorkDetails', 'hasPoliticalCandidacy',
+    'candidacyPositionName', 'candidacyResult', 'candidacyExperienceDescription', 'hasPriorCriminalConvictions', 'priorConvictionDescription',
+    'sectionSevenCriminalRecordCertificate', 'cvResume', 'lettersOfRecommendation', 'criminalRecord', 'employerNoc',
+    'referenceName', 'referenceRelationship', 'referenceContact', 'primaryLearningObjective', 'uniqueContribution',
+    'futureCareerGoal', 'fundingSource', 'scholarshipEssay', 'dietaryRestrictions', 'accessibilityRequirements',
+    'photoFront', 'socialProfileFacebookUrl', 'socialProfileInstagramUrl', 'socialProfileXUrl', 'socialProfileLinkedInUrl',
+    'socialProfileTikTokUrl', 'dataAccuracyTermsConfirmed',
+    
+}
+
+def sync_course_steps(cursor, course_id, steps, path_type):
+    # Delete existing
+    cursor.execute("DELETE FROM course_steps WHERE course_id=%s AND path_type=%s", (course_id, path_type))
+    if not steps:
+        return
+        
+    for idx, step in enumerate(steps):
+        step_type = step.get('step_type', '')
+        if path_type == 'registration' and step_type not in VALID_REGISTRATION_TYPES:
+            raise HTTPException(status_code=400, detail=f"Invalid registration step type: {step_type}")
+            
+        cursor.execute(
+            """INSERT INTO course_steps 
+               (course_id, path_type, step_key, step_type, title_ar, step_order, is_required, config_json) 
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+            (
+                course_id,
+                path_type,
+                step.get('step_key', f"{path_type}_{idx}"),
+                step_type,
+                step.get('title_ar', 'بدون عنوان'),
+                step.get('step_order', idx),
+                int(step.get('is_required', 1)),
+                json.dumps(step.get('config_json', {}), ensure_ascii=False)
+            )
+        )
+
+
 @router.get("")
 async def list_courses(editor: dict = Depends(require_editor)):
     db = get_db_connection()
@@ -75,6 +141,17 @@ async def get_course(course_id: int, editor: dict = Depends(require_editor)):
         except json.JSONDecodeError:
             row['batch_data'] = {}
         row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
+        
+        cursor.execute("SELECT step_key, step_type, title_ar, step_order, is_required, config_json FROM course_steps WHERE course_id=%s AND path_type='registration' ORDER BY step_order", (course_id,))
+        steps = cursor.fetchall()
+        for s in steps:
+            if isinstance(s.get('config_json'), str):
+                try:
+                    s['config_json'] = json.loads(s['config_json'])
+                except:
+                    s['config_json'] = {}
+        row['registration_steps'] = steps
+        
         return row
     finally:
         cursor.close()
@@ -105,6 +182,11 @@ async def create_course(course: CourseBase, editor: dict = Depends(require_edito
         )
         db.commit()
         new_id = cursor.lastrowid
+        
+        if course.registration_steps is not None:
+            sync_course_steps(cursor, new_id, course.registration_steps, 'registration')
+            db.commit()
+            
         return {"id": new_id, **course.dict()}
     finally:
         cursor.close()
@@ -143,7 +225,15 @@ async def update_course(course_id: int, course: CourseBase, editor: dict = Depen
         )
         db.commit()
         if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Course not found")
+            # Check if course actually exists to avoid 404 when no fields changed
+            cursor.execute("SELECT id FROM courses WHERE id=%s", (course_id,))
+            if not cursor.fetchone():
+                raise HTTPException(status_code=404, detail="Course not found")
+                
+        if course.registration_steps is not None:
+            sync_course_steps(cursor, course_id, course.registration_steps, 'registration')
+            db.commit()
+            
         return {"id": course_id, **course.dict()}
     finally:
         cursor.close()
@@ -189,3 +279,108 @@ async def upload_course_cover(
     # Pass "0" as ref_id since course_id might not exist yet
     rel_path = await save_upload_file(file, "course_image", "0")
     return {"image_url": rel_path}
+
+
+VALID_ADMISSION_TYPES = {
+    'admission_test', 'interview', 'essay', 'background_check', 
+    'admin_review', 'acceptance_decision'
+}
+
+@router.get("/{course_id}/admission-steps")
+async def get_admission_steps(course_id: int, editor: dict = Depends(require_editor)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT step_key, step_type, title_ar, step_order, is_required, config_json FROM course_steps WHERE course_id=%s AND path_type='admission' ORDER BY step_order", (course_id,))
+        steps = cursor.fetchall()
+        for s in steps:
+            if isinstance(s.get('config_json'), str):
+                try:
+                    s['config_json'] = json.loads(s['config_json'])
+                except:
+                    s['config_json'] = {}
+        return steps
+    finally:
+        cursor.close()
+        db.close()
+
+@router.put("/{course_id}/admission-steps")
+async def update_admission_steps(course_id: int, steps: list, editor: dict = Depends(require_editor)):
+    db = get_db_connection()
+    cursor = db.cursor()
+    try:
+        # Delete existing
+        cursor.execute("DELETE FROM course_steps WHERE course_id=%s AND path_type='admission'", (course_id,))
+        for idx, step in enumerate(steps):
+            step_type = step.get('step_type', '')
+            if step_type not in VALID_ADMISSION_TYPES:
+                raise HTTPException(status_code=400, detail=f"Invalid admission step type: {step_type}")
+                
+            cursor.execute(
+                """INSERT INTO course_steps 
+                   (course_id, path_type, step_key, step_type, title_ar, step_order, is_required, config_json) 
+                   VALUES (%s, 'admission', %s, %s, %s, %s, %s, %s)""",
+                (
+                    course_id,
+                    step.get('step_key', f"admission_{idx}"),
+                    step_type,
+                    step.get('title_ar', 'بدون عنوان'),
+                    step.get('step_order', idx),
+                    int(step.get('is_required', 1)),
+                    json.dumps(step.get('config_json', {}), ensure_ascii=False)
+                )
+            )
+        db.commit()
+        return {"message": "Admission steps updated successfully"}
+    finally:
+        cursor.close()
+        db.close()
+
+
+@router.get("/{course_id}/registration-steps")
+async def get_registration_steps(course_id: int, editor: dict = Depends(require_editor)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT step_key, step_type, title_ar, step_order, is_required, config_json FROM course_steps WHERE course_id=%s AND path_type='registration' ORDER BY step_order", (course_id,))
+        steps = cursor.fetchall()
+        for s in steps:
+            if isinstance(s.get('config_json'), str):
+                try:
+                    s['config_json'] = json.loads(s['config_json'])
+                except:
+                    s['config_json'] = {}
+        return steps
+    finally:
+        cursor.close()
+        db.close()
+
+@router.put("/{course_id}/registration-steps")
+async def update_registration_steps(course_id: int, steps: list, editor: dict = Depends(require_editor)):
+    db = get_db_connection()
+    cursor = db.cursor()
+    try:
+        # Delete existing
+        cursor.execute("DELETE FROM course_steps WHERE course_id=%s AND path_type='registration'", (course_id,))
+        
+        # Insert new
+        for idx, step in enumerate(steps):
+            cursor.execute(
+                """INSERT INTO course_steps 
+                   (course_id, path_type, step_key, step_type, title_ar, step_order, is_required, config_json) 
+                   VALUES (%s, 'registration', %s, %s, %s, %s, %s, %s)""",
+                (
+                    course_id,
+                    step.get('step_key', f"reg_{idx}"),
+                    step.get('step_type', ''),
+                    step.get('title_ar', 'بدون عنوان'),
+                    step.get('step_order', idx),
+                    int(step.get('is_required', 1)),
+                    json.dumps(step.get('config_json', {}), ensure_ascii=False)
+                )
+            )
+        db.commit()
+        return {"message": "Registration steps updated successfully"}
+    finally:
+        cursor.close()
+        db.close()
