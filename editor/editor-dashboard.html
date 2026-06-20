@@ -457,6 +457,39 @@
         0%   { background-position: 200% 0; }
         100% { background-position: -200% 0; }
       }
+
+      /* ══ UX polish & accessibility (Web Interface Guidelines) ══ */
+      :root { color-scheme: dark; }
+      html.light-mode { color-scheme: light; }
+
+      /* Tabular figures so metric numbers stay aligned as they change */
+      .ed-kpi__val, .ed-stat__val, .ed-card__meta { font-variant-numeric: tabular-nums; }
+
+      /* Keyboard-only focus rings (no ring on mouse click) */
+      a:focus-visible, button:focus-visible, [tabindex]:focus-visible,
+      select:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 2px solid #ef4444;
+        outline-offset: 3px;
+        border-radius: 10px;
+      }
+
+      /* Snappier taps on touch */
+      a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+      /* Lift + clearer affordance on the actionable cards */
+      .ed-kpi, .ed-action { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+      .ed-action:hover .ed-action__arrow { transform: translateX(-4px); }
+      .ed-action__arrow { transition: transform .2s ease; }
+
+      /* Respect reduced-motion: drop decorative animation, keep UI usable */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: .001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: .001ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
     </style>
   </head>
   <body data-page="dashboard">
@@ -629,8 +662,11 @@
         return fetch(url, Object.assign({}, opts, {headers: headers}));
       }
 
+      var REDUCE_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
       function countUp(el, target) {
         if (!el || isNaN(target) || target === 0) { if (el) el.textContent = target; return; }
+        if (REDUCE_MOTION) { el.textContent = target; return; }
         var current = 0;
         var step    = Math.max(1, Math.ceil(target / 45));
         function tick() {

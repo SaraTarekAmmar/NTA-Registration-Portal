@@ -655,6 +655,35 @@
       /* Make sure echarts canvases keep their pixels when printing */
       .dash-chart canvas { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+
+    /* ══ UX polish & accessibility (Web Interface Guidelines) ══ */
+    :root { color-scheme: dark; }
+    html.light-mode { color-scheme: light; }
+
+    /* Tabular figures so KPIs / counts stay aligned as numbers change */
+    .dash-kpi__val, .adm-pipe-step__val, .dash-donut-total__num,
+    .dash-status-legend__val, .dash-top__count { font-variant-numeric: tabular-nums; }
+
+    /* Keyboard-only focus rings (no ring on mouse click) */
+    a:focus-visible, button:focus-visible, [tabindex]:focus-visible,
+    select:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid #ef4444;
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    /* Snappier taps on touch */
+    a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+    /* Respect reduced-motion: drop decorative animation, keep UI usable */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
   <script src="js/admin-guard.js"></script>
 </head>
@@ -678,7 +707,7 @@
       <div class="dash-topbar__actions">
         <span class="dash-topbar__date" id="topbarDate"></span>
         <button class="dash-topbar__export" type="button" onclick="exportReport()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           تصدير التقرير
         </button>
       </div>
