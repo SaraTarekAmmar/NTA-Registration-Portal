@@ -1115,6 +1115,33 @@
         font-weight: 700;
         color: var(--text-muted);
       }
+
+      /* ══ Light-mode overrides — surfaces light, text readable ══ */
+      html.light-mode .ap-panel,
+      html.light-mode .ap-qs-item,
+      html.light-mode .ap-chart-box,
+      html.light-mode .ap-att-summary,
+      html.light-mode .ap-att-table,
+      html.light-mode .ap-course-banner,
+      html.light-mode .ap-sess-card,
+      html.light-mode .ap-history-card,
+      html.light-mode .ap-rec-card,
+      html.light-mode .ap-field,
+      html.light-mode .admin-profile__tabs { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); }
+      html.light-mode .admin-profile__tab { color: var(--text-subtle); }
+      html.light-mode .admin-profile__tab--active,
+      html.light-mode .admin-profile__tab--analysis { background: rgba(99,102,241,0.1); color: var(--text-main); }
+      html.light-mode .ap-score-chip,
+      html.light-mode .ap-sess-card__date,
+      html.light-mode .ap-sess-card__head,
+      html.light-mode .ap-sess-photo__label,
+      html.light-mode .ap-doc-link { background: #f8fafc; color: var(--text-main); border-color: rgba(0,0,0,0.1); }
+      html.light-mode .ap-att-bar,
+      html.light-mode .ap-score-bar,
+      html.light-mode .ap-strength-bar { background: rgba(0,0,0,0.08); }
+      html.light-mode .ap-panel,
+      html.light-mode .ap-sess-card,
+      html.light-mode .ap-history-card { box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
     </style>
     <script src="js/admin-guard.js"></script>
 </head>

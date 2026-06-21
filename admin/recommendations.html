@@ -1808,6 +1808,22 @@
         .rec-sidenav { flex-wrap: wrap; }
         .rec-sidenav__btn { flex: 1 1 auto; }
       }
+
+      /* ══ Light-mode overrides — surfaces light, text readable ══ */
+      html.light-mode .rec-table,
+      html.light-mode .rec-ai-panel,
+      html.light-mode .rec-ai-notes-panel,
+      html.light-mode .rec-course-card,
+      html.light-mode .rec-card__rationale { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+      html.light-mode .rec-table-pill,
+      html.light-mode .rec-skill-chip,
+      html.light-mode .rec-table__btn,
+      html.light-mode .rec-carousel-btn,
+      html.light-mode .rec-course-pill { background: #f8fafc; color: var(--text-main); border-color: rgba(0,0,0,0.1); }
+      html.light-mode .rec-ai-stat__bar,
+      html.light-mode .rec-table__perf { background: rgba(0,0,0,0.07); }
+      html.light-mode .rec-card__avatar,
+      html.light-mode .rec-user-avatar { background: rgba(99,102,241,0.14); }
     </style>
   </head>
   <body class="trainee-app">
