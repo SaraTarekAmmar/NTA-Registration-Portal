@@ -814,3 +814,37 @@ html.light-mode .ed-hero__date {
 }
 html.light-mode .ed-hero__live     { color: var(--text-muted) !important; }
 html.light-mode .ed-section__link  { color: #b91c1c !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   UX POLISH & ACCESSIBILITY — Web Interface Guidelines (all editor pages)
+   ════════════════════════════════════════════════════════════════ */
+:root { color-scheme: dark; }
+html.light-mode { color-scheme: light; }
+
+/* Keyboard-only focus rings (no ring on mouse click) */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible,
+select:focus-visible, input:focus-visible, textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Snappier taps; intentional tap highlight */
+a, button, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+/* Subtle press feedback */
+button:active:not(:disabled), .btn:active:not(:disabled), [role="button"]:active { transform: translateY(1px); }
+
+/* Tabular figures keep metric numbers aligned as they change */
+[class$="__val"], [class$="__num"], [class$="__count"], .editor-table td { font-variant-numeric: tabular-nums; }
+
+/* Respect reduced-motion: drop decorative animation, keep UI usable */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
