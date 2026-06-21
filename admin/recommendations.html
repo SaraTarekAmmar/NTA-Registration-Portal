@@ -1798,6 +1798,16 @@
       .rec-course-pill__icon svg {
         display: block;
       }
+
+      /* ══ Mobile responsive: contain wide rows, wrap nav ══ */
+      @media (max-width: 920px) {
+        .rec-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .rec-table-head, .rec-table-row { min-width: 680px; }
+      }
+      @media (max-width: 760px) {
+        .rec-sidenav { flex-wrap: wrap; }
+        .rec-sidenav__btn { flex: 1 1 auto; }
+      }
     </style>
   </head>
   <body class="trainee-app">
