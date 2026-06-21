@@ -1038,6 +1038,27 @@
           background-position: -200% 0;
         }
       }
+
+      /* ══ Light-mode overrides — surfaces become light, text stays readable ══ */
+      html.light-mode .at-course-strip,
+      html.light-mode .at-kpi,
+      html.light-mode .at-card,
+      html.light-mode .at-qs,
+      html.light-mode .at-chart-box,
+      html.light-mode .at-search,
+      html.light-mode .at-panel,
+      html.light-mode .at-att-table,
+      html.light-mode .at-att-summary { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); }
+      html.light-mode .at-course-pill,
+      html.light-mode .at-score-chip { background: #f8fafc; border-color: rgba(0,0,0,0.1); color: var(--text-main); }
+      html.light-mode .at-card__stage-badge { background: rgba(255,255,255,0.96); color: var(--text-main); border-color: rgba(0,0,0,0.08); }
+      html.light-mode .at-card__att-bar,
+      html.light-mode .at-card__img-prog,
+      html.light-mode .at-att-summary__bar { background: rgba(0,0,0,0.07); }
+      html.light-mode .at-skel-card { background: rgba(0,0,0,0.05); }
+      html.light-mode .at-empty { background: #f8fafc; color: var(--text-subtle); }
+      html.light-mode .at-card,
+      html.light-mode .at-kpi { box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
     </style>
     <script src="js/admin-guard.js"></script>
 </head>
