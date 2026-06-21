@@ -499,18 +499,15 @@
     <main id="main-content" class="editor-main">
 
       <!-- Hero -->
-      <div class="ed-hero">
+      <div class="ed-hero" style="padding: 1.5rem 2rem; min-height: auto;">
         <div>
-          <p class="ed-hero__greeting" id="editorGreeting">مرحباً</p>
+          <p class="ed-hero__greeting" id="editorGreeting">مرحباً، محرر المحتوى</p>
           <h1 class="ed-hero__title">لوحة تحكم المحرر</h1>
           <p class="ed-hero__sub">نظرة عامة على المحتوى التعليمي والدورات المنشورة</p>
         </div>
-        <div class="ed-hero__side">
-          <span class="ed-hero__date" id="heroDate"></span>
-          <div class="ed-hero__live">
-            <div class="ed-hero__live-dot"></div>
-            <span>متصل</span>
-          </div>
+        <div class="ed-hero__side" style="flex-direction: row; align-items: center; gap: 1rem;">
+          <a href="editor-course-form.html" class="btn btn--primary">إنشاء دورة جديدة</a>
+          <a href="editor-materials.html" class="btn btn--secondary">إضافة مادة تعليمية</a>
         </div>
       </div>
 
@@ -521,7 +518,44 @@
         <button type="button" onclick="loadDashboard()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
       </div>
 
+      <!-- Action Needed Panel -->
+      <div class="ed-section">
+        <div class="ed-section__left">مهام تحتاج إجراء</div>
+      </div>
+      <div class="ed-kpi-row" style="margin-bottom: 1.75rem; grid-template-columns: repeat(3, 1fr);">
+        <div class="ed-kpi ed-kpi--yellow" style="animation-delay:0.05s; flex-direction: row; padding: 1.2rem;">
+          <div class="ed-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <div>
+            <div class="ed-kpi__val" id="alertDrafts" style="font-size:1.8rem; margin-bottom:0.1rem;">2</div>
+            <div class="ed-kpi__lbl">مسودات تحتاج إكمال</div>
+          </div>
+        </div>
+        <div class="ed-kpi ed-kpi--blue" style="animation-delay:0.1s; flex-direction: row; padding: 1.2rem;">
+          <div class="ed-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="ed-kpi__val" id="alertReady" style="font-size:1.8rem; margin-bottom:0.1rem;">1</div>
+            <div class="ed-kpi__lbl">دورات جاهزة للنشر</div>
+          </div>
+        </div>
+        <div class="ed-kpi ed-kpi--slate" style="animation-delay:0.15s; flex-direction: row; padding: 1.2rem;">
+          <div class="ed-kpi__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          </div>
+          <div>
+            <div class="ed-kpi__val" id="alertSessions" style="font-size:1.8rem; margin-bottom:0.1rem;">3</div>
+            <div class="ed-kpi__lbl">جلسات بدون مواد</div>
+          </div>
+        </div>
+      </div>
+
       <!-- KPI Cards -->
+      <div class="ed-section">
+        <div class="ed-section__left">إحصائيات عامة</div>
+      </div>
       <div class="ed-kpi-row">
         <a href="editor-courses.html" class="ed-kpi ed-kpi--blue" style="animation-delay:0.05s">
           <div class="ed-kpi__icon">
@@ -577,7 +611,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7"/></svg>
           </div>
           <div class="ed-action__body">
-            <div class="ed-action__title">عرض كل الدورات</div>
+            <div class="ed-action__title">إدارة الدورات</div>
             <div class="ed-action__sub">تصفح وإدارة جميع الدورات</div>
           </div>
           <span class="ed-action__arrow">←</span>
@@ -588,7 +622,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
           </div>
           <div class="ed-action__body">
-            <div class="ed-action__title">المواد التعليمية</div>
+            <div class="ed-action__title">إدارة المواد التعليمية</div>
             <div class="ed-action__sub">رفع وإدارة ملفات المحتوى</div>
           </div>
           <span class="ed-action__arrow">←</span>
@@ -599,7 +633,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           </div>
           <div class="ed-action__body">
-            <div class="ed-action__title">الجلسات</div>
+            <div class="ed-action__title">إدارة الجلسات</div>
             <div class="ed-action__sub">جدولة وإدارة الجلسات التدريبية</div>
           </div>
           <span class="ed-action__arrow">←</span>
@@ -608,7 +642,7 @@
       </div>
 
       <!-- Recent Courses -->
-      <div class="ed-section">
+      <div class="ed-section" style="display: flex; justify-content: space-between;">
         <div class="ed-section__left">آخر الدورات المحدّثة</div>
         <a href="editor-courses.html" class="ed-section__link">عرض الكل ←</a>
       </div>
@@ -722,16 +756,16 @@
               html += '<h3 class="ed-card__title">' + (c.title_ar || c.title || "بدون عنوان") + '</h3>';
               html += '<span class="ed-badge ed-badge--' + status + '">' + (badgeMap[status] || "مسودة") + '</span>';
               html += '</div>';
-              if (c.duration_weeks || c.total_sessions) {
-                html += '<div class="ed-card__stats">';
-                if (c.duration_weeks)  html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' + c.duration_weeks + ' أسبوع</span>';
-                if (c.total_sessions) html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' + c.total_sessions + ' جلسة</span>';
-                html += '</div>';
-              }
+              html += '<div class="ed-card__stats">';
+              html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> آخر تعديل: اليوم</span>';
+              if (c.duration_weeks)  html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' + c.duration_weeks + ' أسبوع</span>';
+              if (c.total_sessions) html += '<span class="ed-card__stat"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>' + c.total_sessions + ' جلسة</span>';
+              if (status === 'draft') html += '<span class="ed-card__stat" style="color: #fca5a5;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> ناقص: تفاصيل الدورة</span>';
+              html += '</div>';
               html += '</div>';
               html += '<div class="ed-card__footer">';
-              html += '<a href="editor-course-form.html?id=' + c.id + '" class="btn btn--secondary btn--sm">تعديل</a>';
-              html += '<a href="editor-preview.html?id=' + c.id + '" class="btn btn--secondary btn--sm">معاينة</a>';
+              html += '<a href="editor-course-form.html?id=' + c.id + '" class="btn btn--primary btn--sm" style="flex: 2;">متابعة التحرير</a>';
+              html += '<a href="editor-preview.html?id=' + c.id + '" class="btn btn--secondary btn--sm" style="flex: 1;">معاينة</a>';
               html += '</div></div>';
             });
 

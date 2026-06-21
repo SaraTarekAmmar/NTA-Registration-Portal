@@ -36,8 +36,8 @@
       }
       .builder-container {
         display: grid;
-        grid-template-columns: 350px 1fr;
-        gap: 1.5rem;
+        grid-template-columns: 320px 1fr;
+        gap: 2rem;
         align-items: start;
       }
       @media (max-width: 900px) {
@@ -51,19 +51,31 @@
         border-radius: 12px;
         padding: 1.25rem;
         position: sticky;
-        top: 2rem;
+        top: 6rem;
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
       }
-      .builder-settings-panel h3 {
-        font-size: 1.05rem;
-        margin: 0 0 1.25rem;
-        padding-bottom: 0.75rem;
+      .settings-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
         border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .settings-section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .settings-section h4 {
+        font-size: 0.9rem;
+        color: var(--text-main);
+        margin: 0 0 1rem;
+        font-weight: 700;
         display: flex;
         align-items: center;
         gap: 0.5rem;
       }
       .builder-settings-group {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
       }
       .builder-settings-group label {
         display: block;
@@ -74,60 +86,111 @@
       .builder-steps-list {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0;
+        position: relative;
       }
-      .builder-step-card {
-        background: #111827;
-        border: 1px solid rgba(255,255,255,0.05);
-        border-radius: 12px;
-        padding: 1rem;
+      .timeline-item {
         display: flex;
-        align-items: center;
-        gap: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        gap: 1.25rem;
+        position: relative;
+        padding-bottom: 1rem;
       }
-      .builder-step-card:hover {
-        background: #1f2937;
-        border-color: rgba(255,255,255,0.1);
+      .timeline-item::after {
+        content: '';
+        position: absolute;
+        right: 15px;
+        top: 32px;
+        bottom: 0;
+        width: 3px;
+        background: rgba(255,255,255,0.08);
+        z-index: 0;
       }
-      .builder-step-card.selected {
-        background: rgba(59,130,246,0.05);
-        border-color: rgba(59,130,246,0.3);
+      .timeline-item:last-child::after {
+        display: none;
       }
-      .builder-step-num {
+      .timeline-item.selected::after {
+        background: #3b82f6;
+        box-shadow: 0 0 8px rgba(59,130,246,0.5);
+      }
+      .timeline-num {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.05);
+        background: #111827;
+        border: 2px solid rgba(255,255,255,0.15);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 0.9rem;
-        color: #9ca3af;
+        color: var(--text-subtle);
+        position: relative;
+        z-index: 2;
+        flex-shrink: 0;
+        transition: all 0.2s;
       }
-      .builder-step-card.selected .builder-step-num {
-        background: rgba(59,130,246,0.15);
-        color: #60a5fa;
+      .timeline-item.selected .timeline-num {
+        border-color: #3b82f6;
+        color: #fff;
+        background: #2563eb;
       }
-      .builder-step-info {
+      .builder-step-card {
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
         flex: 1;
+        position: relative;
+      }
+      .builder-step-card:hover {
+        background: #1f2937;
+        border-color: rgba(255,255,255,0.2);
+      }
+      .timeline-item.selected .builder-step-card {
+        background: rgba(59,130,246,0.08);
+        border-color: #3b82f6;
+      }
+      .timeline-item.selected .builder-step-card::before {
+        content: '';
+        position: absolute;
+        right: -1px;
+        top: -1px;
+        bottom: -1px;
+        width: 4px;
+        background: #3b82f6;
+        border-radius: 0 8px 8px 0;
+      }
+      @keyframes highlightPulse {
+        0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+        100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+      }
+      .highlight-new {
+        animation: highlightPulse 1.5s ease-out;
+      }
+      .builder-step-card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
       }
       .builder-step-title {
         font-weight: 700;
         font-size: 0.95rem;
-        margin-bottom: 0.25rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        margin-bottom: 0.15rem;
+        color: var(--text-main);
       }
       .builder-step-meta {
         font-size: 0.75rem;
         color: var(--text-subtle);
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
       }
       .badge {
         font-size: 0.7rem;
@@ -138,26 +201,92 @@
       .badge--red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
       .badge--blue { background: rgba(59,130,246,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
       .badge--green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+      .badge--neutral { background: rgba(255,255,255,0.05); color: #9ca3af; border: 1px solid rgba(255,255,255,0.1); }
       
-      .builder-header {
+      .builder-action-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 0.75rem 1.25rem;
         margin-bottom: 1.5rem;
+        position: sticky;
+        top: 1rem;
+        z-index: 20;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       }
-      .builder-header-title {
-        font-size: 1.2rem;
-        font-weight: 800;
-        margin: 0;
+      .action-bar-context {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        font-size: 0.9rem;
       }
-
+      .action-bar-context h2 {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0;
+      }
+      .action-bar-separator {
+        color: var(--text-subtle);
+        opacity: 0.5;
+      }
+      .action-bar-context span {
+        color: var(--text-subtle);
+      }
+      .action-bar-context .status-saved {
+        color: #34d399;
+        font-weight: 600;
+      }
+      .action-bar-context .status-unsaved {
+        color: #fbbf24;
+        font-weight: 600;
+      }
+      .action-bar-buttons {
+        display: flex;
+        gap: 0.75rem;
+      }
+      
+      .validation-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 1.25rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .validation-bar--ready {
+        background: rgba(16,185,129,0.1);
+        border: 1px solid rgba(16,185,129,0.2);
+        color: #34d399;
+      }
+      .validation-bar--error {
+        background: rgba(239,68,68,0.1);
+        border: 1px solid rgba(239,68,68,0.2);
+        color: #ef4444;
+      }
+      .validation-bar span {
+        opacity: 0.8;
+        font-weight: 400;
+      }
+      .transition-logic {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed rgba(255,255,255,0.05);
+        font-size: 0.75rem;
+      }
+      
       /* ══ Light-mode overrides ══ */
       html.light-mode .builder-settings-panel,
-      html.light-mode .builder-step-card,
-      html.light-mode .adm-step-card { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+      html.light-mode .builder-step-card { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+      html.light-mode .validation-bar--ready { background: #ecfdf5; border-color: #a7f3d0; color: #059669; }
+      html.light-mode .validation-bar--error { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
     </style>
   </head>
   <body data-page="admission-builder">
@@ -172,9 +301,18 @@
       <!-- Course selector -->
       <div class="editor-form-group" style="max-width:360px;margin-bottom:1.5rem;">
         <label for="courseSelect">اختر الدورة</label>
-        <select id="courseSelect" class="editor-select" onchange="loadAdmissionSteps()">
-          <option value="">— اختر دورة —</option>
-        </select>
+        <div class="ui-select" id="courseSelectContainer">
+          <input type="hidden" id="courseSelect" onchange="loadAdmissionSteps()">
+          <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ui-select__value is-placeholder">— اختر دورة —</span>
+            <span class="ui-select__chevron">▼</span>
+          </button>
+          <div class="ui-select__menu" id="courseSelectMenu" role="listbox" hidden>
+            <button type="button" class="ui-select__option" data-value="" role="option">
+              <span>— اختر دورة —</span><span class="ui-select__check">✓</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
@@ -194,101 +332,138 @@
 
       <!-- Builder area -->
       <div id="builderArea" style="display:none;">
-        <div class="builder-header">
-          <h2 class="builder-header-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            مسار القبول — الخطوات
-          </h2>
-          <div style="display:flex;gap:0.75rem;">
-            <button type="button" class="btn btn--primary" onclick="addAdmStep()">+ خطوة</button>
+        
+        <div class="builder-action-bar">
+          <div class="action-bar-context">
+            <h2 id="builderCourseTitle">مسار القبول</h2>
+            <span class="action-bar-separator">·</span>
+            <span id="courseStageCount">0 مرحلة</span>
+            <span class="action-bar-separator">·</span>
+            <span id="saveStatusIndicator" class="status-saved">لم يتم إجراء تعديلات</span>
           </div>
+          <div class="action-bar-buttons">
+            <button type="button" class="btn btn--secondary" onclick="showEditorToast('ميزة المعاينة قيد التطوير', 'info')">معاينة المسار</button>
+            <button type="button" class="btn btn--secondary" onclick="showEditorToast('ميزة الحفظ كمسودة قيد التطوير', 'info')">حفظ كمسودة</button>
+            <button type="button" class="btn btn--primary" onclick="saveAdmissionSteps()" id="publishBtnMain" style="background:#3b82f6; border-color:#3b82f6;">نشر التغييرات</button>
+          </div>
+        </div>
+
+        <div id="validationBar" class="validation-bar validation-bar--ready">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="validationIcon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div id="validationText">المسار جاهز للنشر · 0 مرحلة · لا توجد أخطاء</div>
         </div>
 
         <div class="builder-container">
           <!-- Left Pane: Step Settings -->
           <div class="builder-settings-panel" id="stepSettingsPanel" style="display:none;">
-            <h3>
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              المعلومات
+            
+            <h3 id="panelStageTitle" style="font-size:1.1rem; font-weight:800; margin:0 0 1.5rem; color:var(--text-main); display:flex; align-items:center; gap:0.5rem;">
+              إعدادات المرحلة
             </h3>
-            
-            <div class="builder-settings-group">
-              <label>العنوان بالعربية</label>
-              <input type="text" class="editor-input" id="settingTitle" oninput="updateSelectedStep('title_ar', this.value)" />
-            </div>
-            
-            <div style="display:flex;gap:1rem;margin-bottom:1.25rem;">
-              <div style="flex:1;">
-                <label>نوع الخطوة</label>
-                <select class="editor-select" id="settingType" onchange="updateSelectedStep('step_type', this.value)">
-                  <option value="admission_test">اختبار قبول</option>
-                  <option value="interview">مقابلة شخصية</option>
-                  <option value="essay">مقال / تقييم كتابي</option>
-                  <option value="background_check">فحص أمني / تدقيق</option>
-                  <option value="admin_review">مراجعة إدارية</option>
-                  <option value="acceptance_decision">قرار القبول النهائي</option>
-                </select>
-              </div>
-              <div style="width:80px;">
-                <label>الترتيب</label>
-                <input type="text" class="editor-input" id="settingOrder" readonly style="background:rgba(255,255,255,0.02);color:var(--text-subtle);text-align:center;" />
-              </div>
-            </div>
-            
-            <div class="builder-settings-group">
-              <label>المفتاح (step_key)</label>
-              <input type="text" class="editor-input" id="settingKey" oninput="updateSelectedStep('step_key', this.value)" style="direction:ltr;text-align:right;" />
-            </div>
 
-            <div class="builder-settings-group">
-              <label>الوصف (اختياري)</label>
-              <textarea class="editor-textarea" rows="2" id="settingDesc" oninput="updateSelectedStep('description_ar', this.value)"></textarea>
-            </div>
-            
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
-              <div style="display:flex;align-items:center;gap:1.5rem;">
-                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;margin:0;">
-                  <input type="checkbox" id="settingRequired" onchange="updateSelectedStep('is_required', this.checked)" />
-                  <span style="font-size:0.85rem;font-weight:600;">إجبارية</span>
-                </label>
-                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;margin:0;">
-                  <input type="checkbox" id="settingActive" onchange="updateSelectedConfig('is_active', this.checked)" />
-                  <span style="font-size:0.85rem;font-weight:600;">نشطة</span>
-                </label>
+            <div class="settings-section">
+              <h4>بيانات المرحلة</h4>
+              <div class="builder-settings-group">
+                <label>اسم المرحلة</label>
+                <input type="text" class="editor-input" id="settingTitle" oninput="updateSelectedStep('title_ar', this.value)" />
+              </div>
+              <div class="builder-settings-group">
+                <label>نوع المرحلة</label>
+                <div class="ui-select" id="settingTypeContainer">
+                  <input type="hidden" id="settingType" onchange="updateSelectedStep('step_type', this.value)">
+                  <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="ui-select__value">اختبار قبول</span>
+                    <span class="ui-select__chevron">▼</span>
+                  </button>
+                  <div class="ui-select__menu" role="listbox" hidden>
+                    <button type="button" class="ui-select__option" data-value="admission_test" role="option"><span>اختبار قبول</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="interview" role="option"><span>مقابلة شخصية</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="essay" role="option"><span>مقال / تقييم كتابي</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="background_check" role="option"><span>فحص أمني / تدقيق</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="admin_review" role="option"><span>مراجعة إدارية</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="acceptance_decision" role="option"><span>قرار القبول النهائي</span><span class="ui-select__check">✓</span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="builder-settings-group">
+                <label>وصف المرحلة (اختياري)</label>
+                <textarea class="editor-textarea" rows="2" id="settingDesc" oninput="updateSelectedStep('description_ar', this.value)"></textarea>
               </div>
             </div>
-
-            <div class="builder-settings-group">
-              <label style="font-weight:700;color:var(--text-main);margin-bottom:0.75rem;">قواعد الفتح</label>
-              <label>تفتح بعد إكمال (step_key)</label>
-              <select class="editor-select" id="settingDependsOn" onchange="updateSelectedConfig('depends_on', this.value)">
-                <option value="">لا يوجد (مفتوحة دائماً)</option>
-              </select>
+            
+            <div class="settings-section">
+              <h4>الحالة والظهور</h4>
+              <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;margin-bottom:1rem;">
+                <input type="checkbox" id="settingActive" onchange="updateSelectedConfig('is_active', this.checked)" />
+                <span style="font-size:0.9rem;font-weight:600;color:var(--text-main);">المرحلة مفعّلة</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;margin:0;">
+                <input type="checkbox" id="settingRequired" onchange="updateSelectedStep('is_required', this.checked)" />
+                <span style="font-size:0.9rem;font-weight:600;color:var(--text-main);">مرحلة إجبارية</span>
+              </label>
             </div>
 
-            <div style="display:flex;gap:0.5rem;margin-top:2rem;">
-              <button type="button" class="btn btn--primary" style="flex:1;background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);" onclick="removeSelectedStep()">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                حذف
-              </button>
+            <div class="settings-section">
+              <h4>قواعد الانتقال</h4>
+              <div class="builder-settings-group">
+                <label style="color:#34d399;">عند القبول (الاجتياز):</label>
+                <div class="ui-select" id="settingTransitionPassContainer">
+                  <input type="hidden" id="settingTransitionPass" onchange="updateSelectedConfig('transition_pass', this.value)">
+                  <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="ui-select__value">المرحلة التالية</span>
+                    <span class="ui-select__chevron">▼</span>
+                  </button>
+                  <div class="ui-select__menu" role="listbox" hidden>
+                    <button type="button" class="ui-select__option" data-value="next" role="option"><span>المرحلة التالية</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="accept" role="option"><span>قبول نهائي</span><span class="ui-select__check">✓</span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="builder-settings-group">
+                <label style="color:#ef4444;">عند الرفض (عدم الاجتياز):</label>
+                <div class="ui-select" id="settingTransitionFailContainer">
+                  <input type="hidden" id="settingTransitionFail" onchange="updateSelectedConfig('transition_fail', this.value)">
+                  <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="ui-select__value">رفض و إنهاء المسار</span>
+                    <span class="ui-select__chevron">▼</span>
+                  </button>
+                  <div class="ui-select__menu" role="listbox" hidden>
+                    <button type="button" class="ui-select__option" data-value="reject" role="option"><span>رفض و إنهاء المسار</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="hold" role="option"><span>وضع في قائمة الانتظار (Hold)</span><span class="ui-select__check">✓</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>إعدادات متقدمة</h4>
+              <div style="display:flex;gap:1rem;margin-bottom:1rem;">
+                <div style="flex:1;">
+                  <label>المعرف الفني (step_key)</label>
+                  <input type="text" class="editor-input" id="settingKey" oninput="updateSelectedStep('step_key', this.value)" style="direction:ltr;text-align:right;" />
+                </div>
+                <div style="width:80px;">
+                  <label>الترتيب</label>
+                  <input type="text" class="editor-input" id="settingOrder" readonly style="background:rgba(255,255,255,0.02);color:var(--text-subtle);text-align:center;" />
+                </div>
+              </div>
             </div>
 
           </div>
           
           <div id="noStepSelectedMsg" class="builder-settings-panel" style="display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:300px;text-align:center;color:var(--text-subtle);">
               <svg width="48" height="48" fill="none" stroke="rgba(255,255,255,0.1)" viewBox="0 0 24 24" style="margin-bottom:1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-              <p style="margin:0;">اختر خطوة من القائمة لعرض إعداداتها</p>
+              <p style="margin:0;">اختر مرحلة من القائمة لعرض إعداداتها</p>
           </div>
 
           <!-- Right Pane: Steps List -->
           <div>
+              <div style="margin-bottom: 1.5rem;">
+                <button type="button" class="btn btn--secondary" onclick="addAdmStep()" style="width:100%; border-style:dashed; color:#60a5fa; border-color:rgba(59,130,246,0.3); background:rgba(59,130,246,0.05);">+ إضافة مرحلة جديدة</button>
+              </div>
               <div id="admStepsList" class="builder-steps-list"></div>
               <div id="noAdmStepsMsg" style="text-align:center;padding:3rem 1rem;color:var(--text-subtle);font-size:0.9rem;background:rgba(255,255,255,0.02);border-radius:12px;border:1px dashed rgba(255,255,255,0.1);">
-                لم تتم إضافة خطوات. استخدم زر "+ خطوة" للبدء في بناء مسار القبول.
-              </div>
-              
-              <div style="display:flex;justify-content:flex-end;margin-top:2rem;">
-                <button type="button" class="btn btn--primary" onclick="saveAdmissionSteps()">حفظ مسار القبول</button>
+                لم تتم إضافة مراحل. استخدم زر "+ إضافة مرحلة جديدة" للبدء في بناء مسار القبول.
               </div>
           </div>
         </div>
@@ -304,7 +479,25 @@
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
       var admissionSteps = [];
+      var hasUnsavedChanges = false;
       
+      function markUnsaved() {
+        hasUnsavedChanges = true;
+        var ind = document.getElementById("saveStatusIndicator");
+        if(ind) {
+          ind.textContent = "توجد تغييرات غير محفوظة";
+          ind.className = "status-unsaved";
+        }
+      }
+      
+      function markSaved() {
+        hasUnsavedChanges = false;
+        var ind = document.getElementById("saveStatusIndicator");
+        if(ind) {
+          ind.textContent = "آخر حفظ منذ دقيقة";
+          ind.className = "status-saved";
+        }
+      }
       var ADM_TYPE_LABELS = {
         'admission_test': 'اختبار قبول',
         'interview': 'مقابلة شخصية',
@@ -327,24 +520,31 @@
       }
 
       // Load courses
-      authFetch("/api/courses")
-        .then(function(r) { return r.json(); })
-        .then(function(courses) {
-          var sel = document.getElementById("courseSelect");
-          courses.forEach(function(c) {
-            var opt = document.createElement("option");
-            opt.value = c.id;
-            opt.textContent = c.title_ar || c.title;
-            sel.appendChild(opt);
-          });
-          var params = new URLSearchParams(window.location.search);
-          var cid = params.get("course_id");
-          if (cid) { sel.value = cid; loadAdmissionSteps(); }
-        })
-        .catch(function() {});
+      function loadCourses() {
+        authFetch("/api/courses")
+          .then(function(r) { return r.json(); })
+          .then(function(courses) {
+            var menu = document.getElementById("courseSelectMenu");
+            var html = '<button type="button" class="ui-select__option" data-value="" role="option"><span>— اختر دورة —</span><span class="ui-select__check">✓</span></button>';
+            courses.forEach(function(c) {
+              html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + (c.title_ar || c.title) + '</span><span class="ui-select__check">✓</span></button>';
+            });
+            menu.innerHTML = html;
+            if (window.initUISelects) window.initUISelects(document.getElementById("courseSelectContainer"));
+            var params = new URLSearchParams(window.location.search);
+            var cid = params.get("course_id");
+            if (cid) {
+               var opt = menu.querySelector('[data-value="'+cid+'"]');
+               if (opt) { opt.click(); }
+            }
+          })
+          .catch(function() {});
+      }
+      loadCourses();
 
       function loadAdmissionSteps() {
-        var courseId = document.getElementById("courseSelect").value;
+        var sel = document.getElementById("courseSelect");
+        var courseId = sel.value;
         if (!courseId) {
           admissionSteps = [];
           document.getElementById("emptyState").style.display = "flex";
@@ -353,6 +553,15 @@
           document.getElementById("emptyState").querySelector(".editor-state__text").textContent = "اختر دورة من القائمة أعلاه لعرض مسار القبول الخاص بها وإدارته.";
           return;
         }
+        
+        var titleEl = document.getElementById("builderCourseTitle");
+        if(titleEl) {
+            var courseName = "";
+            var opt = document.querySelector('#courseSelectMenu .ui-select__option[data-value="'+courseId+'"] span:not(.ui-select__check)');
+            if (opt) courseName = opt.textContent.trim();
+            titleEl.innerHTML = 'مسار القبول <small>' + courseName + '</small>';
+        }
+        
         document.getElementById("pageBanner").style.display = "none";
         document.getElementById("loadingState").style.display = "flex";
         document.getElementById("emptyState").style.display = "none";
@@ -372,6 +581,7 @@
               ];
             }
             selectedStepIndex = admissionSteps.length > 0 ? 0 : -1;
+            hasUnsavedChanges = false;
             document.getElementById("loadingState").style.display = "none";
             document.getElementById("builderArea").style.display = "block";
             renderAdmSteps();
@@ -420,6 +630,7 @@
           }
 
           draggedIndex = -1;
+          markUnsaved();
           renderAdmSteps();
       }
 
@@ -432,15 +643,23 @@
         admissionSteps.push({
             step_type: 'admission_test',
             step_key: key,
-            title_ar: 'اختبار قبول',
+            title_ar: 'مرحلة جديدة',
             description_ar: '',
             is_required: true,
             config_json: {
                 is_active: true
-            }
+            },
+            _isNew: true
         });
         selectedStepIndex = admissionSteps.length - 1;
+        markUnsaved();
+        notify("تم إضافة مرحلة جديدة. لا تنس حفظ التغييرات.");
         renderAdmSteps();
+        
+        // Scroll to bottom slowly
+        setTimeout(function() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 100);
       }
       
       function selectStep(idx) {
@@ -451,7 +670,11 @@
       function updateSelectedStep(field, value) {
           if (selectedStepIndex === -1) return;
           admissionSteps[selectedStepIndex][field] = value;
+          markUnsaved();
           renderStepsListOnly();
+          if (field === 'title_ar') {
+            document.getElementById('panelStageTitle').textContent = "إعدادات المرحلة: " + (value || "بدون عنوان");
+          }
       }
       
       function updateSelectedConfig(field, value) {
@@ -460,28 +683,31 @@
               admissionSteps[selectedStepIndex].config_json = {};
           }
           admissionSteps[selectedStepIndex].config_json[field] = value;
+          markUnsaved();
           renderStepsListOnly();
       }
       
       
       function removeStepDirectly(e, idx) {
           e.stopPropagation();
-          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+          if(confirm("حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟")) {
               admissionSteps.splice(idx, 1);
               if (selectedStepIndex === idx) {
                   selectedStepIndex = -1;
               } else if (selectedStepIndex > idx) {
                   selectedStepIndex--;
               }
+              markUnsaved();
               renderAdmSteps();
           }
       }
 
       function removeSelectedStep() {
           if (selectedStepIndex === -1) return;
-          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟")) {
+          if(confirm("حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟")) {
               admissionSteps.splice(selectedStepIndex, 1);
               selectedStepIndex = -1;
+              markUnsaved();
               renderAdmSteps();
           }
       }
@@ -498,64 +724,135 @@
         if (!admissionSteps.length) { 
             list.innerHTML = ""; 
             noMsg.style.display = "block"; 
+            updateValidationBar();
             return; 
         }
         noMsg.style.display = "none";
         
+        var totalReq = 0;
+        
         var html = "";
         admissionSteps.forEach(function(s, i) {
+          if(s.is_required) totalReq++;
           var isSelected = i === selectedStepIndex;
           var activeBadge = (s.config_json && s.config_json.is_active === false) 
-              ? '<span class="badge badge--red">غير نشط</span>' 
-              : '<span class="badge badge--green">نشط</span>';
+              ? '<span class="badge badge--neutral">غير مفعلة</span>' 
+              : '';
               
           var reqBadge = s.is_required 
-              ? '<span class="badge badge--red">إجباري</span>' 
-              : '<span class="badge" style="background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.1)">اختياري</span>';
+              ? '' 
+              : '<span class="badge badge--neutral">اختيارية</span>';
               
           var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
           
-          html += '<div class="builder-step-card '+(isSelected?'selected':'')+'" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')" onclick="selectStep('+i+')">';
-          html += '  <div class="builder-step-num">'+(i+1)+'</div>';
-          html += '  <div class="builder-step-info">';
-          html += '    <div class="builder-step-title">';
-          html += '      ' + (s.title_ar || 'خطوة بدون عنوان');
+          var tPass = (s.config_json && s.config_json.transition_pass) || "next";
+          var tFail = (s.config_json && s.config_json.transition_fail) || "reject";
+          var tPassLabel = tPass === "next" ? "المرحلة التالية" : (tPass === "accept" ? "قبول نهائي" : (getStepName(tPass) || "مرحلة مخصصة"));
+          var tFailLabel = tFail === "reject" ? "رفض وإنهاء" : (tFail === "hold" ? "قائمة الانتظار" : (getStepName(tFail) || "مرحلة مخصصة"));
+
+          var classList = 'builder-step-card';
+          if(s._isNew) {
+              classList += ' highlight-new';
+              delete s._isNew;
+          }
+          
+          html += '<div class="timeline-item '+(isSelected?'selected':'')+'">';
+          html += '  <div class="timeline-num">'+(i+1)+'</div>';
+          html += '  <div class="'+classList+'" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')" onclick="selectStep('+i+')">';
+          html += '    <div class="builder-step-card-header">';
+          html += '      <div style="flex:1;">';
+          html += '        <div class="builder-step-title">' + (s.title_ar || 'مرحلة بدون عنوان') + '</div>';
+          html += '        <div class="builder-step-meta">';
+          html += '          <span>'+typeLabel+'</span>';
+          if(activeBadge || reqBadge) html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;">' + reqBadge + activeBadge + '</div>';
+          html += '        </div>';
+          html += '      </div>';
+          html += '      <div style="display:flex; align-items:center; gap:0.5rem;">';
+          html += '        <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>';
+          html += '        <div class="ui-menu" onclick="event.stopPropagation()">';
+          html += '          <button type="button" class="ui-menu__trigger" style="padding:0.2rem 0.4rem; font-size: 1.2rem;">⋮</button>';
+          html += '          <div class="ui-menu__content" hidden>';
+          html += '            <button type="button" class="ui-menu__item is-danger" onclick="removeStepDirectly(event, '+i+')">حذف المرحلة</button>';
+          html += '          </div>';
+          html += '        </div>';
+          html += '      </div>';
           html += '    </div>';
-          html += '    <div class="builder-step-meta">';
-          html += '      <span style="color:#60a5fa;font-family:monospace;">'+(s.step_key || 'step_'+(i+1))+'</span>';
-          html += '      <span style="opacity:0.5">•</span>';
-          html += '      <span>'+typeLabel+'</span>';
+          html += '    <div class="transition-logic">';
+          html += '      <div style="color:var(--text-subtle);"><span style="color:#34d399; margin-left:4px; font-weight:600;">عند القبول:</span> ' + tPassLabel + '</div>';
+          html += '      <div style="color:var(--text-subtle);"><span style="color:#ef4444; margin-left:4px; font-weight:600;">عند الرفض:</span> ' + tFailLabel + '</div>';
           html += '    </div>';
-          html += '  </div>';
-          html += '  <div style="display:flex;gap:0.4rem;">';
-          html +=      reqBadge + activeBadge;
-          html += '  </div>';
-          html += '  <div style="display:flex; align-items:center; gap:0.75rem;">';
-          html += '    <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب">';
-          html += '      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="opacity:0.6;"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>';
-          html += '    </div>';
-          html += '    <button type="button" onclick="removeStepDirectly(event, '+i+')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:4px;color:#ef4444;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.background=\'rgba(239,68,68,0.2)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.1)\'" title="حذف الخطوة">';
-          html += '      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
-          html += '    </button>';
           html += '  </div>';
           html += '</div>';
         });
         list.innerHTML = html;
+        if (window.initUIMenus) window.initUIMenus(list);
+        updateValidationBar();
+        updateSelects();
+      }
+      
+      function getStepName(key) {
+        var s = admissionSteps.find(function(x){return x.step_key === key});
+        return s ? (s.title_ar || s.step_key) : null;
+      }
+
+      function updateValidationBar() {
+        var valBar = document.getElementById("validationBar");
+        var valIcon = document.getElementById("validationIcon");
+        var valText = document.getElementById("validationText");
+        var courseStageCount = document.getElementById("courseStageCount");
         
-        var dependsSelect = document.getElementById("settingDependsOn");
-        if (dependsSelect) {
-            var opts = '<option value="">لا يوجد (مفتوحة دائماً)</option>';
+        if(!valBar) return;
+        
+        var hasErrors = false;
+        var errorMsgs = [];
+        admissionSteps.forEach(function(s) {
+            if(!s.title_ar || s.title_ar.trim() === '') hasErrors = true;
+        });
+        if(admissionSteps.length === 0) {
+            hasErrors = true;
+            errorMsgs.push("المسار فارغ");
+        }
+        
+        if(courseStageCount) courseStageCount.textContent = admissionSteps.length + " مرحلة";
+        
+        if(hasErrors) {
+            valBar.className = "validation-bar validation-bar--error";
+            valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            valText.innerHTML = 'غير جاهز للنشر <span>· توجد أخطاء في إعداد بعض المراحل</span>';
+        } else {
+            valBar.className = "validation-bar validation-bar--ready";
+            valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            valText.innerHTML = 'المسار جاهز للنشر <span>· ' + admissionSteps.length + ' مرحلة · لا توجد أخطاء</span>';
+        }
+      }
+
+      function updateSelects() {
+        var passSelect = document.getElementById("settingTransitionPass");
+        var failSelect = document.getElementById("settingTransitionFail");
+        
+        if (passSelect && failSelect) {
+            var passOpts = '<option value="next">المرحلة التالية</option><option value="accept">قبول نهائي</option>';
+            var failOpts = '<option value="reject">رفض وإنهاء المسار</option><option value="hold">وضع في قائمة الانتظار (Hold)</option>';
+            
             admissionSteps.forEach(function(s, idx) {
                 if (idx !== selectedStepIndex) {
-                    opts += '<option value="'+(s.step_key || 'step_'+(idx+1))+'">'+(s.title_ar || s.step_key)+'</option>';
+                    var val = (s.step_key || 'step_'+(idx+1));
+                    var lbl = (s.title_ar || s.step_key);
+                    passOpts += '<option value="'+val+'">'+lbl+'</option>';
+                    failOpts += '<option value="'+val+'">'+lbl+'</option>';
                 }
             });
-            dependsSelect.innerHTML = opts;
-            if (selectedStepIndex !== -1 && admissionSteps[selectedStepIndex].config_json && admissionSteps[selectedStepIndex].config_json.depends_on) {
-                dependsSelect.value = admissionSteps[selectedStepIndex].config_json.depends_on;
+            passSelect.innerHTML = passOpts;
+            failSelect.innerHTML = failOpts;
+            
+            if (selectedStepIndex !== -1 && admissionSteps[selectedStepIndex].config_json) {
+                passSelect.value = admissionSteps[selectedStepIndex].config_json.transition_pass || "next";
+                failSelect.value = admissionSteps[selectedStepIndex].config_json.transition_fail || "reject";
             } else {
-                dependsSelect.value = "";
+                passSelect.value = "next";
+                failSelect.value = "reject";
             }
+            if(window.initUISelects) { window.initUISelects(passSelect.parentElement); window.initUISelects(failSelect.parentElement); }
         }
       }
 
@@ -575,11 +872,44 @@
           var s = admissionSteps[selectedStepIndex];
           var cfg = s.config_json || {};
           
+          document.getElementById('panelStageTitle').textContent = "إعدادات المرحلة: " + (s.title_ar || "بدون عنوان");
+          
           document.getElementById("settingTitle").value = s.title_ar || "";
-          document.getElementById("settingType").value = s.step_type || "admission_test";
+          var stepType = s.step_type || "";
+          var typeInput = document.getElementById("settingType");
+          if(typeInput && typeInput.uiSelectApi) {
+            typeInput.uiSelectApi.setValue(stepType);
+          } else if(typeInput) {
+            typeInput.value = stepType;
+            if(typeInput.nextElementSibling) {
+              var tOption = typeInput.parentElement.querySelector('.ui-select__option[data-value="'+stepType+'"]');
+              if(tOption) typeInput.nextElementSibling.querySelector('.ui-select__value').textContent = tOption.querySelector('span').textContent;
+            }
+          }
           document.getElementById("settingOrder").value = selectedStepIndex + 1;
           document.getElementById("settingKey").value = s.step_key || "";
           document.getElementById("settingDesc").value = s.description_ar || "";
+          var tp = cfg.transition_pass || "next";
+          var tpInput = document.getElementById("settingTransitionPass");
+          if(tpInput && tpInput.uiSelectApi) tpInput.uiSelectApi.setValue(tp);
+          else if(tpInput) {
+            tpInput.value = tp;
+            if(tpInput.nextElementSibling) {
+              var tpo = tpInput.parentElement.querySelector('.ui-select__option[data-value="'+tp+'"]');
+              if(tpo) tpInput.nextElementSibling.querySelector('.ui-select__value').textContent = tpo.querySelector('span').textContent;
+            }
+          }
+          
+          var tf = cfg.transition_fail || "reject";
+          var tfInput = document.getElementById("settingTransitionFail");
+          if(tfInput && tfInput.uiSelectApi) tfInput.uiSelectApi.setValue(tf);
+          else if(tfInput) {
+            tfInput.value = tf;
+            if(tfInput.nextElementSibling) {
+              var tfo = tfInput.parentElement.querySelector('.ui-select__option[data-value="'+tf+'"]');
+              if(tfo) tfInput.nextElementSibling.querySelector('.ui-select__value').textContent = tfo.querySelector('span').textContent;
+            }
+          }
           document.getElementById("settingRequired").checked = !!s.is_required;
           document.getElementById("settingActive").checked = cfg.is_active !== false;
       }
@@ -598,6 +928,7 @@
         })
           .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
           .then(function() {
+            markSaved();
             showEditorToast("تم حفظ مسار القبول بنجاح", "success");
           })
           .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });

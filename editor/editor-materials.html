@@ -10,198 +10,156 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="js/editor-guard.js"></script>
   <style>
-    .mat-page { max-width: 1080px; margin: 2rem auto; padding: 0 1.25rem; }
-
-    /* Hero */
-    .mat-hero { margin-bottom: 1.75rem; }
-    .mat-hero__title { font-size: 1.55rem; font-weight: 800; color: var(--text-main); margin: 0 0 .35rem; }
-    .mat-hero__sub { color: var(--text-subtle); font-size: .9rem; margin: 0; }
-
-    /* Course selector bar */
-    .mat-filter-bar {
-      display: flex; align-items: center; gap: 1rem;
-      flex-wrap: wrap; margin-bottom: 1.5rem;
+    /* Main layout */
+    .mat-page { 
+      max-width: 1600px; 
+      margin: 1.5rem auto; 
+      padding: 0 2rem; 
+      width: 100%;
     }
-    .mat-filter-bar label { font-size: .84rem; font-weight: 600; color: var(--text-subtle); flex-shrink: 0; }
-    .mat-filter-bar select {
-      flex: 1; min-width: 220px; max-width: 360px;
-      padding: .6rem .9rem; border-radius: 10px;
-      background: var(--surface-input, rgba(30,41,59,.8));
+    .workspace-grid { 
+      display: grid; 
+      grid-template-columns: 420px 1fr; 
+      gap: 2.5rem; 
+      align-items: start; 
+    }
+    @media(max-width: 1100px) { .workspace-grid { grid-template-columns: 1fr; } }
+
+    /* Builder Header */
+    .builder-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .builder-header__title { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.5rem; }
+    .builder-header__desc { font-size: 1rem; color: var(--text-subtle); margin: 0; }
+
+    /* Builder Container (Glassmorphism) */
+    .builder-container {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border-subtle);
-      color: var(--text-main); font-family: inherit; font-size: .88rem; outline: none;
-      transition: border-color .2s;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: opacity 0.3s ease;
     }
-    .mat-filter-bar select:focus { border-color: var(--border-accent); }
-
-    /* Category tabs */
-    .mat-cat-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .mat-cat-tab {
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .38rem 1rem; border-radius: 999px; cursor: pointer;
-      border: 1px solid var(--border-subtle);
-      background: transparent; color: var(--text-subtle);
-      font-family: inherit; font-size: .82rem; font-weight: 500;
-      transition: border-color .2s, color .2s, background .2s;
-    }
-    .mat-cat-tab:hover { border-color: var(--border-accent); color: var(--text-main); }
-    .mat-cat-tab.active {
-      border-color: rgba(59,130,246,.8); background: rgba(59,130,246,.1);
-      color: var(--text-main); font-weight: 600;
-    }
-    .mat-cat-tab .mat-cat-dot {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-    }
-    .mat-cat-tab[data-cat="all"] .mat-cat-dot { background: #94a3b8; }
-    .mat-cat-tab[data-cat="technical"] .mat-cat-dot { background: #60a5fa; }
-    .mat-cat-tab[data-cat="financial"] .mat-cat-dot { background: #fbbf24; }
-    .mat-cat-tab[data-cat="political"] .mat-cat-dot { background: #a78bfa; }
-    .mat-cat-tab[data-cat="supporting"] .mat-cat-dot { background: #34d399; }
-    .mat-cat-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border-radius: 50%;
-      font-size: .65rem; font-weight: 700;
-      background: rgba(255,255,255,.08); color: var(--text-subtle);
+    
+    .workspace-section__title {
+      font-size: 1.3rem; font-weight: 700; color: var(--text-main);
+      margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.6rem;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);
     }
 
     /* Upload zone */
     .mat-upload-zone {
-      border: 2px dashed var(--border-accent); border-radius: 20px;
-      padding: 2rem; text-align: center; cursor: pointer;
-      transition: background .2s, border-color .2s;
-      margin-bottom: 1.75rem;
+      position: relative;
+      border: 2px dashed var(--border-subtle); 
+      border-radius: 16px;
+      padding: 3rem 2rem; 
+      text-align: center; 
+      transition: all 0.3s ease;
+      background: var(--bg-input);
+      cursor: pointer;
     }
     .mat-upload-zone:hover, .mat-upload-zone.dragover {
-      background: rgba(59,130,246,.06); border-color: rgba(96,165,250,.8);
+      background: rgba(59,130,246,0.1); 
+      border-color: #3b82f6;
+      transform: translateY(-2px);
     }
-    .mat-upload-zone__icon { font-size: 2rem; margin-bottom: .5rem; }
-    .mat-upload-zone__title { font-size: .96rem; font-weight: 700; color: var(--text-main); margin: 0 0 .4rem; }
-    .mat-upload-zone__sub { font-size: .78rem; color: var(--text-subtle); margin: 0 0 .9rem; }
-    .mat-upload-meta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
-    .mat-meta-field { display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; }
-    .mat-meta-field label { font-size: .75rem; font-weight: 600; color: var(--text-subtle); }
-    .mat-meta-field select,
-    .mat-meta-field input {
-      padding: .45rem .75rem; border-radius: 8px;
-      background: var(--surface-input, rgba(30,41,59,.8));
+    .mat-upload-zone__icon { 
+      font-size: 3rem; margin-bottom: 1rem; color: #3b82f6; 
+      filter: drop-shadow(0 4px 6px rgba(59,130,246,0.3));
+    }
+    .mat-upload-zone__title { font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin: 0 0 0.5rem; }
+    .mat-upload-zone__sub { font-size: 0.9rem; color: var(--text-subtle); margin: 0 0 1.5rem; line-height: 1.5; }
+    
+    .mat-input {
+      padding: 0.75rem 1rem; border-radius: 10px;
+      background: var(--bg-input);
       border: 1px solid var(--border-subtle);
-      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
+      color: var(--text-main); font-family: inherit; font-size: 0.95rem; outline: none;
+      transition: all 0.2s;
     }
+    .mat-input:focus { border-color: #3b82f6; background: var(--bg-input); box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
 
-    /* Default category — always visible */
-    .mat-default-cat {
-      display: flex; align-items: center; justify-content: center;
-      gap: .6rem; flex-wrap: wrap; margin-top: 1.1rem;
-    }
-    .mat-default-cat label { font-size: .8rem; font-weight: 600; color: var(--text-subtle); }
-    .mat-default-cat select {
-      padding: .45rem .85rem; border-radius: 8px;
-      background: var(--surface-input, rgba(30,41,59,.8));
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
-      transition: border-color .2s, opacity .2s;
-    }
-    .mat-default-cat select:disabled { opacity: .45; cursor: not-allowed; }
-    .mat-cat-hint { font-size: .74rem; color: #fbbf24; font-weight: 600; }
-    .mat-upload-zone__note { font-size: .76rem; color: var(--text-subtle); margin: .55rem 0 0; opacity: .9; }
-
-    /* Pending files queue — per-file category */
-    .mat-queue { margin-top: 1.1rem; display: none; flex-direction: column; gap: .6rem; }
-    .mat-queue__desc label { display: block; font-size: .75rem; font-weight: 600; color: var(--text-subtle); margin-bottom: .25rem; text-align: right; }
-    .mat-queue__desc input {
-      width: 100%; padding: .5rem .75rem; border-radius: 8px; box-sizing: border-box;
-      background: var(--surface-input, rgba(30,41,59,.8));
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main); font-family: inherit; font-size: .82rem; outline: none;
-    }
+    /* Pending files queue */
+    .mat-queue { margin-top: 1.5rem; display: none; flex-direction: column; gap: 0.8rem; }
+    .mat-queue__desc label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
+    .mat-queue__desc input { width: 100%; }
     .mat-pending-row {
-      display: flex; align-items: center; gap: .6rem;
-      padding: .5rem .7rem; border-radius: 10px;
-      background: var(--surface-glass, rgba(30,41,59,.4));
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem 1rem; border-radius: 10px;
+      background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
+      transition: transform 0.2s;
     }
-    .mat-pending-row__name { flex: 1; min-width: 0; font-size: .8rem; color: var(--text-main); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .mat-pending-row__size { font-size: .7rem; color: var(--text-subtle); flex-shrink: 0; }
+    .mat-pending-row:hover { transform: translateX(-4px); }
+    .mat-pending-row__name { flex: 1; min-width: 0; font-size: 0.95rem; color: var(--text-main); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+    .mat-pending-row__size { font-size: 0.85rem; color: var(--text-subtle); flex-shrink: 0; }
     .mat-pending-row select {
-      padding: .35rem .6rem; border-radius: 7px; flex-shrink: 0;
-      background: var(--surface-input, rgba(30,41,59,.8));
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main); font-family: inherit; font-size: .78rem; outline: none;
+      padding: 0.5rem 0.8rem; border-radius: 8px; flex-shrink: 0;
+      background: var(--bg-input); border: 1px solid var(--border-subtle); color: var(--text-main); outline: none;
+      font-family: inherit; font-size: 0.85rem;
+    }
+    .mat-pending-row select:focus { border-color: #3b82f6; }
+
+    /* Progress */
+    .mat-progress { margin-top: 1.5rem; display: none; background: var(--bg-input); padding: 1rem; border-radius: 10px; }
+    .mat-progress__label { font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.6rem; font-weight: 700; }
+    .mat-progress__bar { height: 8px; background: var(--bg-input); border-radius: 999px; overflow: hidden; }
+    .mat-progress__fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); width: 0; transition: width 0.3s; border-radius: 999px; }
+
+    /* Segmented Tabs */
+    .lib-tabs { display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border-subtle); margin-bottom: 2rem; flex-wrap: wrap; }
+    .lib-tab { background: none; border: none; border-bottom: 3px solid transparent; color: var(--text-subtle); font-family: inherit; font-size: 1rem; font-weight: 700; padding: 0.75rem 0.5rem; cursor: pointer; transition: all 0.2s; display: flex; gap: 0.5rem; align-items: center; }
+    .lib-tab:hover { color: var(--text-main); }
+    .lib-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+    
+    .mat-cat-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0 0.5rem; height: 22px; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 800;
+      background: var(--bg-input); color: inherit; border: 1px solid var(--border-subtle);
+    }
+    .lib-tab.active .mat-cat-badge { background: rgba(59,130,246,0.15); color: #60a5fa; border-color: rgba(59,130,246,0.3); }
+
+    /* Filters */
+    .mat-library-filters {
+      display: flex; gap: 1rem; align-items: center; padding: 1.25rem;
+      background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-subtle);
+      margin-bottom: 2rem;
     }
 
-    /* Upload progress */
-    .mat-progress { margin-bottom: 1.25rem; display: none; }
-    .mat-progress__label { font-size: .82rem; color: var(--text-subtle); margin-bottom: .4rem; }
-    .mat-progress__bar { height: 6px; background: var(--border-subtle); border-radius: 999px; overflow: hidden; }
-    .mat-progress__fill { height: 100%; background: linear-gradient(90deg, rgba(185,28,28,0.7), #b91c1c); width: 0; transition: width .3s; border-radius: 999px; }
+    /* Empty state */
+    .mat-empty { text-align: center; padding: 5rem 1rem; background: var(--bg-input); border-radius: 16px; border: 1px dashed var(--border-subtle); }
+    .mat-empty__icon { font-size: 4rem; margin-bottom: 1.5rem; color: var(--text-subtle); opacity: 0.5; }
+    .mat-empty__title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0 0 0.75rem; }
+    .mat-empty__text { font-size: 1rem; color: var(--text-subtle); margin: 0; line-height: 1.6; }
 
-    /* Stats strip */
-    .mat-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; margin-bottom: 1.75rem; }
-    @media(max-width:700px){ .mat-stats { grid-template-columns: repeat(3, 1fr); } }
-    .mat-stat-card {
-      padding: .85rem 1rem; border-radius: 14px;
-      background: var(--bg-card, rgba(15,23,42,.6));
-      border: 1px solid var(--border-subtle); text-align: center;
-    }
-    .mat-stat-card__val { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
-    .mat-stat-card__lbl { font-size: .72rem; color: var(--text-subtle); margin-top: .15rem; }
-    .mat-stat-card--blue .mat-stat-card__val { color: #60a5fa; }
-    .mat-stat-card--yellow .mat-stat-card__val { color: #fbbf24; }
-    .mat-stat-card--purple .mat-stat-card__val { color: #a78bfa; }
-    .mat-stat-card--green .mat-stat-card__val { color: #34d399; }
-
-    /* Files grid */
-    .mat-files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-    .mat-file-card {
-      border-radius: 16px; padding: 1rem 1.1rem;
-      background: var(--bg-card, rgba(15,23,42,.6));
-      border: 1px solid var(--border-subtle);
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .mat-file-card:hover { border-color: var(--border-accent); box-shadow: 0 4px 16px rgba(0,0,0,.2); }
-
-    .mat-file-header { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: .75rem; }
-    .mat-file-icon {
-      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
-    }
-    .mat-file-icon--pdf { background: rgba(239,68,68,.15); }
-    .mat-file-icon--word { background: rgba(59,130,246,.15); }
-    .mat-file-icon--excel { background: rgba(16,185,129,.15); }
-    .mat-file-icon--ppt { background: rgba(245,158,11,.15); }
-    .mat-file-icon--video { background: rgba(168,85,247,.15); }
-    .mat-file-icon--image { background: rgba(6,182,212,.15); }
-    .mat-file-icon--other { background: rgba(107,114,128,.15); }
-
-    .mat-file-info { flex: 1; min-width: 0; }
-    .mat-file-name { font-size: .88rem; font-weight: 700; color: var(--text-main); margin: 0 0 .2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .mat-file-size { font-size: .72rem; color: var(--text-subtle); margin: 0; }
-
-    .mat-file-cat {
-      display: inline-block; margin-bottom: .6rem;
-      padding: .2rem .65rem; border-radius: 999px; font-size: .7rem; font-weight: 600;
-    }
-    .mat-file-cat--technical { background: rgba(96,165,250,.15); color: #60a5fa; }
-    .mat-file-cat--financial { background: rgba(251,191,36,.15); color: #fbbf24; }
-    .mat-file-cat--political { background: rgba(167,139,250,.15); color: #a78bfa; }
-    .mat-file-cat--supporting { background: rgba(52,211,153,.15); color: #34d399; }
-
-    .mat-file-desc { font-size: .78rem; color: var(--text-subtle); margin: 0 0 .75rem; line-height: 1.5; }
-    .mat-file-footer { display: flex; align-items: center; justify-content: space-between; }
-    .mat-file-date { font-size: .7rem; color: var(--text-subtle); }
-    .mat-file-actions { display: flex; gap: .35rem; }
-    .mat-action-btn {
-      width: 30px; height: 30px; border-radius: 8px; border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,.05); color: var(--text-subtle);
-      transition: background .2s, color .2s;
-    }
-    .mat-action-btn:hover { background: rgba(59,130,246,.15); color: #60a5fa; }
-    .mat-action-btn--danger:hover { background: rgba(248,113,113,.15); color: #f87171; }
-
-    .mat-empty { text-align: center; padding: 3.5rem 1rem; }
-    .mat-empty__icon { font-size: 2.75rem; margin-bottom: .75rem; }
-    .mat-empty__title { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0 0 .4rem; }
-    .mat-empty__text { font-size: .84rem; color: var(--text-subtle); margin: 0; }
+    /* Materials Table */
+    .mat-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-input); box-shadow: inset 0 2px 10px rgba(0,0,0,0.1); }
+    .mat-table { width: 100%; border-collapse: collapse; text-align: right; }
+    .mat-table th { background: var(--bg-input); padding: 1.25rem 1.5rem; font-size: 0.95rem; color: var(--text-subtle); border-bottom: 1px solid var(--border-subtle); white-space: nowrap; font-weight: 800; letter-spacing: 0.5px; }
+    .mat-table td { padding: 1.25rem 1.5rem; font-size: 0.95rem; color: var(--text-main); border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .mat-table tr:last-child td { border-bottom: none; }
+    .mat-table tr:hover td { background: var(--bg-input); }
+    
+    .mat-file-cat { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 800; }
+    .mat-file-cat--technical { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+    .mat-file-cat--financial { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+    .mat-file-cat--political { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+    .mat-file-cat--supporting { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+    
+    .mat-action-menu { position: relative; display: inline-block; outline: none; }
+    .mat-action-menu-content { display: none; position: absolute; left: 0; top: calc(100% + 8px); background: var(--bg-elevated); backdrop-filter: blur(8px); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.5rem 0; min-width: 160px; z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+    .mat-action-menu.open .mat-action-menu-content { display: block; animation: menuFadeIn 0.2s ease; }
+    @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    .mat-action-menu-item { display: block; width: 100%; text-align: right; padding: 0.6rem 1.25rem; background: none; border: none; color: var(--text-main); font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.2s; }
+    .mat-action-menu-item:hover { background: var(--bg-input); }
+    .mat-action-menu-item--danger { color: #f87171; }
+    .mat-action-menu-item--danger:hover { background: rgba(248,113,113,0.15); color: #fca5a5; }
   </style>
 </head>
 <body data-page="materials">
@@ -209,123 +167,169 @@
   <div id="editorSidebar"></div>
   <main id="main-content" class="mat-page">
 
-    <div class="mat-hero">
-      <h1 class="mat-hero__title">المواد التعليمية</h1>
-      <p class="mat-hero__sub">رفع وإدارة ملفات الدورات مصنّفةً حسب المجال</p>
-    </div>
-
-    <!-- Course selector -->
-    <div class="mat-filter-bar">
-      <label>الدورة:</label>
-      <select id="courseSelect" onchange="onCourseChange()">
-        <option value="">— اختر دورة —</option>
-      </select>
-    </div>
-
-    <!-- Upload zone -->
-    <div class="mat-upload-zone" id="uploadZone"
-         ondragover="event.preventDefault();this.classList.add('dragover')"
-         ondragleave="this.classList.remove('dragover')"
-         ondrop="handleDrop(event)">
-      <div class="mat-upload-zone__icon" id="_uploadZoneIcon"></div>
-      <p class="mat-upload-zone__title">اسحب الملفات هنا أو انقر للاختيار</p>
-      <p class="mat-upload-zone__sub">PDF, Word, Excel, PowerPoint, صور, فيديو, ZIP — أقصى حجم 50MB لكل ملف</p>
-
-      <div class="mat-default-cat">
-        <label for="uploadCategory">التصنيف الافتراضي</label>
-        <select id="uploadCategory" disabled onchange="syncPendingDefault()">
-          <option value="technical">تقني</option>
-          <option value="financial">مالي</option>
-          <option value="political">سياسي</option>
-          <option value="supporting" selected>داعم</option>
-        </select>
-        <span class="mat-cat-hint" id="catHint">اختر دورة أولاً</span>
+    <!-- Top Header -->
+    <div class="builder-header">
+      <div class="builder-header__right">
+        <h1 class="builder-header__title">المواد التعليمية</h1>
+        <p class="builder-header__desc">رفع وإدارة ملفات الدورات كمرفقات تعليمية</p>
       </div>
-      <p class="mat-upload-zone__note">سيُصنَّف كل ملف حسب التصنيف المختار — تأكد منه قبل الرفع</p>
-
-      <button type="button" onclick="document.getElementById('fileInput').click()"
-        style="margin-top:.9rem;padding:.5rem 1.4rem;border-radius:999px;border:1px solid rgba(59,130,246,.6);
-               background:transparent;color:#60a5fa;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">
-        اختر ملفات
-      </button>
-      <input type="file" id="fileInput" multiple
-        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.zip"
-        style="display:none;" onchange="handleFiles(this.files)" />
-
-      <div class="mat-queue" id="uploadMeta">
-        <div class="mat-queue__desc">
-          <label>وصف اختياري (يُطبَّق على كل الملفات)</label>
-          <input type="text" id="uploadDesc" placeholder="ملاحظة مختصرة..." />
+      <div class="builder-header__left" style="display:flex; align-items:center; gap:1rem;">
+        <div style="text-align:right;">
+          <label style="display:block; font-size:0.75rem; font-weight:600; color:var(--text-subtle); margin-bottom:0.4rem;">الدورة المحددة</label>
+          <div class="ui-select" id="courseSelectContainer" style="min-width: 280px;">
+            <input type="hidden" id="courseSelect" onchange="onCourseChange()">
+            <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="ui-select__value is-placeholder">— اختر دورة لإدارة موادها —</span>
+              <span class="ui-select__chevron">▼</span>
+            </button>
+            <div class="ui-select__menu" id="courseSelectMenu" role="listbox" hidden>
+              <button type="button" class="ui-select__option" data-value="" role="option">
+                <span>— اختر دورة لإدارة موادها —</span><span class="ui-select__check">✓</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div id="pendingFilesList"></div>
-        <button type="button" id="uploadConfirmBtn"
-          style="align-self:center;padding:.5rem 1.5rem;border-radius:8px;border:none;background:linear-gradient(180deg,#3b82f6,#1d4ed8);
-                 color:white;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;"
-          onclick="uploadPendingFiles()">
-          رفع الملفات
-        </button>
       </div>
-      <div id="pendingLabel" style="font-size:.78rem;color:var(--text-subtle);margin-top:.5rem;display:none;"></div>
     </div>
 
-    <!-- Progress -->
-    <div class="mat-progress" id="uploadProgress">
-      <div class="mat-progress__label" id="progressLabel">جاري الرفع...</div>
-      <div class="mat-progress__bar"><div class="mat-progress__fill" id="progressFill"></div></div>
-    </div>
+    <!-- Main Workspace -->
+    <div class="workspace-grid" id="mainWorkspace">
+      
+      <!-- Upload Section -->
+      <div class="builder-container workspace-section" id="uploadSection">
+        <h3 class="workspace-section__title">رفع الملفات</h3>
+        
+        <div class="mat-upload-zone" id="uploadZone"
+             ondragover="event.preventDefault();if(selectedCourseId) this.classList.add('dragover')"
+             ondragleave="this.classList.remove('dragover')"
+             ondrop="handleDrop(event)">
+          
+          <div id="uploadZoneContent">
+             <div class="mat-upload-zone__icon" id="_uploadZoneIcon"></div>
+             <p class="mat-upload-zone__title">اسحب الملفات هنا أو اخترها من جهازك</p>
+             <p class="mat-upload-zone__sub">PDF, Word, Excel, PowerPoint, صور, فيديو, ZIP (أقصى حجم 50MB)</p>
+             
+             <div style="display:flex; justify-content:center; align-items:center; gap: 1.5rem; margin-top: 1.25rem;">
+                   <div class="mat-default-cat" style="margin:0; width: 100%;">
+                     <label for="uploadCategory" style="font-size:0.85rem; font-weight:600; color:var(--text-main); display:block; margin-bottom: 0.5rem; text-align: right;">التصنيف الافتراضي:</label>
+                     <div class="ui-select" id="uploadCategorySelect" style="width:100%; display: block;">
+                       <input type="hidden" id="uploadCategory" value="supporting" onchange="syncPendingDefault()">
+                       <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                         <span class="ui-select__value">داعم</span>
+                         <span class="ui-select__chevron">▼</span>
+                       </button>
+                       <div class="ui-select__menu" role="listbox" hidden>
+                       <button type="button" class="ui-select__option" data-value="none" role="option">
+                         <span>بدون تصنيف</span><span class="ui-select__check">✓</span>
+                       </button>
+                       <button type="button" class="ui-select__option" data-value="technical" role="option">
+                         <span>تقني</span><span class="ui-select__check">✓</span>
+                       </button>
+                       <button type="button" class="ui-select__option" data-value="financial" role="option">
+                         <span>مالي</span><span class="ui-select__check">✓</span>
+                       </button>
+                       <button type="button" class="ui-select__option" data-value="political" role="option">
+                         <span>سياسي</span><span class="ui-select__check">✓</span>
+                       </button>
+                       <button type="button" class="ui-select__option is-selected" data-value="supporting" role="option">
+                         <span>داعم</span><span class="ui-select__check">✓</span>
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+                 <button type="button" class="btn btn--primary" id="selectFilesBtn" onclick="document.getElementById('fileInput').click()">
+                   اختيار ملفات
+                 </button>
+             </div>
+             <input type="file" id="fileInput" multiple
+               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.zip"
+               style="display:none;" onchange="handleFiles(this.files)" />
+          </div>
+          
+          <div id="uploadDisabledOverlay" style="display:flex; position:absolute; inset:0; background:var(--bg-main); border-radius:12px; flex-direction:column; align-items:center; justify-content:center; z-index:10;">
+             <div style="font-size: 2.5rem; color: var(--text-subtle); margin-bottom: 0.75rem;" id="_lockIcon"></div>
+             <p style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin: 0 0 0.25rem;">اختر دورة أولاً</p>
+             <p style="font-size: 0.85rem; color: var(--text-subtle); margin: 0;">يجب اختيار الدورة من الأعلى قبل رفع الملفات</p>
+          </div>
 
-    <!-- Stats -->
-    <div class="mat-stats" id="statsStrip">
-      <div class="mat-stat-card"><div class="mat-stat-card__val" id="statTotal">—</div><div class="mat-stat-card__lbl">الإجمالي</div></div>
-      <div class="mat-stat-card mat-stat-card--blue"><div class="mat-stat-card__val" id="statTech">—</div><div class="mat-stat-card__lbl">تقني</div></div>
-      <div class="mat-stat-card mat-stat-card--yellow"><div class="mat-stat-card__val" id="statFin">—</div><div class="mat-stat-card__lbl">مالي</div></div>
-      <div class="mat-stat-card mat-stat-card--purple"><div class="mat-stat-card__val" id="statPol">—</div><div class="mat-stat-card__lbl">سياسي</div></div>
-      <div class="mat-stat-card mat-stat-card--green"><div class="mat-stat-card__val" id="statSup">—</div><div class="mat-stat-card__lbl">داعم</div></div>
-    </div>
+        </div>
 
-    <!-- Category tabs -->
-    <div class="mat-cat-tabs" id="catTabs">
-      <button class="mat-cat-tab active" data-cat="all" onclick="filterCat('all')">
-        <span class="mat-cat-dot"></span>الكل <span class="mat-cat-badge" id="badge_all">0</span>
-      </button>
-      <button class="mat-cat-tab" data-cat="technical" onclick="filterCat('technical')">
-        <span class="mat-cat-dot"></span>تقني <span class="mat-cat-badge" id="badge_technical">0</span>
-      </button>
-      <button class="mat-cat-tab" data-cat="financial" onclick="filterCat('financial')">
-        <span class="mat-cat-dot"></span>مالي <span class="mat-cat-badge" id="badge_financial">0</span>
-      </button>
-      <button class="mat-cat-tab" data-cat="political" onclick="filterCat('political')">
-        <span class="mat-cat-dot"></span>سياسي <span class="mat-cat-badge" id="badge_political">0</span>
-      </button>
-      <button class="mat-cat-tab" data-cat="supporting" onclick="filterCat('supporting')">
-        <span class="mat-cat-dot"></span>داعم <span class="mat-cat-badge" id="badge_supporting">0</span>
-      </button>
-    </div>
+        <!-- Pending Files Queue -->
+        <div class="mat-queue" id="uploadMeta" style="position: relative; z-index: 5;">
+            <div class="mat-queue__desc" style="text-align:right;">
+              <label>وصف اختياري (يُطبَّق على كل الملفات المحددة)</label>
+              <input type="text" id="uploadDesc" class="mat-input" placeholder="ملاحظة مختصرة..." style="max-width:500px;"/>
+            </div>
+            <div id="pendingFilesList"></div>
+            <button type="button" id="uploadConfirmBtn" class="btn btn--primary" style="align-self:flex-start; margin-top: 0.5rem;" onclick="uploadPendingFiles()">
+              رفع الملفات المحددة
+            </button>
+        </div>
+        <div id="pendingLabel" style="font-size:.78rem;color:var(--text-subtle);margin-top:.5rem;display:none;text-align:right;"></div>
+        
+        <!-- Progress -->
+        <div class="mat-progress" id="uploadProgress">
+          <div class="mat-progress__label" id="progressLabel">جاري الرفع...</div>
+          <div class="mat-progress__bar"><div class="mat-progress__fill" id="progressFill"></div></div>
+        </div>
+      </div>
 
-    <!-- Type + attachment filters -->
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-      <select id="matTypeFilter" class="editor-select" style="max-width:200px;" onchange="renderFiles()">
-        <option value="">كل الأنواع</option>
-        <option value="pdf">PDF</option>
-        <option value="doc">Word</option>
-        <option value="ppt">PowerPoint</option>
-        <option value="xls">Excel</option>
-        <option value="image">صور</option>
-        <option value="video">فيديو</option>
-      </select>
-      <select id="matLinkFilter" class="editor-select" style="max-width:220px;" onchange="renderFiles()">
-        <option value="">الكل (مرتبطة وغير مرتبطة)</option>
-        <option value="linked">المرتبطة بجلسات</option>
-        <option value="unlinked">غير المستخدمة في أي جلسة</option>
-      </select>
-    </div>
+      <!-- File Library Section -->
+      <div class="builder-container workspace-section" id="librarySection">
+        <h3 class="workspace-section__title">مكتبة المواد</h3>
+        
+        <!-- Segmented Control for categories -->
+        <div class="lib-tabs" id="catTabs">
+            <button class="lib-tab active" data-cat="all" onclick="filterCat('all')">
+              الكل <span class="mat-cat-badge" id="badge_all">0</span>
+            </button>
+            <button class="lib-tab" data-cat="technical" onclick="filterCat('technical')">
+              تقني <span class="mat-cat-badge" id="badge_technical">0</span>
+            </button>
+            <button class="lib-tab" data-cat="financial" onclick="filterCat('financial')">
+              مالي <span class="mat-cat-badge" id="badge_financial">0</span>
+            </button>
+            <button class="lib-tab" data-cat="political" onclick="filterCat('political')">
+              سياسي <span class="mat-cat-badge" id="badge_political">0</span>
+            </button>
+            <button class="lib-tab" data-cat="supporting" onclick="filterCat('supporting')">
+              داعم <span class="mat-cat-badge" id="badge_supporting">0</span>
+            </button>
+        </div>
 
-    <!-- Files grid -->
-    <div id="filesArea">
-      <div class="mat-empty">
-        <div class="mat-empty__icon" id="_emptyIcon"></div>
-        <p class="mat-empty__title">اختر دورة لعرض ملفاتها</p>
-        <p class="mat-empty__text">اختر دورة من القائمة أعلاه لعرض المواد المرفوعة وإدارتها</p>
+        <!-- Filters & Search -->
+        <div class="mat-library-filters" id="libraryFilters">
+          <div style="display:flex; gap:1rem; flex:1;">
+             <input type="text" id="matSearch" class="mat-input" style="flex:2;" placeholder="ابحث باسم الملف..." oninput="renderFiles()" />
+             <div class="ui-select" id="matSortSelect" style="flex:1;">
+               <input type="hidden" id="matSort" value="newest" onchange="renderFiles()">
+               <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false" style="height: 100%;">
+                 <span class="ui-select__value">الأحدث أولاً</span>
+                 <span class="ui-select__chevron">▼</span>
+               </button>
+               <div class="ui-select__menu" role="listbox" hidden>
+                 <button type="button" class="ui-select__option is-selected" data-value="newest" role="option">
+                   <span>الأحدث أولاً</span><span class="ui-select__check">✓</span>
+                 </button>
+                 <button type="button" class="ui-select__option" data-value="name" role="option">
+                   <span>الاسم</span><span class="ui-select__check">✓</span>
+                 </button>
+                 <button type="button" class="ui-select__option" data-value="size" role="option">
+                   <span>الحجم</span><span class="ui-select__check">✓</span>
+                 </button>
+               </div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Files grid/empty state -->
+        <div id="filesArea">
+          <div class="mat-empty" id="libraryEmptyState">
+            <div class="mat-empty__icon" id="_libraryEmptyIcon"></div>
+            <p class="mat-empty__title" id="libraryEmptyTitle">اختر دورة لعرض موادها التعليمية</p>
+            <p class="mat-empty__text" id="libraryEmptySub"></p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -336,6 +340,7 @@
   <script>
     var API = '/api';
     var materials = [];
+    var allCourses = [];
     var activeCat = 'all';
     var selectedCourseId = 0;
     var pendingFiles = [];
@@ -344,7 +349,12 @@
     var CAT_COLORS = { technical: 'blue', financial: 'yellow', political: 'purple', supporting: 'green' };
 
     document.getElementById('_uploadZoneIcon').innerHTML = NTAIcons('folder', 32);
-    document.getElementById('_emptyIcon').innerHTML      = NTAIcons('folder_open', 32);
+    if(document.getElementById('_libraryEmptyIcon')) {
+       document.getElementById('_libraryEmptyIcon').innerHTML = NTAIcons('folder_open', 32);
+    }
+    if(document.getElementById('_lockIcon')) {
+       document.getElementById('_lockIcon').innerHTML = NTAIcons('lock_closed', 32);
+    }
 
     function fileIcon(ext) {
       if (!ext) return { icon: NTAIcons('document', 20), cls: 'other' };
@@ -370,33 +380,55 @@
       editorAuth.fetch(API + '/courses')
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          var sel = document.getElementById('courseSelect');
-          sel.innerHTML = '<option value="">— اختر دورة —</option>';
+          allCourses = data;
+          var menu = document.getElementById('courseSelectMenu');
+          var html = '<button type="button" class="ui-select__option" data-value="" role="option"><span>— اختر دورة لإدارة موادها —</span><span class="ui-select__check">✓</span></button>';
           data.forEach(function(c) {
-            var opt = document.createElement('option');
-            opt.value = c.id;
-            opt.textContent = (c.title_ar || c.title) + (c.status ? ' — ' + c.status : '');
-            sel.appendChild(opt);
+            var label = (c.title_ar || c.title) + (c.status ? ' — ' + c.status : '');
+            html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + label + '</span><span class="ui-select__check">✓</span></button>';
           });
+          menu.innerHTML = html;
+          if (window.initUISelects) window.initUISelects(document.getElementById('courseSelectContainer'));
+          onCourseChange(); // Initialize UI state
         });
     }
 
     function onCourseChange() {
       var val = document.getElementById('courseSelect').value;
       selectedCourseId = parseInt(val) || 0;
-      if (selectedCourseId) loadMaterials(selectedCourseId);
-      else {
+      
+      var overlay = document.getElementById('uploadDisabledOverlay');
+      var filters = document.getElementById('libraryFilters');
+
+      if (selectedCourseId) {
+        if(overlay) overlay.style.display = 'none';
+        if(filters) {
+          filters.style.opacity = '1';
+          filters.style.pointerEvents = 'auto';
+        }
+        
+        loadMaterials(selectedCourseId);
+      } else {
+        if(overlay) overlay.style.display = 'flex';
+        if(filters) {
+          filters.style.opacity = '0.5';
+          filters.style.pointerEvents = 'none';
+        }
+        
         materials = [];
-        renderFiles();
-        updateStats();
-      }
-      // Enable the always-visible default category once a course is chosen
-      document.getElementById('uploadCategory').disabled = !selectedCourseId;
-      document.getElementById('catHint').style.display = selectedCourseId ? 'none' : '';
-      if (!selectedCourseId) {
         pendingFiles = [];
         document.getElementById('uploadMeta').style.display = 'none';
         document.getElementById('pendingLabel').style.display = 'none';
+        
+        var filesArea = document.getElementById('filesArea');
+        if(filesArea) {
+          filesArea.innerHTML = '<div class="mat-empty">' +
+            '<div class="mat-empty__icon">' + NTAIcons('folder', 32) + '</div>' +
+            '<p class="mat-empty__title">اختر دورة لعرض موادها التعليمية</p>' +
+            '<p class="mat-empty__text">يجب اختيار دورة من الأعلى أولاً</p></div>';
+        }
+        
+        updateStats();
       }
     }
 
@@ -419,54 +451,69 @@
 
     function renderFiles() {
       var area = document.getElementById('filesArea');
-      var typeF = (document.getElementById('matTypeFilter') || {}).value || '';
-      var linkF = (document.getElementById('matLinkFilter') || {}).value || '';
+      var searchQ = (document.getElementById('matSearch') || {}).value || '';
+      searchQ = searchQ.toLowerCase();
+      var sortMode = (document.getElementById('matSort') || {}).value || 'newest';
+
       var filtered = materials.filter(function(m) {
         if (activeCat !== 'all' && m.category !== activeCat) return false;
-        if (typeF && matTypeGroup(m.file_type || (m.file_name || '').split('.').pop()) !== typeF) return false;
-        if (linkF === 'linked' && !(m.linked_sessions > 0)) return false;
-        if (linkF === 'unlinked' && (m.linked_sessions > 0)) return false;
+        var fName = (m.file_name || '').toLowerCase();
+        var fDesc = (m.description || '').toLowerCase();
+        if (searchQ && fName.indexOf(searchQ) === -1 && fDesc.indexOf(searchQ) === -1) return false;
         return true;
       });
+
+      filtered.sort(function(a, b) {
+        if (sortMode === 'name') return (a.file_name || '').localeCompare(b.file_name || '');
+        if (sortMode === 'size') return (b.file_size || 0) - (a.file_size || 0);
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+      });
+
       if (!filtered.length) {
-        area.innerHTML = '<div class="mat-empty"><div class="mat-empty__icon">' +
-          NTAIcons(selectedCourseId ? 'folder' : 'folder_open', 32) + '</div>' +
-          '<p class="mat-empty__title">' + (selectedCourseId ? 'لا توجد ملفات في هذا التصنيف' : 'اختر دورة لعرض ملفاتها') + '</p>' +
-          '<p class="mat-empty__text">' + (selectedCourseId ? 'ارفع أول مادة تعليمية باستخدام منطقة الرفع أعلاه' : 'اختر دورة من القائمة أعلاه') + '</p></div>';
+        var msg = selectedCourseId ? 'لا توجد مواد تعليمية في هذه الدورة بعد' : 'اختر دورة لعرض موادها التعليمية';
+        var sub = selectedCourseId ? 'ارفع أول مادة تعليمية لهذه الدورة باستخدام منطقة الرفع أعلاه' : 'يجب اختيار دورة من الأعلى أولاً';
+        var iconStr = NTAIcons(selectedCourseId ? 'folder' : 'folder_open', 32);
+        area.innerHTML = '<div class="mat-empty"><div class="mat-empty__icon">' + iconStr + '</div>' +
+          '<p class="mat-empty__title">' + msg + '</p>' +
+          '<p class="mat-empty__text">' + sub + '</p></div>';
         return;
       }
-      var html = '<div class="mat-files-grid">';
+      var html = '<div class="mat-table-wrapper"><table class="mat-table"><thead><tr>' +
+        '<th>الملف</th><th>التصنيف</th><th>الحجم</th><th>تاريخ الرفع</th><th style="text-align: left;">إجراءات</th>' +
+        '</tr></thead><tbody>';
       filtered.forEach(function(m) {
         var ext = m.file_type || (m.file_name || '').split('.').pop();
         var ic = fileIcon(ext);
         var cat = m.category || 'supporting';
         var dateStr = m.created_at ? new Date(m.created_at).toLocaleDateString('ar-EG') : '';
-        html += '<div class="mat-file-card">' +
-          '<div class="mat-file-header">' +
-            '<div class="mat-file-icon mat-file-icon--' + ic.cls + '">' + ic.icon + '</div>' +
-            '<div class="mat-file-info">' +
-              '<p class="mat-file-name" title="' + (m.file_name || '') + '">' + (m.file_name || 'ملف') + '</p>' +
-              '<p class="mat-file-size">' + formatSize(m.file_size) + '</p>' +
+        html += '<tr>' +
+          '<td>' +
+            '<div style="display: flex; align-items: center; gap: .75rem;">' +
+              '<div class="mat-file-icon mat-file-icon--' + ic.cls + '" style="width: 32px; height: 32px; font-size: 1rem;">' + ic.icon + '</div>' +
+              '<div><div class="mat-file-name" style="max-width: 250px;" title="' + (m.file_name||'') + '">' + (m.file_name||'ملف') + '</div>' +
+              '<div style="font-size: .7rem; color: var(--text-subtle);">' + ext.toUpperCase() + '</div></div>' +
             '</div>' +
-          '</div>' +
-          '<span class="mat-file-cat mat-file-cat--' + cat + '">' + (CAT_LABELS[cat] || cat) + '</span>' +
-          (m.description ? '<p class="mat-file-desc">' + m.description + '</p>' : '') +
-          '<div class="mat-file-footer">' +
-            '<span class="mat-file-date">' + dateStr + '</span>' +
-            (m.linked_sessions ? '<span style="font-size: .7rem; color: #10b981; margin-right: .5rem;">مرتبطة بـ ' + m.linked_sessions + ' جلسة</span>' : '<span style="font-size: .7rem; color: var(--text-subtle); margin-right: .5rem;">غير مرتبطة</span>') +
-            '<div class="mat-file-actions">' +
-              '<a href="' + (m.file_path || '#') + '" target="_blank" class="mat-action-btn" title="تحميل">' +
-                '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>' +
-              '</a>' +
-              '<button class="mat-action-btn mat-action-btn--danger" title="حذف" onclick="deleteMaterial(' + m.id + ')">' +
-                '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>' +
-              '</button>' +
+          '</td>' +
+          '<td><span class="mat-file-cat mat-file-cat--' + cat + '">' + (CAT_LABELS[cat] || cat) + '</span></td>' +
+          '<td><span class="mat-file-size">' + formatSize(m.file_size) + '</span></td>' +
+          '<td><span class="mat-file-date">' + dateStr + '</span></td>' +
+          '<td style="text-align: left;">' +
+            '<div style="display: flex; gap: .5rem; justify-content: flex-end;">' +
+              '<a href="' + (m.file_path || '#') + '" target="_blank" class="btn btn--secondary btn--sm" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;">تنزيل</a>' +
+              '<div class="ui-menu">' +
+                '<button class="ui-menu__trigger" type="button" style="padding: 0.35rem 0.5rem; font-size: 0.75rem;">المزيد ▾</button>' +
+                '<div class="ui-menu__content" hidden>' +
+                  '<button class="ui-menu__item" type="button" onclick="showEditorToast(\'ميزة الاستبدال قيد التطوير\', \'info\')">استبدال الملف</button>' +
+                  '<button class="ui-menu__item is-danger" type="button" onclick="deleteMaterial(' + m.id + ')">حذف المادة</button>' +
+                '</div>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
-        '</div>';
+          '</td>' +
+        '</tr>';
       });
-      html += '</div>';
+      html += '</tbody></table></div>';
       area.innerHTML = html;
+      if (window.initUIMenus) window.initUIMenus(area);
     }
 
     function updateStats() {
@@ -486,7 +533,7 @@
 
     function filterCat(cat) {
       activeCat = cat;
-      document.querySelectorAll('.mat-cat-tab').forEach(function(t){
+      document.querySelectorAll('.lib-tab').forEach(function(t){
         t.classList.toggle('active', t.dataset.cat === cat);
       });
       renderFiles();
@@ -504,9 +551,12 @@
       queueFiles(fileList);
     }
 
-    function catOptions(selected) {
+    function uiSelectOptions(selected) {
       return [['technical','تقني'],['financial','مالي'],['political','سياسي'],['supporting','داعم']]
-        .map(function(c){ return '<option value="' + c[0] + '"' + (c[0] === selected ? ' selected' : '') + '>' + c[1] + '</option>'; })
+        .map(function(c){ 
+          var isSelected = c[0] === selected;
+          return '<button type="button" class="ui-select__option' + (isSelected ? ' is-selected' : '') + '" data-value="' + c[0] + '"><span>' + c[1] + '</span><span class="ui-select__check">✓</span></button>'; 
+        })
         .join('');
     }
 
@@ -519,9 +569,19 @@
           '<div class="mat-file-icon mat-file-icon--' + ic.cls + '" style="width:30px;height:30px;font-size:.9rem;border-radius:8px;">' + ic.icon + '</div>' +
           '<span class="mat-pending-row__name" title="' + (f.name || '') + '">' + (f.name || 'ملف') + '</span>' +
           '<span class="mat-pending-row__size">' + formatSize(f.size) + '</span>' +
-          '<select class="mat-row-cat" data-idx="' + i + '">' + catOptions(def) + '</select>' +
+          '<div class="ui-select" id="pendingCatContainer_' + i + '" style="min-width:110px;">' +
+            '<input type="hidden" class="mat-row-cat" data-idx="' + i + '" value="' + def + '">' +
+            '<button type="button" class="ui-select__trigger" style="padding:0.35rem 0.6rem; border-radius:6px; background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1);">' +
+              '<span class="ui-select__value">' + (CAT_LABELS[def] || def) + '</span><span class="ui-select__chevron">▼</span>' +
+            '</button>' +
+            '<div class="ui-select__menu" hidden>' + uiSelectOptions(def) + '</div>' +
+          '</div>' +
+          '<button type="button" class="mat-action-btn mat-action-btn--danger" style="width: 24px; height: 24px;" onclick="removePendingFile(' + i + ')" title="إزالة">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
+          '</button>' +
         '</div>';
       }).join('');
+      if (window.initUISelects) window.initUISelects(list);
     }
 
     // Re-apply the default category to any queued rows the user hasn't touched
@@ -538,6 +598,17 @@
       document.getElementById('pendingLabel').style.display = '';
       document.getElementById('pendingLabel').textContent = pendingFiles.length + ' ملف(ات) جاهزة للرفع';
       document.getElementById('fileInput').value = '';
+    }
+
+    function removePendingFile(index) {
+      pendingFiles.splice(index, 1);
+      if (!pendingFiles.length) {
+        document.getElementById('uploadMeta').style.display = 'none';
+        document.getElementById('pendingLabel').style.display = 'none';
+        return;
+      }
+      renderPendingList();
+      document.getElementById('pendingLabel').textContent = pendingFiles.length + ' ملف(ات) جاهزة للرفع';
     }
 
     async function uploadPendingFiles() {

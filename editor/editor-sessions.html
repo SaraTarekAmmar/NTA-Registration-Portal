@@ -32,16 +32,30 @@
     <div id="editorSidebar"></div>
     <main id="main-content" class="editor-main">
       <div class="editor-page-header">
-        <h1 class="editor-page-header__title">الجلسات</h1>
-        <p class="editor-page-header__sub">إضافة وتعديل جلسات الدورات</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+          <div>
+            <h1 class="editor-page-header__title">الجلسات</h1>
+            <p class="editor-page-header__sub">إدارة جلسات الدورات التعليمية</p>
+          </div>
+          <button type="button" class="btn btn--primary" onclick="addSession()" id="addSessionBtn" disabled>+ إضافة جلسة</button>
+        </div>
       </div>
 
       <!-- Course selector -->
       <div class="editor-form-group" style="max-width:360px;margin-bottom:1.5rem;">
         <label for="courseSelect">اختر الدورة</label>
-        <select id="courseSelect" class="editor-select" onchange="loadSessions()">
-          <option value="">— اختر دورة —</option>
-        </select>
+        <div class="ui-select" id="courseSelectContainer">
+          <input type="hidden" id="courseSelect" onchange="loadSessions()">
+          <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="ui-select__value is-placeholder">— اختر دورة —</span>
+            <span class="ui-select__chevron">▼</span>
+          </button>
+          <div class="ui-select__menu" id="courseSelectMenu" role="listbox" hidden>
+            <button type="button" class="ui-select__option" data-value="" role="option">
+              <span>— اختر دورة —</span><span class="ui-select__check">✓</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
@@ -49,9 +63,40 @@
         <button type="button" onclick="loadSessions()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
       </div>
 
+      <!-- Session Summary Stats (hidden by default) -->
+      <div id="sessionSummary" class="editor-kpi-row" style="display:none; margin-bottom:1.5rem;">
+        <div class="editor-kpi">
+          <div class="editor-kpi__icon" style="color:var(--text-subtle); border-color:rgba(255,255,255,0.1); background:rgba(255,255,255,0.05);"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="statTotalSess">—</div>
+            <div class="editor-kpi__lbl">الإجمالي</div>
+          </div>
+        </div>
+        <div class="editor-kpi">
+          <div class="editor-kpi__icon" style="color:#10b981; border-color:rgba(16,185,129,0.2); background:rgba(16,185,129,0.1);"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="statPubSess" style="color:#10b981;">—</div>
+            <div class="editor-kpi__lbl">منشورة</div>
+          </div>
+        </div>
+        <div class="editor-kpi">
+          <div class="editor-kpi__icon" style="color:#f59e0b; border-color:rgba(245,158,11,0.2); background:rgba(245,158,11,0.1);"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="statDraftSess" style="color:#f59e0b;">—</div>
+            <div class="editor-kpi__lbl">مسودة</div>
+          </div>
+        </div>
+        <div class="editor-kpi">
+          <div class="editor-kpi__icon" style="color:#ef4444; border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.1);"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+          <div class="editor-kpi__body">
+            <div class="editor-kpi__val" id="statIncSess" style="color:#ef4444;">—</div>
+            <div class="editor-kpi__lbl">غير مكتملة</div>
+          </div>
+        </div>
+      </div>
+
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-        <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0;">قائمة الجلسات</h2>
-        <button type="button" class="btn btn--primary btn--sm" onclick="addSession()" id="addSessionBtn" disabled>+ إضافة جلسة</button>
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-main);margin:0;">جلسات الدورة</h2>
       </div>
 
       <div id="loadingState" class="editor-state" style="display:none;">
@@ -89,11 +134,27 @@
             </div>
             <div class="editor-form-group">
               <label for="sessionStatus">الحالة</label>
-              <select id="sessionStatus" class="editor-select">
-                <option value="scheduled">مجدولة</option>
-                <option value="completed">مكتملة</option>
-                <option value="cancelled">ملغاة</option>
-              </select>
+              <div class="ui-select" id="sessionStatusSelect">
+                <input type="hidden" id="sessionStatus" value="scheduled">
+                <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="ui-select__value">مجدولة</span>
+                  <span class="ui-select__chevron">▼</span>
+                </button>
+                <div class="ui-select__menu" role="listbox" hidden>
+                  <button type="button" class="ui-select__option is-selected" data-value="scheduled" role="option">
+                    <span>مجدولة</span><span class="ui-select__check">✓</span>
+                  </button>
+                  <button type="button" class="ui-select__option" data-value="completed" role="option">
+                    <span>مكتملة</span><span class="ui-select__check">✓</span>
+                  </button>
+                  <button type="button" class="ui-select__option" data-value="cancelled" role="option">
+                    <span>ملغاة</span><span class="ui-select__check">✓</span>
+                  </button>
+                  <button type="button" class="ui-select__option" data-value="draft" role="option">
+                    <span>مسودة</span><span class="ui-select__check">✓</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -167,7 +228,10 @@
 
           <div class="editor-modal__actions">
             <button type="button" class="btn btn--secondary" onclick="closeSessionModal()">إلغاء</button>
-            <button type="button" class="btn btn--primary" onclick="saveSession()" id="saveSessionBtn">حفظ الجلسة</button>
+            <div style="display: flex; gap: 0.5rem; margin-right: auto;">
+              <button type="button" class="btn btn--secondary" onclick="saveSessionAsDraft()">حفظ كمسودة</button>
+              <button type="button" class="btn btn--primary" onclick="saveSession()" id="saveSessionBtn">حفظ الجلسة</button>
+            </div>
           </div>
         </div>
       </div>
@@ -184,9 +248,20 @@
       var editingIdx = -1;
       var courseMaterials = [];  // all active materials of the current course (picker source)
       var linkedMaterials = [];  // materials linked to the open session
+      var pendingMaterialLinks = [];
+      var pendingMaterialUnlinks = [];
       var CAT_LABELS = { technical: "تقني", financial: "مالي", political: "سياسي", supporting: "داعم" };
 
       function sdTab(name) {
+        if (name !== 'details') {
+          var title = document.getElementById("sessionTitle").value.trim();
+          if (!title) {
+            document.getElementById("sessionTitleError").style.display = "block";
+            showEditorToast("يرجى إدخال عنوان الجلسة أولاً", "error");
+            return;
+          }
+        }
+        
         ["details", "content", "materials"].forEach(function (t) {
           document.getElementById("sdPanel-" + t).style.display = (t === name) ? "block" : "none";
         });
@@ -199,7 +274,21 @@
         s = s || {};
         document.getElementById("sessionTitle").value = s.topic || s.title || "";
         document.getElementById("sessionDate").value = s.session_date ? String(s.session_date).slice(0, 16) : "";
-        document.getElementById("sessionStatus").value = s.status || "scheduled";
+        var statVal = s.status || "scheduled";
+        document.getElementById("sessionStatus").value = statVal;
+        
+        var statMenu = document.getElementById("sessionStatusSelect");
+        if (statMenu) {
+           var opt = statMenu.querySelector('[data-value="'+statVal+'"]');
+           if (opt) {
+              statMenu.querySelectorAll('.ui-select__option').forEach(function(o){ o.classList.remove('is-selected'); });
+              opt.classList.add('is-selected');
+              var txt = opt.querySelector('span:not(.ui-select__check)').textContent;
+              statMenu.querySelector('.ui-select__value').textContent = txt;
+              statMenu.querySelector('.ui-select__value').classList.remove('is-placeholder');
+           }
+        }
+        
         document.getElementById("sessionDescription").value = s.description || "";
         document.getElementById("sessionContent").value = s.content || "";
         document.getElementById("sessionObjectives").value = s.objectives || "";
@@ -219,17 +308,19 @@
       authFetch("/api/courses")
         .then(function(r) { return r.json(); })
         .then(function(courses) {
-          var sel = document.getElementById("courseSelect");
+          var menu = document.getElementById("courseSelectMenu");
+          var html = '<button type="button" class="ui-select__option" data-value="" role="option"><span>— اختر دورة —</span><span class="ui-select__check">✓</span></button>';
           courses.forEach(function(c) {
-            var opt = document.createElement("option");
-            opt.value = c.id;
-            opt.textContent = c.title_ar || c.title;
-            sel.appendChild(opt);
+            html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + (c.title_ar || c.title) + '</span><span class="ui-select__check">✓</span></button>';
           });
+          menu.innerHTML = html;
           // Check URL param
           var params = new URLSearchParams(window.location.search);
           var cid = params.get("course_id");
-          if (cid) { sel.value = cid; loadSessions(); }
+          if (cid) {
+             var opt = menu.querySelector('[data-value="'+cid+'"]');
+             if (opt) opt.click();
+          }
         })
         .catch(function() {});
 
@@ -240,6 +331,7 @@
           sessions = [];
           document.getElementById("emptyState").style.display = "flex";
           document.getElementById("sessionsList").style.display = "none";
+          document.getElementById("sessionSummary").style.display = "none";
           document.getElementById("emptyState").querySelector(".editor-state__title").textContent = "اختر دورة أولاً";
           document.getElementById("emptyState").querySelector(".editor-state__text").textContent = "اختر دورة من القائمة أعلاه لعرض وإدارة جلساتها.";
           return;
@@ -266,35 +358,81 @@
       function renderSessions() {
         var list = document.getElementById("sessionsList");
         var empty = document.getElementById("emptyState");
+        var summary = document.getElementById("sessionSummary");
+        
         if (!sessions.length) {
           list.style.display = "none";
+          summary.style.display = "none";
           empty.style.display = "flex";
           empty.querySelector(".editor-state__title").textContent = "لا توجد جلسات";
           empty.querySelector(".editor-state__text").textContent = "اضغط \"إضافة جلسة\" لإنشاء أول جلسة.";
           return;
         }
+        
         empty.style.display = "none";
-        var statusMap = { scheduled:"مجدولة", completed:"مكتملة", cancelled:"ملغاة" };
+        summary.style.display = "flex";
+        
+        var pubCount = 0, draftCount = 0, incCount = 0;
+        
         var html = '<div class="editor-table-wrap"><table class="editor-table">' +
           '<caption class="sr-only">قائمة الجلسات التدريبية</caption>' +
           '<thead><tr>' +
-          '<th scope="col">#</th><th scope="col">عنوان الجلسة</th><th scope="col">التاريخ</th><th scope="col">الحالة</th><th scope="col">الإجراءات</th>' +
+          '<th scope="col">الترتيب</th><th scope="col">عنوان الجلسة</th><th scope="col">التاريخ والوقت</th><th scope="col">حالة النشر</th><th scope="col">الإجراءات</th>' +
           '</tr></thead><tbody>';
+          
         sessions.forEach(function(s, i) {
+          // Detect human title vs slug
+          var rawTitle = s.topic || s.title || "";
+          var displayTitle = rawTitle;
+          if (!displayTitle || displayTitle.indexOf("course_") >= 0) {
+            displayTitle = "الجلسة " + (i + 1);
+          }
+          
+          // Detect completeness
+          var missing = [];
+          if (!s.session_date) missing.push("تاريخ");
+          
+          var isInc = missing.length > 0;
+          if (isInc) incCount++;
+          if (s.status === "completed") pubCount++;
+          else draftCount++;
+          
+          var statusLabel = (s.status === "completed") ? "منشورة" : (s.status === "cancelled" ? "ملغاة" : "مسودة");
+          var badgeClass = (s.status === "completed") ? "published" : (s.status === "cancelled" ? "archived" : "draft");
+          
           html += '<tr>';
           html += '<td style="color:var(--text-subtle);">'+(i+1)+'</td>';
-          html += '<td style="font-weight:600;">'+(s.topic||s.title||"جلسة "+(i+1))+'</td>';
-          html += '<td>'+(s.session_date ? new Date(s.session_date).toLocaleDateString("ar-EG") : "—")+'</td>';
-          html += '<td><span class="editor-course-card__badge editor-course-card__badge--'+(s.status==="completed"?"published":s.status==="cancelled"?"archived":"draft")+'">'+
-            (statusMap[s.status]||"مجدولة")+'</span></td>';
-          html += '<td style="display:flex;gap:0.5rem;">';
+          html += '<td style="font-weight:600; font-size:0.9rem;">'+displayTitle+'</td>';
+          html += '<td>'+(s.session_date ? new Date(s.session_date).toLocaleString("ar-EG", {year:'numeric', month:'numeric', day:'numeric', hour:'numeric', minute:'numeric'}) : '<span class="editor-course-card__badge editor-course-card__badge--archived">غير محدد</span>')+'</td>';
+          
+          html += '<td>';
+          html += '<span class="editor-course-card__badge editor-course-card__badge--'+badgeClass+'">'+statusLabel+'</span>';
+          if (isInc && s.status !== "completed") {
+            html += '<div style="font-size:0.65rem; color:#f87171; margin-top:0.35rem; padding-right:0.2rem;">ناقص: ' + missing.join('، ') + '</div>';
+          }
+          html += '</td>';
+          
+          html += '<td><div style="display:flex;gap:0.5rem;align-items:center;position:relative;">';
           html += '<button type="button" class="btn btn--secondary btn--sm" onclick="openEditSession('+i+')">تعديل</button>';
-          html += '<button type="button" class="btn btn--danger btn--sm" onclick="deleteSession('+i+')">حذف</button>';
-          html += '</td></tr>';
+          html += '<div class="ui-menu">';
+          html += '  <button type="button" class="ui-menu__trigger">المزيد ▾</button>';
+          html += '  <div class="ui-menu__content" hidden>';
+          html += '    <button type="button" class="ui-menu__item" onclick="showEditorToast(\'ميزة النسخ قيد التطوير\', \'info\');">نسخ الجلسة</button>';
+          html += '    <button type="button" class="ui-menu__item is-danger" onclick="deleteSession('+i+');">حذف الجلسة</button>';
+          html += '  </div>';
+          html += '</div>';
+          html += '</div></td></tr>';
         });
         html += '</tbody></table></div>';
+        
+        document.getElementById("statTotalSess").textContent = sessions.length;
+        document.getElementById("statPubSess").textContent = pubCount;
+        document.getElementById("statDraftSess").textContent = draftCount;
+        document.getElementById("statIncSess").textContent = incCount;
+
         list.innerHTML = html;
         list.style.display = "block";
+        if (window.initUIMenus) window.initUIMenus(list);
       }
 
       function addSession() {
@@ -302,11 +440,22 @@
         document.getElementById("sessionModalTitle").textContent = "إضافة جلسة جديدة";
         setSessionFields({});
         linkedMaterials = [];
+        pendingMaterialLinks = [];
+        pendingMaterialUnlinks = [];
         sdTab("details");
-        document.getElementById("sdMaterialsTab").disabled = true;   // need a saved session first
-        document.getElementById("sdMaterialsHint").style.display = "block";
-        document.getElementById("sdMaterialsBody").style.display = "none";
+        document.getElementById("sdMaterialsTab").disabled = false;
+        document.getElementById("sdMaterialsHint").style.display = "none";
+        document.getElementById("sdMaterialsBody").style.display = "block";
         document.getElementById("sdPicker").style.display = "none";
+        renderLinkedMaterials();
+        
+        var courseId = document.getElementById("courseSelect").value;
+        if(courseId) {
+            authFetch("/api/materials/" + courseId)
+              .then(function (r) { return r.ok ? r.json() : []; })
+              .then(function (list) { courseMaterials = list || []; })
+              .catch(function () { courseMaterials = []; });
+        }
         document.getElementById("sessionModal").style.display = "flex";
         document.getElementById("sessionTitle").focus();
       }
@@ -319,10 +468,12 @@
         sdTab("details");
         document.getElementById("sdPicker").style.display = "none";
         var hasId = !!s.id;
-        document.getElementById("sdMaterialsTab").disabled = !hasId;
-        document.getElementById("sdMaterialsHint").style.display = hasId ? "none" : "block";
-        document.getElementById("sdMaterialsBody").style.display = hasId ? "block" : "none";
+        document.getElementById("sdMaterialsTab").disabled = false;
+        document.getElementById("sdMaterialsHint").style.display = "none";
+        document.getElementById("sdMaterialsBody").style.display = "block";
         linkedMaterials = [];
+        pendingMaterialLinks = [];
+        pendingMaterialUnlinks = [];
         renderLinkedMaterials();
         if (hasId) loadSessionMaterials(s.id);
         document.getElementById("sessionModal").style.display = "flex";
@@ -333,10 +484,46 @@
         document.getElementById("sessionModal").style.display = "none";
       }
 
+      function saveSessionAsDraft() {
+        var statInput = document.getElementById("sessionStatus");
+        var statMenu = document.getElementById("sessionStatusSelect");
+        if (statInput && statMenu && statInput.uiSelectApi) {
+          statInput.uiSelectApi.setValue("draft");
+        } else if (statInput) {
+           statInput.value = "draft";
+           if (statMenu) {
+               var opt = statMenu.querySelector('[data-value="draft"]');
+               if (opt) {
+                   statMenu.querySelectorAll('.ui-select__option').forEach(function(o){ o.classList.remove('is-selected'); });
+                   opt.classList.add('is-selected');
+                   statMenu.querySelector('.ui-select__value').textContent = opt.querySelector('span:not(.ui-select__check)').textContent;
+                   statMenu.querySelector('.ui-select__value').classList.remove('is-placeholder');
+               }
+           }
+        }
+        saveSession();
+      }
+      
+      function syncPendingMaterials(sessionId) {
+          if (!sessionId) return Promise.resolve();
+          var promises = [];
+          pendingMaterialLinks.forEach(function(mid) {
+              promises.push(authFetch("/api/sessions/" + sessionId + "/materials", { method: "POST", body: JSON.stringify({ material_id: mid }) }).catch(function(){}));
+          });
+          pendingMaterialUnlinks.forEach(function(mid) {
+              promises.push(authFetch("/api/sessions/" + sessionId + "/materials/" + mid, { method: "DELETE" }).catch(function(){}));
+          });
+          pendingMaterialLinks = [];
+          pendingMaterialUnlinks = [];
+          return Promise.all(promises);
+      }
+
       function saveSession() {
         var title = document.getElementById("sessionTitle").value.trim();
         if (!title) {
+          sdTab('details');
           document.getElementById("sessionTitleError").style.display = "block";
+          showEditorToast("يرجى إدخال عنوان الجلسة أولاً", "error");
           return;
         }
         document.getElementById("sessionTitleError").style.display = "none";
@@ -365,22 +552,41 @@
           if (existingId) {
             authFetch("/api/sessions/" + existingId, {
               method: "PUT", body: JSON.stringify(Object.assign({}, apiPayload))
+            }).then(function() {
+                return syncPendingMaterials(existingId);
+            }).then(function() {
+                showEditorToast("تم تحديث الجلسة والمواد.", "success");
+                renderSessions();
+                closeSessionModal();
             }).catch(function() {});
+          } else {
+             // Mock scenario
+             syncPendingMaterials(existingId).then(function() {
+                showEditorToast("تم تحديث الجلسة والمواد.", "success");
+                renderSessions();
+                closeSessionModal();
+             });
           }
-          showEditorToast("تم تحديث الجلسة.", "success");
-          closeSessionModal();
-          renderSessions();
         } else {
           authFetch("/api/sessions", { method: "POST", body: JSON.stringify(apiPayload) })
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(data) {
               if (data && data.id) obj.id = data.id;
               sessions.push(obj);
-              renderSessions();
+              syncPendingMaterials(obj.id).then(function() {
+                  renderSessions();
+                  showEditorToast("تم حفظ الجلسة والمواد.", "success");
+                  closeSessionModal();
+              });
             })
-            .catch(function() { sessions.push(obj); renderSessions(); });
-          showEditorToast("تمت إضافة الجلسة.", "success");
-          closeSessionModal();
+            .catch(function() { 
+              sessions.push(obj); 
+              syncPendingMaterials(obj.id).then(function() {
+                  renderSessions(); 
+                  showEditorToast("تم حفظ الجلسة الجديدة.", "success");
+                  closeSessionModal();
+              });
+            });
         }
       }
 
@@ -442,10 +648,8 @@
         if (!file) return;
         event.target.value = ""; // reset
 
-        var sess = sessions[editingIdx];
-        var sid = sess && sess.id;
         var courseId = document.getElementById("courseSelect").value;
-        if (!sid || !courseId) return;
+        if (!courseId) return;
 
         var btn = document.getElementById("sessionUploadBtn");
         var origText = btn.textContent;
@@ -469,19 +673,17 @@
         .then(function(r) { return r.ok ? r.json() : Promise.reject(r); })
         .then(function(data) {
           if (!data || !data.id) throw new Error();
-          var mid = data.id;
-          return authFetch("/api/sessions/" + sid + "/materials", {
-            method: "POST",
-            body: JSON.stringify({ material_id: mid })
-          });
+          data.file_name = file.name;
+          linkedMaterials.push(data);
+          pendingMaterialLinks.push(data.id);
+          renderLinkedMaterials();
         })
         .then(function() {
-          showEditorToast("تم رفع وربط المادة بنجاح.", "success");
-          loadSessionMaterials(sid);
+          showEditorToast("تم رفع المادة بنجاح. ستُحفظ مع الجلسة.", "success");
         })
         .catch(function(err) {
           console.error(err);
-          showEditorToast("فشل رفع المادة. قد يكون الملف كبيراً جداً أو بصيغة غير مدعومة.", "error");
+          showEditorToast("فشل رفع المادة. قد يكون الملف كبيراً جداً.", "error");
         })
         .finally(function() {
           btn.textContent = origText;
@@ -530,27 +732,38 @@
       }
 
       function linkSelected() {
-        var sess = sessions[editingIdx];
-        var sid = sess && sess.id;
-        if (!sid) return;
         var checks = [].slice.call(document.querySelectorAll("#sdPickList input:checked:not(:disabled)"));
         if (!checks.length) { showEditorToast("لم يتم اختيار مواد.", "error"); return; }
         var ids = checks.map(function (c) { return parseInt(c.value); });
-        var done = 0;
+        
         ids.forEach(function (mid) {
-          authFetch("/api/sessions/" + sid + "/materials", { method: "POST", body: JSON.stringify({ material_id: mid }) })
-            .then(function () { done++; if (done === ids.length) { loadSessionMaterials(sid); closeMaterialPicker(); showEditorToast("تم ربط " + ids.length + " مادة.", "success"); } })
-            .catch(function () { done++; });
+            if (pendingMaterialLinks.indexOf(mid) < 0) pendingMaterialLinks.push(mid);
+            var uIdx = pendingMaterialUnlinks.indexOf(mid);
+            if (uIdx >= 0) pendingMaterialUnlinks.splice(uIdx, 1);
+            
+            var mat = courseMaterials.find(function(cm) { return cm.id === mid; });
+            if (mat && !linkedMaterials.find(function(lm) { return lm.id === mid; })) {
+                linkedMaterials.push(mat);
+            }
         });
+        
+        renderLinkedMaterials();
+        closeMaterialPicker(); 
+        showEditorToast("تم إضافة " + ids.length + " مادة. ستُحفظ مع الجلسة.", "success");
       }
 
       function unlinkMaterial(materialId) {
-        var sess = sessions[editingIdx];
-        var sid = sess && sess.id;
-        if (!sid) return;
-        authFetch("/api/sessions/" + sid + "/materials/" + materialId, { method: "DELETE" })
-          .then(function () { loadSessionMaterials(sid); showEditorToast("تم إلغاء ربط المادة.", "success"); })
-          .catch(function () {});
+          linkedMaterials = linkedMaterials.filter(function(m) { return m.id !== materialId; });
+          renderLinkedMaterials();
+          
+          var idx = pendingMaterialLinks.indexOf(materialId);
+          if (idx >= 0) {
+              pendingMaterialLinks.splice(idx, 1);
+          } else {
+              if (pendingMaterialUnlinks.indexOf(materialId) < 0) {
+                  pendingMaterialUnlinks.push(materialId);
+              }
+          }
       }
 
       // Close modal on Escape only when it is open

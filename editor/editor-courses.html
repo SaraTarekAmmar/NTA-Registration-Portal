@@ -15,9 +15,15 @@
     <div id="editorSidebar"></div>
 
     <main id="main-content" class="editor-main">
-      <div class="editor-page-header">
-        <h1 class="editor-page-header__title">الدورات التعليمية</h1>
-        <p class="editor-page-header__sub">إدارة وتحرير الدورات — مسودة / منشورة / مؤرشفة</p>
+      <div class="editor-page-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h1 class="editor-page-header__title">الدورات التعليمية</h1>
+          <p class="editor-page-header__sub">إدارة وتحرير الدورات — مسودة / منشورة / مؤرشفة</p>
+        </div>
+        <a href="editor-course-form.html" class="btn btn--primary" style="margin-top: 0.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          إنشاء دورة جديدة
+        </a>
       </div>
 
       <div id="pageBanner" class="editor-banner editor-banner--error" style="display:none;" role="alert">
@@ -25,22 +31,20 @@
         <button type="button" onclick="loadCourses()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:inherit;font-weight:700;font-size:0.82rem;">إعادة المحاولة</button>
       </div>
 
+      <!-- Tabs -->
+      <div class="editor-tabs" id="statusTabs">
+        <a href="#" class="editor-tab active" data-status="" onclick="setTabFilter('', event)">الكل <span class="editor-tab-count" id="countAll">0</span></a>
+        <a href="#" class="editor-tab" data-status="draft" onclick="setTabFilter('draft', event)">مسودات <span class="editor-tab-count" id="countDraft">0</span></a>
+        <a href="#" class="editor-tab" data-status="published" onclick="setTabFilter('published', event)">منشورة <span class="editor-tab-count" id="countPublished">0</span></a>
+        <a href="#" class="editor-tab" data-status="archived" onclick="setTabFilter('archived', event)">مؤرشفة <span class="editor-tab-count" id="countArchived">0</span></a>
+      </div>
+
       <!-- Filters row -->
-      <div class="editor-filters">
-        <div class="editor-search">
+      <div class="editor-filters" style="justify-content: flex-start; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+        <div class="editor-search" style="margin-left: auto;">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
           <input type="text" id="searchInput" placeholder="البحث بالاسم..." oninput="filterCourses()" />
         </div>
-        <select class="editor-filter-select" id="statusFilter" onchange="filterCourses()">
-          <option value="">كل الحالات</option>
-          <option value="draft">مسودة</option>
-          <option value="published">منشورة</option>
-          <option value="archived">مؤرشفة</option>
-        </select>
-        <a href="editor-course-form.html" class="btn btn--primary">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-          دورة جديدة
-        </a>
       </div>
 
       <!-- States -->
@@ -76,13 +80,41 @@
         return fetch(url, Object.assign({}, opts, {headers: headers}));
       }
 
+      var currentStatusFilter = "";
+
+      function setTabFilter(status, evt) {
+        if (evt) evt.preventDefault();
+        currentStatusFilter = status;
+        document.querySelectorAll(".editor-tab").forEach(function(el) {
+          el.classList.toggle("active", el.dataset.status === status);
+        });
+        filterCourses();
+      }
+
+      function updateTabCounts() {
+        var draft = 0, pub = 0, arch = 0;
+        allCourses.forEach(function(c) {
+          var s = c.status || "draft";
+          if (s === "draft") draft++;
+          else if (s === "published") pub++;
+          else if (s === "archived") arch++;
+        });
+        document.getElementById("countAll").textContent = allCourses.length;
+        document.getElementById("countDraft").textContent = draft;
+        document.getElementById("countPublished").textContent = pub;
+        document.getElementById("countArchived").textContent = arch;
+        
+        document.querySelectorAll(".editor-tab").forEach(function(el) {
+          el.classList.toggle("active", el.dataset.status === currentStatusFilter);
+        });
+      }
+
       // Pre-select filter from URL param
       (function() {
         var params = new URLSearchParams(window.location.search);
         var s = params.get("status");
         if (s) {
-          var sel = document.getElementById("statusFilter");
-          if (sel) sel.value = s;
+          currentStatusFilter = s;
         }
       })();
 
@@ -108,27 +140,37 @@
           if (c.image_url) {
             html += '<div class="editor-course-card__cover" style="'+coverStyle+'background-image:url(\''+String(c.image_url).replace(/'/g,"%27")+'\')"></div>';
           } else {
-            html += '<div class="editor-course-card__cover" style="'+coverStyle+'color:var(--text-subtle)"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
+            html += '<div class="editor-course-card__cover" style="'+coverStyle+'background-image:url(\'/images/course-placeholder.svg\')"></div>';
           }
           html += '<h3 class="editor-course-card__title">'+(c.title_ar||c.title||"بدون عنوان")+'</h3>';
           html += '<div class="editor-course-card__meta">'+statusBadge(c.status||"draft")+'</div>';
-          html += '<div class="editor-course-card__stats">';
-          if(c.duration_weeks) html += '<span>'+c.duration_weeks+' أسابيع</span>';
-          if(c.total_sessions) html += '<span>'+c.total_sessions+' جلسة</span>';
-          if(c.materials_count != null) html += '<span>'+c.materials_count+' مادة</span>';
+          html += '<div class="editor-course-card__stats" style="flex-direction:column; gap:0.4rem; margin-bottom: 0.5rem;">';
+          if(c.duration_weeks) html += '<span>'+c.duration_weeks+' أسابيع • '+(c.total_sessions||0)+' جلسة</span>';
+          if((c.status || "draft") === "draft") html += '<span style="color:#fca5a5;">ناقص: المواد التعليمية</span>';
           html += '</div>';
           var status = c.status || "draft";
-          html += '<div class="editor-course-card__actions">';
-          html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--secondary btn--sm">تعديل</a>';
-          html += '<a href="editor-preview.html?id='+c.id+'" class="btn btn--secondary btn--sm">معاينة</a>';
-          if(status !== "published" && status !== "archived") html += '<button type="button" class="btn btn--primary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
-          if(status === "archived") html += '<button type="button" class="btn btn--secondary btn--sm" onclick="unarchiveCourse('+c.id+')">إلغاء الأرشفة</button>';
-          else html += '<button type="button" class="btn btn--secondary btn--sm" onclick="archiveCourse('+c.id+')">أرشفة</button>';
-          html += '<button type="button" class="btn btn--danger btn--sm" onclick="deleteCourse('+c.id+')">حذف</button>';
+          html += '<div class="editor-course-card__actions" style="justify-content: space-between; align-items: center;">';
+          
+          html += '<div style="display:flex; gap:0.5rem;">';
+          html += '<a href="editor-course-form.html?id='+c.id+'" class="btn btn--primary btn--sm">متابعة</a>';
+          if(status !== "published" && status !== "archived") html += '<button type="button" class="btn btn--secondary btn--sm" onclick="publishCourse('+c.id+')">نشر</button>';
+          html += '</div>';
+
+          // More actions menu
+          html += '<div class="ui-menu">';
+          html += '<button type="button" class="ui-menu__trigger">المزيد ▾</button>';
+          html += '<div class="ui-menu__content" hidden>';
+          html += '<a href="editor-preview.html?id='+c.id+'" class="ui-menu__item">معاينة</a>';
+          if(status === "archived") html += '<button type="button" class="ui-menu__item" onclick="unarchiveCourse('+c.id+')">إلغاء الأرشفة</button>';
+          else html += '<button type="button" class="ui-menu__item" onclick="archiveCourse('+c.id+')">أرشفة</button>';
+          html += '<button type="button" class="ui-menu__item is-danger" onclick="deleteCourse('+c.id+')">حذف</button>';
+          html += '</div></div>';
+
           html += '</div></div>';
         });
         grid.innerHTML = html;
         grid.style.display = "grid";
+        if (window.initUIMenus) window.initUIMenus(grid);
       }
 
       function setCourseStatus(id, newStatus) {
@@ -193,7 +235,7 @@
 
       function filterCourses() {
         var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-        var s = document.getElementById("statusFilter").value;
+        var s = currentStatusFilter;
         var filtered = allCourses.filter(function(c) {
           var title = (c.title_ar || c.title || "").toLowerCase();
           var matchQ = !q || title.includes(q);
@@ -214,6 +256,7 @@
           .then(function(data) {
             allCourses = data;
             document.getElementById("loadingState").style.display = "none";
+            updateTabCounts();
             filterCourses();
           })
           .catch(function(err) {

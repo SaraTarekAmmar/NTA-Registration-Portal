@@ -194,7 +194,73 @@
       /* ══ Light-mode overrides ══ */
       html.light-mode .builder-settings-panel,
       html.light-mode .builder-step-card,
-      html.light-mode .reg-step-card { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+      html.light-mode .reg-step-card,
+      html.light-mode .review-card,
+      html.light-mode .mini-course-preview,
+      html.light-mode .cover-upload-card,
+      html.light-mode .compact-settings-row { background: #fff; border-color: rgba(0,0,0,0.1); color: var(--text-main); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+      html.light-mode .mini-course-preview__cover { background-color: #f1f5f9; }
+
+      .form-split-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .form-split-layout { grid-template-columns: 1fr; }
+      }
+      .cover-upload-card {
+        background: rgba(8,12,32,0.4);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1.25rem;
+        text-align: center;
+      }
+      .review-split-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        align-items: start;
+        margin-bottom: 2rem;
+      }
+      .review-card {
+        background: rgba(8,12,32,0.4);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 1.5rem;
+      }
+      .mini-course-preview {
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .mini-course-preview__cover {
+        height: 140px;
+        background-color: #1f2937;
+        background-size: cover;
+        background-position: center;
+      }
+      .mini-course-preview__body {
+        padding: 1rem;
+      }
+      .readiness-list {
+        list-style: none; padding: 0; margin: 0;
+      }
+      .readiness-list li {
+        display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85rem;
+      }
+      .readiness-list li svg { width: 18px; height: 18px; }
+      .readiness-list li.ok { color: #34d399; }
+      .readiness-list li.warn { color: #fbbf24; }
+      .compact-settings-row {
+        background: rgba(8,12,32,0.2);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+      }
     </style>
   </head>
   <body data-page="courses">
@@ -204,19 +270,19 @@
     <main id="main-content" class="editor-main">
       <div class="editor-page-header">
         <h1 class="editor-page-header__title" id="formTitle">إنشاء دورة جديدة</h1>
-        <p class="editor-page-header__sub">أدخل تفاصيل الدورة ومسار التسجيل الخاص بها</p>
+        <p class="editor-page-header__sub">أدخل البيانات الأساسية للدورة. يمكنك إعداد الجلسات والمواد لاحقاً.</p>
       </div>
 
       <!-- Step Progress -->
       <div class="editor-steps" id="stepsBar">
         <div class="editor-step active" data-step="1">
           <div class="editor-step__num">1</div>
-          <span>المعلومات الأساسية</span>
+          <span>الخطوة 1 من 2 — المعلومات الأساسية</span>
         </div>
         <div class="editor-step__connector"></div>
         <div class="editor-step" data-step="2">
           <div class="editor-step__num">2</div>
-          <span>معاينة وحفظ</span>
+          <span>المراجعة والحفظ</span>
         </div>
       </div>
 
@@ -227,68 +293,114 @@
       <!-- Step 1: Basic Info -->
       <div id="step1" class="step-panel">
         <form id="basicInfoForm" novalidate>
-          <div class="editor-form-group">
-            <label>صورة غلاف الدورة</label>
-            <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-              <div id="coverPreview" style="width:150px;height:95px;border-radius:10px;border:1px solid var(--border-subtle);background:rgba(255,255,255,0.04);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--text-subtle);font-size:0.72rem;flex-shrink:0;">لا توجد صورة</div>
-              <div>
+          <div class="form-split-layout">
+            <!-- Right side: Data -->
+            <div class="form-data-col">
+              <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--text-main);">بيانات الدورة</h3>
+              <div class="editor-form-group">
+                <label for="titleAr">اسم الدورة بالعربية <span class="required">*</span></label>
+                <input type="text" id="titleAr" class="editor-input" placeholder="أدخل اسم الدورة بالعربية" aria-describedby="titleArError" />
+                <p id="titleArError" class="inline-error" style="display:none;">هذا الحقل مطلوب.</p>
+              </div>
+              <div class="editor-form-group">
+                <label for="titleEn">اسم الدورة بالإنجليزية</label>
+                <input type="text" id="titleEn" class="editor-input" placeholder="Example: Python for Data Science" />
+              </div>
+              <div class="editor-form-group">
+                <label for="description">وصف الدورة <span class="required">*</span></label>
+                <textarea id="description" class="editor-textarea" rows="4" placeholder="اكتب وصفاً مختصراً يوضح هدف الدورة ومخرجاتها." aria-describedby="descriptionError"></textarea>
+                <p id="descriptionError" class="inline-error" style="display:none;">هذا الحقل مطلوب.</p>
+              </div>
+            </div>
+
+            <!-- Left side: Image -->
+            <div class="form-image-col">
+              <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--text-main);">صورة غلاف الدورة</h3>
+              <div class="cover-upload-card">
+                <div id="coverPreview" style="width:100%;height:140px;border-radius:8px;border:1px solid var(--border-subtle);background:rgba(255,255,255,0.04);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--text-subtle);font-size:0.85rem;margin-bottom:1rem;">لا توجد صورة</div>
                 <input type="file" id="coverInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;" onchange="uploadCover(this.files)" />
                 <input type="hidden" id="coverImageUrl" />
-                <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('coverInput').click()">رفع صورة</button>
-                <button type="button" class="btn btn--secondary btn--sm" id="coverRemoveBtn" style="display:none;" onclick="clearCover()">إزالة</button>
-                <p style="font-size:0.72rem;color:var(--text-subtle);margin:0.45rem 0 0;">JPG، PNG، WebP — حد أقصى 20MB</p>
+                <button type="button" class="btn btn--secondary btn--sm" onclick="document.getElementById('coverInput').click()" style="width:100%;margin-bottom:0.5rem;">رفع صورة الغلاف</button>
+                <button type="button" class="btn btn--secondary btn--sm" id="coverRemoveBtn" style="display:none;width:100%;margin-bottom:0.5rem;color:#f87171;" onclick="clearCover()">إزالة الصورة</button>
+                <p style="font-size:0.75rem;color:var(--text-subtle);line-height:1.5;">تظهر في بطاقة الدورة وصفحة التفاصيل<br>JPG, PNG, WebP — حد أقصى 20MB</p>
               </div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="form-two-col">
-            <div class="editor-form-group">
-              <label for="titleAr">اسم الدورة (عربي) <span class="required">*</span></label>
-              <input type="text" id="titleAr" class="editor-input" placeholder="أدخل اسم الدورة بالعربية" aria-describedby="titleArError" />
-              <p id="titleArError" class="inline-error" style="display:none;">اسم الدورة مطلوب.</p>
-            </div>
-            <div class="editor-form-group">
-              <label for="titleEn">اسم الدورة (إنجليزي)</label>
-              <input type="text" id="titleEn" class="editor-input" placeholder="Course title in English" />
+
+          <div class="compact-settings-row">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text-main);">إعدادات الدورة</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;">
+              <div class="editor-form-group" style="margin-bottom:0;">
+                <label for="durationWeeks">مدة الدورة بالأسابيع <span class="required">*</span></label>
+                <input type="number" id="durationWeeks" class="editor-input" min="1" placeholder="8" aria-describedby="durationError" />
+                <p id="durationError" class="inline-error" style="display:none;">هذا الحقل مطلوب.</p>
+              </div>
+              <div class="editor-form-group" style="margin-bottom:0;">
+                <label for="totalSessions">عدد الجلسات الإجمالي</label>
+                <input type="number" id="totalSessions" class="editor-input" min="0" placeholder="20" />
+              </div>
+              <div class="editor-form-group" style="margin-bottom:0;">
+                <label for="courseStatus">حالة الدورة</label>
+                <div class="ui-select" id="courseStatusSelect">
+                  <input type="hidden" id="courseStatus" value="draft">
+                  <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="ui-select__value">مسودة</span>
+                    <span class="ui-select__chevron">▼</span>
+                  </button>
+                  <div class="ui-select__menu" role="listbox" hidden>
+                    <button type="button" class="ui-select__option is-selected" data-value="draft" role="option">
+                      <span>مسودة</span><span class="ui-select__check">✓</span>
+                    </button>
+                    <button type="button" class="ui-select__option" data-value="published" role="option">
+                      <span>منشورة</span><span class="ui-select__check">✓</span>
+                    </button>
+                  </div>
+                </div>
+                <p style="font-size:0.75rem;color:var(--text-subtle);margin-top:0.4rem;" id="statusHelper">مسودة: لن تظهر الدورة للمتدربين حتى يتم نشرها.</p>
+              </div>
             </div>
           </div>
 
-          <div class="editor-form-group">
-            <label for="description">الوصف <span class="required">*</span></label>
-            <textarea id="description" class="editor-textarea" rows="4" placeholder="اكتب وصفاً واضحاً للدورة..." aria-describedby="descriptionError"></textarea>
-            <p id="descriptionError" class="inline-error" style="display:none;">الوصف مطلوب.</p>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;" class="form-three-col">
-            <div class="editor-form-group">
-              <label for="durationWeeks">المدة (أسابيع) <span class="required">*</span></label>
-              <input type="number" id="durationWeeks" class="editor-input" min="1" placeholder="8" aria-describedby="durationError" />
-              <p id="durationError" class="inline-error" style="display:none;">المدة مطلوبة ويجب أن تكون رقماً موجباً.</p>
-            </div>
-            <div class="editor-form-group">
-              <label for="totalSessions">عدد الجلسات الإجمالي</label>
-              <input type="number" id="totalSessions" class="editor-input" min="0" placeholder="20" />
-            </div>
-            <div class="editor-form-group">
-              <label for="courseStatus">الحالة</label>
-              <select id="courseStatus" class="editor-select">
-                <option value="draft">مسودة</option>
-                <option value="published">منشورة</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+          <div style="display:flex;gap:0.75rem;justify-content:space-between;margin-top:2rem;">
             <a href="editor-courses.html" class="btn btn--secondary">إلغاء</a>
-            <button type="submit" class="btn btn--primary" id="continueBtn1">المتابعة ←</button>
+            <button type="submit" class="btn btn--primary" id="continueBtn1">التالي: المراجعة</button>
           </div>
         </form>
       </div>
 
-      <!-- Step 2: Preview -->
       <div id="step2" class="step-panel" style="display:none;">
-        <div style="background:rgba(8,12,32,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;">
-          <h2 style="font-size:1.2rem;font-weight:800;margin:0 0 1rem;color:var(--text-main);">ملخص الدورة</h2>
-          <div id="previewSummary" style="font-size:0.88rem;color:var(--text-subtle);line-height:1.8;"></div>
+        <div class="review-split-layout">
+          <!-- Right side: Summary -->
+          <div class="form-data-col">
+            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--text-main);">ملخص الدورة</h3>
+            <div class="review-card">
+              <div id="previewSummary" style="font-size:0.9rem;color:var(--text-subtle);line-height:2;"></div>
+            </div>
+            
+            <h3 style="font-size:1.1rem;font-weight:700;margin:1.5rem 0 1rem;color:var(--text-main);">جاهزية الدورة</h3>
+            <div class="review-card">
+              <ul id="readinessList" class="readiness-list">
+                <!-- Checklist populated via JS -->
+              </ul>
+              <p style="font-size:0.75rem;color:var(--text-subtle);margin-top:0.75rem;">بعد الحفظ، يمكنك إضافة الجلسات والمواد التعليمية.</p>
+            </div>
+          </div>
+          
+          <!-- Left side: Card Preview -->
+          <div class="form-image-col">
+            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--text-main);">معاينة بطاقة الدورة</h3>
+            <div class="mini-course-preview" id="miniCardPreview">
+              <div class="mini-course-preview__cover" id="miniCardCover"></div>
+              <div class="mini-course-preview__body">
+                <h4 style="margin:0 0 0.25rem;font-size:1rem;font-weight:700;color:var(--text-main);" id="miniCardTitle">اسم الدورة</h4>
+                <div style="font-size:0.75rem;color:var(--text-subtle);display:flex;gap:0.5rem;align-items:center;">
+                  <span id="miniCardStatus">مسودة</span>
+                  <span>·</span>
+                  <span id="miniCardSessions">0 جلسات</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="publishBlockMsg" class="editor-banner editor-banner--error" style="display:none;">
@@ -296,9 +408,9 @@
           <span id="publishBlockText"></span>
         </div>
 
-        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;flex-wrap:wrap;">
-          <button type="button" class="btn btn--secondary" onclick="goStep(1)">← رجوع للتعديل</button>
-          <button type="button" class="btn btn--primary" id="publishBtn" onclick="saveCourse()">حفظ الدورة</button>
+        <div style="display:flex;gap:0.75rem;justify-content:space-between;margin-top:1.5rem;flex-wrap:wrap;">
+          <button type="button" class="btn btn--secondary" onclick="goStep(1)">رجوع للتعديل</button>
+          <button type="button" class="btn btn--primary" id="publishBtn" onclick="saveCourse()">حفظ كمسودة</button>
         </div>
       </div>
     </main>
@@ -371,23 +483,24 @@
             document.getElementById("description").value = c.description || "";
             document.getElementById("durationWeeks").value = c.duration_weeks || "";
             document.getElementById("totalSessions").value = c.total_sessions || "";
-            document.getElementById("courseStatus").value = c.status || "draft";
+            var statVal = c.status || "draft";
+            document.getElementById("courseStatus").value = statVal;
+            
+            var statMenu = document.getElementById("courseStatusSelect");
+            if (statMenu) {
+               var opt = statMenu.querySelector('[data-value="'+statVal+'"]');
+               if (opt) {
+                  statMenu.querySelectorAll('.ui-select__option').forEach(function(o){ o.classList.remove('is-selected'); });
+                  opt.classList.add('is-selected');
+                  var txt = opt.querySelector('span:not(.ui-select__check)').textContent;
+                  statMenu.querySelector('.ui-select__value').textContent = txt;
+                  statMenu.querySelector('.ui-select__value').classList.remove('is-placeholder');
+               }
+            }
+            
             setCover(c.image_url || "");
             
-            if (c.registration_steps && c.registration_steps.length > 0) {
-                registrationSteps = c.registration_steps;
-                selectedStepIndex = 0;
-            } else {
-                registrationSteps = [
-                    { step_type: 'basic_info', step_key: 'step_1', title_ar: 'المعلومات الشخصية', description_ar: '', is_required: true, config_json: { is_active: true } },
-                    { step_type: 'contact_info', step_key: 'step_2', title_ar: 'بيانات الاتصال', description_ar: '', is_required: true, config_json: { is_active: true } },
-                    { step_type: 'address_info', step_key: 'step_3', title_ar: 'محل الإقامة', description_ar: '', is_required: true, config_json: { is_active: true } },
-                    { step_type: 'document_upload', step_key: 'step_4', title_ar: 'بطاقة الرقم القومي', description_ar: '', is_required: true, config_json: { is_active: true } },
-                    { step_type: 'certificate_upload', step_key: 'step_5', title_ar: 'المؤهل الدراسي', description_ar: '', is_required: true, config_json: { is_active: true } }
-                ];
-                selectedStepIndex = 0;
-            }
-            renderRegSteps();
+
           })
           .catch(function() { showBanner("تعذّر تحميل بيانات الدورة."); });
       }
@@ -402,7 +515,7 @@
           if (s === n) el.classList.add("active");
           else if (s < n) el.classList.add("done");
         });
-        if (n === 3) buildPreview();
+        if (n === 2) buildPreview();
         window.scrollTo(0,0);
       }
 
@@ -434,27 +547,64 @@
       });
 
       function buildPreview() {
-        var title = document.getElementById("titleAr").value.trim();
+        var titleAr = document.getElementById("titleAr").value.trim();
+        var titleEn = document.getElementById("titleEn").value.trim();
+        var desc = document.getElementById("description").value.trim();
+        var dur = document.getElementById("durationWeeks").value;
+        var sess = document.getElementById("totalSessions").value;
         var status = document.getElementById("courseStatus").value;
+        var coverImg = document.getElementById("coverImageUrl").value;
 
-        var html = "";
-        html += '<table style="width:100%;border-collapse:collapse;">';
+        // 1. Populate Summary Card
+        var html = '<table style="width:100%;border-collapse:collapse;">';
         var rows = [
-          ["اسم الدورة", title || '<span style="color:#fca5a5;">غير محدد</span>'],
-          
+          ["اسم الدورة بالعربية", titleAr || '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["اسم الدورة بالإنجليزية", titleEn || '<span style="color:#9ca3af;">لا يوجد</span>'],
+          ["الوصف", desc ? desc.substring(0,60)+(desc.length>60?'...':'') : '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["عدد الأسابيع", dur || '<span style="color:#fca5a5;">غير محدد</span>'],
+          ["إجمالي الجلسات", sess || '<span style="color:#9ca3af;">لا يوجد</span>'],
           ["الحالة", status === "published" ? '<span style="color:#6ee7b7;">منشورة</span>' : '<span style="color:#fde68a;">مسودة</span>']
         ];
         rows.forEach(function(r) {
-          html += '<tr><td style="padding:0.4rem 0;font-weight:700;width:160px;vertical-align:top;">'+r[0]+'</td><td style="padding:0.4rem 0;">'+r[1]+'</td></tr>';
+          html += '<tr><td style="padding:0.6rem 0;font-weight:700;width:170px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.05);">'+r[0]+'</td><td style="padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">'+r[1]+'</td></tr>';
         });
         html += '</table>';
         document.getElementById("previewSummary").innerHTML = html;
 
+        // 2. Populate Readiness Checklist
+        var rList = "";
         var missing = [];
-        if (!title) missing.push("اسم الدورة");
+        var okIcon = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        var warnIcon = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18A9 9 0 0112 3z"/></svg>';
+        
+        if (titleAr) rList += '<li class="ok">'+okIcon+' الاسم العربي موجود</li>';
+        else { rList += '<li class="warn">'+warnIcon+' الاسم العربي مفقود</li>'; missing.push("اسم الدورة"); }
+        
+        if (desc) rList += '<li class="ok">'+okIcon+' الوصف موجود</li>';
+        else { rList += '<li class="warn">'+warnIcon+' الوصف مفقود</li>'; missing.push("الوصف"); }
+        
+        if (dur) rList += '<li class="ok">'+okIcon+' المدة بالأسابيع محددة</li>';
+        else { rList += '<li class="warn">'+warnIcon+' المدة غير محددة</li>'; missing.push("المدة"); }
+        
+        if (coverImg) rList += '<li class="ok">'+okIcon+' تم رفع صورة الغلاف</li>';
+        else rList += '<li class="warn" style="color:#9ca3af;">'+warnIcon+' لم يتم رفع صورة غلاف (تظهر صورة افتراضية)</li>';
+        
+        document.getElementById("readinessList").innerHTML = rList;
 
+        // 3. Populate Mini Preview Card
+        document.getElementById("miniCardTitle").textContent = titleAr || "اسم الدورة";
+        document.getElementById("miniCardStatus").textContent = status === "published" ? "منشورة" : "مسودة";
+        document.getElementById("miniCardSessions").textContent = (sess || 0) + " جلسات";
+        var miniCover = document.getElementById("miniCardCover");
+        if (coverImg) miniCover.style.backgroundImage = "url('"+String(coverImg).replace(/'/g,"%27")+"')";
+        else miniCover.style.backgroundImage = "none";
+
+        // 4. Update Button & Block Msg
         var publishBtn = document.getElementById("publishBtn");
         var blockMsg = document.getElementById("publishBlockMsg");
+        
+        publishBtn.textContent = status === "published" ? "نشر الدورة" : "حفظ كمسودة";
+
         if (missing.length) {
           publishBtn.disabled = true;
           blockMsg.style.display = "flex";

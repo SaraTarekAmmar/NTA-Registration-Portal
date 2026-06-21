@@ -181,4 +181,111 @@
       overlay.querySelector("#editorConfirmOk").focus();
     });
   };
+
+  // ── Global Custom UI Components Logic ──
+  window.initUISelects = function(container) {
+    (container || document).querySelectorAll(".ui-select:not(.is-initialized)").forEach(function(select) {
+      select.classList.add("is-initialized");
+      var trigger = select.querySelector(".ui-select__trigger");
+      var menu = select.querySelector(".ui-select__menu");
+      var valueText = select.querySelector(".ui-select__value");
+      var hiddenInput = select.querySelector("input[type='hidden']");
+      var getOptions = function() { return Array.from(select.querySelectorAll(".ui-select__option")); };
+
+      function openMenu() {
+        select.classList.add("is-open");
+        trigger.setAttribute("aria-expanded", "true");
+        menu.hidden = false;
+      }
+      function closeMenu() {
+        select.classList.remove("is-open");
+        trigger.setAttribute("aria-expanded", "false");
+        menu.hidden = true;
+      }
+      function selectOption(option) {
+        getOptions().forEach(function(item) { item.classList.remove("is-selected"); });
+        option.classList.add("is-selected");
+        
+        var labelNode = option.querySelector("span:not(.ui-select__check)");
+        var label = labelNode ? labelNode.textContent.trim() : option.textContent.replace("✓", "").trim();
+        var value = option.dataset.value || "";
+
+        valueText.textContent = label;
+        valueText.classList.remove("is-placeholder");
+        if (hiddenInput) {
+          hiddenInput.value = value;
+          // Trigger standard change event on the hidden input for legacy listeners
+          hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        closeMenu();
+        select.dispatchEvent(new CustomEvent("select:change", { bubbles: true, detail: { value: value, label: label } }));
+      }
+
+      trigger.addEventListener("click", function(e) {
+        e.preventDefault();
+        menu.hidden ? openMenu() : closeMenu();
+      });
+
+      menu.addEventListener("click", function(e) {
+        var option = e.target.closest(".ui-select__option");
+        if (option) selectOption(option);
+      });
+
+      document.addEventListener("click", function(e) {
+        if (!select.contains(e.target)) closeMenu();
+      });
+
+      trigger.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeMenu();
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          menu.hidden ? openMenu() : closeMenu();
+        }
+      });
+    });
+  };
+
+  window.initUIMenus = function(container) {
+    (container || document).querySelectorAll(".ui-menu:not(.is-initialized)").forEach(function(menuRoot) {
+      menuRoot.classList.add("is-initialized");
+      var trigger = menuRoot.querySelector(".ui-menu__trigger");
+      var content = menuRoot.querySelector(".ui-menu__content");
+
+      function openMenu() {
+        content.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
+      }
+      function closeMenu() {
+        content.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+      }
+
+      trigger.addEventListener("click", function(e) {
+        e.preventDefault();
+        content.hidden ? openMenu() : closeMenu();
+      });
+
+      document.addEventListener("click", function(e) {
+        if (!menuRoot.contains(e.target)) closeMenu();
+      });
+
+      trigger.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeMenu();
+      });
+      
+      content.addEventListener("click", function(e) {
+         if (e.target.closest(".ui-menu__item") || e.target.closest("button") || e.target.closest("a")) {
+             closeMenu();
+         }
+      });
+    });
+  };
+
+  // Initialize on load
+  document.addEventListener("DOMContentLoaded", function() {
+    window.initUISelects();
+    window.initUIMenus();
+  });
+
 })();

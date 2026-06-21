@@ -50,6 +50,12 @@ data/admission/
 
 # Brain session scratch pads
 brain/
+scratch/
+
+# Local DB + stray dumps (never commit)
+*.db
+log.txt
+old_file.txt
 
 # User-uploaded files
 uploads/
