@@ -32,6 +32,21 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
 
+
+# Sanitize 5xx responses — log the real error server-side, return a generic
+# message to clients (set NTA_DEBUG=1 to surface details in non-prod).
+from starlette.exceptions import HTTPException as _StarletteHTTPException
+from fastapi.responses import JSONResponse as _JSONResponse
+
+
+@app.exception_handler(_StarletteHTTPException)
+async def _sanitize_http_exception(request, exc):
+    detail = exc.detail
+    if isinstance(getattr(exc, "status_code", 0), int) and exc.status_code >= 500 and os.getenv("NTA_DEBUG") != "1":
+        print(f"[5xx] {request.method} {request.url.path}: {detail}")
+        detail = "Internal server error"
+    return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
+
 from fastapi import Request
 from core.logger_util import log_activity, session_context, trace_context, get_traceback
 from jose import jwt

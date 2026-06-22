@@ -24,21 +24,34 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# CORS origins — env-driven so production can drop localhost (set ALLOWED_ORIGINS).
+_ALLOWED_ORIGINS = [o.strip() for o in os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://academy.nta.eg,https://reg.nta.eg,http://localhost:7771,http://localhost:8002,http://localhost:8003,http://localhost:8004"
+).split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://academy.nta.eg",
-        "https://reg.nta.eg",
-        "http://localhost:7771",
-        "http://localhost:8002",
-        "http://localhost:8003",
-        "http://localhost:8004"
-    ],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_origins=_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
+
+
+# Sanitize 5xx responses — log the real error server-side, return a generic
+# message to clients (set NTA_DEBUG=1 to surface details in non-prod).
+from starlette.exceptions import HTTPException as _StarletteHTTPException
+from fastapi.responses import JSONResponse as _JSONResponse
+
+
+@app.exception_handler(_StarletteHTTPException)
+async def _sanitize_http_exception(request, exc):
+    detail = exc.detail
+    if isinstance(getattr(exc, "status_code", 0), int) and exc.status_code >= 500 and os.getenv("NTA_DEBUG") != "1":
+        print(f"[5xx] {request.method} {request.url.path}: {detail}")
+        detail = "Internal server error"
+    return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
 
 
 @app.middleware("http")
@@ -137,9 +150,25 @@ async def debug_log(request: Request):
 
 
 # Serve the centralized data folder
+class PrivateDataStaticFiles(StaticFiles):
+    """Blocks PII / sensitive subdirectories from unauthenticated static access.
+    Protected files (trainee docs, admin photos, uploads, exams) are served only
+    through authenticated API routes, not this public mount."""
+
+    _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] in self._BLOCKED) or any(s.startswith(".") for s in segs):
+            from starlette.responses import PlainTextResponse
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
 # Serve static files (HTML, CSS, JS) from the user directory
 # This allows opening http://localhost:8001/ directly

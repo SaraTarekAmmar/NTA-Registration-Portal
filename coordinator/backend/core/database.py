@@ -12,7 +12,8 @@ DB_CONFIG = {
     "user": os.getenv("DB_USER", "root"),
     "password": os.getenv("DB_PASSWORD", ""),
     "database": os.getenv("DB_NAME", "nta_portal"),
-    "charset": "utf8mb4"
+    "charset": "utf8mb4",
+    "connection_timeout": int(os.getenv("DB_CONNECTION_TIMEOUT", "10")),
 }
 
 connection_pool = None

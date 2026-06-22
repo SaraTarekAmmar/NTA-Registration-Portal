@@ -131,7 +131,7 @@ async def get_log_stats(current_user: dict = Depends(get_superadmin_user)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/notifications")
-async def get_notifications(limit: int = 20, current_user: dict = Depends(get_superadmin_user)):
+async def get_notifications(limit: int = Query(20, ge=1, le=100), current_user: dict = Depends(get_superadmin_user)):
     """
     Fetch specific events for the notifications dashboard.
     """

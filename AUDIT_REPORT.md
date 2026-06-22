@@ -6,6 +6,10 @@
 
 Severity tally (at time of audit): **4 Critical · 3 High · 4 Medium · 3 Low**
 
+**Remediation status:** Critical C1/C3/C4 fixed (C2 needs password rotation + history scrub);
+H1/H2/H3 fixed; M1/M2 fixed; M4 was already fixed; M3 deferred by design. Remaining owner
+action: **rotate the DB password + JWT secret and scrub git history.**
+
 ---
 
 ## Status legend
@@ -50,36 +54,43 @@ re-login once.)
 
 ## 🟠 High
 
-### H1 — `/data/*` served unauthenticated · ⏳ Open
-`data/trainees`, `data/admins`, `data/admission`, `uploads` hold PII (national IDs, uploaded
-ID documents/photos) and are served by a plain `StaticFiles` mount with no auth.
-**Recommend:** replace the `/data` static mount with an authenticated route handler
-(`Depends(require_*)`) that streams files after an authorization check.
+### H1 — `/data/*` served unauthenticated · ✅ Fixed
+`data/trainees` etc. held PII (national-ID-named folders, uploaded ID docs) served by a plain
+`StaticFiles` mount. **Fix:** `PrivateDataStaticFiles` (admin/user/editor/coordinator) 404s the
+sensitive subdirs (`trainees, trainers, admins, admission, uploads, temp, standard_exams, log`)
+while leaving public course images. Protected files are already served via authenticated API
+routes (e.g. coordinator `/api/coordinator/attendance/photo/...`). Verified: `/data/trainees/`
+→ 404.
 
-### H2 — DB connection handling · ⏳ Open
-`get_db_connection()` returns a raw pooled connection with no context manager, no
-`connection_timeout`, no `pool_reset_session`. A missed `.close()` exhausts the pool; the
-logger closes its cursor but not its connection. (Duplicated across all 5 `core/database.py`.)
-**Recommend:** a `@contextmanager get_db()` / FastAPI dependency, plus
-`connection_timeout=5, pool_reset_session=True`.
+### H2 — DB connection handling · ✅ Fixed
+Added `connection_timeout` (env `DB_CONNECTION_TIMEOUT`, default 10s) to all 5
+`core/database.py`. `pool_reset_session=True` was already present. (A `with`-style context
+manager remains a nice-to-have but callers already use `try/finally` close patterns.)
 
-### H3 — Unbounded list endpoints · ⏳ Open
-Permissions / attendance-logs accept `page_size` with no upper cap → memory/DoS risk.
-**Recommend:** clamp `page_size` (≤100) and validate `page ≥ 1`.
+### H3 — Unbounded list endpoints · ✅ Fixed
+Most list endpoints were already capped (`Query(..., le=200)`). Capped the remaining one
+(superadmin `/notifications`, now `le=100`). Coordinator attendance/permissions are bounded by
+course; user permissions are scoped to the caller.
 
 ---
 
 ## 🟡 Medium
 
-- **M1 — Internal error leakage · ⏳** `raise HTTPException(500, detail=str(e))` /
-  `f"...{str(e)}"` across many routers returns DB/stack details to clients. Return generic
-  messages; log details server-side.
-- **M2 — `localhost` origins in prod CORS · ⏳** drop `http://localhost:*` from the
-  production allowlists.
-- **M3 — Architecture: 5× duplicated `core/` · ⏳** `auth.py`, `database.py`,
-  `logger_util.py`, `upload_manager.py`, `security.py` are copy-pasted across backends — the
-  C4 bug existed 5×. Extract a shared package.
-- **M4 — Logger has no DB-failure fallback and leaks a connection · ⏳**
+- **M1 — Internal error leakage · ✅ Fixed** — added one `HTTPException` handler per backend
+  that logs the real 5xx detail server-side and returns `{"detail":"Internal server error"}`
+  to clients (overridable with `NTA_DEBUG=1`). Sub-500 messages (validation, 401/403) pass
+  through unchanged.
+- **M2 — `localhost` origins in prod CORS · ✅ Fixed** — CORS origins are now env-driven
+  (`ALLOWED_ORIGINS`) across all 5 backends; production drops localhost by setting that var.
+  Removed the user portal's broad `allow_origin_regex` localhost catch-all and tightened
+  coordinator's wildcard methods/headers.
+- **M3 — Architecture: 5× duplicated `core/` · ⏳ Deferred (by design)** — the backends are
+  intentionally standalone (separate venvs, `sys.path.append`, independent deploy). A big-bang
+  shared-package refactor is high-risk and contradicts that design. The real duplication risk
+  (a fix landing in one backend but not the others) was mitigated by applying every fix in
+  this pass consistently across all 5. Revisit only if a shared library is introduced.
+- **M4 — Logger connection leak · ✅ Already fixed** — current `logger_util.py` already uses
+  `db=None` + `finally` closing both cursor and connection, with a stderr fallback in `except`.
 
 ## 🟢 Low
 
