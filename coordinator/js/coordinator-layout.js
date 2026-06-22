@@ -10,7 +10,7 @@
     var l = document.createElement('link');
     l.id = 'ntaSbCss';
     l.rel = 'stylesheet';
-    l.href = '/admin/header/header.css?v=5';
+    l.href = '/admin/header/header.css?v=7';
     document.head.appendChild(l);
   })();
 

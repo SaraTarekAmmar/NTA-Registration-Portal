@@ -325,6 +325,17 @@ body[data-page] #ntaThemeFab {
   :root { --sb-w: 0px; }
   body[data-page] { padding-right: 0 !important; }
 
+  /* Reserve clearance for the fixed hamburger so page titles/headers
+     never sit underneath it (RTL: both live in the top-right corner).
+     Covers every flow's content wrapper, even when nested in a container. */
+  body[data-page] > main,
+  body[data-page] .editor-main,
+  body[data-page] .mat-page,
+  body[data-page] .trainee-main,
+  body[data-page] .main-content,
+  body[data-page] .rec-wrap,
+  body[data-page] .coordinator-main { padding-top: 4.25rem; }
+
   /* Sidebar slides in as a drawer instead of disappearing */
   #ntaHeader, #editorSidebar, #coordinatorSidebar {
     width: 260px !important;
