@@ -136,8 +136,22 @@ admin_header_path = project_root / "admin" / "header"
 if os.path.exists(admin_header_path):
     app.mount("/admin/header", StaticFiles(directory=str(admin_header_path)), name="admin_header")
 
+from starlette.responses import PlainTextResponse as _PlainTextResponse
+
+
+class GuardedStaticFiles(StaticFiles):
+    """Static server that refuses to expose backend source, .env, or dotfiles."""
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
+            return _PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 editor_path = Path(__file__).parent.parent
-app.mount("/", StaticFiles(directory=str(editor_path), html=True), name="editor_static")
+app.mount("/", GuardedStaticFiles(directory=str(editor_path), html=True), name="editor_static")
 
 if __name__ == "__main__":
     import uvicorn

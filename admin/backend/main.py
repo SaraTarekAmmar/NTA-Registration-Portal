@@ -141,8 +141,22 @@ if os.path.exists(data_path):
 
 # Serve static files (HTML, CSS, JS) from the admin directory
 # This allows opening http://localhost:8002/ directly
+from starlette.responses import PlainTextResponse as _PlainTextResponse
+
+
+class GuardedStaticFiles(StaticFiles):
+    """Static server that refuses to expose backend source, .env, or dotfiles."""
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
+            return _PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 static_path = Path(__file__).parent.parent
-app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn

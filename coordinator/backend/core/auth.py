@@ -12,7 +12,12 @@ load_dotenv(dotenv_path=env_path)
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY or SECRET_KEY in ("your-secret-key", "super-secret-key-for-ai-proxy", "changeme"):
+    raise RuntimeError(
+        "SECRET_KEY is missing or set to a known default value. Set a strong, "
+        "unique SECRET_KEY in the backend .env file before starting the server."
+    )
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "480"))
 

@@ -16,7 +16,17 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
+# Load environment before reading secrets (independent of main.py import order)
+from pathlib import Path as _Path
+from dotenv import load_dotenv as _load_dotenv
+_load_dotenv(_Path(__file__).resolve().parents[1] / ".env")
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY or SECRET_KEY in ("your-secret-key", "super-secret-key-for-ai-proxy", "changeme"):
+    raise RuntimeError(
+        "SECRET_KEY is missing or set to a known default value. Set a strong, "
+        "unique SECRET_KEY in the backend .env file before starting the server."
+    )
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "480"))
 
