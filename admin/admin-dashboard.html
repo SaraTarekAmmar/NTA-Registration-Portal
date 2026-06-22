@@ -1076,7 +1076,6 @@
         renderTopPrograms();
         initCharts();
       }).catch(function (err) { console.error("Dashboard fetch error:", err); });
-      refreshNotifications();
     }
 
     function applyRegistrationStats(stats) {
@@ -1086,19 +1085,6 @@
         labels: stats.labels.slice(-3),
         values: stats.values.slice(-3)
       };
-    }
-
-    function refreshNotifications() {
-      window.authenticatedFetch("/api/permissions")
-        .then(function (r) { return r.ok ? r.json() : []; })
-        .then(function (list) {
-          var pending = (Array.isArray(list) ? list : []).filter(function (p) { return p.status === "pending"; }).length;
-          var badge = document.getElementById("notifBadge");
-          if (!badge) return;
-          if (pending > 0) { badge.textContent = pending; badge.style.display = ""; }
-          else { badge.style.display = "none"; }
-        })
-        .catch(function () {});
     }
 
     function updateKpis() {
