@@ -490,7 +490,9 @@ async def bulk_enroll(
                         cursor.execute("INSERT INTO pipeline_state (trainee_id, current_stage_id, status) VALUES (%s, 1, 'active')", (uid,))
                     
                     # Track private assignment
-                    cursor.execute("INSERT INTO private_course_assignments (course_id, national_id) VALUES (%s, %s)", (course_id, nid))
+                    cursor.execute("SELECT id FROM private_course_assignments WHERE course_id = %s AND national_id = %s", (course_id, nid))
+                    if not cursor.fetchone():
+                        cursor.execute("INSERT INTO private_course_assignments (course_id, national_id) VALUES (%s, %s)", (course_id, nid))
                     count += 1
             
             elif mode == 'trainers':

@@ -26,12 +26,13 @@ class ExamAnalyzer:
                 
             if is_correct:
                 total_correct += 1
-                
+
+            metadata = q.get('metadata') or {}
             results.append({
                 "number": q['number'],
-                "Pillar": q['metadata']['Pillar'],
-                "CEFR_Level": q['metadata']['CEFR_Level'],
-                "Topic": q['metadata']['Topic'],
+                "Pillar": metadata.get('Pillar', 'General'),
+                "CEFR_Level": metadata.get('CEFR_Level', 'A1'),
+                "Topic": metadata.get('Topic', 'General'),
                 "Outcome": is_correct
             })
             

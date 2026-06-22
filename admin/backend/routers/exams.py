@@ -118,15 +118,15 @@ async def submit_exam(subject: str, req: ExamSubmitRequest, authorization: Optio
         # 2. Run analysis
         analysis = ExamAnalyzer.analyze_submission(exam_content, answers)
         
-        # 3. Store submission — upsert so a trainee can only have one result per exam
+        # Check if already submitted
+        cursor.execute("SELECT id FROM trainee_exam_submissions WHERE trainee_id = %s AND subject = %s", (trainee_id, subject))
+        if cursor.fetchone():
+            raise HTTPException(status_code=400, detail="لقد قمت بتسليم هذا الامتحان مسبقاً")
+
+        # 3. Store submission
         cursor.execute("""
             INSERT INTO trainee_exam_submissions (trainee_id, subject, answers_json, score, processed_results)
             VALUES (%s, %s, %s, %s, %s)
-            ON DUPLICATE KEY UPDATE
-                answers_json = VALUES(answers_json),
-                score = VALUES(score),
-                processed_results = VALUES(processed_results),
-                submitted_at = NOW()
         """, (trainee_id, subject, json.dumps(answers, ensure_ascii=False), analysis['score'], json.dumps(analysis, ensure_ascii=False)))
 
         db.commit()

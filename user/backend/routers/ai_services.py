@@ -1,7 +1,9 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 import requests
 from pydantic import BaseModel
 import os
+from core.auth import get_current_user
+from typing import Optional
 
 router = APIRouter(prefix="/api/ai", tags=["AI Services"])
 
@@ -29,7 +31,7 @@ async def extract_national_id(file: UploadFile = File(...)):
         raise HTTPException(status_code=503, detail=f"Failed to connect to OCR service: {str(e)}")
 
 @router.post("/face/checkin")
-async def face_checkin(request: FaceActionRequest):
+async def face_checkin(request: FaceActionRequest, current_user: dict = Depends(get_current_user)):
     """ Proxy to Face Check-in AI Microservice running on port 7832 """
     try:
         response = requests.post(

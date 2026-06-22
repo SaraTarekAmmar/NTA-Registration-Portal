@@ -263,9 +263,14 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                 SELECT subject, score
                 FROM trainee_exam_submissions
                 WHERE trainee_id = %s
+                ORDER BY submitted_at DESC
             """, (review.trainee_id,))
             exam_rows = cursor.fetchall()
-            scores = {row[0]: float(row[1]) for row in exam_rows if row[1] is not None}
+            # Since ordered by submitted_at DESC, loop in reverse so newer scores overwrite older
+            scores = {}
+            for row in reversed(exam_rows):
+                if row[1] is not None:
+                    scores[row[0]] = float(row[1])
 
             arabic_score           = scores.get("arabic")
             english_score          = scores.get("english")
@@ -456,7 +461,7 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
         db.close()
 
 @router.get("/reviews/{trainee_id}")
-async def get_reviews(trainee_id: int, admin: dict = Depends(get_admin_user)):
+async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
     try:
@@ -489,10 +494,9 @@ async def get_trainee_profile(trainee_id: int, staff: dict = Depends(get_staff_u
             WHERE u.id = %s AND u.role IN ('trainee', 'applicant')
         """, (trainee_id,))
         user = cursor.fetchone()
-        if user:
-            user['id'] = user['user_id'] # Ensure 'id' refers to user_id for frontend compatibility
         if not user:
             raise HTTPException(status_code=404, detail="Trainee not found")
+        user['id'] = user['user_id'] # Ensure 'id' refers to user_id for frontend compatibility
 
         # 2. Fetch Child Tables (Normalized tables take priority over legacy JSON blobs).
         # BUG 12 NOTE: trainee_profiles.* includes legacy JSON columns (academic_history,
@@ -645,7 +649,7 @@ async def get_cv_matching_result(trainee_id: int, course_id: int, staff: dict = 
 
 
 @router.get("/trainee-analytics/{trainee_id}/{course_id}")
-async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: dict = Depends(get_admin_user)):
+async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: dict = Depends(get_staff_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -657,7 +661,7 @@ async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: d
 
         # 2. Fetch Sessions
         cursor.execute("""
-            SELECT id, topic as name, DATE_FORMAT(session_date, '%e %b') as date, session_date
+            SELECT id, topic as name, DATE(session_date) as date_val, DATE_FORMAT(session_date, '%e %b') as date, session_date
             FROM course_sessions 
             WHERE course_id = %s 
             ORDER BY session_date ASC
@@ -675,7 +679,7 @@ async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: d
 
         # 4. Fetch Permissions
         cursor.execute("""
-            SELECT type as permission_type, reason as permission_reason, DATE_FORMAT(date, '%e %b') as date
+            SELECT type as permission_type, reason as permission_reason, DATE(date) as date_val
             FROM attendance_permissions
             WHERE user_id = %s AND course_id = %s AND status = 'accepted'
         """, (trainee_id, course_id))
@@ -687,14 +691,14 @@ async def get_trainee_analytics(trainee_id: int, course_id: int, current_user: d
             if sid not in log_map: log_map[sid] = {}
             log_map[sid][l["event_type"]] = l
 
-        perm_map = {p["date"]: p for p in permissions}
+        perm_map = {str(p["date_val"]): p for p in permissions}
 
         att_sessions = []
         for s in sessions:
             sid = str(s["id"])
             s_date = s["date"]
             l_entry = log_map.get(sid, {})
-            p_entry = perm_map.get(s_date)
+            p_entry = perm_map.get(str(s["date_val"]))
             
             sess_res = {
                 "id": sid,

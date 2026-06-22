@@ -8,8 +8,8 @@ class TraineeSummary(BaseModel):
     email: str
     stage: Optional[int] = None
     status: Optional[str] = None
-    gender: str
-    dob: date
+    gender: Optional[str] = None
+    dob: Optional[date] = None
     category: Optional[str] = None
     course_id: Optional[int] = None
     ai_match_score: Optional[int] = 0

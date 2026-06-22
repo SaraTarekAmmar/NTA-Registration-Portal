@@ -43,7 +43,7 @@ async def face_checkin(request: FaceActionRequest, staff: dict = Depends(get_sta
         raise HTTPException(status_code=503, detail=f"Failed to connect to Face service: {str(e)}")
 
 @router.post("/quiz/generate")
-async def generate_quiz(course_id: int = Form(...), file: UploadFile = File(...), num_questions: int = Form(10), session_id: int = Form(0)):
+async def generate_quiz(course_id: int = Form(...), file: UploadFile = File(...), num_questions: int = Form(10), session_id: int = Form(0), staff: dict = Depends(get_staff_user)):
     try:
         files = {"file": (file.filename, await file.read(), file.content_type)}
         data = {"num_questions": num_questions}
