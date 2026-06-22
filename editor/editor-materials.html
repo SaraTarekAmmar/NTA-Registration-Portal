@@ -23,7 +23,15 @@
       gap: 2.5rem; 
       align-items: start; 
     }
-    @media(max-width: 1100px) { .workspace-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 1100px) {
+      .workspace-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .workspace-grid > * { min-width: 0; }
+    }
+    @media(max-width: 760px) {
+      .mat-library-filters { flex-wrap: wrap; }
+      .mat-library-filters > * { min-width: 0; flex-wrap: wrap; }
+      .mat-library-filters .mat-input { width: 100%; min-width: 0; flex: 1 1 100%; }
+    }
 
     /* Builder Header */
     .builder-header {

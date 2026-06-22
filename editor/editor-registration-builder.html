@@ -390,9 +390,9 @@
       .builder-step-card.expanded .expand-icon { transform: rotate(180deg); }
       /* Step Body (Table) */
       .builder-step-body { display: none; border-top: 1px solid var(--border-subtle); background: var(--bg-card); }
-      .builder-step-card.expanded .builder-step-body { display: block; }
-      
-      .fields-table { width: 100%; border-collapse: collapse; text-align: center; }
+      .builder-step-card.expanded .builder-step-body { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+      .fields-table { width: 100%; border-collapse: collapse; text-align: center; min-width: 540px; }
       .fields-table th { padding: 1rem; font-size: 0.85rem; color: var(--text-subtle); font-weight: 700; border-bottom: 1px solid var(--border-subtle); background: var(--bg-input); }
       .fields-table td { padding: 1rem; font-size: 0.9rem; color: var(--text-main); border-bottom: 1px solid var(--border-subtle); }
       .fields-table tr:hover td { background: var(--bg-input); }
@@ -426,6 +426,21 @@
       .text-green { color: #059669; font-weight: 600; }
       .text-neutral { color: var(--text-subtle); }
 
+      /* Responsive — stack panels + tighten the builder on small screens */
+      @media (max-width: 760px) {
+        .builder-container { flex-direction: column; gap: 1rem; }
+        .builder-main-area { width: 100%; }
+        .health-panel { flex-direction: column; gap: 1rem; }
+        .health-status { min-width: 0; border-right: none; padding-right: 0; align-items: flex-start; }
+        .health-panel-metrics { gap: 1.25rem; flex-wrap: wrap; }
+        .builder-toolbar { flex-wrap: wrap; }
+        .toolbar-right, .toolbar-left { flex-wrap: wrap; }
+        /* Header action row (inline flex) wraps instead of overflowing */
+        .builder-header [style*="display:flex"], .builder-header [style*="display: flex"] { flex-wrap: wrap; }
+        .fields-table th, .fields-table td { padding: 0.6rem 0.5rem; font-size: 0.8rem; }
+        /* Field-edit slide-out fills the screen instead of overflowing it */
+        .field-drawer { width: 100vw; left: -100vw; }
+      }
     </style>
   </head>
   <body data-page="registration-builder">
