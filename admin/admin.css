@@ -1964,3 +1964,12 @@ button:active:not(:disabled), .btn:active:not(:disabled), [role="button"]:active
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Mobile: trim content-wrapper padding + wrap header/search rows so
+   narrow viewports never produce a few px of horizontal overflow ── */
+@media (max-width: 700px) {
+  .trainee-main, .admin-main { padding-left: 1rem; padding-right: 1rem; max-width: 100%; overflow-x: clip; }
+  .at-header, .au-header, .ap-header, .admin-section__header,
+  .at-header > div, .au-header > div { flex-wrap: wrap; }
+  .at-search, .au-search, .at-search input, .au-search input { width: 100%; min-width: 0; }
+}

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>لوحة التوصيات - الأكاديمية الوطنية للتدريب</title>
     <link rel="stylesheet" href="trainee.css" />
-    <link rel="stylesheet" href="admin.css?v=3" />
+    <link rel="stylesheet" href="admin.css?v=4" />
     <link rel="stylesheet" href="admin-portal.css" />
     <link rel="stylesheet" href="admin-theme.css" />
     <link rel="stylesheet" href="header/header.css?v=5" />
@@ -143,11 +143,13 @@
       }
       @media (max-width: 800px) {
         .rec-layout {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
         }
+        .rec-layout > *, .rec-content { min-width: 0; }
         .rec-sidenav {
           display: flex;
           flex-direction: row;
+          flex-wrap: wrap;
           gap: 0.4rem;
         }
       }
