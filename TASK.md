@@ -16,8 +16,8 @@ Remove all shadows (CSS `box-shadow`) from all dashboard layouts (Admin, Editor,
 - [x] Audit `trainer-dashboard.html` and related CSS for box-shadows
 - [x] Remove/override box-shadow styles to `none` or `0 0 0 transparent`
 - [x] Verify pages in browser
-- [ ] Commit changes
-- [ ] Push to GitHub (origin/master)
+- [x] Commit changes
+- [x] Push to GitHub (origin/master)
 
 ## Next step
-Commit the changes and push to origin/master.
+Task completed.
