@@ -1,5 +1,6 @@
 import json
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
+from typing import List
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, Body
 from core.auth import require_editor
 from core.database import get_db_connection
 from core.upload_manager import save_upload_file, move_course_files_to_course_folder
@@ -23,41 +24,11 @@ def skill_to_db(value):
 
 
 VALID_REGISTRATION_TYPES = {
-    'fullName', 'fullNameEn', 'dob', 'countryOfStay', 'governmentOrState',
-    'city', 'address', 'maritalStatus', 'militaryStatus', 'militaryReason',
-    'identityDocNationalId', 'identityDocPassport', 'nationalId', 'passportNumber', 'identityDocumentScan',
-    'numberOfNationalities', 'nationality', 'secondNationality', 'thirdNationality', 'mobileNumber1',
-    'mobileNumber2', 'whatsappNumber', 'whatsappSameAsMobile', 'monthlyAverageIncome', 'primaryEmail',
-    'secondaryEmail', 'emergencyContactsCount', 'emergencyName1', 'emergencyPhone1', 'emergencyAddress1',
-    'emergencyId1', 'emergencyName2', 'emergencyPhone2', 'emergencyAddress2', 'emergencyId2',
-    'eduHighestDegree', 'eduDegreeCountry', 'eduInstitution', 'eduInstituteName', 'eduSchoolName',
-    'eduCollegeFacultySelect', 'eduCollegeFacultyText', 'eduSpeciality', 'eduGpa', 'eduTotalScore',
-    'eduPercentage', 'eduGraduationDate', 'graduationCertificateScan', 'eduHasPostgraduate', 'eduPostgraduateDegreeType',
-    'eduDegreeIssuerEntity', 'eduMainSpecialityPg', 'eduSecondarySpecialityPg', 'eduPgStartDate', 'eduPgEndDate',
-    'eduFunding', 'eduRecommendingEntity', 'eduScholarshipEntity', 'standardizedTestName', 'standardizedTestName',
-    'standardizedTestScore', 'standardizedTestAuthority', 'standardizedTestDate', 'standardizedTestDocument', 'standardizedTestUrl',
-    'empExperienceStatus', 'employmentSectionCv', 'empJobType', 'empWorkNature', 'empMinistry',
-    'empMinistrySub', 'empJoiningDate', 'empCurrentlyWorking', 'empEndDate', 'empJobTitle',
-    'empSeniority', 'empDepartment', 'empSpeciality', 'empJobDescription', 'empCompanyAddress',
-    'empIndustryPrimary', 'empIndustrySecondary', 'empRefName', 'empRefPhone', 'empRefEmail',
-    'empRefPlaceIndex', 'organizationIndustry', 'startDate', 'endDate', 'keyResponsibilities',
-    'reasonForLeaving', 'currentJobTitle', 'yearsManagementExperience', 'organizationSize', 'annualBudgetManaged',
-    'directReports', 'globalExperience', 'technicalSkillCategory', 'computerSkillCategory', 'softSkillCategory',
-    'otherSkillsFreeText', 'nativeLanguage', 'englishProficiency', 'interestsDescription', 'usesSocialMedia',
-    'socialPlatformFacebook', 'hasPrizesAwards', 'prizeName', 'prizeDateAchieved', 'prizeCategory',
-    'prizeIssuingBody', 'prizeCertificate', 'hasConferencesWorkshops', 'cwActivityType', 'cwEventName',
-    'cwOrganizingEntity', 'cwStartDate', 'cwEndDate', 'cwParticipationLevel', 'awardTitle',
-    'issuingBody', 'keyAchievement', 'communityLeadership', 'extracurricularRole', 'extracurricularDuration',
-    'portfolioUrl', 'hasPublicVoluntaryWork', 'pvFoundationName', 'pvPosition', 'pvJoinDate',
-    'pvLeaveDate', 'pvScope', 'pvWorkField', 'pvCountry', 'pvState',
-    'hasPoliticalParticipation', 'politicalPartyName', 'politicalRole', 'politicalWorkDetails', 'hasPoliticalCandidacy',
-    'candidacyPositionName', 'candidacyResult', 'candidacyExperienceDescription', 'hasPriorCriminalConvictions', 'priorConvictionDescription',
-    'sectionSevenCriminalRecordCertificate', 'cvResume', 'lettersOfRecommendation', 'criminalRecord', 'employerNoc',
-    'referenceName', 'referenceRelationship', 'referenceContact', 'primaryLearningObjective', 'uniqueContribution',
-    'futureCareerGoal', 'fundingSource', 'scholarshipEssay', 'dietaryRestrictions', 'accessibilityRequirements',
-    'photoFront', 'socialProfileFacebookUrl', 'socialProfileInstagramUrl', 'socialProfileXUrl', 'socialProfileLinkedInUrl',
-    'socialProfileTikTokUrl', 'dataAccuracyTermsConfirmed',
-    
+    'personal_info', 'contact_info', 'education_bg', 'standardized_tests',
+    'work_experience', 'skills_languages', 'awards_conferences',
+    'legal_status', 'document_uploads', 'references_social', 'final_acknowledgement',
+    # Fallback types from flow builder just in case:
+    'document_upload', 'custom_question'
 }
 
 def sync_course_steps(cursor, course_id, steps, path_type):
@@ -305,7 +276,7 @@ async def get_admission_steps(course_id: int, editor: dict = Depends(require_edi
         db.close()
 
 @router.put("/{course_id}/admission-steps")
-async def update_admission_steps(course_id: int, steps: list, editor: dict = Depends(require_editor)):
+async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -356,7 +327,7 @@ async def get_registration_steps(course_id: int, editor: dict = Depends(require_
         db.close()
 
 @router.put("/{course_id}/registration-steps")
-async def update_registration_steps(course_id: int, steps: list, editor: dict = Depends(require_editor)):
+async def update_registration_steps(course_id: int, steps: List[dict] = Body(...), editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor()
     try:

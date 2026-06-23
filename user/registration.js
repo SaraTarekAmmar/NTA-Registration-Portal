@@ -191,6 +191,15 @@
         let ok = true;
         const skipInputTypes = new Set(['hidden', 'button', 'submit', 'reset', 'image']);
         const hidden = (el) => isElementVisiblyHidden(el, stepEl);
+        
+        const stepNum = parseInt(stepEl.getAttribute('data-step'), 10);
+        const fd = dynamicFlow['step_' + stepNum];
+        const dynamicRequiredFields = new Set();
+        if (fd && fd.config && fd.config.fields) {
+            fd.config.fields.forEach(f => {
+                if (f.is_required) dynamicRequiredFields.add(f.field_id);
+            });
+        }
 
         stepEl.querySelectorAll('select').forEach((sel) => {
             if (sel.disabled || hidden(sel)) return;
@@ -208,8 +217,9 @@
         stepEl.querySelectorAll('textarea').forEach((ta) => {
             if (ta.disabled || hidden(ta)) return;
             const optionalTextareas = ['scholarshipEssay', 'dietaryRestrictions', 'accessibilityRequirements'];
+            const isDynamicReq = dynamicRequiredFields.has(ta.id) || dynamicRequiredFields.has(ta.name);
             if (!String(ta.value || '').trim()) {
-                if (optionalTextareas.includes(ta.name) || ta.classList.contains('optional-input') || (ta.placeholder && ta.placeholder.includes('اختياري'))) {
+                if (!isDynamicReq && (optionalTextareas.includes(ta.name) || ta.classList.contains('optional-input') || (ta.placeholder && ta.placeholder.includes('اختياري')))) {
                     ta.classList.remove('error');
                     ta.removeAttribute('aria-invalid');
                 } else {
@@ -250,7 +260,8 @@
                     'portfolioFile',
                     'graduationCertificateScan[]'
                 ];
-                if ((optionalFiles.includes(inp.name) || inp.classList.contains('optional-input')) && !hasFile) {
+                const isDynamicReq = dynamicRequiredFields.has(inp.id) || dynamicRequiredFields.has(inp.name);
+                if (!isDynamicReq && (optionalFiles.includes(inp.name) || inp.classList.contains('optional-input')) && !hasFile) {
                     inp.classList.remove('error');
                     if (inp.parentElement) inp.parentElement.classList.remove('error');
                     return;
@@ -284,9 +295,10 @@
                 'emergencyId2',
                 'scheduleAcknowledgment'  // informational confirmation checkbox — not a hard blocker
             ];
+            const isDynamicReq = dynamicRequiredFields.has(inp.id) || dynamicRequiredFields.has(inp.name);
 
             if (!String(inp.value || '').trim()) {
-                if (optionalInputNames.includes(inp.name) || inp.classList.contains('optional-input')) {
+                if (!isDynamicReq && (optionalInputNames.includes(inp.name) || inp.classList.contains('optional-input'))) {
                     inp.classList.remove('error');
                     inp.removeAttribute('aria-invalid');
                 } else {

@@ -378,7 +378,11 @@
       .builder-step-header:hover { background: var(--bg-input); }
       
       .header-right { display: flex; align-items: center; gap: 1rem; }
-      .header-left { display: flex; align-items: center; gap: 1rem; text-align: left; flex-direction: row-reverse; }
+      .header-left { display: flex; align-items: center; gap: 0.75rem; text-align: left; flex-direction: row-reverse; }
+      .selection-counter {
+        display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap;
+        color: #3b82f6; font-size: 0.85rem; font-weight: 500; line-height: 1;
+      }
 
       .drag-handle { color: var(--text-subtle); cursor: grab; opacity: 0.5; padding: 0.25rem; display: flex; }
       .drag-handle:hover { opacity: 1; }
@@ -515,8 +519,8 @@
           <div style="display:flex;gap:0.75rem;">
             <button type="button" class="btn btn--secondary" onclick="addAdmStep()">+ إضافة قسم</button>
             <button type="button" class="btn btn--secondary" onclick="showEditorToast('ميزة المعاينة قيد التطوير', 'info')">معاينة كمتقدم</button>
-            <button type="button" class="btn btn--primary" id="saveDraftBtn" onclick="saveRegistrationSteps()" style="background:#10b981; border-color:#10b981;">حفظ كمسودة</button>
-            <button type="button" class="btn btn--secondary" disabled style="opacity:0.5; cursor:not-allowed;" title="نشر التغييرات غير متاح حالياً">نشر التغييرات</button>
+            <button type="button" class="btn btn--secondary" id="saveDraftBtn" onclick="saveRegistrationSteps(false)" style="color: #64748b; border-color: #cbd5e1; background: #f8fafc;">حفظ كمسودة</button>
+            <button type="button" class="btn btn--primary" id="publishBtn" onclick="saveRegistrationSteps(true)" style="background:#10b981; border-color:#10b981;">نشر التغييرات</button>
           </div>
         </div>
 
@@ -547,17 +551,17 @@
         </div>
 
         <!-- Warning banner for active course -->
-        <div id="activeCourseWarning" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f59e0b; display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
+        <div id="activeCourseWarning" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f59e0b; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           هذه الدورة تستقبل طلبات حالياً. أي تعديلات ستؤثر على مسار التقديم.
         </div>
 
-        <div id="burdenWarning" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f59e0b; display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
+        <div id="burdenWarning" style="display:none; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f59e0b; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           تنبيه: النموذج طويل وقد يستغرق المتقدم أكثر من 15 دقيقة لإكماله، مما يزيد من معدل الانسحاب.
         </div>
 
-        <div id="validationWarning" style="display:none; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f87171; display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
+        <div id="validationWarning" style="display:none; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.5rem; color:#f87171; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:600;">
           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
           <span id="validationWarningText">توجد مشاكل تمنع نشر النموذج.</span>
         </div>
@@ -1114,7 +1118,9 @@
       }
 
       function toggleStepActive(idx, isChecked) {
-          if (registrationSteps[idx].config_json && registrationSteps[idx].config_json.fields) {
+          if (!registrationSteps[idx].config_json) registrationSteps[idx].config_json = {};
+          registrationSteps[idx].config_json.is_active = isChecked;
+          if (registrationSteps[idx].config_json.fields) {
               registrationSteps[idx].config_json.fields.forEach(function(f) {
                   f.is_active = isChecked;
               });
@@ -1223,8 +1229,19 @@
           var isIndeterminate = (selectedCount > 0 && selectedCount < fields.length);
           var isChecked = (selectedCount === fields.length && fields.length > 0);
           var checkAttr = isChecked ? 'checked' : '';
+          var selectionCounter = '';
+          if (fields.length > 0) {
+              if (selectedCount === fields.length) {
+                  selectionCounter = '(الكل محدد)';
+              } else if (selectedCount > 0) {
+                  selectionCounter = '(' + selectedCount + ' من ' + fields.length + ' محدد)';
+              }
+          }
+          var selectionCounterHtml = selectionCounter
+              ? '<span class="selection-counter" aria-live="polite">' + selectionCounter + '</span>'
+              : '';
           
-          var stepActiveBadge = (s.config_json && s.config_json.is_active === false) 
+          var stepActiveBadge = ((s.config_json && s.config_json.is_active === false) || (fields.length > 0 && selectedCount === 0))
               ? '<span class="badge badge--neutral">مخفي</span>' 
               : '<span class="badge badge--green">منشور</span>';
           
@@ -1241,11 +1258,8 @@
 
           html += '    <div class="header-left" style="display:flex; align-items:center; gap:1rem; flex-direction:row-reverse;">';
           html += '      ' + stepActiveBadge;
-          html += '      <div class="drag-handle" style="cursor:grab;">⋮</div>' +
-                  '      <button type="button" onclick="removeStepInline('+i+')" style="color:#ef4444; background:none; border:none; cursor:pointer; padding:0 0.5rem;" title="حذف القسم">' +
-                  '        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>' +
-                  '      </button>';
           html += '      <input type="checkbox" class="custom-checkbox" '+checkAttr+' onclick="toggleStepActive('+i+', this.checked)" '+(isIndeterminate?'id="indet_'+i+'"':'')+'>';
+          html += '      ' + selectionCounterHtml;
           html += '    </div>';
           
           html += '  </div>';
@@ -1286,10 +1300,6 @@
                   html += '  <td>' + reqText + '</td>';
                   html += '  <td>' + activeBadge + '</td>';
                   html += '  <td style="display:flex; align-items:center; gap:0.5rem; justify-content:center; border-bottom:none; flex-direction:row-reverse;">';
-                  html += '    <div class="drag-handle" style="cursor:grab;">⋮</div>' +
-                          '    <button type="button" onclick="removeFieldInline('+i+', '+realIdx+')" style="color:#ef4444; background:none; border:none; cursor:pointer; padding:0 0.5rem;" title="حذف الحقل">' +
-                          '      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>' +
-                          '    </button>';
                   html += '    <input type="checkbox" class="custom-checkbox" '+(isFChecked?'checked':'')+' onclick="toggleFieldActiveInline('+i+', '+realIdx+', this.checked)">';
                   html += '  </td>';
                   html += '</tr>';
@@ -1428,12 +1438,17 @@
 
 
 
-      function saveRegistrationSteps() {
+      function saveRegistrationSteps(isPublished) {
         var courseId = document.getElementById("courseSelect").value;
         if (!courseId) return;
 
-        // Re-assign step_order
-        registrationSteps.forEach(function(s, i) { s.step_order = i; if(!s.step_key) s.step_key = "step_" + (i+1); });
+        // Re-assign step_order and inject published state
+        registrationSteps.forEach(function(s, i) { 
+            s.step_order = i; 
+            if(!s.step_key) s.step_key = "step_" + (i+1); 
+            if (!s.config_json) s.config_json = {};
+            s.config_json.is_published = isPublished;
+        });
           
         fetch("/api/courses/" + courseId + "/registration-steps", {
           method: "PUT",
@@ -1442,7 +1457,11 @@
         })
           .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
           .then(function() {
-            showEditorToast("تم حفظ مسار التسجيل بنجاح", "success");
+            var msg = isPublished ? "تم نشر مسار التسجيل بنجاح" : "تم حفظ المسودة بنجاح";
+            showEditorToast(msg, "success");
+            // clear unsaved indicator since changes are now saved
+            var ind = document.getElementById('unsavedIndicator');
+            if(ind) ind.style.display = 'none';
           })
           .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
       }

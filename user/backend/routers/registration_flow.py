@@ -189,6 +189,23 @@ async def submit_step(body: StepSubmit, current_user: dict = Depends(get_current
             raise HTTPException(403, "Step is not assigned to your registration flow")
         if step_in_flow["is_locked"]:
             raise HTTPException(403, step_in_flow["locked_reason"] or "Step is locked")
+
+        # Basic presence validation for required fields
+        if step_in_flow.get("is_required") and not body.submitted_data:
+            raise HTTPException(400, "هذه الخطوة تتطلب إدخال بيانات (Step requires data)")
+            
+        if body.submitted_data and step_in_flow.get("config") and isinstance(step_in_flow["config"], dict) and "fields" in step_in_flow["config"]:
+            missing_fields = []
+            for field in step_in_flow["config"]["fields"]:
+                if field.get("is_required") and field.get("is_active", True):
+                    field_id = field.get("field_id")
+                    if field_id:
+                        val = body.submitted_data.get(field_id)
+                        if val is None or str(val).strip() == "":
+                            missing_fields.append(field_id)
+            if missing_fields:
+                raise HTTPException(400, f"الحقول التالية مطلوبة: {', '.join(missing_fields)}")
+
         data_json = json.dumps(body.submitted_data, ensure_ascii=False) if body.submitted_data else None
         cursor.execute(
             """
