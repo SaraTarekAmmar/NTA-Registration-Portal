@@ -5,23 +5,26 @@
 > Replace the example below with the real task whenever a new one starts.
 
 ## Goal
-<one or two sentences: what are we trying to achieve?>
+Find why the admin, editor, and coordinator Windows batch launchers appear not to run, and fix any broken startup configuration.
 
 ## Context / Constraints
-- <key files, decisions, gotchas the next turn must not forget>
+- `admin/RUN_ADMIN.bat`, `editor/RUN_EDITOR.bat`, and `coordinator/RUN_COORDINATOR.bat` are the startup scripts.
+- Editor launcher had a port mismatch with the rest of the repo and with superadmin.
+- Keep changes aligned with the repo's existing no-bundler, FastAPI, Windows batch setup.
 
 ## Checklist
-- [ ] <step 1>
-- [ ] <step 2>
-- [ ] <step 3>
+- [x] Inspect the batch launchers and backend startup files
+- [x] Identify the startup mismatch
+- [x] Fix the editor port configuration
+- [x] Verify the updated editor launcher starts on port 8004
 - [ ] Commit changes
 - [ ] Push to GitHub (origin/<branch>)
 
 ## Next step
-<the single next action to take>
+Commit the launcher fix and push it to origin.
 
 ## Notes / Log
-- <date> — <what was done / what was learned>
+- 2026-06-23 — Confirmed admin and coordinator launch successfully; editor was wired to port 8003, conflicting with superadmin. Updated editor startup to 8004.
 
 ---
 <!-- EXAMPLE (delete when starting a real task):

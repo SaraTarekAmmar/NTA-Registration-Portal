@@ -27,7 +27,7 @@ app = FastAPI(
 # CORS origins — env-driven so production can drop localhost (set ALLOWED_ORIGINS).
 _ALLOWED_ORIGINS = [o.strip() for o in os.getenv(
     "ALLOWED_ORIGINS",
-    "https://academy.nta.eg,http://localhost:8003,http://localhost:8002"
+    "https://academy.nta.eg,http://localhost:8004,http://localhost:8002"
 ).split(",") if o.strip()]
 
 app.add_middleware(

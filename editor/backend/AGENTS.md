@@ -1,7 +1,7 @@
 # Editor Backend — AGENTS.md
 
 Standalone FastAPI application serving the NTA Editor Portal.
-Runs on **port 8003** independently of the admin backend (port 8002).
+Runs on **port 8004** independently of the admin backend (port 8002).
 
 ## Startup
 
@@ -9,7 +9,7 @@ Runs on **port 8003** independently of the admin backend (port 8002).
 cd editor/backend
 cp .env.example .env   # fill in SECRET_KEY and DB credentials
 pip install -r requirements.txt
-python main.py          # starts on http://0.0.0.0:8003
+python main.py          # starts on http://0.0.0.0:8004
 ```
 
 ## Architecture
@@ -79,4 +79,4 @@ Max file size: 20 MB. Allowed: pdf, doc, docx, jpg, jpeg, png, zip, rar.
 See `.env.example` for all required variables:
 - `SECRET_KEY` — must match admin backend if tokens need to be cross-verified
 - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-- `PORT` (default 8003)
+- `PORT` (default 8004)

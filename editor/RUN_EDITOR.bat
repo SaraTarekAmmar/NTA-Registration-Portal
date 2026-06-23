@@ -5,9 +5,9 @@ SETLOCAL EnableDelayedExpansion
 REM Change to the directory of this batch file
 cd /d "%~dp0"
 
-REM 1. Kill any process on port 8003
-echo [PRE-FLIGHT] Checking for existing processes on port 8003...
-for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8003') do (
+REM 1. Kill any process on port 8004
+echo [PRE-FLIGHT] Checking for existing processes on port 8004...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8004') do (
     echo [CLEANUP] Killing PID %%a...
     taskkill /F /T /PID %%a 2>nul
 )
@@ -57,10 +57,10 @@ if %errorlevel% neq 0 (
 
 :START_SERVER
 echo [SUCCESS] Virtual environment and database verified.
-echo [STARTING] Starting Editor Portal Backend (Port 8003)...
-echo [INFO] Open http://localhost:8003/editor-login.html in your browser.
+echo [STARTING] Starting Editor Portal Backend (Port 8004)...
+echo [INFO] Open http://localhost:8004/editor-login.html in your browser.
 echo [INFO] If the window closes immediately, check the output above for errors.
-"backend\venv\Scripts\python.exe" -m uvicorn backend.main:app --port 8003 --host 127.0.0.1 --http h11 --loop asyncio
+"backend\venv\Scripts\python.exe" -m uvicorn backend.main:app --port 8004 --host 127.0.0.1 --http h11 --loop asyncio
 if %errorlevel% neq 0 (
     echo.
     echo [CRASH] Server exited with an error. See output above.
