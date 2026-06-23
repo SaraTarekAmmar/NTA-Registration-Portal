@@ -80,10 +80,16 @@ cd editor/backend && uvicorn main:app --reload --port 8004
 - Verbose how-tos belong in `.claude/skills/` — only load when a skill is invoked
 - MCP servers to consider adding: `mcp-server-sqlite` (query the DB directly), `github-mcp-server` (read/create issues)
 
+## Task Continuity (combat context compaction)
+- At the start of every turn, read `TASK.md` (repo root) for the active goal + checklist;
+  create it from the user's request if missing. Keep it updated as steps complete.
+- Work isn't done until all `TASK.md` boxes are ticked AND changes are pushed.
+
 ## Git Workflow
 - After a unit of work: `git add`, commit (conventional-commit message), then
   `git push origin <current-branch>` so changes reach GitHub. Don't leave work
   committed-but-unpushed.
+- A `post-commit` git hook auto-pushes every commit to `origin` as a safety net.
 - Default branch `master`; remote `origin` (`github.com/SaraTarekAmmar/NTA-Registration-Portal`).
 
 ## What NOT to Do

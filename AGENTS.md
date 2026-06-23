@@ -75,10 +75,22 @@ Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 - Admin and editor auth flows are separate — do not mix their tokens
   (`admin_token` vs `editor_token` in localStorage).
 
+## Task Continuity (combat short memory / context compaction)
+Your context gets compacted on long sessions and you WILL forget the original goal.
+Do not rely on memory — externalize it to a file:
+- At the **start of every turn**, read `TASK.md` (repo root) for the active objective and
+  its checklist. If it doesn't exist, create it from the user's request before starting.
+- Keep `TASK.md` current: list the goal, a checked/unchecked step list, and a "Next step"
+  line. Update it as you finish each step.
+- Work is NOT done until every `TASK.md` checkbox is ticked AND the changes are pushed.
+  Re-read `TASK.md` before declaring completion.
+
 ## Git Workflow
 - After completing a unit of work, `git add` the changes, commit with a clear
   conventional-commit message, then **push to GitHub** (`git push origin <current-branch>`).
   Committing locally without pushing is NOT done — changes must reach the remote.
+- A repo `post-commit` git hook auto-pushes every commit to `origin` as a safety net, so
+  even if you forget to push, the commit still reaches GitHub. Still run the push yourself.
 - Default branch is `master`; the remote is `origin`
   (`https://github.com/SaraTarekAmmar/NTA-Registration-Portal.git`).
 - Never force-push (`--force`/`-f`) or push to branches you didn't create without asking.
