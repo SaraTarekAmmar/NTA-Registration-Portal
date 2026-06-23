@@ -13,8 +13,8 @@ Remove the shadow/glow from the timeline connector line on the admission builder
 ## Checklist
 - [x] Remove box-shadow from `.timeline-item.selected::after` in `editor-admission-builder.html`
 - [x] Verify changes in the browser
-- [ ] Commit changes
-- [ ] Push to GitHub (origin/master)
+- [x] Commit changes
+- [x] Push to GitHub (origin/master)
 
 ## Next step
-Commit the changes and push to origin/master.
+Task completed.
