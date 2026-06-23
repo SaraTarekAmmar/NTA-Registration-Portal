@@ -15,8 +15,8 @@ Make the admin, editor, and coordinator flows responsive on mobile and tighten t
 - [x] Audit shared shell and dashboard pages for mobile and heuristic issues
 - [x] Patch responsive layout and interaction fixes
 - [x] Verify the key pages at mobile widths
-- [ ] Commit changes
-- [ ] Push to GitHub (origin/master)
+- [x] Commit changes
+- [x] Push to GitHub (origin/master)
 
 ## Next step
 Stage, commit, and push the responsive updates.
