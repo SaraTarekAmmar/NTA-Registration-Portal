@@ -311,3 +311,20 @@ button:active:not(:disabled), .btn:active:not(:disabled), [role="button"]:active
     scroll-behavior: auto !important;
   }
 }
+
+/* Remove all shadows as requested */
+.coord-kpi,
+.coord-kpi:hover,
+.coord-kpi__icon,
+.coord-kpi:hover .coord-kpi__icon,
+.coord-action,
+.coord-action:hover,
+.coord-modal,
+.btn,
+.btn:hover,
+html.light-mode .coord-kpi,
+html.light-mode .coord-action,
+html.light-mode .coord-modal {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}

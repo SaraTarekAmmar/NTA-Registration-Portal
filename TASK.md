@@ -4,18 +4,20 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Fix light mode styling for the builder action bar and timeline numbers on the admission builder page.
+Remove all shadows (CSS `box-shadow`) from all dashboard layouts (Admin, Editor, Coordinator, Trainer) to make them look flatter/cleaner.
 
 ## Context / Constraints
-- Action bar and timeline numbers remained dark/black even when light mode was toggled on.
-- Override backgrounds and borders in `html.light-mode` to match the light theme cleanly.
+- Search each dashboard page (admin-dashboard.html, editor-dashboard.html, coordinator-dashboard.html, trainer-dashboard.html) and their corresponding stylesheets (like editor.css, styles.css) for shadow/box-shadow rules and remove/override them to `none`.
 
 ## Checklist
-- [x] Identify the dark elements (action bar, timeline numbers, connectors) in `editor-admission-builder.html`
-- [x] Add CSS overrides under `html.light-mode`
-- [x] Verify layout changes using the browser subagent in light mode
-- [x] Commit changes
-- [x] Push to GitHub (origin/master)
+- [x] Audit `editor-dashboard.html` and related CSS for box-shadows
+- [x] Audit `admin-dashboard.html` and related CSS for box-shadows
+- [x] Audit `coordinator-dashboard.html` and related CSS for box-shadows
+- [x] Audit `trainer-dashboard.html` and related CSS for box-shadows
+- [x] Remove/override box-shadow styles to `none` or `0 0 0 transparent`
+- [x] Verify pages in browser
+- [ ] Commit changes
+- [ ] Push to GitHub (origin/master)
 
 ## Next step
-Task completed.
+Commit the changes and push to origin/master.

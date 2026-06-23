@@ -490,6 +490,30 @@
           scroll-behavior: auto !important;
         }
       }
+
+      /* Remove all shadows as requested */
+      .ed-hero,
+      .ed-hero::before,
+      .ed-hero::after,
+      .ed-hero__greeting::before,
+      .ed-kpi,
+      .ed-kpi:hover,
+      .ed-kpi__icon,
+      .ed-kpi:hover .ed-kpi__icon,
+      .ed-section__left::before,
+      .ed-action,
+      .ed-action:hover,
+      .ed-card,
+      .ed-card:hover,
+      .btn,
+      .btn:hover,
+      html.light-mode .ed-hero,
+      html.light-mode .ed-kpi,
+      html.light-mode .ed-action,
+      html.light-mode .ed-card {
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
     </style>
   </head>
   <body data-page="dashboard">

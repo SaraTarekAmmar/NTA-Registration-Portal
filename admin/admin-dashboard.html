@@ -684,6 +684,31 @@
         scroll-behavior: auto !important;
       }
     }
+
+    /* Remove all shadows as requested */
+    .dash-topbar__avatar,
+    .dash-topbar__export,
+    .dash-topbar__export:hover,
+    .dash-hero,
+    .dash-hero__live-dot,
+    .dash-kpi,
+    .dash-kpi:hover,
+    .dash-kpi__icon,
+    .dash-kpi:hover .dash-kpi__icon,
+    .dash-panel,
+    .dash-panel:hover,
+    .adm-section-title::before,
+    .adm-quick,
+    .adm-quick:hover,
+    .btn,
+    .btn:hover,
+    html.light-mode .dash-hero,
+    html.light-mode .dash-kpi,
+    html.light-mode .dash-panel,
+    html.light-mode .adm-quick {
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
   </style>
   <script src="js/admin-guard.js"></script>
 </head>

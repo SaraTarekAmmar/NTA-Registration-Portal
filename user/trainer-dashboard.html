@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -406,6 +406,18 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* Remove all shadows as requested */
+      .dashboard-container,
+      .course-card,
+      .course-card:hover,
+      .btn,
+      .btn:hover,
+      .modal-content,
+      html.light-mode .dashboard-container {
+        box-shadow: none !important;
+        text-shadow: none !important;
       }
     </style>
   </head>
