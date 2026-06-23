@@ -67,3 +67,6 @@ uploads/
 .hermes/
 .warp/
 opencode.json
+
+# OpenCode auto-commit opt-in marker (local preference)
+.opencode-autocommit
