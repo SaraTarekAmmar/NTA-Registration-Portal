@@ -4,20 +4,17 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Remove all shadows (CSS `box-shadow`) from all dashboard layouts (Admin, Editor, Coordinator, Trainer) to make them look flatter/cleaner.
+Remove the shadow/glow from the timeline connector line on the admission builder page (`editor-admission-builder.html`).
 
 ## Context / Constraints
-- Search each dashboard page (admin-dashboard.html, editor-dashboard.html, coordinator-dashboard.html, trainer-dashboard.html) and their corresponding stylesheets (like editor.css, styles.css) for shadow/box-shadow rules and remove/override them to `none`.
+- The selected timeline item's connector line (`.timeline-item.selected::after`) has a blue box-shadow (`box-shadow: 0 0 8px rgba(59,130,246,0.5);`) which creates a fuzzy glow/shadow on the page.
+- Remove this box-shadow style.
 
 ## Checklist
-- [x] Audit `editor-dashboard.html` and related CSS for box-shadows
-- [x] Audit `admin-dashboard.html` and related CSS for box-shadows
-- [x] Audit `coordinator-dashboard.html` and related CSS for box-shadows
-- [x] Audit `trainer-dashboard.html` and related CSS for box-shadows
-- [x] Remove/override box-shadow styles to `none` or `0 0 0 transparent`
-- [x] Verify pages in browser
-- [x] Commit changes
-- [x] Push to GitHub (origin/master)
+- [x] Remove box-shadow from `.timeline-item.selected::after` in `editor-admission-builder.html`
+- [x] Verify changes in the browser
+- [ ] Commit changes
+- [ ] Push to GitHub (origin/master)
 
 ## Next step
-Task completed.
+Commit the changes and push to origin/master.
