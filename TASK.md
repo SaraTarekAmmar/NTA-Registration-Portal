@@ -14,8 +14,8 @@ Fix light mode styling for the builder action bar and timeline numbers on the ad
 - [x] Identify the dark elements (action bar, timeline numbers, connectors) in `editor-admission-builder.html`
 - [x] Add CSS overrides under `html.light-mode`
 - [x] Verify layout changes using the browser subagent in light mode
-- [ ] Commit changes
-- [ ] Push to GitHub (origin/master)
+- [x] Commit changes
+- [x] Push to GitHub (origin/master)
 
 ## Next step
-Commit the styles fix and push to GitHub.
+Task completed.
