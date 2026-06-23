@@ -17,14 +17,15 @@ Find why the admin, editor, and coordinator Windows batch launchers appear not t
 - [x] Identify the startup mismatch
 - [x] Fix the editor port configuration
 - [x] Verify the updated editor launcher starts on port 8004
-- [ ] Commit changes
-- [ ] Push to GitHub (origin/<branch>)
+- [x] Commit changes
+- [x] Push to GitHub (origin/master)
 
 ## Next step
 Commit the launcher fix and push it to origin.
 
 ## Notes / Log
 - 2026-06-23 — Confirmed admin and coordinator launch successfully; editor was wired to port 8003, conflicting with superadmin. Updated editor startup to 8004.
+- 2026-06-23 — Committed as `aa83b52` and pushed to `origin/master`.
 
 ---
 <!-- EXAMPLE (delete when starting a real task):
