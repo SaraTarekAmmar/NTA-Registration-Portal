@@ -224,6 +224,60 @@ html.light-mode .btn--primary { background: linear-gradient(135deg, rgba(59,130,
   .coordinator-main { padding: 1.25rem; }
 }
 
+/* ══════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE STYLES — Coordinator Portal
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Main padding ── */
+@media (max-width: 480px) {
+  .coordinator-main { padding: 1rem; }
+}
+
+/* ── Page header ── */
+@media (max-width: 560px) {
+  .coord-page-header { margin-bottom: 1.25rem; }
+  .coord-page-header__title { font-size: 1.35rem; }
+}
+
+/* ── KPI row: already uses auto-fill; ensure 1-col on xs ── */
+@media (max-width: 420px) {
+  .coord-kpi-row { grid-template-columns: 1fr; }
+}
+
+/* ── Action cards grid ── */
+@media (max-width: 560px) {
+  .coord-actions-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Filters: stack on mobile ── */
+@media (max-width: 600px) {
+  .coord-filters { flex-direction: column; align-items: stretch; }
+  .coord-search { min-width: 0; width: 100%; }
+  .coord-select { width: 100%; }
+}
+
+/* ── Table ── */
+.coord-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Modal ── */
+@media (max-width: 540px) {
+  .coord-modal {
+    padding: 1.25rem;
+    border-radius: 14px;
+    max-width: calc(100% - 1.5rem);
+    margin: 0.75rem;
+  }
+  .coord-modal__actions { flex-direction: column; }
+  .coord-modal__actions .btn { width: 100%; justify-content: center; }
+}
+
+/* ── Action card body wrapping on mobile ── */
+@media (max-width: 400px) {
+  .coord-action { flex-wrap: wrap; }
+  .coord-action__arrow { display: none; }
+}
+
+
 /* ════════════════════════════════════════════════════════════════
    UX POLISH & ACCESSIBILITY — Web Interface Guidelines (all coordinator pages)
    ════════════════════════════════════════════════════════════════ */

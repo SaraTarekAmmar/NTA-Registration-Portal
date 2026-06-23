@@ -560,3 +560,42 @@ html.light-mode .nta-user__name {
 html.light-mode .nta-user__role {
   color: #64748b;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   ADDITIONAL MOBILE REFINEMENTS — Sidebar UX
+   ══════════════════════════════════════════════════════════════ */
+
+/* On very small screens, make the sidebar scrollable so all nav items
+   are reachable even on short viewports (e.g. landscape iPhone) */
+@media (max-width: 700px) {
+  .nta-sidebar {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100dvh;
+  }
+  /* Increase nav link tap targets for touch */
+  .nta-nav__link {
+    min-height: 44px;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+  /* Ensure logout / theme buttons are comfortably tappable */
+  .nta-sidebar__theme-btn,
+  .nta-sidebar__logout {
+    min-height: 44px;
+  }
+  /* Avoid hamburger covering any page content in landscape */
+  body[data-page] > main,
+  body[data-page] .editor-main,
+  body[data-page] .trainee-main,
+  body[data-page] .coordinator-main {
+    padding-top: 4.5rem;
+  }
+}
+
+/* Ensure brand section text doesn't overflow on sidebar open */
+@media (max-width: 360px) {
+  .nta-sidebar__brand-name { font-size: 0.85rem; }
+  .nta-sidebar__brand-sub  { font-size: 0.6rem; }
+}
+

@@ -3427,3 +3427,97 @@ html.light-mode .course-card-skeleton__btn {
   );
   background-size: 200% 100%;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE STYLES — User (Trainee) Portal
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Trainee main content wrapper ── */
+@media (max-width: 900px) {
+  .trainee-main { padding: 1.5rem 1rem; }
+}
+@media (max-width: 600px) {
+  .trainee-main { padding: 1.1rem 0.9rem; }
+  .trainee-main h1 { font-size: 1.25rem; margin-bottom: 1.1rem; }
+}
+
+/* ── Courses grid: 5 → 3 → 2 → 1 ── */
+@media (max-width: 1400px) {
+  .courses-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1100px) {
+  .courses-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 780px) {
+  .courses-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+}
+@media (max-width: 480px) {
+  .courses-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+}
+
+/* ── Course card on mobile ── */
+@media (max-width: 480px) {
+  .course-card { border-radius: 12px; }
+  .course-card__body { padding: 0.85rem; }
+  .course-card__actions { flex-direction: column; gap: 0.4rem; }
+  .course-card__btn { width: 100%; justify-content: center; }
+}
+
+/* ── Course details modal ── */
+@media (max-width: 600px) {
+  .course-details-modal__dialog {
+    max-width: calc(100% - 1.5rem);
+    margin: 0.75rem;
+    border-radius: 14px;
+  }
+  .course-details-modal__image-wrap { height: 160px; }
+  .course-details-modal__body { padding: 1.1rem; }
+}
+
+/* ── Trainee profile overview ── */
+@media (max-width: 900px) {
+  .profile-layout { grid-template-columns: 1fr !important; }
+  .profile-sidebar { position: static !important; }
+}
+@media (max-width: 600px) {
+  .profile-header { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
+  .profile-hero { padding: 1.1rem 1rem; }
+  .profile-hero h1 { font-size: 1.3rem; }
+  .profile-section { padding: 1rem; border-radius: 12px; }
+}
+
+/* ── Courses filters: stack on mobile ── */
+@media (max-width: 600px) {
+  .courses-filters { flex-direction: column; align-items: stretch; }
+  .courses-search-wrap { width: 100%; }
+  .courses-filter-row { flex-direction: column; gap: 0.5rem; }
+  .courses-filter-row select,
+  .courses-filter-row input { width: 100%; }
+}
+
+/* ── Courses tabs: horizontal scroll ── */
+@media (max-width: 540px) {
+  .courses-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.4rem; }
+  .course-tab { flex-shrink: 0; }
+}
+
+/* ── Courses pagination ── */
+@media (max-width: 480px) {
+  .courses-pagination { gap: 0.25rem; flex-wrap: wrap; justify-content: center; }
+  .courses-pagination__btn { min-width: 34px; height: 34px; font-size: 0.8rem; }
+}
+
+/* ── Application status page ── */
+@media (max-width: 600px) {
+  .application-status-card { padding: 1.1rem; border-radius: 12px; }
+  .application-status-card__header { flex-direction: column; gap: 0.65rem; align-items: flex-start; }
+  .application-stages { gap: 0.5rem; }
+}
+
+/* ── User login page ── */
+@media (max-width: 480px) {
+  .login-card { padding: 1.5rem 1.1rem; border-radius: 14px; }
+  .login-card__logo { max-height: 52px; }
+  .login-card__title { font-size: 1.35rem; }
+}
+

@@ -1973,3 +1973,87 @@ button:active:not(:disabled), .btn:active:not(:disabled), [role="button"]:active
   .at-header > div, .au-header > div { flex-wrap: wrap; }
   .at-search, .au-search, .at-search input, .au-search input { width: 100%; min-width: 0; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE STYLES — Admin Portal
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Admin Hero ── */
+@media (max-width: 600px) {
+  .admin-hero { padding: 1.1rem 1rem; }
+  .admin-hero h1 { font-size: 1.4rem; }
+  .admin-hero__subtitle { font-size: 0.85rem; }
+}
+
+/* ── Admin Section ── */
+@media (max-width: 600px) {
+  .admin-section { padding: 1rem; border-radius: 12px; }
+  .admin-section__head { flex-direction: column; align-items: stretch; }
+  .admin-filters { flex-direction: column; align-items: stretch; }
+  .admin-stage-filter { flex-direction: column; align-items: stretch; }
+  .admin-stage-filter__select { min-width: 0; width: 100%; }
+  .admin-search { min-width: 0; max-width: 100%; width: 100%; }
+}
+
+/* ── Admin Table: horizontal scroll on small screens ── */
+.admin-table-wrap,
+.au-table-wrap,
+.at-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Table action buttons: stack vertically on mobile ── */
+@media (max-width: 500px) {
+  .admin-table .admin-actions-cell { display: flex; flex-direction: column; gap: 0.4rem; }
+}
+
+/* ── Pagination on mobile ── */
+@media (max-width: 500px) {
+  .admin-pagination { gap: 0.25rem; }
+  .admin-pagination__btn { min-width: 34px; height: 34px; font-size: 0.82rem; }
+}
+
+/* ── Admin stage pills: allow scroll on very narrow screens ── */
+@media (max-width: 420px) {
+  .au-stage-pills { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.5rem; }
+  .au-stage-pill { flex-shrink: 0; }
+}
+
+/* ── Stage-review columns ── */
+@media (max-width: 600px) {
+  .automated-results { grid-template-columns: 1fr !important; }
+  .s1-process-content { width: calc(100% - 2rem); max-width: 100%; padding: 1.5rem; }
+}
+
+/* ── Admin trainee cards grid ── */
+@media (max-width: 700px) {
+  .at-cards-grid,
+  .admin-trainee-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 420px) {
+  .at-cards-grid,
+  .admin-trainee-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Admin modals: full-width on mobile ── */
+@media (max-width: 560px) {
+  .admin-modal__dialog,
+  .cd-modal,
+  .admin-modal__dialog--success {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 100%;
+  }
+}
+
+/* ── Admin dashboard: quick-actions responsive ── */
+@media (max-width: 480px) {
+  .admin-stages-legend { padding: 1rem; gap: 0.5rem; }
+  .admin-stages-legend__list { gap: 0.35rem 0.5rem; }
+}
+

@@ -2123,5 +2123,103 @@ html.light-mode .identity-doc-option__hint {
     float: left;
 }
 [dir="rtl"] .reg-fieldset__legend {
-    float: right;
+  float: right;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE STYLES — User Registration Flow
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Registration page body ── */
+@media (max-width: 640px) {
+  body.registration-page {
+    padding: 1rem 0.5rem 16px;
+    overflow: auto; /* allow scroll on tiny screens */
+  }
+}
+
+/* ── Registration card padding ── */
+@media (max-width: 640px) {
+  .reg-card { padding: 1.25rem 1.1rem; border-radius: 14px; }
+  .reg-page-title { font-size: 1.15rem; margin-bottom: 0.85rem; }
+}
+@media (max-width: 400px) {
+  .reg-card { padding: 1rem 0.85rem; }
+}
+
+/* ── Registration logo & back button ── */
+@media (max-width: 480px) {
+  .reg-logo { top: 0.75rem; right: 0.75rem; }
+  .reg-logo__img { max-height: 44px; }
+  .reg-back-btn { top: 0.75rem; left: 2.5rem; font-size: 0.75rem; padding: 0.3rem 0.55rem; }
+}
+
+/* ── Stepper: compact on tiny screens ── */
+@media (max-width: 480px) {
+  .reg-stepper { margin-bottom: 1rem; padding: 0.65rem 0; }
+  .reg-stepper__num { width: 32px; height: 32px; font-size: 0.75rem; }
+  .reg-stepper__label { font-size: 0.56rem; }
+}
+@media (max-width: 360px) {
+  .reg-stepper__label { display: none; } /* hide labels on very small screens */
+}
+
+/* ── Form row: two columns → single column ── */
+@media (max-width: 560px) {
+  .reg-form__row { grid-template-columns: 1fr; gap: 0; }
+  .reg-form__row--lang-align { align-items: stretch; }
+}
+
+/* ── Identity doc grid: two columns → single column ── */
+@media (max-width: 480px) {
+  .identity-doc-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Step title ── */
+@media (max-width: 480px) {
+  .reg-step__title { font-size: 1.1rem; }
+  .reg-step__desc  { font-size: 0.85rem; }
+}
+
+/* ── Registration actions bar ── */
+@media (max-width: 480px) {
+  .reg-actions { flex-direction: column-reverse; gap: 0.6rem; }
+  .reg-btn { width: 100%; justify-content: center; text-align: center; }
+  .reg-btn--submit { order: -1; }
+}
+
+/* ── Photo upload card ── */
+@media (max-width: 480px) {
+  .photo-upload-card { padding: 1.5rem 1rem; }
+}
+
+/* ── Skill / language row on mobile ── */
+@media (max-width: 480px) {
+  .skill-row-inline { flex-wrap: wrap; }
+  .skill-row-inline .skill-proficiency { flex: 0 0 100%; }
+}
+
+/* ── Social toggle pills: wrap ── */
+@media (max-width: 480px) {
+  .social-toggles-group { gap: 0.5rem; }
+  .social-toggle { flex: 1 1 calc(50% - 0.5rem); }
+}
+
+/* ── Interest items: wrap nicely ── */
+@media (max-width: 480px) {
+  .interest-item { min-width: calc(50% - 0.375rem); }
+}
+
+/* ── Cognition options: stack on mobile ── */
+@media (max-width: 480px) {
+  .cognition-options { flex-direction: column; }
+  .cognition-option { width: 100%; }
+}
+
+/* ── Success screen ── */
+@media (max-width: 480px) {
+  .reg-success__icon { font-size: 3rem; }
+  .reg-success__title { font-size: 1.4rem; }
+  .reg-success__actions { flex-direction: column; align-items: stretch; }
+  .reg-success__actions .reg-btn { width: 100%; justify-content: center; }
 }
