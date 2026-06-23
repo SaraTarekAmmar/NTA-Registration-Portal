@@ -80,8 +80,14 @@ cd editor/backend && uvicorn main:app --reload --port 8004
 - Verbose how-tos belong in `.claude/skills/` — only load when a skill is invoked
 - MCP servers to consider adding: `mcp-server-sqlite` (query the DB directly), `github-mcp-server` (read/create issues)
 
+## Git Workflow
+- After a unit of work: `git add`, commit (conventional-commit message), then
+  `git push origin <current-branch>` so changes reach GitHub. Don't leave work
+  committed-but-unpushed.
+- Default branch `master`; remote `origin` (`github.com/SaraTarekAmmar/NTA-Registration-Portal`).
+
 ## What NOT to Do
-- Do not run `git push` without asking
+- Do not force-push or rewrite published history without asking
 - Do not drop tables without confirming
 - Do not add npm/node dependencies
 - Do not modify `.env` files — use `.env.example` as reference

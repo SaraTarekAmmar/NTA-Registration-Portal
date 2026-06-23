@@ -75,9 +75,16 @@ Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 - Admin and editor auth flows are separate — do not mix their tokens
   (`admin_token` vs `editor_token` in localStorage).
 
+## Git Workflow
+- After completing a unit of work, `git add` the changes, commit with a clear
+  conventional-commit message, then **push to GitHub** (`git push origin <current-branch>`).
+  Committing locally without pushing is NOT done — changes must reach the remote.
+- Default branch is `master`; the remote is `origin`
+  (`https://github.com/SaraTarekAmmar/NTA-Registration-Portal.git`).
+- Never force-push (`--force`/`-f`) or push to branches you didn't create without asking.
+
 ## What Agents Should NOT Do
 - Never drop or truncate tables without explicit user confirmation
-- Never push to git without asking (committing locally is fine)
 - Never loosen CORS (configured for the live domain only)
 - Never add npm/Node.js dependencies
 - Never expose JWT secrets or API keys in logs or responses
