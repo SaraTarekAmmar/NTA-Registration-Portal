@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 import os
 import uuid
 import time
@@ -149,6 +150,11 @@ app.include_router(ai_services.router)
 app.include_router(exams.router)
 app.include_router(class_matrix.router)
 app.include_router(quiz_results.router)
+
+# Send the bare root URL to the bundled landing page.
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/index.html", status_code=307)
 
 # Serve the centralized data folder
 class PrivateDataStaticFiles(StaticFiles):

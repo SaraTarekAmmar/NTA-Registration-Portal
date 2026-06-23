@@ -26,6 +26,8 @@ Commit the launcher fix and push it to origin.
 ## Notes / Log
 - 2026-06-23 — Confirmed admin and coordinator launch successfully; editor was wired to port 8003, conflicting with superadmin. Updated editor startup to 8004.
 - 2026-06-23 — Committed as `aa83b52` and pushed to `origin/master`.
+- 2026-06-23 — Admin root `/` returned Not Found even though `/index.html` and `/admin-login.html` worked; added a redirect from `/` to `/index.html`.
+- 2026-06-23 — Verified `http://127.0.0.1:8002/` now resolves after restart.
 
 ---
 <!-- EXAMPLE (delete when starting a real task):
