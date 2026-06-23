@@ -68,5 +68,5 @@ uploads/
 .warp/
 opencode.json
 
-# OpenCode auto-commit opt-in marker (local preference)
-.opencode-autocommit
+# OpenCode auto-commit opt-out marker (local preference)
+.opencode-noautocommit
