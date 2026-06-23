@@ -4,17 +4,19 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Remove the shadow/glow from the timeline connector line on the admission builder page (`editor-admission-builder.html`).
+Make the admin, editor, and coordinator flows responsive on mobile and tighten the UI/UX heuristics across their dashboard pages.
 
 ## Context / Constraints
-- The selected timeline item's connector line (`.timeline-item.selected::after`) has a blue box-shadow (`box-shadow: 0 0 8px rgba(59,130,246,0.5);`) which creates a fuzzy glow/shadow on the page.
-- Remove this box-shadow style.
+- Keep the current visual language and layout structure.
+- Fix the most visible mobile issues first: wrapping, spacing, overflow, tap targets, and stacked controls.
+- Prefer shared CSS updates where possible so the fix covers all dashboards consistently.
 
 ## Checklist
-- [x] Remove box-shadow from `.timeline-item.selected::after` in `editor-admission-builder.html`
-- [x] Verify changes in the browser
-- [x] Commit changes
-- [x] Push to GitHub (origin/master)
+- [x] Audit shared shell and dashboard pages for mobile and heuristic issues
+- [x] Patch responsive layout and interaction fixes
+- [x] Verify the key pages at mobile widths
+- [ ] Commit changes
+- [ ] Push to GitHub (origin/master)
 
 ## Next step
-Task completed.
+Stage, commit, and push the responsive updates.

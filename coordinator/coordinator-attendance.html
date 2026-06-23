@@ -3,8 +3,8 @@
   <head>
     <script src="/common/js/theme.js"></script>
     <link rel="stylesheet" href="/common/css/theme.css?v=4" />
-    <link rel="stylesheet" href="/admin/header/header.css?v=4" />
-    <link rel="stylesheet" href="coordinator.css?v=2" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
+    <link rel="stylesheet" href="coordinator.css?v=3" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>الحضور والغياب | المنسّق</title>
@@ -15,6 +15,9 @@
       .att-time { font-size: 0.72rem; color: var(--text-subtle); display: block; margin-top: 0.2rem; }
       .att-photo { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; vertical-align: middle; margin: 0 0.15rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
       .att-photo:hover { transform: scale(1.5); position: relative; z-index: 10; }
+      @media (max-width: 600px) {
+        #courseSelect { min-width: 0 !important; width: 100%; }
+      }
     </style>
   </head>
   <body data-page="attendance">
@@ -26,7 +29,7 @@
       </header>
 
       <div class="coord-filters">
-        <select id="courseSelect" class="coord-select" style="min-width: 250px" onchange="loadAttendance()">
+        <select id="courseSelect" class="coord-select" onchange="loadAttendance()">
           <option value="">جارٍ تحميل الدورات...</option>
         </select>
         <div class="coord-search">

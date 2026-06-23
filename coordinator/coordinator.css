@@ -9,6 +9,7 @@ body { overflow-x: hidden; }
 .coordinator-main {
   padding: 2rem;
   min-height: 100vh;
+  min-width: 0;
 }
 
 /* Page header */
@@ -237,6 +238,30 @@ html.light-mode .btn--primary { background: linear-gradient(135deg, rgba(59,130,
 @media (max-width: 560px) {
   .coord-page-header { margin-bottom: 1.25rem; }
   .coord-page-header__title { font-size: 1.35rem; }
+  .coord-page-header__sub { line-height: 1.55; }
+  .coord-kpi {
+    padding: 1rem 1.1rem;
+    align-items: flex-start;
+  }
+  .coord-action {
+    padding: 0.95rem 1rem;
+    align-items: flex-start;
+  }
+  .coord-action__icon {
+    width: 42px;
+    height: 42px;
+  }
+  .coord-action__title {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+  .coord-action__sub {
+    line-height: 1.5;
+  }
+  .coord-table th,
+  .coord-table td {
+    padding: 0.7rem 0.8rem;
+  }
 }
 
 /* ── KPI row: already uses auto-fill; ensure 1-col on xs ── */
@@ -275,6 +300,22 @@ html.light-mode .btn--primary { background: linear-gradient(135deg, rgba(59,130,
 @media (max-width: 400px) {
   .coord-action { flex-wrap: wrap; }
   .coord-action__arrow { display: none; }
+  .coord-kpi {
+    gap: 0.85rem;
+  }
+  .coord-kpi__icon {
+    width: 38px;
+    height: 38px;
+  }
+  .coord-kpi__val {
+    font-size: 1.65rem;
+  }
+  .coord-kpi__lbl {
+    font-size: 0.68rem;
+  }
+  .coord-modal__title {
+    font-size: 1rem;
+  }
 }
 
 

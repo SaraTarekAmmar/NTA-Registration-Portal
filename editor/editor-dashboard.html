@@ -126,8 +126,13 @@
         gap: 1rem;
         margin-bottom: 1.75rem;
       }
+      .ed-kpi-row--compact {
+        grid-template-columns: repeat(3, 1fr);
+      }
       @media (max-width: 900px) { .ed-kpi-row { grid-template-columns: repeat(2, 1fr); } }
       @media (max-width: 480px) { .ed-kpi-row { grid-template-columns: 1fr; } }
+      @media (max-width: 900px) { .ed-kpi-row--compact { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 520px) { .ed-kpi-row--compact { grid-template-columns: 1fr; } }
 
       .ed-kpi {
         padding: 1.4rem 1.5rem;
@@ -247,6 +252,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.5rem;
+        flex-wrap: wrap;
       }
       .ed-section__left {
         display: flex;
@@ -375,6 +381,7 @@
 
       .ed-card__body { padding: 1.1rem 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.65rem; }
       .ed-card__top  { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+      .ed-card__top  { flex-wrap: wrap; }
       .ed-card__title {
         font-size: 0.93rem;
         font-weight: 700;
@@ -414,6 +421,63 @@
         display: flex; gap: 0.5rem;
       }
       .ed-card__footer .btn { flex: 1; justify-content: center; font-size: 0.78rem; }
+
+      @media (max-width: 760px) {
+        .ed-hero {
+          padding: 1.1rem 1rem;
+          border-radius: 18px;
+        }
+        .ed-hero__title {
+          font-size: 1.55rem;
+          line-height: 1.25;
+        }
+        .ed-hero__side {
+          width: 100%;
+          align-items: stretch !important;
+          flex-direction: column !important;
+          gap: 0.65rem !important;
+        }
+        .ed-hero__side .btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .ed-section {
+          row-gap: 0.35rem;
+        }
+        .ed-section__link {
+          width: 100%;
+          text-align: start;
+        }
+        .ed-actions-grid {
+          gap: 0.75rem;
+        }
+        .ed-action {
+          padding: 0.95rem 1rem;
+          align-items: flex-start;
+        }
+        .ed-action__icon {
+          width: 42px;
+          height: 42px;
+        }
+        .ed-action__title {
+          font-size: 0.9rem;
+        }
+        .ed-action__sub {
+          line-height: 1.45;
+        }
+        .ed-action__arrow {
+          display: none;
+        }
+        .ed-courses-grid {
+          grid-template-columns: 1fr;
+        }
+        .ed-card__footer {
+          flex-direction: column;
+        }
+        .ed-card__footer .btn {
+          width: 100%;
+        }
+      }
 
       /* ══ Empty state ══ */
       .ed-empty {
@@ -546,7 +610,7 @@
       <div class="ed-section">
         <div class="ed-section__left">مهام تحتاج إجراء</div>
       </div>
-      <div class="ed-kpi-row" style="margin-bottom: 1.75rem; grid-template-columns: repeat(3, 1fr);">
+      <div class="ed-kpi-row ed-kpi-row--compact" style="margin-bottom: 1.75rem;">
         <div class="ed-kpi ed-kpi--yellow" style="animation-delay:0.05s; flex-direction: row; padding: 1.2rem;">
           <div class="ed-kpi__icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
