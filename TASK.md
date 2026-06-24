@@ -4,19 +4,18 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Make the admin, editor, and coordinator flows responsive on mobile and tighten the UI/UX heuristics across their dashboard pages.
+Run the admin, editor, and coordinator FastAPI backend applications on localhost.
 
 ## Context / Constraints
-- Keep the current visual language and layout structure.
-- Fix the most visible mobile issues first: wrapping, spacing, overflow, tap targets, and stacked controls.
-- Prefer shared CSS updates where possible so the fix covers all dashboards consistently.
+- Admin: port 8002 (`admin/backend`)
+- Editor: port 8004 (`editor/backend`)
+- Coordinator: port 8005 (`coordinator/backend`)
+- Run commands on their respective directories, using their virtual environment Python executables if present.
 
 ## Checklist
-- [x] Audit shared shell and dashboard pages for mobile and heuristic issues
-- [x] Patch responsive layout and interaction fixes
-- [x] Verify the key pages at mobile widths
-- [x] Commit changes
-- [x] Push to GitHub (origin/master)
+- [x] Start Admin Backend server (port 8002)
+- [x] Start Editor Backend server (port 8004)
+- [x] Start Coordinator Backend server (port 8005)
 
 ## Next step
-Stage, commit, and push the responsive updates.
+None. Servers are active.

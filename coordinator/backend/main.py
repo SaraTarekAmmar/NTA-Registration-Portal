@@ -6,6 +6,7 @@ Port: 8005
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from pathlib import Path
 import os
 
@@ -117,3 +118,7 @@ app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), na
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "coordinator"}
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/index.html", status_code=307)

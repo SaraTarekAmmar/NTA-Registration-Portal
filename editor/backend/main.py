@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 import os
 import uuid
 import time
@@ -164,6 +165,11 @@ app.include_router(flow_builder.router)
 async def health_check():
     """Simple liveness probe — returns 200 OK when the server is up."""
     return {"status": "ok", "service": "editor"}
+
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/index.html", status_code=307)
 
 
 project_root = Path(__file__).parent.parent.parent
