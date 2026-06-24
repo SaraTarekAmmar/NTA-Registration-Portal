@@ -4,17 +4,19 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Make coordinator styles consistent with admin and editor portals, especially the login screen.
+Verify the authentication and dashboard flows for the Admin, Editor, and Coordinator portals using browser automation.
 
 ## Context / Constraints
-- Coordinator used a different login UI (blue accents, different layout, no icons).
-- Added `coordinator/styles.css` (cloned from `admin/styles.css` base styles).
-- Standardized `coordinator/coordinator-login.html` with premium dark navy background, glassmorphism container, input SVGs, validation errors, and crimson accents.
+- Credentials:
+  - Admin: admin@nta.edu.eg / 29001011234567 / NTA@Admin2026 (Port 8002)
+  - Editor: editor@nta.edu.eg / 29505051234567 / NTA@Editor2026 (Port 8004)
+  - Coordinator: coordinator@nta.edu.eg / 29304041234567 / NTA@Coord2026 (Port 8005)
+- Use `browser_subagent` or programmatic execution (due to browser issues) to test the login flows, check for successful redirects to dashboards, and ensure no console/render errors occur.
 
 ## Checklist
-- [x] Create base stylesheet `/styles.css` for coordinator (copied from admin `styles.css`)
-- [x] Update `coordinator-login.html` to use the premium glassmorphism card, inputs, icons, and crimson theme
-- [x] Verify no syntax errors in `coordinator-login.html`
+- [x] Test Coordinator login and dashboard flow (Port 8005)
+- [x] Test Editor login and dashboard flow (Port 8004)
+- [x] Test Admin login and dashboard flow (Port 8002)
 
 ## Next step
 Verify the changes, commit, and push.
