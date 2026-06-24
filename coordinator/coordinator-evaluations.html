@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
+    <link rel="stylesheet" href="coordinator.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>متابعة التقييمات | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      .eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}.eval-card{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem}.eval-card h3{margin:0 0 .4rem;color:var(--text-main);font-size:1rem}.eval-meta{color:var(--text-subtle);font-size:.82rem;line-height:1.7}.eval-badge{display:inline-flex;margin-top:.8rem;border-radius:999px;background:rgba(251,191,36,.12);color:#fde68a;padding:.25rem .7rem;font-size:.75rem;font-weight:700}
+    </style>
+  </head>
+  <body data-page="evaluations">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">متابعة التقييمات الناقصة</h1>
+        <p class="coord-page-header__sub">قائمة المتقدمين في مراحل المقابلات الذين لم يتم تسجيل تقييمهم بعد.</p>
+      </header>
+      <section class="eval-grid" id="cards"><div class="coord-skeleton"></div><div class="coord-skeleton"></div></section>
+    </main>
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      function stageLabel(id){return Number(id)===6?'المقابلة الثانية':'المقابلة الأولى';}
+      function render(rows){
+        var el=document.getElementById('cards');
+        if(!rows.length){el.innerHTML='<div class="coord-state"><div class="coord-state__text">لا توجد تقييمات ناقصة حالياً.</div></div>';return;}
+        el.innerHTML=rows.map(function(r){return '<article class="eval-card"><h3>'+esc(r.name)+'</h3><div class="eval-meta">'+esc(r.email)+'<br>'+esc(r.course_title_ar||r.course_title||'—')+'</div><span class="eval-badge">'+stageLabel(r.stage_id)+'</span></article>';}).join('');
+      }
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/missing-evaluations').then(function(r){return r.json();}).then(render).catch(function(){document.getElementById('cards').innerHTML='<div class="coord-state"><div class="coord-state__text" style="color:#fca5a5">فشل تحميل التقييمات</div></div>';});
+    </script>
+  </body>
+</html>
