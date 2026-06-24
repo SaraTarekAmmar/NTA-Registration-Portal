@@ -112,9 +112,6 @@ class GuardedStaticFiles(StaticFiles):
         return await super().get_response(path, scope)
 
 
-app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), name="coordinator_frontend")
-
-
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "coordinator"}
@@ -122,3 +119,6 @@ async def health():
 @app.get("/")
 async def root():
     return RedirectResponse(url="/index.html", status_code=307)
+
+
+app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), name="coordinator_frontend")
