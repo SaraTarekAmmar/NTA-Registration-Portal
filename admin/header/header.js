@@ -85,7 +85,10 @@
     var tok = localStorage.getItem('admin_token');
     if (tok) {
       try {
-        var p = JSON.parse(atob(tok.split('.')[1]));
+        var _b64 = tok.split('.')[1].replace(/-/g, "+").replace(/_/g, "/");
+        var p = JSON.parse(decodeURIComponent(atob(_b64).split("").map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join("")));
         session = { token: tok, role: p.role, name: p.name || p.email || '' };
       } catch (e) {}
     }

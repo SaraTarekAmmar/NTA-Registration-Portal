@@ -3,8 +3,10 @@
 
   function parseJwt(token) {
     try {
-      var base64Payload = token.split(".")[1];
-      return JSON.parse(atob(base64Payload));
+      var base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(decodeURIComponent(atob(base64).split("").map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join("")));
     } catch (e) {
       return null;
     }

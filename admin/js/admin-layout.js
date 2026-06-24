@@ -5,7 +5,11 @@
   function getPayload() {
     try {
       var t = localStorage.getItem(ADMIN_TOKEN_KEY);
-      return t ? JSON.parse(atob(t.split(".")[1])) : null;
+      if (!t) return null;
+      var base64 = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(decodeURIComponent(atob(base64).split("").map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join("")));
     } catch (e) { return null; }
   }
 

@@ -84,7 +84,10 @@
       var name = '';
       if (token) {
         try {
-          var p = JSON.parse(atob(token.split('.')[1]));
+          var _b64 = token.split('.')[1].replace(/-/g, "+").replace(/_/g, "/");
+          var p = JSON.parse(decodeURIComponent(atob(_b64).split("").map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join("")));
           name = p.name || p.email || '';
         } catch (e) {}
       }
