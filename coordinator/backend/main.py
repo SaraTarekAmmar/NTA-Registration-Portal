@@ -1,6 +1,6 @@
 """
 Coordinator Portal — FastAPI Application
-Handles attendance tracking and permission/excuse management.
+Handles attendance tracking, permission/excuse management, and interview-day coordination.
 Port: 8005
 """
 from fastapi import FastAPI
@@ -11,8 +11,8 @@ import os
 
 app = FastAPI(
     title="NTA Coordinator Portal",
-    description="Coordinator attendance and permissions management",
-    version="1.0.0",
+    description="Coordinator attendance, permissions, and interview operations management",
+    version="1.1.0",
 )
 
 # ── CORS ─────────────────────────────────────────────────────────────
@@ -46,11 +46,12 @@ async def _sanitize_http_exception(request, exc):
     return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
 
 # ── Routers ──────────────────────────────────────────────────────────
-from routers import auth, attendance, permissions
+from routers import auth, attendance, permissions, interviews
 
 app.include_router(auth.router)
 app.include_router(attendance.router)
 app.include_router(permissions.router)
+app.include_router(interviews.router)
 
 # ── Static Files ─────────────────────────────────────────────────────
 # Mount coordinator frontend (coordinator/ directory, one level up from backend/)
@@ -105,7 +106,6 @@ class GuardedStaticFiles(StaticFiles):
         if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
             return _PlainTextResponse("Not Found", status_code=404)
         return await super().get_response(path, scope)
-
 
 app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), name="coordinator_frontend")
 
