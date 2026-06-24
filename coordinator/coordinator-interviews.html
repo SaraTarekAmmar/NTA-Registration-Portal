@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
+    <link rel="stylesheet" href="coordinator.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>طابور المقابلات | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      .coord-table-wrap{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;overflow:auto}.coord-table{width:100%;border-collapse:collapse;min-width:850px}.coord-table th,.coord-table td{padding:.9rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;color:var(--text-main)}.coord-table th{color:var(--text-subtle);font-size:.78rem}.coord-badge{display:inline-flex;border-radius:999px;padding:.25rem .65rem;font-size:.75rem;font-weight:700}.coord-badge--ok{background:rgba(34,197,94,.12);color:#86efac}.coord-badge--wait{background:rgba(251,191,36,.12);color:#fde68a}.coord-badge--stage{background:rgba(239,68,68,.12);color:#fecaca}.coord-actions-grid{margin-bottom:1.25rem}.coord-state{grid-column:1/-1}
+    </style>
+  </head>
+  <body data-page="interviews">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">طابور المقابلات</h1>
+        <p class="coord-page-header__sub">متابعة المتقدمين الموجودين في مراحل المقابلة الأولى والثانية.</p>
+      </header>
+
+      <div class="coord-kpi-row" id="interviewKpis">
+        <div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div>
+      </div>
+
+      <section class="coord-table-wrap">
+        <table class="coord-table">
+          <thead>
+            <tr>
+              <th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th>
+            </tr>
+          </thead>
+          <tbody id="queueBody"><tr><td colspan="6">جاري التحميل...</td></tr></tbody>
+        </table>
+      </section>
+    </main>
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      function stageLabel(id){return Number(id)===6?'المقابلة الثانية':'المقابلة الأولى';}
+      function renderKPIs(d){
+        var items=[
+          {val:d.waiting_interviews||0,lbl:'في طابور المقابلات',cls:'coord-kpi--blue'},
+          {val:d.missing_evaluations||0,lbl:'تقييمات ناقصة',cls:'coord-kpi--yellow'},
+          {val:d.completed_today||0,lbl:'مكتملة اليوم',cls:'coord-kpi--green'},
+          {val:d.rejected_today||0,lbl:'مرفوضة اليوم',cls:'coord-kpi--red'}
+        ];
+        document.getElementById('interviewKpis').innerHTML=items.map(function(k){return '<div class="coord-kpi '+k.cls+'"><div class="coord-kpi__body"><div class="coord-kpi__val">'+k.val+'</div><div class="coord-kpi__lbl">'+k.lbl+'</div></div></div>';}).join('');
+      }
+      function renderQueue(rows){
+        var body=document.getElementById('queueBody');
+        if(!rows.length){body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';return;}
+        body.innerHTML=rows.map(function(r){
+          var done=!!r.review_id;
+          return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td></tr>';
+        }).join('');
+      }
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/summary').then(function(r){return r.json();}).then(renderKPIs).catch(function(){document.getElementById('interviewKpis').innerHTML='<div class="coord-state">فشل تحميل الإحصائيات</div>';});
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="6">فشل تحميل الطابور</td></tr>';});
+    </script>
+  </body>
+</html>
