@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, Depends, File, UploadFile
 from typing import List, Optional
-from schemas.admin import TraineeSummary, StageReviewCreate
+from schemas.admin import TraineeSummary, StageReviewCreate, SecurityDecisionCreate
 from core.database import get_db_connection
 from core.auth import get_admin_user, get_staff_user, get_current_user, get_password_hash
 from core.upload_manager import save_upload_file, move_user_files_to_user_folder, move_admission_file_to_folder
@@ -791,3 +791,71 @@ async def get_attendance_photo(national_id: str, session_id: int, event_type: st
         
     # Redirect to fallback mock avatar if real image doesn't exist
     return RedirectResponse(url=f"https://i.pravatar.cc/300?u={national_id}")
+
+@router.post("/trainees/{trainee_id}/security-decision")
+async def create_security_decision(
+    trainee_id: int, 
+    decision_data: SecurityDecisionCreate,
+    admin: dict = Depends(get_admin_user)
+):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT id, national_id, passport_number FROM users WHERE id = %s", (trainee_id,))
+        u_data = cursor.fetchone()
+        if not u_data:
+            raise HTTPException(status_code=404, detail="Trainee not found")
+
+        cursor.execute("""
+            INSERT INTO admission_security_decisions
+                (applicant_user_id, national_id, passport_number, course_id, decision, internal_reason, decided_by, decided_at, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+        """, (
+            u_data["id"],
+            u_data["national_id"],
+            u_data["passport_number"],
+            decision_data.course_id,
+            decision_data.decision,
+            decision_data.internal_reason,
+            admin["id"]
+        ))
+        decision_id = cursor.lastrowid
+        db.commit()
+
+        log_activity(
+            category="SECURITY_DECISION",
+            event_type="NON_DESTRUCTIVE_DECISION",
+            user_id=admin["id"],
+            role=admin["role"],
+            details={"trainee_id": trainee_id, "decision": decision_data.decision, "decision_id": decision_id}
+        )
+
+        return {"message": "Security decision recorded successfully", "decision_id": decision_id}
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        db.close()
+
+@router.get("/trainees/{trainee_id}/security-decisions")
+async def get_security_decisions(trainee_id: int, admin: dict = Depends(get_admin_user)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT id, decision, internal_reason, course_id, decided_by, decided_at
+            FROM admission_security_decisions
+            WHERE applicant_user_id = %s
+            ORDER BY decided_at DESC
+        """, (trainee_id,))
+        results = cursor.fetchall()
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        db.close()
