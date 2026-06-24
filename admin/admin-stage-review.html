@@ -834,7 +834,12 @@
                             details: details
                         };
 
-                        window.authenticatedFetch('/api/admin/stage-review', {
+                        // Rejections go through the non-destructive endpoint (keeps the
+                        // applicant record + audit trail); acceptances use the original route.
+                        const _reviewEndpoint = isAccept
+                            ? '/api/admin/stage-review'
+                            : '/api/admin/stage-review-safe-reject';
+                        window.authenticatedFetch(_reviewEndpoint, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
