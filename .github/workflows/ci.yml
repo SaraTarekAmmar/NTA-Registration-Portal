@@ -45,8 +45,11 @@ jobs:
       - name: Check standalone JavaScript syntax
         shell: bash
         run: |
+          # Exclude Babel/JSX frontends (e.g. superadmin/frontend) — they are
+          # transpiled in-browser and are not valid standalone JS for node --check.
           find admin editor user superadmin common -type f -name '*.js' \
             -not -path '*/venv/*' -not -path '*/.venv/*' -not -path '*/node_modules/*' \
+            -not -path '*/frontend/*' \
             -print0 | xargs -0 -r -n 1 node --check
       - name: Check inline HTML scripts
         run: python tools/check_inline_scripts.py .
