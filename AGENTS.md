@@ -75,15 +75,16 @@ Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 - Admin and editor auth flows are separate — do not mix their tokens
   (`admin_token` vs `editor_token` in localStorage).
 
-## Task Continuity (combat short memory / context compaction)
-Your context gets compacted on long sessions and you WILL forget the original goal.
-Do not rely on memory — externalize it to a file:
-- At the **start of every turn**, read `TASK.md` (repo root) for the active objective and
-  its checklist. If it doesn't exist, create it from the user's request before starting.
-- Keep `TASK.md` current: list the goal, a checked/unchecked step list, and a "Next step"
-  line. Update it as you finish each step.
-- Work is NOT done until every `TASK.md` checkbox is ticked AND the changes are pushed.
-  Re-read `TASK.md` before declaring completion.
+## Task Continuity
+- `TASK.md` is the single source of truth for the active goal. Read it ONCE at the very
+  start of a new task. Do NOT re-read or rewrite it every turn — that wastes context and
+  causes loops. Treat the goal as your anchor and just keep working on it.
+- Update `TASK.md` only when a checklist item is actually completed (or the goal changes).
+  Update = a single short edit, not a regenerated summary.
+- Do not narrate your plan, do not output "anchored summary" blocks, do not restate the
+  goal in every reply. Take the next concrete action; describe what you did, not what you
+  are about to do.
+- Work is done when the checklist is fully ticked AND pushed to GitHub.
 
 ## Git Workflow
 - After completing a unit of work, `git add` the changes, commit with a clear
