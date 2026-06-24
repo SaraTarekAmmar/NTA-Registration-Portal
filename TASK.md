@@ -4,16 +4,17 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Fix `http://localhost:8005/` returning "Not Found" by re-ordering route registration in the coordinator backend.
+Make coordinator styles consistent with admin and editor portals, especially the login screen.
 
 ## Context / Constraints
-- The FastAPI mount point `/` intercepts the root path request when registered before the `@app.get("/")` route.
-- Moving `@app.get("/")` before the mount point registration (consistent with admin and editor main.py configurations) fixes the 404 error.
+- Coordinator used a different login UI (blue accents, different layout, no icons).
+- Added `coordinator/styles.css` (cloned from `admin/styles.css` base styles).
+- Standardized `coordinator/coordinator-login.html` with premium dark navy background, glassmorphism container, input SVGs, validation errors, and crimson accents.
 
 ## Checklist
-- [x] Move root redirect route before static folder mount in `coordinator/backend/main.py`
-- [x] Verify root URL redirect works for coordinator
-- [x] Restart coordinator server and confirm fix
+- [x] Create base stylesheet `/styles.css` for coordinator (copied from admin `styles.css`)
+- [x] Update `coordinator-login.html` to use the premium glassmorphism card, inputs, icons, and crimson theme
+- [x] Verify no syntax errors in `coordinator-login.html`
 
 ## Next step
-None. The redirect works perfectly.
+Verify the changes, commit, and push.
