@@ -3,9 +3,10 @@ Coordinator Portal — FastAPI Application
 Handles attendance tracking, permission/excuse management, and interview-day coordination.
 Port: 8005
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from pathlib import Path
 import os
 
@@ -15,8 +16,6 @@ app = FastAPI(
     version="1.1.0",
 )
 
-# ── CORS ─────────────────────────────────────────────────────────────
-# Env-driven so production can drop localhost (set ALLOWED_ORIGINS).
 origins = [o.strip() for o in os.getenv(
     "ALLOWED_ORIGINS",
     "https://academy.nta.eg,http://localhost:8005,http://127.0.0.1:8005,http://localhost:8002,http://localhost:8004"
@@ -30,9 +29,6 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Trace-ID"],
 )
 
-
-# Sanitize 5xx responses — log the real error server-side, return a generic
-# message to clients (set NTA_DEBUG=1 to surface details in non-prod).
 from starlette.exceptions import HTTPException as _StarletteHTTPException
 from fastapi.responses import JSONResponse as _JSONResponse
 
@@ -53,31 +49,44 @@ app.include_router(attendance.router)
 app.include_router(permissions.router)
 app.include_router(interviews.router)
 
-# ── Static Files ─────────────────────────────────────────────────────
-# Mount coordinator frontend (coordinator/ directory, one level up from backend/)
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
+@app.middleware("http")
+async def limit_json_body(request: Request, call_next):
+    if request.method in ("POST", "PUT", "PATCH"):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 1_048_576:
+            return _JSONResponse(
+                status_code=413,
+                content={"detail": "حجم الطلب كبير جدًا. الحد الأقصى 1 ميجابايت."},
+            )
+    return await call_next(request)
+
 COORDINATOR_DIR = Path(__file__).parent.parent
 COMMON_DIR = COORDINATOR_DIR.parent / "common"
 ADMIN_HEADER_DIR = COORDINATOR_DIR.parent / "admin" / "header"
 IMAGES_DIR = COORDINATOR_DIR.parent / "admin" / "images"
 DATA_DIR = COORDINATOR_DIR.parent / "data"
 
-# Serve common assets
 if COMMON_DIR.exists():
     app.mount("/common", StaticFiles(directory=str(COMMON_DIR)), name="common")
 
-# Serve admin header CSS/JS (shared sidebar styles)
 if ADMIN_HEADER_DIR.exists():
     app.mount("/admin/header", StaticFiles(directory=str(ADMIN_HEADER_DIR)), name="admin_header")
 
-# Serve images
 if IMAGES_DIR.exists():
     app.mount("/images", StaticFiles(directory=str(IMAGES_DIR)), name="images")
 
 class PrivateDataStaticFiles(StaticFiles):
-    """Blocks PII / sensitive subdirectories from unauthenticated static access.
-    Attendance photos are served via the authenticated /api/coordinator/attendance
-    /photo route, not this public mount."""
-
     _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
 
     async def get_response(self, path, scope):
@@ -89,17 +98,13 @@ class PrivateDataStaticFiles(StaticFiles):
         return await super().get_response(path, scope)
 
 
-# Serve data (non-sensitive assets only; PII subdirs blocked)
 if DATA_DIR.exists():
     app.mount("/data", PrivateDataStaticFiles(directory=str(DATA_DIR)), name="data")
 
-# Serve coordinator frontend as root (must be last)
 from starlette.responses import PlainTextResponse as _PlainTextResponse
 
 
 class GuardedStaticFiles(StaticFiles):
-    """Static server that refuses to expose backend source, .env, or dotfiles."""
-
     async def get_response(self, path, scope):
         norm = path.replace("\\", "/").strip("/").lower()
         segs = [s for s in norm.split("/") if s]
@@ -107,9 +112,13 @@ class GuardedStaticFiles(StaticFiles):
             return _PlainTextResponse("Not Found", status_code=404)
         return await super().get_response(path, scope)
 
-app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), name="coordinator_frontend")
-
-
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "coordinator"}
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/index.html", status_code=307)
+
+
+app.mount("/", GuardedStaticFiles(directory=str(COORDINATOR_DIR), html=True), name="coordinator_frontend")

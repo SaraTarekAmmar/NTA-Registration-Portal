@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="editor.css?v=3" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="js/editor-guard.js?v=2"></script>
+  <script src="/common/js/nta-confirm.js"></script>
   <script src="js/icons.js"></script>
   <style>
     .fb-layout { display: grid; grid-template-columns: 300px 1fr 340px; gap: 1.25rem; max-width: 1400px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; align-items: start; }
@@ -430,8 +431,8 @@
       .catch(function(e){ toast(e.detail || 'فشل الحفظ', false); });
     }
 
-    function deleteStep(id) {
-      if (!confirm('حذف هذه الخطوة؟')) return;
+    async function deleteStep(id) {
+      if (!(await ntaConfirm('حذف هذه الخطوة؟', {title: 'تأكيد الحذف', confirmText: 'حذف', icon: '🗑️'}))) return;
       authFetch(API + '/steps/' + id, { method: 'DELETE' })
         .then(function(r){ return r.ok ? r.json() : r.json().then(function(e){ throw e; }); })
         .then(function(){ toast('تم الحذف'); loadSteps(STATE.selectedTplId); document.getElementById('editorBody').innerHTML = '<div class="fb-empty">اختر خطوة لتعديلها</div>'; })

@@ -1,5 +1,5 @@
-from pydantic import BaseModel, field_validator
-from typing import List, Optional
+from pydantic import BaseModel, field_validator, Field
+from typing import List, Optional, Literal
 from datetime import date
 
 class TraineeSummary(BaseModel):
@@ -42,3 +42,8 @@ class StageReviewCreate(BaseModel):
         if normalized in ('rejected', 'reject', 'denied'):
             return 'Rejected'
         raise ValueError(f"result must be 'Active' or 'Rejected', got: '{v}'")
+
+class SecurityDecisionCreate(BaseModel):
+    decision: Literal["clear", "hold", "silent_reject", "block_future"]
+    internal_reason: Optional[str] = Field(default=None, max_length=5000)
+    course_id: Optional[int] = None

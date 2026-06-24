@@ -6,6 +6,11 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+class EditorLoginRequest(BaseModel):
+    email: str
+    nationalId: str
+    password: str
+
 
 class TokenResponse(BaseModel):
     access_token: str

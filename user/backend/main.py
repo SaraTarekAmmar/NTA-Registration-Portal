@@ -125,6 +125,30 @@ async def log_requests(request: Request, call_next):
     return response
 
 
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Inject security headers on every response."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
+@app.middleware("http")
+async def limit_json_body(request: Request, call_next):
+    """Reject JSON POST bodies exceeding 1 MB to prevent resource-exhaustion attacks."""
+    if request.method in ("POST", "PUT", "PATCH"):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 1_048_576:  # 1 MB
+            return _JSONResponse(
+                status_code=413,
+                content={"detail": "حجم الطلب كبير جدًا. الحد الأقصى 1 ميجابايت."},
+            )
+    return await call_next(request)
+
+
 # In standalone mode, auth router is local
 app.include_router(auth.router)
 app.include_router(trainees.router)
@@ -142,10 +166,17 @@ app.include_router(reg_steps.router)
 app.include_router(registration_flow.router)
 
 
+@app.get("/api/health")
+async def health_check():
+    """Simple liveness probe — returns 200 OK when the server is up."""
+    return {"status": "ok", "service": "user"}
+
 @app.post("/api/debug/log")
-async def debug_log(request: Request):
+async def debug_log(request: Request, current_user: dict = Depends(auth.get_current_user)):
+    """Frontend error logger — requires a valid user JWT to prevent log injection abuse."""
     data = await request.json()
-    print("\n[FRONTEND ERROR LOG]:", data.get("error"), "\n[STACK]:", data.get("stack"), "\n")
+    user_id = current_user.get("id", "anon")
+    print(f"\n[FRONTEND ERROR LOG] user={user_id} error={data.get('error')}\n[STACK]: {data.get('stack')}\n")
     return {"status": "ok"}
 
 

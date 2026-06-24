@@ -2,6 +2,13 @@
  * NTA shared theme (dark default, light via html.light-mode).
  * Load synchronously in <head> before stylesheets to reduce flash.
  */
+window.ntaEscapeHTML = function(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[&<>'"]/g, function(tag) {
+    var charsToReplace = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
+    return charsToReplace[tag] || tag;
+  });
+};
 (function (global) {
   var STORAGE_KEY = "nta-theme";
   var LIGHT = "light";

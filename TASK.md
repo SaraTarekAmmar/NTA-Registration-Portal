@@ -4,19 +4,19 @@
 > Work is NOT done until every box below is ticked AND the changes are pushed to GitHub.
 
 ## Goal
-Make the admin, editor, and coordinator flows responsive on mobile and tighten the UI/UX heuristics across their dashboard pages.
+Verify the authentication and dashboard flows for the Admin, Editor, and Coordinator portals using browser automation.
 
 ## Context / Constraints
-- Keep the current visual language and layout structure.
-- Fix the most visible mobile issues first: wrapping, spacing, overflow, tap targets, and stacked controls.
-- Prefer shared CSS updates where possible so the fix covers all dashboards consistently.
+- Credentials:
+  - Admin: admin@nta.edu.eg / 29001011234567 / NTA@Admin2026 (Port 8002)
+  - Editor: editor@nta.edu.eg / 29505051234567 / NTA@Editor2026 (Port 8004)
+  - Coordinator: coordinator@nta.edu.eg / 29304041234567 / NTA@Coord2026 (Port 8005)
+- Use `browser_subagent` or programmatic execution (due to browser issues) to test the login flows, check for successful redirects to dashboards, and ensure no console/render errors occur.
 
 ## Checklist
-- [x] Audit shared shell and dashboard pages for mobile and heuristic issues
-- [x] Patch responsive layout and interaction fixes
-- [x] Verify the key pages at mobile widths
-- [x] Commit changes
-- [x] Push to GitHub (origin/master)
+- [x] Test Coordinator login and dashboard flow (Port 8005)
+- [x] Test Editor login and dashboard flow (Port 8004)
+- [x] Test Admin login and dashboard flow (Port 8002)
 
 ## Next step
-Stage, commit, and push the responsive updates.
+Verify the changes, commit, and push.

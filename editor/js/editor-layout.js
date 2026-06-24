@@ -1,117 +1,34 @@
 (function () {
   var EDITOR_TOKEN_KEY = "editor_token";
 
-  (function () {
-    if (document.getElementById('ntaSbCss')) return;
-    if (document.querySelector('link[href*="header/header.css"]')) return;
-    var l = document.createElement('link');
-    l.id = 'ntaSbCss';
-    l.rel = 'stylesheet';
-    l.href = '/admin/header/header.css?v=8';
-    document.head.appendChild(l);
-  })();
-
   function ic(path) {
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg>';
   }
-
   function navItem(href, page, icon, label, cur) {
-    var cls = 'nta-sidebar__item' + (cur === page ? ' active' : '');
-    return '<a href="' + href + '" class="' + cls + '" data-page="' + page + '">' +
-      icon + '<span class="nta-sidebar__item-lbl">' + label + '</span></a>';
+    return '<a href="' + href + '" class="nta-sidebar__item' + (cur === page ? ' active' : '') + '" data-page="' + page + '">' + icon + '<span class="nta-sidebar__item-lbl">' + label + '</span></a>';
   }
-
-  function buildSidebar(activePage, name) {
-    var ICONS = {
-      home:     ic('<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>'),
-      courses:  ic('<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>'),
-      materials:ic('<path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>'),
+  function buildSidebar(activePage) {
+    var icons = {
+      home: ic('<path d="M3 12l9-9 9 9M5 10v10h14V10"/>'),
+      courses: ic('<path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/>'),
+      materials: ic('<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>'),
       sessions: ic('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
-      flow:     ic('<path d="M4 6h16M4 12h8m-8 6h16"/>'),
-      exams:    ic('<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>'),
-      logout:   ic('<path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>'),
+      flow: ic('<path d="M4 6h16M4 12h8m-8 6h16"/>'),
+      exams: ic('<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>'),
+      scenarios: ic('<circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/><path d="M8 6h12M8 12h12M8 18h12"/>'),
+      logout: ic('<path d="M17 16l4-4-4-4M21 12H7"/><path d="M13 16v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>')
     };
-
     var onerr = "this.style.display='none';this.nextElementSibling.style.display='flex'";
-
     var nav =
-      navItem('editor-dashboard.html', 'dashboard',  ICONS.home,      'لوحة التحكم',    activePage) +
-      navItem('editor-courses.html',   'courses',    ICONS.courses,   'الدورات',         activePage) +
-      navItem('editor-materials.html', 'materials',  ICONS.materials, 'المواد التعليمية',activePage) +
-      navItem('editor-sessions.html',  'sessions',   ICONS.sessions,  'الجلسات',         activePage) +
-      navItem('editor-registration-builder.html?v=' + Date.now(), 'registration-builder', ICONS.flow, 'مسار التسجيل', activePage) +
-      navItem('editor-admission-builder.html', 'admission-builder', ICONS.exams,  'مسار القبول',    activePage);
-
-    return '<aside class="nta-sidebar">' +
-      '<div class="nta-sidebar__brand">' +
-        '<a href="editor-dashboard.html" class="nta-sidebar__logo-link">' +
-          '<img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" id="ntaLogoImg" onerror="' + onerr + '">' +
-          '<span class="nta-sidebar__logo-fallback">NTA</span>' +
-          '<div class="nta-sidebar__logo-text">' +
-            '<span class="nta-sidebar__logo-main">NTA</span>' +
-            '<span class="nta-sidebar__logo-sub">NATIONAL TRAINING ACADEMY</span>' +
-            '<span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span>' +
-          '</div>' +
-        '</a>' +
-      '</div>' +
-      '<nav class="nta-sidebar__nav" aria-label="قائمة المحرر">' + nav + '</nav>' +
-      '<div class="nta-sidebar__footer">' +
-        '<div class="nta-sidebar__bottom-row">' +
-          '<button type="button" class="nta-sidebar__logout" id="editorLogoutBtn">' +
-            ICONS.logout + 'تسجيل الخروج' +
-          '</button>' +
-          '<button type="button" class="nta-sidebar__theme-btn" id="themeToggle" aria-label="تبديل المظهر" title="تبديل المظهر">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>' +
-          '</button>' +
-        '</div>' +
-      '</div>' +
-    '</aside>';
+      navItem('editor-dashboard.html', 'dashboard', icons.home, 'لوحة التحكم', activePage) +
+      navItem('editor-courses.html', 'courses', icons.courses, 'الدورات', activePage) +
+      navItem('editor-materials.html', 'materials', icons.materials, 'المواد التعليمية', activePage) +
+      navItem('editor-sessions.html', 'sessions', icons.sessions, 'الجلسات', activePage) +
+      navItem('editor-registration-builder.html?v=' + Date.now(), 'registration-builder', icons.flow, 'مسار التسجيل', activePage) +
+      navItem('editor-admission-builder.html', 'admission-builder', icons.exams, 'مسار القبول', activePage) +
+      navItem('editor-admission-scenarios.html', 'admission-scenarios', icons.scenarios, 'سيناريوهات القبول', activePage);
+    return '<aside class="nta-sidebar"><div class="nta-sidebar__brand"><a href="editor-dashboard.html" class="nta-sidebar__logo-link"><img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" onerror="' + onerr + '"><span class="nta-sidebar__logo-fallback">NTA</span><div class="nta-sidebar__logo-text"><span class="nta-sidebar__logo-main">NTA</span><span class="nta-sidebar__logo-sub">NATIONAL TRAINING ACADEMY</span><span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span></div></a></div><nav class="nta-sidebar__nav" aria-label="قائمة المحرر">' + nav + '</nav><div class="nta-sidebar__footer"><div class="nta-sidebar__bottom-row"><button type="button" class="nta-sidebar__logout" id="editorLogoutBtn">' + icons.logout + 'تسجيل الخروج</button><button type="button" class="nta-sidebar__theme-btn" id="themeToggle" aria-label="تبديل المظهر" title="تبديل المظهر">☼</button></div></div></aside>';
   }
-
-  function loadCourseFormEnhancements() {
-    if (!document.getElementById('basicInfoForm')) return;
-    if (document.getElementById('editorCourseFormEnhancements')) return;
-    var script = document.createElement('script');
-    script.id = 'editorCourseFormEnhancements';
-    script.src = 'js/editor-course-form.js?v=4';
-    document.body.appendChild(script);
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    var container = document.getElementById("editorSidebar");
-    if (container) {
-      var token = localStorage.getItem(EDITOR_TOKEN_KEY);
-      var name = '';
-      if (token) {
-        try {
-          var _b64 = token.split('.')[1].replace(/-/g, "+").replace(/_/g, "/");
-          var p = JSON.parse(decodeURIComponent(atob(_b64).split("").map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          }).join("")));
-          name = p.name || p.email || '';
-        } catch (e) {}
-      }
-      var activePage = document.body.getAttribute("data-page") || "";
-      container.innerHTML = buildSidebar(activePage, name);
-    }
-
-    var logoutBtn = document.getElementById("editorLogoutBtn");
-    if (logoutBtn && !logoutBtn.dataset.ntaBound) {
-      logoutBtn.dataset.ntaBound = '1';
-      logoutBtn.addEventListener("click", function () {
-        localStorage.removeItem(EDITOR_TOKEN_KEY);
-        window.location.replace("editor-login.html");
-      });
-    }
-
-    if (window.NTATheme && typeof window.NTATheme.bindAllToggles === "function") {
-      window.NTATheme.bindAllToggles();
-    }
-
-    setupMobileNav(container);
-    loadCourseFormEnhancements();
-  });
-
   function setupMobileNav(container) {
     if (document.getElementById("ntaNavToggle")) return;
     var btn = document.createElement("button");
@@ -119,176 +36,37 @@
     btn.className = "nta-nav-toggle";
     btn.type = "button";
     btn.setAttribute("aria-label", "فتح القائمة");
-    btn.setAttribute("aria-expanded", "false");
-    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    btn.innerHTML = '☰';
     var backdrop = document.createElement("div");
     backdrop.id = "ntaNavBackdrop";
     backdrop.className = "nta-nav-backdrop";
     document.body.appendChild(btn);
     document.body.appendChild(backdrop);
-    function setOpen(open) {
-      document.body.classList.toggle("nta-nav-open", open);
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-    }
+    function setOpen(open) { document.body.classList.toggle("nta-nav-open", open); }
     btn.addEventListener("click", function () { setOpen(!document.body.classList.contains("nta-nav-open")); });
     backdrop.addEventListener("click", function () { setOpen(false); });
     if (container) container.addEventListener("click", function (e) { if (e.target.closest("a")) setOpen(false); });
-    window.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
   }
-
-  window.showEditorToast = function (msg, type) {
-    type = type || "success";
-    var container = document.getElementById("editorToastContainer");
-    if (!container) {
-      container = document.createElement("div");
-      container.id = "editorToastContainer";
-      container.className = "editor-toast-container";
-      document.body.appendChild(container);
-    }
-    var toast = document.createElement("div");
-    toast.className = "editor-toast editor-toast--" + type;
-    toast.textContent = msg;
-    container.appendChild(toast);
-    setTimeout(function () {
-      toast.style.opacity = "0";
-      toast.style.transition = "opacity 0.3s";
-      setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
-    }, 3500);
-  };
-
-  window.editorConfirm = function (opts) {
-    return new Promise(function (resolve) {
-      var overlay = document.createElement("div");
-      overlay.className = "editor-modal-overlay";
-      overlay.innerHTML =
-        '<div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorConfirmTitle">' +
-        '<h2 class="editor-modal__title" id="editorConfirmTitle">' + (opts.title || "تأكيد") + "</h2>" +
-        '<div class="editor-modal__body">' + (opts.body || "") + "</div>" +
-        '<div class="editor-modal__actions">' +
-        '<button type="button" class="btn btn--secondary" id="editorConfirmCancel">' + (opts.cancelLabel || "إلغاء") + "</button>" +
-        '<button type="button" class="btn ' + (opts.danger ? "btn--danger" : "btn--primary") + '" id="editorConfirmOk">' + (opts.okLabel || "تأكيد") + "</button>" +
-        "</div></div>";
-      document.body.appendChild(overlay);
-
-      function keyHandler(e) { if (e.key === "Escape") close(false); }
-      function close(result) {
-        document.removeEventListener("keydown", keyHandler);
-        document.body.removeChild(overlay);
-        resolve(result);
-      }
-
-      overlay.querySelector("#editorConfirmCancel").addEventListener("click", function () { close(false); });
-      overlay.querySelector("#editorConfirmOk").addEventListener("click", function () { close(true); });
-      overlay.addEventListener("click", function (e) { if (e.target === overlay) close(false); });
-      document.addEventListener("keydown", keyHandler);
-      overlay.querySelector("#editorConfirmOk").focus();
-    });
-  };
-
-  // ── Global Custom UI Components Logic ──
-  window.initUISelects = function(container) {
-    (container || document).querySelectorAll(".ui-select:not(.is-initialized)").forEach(function(select) {
-      select.classList.add("is-initialized");
-      var trigger = select.querySelector(".ui-select__trigger");
-      var menu = select.querySelector(".ui-select__menu");
-      var valueText = select.querySelector(".ui-select__value");
-      var hiddenInput = select.querySelector("input[type='hidden']");
-      var getOptions = function() { return Array.from(select.querySelectorAll(".ui-select__option")); };
-
-      function openMenu() {
-        select.classList.add("is-open");
-        trigger.setAttribute("aria-expanded", "true");
-        menu.hidden = false;
-      }
-      function closeMenu() {
-        select.classList.remove("is-open");
-        trigger.setAttribute("aria-expanded", "false");
-        menu.hidden = true;
-      }
-      function selectOption(option) {
-        getOptions().forEach(function(item) { item.classList.remove("is-selected"); });
-        option.classList.add("is-selected");
-        
-        var labelNode = option.querySelector("span:not(.ui-select__check)");
-        var label = labelNode ? labelNode.textContent.trim() : option.textContent.replace("✓", "").trim();
-        var value = option.dataset.value || "";
-
-        valueText.textContent = label;
-        valueText.classList.remove("is-placeholder");
-        if (hiddenInput) {
-          hiddenInput.value = value;
-          // Trigger standard change event on the hidden input for legacy listeners
-          hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-
-        closeMenu();
-        select.dispatchEvent(new CustomEvent("select:change", { bubbles: true, detail: { value: value, label: label } }));
-      }
-
-      trigger.addEventListener("click", function(e) {
-        e.preventDefault();
-        menu.hidden ? openMenu() : closeMenu();
-      });
-
-      menu.addEventListener("click", function(e) {
-        var option = e.target.closest(".ui-select__option");
-        if (option) selectOption(option);
-      });
-
-      document.addEventListener("click", function(e) {
-        if (!select.contains(e.target)) closeMenu();
-      });
-
-      trigger.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") closeMenu();
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          menu.hidden ? openMenu() : closeMenu();
-        }
-      });
-    });
-  };
-
-  window.initUIMenus = function(container) {
-    (container || document).querySelectorAll(".ui-menu:not(.is-initialized)").forEach(function(menuRoot) {
-      menuRoot.classList.add("is-initialized");
-      var trigger = menuRoot.querySelector(".ui-menu__trigger");
-      var content = menuRoot.querySelector(".ui-menu__content");
-
-      function openMenu() {
-        content.hidden = false;
-        trigger.setAttribute("aria-expanded", "true");
-      }
-      function closeMenu() {
-        content.hidden = true;
-        trigger.setAttribute("aria-expanded", "false");
-      }
-
-      trigger.addEventListener("click", function(e) {
-        e.preventDefault();
-        content.hidden ? openMenu() : closeMenu();
-      });
-
-      document.addEventListener("click", function(e) {
-        if (!menuRoot.contains(e.target)) closeMenu();
-      });
-
-      trigger.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") closeMenu();
-      });
-      
-      content.addEventListener("click", function(e) {
-         if (e.target.closest(".ui-menu__item") || e.target.closest("button") || e.target.closest("a")) {
-             closeMenu();
-         }
-      });
-    });
-  };
-
-  // Initialize on load
-  document.addEventListener("DOMContentLoaded", function() {
+  function loadCourseFormEnhancements() {
+    if (!document.getElementById('basicInfoForm') || document.getElementById('editorCourseFormEnhancements')) return;
+    var script = document.createElement('script');
+    script.id = 'editorCourseFormEnhancements';
+    script.src = 'js/editor-course-form.js?v=4';
+    document.body.appendChild(script);
+  }
+  window.showEditorToast = window.showEditorToast || function (msg) { alert(msg); };
+  window.editorConfirm = window.editorConfirm || function () { return Promise.resolve(confirm('تأكيد؟')); };
+  window.initUISelects = window.initUISelects || function () {};
+  window.initUIMenus = window.initUIMenus || function () {};
+  document.addEventListener("DOMContentLoaded", function () {
+    var container = document.getElementById("editorSidebar");
+    if (container) container.innerHTML = buildSidebar(document.body.getAttribute("data-page") || "");
+    var logoutBtn = document.getElementById("editorLogoutBtn");
+    if (logoutBtn) logoutBtn.addEventListener("click", function () { localStorage.removeItem(EDITOR_TOKEN_KEY); window.location.replace("editor-login.html"); });
+    if (window.NTATheme && typeof window.NTATheme.bindAllToggles === "function") window.NTATheme.bindAllToggles();
+    setupMobileNav(container);
+    loadCourseFormEnhancements();
     window.initUISelects();
     window.initUIMenus();
   });
-
 })();

@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from pydantic import BaseModel
-from schemas.auth import LoginRequest, TokenResponse
+from schemas.auth import LoginRequest, AdminLoginRequest, TokenResponse
 from .database import get_db_connection
 from .logger_util import log_activity
 import os
@@ -290,10 +290,10 @@ async def _role_login(req: Request, email: str, password: str, required_role: st
 
 
 @admin_router.post("/login")
-async def admin_login(req: Request, body: dict):
-    email = body.get("email", "").strip()
-    national_id = body.get("nationalId", "").strip()
-    password = body.get("password", "")
+async def admin_login(req: Request, request: AdminLoginRequest):
+    email = request.email.strip()
+    national_id = request.nationalId.strip()
+    password = request.password
     if not email:
         raise HTTPException(status_code=422, detail="البريد الإلكتروني مطلوب.")
     if not national_id:

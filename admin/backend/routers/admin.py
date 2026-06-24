@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, Depends, File, UploadFile
 from typing import List, Optional
-from schemas.admin import TraineeSummary, StageReviewCreate
+from schemas.admin import TraineeSummary, StageReviewCreate, SecurityDecisionCreate
 from core.database import get_db_connection
 from core.auth import get_admin_user, get_staff_user, get_current_user, get_password_hash
 from core.upload_manager import save_upload_file, move_user_files_to_user_folder, move_admission_file_to_folder
@@ -363,17 +363,22 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                     gender = user[2]
                     raw_password = generate_temp_password()
                     hashed_password = get_password_hash(raw_password)
-                    
+
                     # Update user with the new password
                     cursor.execute("UPDATE users SET password_hash = %s WHERE id = %s", (hashed_password, review.trainee_id))
-                    
-                    # Send Email (handled after commit to ensure DB integrity)
-                    send_credential_email(email, full_name, raw_password, gender)
+
+                    # Store credential info for post-commit email dispatch
+                    # (avoids holding an open DB transaction while waiting on the mail server)
+                    _pending_email = (email, full_name, raw_password, gender)
 
                     # ── NEW: Trigger AI CV Matching in background ──
                     if assigned_course_id:
-                        threading.Thread(target=trigger_cv_match, args=(review.trainee_id, assigned_course_id)).start()
-                    
+                        threading.Thread(
+                            target=trigger_cv_match,
+                            args=(review.trainee_id, assigned_course_id),
+                            daemon=True,
+                        ).start()
+
                     # Log Stage 7 Approval
                     log_activity(
                         category="ADMIN",
@@ -447,9 +452,18 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                 role=admin["role"],
                 details={"trainee_id": review.trainee_id, "stage_id": review.stage_id, "notes": review.notes}
             )
-        
+
         db.commit()
+
+        # Dispatch credential email AFTER commit — so DB is safe even if mail server is slow/down.
+        if '_pending_email' in dir():
+            try:
+                send_credential_email(*_pending_email)
+            except Exception as mail_err:
+                print(f"[WARNING] Credential email failed (account was committed): {mail_err}")
+
         return {"message": "Review submitted successfully"}
+
     except HTTPException:
         db.rollback()
         raise
@@ -471,7 +485,7 @@ async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
             if row.get('details') and isinstance(row['details'], str):
                 try:
                     row['details'] = json.loads(row['details'])
-                except:
+                except (json.JSONDecodeError, ValueError):
                     pass
         return results
     finally:
@@ -777,3 +791,71 @@ async def get_attendance_photo(national_id: str, session_id: int, event_type: st
         
     # Redirect to fallback mock avatar if real image doesn't exist
     return RedirectResponse(url=f"https://i.pravatar.cc/300?u={national_id}")
+
+@router.post("/trainees/{trainee_id}/security-decision")
+async def create_security_decision(
+    trainee_id: int, 
+    decision_data: SecurityDecisionCreate,
+    admin: dict = Depends(get_admin_user)
+):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT id, national_id, passport_number FROM users WHERE id = %s", (trainee_id,))
+        u_data = cursor.fetchone()
+        if not u_data:
+            raise HTTPException(status_code=404, detail="Trainee not found")
+
+        cursor.execute("""
+            INSERT INTO admission_security_decisions
+                (applicant_user_id, national_id, passport_number, course_id, decision, internal_reason, decided_by, decided_at, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+        """, (
+            u_data["id"],
+            u_data["national_id"],
+            u_data["passport_number"],
+            decision_data.course_id,
+            decision_data.decision,
+            decision_data.internal_reason,
+            admin["id"]
+        ))
+        decision_id = cursor.lastrowid
+        db.commit()
+
+        log_activity(
+            category="SECURITY_DECISION",
+            event_type="NON_DESTRUCTIVE_DECISION",
+            user_id=admin["id"],
+            role=admin["role"],
+            details={"trainee_id": trainee_id, "decision": decision_data.decision, "decision_id": decision_id}
+        )
+
+        return {"message": "Security decision recorded successfully", "decision_id": decision_id}
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        db.close()
+
+@router.get("/trainees/{trainee_id}/security-decisions")
+async def get_security_decisions(trainee_id: int, admin: dict = Depends(get_admin_user)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT id, decision, internal_reason, course_id, decided_by, decided_at
+            FROM admission_security_decisions
+            WHERE applicant_user_id = %s
+            ORDER BY decided_at DESC
+        """, (trainee_id,))
+        results = cursor.fetchall()
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        db.close()
