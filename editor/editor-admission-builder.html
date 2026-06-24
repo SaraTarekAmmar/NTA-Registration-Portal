@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="editor.css?v=3" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/editor-guard.js?v=2"></script>
+    <script src="/common/js/nta-confirm.js"></script>
     <style>
       .adm-step-card {
         background: rgba(8,12,32,0.4);
@@ -537,7 +538,8 @@
             var menu = document.getElementById("courseSelectMenu");
             var html = '<button type="button" class="ui-select__option" data-value="" role="option"><span>— اختر دورة —</span><span class="ui-select__check">✓</span></button>';
             courses.forEach(function(c) {
-              html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + (c.title_ar || c.title) + '</span><span class="ui-select__check">✓</span></button>';
+              var safeTitle = window.ntaEscapeHTML ? ntaEscapeHTML(c.title_ar || c.title) : (c.title_ar || c.title);
+              html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + safeTitle + '</span><span class="ui-select__check">✓</span></button>';
             });
             menu.innerHTML = html;
             if (window.initUISelects) window.initUISelects(document.getElementById("courseSelectContainer"));
@@ -596,18 +598,14 @@
             document.getElementById("builderArea").style.display = "block";
             renderAdmSteps();
           })
-          .catch(function() {
-            admissionSteps = [
-                { step_type: 'admission_test', step_key: 'step_1', title_ar: 'اختبار تقييم أولي', description_ar: '', is_required: true, config_json: { is_active: true } },
-                { step_type: 'interview', step_key: 'step_2', title_ar: 'المقابلة الشخصية', description_ar: '', is_required: true, config_json: { is_active: true } },
-                { step_type: 'background_check', step_key: 'step_3', title_ar: 'الفحص الأمني', description_ar: '', is_required: true, config_json: { is_active: true } },
-                { step_type: 'admin_review', step_key: 'step_4', title_ar: 'المراجعة الإدارية', description_ar: '', is_required: true, config_json: { is_active: true } },
-                { step_type: 'acceptance_decision', step_key: 'step_5', title_ar: 'قرار القبول النهائي', description_ar: '', is_required: true, config_json: { is_active: true } }
-            ];
-            selectedStepIndex = 0;
+          .catch(function(err) {
             document.getElementById("loadingState").style.display = "none";
-            document.getElementById("builderArea").style.display = "block";
-            renderAdmSteps();
+            document.getElementById("pageBannerText").textContent = "حدث خطأ أثناء تحميل بيانات المسار. يرجى التحقق من الاتصال وإعادة المحاولة.";
+            document.getElementById("pageBanner").style.display = "flex";
+            var emptyState = document.getElementById("emptyState");
+            emptyState.style.display = "flex";
+            emptyState.querySelector(".editor-state__title").textContent = "تعذر تحميل المسار";
+            emptyState.querySelector(".editor-state__text").textContent = "لم نتمكن من تحميل خطوات القبول لهذه الدورة.";
           });
       }
 
@@ -698,9 +696,9 @@
       }
       
       
-      function removeStepDirectly(e, idx) {
+      async function removeStepDirectly(e, idx) {
           e.stopPropagation();
-          if(confirm("حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟")) {
+          if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(idx, 1);
               if (selectedStepIndex === idx) {
                   selectedStepIndex = -1;
@@ -712,9 +710,9 @@
           }
       }
 
-      function removeSelectedStep() {
+      async function removeSelectedStep() {
           if (selectedStepIndex === -1) return;
-          if(confirm("حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟")) {
+          if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(selectedStepIndex, 1);
               selectedStepIndex = -1;
               markUnsaved();
@@ -768,10 +766,11 @@
           
           html += '<div class="timeline-item '+(isSelected?'selected':'')+'">';
           html += '  <div class="timeline-num">'+(i+1)+'</div>';
-          html += '  <div class="'+classList+'" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')" onclick="selectStep('+i+')">';
+          html += '  <div class="'+classList+'" role="button" tabindex="0" draggable="true" ondragstart="handleDragStart(event, '+i+')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '+i+')" onclick="selectStep('+i+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \') { event.preventDefault(); selectStep('+i+'); }">';
           html += '    <div class="builder-step-card-header">';
           html += '      <div style="flex:1;">';
-          html += '        <div class="builder-step-title">' + (s.title_ar || 'مرحلة بدون عنوان') + '</div>';
+          var safeStepTitle = window.ntaEscapeHTML ? ntaEscapeHTML(s.title_ar || 'مرحلة بدون عنوان') : (s.title_ar || 'مرحلة بدون عنوان');
+          html += '        <div class="builder-step-title">' + safeStepTitle + '</div>';
           html += '        <div class="builder-step-meta">';
           html += '          <span>'+typeLabel+'</span>';
           if(activeBadge || reqBadge) html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;">' + reqBadge + activeBadge + '</div>';

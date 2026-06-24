@@ -47,10 +47,35 @@ async def _sanitize_http_exception(request, exc):
 
 # ── Routers ──────────────────────────────────────────────────────────
 from routers import auth, attendance, permissions
+from fastapi import Request
 
 app.include_router(auth.router)
 app.include_router(attendance.router)
 app.include_router(permissions.router)
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Inject security headers on every response."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
+@app.middleware("http")
+async def limit_json_body(request: Request, call_next):
+    """Reject JSON POST bodies exceeding 1 MB to prevent resource-exhaustion attacks."""
+    if request.method in ("POST", "PUT", "PATCH"):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 1_048_576:  # 1 MB
+            return _JSONResponse(
+                status_code=413,
+                content={"detail": "حجم الطلب كبير جدًا. الحد الأقصى 1 ميجابايت."},
+            )
+    return await call_next(request)
 
 # ── Static Files ─────────────────────────────────────────────────────
 # Mount coordinator frontend (coordinator/ directory, one level up from backend/)

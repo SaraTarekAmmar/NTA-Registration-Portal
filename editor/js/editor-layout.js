@@ -239,11 +239,37 @@
         if (!select.contains(e.target)) closeMenu();
       });
 
+      menu.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+          closeMenu();
+          trigger.focus();
+        } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          var opts = getOptions();
+          var idx = opts.indexOf(document.activeElement);
+          if (e.key === "ArrowDown") {
+            idx = (idx + 1) % opts.length;
+          } else {
+            idx = (idx - 1 + opts.length) % opts.length;
+          }
+          if (opts[idx]) opts[idx].focus();
+        }
+      });
+
       trigger.addEventListener("keydown", function(e) {
         if (e.key === "Escape") closeMenu();
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
-          menu.hidden ? openMenu() : closeMenu();
+          if (menu.hidden) {
+            openMenu();
+            var opts = getOptions();
+            if (opts.length) setTimeout(function() {
+              var selected = opts.find(function(o) { return o.classList.contains('is-selected'); });
+              (selected || opts[0]).focus();
+            }, 10);
+          } else {
+            if (e.key !== "ArrowDown" && e.key !== "ArrowUp") closeMenu();
+          }
         }
       });
     });

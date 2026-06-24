@@ -64,7 +64,7 @@ async def global_debugger_middleware(request: Request, call_next):
     trace_id = request.headers.get("X-Trace-ID", str(uuid.uuid4()))
     trace_token = trace_context.set(trace_id)
     start_time = time.time()
-    
+
     # 2. Extract Session ID (Security Context)
     auth_header = request.headers.get("Authorization")
     sid = None
@@ -77,29 +77,29 @@ async def global_debugger_middleware(request: Request, call_next):
             role = payload.get("role")
         except Exception:
             pass
-    
+
     session_token = session_context.set(sid)
-    
+
     # 3. Capture Basic Info
     path = request.url.path
     is_static = any(path.endswith(ext) for ext in [".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".woff", ".woff2"])
     ip = request.client.host if request.client else "unknown"
     ua = request.headers.get("user-agent", "unknown")
-    
+
     # 4. Handle Request
     try:
         response = await call_next(request)
-        
+
         # 5. Post-Request Logging (Always On for APIs)
         if not is_static:
             duration_ms = int((time.time() - start_time) * 1000)
-            
+
             category = "PASSIVE"
             event_type = "PAGE_VIEW"
             if path.startswith("/api/"):
                 category = "ACTION"
                 event_type = "API_CALL"
-            
+
             log_activity(
                 category=category,
                 event_type=event_type,
@@ -112,14 +112,14 @@ async def global_debugger_middleware(request: Request, call_next):
                 duration_ms=duration_ms,
                 status="Logged"
             )
-            
+
         return response
-        
+
     except Exception as e:
         # 6. Critical Error Logging (Traceback & Payload)
         duration_ms = int((time.time() - start_time) * 1000)
         tb = get_traceback()
-        
+
         log_activity(
             category="SYSTEM",
             event_type="UNHANDLED_EXCEPTION",
@@ -140,6 +140,31 @@ async def global_debugger_middleware(request: Request, call_next):
         session_context.reset(session_token)
         trace_context.reset(trace_token)
 
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Inject security headers on every response."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
+@app.middleware("http")
+async def limit_json_body(request: Request, call_next):
+    """Reject JSON POST bodies exceeding 1 MB to prevent resource-exhaustion attacks."""
+    if request.method in ("POST", "PUT", "PATCH"):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 1_048_576:  # 1 MB
+            return _JSONResponse(
+                status_code=413,
+                content={"detail": "حجم الطلب كبير جدًا. الحد الأقصى 1 ميجابايت."},
+            )
+    return await call_next(request)
+
+
 # In standalone mode, auth router is local
 app.include_router(auth.router)
 app.include_router(auth.admin_router)
@@ -150,6 +175,12 @@ app.include_router(ai_services.router)
 app.include_router(exams.router)
 app.include_router(class_matrix.router)
 app.include_router(quiz_results.router)
+
+# Health check endpoint
+@app.get("/api/health")
+async def health_check():
+    """Simple liveness probe — returns 200 OK when the server is up."""
+    return {"status": "ok", "service": "admin"}
 
 # Send the bare root URL to the bundled landing page.
 @app.get("/")

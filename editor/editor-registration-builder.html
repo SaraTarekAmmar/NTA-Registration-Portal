@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="editor.css?v=3" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/editor-guard.js?v=2"></script>
+    <script src="/common/js/nta-confirm.js"></script>
 <script src="js/default-registration-steps.js"></script>
+
     <style>
       /* ══ Editor Registration Builder Redesign CSS ══ */
       .adm-step-card {
@@ -1031,9 +1033,9 @@
       }
       
       
-      function removeStepDirectly(e, idx) {
+      async function removeStepDirectly(e, idx) {
           e.stopPropagation();
-          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟ قد يؤثر ذلك على التقديمات الحالية.")) {
+          if(await ntaConfirm('هل أنت متأكد من حذف هذه الخطوة؟ قد يؤثر ذلك على التقديمات الحالية.', {title: 'حذف الخطوة', confirmText: 'حذف', icon: '🗑️'})) {
               registrationSteps.splice(idx, 1);
               if (selectedStepIndex === idx) {
                   selectedStepIndex = -1;
@@ -1045,9 +1047,9 @@
           }
       }
 
-      function removeSelectedStep() {
+      async function removeSelectedStep() {
           if (selectedStepIndex === -1) return;
-          if(confirm("هل أنت متأكد من حذف هذه الخطوة؟ قد يؤثر ذلك على التقديمات الحالية.")) {
+          if(await ntaConfirm('هل أنت متأكد من حذف هذه الخطوة؟ قد يؤثر ذلك على التقديمات الحالية.', {title: 'حذف الخطوة', confirmText: 'حذف', icon: '🗑️'})) {
               registrationSteps.splice(selectedStepIndex, 1);
               selectedStepIndex = -1;
               markUnsaved();
@@ -1135,16 +1137,16 @@
           renderAdmSteps();
       }
 
-      function removeStepInline(idx) {
-          if(confirm("هل أنت متأكد من حذف هذا القسم بالكامل؟")) {
+      async function removeStepInline(idx) {
+          if(await ntaConfirm('هل أنت متأكد من حذف هذا القسم بالكامل؟', {title: 'حذف القسم', confirmText: 'حذف', icon: '🗑️'})) {
               registrationSteps.splice(idx, 1);
               markUnsaved();
               renderAdmSteps();
           }
       }
 
-      function removeFieldInline(stepIdx, fieldIdx) {
-          if(confirm("هل أنت متأكد من حذف هذا الحقل؟")) {
+      async function removeFieldInline(stepIdx, fieldIdx) {
+          if(await ntaConfirm('هل أنت متأكد من حذف هذا الحقل؟', {title: 'حذف الحقل', confirmText: 'حذف', icon: '🗑️'})) {
               registrationSteps[stepIdx].config_json.fields.splice(fieldIdx, 1);
               markUnsaved();
               renderAdmSteps();
@@ -1248,11 +1250,14 @@
           html += '<div class="builder-step-card '+(isExpanded?'expanded':'')+'">';
           
           // --- HEADER ---
-          html += '  <div class="builder-step-header" onclick="toggleStepExpanded(event, '+i+')">';
+          html += '  <div class="builder-step-header" role="button" tabindex="0" onclick="toggleStepExpanded(event, '+i+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \') { event.preventDefault(); toggleStepExpanded(event, '+i+'); }">';
+          
+          var safeTitle = ntaEscapeHTML(s.title_ar || 'قسم بدون عنوان');
+          var safeType = ntaEscapeHTML(s.step_type || 'custom');
           
           html += '    <div class="header-right" style="display:flex; align-items:center; gap:1rem; flex-direction:row-reverse;">';
-          html += '      <div class="step-title"><span>'+(i+1)+'</span> ' + (s.title_ar || 'قسم بدون عنوان') + ' <svg onclick="editStepTitle(event, '+i+')" style="cursor:pointer; width:16px; height:16px; margin-right:0.5rem; color:var(--text-subtle);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>';
-          html += '      <div class="step-meta">'+(s.step_type || 'custom')+' • '+fields.length+' حقول</div>';
+          html += '      <div class="step-title"><span>'+(i+1)+'</span> ' + safeTitle + ' <svg onclick="editStepTitle(event, '+i+')" style="cursor:pointer; width:16px; height:16px; margin-right:0.5rem; color:var(--text-subtle);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>';
+          html += '      <div class="step-meta">'+safeType+' • '+fields.length+' حقول</div>';
           html += '      <svg class="expand-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition:0.3s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
           html += '    </div>';
 
@@ -1293,9 +1298,11 @@
                   var reqText = f.is_required ? '<span class="text-green">نعم</span>' : '<span class="text-neutral">لا</span>';
                   var typeLabel = getFieldType(f.field_id);
                   
+                  var safeLabel = ntaEscapeHTML(f.label || f.field_id || 'بدون اسم');
+                  
                   html += '<tr>';
                   html += '  <td>' + (realIdx+1) + '</td>';
-                  html += '  <td style="font-weight:600; cursor:pointer; color:#3b82f6;" onclick="openFieldDrawer('+i+', '+realIdx+')"><u>' + (f.label || f.field_id || 'بدون اسم') + '</u></td>';
+                  html += '  <td style="font-weight:600; cursor:pointer; color:#3b82f6;" onclick="openFieldDrawer('+i+', '+realIdx+')"><u>' + safeLabel + '</u></td>';
                   html += '  <td>' + typeLabel + '</td>';
                   html += '  <td>' + reqText + '</td>';
                   html += '  <td>' + activeBadge + '</td>';

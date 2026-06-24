@@ -1495,21 +1495,60 @@ html.light-mode .chat-dialog__send {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* Respect reduced motion — disable all micro-animations */
+/* Respect reduced motion — disable all micro-animations system-wide.
+   Users with prefers-reduced-motion:reduce (vestibular disorders, migraines, etc.)
+   get a fully usable interface with zero animation overhead. */
 @media (prefers-reduced-motion: reduce) {
+  /* 1. Kill all keyframe animations on every element */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* 2. Zero out specific component transitions */
   .main-content,
   .qr-page,
   .final-wrap,
   .trainee-main,
   .editor-main,
   .coordinator-main {
-    animation: none;
+    animation: none !important;
   }
+
   .course-card,
   .admin-summary-card,
   .profile-analytics-card,
   .at-card,
   .rec-card {
-    transition: none;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  /* 3. Disable skeleton shimmer */
+  .skeleton,
+  .skeleton-line,
+  [class*="skeleton"] {
+    animation: none !important;
+    background: var(--skeleton-base) !important;
+  }
+
+  /* 4. Disable toast slide-in */
+  .reg-toast,
+  .gq-toast {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* 5. Disable sidebar / header enter animations */
+  .nta-sidebar,
+  .nta-header,
+  .admin-header {
+    animation: none !important;
+    transition: none !important;
   }
 }

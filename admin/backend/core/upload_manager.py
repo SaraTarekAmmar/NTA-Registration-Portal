@@ -37,9 +37,30 @@ CATEGORY_MAP = {
     "temp": "temp"
 }
 
+# Magic-byte signatures for allowed file types.
+# Checked against the first 8 bytes of the actual file — not the client-supplied MIME type.
+_MAGIC_SIGNATURES: list[tuple[bytes, str]] = [
+    (b"%PDF", "application/pdf"),
+    (b"\xd0\xcf\x11\xe0", "application/msword"),           # .doc (OLE compound)
+    (b"PK\x03\x04", "application/zip"),                    # .docx / .xlsx / .zip (ZIP-based)
+    (b"\xff\xd8\xff", "image/jpeg"),                       # JPEG
+    (b"\x89PNG\r\n\x1a\n", "image/png"),                  # PNG
+    (b"Rar!\x1a\x07", "application/x-rar-compressed"),    # RAR
+]
+
+
+def _check_magic_bytes(header: bytes) -> bool:
+    """Return True if the file header matches at least one known allowed signature."""
+    for sig, _ in _MAGIC_SIGNATURES:
+        if header.startswith(sig):
+            return True
+    return False
+
+
 async def save_upload_file(file: UploadFile, category: str = "temp", identifier: str = "admin") -> str:
     """
     Saves an uploaded file to the server and returns the relative path.
+    Validates both file extension AND actual magic bytes (not just client MIME type).
     """
     file_extension = Path(file.filename).suffix.lower() if file.filename else ""
 
@@ -48,6 +69,13 @@ async def save_upload_file(file: UploadFile, category: str = "temp", identifier:
 
     if file.content_type not in ALLOWED_MIMETYPES:
         raise HTTPException(status_code=400, detail=f"MIME type '{file.content_type}' not allowed.")
+
+    # Read and validate magic bytes — defence against MIME spoofing
+    header = await file.read(8)
+    if not _check_magic_bytes(header):
+        raise HTTPException(status_code=400, detail="محتوى الملف لا يطابق نوعه. الرجاء رفع ملف صحيح.")
+    # Rewind so the full content is written below
+    await file.seek(0)
 
     # Determine target directory based on category
     subfolder = CATEGORY_MAP.get(category, "temp")
@@ -59,13 +87,13 @@ async def save_upload_file(file: UploadFile, category: str = "temp", identifier:
     import re
     timestamp = int(time.time())
     clean_original = re.sub(r'[^a-zA-Z0-9_]', '', Path(file.filename).stem) if file.filename else "file"
-    
+
     # For course materials, keep it minimal since it's already in a course folder
     if category == "course_material":
         unique_filename = f"{timestamp}_{clean_original}{file_extension}"
     else:
         unique_filename = f"{category}_{identifier}_{timestamp}_{clean_original}{file_extension}"
-    
+
     file_path = target_dir / unique_filename
 
     # Save the file

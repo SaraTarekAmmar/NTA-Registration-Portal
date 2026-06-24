@@ -5,15 +5,16 @@ from core.auth import (
 )
 from core.database import get_db_connection
 from core.logger_util import log_activity
+from schemas.auth import CoordinatorLoginRequest
 
 router = APIRouter(prefix="/api/coordinator/auth", tags=["Coordinator Auth"])
 
 
 @router.post("/login")
-async def coordinator_login(req: Request, body: dict):
-    email = body.get("email", "").strip()
-    national_id = body.get("nationalId", "").strip()
-    password = body.get("password", "")
+async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
+    email = request.email.strip()
+    national_id = request.nationalId.strip()
+    password = request.password
 
     if not email:
         raise HTTPException(status_code=422, detail="البريد الإلكتروني مطلوب.")

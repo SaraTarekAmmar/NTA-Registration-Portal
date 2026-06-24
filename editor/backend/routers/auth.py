@@ -5,15 +5,16 @@ from core.auth import (
 )
 from core.database import get_db_connection
 from core.logger_util import log_activity
+from schemas.auth import EditorLoginRequest
 
 router = APIRouter(prefix="/api/editor/auth", tags=["Editor Auth"])
 
 
 @router.post("/login")
-async def editor_login(req: Request, body: dict):
-    email = body.get("email", "").strip()
-    national_id = body.get("nationalId", "").strip()
-    password = body.get("password", "")
+async def editor_login(req: Request, request: EditorLoginRequest):
+    email = request.email.strip()
+    national_id = request.nationalId.strip()
+    password = request.password
     if not email:
         raise HTTPException(status_code=422, detail="Email is required.")
     if not national_id:

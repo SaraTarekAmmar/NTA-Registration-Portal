@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -215,8 +215,6 @@
         var ADMIN_TOKEN_KEY = "admin_token";
 
         // Always show the login form (no auto-skip): a fresh visit must log in.
-        // Clear any stale token so the session starts clean.
-        localStorage.removeItem(ADMIN_TOKEN_KEY);
 
         var form = document.getElementById("adminLoginForm");
         var btn = document.getElementById("adminLoginBtn");

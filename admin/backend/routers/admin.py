@@ -363,17 +363,22 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                     gender = user[2]
                     raw_password = generate_temp_password()
                     hashed_password = get_password_hash(raw_password)
-                    
+
                     # Update user with the new password
                     cursor.execute("UPDATE users SET password_hash = %s WHERE id = %s", (hashed_password, review.trainee_id))
-                    
-                    # Send Email (handled after commit to ensure DB integrity)
-                    send_credential_email(email, full_name, raw_password, gender)
+
+                    # Store credential info for post-commit email dispatch
+                    # (avoids holding an open DB transaction while waiting on the mail server)
+                    _pending_email = (email, full_name, raw_password, gender)
 
                     # ── NEW: Trigger AI CV Matching in background ──
                     if assigned_course_id:
-                        threading.Thread(target=trigger_cv_match, args=(review.trainee_id, assigned_course_id)).start()
-                    
+                        threading.Thread(
+                            target=trigger_cv_match,
+                            args=(review.trainee_id, assigned_course_id),
+                            daemon=True,
+                        ).start()
+
                     # Log Stage 7 Approval
                     log_activity(
                         category="ADMIN",
@@ -447,9 +452,18 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
                 role=admin["role"],
                 details={"trainee_id": review.trainee_id, "stage_id": review.stage_id, "notes": review.notes}
             )
-        
+
         db.commit()
+
+        # Dispatch credential email AFTER commit — so DB is safe even if mail server is slow/down.
+        if '_pending_email' in dir():
+            try:
+                send_credential_email(*_pending_email)
+            except Exception as mail_err:
+                print(f"[WARNING] Credential email failed (account was committed): {mail_err}")
+
         return {"message": "Review submitted successfully"}
+
     except HTTPException:
         db.rollback()
         raise
@@ -471,7 +485,7 @@ async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
             if row.get('details') and isinstance(row['details'], str):
                 try:
                     row['details'] = json.loads(row['details'])
-                except:
+                except (json.JSONDecodeError, ValueError):
                     pass
         return results
     finally:
