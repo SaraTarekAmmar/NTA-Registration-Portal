@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 from core import auth
 from core.logger_util import log_activity
 from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, reg_steps, registration_flow
-from fastapi import Request
+from fastapi import Request, Depends
 
 load_dotenv()
 
