@@ -70,6 +70,29 @@ def apply_defaults():
             "marital_status": "single",
             "password": "NTA@Coord2026",
         },
+        # ── Committee Member Staff ───────────────────────────────────────────
+        {
+            "full_name_ar": "عضو اللجنة الأول",
+            "full_name_en": "Committee Member 1",
+            "email": "member1@nta.edu.eg",
+            "national_id": "29402021234567",
+            "role": "committee_member",
+            "dob": "1994-02-02",
+            "gender": "male",
+            "marital_status": "single",
+            "password": "NTA@Member2026",
+        },
+        {
+            "full_name_ar": "عضو اللجنة الثاني",
+            "full_name_en": "Committee Member 2",
+            "email": "member2@nta.edu.eg",
+            "national_id": "29403031234567",
+            "role": "committee_member",
+            "dob": "1994-03-03",
+            "gender": "female",
+            "marital_status": "single",
+            "password": "NTA@Member2026",
+        },
         # ── Trainers ─────────────────────────────────────────────────────────
         {
             "full_name_ar": "غادة عبد اللطيف",

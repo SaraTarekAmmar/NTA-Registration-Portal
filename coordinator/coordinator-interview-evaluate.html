@@ -201,6 +201,13 @@
       document.getElementById('applicantSel').addEventListener('change', onApplicant);
       document.getElementById('submitBtn').addEventListener('click', submit);
       renderGrid(); loadApplicants();
+      if (auth.payload && auth.payload.role === 'committee_member') {
+        var nameInput = document.getElementById('memberName');
+        if (nameInput) {
+          nameInput.value = auth.payload.name || '';
+          nameInput.disabled = true;
+        }
+      }
     </script>
   </body>
 </html>

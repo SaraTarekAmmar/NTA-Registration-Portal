@@ -34,23 +34,38 @@
 
   function buildSidebar(activePage) {
     var userName = "";
-    try { if (window.coordinatorAuth && window.coordinatorAuth.payload) userName = window.coordinatorAuth.payload.name || window.coordinatorAuth.payload.email || ""; } catch (e) {}
+    var userRole = "";
+    try {
+      if (window.coordinatorAuth && window.coordinatorAuth.payload) {
+        userName = window.coordinatorAuth.payload.name || window.coordinatorAuth.payload.email || "";
+        userRole = window.coordinatorAuth.payload.role || "";
+      }
+    } catch (e) {}
+    
     var onerr = "this.style.display='none';this.nextElementSibling.style.display='flex'";
+    var isMember = (userRole === "committee_member");
+    
     var nav = '<div class="nta-sidebar__nav-lbl">الرئيسية</div>' +
       navItem("coordinator-dashboard.html", "dashboard", ICONS.dashboard, "لوحة التحكم", activePage) +
       '<div class="nta-sidebar__divider"></div>' +
       '<div class="nta-sidebar__nav-lbl">المقابلات</div>' +
       navItem("coordinator-interviews.html", "interviews", ICONS.interviews, "طابور المقابلات", activePage) +
       navItem("coordinator-interview-evaluate.html", "evaluate", ICONS.evaluations, "تقييم مقابلة", activePage) +
-      navItem("coordinator-evaluations.html", "evaluations", ICONS.evaluations, "متابعة التقييمات", activePage) +
-      navItem("coordinator-committees.html", "committees", ICONS.interviews, "لجان المقابلات", activePage) +
-      '<div class="nta-sidebar__divider"></div>' +
-      '<div class="nta-sidebar__nav-lbl">الإدارة</div>' +
-      navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage) +
-      navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage);
+      navItem("coordinator-evaluations.html", "evaluations", ICONS.evaluations, "متابعة التقييمات", activePage);
+      
+    if (!isMember) {
+      nav += navItem("coordinator-committees.html", "committees", ICONS.interviews, "لجان المقابلات", activePage) +
+        '<div class="nta-sidebar__divider"></div>' +
+        '<div class="nta-sidebar__nav-lbl">الإدارة</div>' +
+        navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage) +
+        navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage);
+    }
 
-    var html = '<aside class="nta-sidebar"><div class="nta-sidebar__brand"><a href="coordinator-dashboard.html" class="nta-sidebar__logo-link"><img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" id="ntaLogoImg" onerror="' + onerr + '"><span class="nta-sidebar__logo-fallback">NTA</span><div class="nta-sidebar__logo-text"><span class="nta-sidebar__logo-main">NTA</span><span class="nta-sidebar__logo-sub">بوابة المنسق</span><span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span></div></a></div><nav class="nta-sidebar__nav" aria-label="قائمة المنسق">' + nav + '</nav><div class="nta-sidebar__footer">';
-    if (userName) html += '<div class="nta-sidebar__user"><div class="nta-sidebar__avatar">' + (userName.charAt(0) || "م") + '</div><div class="nta-sidebar__user-info"><div class="nta-sidebar__user-name">' + userName + '</div><div class="nta-sidebar__user-role-lbl">منسق</div></div></div>';
+    var roleLabel = isMember ? "عضو لجنة" : "منسق";
+    var sidebarLabel = isMember ? "بوابة عضو اللجنة" : "بوابة المنسق";
+
+    var html = '<aside class="nta-sidebar"><div class="nta-sidebar__brand"><a href="coordinator-dashboard.html" class="nta-sidebar__logo-link"><img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" id="ntaLogoImg" onerror="' + onerr + '"><span class="nta-sidebar__logo-fallback">NTA</span><div class="nta-sidebar__logo-text"><span class="nta-sidebar__logo-main">NTA</span><span class="nta-sidebar__logo-sub">' + sidebarLabel + '</span><span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span></div></a></div><nav class="nta-sidebar__nav" aria-label="قائمة المنسق">' + nav + '</nav><div class="nta-sidebar__footer">';
+    if (userName) html += '<div class="nta-sidebar__user"><div class="nta-sidebar__avatar">' + (userName.charAt(0) || "م") + '</div><div class="nta-sidebar__user-info"><div class="nta-sidebar__user-name">' + userName + '</div><div class="nta-sidebar__user-role-lbl">' + roleLabel + '</div></div></div>';
     html += '<div class="nta-sidebar__bottom-row"><button type="button" class="nta-sidebar__logout" onclick="window.coordinatorAuth.logout()">' + ICONS.logout + 'تسجيل الخروج</button><button type="button" class="nta-sidebar__theme-btn" id="themeToggle" aria-label="تبديل المظهر" title="تبديل المظهر"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></button></div></div></aside>';
     return html;
   }

@@ -9,7 +9,7 @@ import csv
 import json
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
-from core.auth import require_coordinator
+from core.auth import require_coordinator, require_coordinator_or_member
 from core.database import get_db_connection
 
 router = APIRouter(prefix="/api/coordinator/interviews", tags=["Coordinator Interviews"])
@@ -22,53 +22,120 @@ def _rows(cursor):
 
 
 @router.get("/summary")
-async def interview_summary(coordinator: dict = Depends(require_coordinator)):
+async def interview_summary(user: dict = Depends(require_coordinator_or_member)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute(
-            """
-            SELECT COUNT(*) AS cnt
-            FROM users u
-            JOIN pipeline_state ps ON ps.trainee_id = u.id
-            WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
-            """
-        )
-        waiting = cursor.fetchone()["cnt"]
+        if user["role"] == "committee_member":
+            cursor.execute(
+                "SELECT committee_id FROM interview_committee_members WHERE member_user_id = %s",
+                (user["id"],),
+            )
+            c_ids = [r["committee_id"] for r in cursor.fetchall()]
+            if not c_ids:
+                return {
+                    "waiting_interviews": 0,
+                    "missing_evaluations": 0,
+                    "completed_today": 0,
+                    "rejected_today": 0,
+                }
+            
+            placeholders = ",".join(["%s"] * len(c_ids))
+            
+            # 1. Waiting interviews
+            cursor.execute(
+                f"""
+                SELECT COUNT(DISTINCT u.id) AS cnt
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                JOIN interview_committee_applicants ica ON ica.applicant_user_id = u.id AND ica.stage_id = ps.current_stage_id
+                WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
+                  AND ica.committee_id IN ({placeholders})
+                """,
+                tuple(c_ids),
+            )
+            waiting = cursor.fetchone()["cnt"]
 
-        cursor.execute(
-            """
-            SELECT COUNT(*) AS cnt
-            FROM users u
-            JOIN pipeline_state ps ON ps.trainee_id = u.id
-            LEFT JOIN stage_reviews sr
-              ON sr.trainee_id = u.id AND sr.stage_id = ps.current_stage_id
-            WHERE u.role = 'applicant'
-              AND ps.current_stage_id IN (5, 6)
-              AND sr.id IS NULL
-            """
-        )
-        missing = cursor.fetchone()["cnt"]
+            # 2. Missing evaluations
+            cursor.execute("SELECT full_name_ar FROM users WHERE id = %s", (user["id"],))
+            member_name = cursor.fetchone()["full_name_ar"]
+            
+            cursor.execute(
+                f"""
+                SELECT COUNT(DISTINCT u.id) AS cnt
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                JOIN interview_committee_applicants ica ON ica.applicant_user_id = u.id AND ica.stage_id = ps.current_stage_id
+                LEFT JOIN admission_interview_scores s
+                  ON s.trainee_id = u.id AND s.stage_id = ps.current_stage_id AND s.committee_member_name = %s
+                WHERE u.role = 'applicant'
+                  AND ps.current_stage_id IN (5, 6)
+                  AND ica.committee_id IN ({placeholders})
+                  AND s.id IS NULL
+                """,
+                (member_name,) + tuple(c_ids),
+            )
+            missing = cursor.fetchone()["cnt"]
 
-        cursor.execute(
-            """
-            SELECT COUNT(*) AS cnt
-            FROM stage_reviews
-            WHERE stage_id IN (5, 6) AND DATE(created_at) = CURDATE()
-            """
-        )
-        completed_today = cursor.fetchone()["cnt"]
+            # 3. Completed today
+            cursor.execute(
+                "SELECT COUNT(*) AS cnt FROM admission_interview_scores "
+                "WHERE committee_member_name = %s AND DATE(created_at) = CURDATE()",
+                (member_name,),
+            )
+            completed_today = cursor.fetchone()["cnt"]
 
-        cursor.execute(
-            """
-            SELECT COUNT(*) AS cnt
-            FROM stage_reviews
-            WHERE stage_id IN (5, 6)
-              AND result = 'Rejected'
-              AND DATE(created_at) = CURDATE()
-            """
-        )
-        rejected_today = cursor.fetchone()["cnt"]
+            # 4. Rejected today
+            cursor.execute(
+                "SELECT COUNT(*) AS cnt FROM admission_interview_scores "
+                "WHERE committee_member_name = %s AND recommendation = 'unsuitable' AND DATE(created_at) = CURDATE()",
+                (member_name,),
+            )
+            rejected_today = cursor.fetchone()["cnt"]
+        else:
+            cursor.execute(
+                """
+                SELECT COUNT(*) AS cnt
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
+                """
+            )
+            waiting = cursor.fetchone()["cnt"]
+
+            cursor.execute(
+                """
+                SELECT COUNT(*) AS cnt
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                LEFT JOIN stage_reviews sr
+                  ON sr.trainee_id = u.id AND sr.stage_id = ps.current_stage_id
+                WHERE u.role = 'applicant'
+                  AND ps.current_stage_id IN (5, 6)
+                  AND sr.id IS NULL
+                """
+            )
+            missing = cursor.fetchone()["cnt"]
+
+            cursor.execute(
+                """
+                SELECT COUNT(*) AS cnt
+                FROM stage_reviews
+                WHERE stage_id IN (5, 6) AND DATE(created_at) = CURDATE()
+                """
+            )
+            completed_today = cursor.fetchone()["cnt"]
+
+            cursor.execute(
+                """
+                SELECT COUNT(*) AS cnt
+                FROM stage_reviews
+                WHERE stage_id IN (5, 6)
+                  AND result = 'Rejected'
+                  AND DATE(created_at) = CURDATE()
+                """
+            )
+            rejected_today = cursor.fetchone()["cnt"]
 
         return {
             "waiting_interviews": waiting,
@@ -82,39 +149,86 @@ async def interview_summary(coordinator: dict = Depends(require_coordinator)):
 
 
 @router.get("/queue")
-async def interview_queue(coordinator: dict = Depends(require_coordinator)):
+async def interview_queue(user: dict = Depends(require_coordinator_or_member)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute(
-            """
-            SELECT u.id,
-                   u.full_name_ar AS name,
-                   u.email,
-                   u.national_id,
-                   ps.current_stage_id AS stage_id,
-                   ps.status AS pipeline_status,
-                   a.course_id,
-                   c.title_ar AS course_title_ar,
-                   c.title AS course_title,
-                   sr.id AS review_id,
-                   sr.result AS review_result,
-                   sr.created_at AS reviewed_at
-            FROM users u
-            JOIN pipeline_state ps ON ps.trainee_id = u.id
-            LEFT JOIN (
-              SELECT user_id, course_id, status,
-                     ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY applied_at DESC, id DESC) AS rn
-              FROM applications
-            ) a ON a.user_id = u.id AND a.rn = 1
-            LEFT JOIN courses c ON c.id = a.course_id
-            LEFT JOIN stage_reviews sr
-              ON sr.trainee_id = u.id AND sr.stage_id = ps.current_stage_id
-            WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
-            ORDER BY ps.current_stage_id, u.full_name_ar
-            """
-        )
-        return _rows(cursor)
+        if user["role"] == "committee_member":
+            cursor.execute(
+                "SELECT committee_id FROM interview_committee_members WHERE member_user_id = %s",
+                (user["id"],),
+            )
+            c_ids = [r["committee_id"] for r in cursor.fetchall()]
+            if not c_ids:
+                return []
+            
+            cursor.execute("SELECT full_name_ar FROM users WHERE id = %s", (user["id"],))
+            member_name = cursor.fetchone()["full_name_ar"]
+            
+            placeholders = ",".join(["%s"] * len(c_ids))
+            cursor.execute(
+                f"""
+                SELECT u.id,
+                       u.full_name_ar AS name,
+                       u.email,
+                       u.national_id,
+                       ps.current_stage_id AS stage_id,
+                       ps.status AS pipeline_status,
+                       a.course_id,
+                       c.title_ar AS course_title_ar,
+                       c.title AS course_title,
+                       s.id AS review_id,
+                       s.recommendation AS review_result,
+                       s.updated_at AS reviewed_at,
+                       ica.committee_id
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                JOIN interview_committee_applicants ica ON ica.applicant_user_id = u.id AND ica.stage_id = ps.current_stage_id
+                LEFT JOIN (
+                  SELECT user_id, course_id, status,
+                         ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY applied_at DESC, id DESC) AS rn
+                  FROM applications
+                ) a ON a.user_id = u.id AND a.rn = 1
+                LEFT JOIN courses c ON c.id = a.course_id
+                LEFT JOIN admission_interview_scores s
+                  ON s.trainee_id = u.id AND s.stage_id = ps.current_stage_id AND s.committee_member_name = %s
+                WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
+                  AND ica.committee_id IN ({placeholders})
+                ORDER BY ps.current_stage_id, u.full_name_ar
+                """,
+                (member_name,) + tuple(c_ids),
+            )
+            return _rows(cursor)
+        else:
+            cursor.execute(
+                """
+                SELECT u.id,
+                       u.full_name_ar AS name,
+                       u.email,
+                       u.national_id,
+                       ps.current_stage_id AS stage_id,
+                       ps.status AS pipeline_status,
+                       a.course_id,
+                       c.title_ar AS course_title_ar,
+                       c.title AS course_title,
+                       sr.id AS review_id,
+                       sr.result AS review_result,
+                       sr.created_at AS reviewed_at
+                FROM users u
+                JOIN pipeline_state ps ON ps.trainee_id = u.id
+                LEFT JOIN (
+                  SELECT user_id, course_id, status,
+                         ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY applied_at DESC, id DESC) AS rn
+                  FROM applications
+                ) a ON a.user_id = u.id AND a.rn = 1
+                LEFT JOIN courses c ON c.id = a.course_id
+                LEFT JOIN stage_reviews sr
+                  ON sr.trainee_id = u.id AND sr.stage_id = ps.current_stage_id
+                WHERE u.role = 'applicant' AND ps.current_stage_id IN (5, 6)
+                ORDER BY ps.current_stage_id, u.full_name_ar
+                """
+            )
+            return _rows(cursor)
     finally:
         cursor.close()
         db.close()
@@ -166,7 +280,7 @@ def _resolve_member_name(coordinator, cursor, fallback):
 
 
 @router.post("/evaluate")
-async def submit_evaluation(body: dict, coordinator: dict = Depends(require_coordinator)):
+async def submit_evaluation(body: dict, user: dict = Depends(require_coordinator_or_member)):
     """Record one committee member's interview evaluation for an applicant.
 
     Computes total / max / percentage server-side and upserts a row in
@@ -220,7 +334,49 @@ async def submit_evaluation(body: dict, coordinator: dict = Depends(require_coor
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        member = _resolve_member_name(coordinator, cursor, body.get("committee_member_name"))
+        if user["role"] == "committee_member":
+            cursor.execute("SELECT full_name_ar FROM users WHERE id = %s", (user["id"],))
+            member = cursor.fetchone()["full_name_ar"]
+            # Authz: a committee member may only evaluate applicants assigned to
+            # one of their own committees.
+            cursor.execute(
+                """SELECT ica.committee_id
+                   FROM interview_committee_applicants ica
+                   JOIN interview_committee_members icm ON icm.committee_id = ica.committee_id
+                   WHERE icm.member_user_id = %s AND ica.applicant_user_id = %s AND ica.stage_id = %s
+                   LIMIT 1""",
+                (user["id"], trainee_id, stage_id),
+            )
+            allowed = cursor.fetchone()
+            if not allowed:
+                raise HTTPException(status_code=403, detail="غير مصرح لك بتقييم هذا المتقدم")
+            if not committee_id:
+                committee_id = allowed["committee_id"]
+        else:
+            member = _resolve_member_name(user, cursor, body.get("committee_member_name"))
+
+        # Fallback to resolve committee_id and course_id
+        if not committee_id:
+            cursor.execute(
+                "SELECT committee_id FROM interview_committee_applicants "
+                "WHERE applicant_user_id = %s AND stage_id = %s LIMIT 1",
+                (trainee_id, stage_id),
+            )
+            comm_row = cursor.fetchone()
+            if comm_row:
+                committee_id = comm_row["committee_id"]
+
+        if not course_id:
+            cursor.execute(
+                """SELECT course_id FROM applications
+                   WHERE user_id = %s AND status IN ('pending', 'approved')
+                   ORDER BY applied_at DESC, id DESC LIMIT 1""",
+                (trainee_id,),
+            )
+            app_row = cursor.fetchone()
+            if app_row:
+                course_id = app_row["course_id"]
+
         cursor.execute(
             "SELECT id FROM admission_interview_scores "
             "WHERE trainee_id = %s AND stage_id = %s AND committee_member_name = %s",
@@ -270,11 +426,21 @@ async def submit_evaluation(body: dict, coordinator: dict = Depends(require_coor
 
 
 @router.get("/applicant/{trainee_id}/scores")
-async def applicant_scores(trainee_id: int, coordinator: dict = Depends(require_coordinator)):
+async def applicant_scores(trainee_id: int, user: dict = Depends(require_coordinator_or_member)):
     """All committee evaluations for an applicant + average / variance across members."""
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
+        if user["role"] == "committee_member":
+            cursor.execute(
+                """SELECT COUNT(*) AS cnt FROM interview_committee_applicants ica
+                   JOIN interview_committee_members icm ON icm.committee_id = ica.committee_id
+                   WHERE ica.applicant_user_id = %s AND icm.member_user_id = %s""",
+                (trainee_id, user["id"]),
+            )
+            if not cursor.fetchone()["cnt"]:
+                raise HTTPException(status_code=403, detail="غير مصرح لك بالوصول لبيانات هذا المتقدم")
+
         cursor.execute(
             """SELECT id, stage_id, committee_id, committee_member_name,
                       criteria_json, total_score, total_max, recommendation, notes,
@@ -310,12 +476,21 @@ async def applicant_scores(trainee_id: int, coordinator: dict = Depends(require_
 
 
 @router.get("/criteria-analysis")
-async def criteria_analysis(coordinator: dict = Depends(require_coordinator)):
+async def criteria_analysis(user: dict = Depends(require_coordinator_or_member)):
     """Average score per criterion across all submitted evaluations (strongest / weakest)."""
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT criteria_json FROM admission_interview_scores")
+        if user["role"] == "committee_member":
+            cursor.execute("SELECT full_name_ar FROM users WHERE id = %s", (user["id"],))
+            member_name = cursor.fetchone()["full_name_ar"]
+            cursor.execute(
+                "SELECT criteria_json FROM admission_interview_scores WHERE committee_member_name = %s",
+                (member_name,),
+            )
+        else:
+            cursor.execute("SELECT criteria_json FROM admission_interview_scores")
+
         agg = {}
         for r in _rows(cursor):
             data = r["criteria_json"]
@@ -349,32 +524,81 @@ async def criteria_analysis(coordinator: dict = Depends(require_coordinator)):
 
 
 @router.get("/decisions-summary")
-async def decisions_summary(coordinator: dict = Depends(require_coordinator)):
+async def decisions_summary(user: dict = Depends(require_coordinator_or_member)):
     """Final-recommendation breakdown + evaluation completion rate."""
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute(
-            """SELECT recommendation, COUNT(*) AS cnt
-               FROM admission_interview_scores GROUP BY recommendation"""
-        )
-        rec = {"accept": 0, "waitlist": 0, "unsuitable": 0, "pending": 0}
-        for r in _rows(cursor):
-            rec[r["recommendation"] or "pending"] = r["cnt"]
+        if user["role"] == "committee_member":
+            cursor.execute("SELECT full_name_ar FROM users WHERE id = %s", (user["id"],))
+            member_name = cursor.fetchone()["full_name_ar"]
+            cursor.execute(
+                "SELECT committee_id FROM interview_committee_members WHERE member_user_id = %s",
+                (user["id"],),
+            )
+            c_ids = [r["committee_id"] for r in cursor.fetchall()]
+            
+            cursor.execute(
+                """SELECT recommendation, COUNT(*) AS cnt
+                   FROM admission_interview_scores 
+                   WHERE committee_member_name = %s 
+                   GROUP BY recommendation""",
+                (member_name,),
+            )
+            rec = {"accept": 0, "waitlist": 0, "unsuitable": 0, "pending": 0}
+            for r in _rows(cursor):
+                rec[r["recommendation"] or "pending"] = r["cnt"]
 
-        cursor.execute(
-            "SELECT COUNT(*) AS cnt FROM users u JOIN pipeline_state ps ON ps.trainee_id=u.id "
-            "WHERE u.role='applicant' AND ps.current_stage_id IN (5,6)"
-        )
-        scheduled = cursor.fetchone()["cnt"]
-        cursor.execute(
-            "SELECT COUNT(DISTINCT trainee_id) AS cnt FROM admission_interview_scores WHERE stage_id IN (5,6)"
-        )
-        evaluated = cursor.fetchone()["cnt"]
-        cursor.execute(
-            "SELECT AVG(total_score/total_max*100) AS avg_pct FROM admission_interview_scores WHERE total_max>0"
-        )
-        avg_pct = cursor.fetchone()["avg_pct"]
+            if c_ids:
+                placeholders = ",".join(["%s"] * len(c_ids))
+                cursor.execute(
+                    f"""SELECT COUNT(DISTINCT applicant_user_id) AS cnt 
+                        FROM interview_committee_applicants
+                        WHERE committee_id IN ({placeholders}) AND stage_id IN (5,6)""",
+                    tuple(c_ids),
+                )
+                scheduled = cursor.fetchone()["cnt"]
+            else:
+                scheduled = 0
+
+            cursor.execute(
+                """SELECT COUNT(DISTINCT trainee_id) AS cnt 
+                   FROM admission_interview_scores 
+                   WHERE committee_member_name = %s AND stage_id IN (5,6)""",
+                (member_name,),
+            )
+            evaluated = cursor.fetchone()["cnt"]
+
+            cursor.execute(
+                """SELECT AVG(total_score/total_max*100) AS avg_pct 
+                   FROM admission_interview_scores 
+                   WHERE committee_member_name = %s AND total_max>0""",
+                (member_name,),
+            )
+            avg_pct = cursor.fetchone()["avg_pct"]
+        else:
+            cursor.execute(
+                """SELECT recommendation, COUNT(*) AS cnt
+                   FROM admission_interview_scores GROUP BY recommendation"""
+            )
+            rec = {"accept": 0, "waitlist": 0, "unsuitable": 0, "pending": 0}
+            for r in _rows(cursor):
+                rec[r["recommendation"] or "pending"] = r["cnt"]
+
+            cursor.execute(
+                "SELECT COUNT(*) AS cnt FROM users u JOIN pipeline_state ps ON ps.trainee_id=u.id "
+                "WHERE u.role='applicant' AND ps.current_stage_id IN (5,6)"
+            )
+            scheduled = cursor.fetchone()["cnt"]
+            cursor.execute(
+                "SELECT COUNT(DISTINCT trainee_id) AS cnt FROM admission_interview_scores WHERE stage_id IN (5,6)"
+            )
+            evaluated = cursor.fetchone()["cnt"]
+            cursor.execute(
+                "SELECT AVG(total_score/total_max*100) AS avg_pct FROM admission_interview_scores WHERE total_max>0"
+            )
+            avg_pct = cursor.fetchone()["avg_pct"]
+
         return {
             "recommendations": rec,
             "interviews_scheduled": scheduled,
@@ -431,8 +655,15 @@ async def create_committee(body: dict, coordinator: dict = Depends(require_coord
             name = (m.get("member_name") if isinstance(m, dict) else str(m)).strip()
             if name:
                 cursor.execute(
-                    "INSERT INTO interview_committee_members (committee_id, member_name) VALUES (%s,%s)",
-                    (cid, name),
+                    "SELECT id FROM users WHERE full_name_ar = %s AND role = 'committee_member'",
+                    (name,),
+                )
+                user_row = cursor.fetchone()
+                user_id = user_row["id"] if user_row else None
+                
+                cursor.execute(
+                    "INSERT INTO interview_committee_members (committee_id, member_name, member_user_id) VALUES (%s,%s,%s)",
+                    (cid, name, user_id),
                 )
         db.commit()
         return {"id": cid, "committee_number": number}
