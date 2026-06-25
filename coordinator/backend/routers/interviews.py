@@ -694,6 +694,53 @@ async def assign_applicants(committee_id: int, body: dict, coordinator: dict = D
         db.close()
 
 
+@router.get("/evaluations")
+async def list_evaluations(stage_id: int = None, recommendation: str = None,
+                           coordinator: dict = Depends(require_coordinator)):
+    """All interview evaluations as JSON (for the printable PDF report)."""
+    where, params = ["1=1"], []
+    if stage_id in (5, 6):
+        where.append("s.stage_id = %s")
+        params.append(stage_id)
+    if recommendation in ("accept", "waitlist", "unsuitable"):
+        where.append("s.recommendation = %s")
+        params.append(recommendation)
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            f"""SELECT s.id, s.trainee_id, u.full_name_ar AS applicant, u.national_id,
+                       s.stage_id, s.committee_id, s.committee_member_name,
+                       s.criteria_json, s.total_score, s.total_max, s.recommendation,
+                       s.notes, s.session_start, s.session_end, s.governorate,
+                       s.still_on_duty, s.updated_at
+                FROM admission_interview_scores s
+                LEFT JOIN users u ON u.id = s.trainee_id
+                WHERE {' AND '.join(where)}
+                ORDER BY s.trainee_id, s.stage_id, s.committee_member_name""",
+            tuple(params),
+        )
+        rows = _rows(cursor)
+        for r in rows:
+            if isinstance(r.get("criteria_json"), str):
+                try:
+                    r["criteria_json"] = json.loads(r["criteria_json"])
+                except Exception:
+                    r["criteria_json"] = {}
+            tm = float(r["total_max"] or 0)
+            r["percentage"] = round(float(r["total_score"]) / tm * 100, 1) if tm else 0
+            r["total_score"] = float(r["total_score"])
+            r["total_max"] = float(r["total_max"])
+            for k in ("session_start", "session_end", "updated_at"):
+                if r.get(k) is not None:
+                    r[k] = str(r[k])
+        return rows
+    finally:
+        cursor.close()
+        db.close()
+
+
 @router.get("/export")
 async def export_evaluations(stage_id: int = None, recommendation: str = None,
                              coordinator: dict = Depends(require_coordinator)):
