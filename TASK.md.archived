@@ -1,0 +1,19 @@
+# Active Task
+
+## Goal
+Audit the **Coordinator Portal** (Port 8005): log in, walk through dashboard / courses / attendance / other sections, capture console errors and any styling/layout issues.
+
+## Credentials
+See `AGENTS.md` → Test Accounts.
+
+## Checklist (this task only)
+- [ ] Log in to Coordinator Portal at http://localhost:8005
+- [ ] Walk dashboard, courses, attendance, any other linked pages
+- [ ] Record console errors (file:line + message) and styling/layout issues
+- [ ] Report findings, commit + push, then update this checklist
+
+## Next step
+Use `browser_subagent` to log in to the Coordinator Portal and start the walk-through.
+
+---
+_When this audit is complete, replace this file with the next task (Editor 8004, then Admin 8002). One portal per TASK.md — do not try to track all three in one file._
