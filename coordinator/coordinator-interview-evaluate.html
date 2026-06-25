@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
+    <link rel="stylesheet" href="coordinator.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تقييم المقابلة | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      .ev-card{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.25rem;margin-bottom:1.25rem}
+      .ev-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;margin-bottom:1rem}
+      .ev-field{display:flex;flex-direction:column;gap:.35rem;flex:1 1 200px;min-width:0}
+      .ev-field label{font-size:.8rem;color:var(--text-subtle)}
+      .ev-field input,.ev-field select,.ev-field textarea{padding:.6rem .75rem;border-radius:9px;background:var(--bg-input,#0d1222);border:1px solid rgba(255,255,255,.12);color:var(--text-main);font-family:inherit;font-size:.9rem}
+      .ev-table{width:100%;border-collapse:collapse}
+      .ev-table th,.ev-table td{padding:.55rem .6rem;border-bottom:1px solid rgba(255,255,255,.07);text-align:center;color:var(--text-main);font-size:.84rem}
+      .ev-table th{color:var(--text-subtle);font-size:.72rem;font-weight:700}
+      .ev-table td.crit{text-align:right;font-weight:600}
+      .ev-table td.crit small{display:block;color:var(--text-subtle);font-weight:400;font-size:.72rem}
+      .ev-table input[type=radio]{width:18px;height:18px;cursor:pointer;accent-color:#3b82f6}
+      .ev-total{display:flex;gap:2rem;flex-wrap:wrap;align-items:center;padding:1rem 1.25rem;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:12px;margin-top:1rem}
+      .ev-total b{font-size:1.6rem;color:#60a5fa;font-variant-numeric:tabular-nums}
+      .ev-total span{color:var(--text-subtle);font-size:.82rem}
+      .ev-btn{padding:.7rem 1.6rem;border-radius:10px;border:1px solid transparent;font-weight:700;font-family:inherit;cursor:pointer;font-size:.9rem}
+      .ev-btn--primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
+      .ev-btn--primary:disabled{opacity:.5;cursor:not-allowed}
+      .ev-existing{font-size:.84rem;color:var(--text-subtle)}
+      .ev-existing .pill{display:inline-flex;gap:.4rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:.2rem .6rem;margin:.2rem;color:var(--text-main)}
+      .ev-msg{padding:.7rem 1rem;border-radius:10px;margin-top:1rem;display:none}
+      .ev-msg--ok{background:rgba(34,197,94,.12);color:#86efac;display:block}
+      .ev-msg--err{background:rgba(239,68,68,.12);color:#fecaca;display:block}
+    </style>
+  </head>
+  <body data-page="interviews">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">تقييم المقابلة الشخصية</h1>
+        <p class="coord-page-header__sub">نموذج تقييم رقمي بمحاور من 1 إلى 5 — يحسب الإجمالي والنسبة تلقائياً.</p>
+      </header>
+
+      <div class="ev-card">
+        <div class="ev-row">
+          <div class="ev-field"><label>المتقدم</label>
+            <select id="applicantSel"><option value="">— اختر المتقدم —</option></select></div>
+          <div class="ev-field" style="flex:0 0 200px"><label>نموذج التقييم</label>
+            <select id="formSel">
+              <option value="fifteen">15 محوراً (من 75)</option>
+              <option value="ten">10 محاور (من 50)</option>
+            </select></div>
+          <div class="ev-field" style="flex:0 0 160px"><label>المرحلة</label>
+            <select id="stageSel"><option value="5">المقابلة الأولى</option><option value="6">المقابلة الثانية</option></select></div>
+        </div>
+        <div class="ev-row">
+          <div class="ev-field"><label>اسم عضو اللجنة</label><input id="memberName" placeholder="اسم المُقيِّم" /></div>
+          <div class="ev-field" style="flex:0 0 200px"><label>التوصية</label>
+            <select id="recSel"><option value="">— بدون —</option><option value="accept">قبول</option><option value="waitlist">قائمة انتظار</option><option value="unsuitable">غير مناسب</option></select></div>
+        </div>
+      </div>
+
+      <div class="ev-card">
+        <table class="ev-table">
+          <thead>
+            <tr><th style="text-align:right">المحور / Criterion</th><th>ضعيف<br>1</th><th>مقبول<br>2</th><th>جيد<br>3</th><th>جيد جداً<br>4</th><th>ممتاز<br>5</th></tr>
+          </thead>
+          <tbody id="critBody"></tbody>
+        </table>
+        <div class="ev-total">
+          <div><b id="totVal">0</b> <span>/ <span id="maxVal">75</span> الإجمالي</span></div>
+          <div><b id="pctVal">0%</b> <span>النسبة المئوية</span></div>
+          <div><b id="filledVal">0/15</b> <span>المحاور المُقيَّمة</span></div>
+        </div>
+        <div class="ev-field" style="margin-top:1rem"><label>ملاحظات</label><textarea id="notes" rows="2" placeholder="ملاحظات اللجنة..."></textarea></div>
+        <div style="margin-top:1rem;display:flex;gap:1rem;align-items:center">
+          <button id="submitBtn" class="ev-btn ev-btn--primary" disabled>حفظ التقييم</button>
+          <span class="ev-existing" id="existing"></span>
+        </div>
+        <div class="ev-msg" id="msg"></div>
+      </div>
+    </main>
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      // Criteria sets mirror the official paper forms (1–5 scale).
+      var RATING = ["ضعيف","مقبول","جيد","جيد جداً","ممتاز"];
+      var FORMS = {
+        fifteen: [
+          ["appearance","المظهر","Appearance"],["personality","تقييم الشخصية","Personality"],
+          ["motivation","الدافعية والحماس","Motivation & enthusiasm"],["confidence","الثقة بالنفس","Self-confidence"],
+          ["initiation","المبادرة","Initiation"],["presentation","مهارات العرض","Presentation skills"],
+          ["communication","مهارات التواصل","Communication skills"],["expression","القدرة على التعبير بألفاظ صحيحة","Ability to express clearly"],
+          ["problem_solving","حل المشكلات","Problem-solving"],["analytical","المهارات التحليلية","Analytical skills"],
+          ["leadership","القيادة","Leadership"],["creativity","الإبداع","Creativity"],
+          ["career_goals","الطموحات العملية","Career goals"],["decision","اتخاذ القرار","Decision making"],
+          ["flexibility","المرونة والقدرة على التكيف","Flexibility / adaptability"]
+        ],
+        ten: [
+          ["appearance","المظهر العام","Appearance"],["conversing","أسلوبه في الحديث والتواصل","Manner of conversing"],
+          ["participation","الحماس والرغبة في المشاركة","Willingness to participate"],["confidence","الثقة بالنفس","Self-confidence"],
+          ["collaboration","التعاون والعمل الجماعي","Collaboration & teamwork"],["respect","احترام الآخرين وأسلوب الحوار","Respect & dialogue"],
+          ["expression","القدرة على التعبير بوضوح","Express himself clearly"],["flexibility","المرونة والاستجابة للتوجيهات","Flexibility & responsiveness"],
+          ["general_behavior","السلوك العام (هدوء/اندفاع)","General behaviour"],["hobbies","وجود هوايات أو اهتمامات خاصة","Hobbies / interests"]
+        ]
+      };
+      function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      var auth = window.coordinatorAuth;
+      var params = new URLSearchParams(location.search);
+
+      function currentCriteria(){ return FORMS[document.getElementById('formSel').value]; }
+
+      function renderGrid(){
+        var crit = currentCriteria();
+        var body = document.getElementById('critBody');
+        body.innerHTML = crit.map(function(c,i){
+          var radios = '';
+          for(var s=1;s<=5;s++){ radios += '<td><input type="radio" name="c_'+c[0]+'" value="'+s+'"></td>'; }
+          return '<tr><td class="crit">'+(i+1)+'. '+esc(c[1])+'<small>'+esc(c[2])+'</small></td>'+radios+'</tr>';
+        }).join('');
+        document.getElementById('maxVal').textContent = crit.length*5;
+        body.addEventListener('change', recalc);
+        recalc();
+      }
+      function collectScores(){
+        var crit = currentCriteria(), out={};
+        crit.forEach(function(c){
+          var sel = document.querySelector('input[name="c_'+c[0]+'"]:checked');
+          if(sel) out[c[0]] = parseInt(sel.value,10);
+        });
+        return out;
+      }
+      function recalc(){
+        var crit = currentCriteria(), scores = collectScores();
+        var keys = Object.keys(scores), total=0;
+        keys.forEach(function(k){ total += scores[k]; });
+        var max = crit.length*5;
+        document.getElementById('totVal').textContent = total;
+        document.getElementById('pctVal').textContent = (max? Math.round(total/max*1000)/10 : 0)+'%';
+        document.getElementById('filledVal').textContent = keys.length+'/'+crit.length;
+        // require ALL criteria scored before enabling submit (prevent incomplete)
+        document.getElementById('submitBtn').disabled = (keys.length !== crit.length) || !document.getElementById('applicantSel').value;
+      }
+      function loadApplicants(){
+        auth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(function(rows){
+          var sel = document.getElementById('applicantSel');
+          rows.forEach(function(r){
+            var o=document.createElement('option'); o.value=r.id; o.textContent=r.name+' ('+(r.national_id||'')+')';
+            o.setAttribute('data-stage', r.stage_id||5); sel.appendChild(o);
+          });
+          var pre = params.get('trainee_id');
+          if(pre){ sel.value=pre; onApplicant(); }
+        });
+      }
+      function onApplicant(){
+        recalc();
+        var id = document.getElementById('applicantSel').value;
+        var ex = document.getElementById('existing'); ex.innerHTML='';
+        if(!id) return;
+        auth.fetch('/api/coordinator/interviews/applicant/'+id+'/scores').then(function(r){return r.json();}).then(function(d){
+          if(d.evaluations && d.evaluations.length){
+            ex.innerHTML = '<strong>تقييمات سابقة ('+d.member_count+'):</strong> '+d.evaluations.map(function(e){
+              return '<span class="pill">'+esc(e.committee_member_name)+': '+e.total_score+'/'+e.total_max+' ('+e.percentage+'%)</span>';
+            }).join('')+' — المتوسط '+d.average_percentage+'%';
+          }
+        });
+      }
+      function submit(){
+        var msg = document.getElementById('msg'); msg.className='ev-msg';
+        var payload = {
+          trainee_id: parseInt(document.getElementById('applicantSel').value,10),
+          stage_id: parseInt(document.getElementById('stageSel').value,10),
+          committee_member_name: document.getElementById('memberName').value.trim(),
+          criteria_json: collectScores(),
+          recommendation: document.getElementById('recSel').value || null,
+          notes: document.getElementById('notes').value.trim()
+        };
+        var btn=document.getElementById('submitBtn'); btn.disabled=true;
+        auth.fetch('/api/coordinator/interviews/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+          .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
+          .then(function(res){
+            if(res.ok){ msg.className='ev-msg ev-msg--ok'; msg.textContent='تم حفظ التقييم: '+res.d.total_score+'/'+res.d.total_max+' ('+res.d.percentage+'%).'; onApplicant(); }
+            else { msg.className='ev-msg ev-msg--err'; msg.textContent=(res.d && res.d.detail) || 'تعذّر حفظ التقييم'; }
+            btn.disabled=false;
+          })
+          .catch(function(){ msg.className='ev-msg ev-msg--err'; msg.textContent='خطأ في الاتصال بالخادم'; btn.disabled=false; });
+      }
+      document.getElementById('formSel').addEventListener('change', renderGrid);
+      document.getElementById('applicantSel').addEventListener('change', onApplicant);
+      document.getElementById('submitBtn').addEventListener('click', submit);
+      renderGrid(); loadApplicants();
+    </script>
+  </body>
+</html>

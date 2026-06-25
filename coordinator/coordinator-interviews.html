@@ -30,11 +30,24 @@
         <table class="coord-table">
           <thead>
             <tr>
-              <th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th>
+              <th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th><th>إجراء</th>
             </tr>
           </thead>
-          <tbody id="queueBody"><tr><td colspan="6">جاري التحميل...</td></tr></tbody>
+          <tbody id="queueBody"><tr><td colspan="7">جاري التحميل...</td></tr></tbody>
         </table>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:1.5rem">
+        <div class="coord-table-wrap">
+          <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">تحليل المحاور</h3>
+          <p style="margin:0 0 1rem;color:var(--text-subtle);font-size:.8rem">متوسط الدرجة لكل محور عبر جميع التقييمات.</p>
+          <div id="critAnalysis"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
+        </div>
+        <div class="coord-table-wrap">
+          <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">القرارات ومعدّل الإنجاز</h3>
+          <p style="margin:0 0 1rem;color:var(--text-subtle);font-size:.8rem">توزيع التوصيات ونسبة اكتمال التقييم.</p>
+          <div id="decSummary"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
+        </div>
       </section>
     </main>
     <script src="js/coordinator-layout.js"></script>
@@ -55,11 +68,31 @@
         if(!rows.length){body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';return;}
         body.innerHTML=rows.map(function(r){
           var done=!!r.review_id;
-          return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td></tr>';
+          return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td><td><a href="coordinator-interview-evaluate.html?trainee_id='+r.id+'" class="coord-badge coord-badge--ok" style="text-decoration:none">تقييم</a></td></tr>';
         }).join('');
       }
       window.coordinatorAuth.fetch('/api/coordinator/interviews/summary').then(function(r){return r.json();}).then(renderKPIs).catch(function(){document.getElementById('interviewKpis').innerHTML='<div class="coord-state">فشل تحميل الإحصائيات</div>';});
-      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="6">فشل تحميل الطابور</td></tr>';});
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="7">فشل تحميل الطابور</td></tr>';});
+
+      function bar(label,avg){
+        var pct=Math.round(avg/5*100);
+        return '<div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.2rem"><span>'+esc(label)+'</span><span style="color:var(--text-subtle)">'+avg+'/5</span></div><div style="height:7px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div></div>';
+      }
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/criteria-analysis').then(function(r){return r.json();}).then(function(d){
+        var el=document.getElementById('critAnalysis');
+        if(!d.criteria||!d.criteria.length){el.innerHTML='<span style="color:var(--text-subtle)">لا توجد تقييمات بعد.</span>';return;}
+        var html='<div style="margin-bottom:.75rem"><strong style="color:#86efac;font-size:.82rem">الأقوى:</strong> '+d.strongest.map(function(c){return esc(c.key)+' ('+c.average+')';}).join('، ')+'</div>';
+        html+='<div style="margin-bottom:1rem"><strong style="color:#fca5a5;font-size:.82rem">الأضعف:</strong> '+d.weakest.map(function(c){return esc(c.key)+' ('+c.average+')';}).join('، ')+'</div>';
+        html+=d.criteria.slice().sort(function(a,b){return b.average-a.average;}).map(function(c){return bar(c.key,c.average);}).join('');
+        el.innerHTML=html;
+      }).catch(function(){document.getElementById('critAnalysis').innerHTML='<span style="color:var(--text-subtle)">تعذّر التحميل</span>';});
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/decisions-summary').then(function(r){return r.json();}).then(function(d){
+        var rec=d.recommendations||{};
+        var items=[['قبول',rec.accept||0,'#86efac'],['قائمة انتظار',rec.waitlist||0,'#fde68a'],['غير مناسب',rec.unsuitable||0,'#fca5a5'],['بانتظار التوصية',rec.pending||0,'#94a3b8']];
+        var html=items.map(function(i){return '<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.85rem"><span style="color:'+i[2]+'">'+i[0]+'</span><strong>'+i[1]+'</strong></div>';}).join('');
+        html+='<div class="ev-total" style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap"><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.average_interview_percentage+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">متوسط النسبة</span></div><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.evaluation_completion_rate+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">اكتمال التقييم</span></div></div>';
+        document.getElementById('decSummary').innerHTML=html;
+      }).catch(function(){document.getElementById('decSummary').innerHTML='<span style="color:var(--text-subtle)">تعذّر التحميل</span>';});
     </script>
   </body>
 </html>
