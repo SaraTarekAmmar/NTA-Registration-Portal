@@ -48,7 +48,7 @@ backend Python, restart the server instead of trusting the auto-reload.
 Login requires email + 14-digit national ID + password.
 - Admin:       admin@nta.edu.eg       / 29001011234567 / NTA@Admin2026  → POST /api/admin/auth/login (port 8002)
 - Editor:      editor@nta.edu.eg      / 29505051234567 / NTA@Editor2026 → POST /api/editor/auth/login (port 8004)
-- Coordinator: coordinator@nta.edu.eg / 29505051234568 / NTA@Coord2026  → POST /api/coordinator/auth/login (port 8005)
+- Coordinator: coordinator@nta.edu.eg / 29304041234567 / NTA@Coord2026  → POST /api/coordinator/auth/login (port 8005)
 - Super:       superadmin@nta.edu.eg  / 10000000000000 / NTA@Super2026  (port 8003)
 Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 
@@ -75,16 +75,9 @@ Re-seed all accounts with `deploy/INSTALL_ACCOUNTS.bat`.
 - Admin and editor auth flows are separate — do not mix their tokens
   (`admin_token` vs `editor_token` in localStorage).
 
-## Task Continuity
-- `TASK.md` is the single source of truth for the active goal. Read it ONCE at the very
-  start of a new task. Do NOT re-read or rewrite it every turn — that wastes context and
-  causes loops. Treat the goal as your anchor and just keep working on it.
-- Update `TASK.md` only when a checklist item is actually completed (or the goal changes).
-  Update = a single short edit, not a regenerated summary.
-- Do not narrate your plan, do not output "anchored summary" blocks, do not restate the
-  goal in every reply. Take the next concrete action; describe what you did, not what you
-  are about to do.
-- Work is done when the checklist is fully ticked AND pushed to GitHub.
+## Task tracking
+The user's request in the chat IS the task. Do not look for or read `TASK.md` or any
+other progress file unless the user explicitly asks you to. Each session is fresh.
 
 ## Git Workflow
 - After completing a unit of work, `git add` the changes, commit with a clear
