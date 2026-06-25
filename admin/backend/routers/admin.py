@@ -492,6 +492,51 @@ async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
         cursor.close()
         db.close()
 
+@router.get("/trainees/{trainee_id}/interview-scores")
+async def get_interview_scores(trainee_id: int, staff: dict = Depends(get_staff_user)):
+    """Committee interview evaluations for a trainee (read-only, admin oversight).
+
+    Returns each committee member's per-criterion scores plus the cross-member
+    average percentage per interview stage. Data is captured by coordinators in
+    admission_interview_scores; admins see all of it here."""
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+    try:
+        cursor.execute(
+            """SELECT id, stage_id, committee_id, committee_member_name,
+                      criteria_json, total_score, total_max, recommendation, notes, updated_at
+               FROM admission_interview_scores
+               WHERE trainee_id = %s
+               ORDER BY stage_id, committee_member_name""",
+            (trainee_id,),
+        )
+        rows = cursor.fetchall()
+        stages = {}
+        for r in rows:
+            if isinstance(r.get("criteria_json"), str):
+                try:
+                    r["criteria_json"] = json.loads(r["criteria_json"])
+                except (json.JSONDecodeError, ValueError):
+                    r["criteria_json"] = {}
+            tm = float(r["total_max"] or 0)
+            r["percentage"] = round(float(r["total_score"]) / tm * 100, 1) if tm else 0
+            r["total_score"] = float(r["total_score"])
+            r["total_max"] = float(r["total_max"])
+            stages.setdefault(r["stage_id"], []).append(r)
+        out = []
+        for sid, evals in sorted(stages.items()):
+            pcts = [e["percentage"] for e in evals]
+            out.append({
+                "stage_id": sid,
+                "evaluations": evals,
+                "member_count": len(evals),
+                "average_percentage": round(sum(pcts) / len(pcts), 1) if pcts else 0,
+            })
+        return out
+    finally:
+        cursor.close()
+        db.close()
+
 @router.get("/trainees/{trainee_id}")
 async def get_trainee_profile(trainee_id: int, staff: dict = Depends(get_staff_user)):
     db = get_db_connection()

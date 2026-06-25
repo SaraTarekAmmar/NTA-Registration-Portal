@@ -309,6 +309,8 @@
                         </div>
                     </div>
 
+                    <div id="s5-committee-scores" class="committee-eval-block" style="display:none"></div>
+
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
                             <label class="stage-review-card__label" for="s5-reviewer-name">اسم المسؤول</label>
@@ -375,6 +377,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="s6-committee-scores" class="committee-eval-block" style="display:none"></div>
 
                     <div class="stage-review-grid">
                         <div class="stage-review-card">
@@ -897,7 +901,45 @@
                     panel.classList.toggle('admin-stage-panel--active', panel.getAttribute('data-stage-panel') === String(stageId));
                 });
                 if (String(stageId) === "4") loadExamResults(traineeId);
+                if (String(stageId) === "5" || String(stageId) === "6") loadCommitteeScores(traineeId);
             }
+
+            function loadCommitteeScores(tid) {
+                window.authenticatedFetch(`/api/admin/trainees/${tid}/interview-scores`)
+                    .then(res => res.ok ? res.json() : [])
+                    .then(stages => {
+                        const byStage = {};
+                        (stages || []).forEach(s => { byStage[s.stage_id] = s; });
+                        [5, 6].forEach(sid => {
+                            const box = document.getElementById(`s${sid}-committee-scores`);
+                            if (!box) return;
+                            const data = byStage[sid];
+                            if (!data || !data.evaluations || !data.evaluations.length) {
+                                box.style.display = 'none';
+                                box.innerHTML = '';
+                                return;
+                            }
+                            const recAr = { accept: 'قبول', waitlist: 'قائمة انتظار', unsuitable: 'غير مناسب' };
+                            let html = '<div class="committee-eval-head">تقييمات لجنة المقابلة الرقمية <span class="committee-eval-avg">المتوسط ' + data.average_percentage + '% · ' + data.member_count + ' عضو</span></div>';
+                            data.evaluations.forEach(e => {
+                                const crit = e.criteria_json || {};
+                                const chips = Object.keys(crit).map(k => '<span class="committee-eval-chip">' + esc(k) + ': ' + crit[k] + '</span>').join('');
+                                html += '<div class="committee-eval-card">'
+                                    + '<div class="committee-eval-row"><strong>' + esc(e.committee_member_name) + '</strong>'
+                                    + '<span class="committee-eval-score">' + e.total_score + '/' + e.total_max + ' (' + e.percentage + '%)'
+                                    + (e.recommendation ? ' · ' + (recAr[e.recommendation] || e.recommendation) : '') + '</span></div>'
+                                    + '<div class="committee-eval-chips">' + chips + '</div>'
+                                    + (e.notes ? '<div class="committee-eval-notes">' + esc(e.notes) + '</div>' : '')
+                                    + '</div>';
+                            });
+                            box.innerHTML = html;
+                            box.style.display = 'block';
+                        });
+                    })
+                    .catch(err => console.error('Error loading committee scores:', err));
+            }
+
+            function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
             function loadExamResults(tid) {
                 window.authenticatedFetch(`/api/exams/results/${tid}`)
