@@ -182,6 +182,16 @@ async def submit_evaluation(body: dict, coordinator: dict = Depends(require_coor
     recommendation = body.get("recommendation")
     notes = (body.get("notes") or "").strip()
 
+    # Interview session metadata (all optional).
+    def _dt(v):
+        v = (v or "").strip().replace("T", " ")
+        return v or None
+    session_start = _dt(body.get("session_start"))
+    session_end = _dt(body.get("session_end"))
+    governorate = (body.get("governorate") or "").strip() or None
+    still_on_duty = body.get("still_on_duty")
+    still_on_duty = 1 if still_on_duty in (True, 1, "1", "yes", "true") else (0 if still_on_duty in (False, 0, "0", "no", "false") else None)
+
     if not trainee_id:
         raise HTTPException(status_code=422, detail="معرّف المتقدم مطلوب")
     try:
@@ -222,20 +232,24 @@ async def submit_evaluation(body: dict, coordinator: dict = Depends(require_coor
                 """UPDATE admission_interview_scores
                    SET course_id=%s, committee_id=%s, criteria_json=%s,
                        total_score=%s, total_max=%s, recommendation=%s, notes=%s,
+                       session_start=%s, session_end=%s, governorate=%s, still_on_duty=%s,
                        updated_at=NOW()
                    WHERE id=%s""",
                 (course_id, committee_id, json.dumps(scores, ensure_ascii=False),
-                 total_score, total_max, rec, notes, existing["id"]),
+                 total_score, total_max, rec, notes,
+                 session_start, session_end, governorate, still_on_duty, existing["id"]),
             )
             row_id = existing["id"]
         else:
             cursor.execute(
                 """INSERT INTO admission_interview_scores
                        (trainee_id, course_id, stage_id, committee_id, committee_member_name,
-                        criteria_json, total_score, total_max, recommendation, notes)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                        criteria_json, total_score, total_max, recommendation, notes,
+                        session_start, session_end, governorate, still_on_duty)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (trainee_id, course_id, stage_id, committee_id, member,
-                 json.dumps(scores, ensure_ascii=False), total_score, total_max, rec, notes),
+                 json.dumps(scores, ensure_ascii=False), total_score, total_max, rec, notes,
+                 session_start, session_end, governorate, still_on_duty),
             )
             row_id = cursor.lastrowid
         db.commit()
@@ -263,7 +277,8 @@ async def applicant_scores(trainee_id: int, coordinator: dict = Depends(require_
     try:
         cursor.execute(
             """SELECT id, stage_id, committee_id, committee_member_name,
-                      criteria_json, total_score, total_max, recommendation, notes, updated_at
+                      criteria_json, total_score, total_max, recommendation, notes,
+                      session_start, session_end, governorate, still_on_duty, updated_at
                FROM admission_interview_scores
                WHERE trainee_id = %s
                ORDER BY stage_id, committee_member_name""",
@@ -472,7 +487,8 @@ async def export_evaluations(stage_id: int = None, recommendation: str = None,
             f"""SELECT s.id, s.trainee_id, u.full_name_ar AS applicant, u.national_id,
                        s.stage_id, s.committee_id, s.committee_member_name,
                        s.criteria_json, s.total_score, s.total_max, s.recommendation,
-                       s.notes, s.updated_at
+                       s.notes, s.session_start, s.session_end, s.governorate,
+                       s.still_on_duty, s.updated_at
                 FROM admission_interview_scores s
                 LEFT JOIN users u ON u.id = s.trainee_id
                 WHERE {' AND '.join(where)}
@@ -496,7 +512,8 @@ async def export_evaluations(stage_id: int = None, recommendation: str = None,
 
         rec_ar = {"accept": "قبول", "waitlist": "قائمة انتظار", "unsuitable": "غير مناسب"}
         stage_ar = {5: "المقابلة الأولى", 6: "المقابلة الثانية"}
-        header = (["معرّف المتقدم", "المتقدم", "الرقم القومي", "المرحلة", "رقم اللجنة", "عضو اللجنة"]
+        header = (["معرّف المتقدم", "المتقدم", "الرقم القومي", "المرحلة", "رقم اللجنة", "عضو اللجنة",
+                   "المحافظة", "بداية المقابلة", "نهاية المقابلة", "على رأس العمل"]
                   + crit_keys + ["الإجمالي", "الحد الأقصى", "النسبة %", "التوصية", "ملاحظات", "التاريخ"])
 
         buf = io.StringIO()
@@ -509,7 +526,9 @@ async def export_evaluations(stage_id: int = None, recommendation: str = None,
             writer.writerow(
                 [r["trainee_id"], r.get("applicant") or "", r.get("national_id") or "",
                  stage_ar.get(r["stage_id"], r["stage_id"]), r.get("committee_id") or "",
-                 r["committee_member_name"]]
+                 r["committee_member_name"], r.get("governorate") or "",
+                 str(r.get("session_start") or ""), str(r.get("session_end") or ""),
+                 ("نعم" if r.get("still_on_duty") == 1 else ("لا" if r.get("still_on_duty") == 0 else ""))]
                 + [r["_criteria"].get(k, "") for k in crit_keys]
                 + [r["total_score"], r["total_max"], pct,
                    rec_ar.get(r["recommendation"], ""), (r.get("notes") or "").replace("\n", " "),

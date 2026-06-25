@@ -921,13 +921,19 @@
                             }
                             const recAr = { accept: 'قبول', waitlist: 'قائمة انتظار', unsuitable: 'غير مناسب' };
                             let html = '<div class="committee-eval-head">تقييمات لجنة المقابلة الرقمية <span class="committee-eval-avg">المتوسط ' + data.average_percentage + '% · ' + data.member_count + ' عضو</span></div>';
+                            const fmtTime = v => v ? String(v).replace('T', ' ').slice(0, 16) : '';
                             data.evaluations.forEach(e => {
                                 const crit = e.criteria_json || {};
                                 const chips = Object.keys(crit).map(k => '<span class="committee-eval-chip">' + esc(k) + ': ' + crit[k] + '</span>').join('');
+                                const meta = [];
+                                if (e.governorate) meta.push('المحافظة: ' + esc(e.governorate));
+                                if (e.session_start || e.session_end) meta.push('الوقت: ' + esc(fmtTime(e.session_start)) + (e.session_end ? ' – ' + esc(fmtTime(e.session_end)) : ''));
+                                if (e.still_on_duty === 1 || e.still_on_duty === 0) meta.push('على رأس العمل: ' + (e.still_on_duty === 1 ? 'نعم' : 'لا'));
                                 html += '<div class="committee-eval-card">'
                                     + '<div class="committee-eval-row"><strong>' + esc(e.committee_member_name) + '</strong>'
                                     + '<span class="committee-eval-score">' + e.total_score + '/' + e.total_max + ' (' + e.percentage + '%)'
                                     + (e.recommendation ? ' · ' + (recAr[e.recommendation] || e.recommendation) : '') + '</span></div>'
+                                    + (meta.length ? '<div class="committee-eval-meta">' + meta.join(' · ') + '</div>' : '')
                                     + '<div class="committee-eval-chips">' + chips + '</div>'
                                     + (e.notes ? '<div class="committee-eval-notes">' + esc(e.notes) + '</div>' : '')
                                     + '</div>';

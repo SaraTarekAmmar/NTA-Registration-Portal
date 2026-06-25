@@ -60,6 +60,13 @@
           <div class="ev-field" style="flex:0 0 200px"><label>التوصية</label>
             <select id="recSel"><option value="">— بدون —</option><option value="accept">قبول</option><option value="waitlist">قائمة انتظار</option><option value="unsuitable">غير مناسب</option></select></div>
         </div>
+        <div class="ev-row">
+          <div class="ev-field" style="flex:1 1 150px"><label>المحافظة</label><input id="govSel" placeholder="المحافظة" /></div>
+          <div class="ev-field" style="flex:0 0 195px"><label>بداية المقابلة</label><input id="startSel" type="datetime-local" /></div>
+          <div class="ev-field" style="flex:0 0 195px"><label>نهاية المقابلة</label><input id="endSel" type="datetime-local" /></div>
+          <div class="ev-field" style="flex:0 0 160px"><label>على رأس العمل؟</label>
+            <select id="dutySel"><option value="">— غير محدد —</option><option value="1">نعم</option><option value="0">لا</option></select></div>
+        </div>
       </div>
 
       <div class="ev-card">
@@ -174,7 +181,11 @@
           committee_member_name: document.getElementById('memberName').value.trim(),
           criteria_json: collectScores(),
           recommendation: document.getElementById('recSel').value || null,
-          notes: document.getElementById('notes').value.trim()
+          notes: document.getElementById('notes').value.trim(),
+          governorate: document.getElementById('govSel').value.trim() || null,
+          session_start: document.getElementById('startSel').value || null,
+          session_end: document.getElementById('endSel').value || null,
+          still_on_duty: document.getElementById('dutySel').value || null
         };
         var btn=document.getElementById('submitBtn'); btn.disabled=true;
         auth.fetch('/api/coordinator/interviews/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})

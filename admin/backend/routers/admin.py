@@ -504,7 +504,8 @@ async def get_interview_scores(trainee_id: int, staff: dict = Depends(get_staff_
     try:
         cursor.execute(
             """SELECT id, stage_id, committee_id, committee_member_name,
-                      criteria_json, total_score, total_max, recommendation, notes, updated_at
+                      criteria_json, total_score, total_max, recommendation, notes,
+                      session_start, session_end, governorate, still_on_duty, updated_at
                FROM admission_interview_scores
                WHERE trainee_id = %s
                ORDER BY stage_id, committee_member_name""",
