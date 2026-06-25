@@ -1,4 +1,18 @@
 (function () {
+  // The sidebar markup uses the shared `.nta-sidebar` classes and the layout/
+  // animation rules for `.editor-main` live in admin/header/header.css. Inject it
+  // (once) so editor pages render the fixed sidebar and the main content fades in
+  // instead of staying at opacity:0 with an unstyled, full-height sidebar.
+  (function () {
+    if (document.getElementById('ntaSbCss')) return;
+    if (document.querySelector('link[href*="header/header.css"]')) return;
+    var l = document.createElement('link');
+    l.id = 'ntaSbCss';
+    l.rel = 'stylesheet';
+    l.href = '/admin/header/header.css?v=8';
+    document.head.appendChild(l);
+  })();
+
   var EDITOR_TOKEN_KEY = "editor_token";
 
   function ic(path) {
