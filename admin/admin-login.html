@@ -351,7 +351,12 @@
           }, ADMIN_API_PORTS)
             .then(function (result) {
               var data = result.data;
-              if (!data.access_token || !["admin", "superadmin"].includes(data.role)) {
+              if (!data.access_token) {
+                // No token returned — wrong service on this port or a server error,
+                // NOT an authorization problem. Don't blame the account.
+                throw new Error("تعذّر تسجيل الدخول. تأكّد من تشغيل خادم المشرف على المنفذ الصحيح (8002).");
+              }
+              if (!["admin", "superadmin"].includes(data.role)) {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
               }
               localStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);
