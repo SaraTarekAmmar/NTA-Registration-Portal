@@ -4,8 +4,11 @@ Adds read-only interview-day endpoints for committee queue, missing evaluation
 follow-up, and dashboard KPIs. The endpoints intentionally reuse existing
 admission pipeline tables so they work without a new migration.
 """
+import io
+import csv
 import json
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from core.auth import require_coordinator
 from core.database import get_db_connection
 
@@ -440,6 +443,84 @@ async def assign_applicants(committee_id: int, body: dict, coordinator: dict = D
             added += cursor.rowcount
         db.commit()
         return {"committee_id": committee_id, "assigned": added}
+    finally:
+        cursor.close()
+        db.close()
+
+
+@router.get("/export")
+async def export_evaluations(stage_id: int = None, recommendation: str = None,
+                             coordinator: dict = Depends(require_coordinator)):
+    """Download all interview evaluations as CSV (opens directly in Excel).
+
+    One row per (applicant, committee member). Per-criterion scores are expanded
+    into their own columns (union across the 10- and 15-criterion forms), plus
+    total / max / percentage / recommendation. Optional stage / recommendation filters.
+    """
+    where, params = ["1=1"], []
+    if stage_id in (5, 6):
+        where.append("s.stage_id = %s")
+        params.append(stage_id)
+    if recommendation in ("accept", "waitlist", "unsuitable"):
+        where.append("s.recommendation = %s")
+        params.append(recommendation)
+
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            f"""SELECT s.id, s.trainee_id, u.full_name_ar AS applicant, u.national_id,
+                       s.stage_id, s.committee_id, s.committee_member_name,
+                       s.criteria_json, s.total_score, s.total_max, s.recommendation,
+                       s.notes, s.updated_at
+                FROM admission_interview_scores s
+                LEFT JOIN users u ON u.id = s.trainee_id
+                WHERE {' AND '.join(where)}
+                ORDER BY s.trainee_id, s.stage_id, s.committee_member_name""",
+            tuple(params),
+        )
+        rows = _rows(cursor)
+
+        crit_keys = []
+        for r in rows:
+            data = r.get("criteria_json")
+            if isinstance(data, str):
+                try:
+                    data = json.loads(data)
+                except Exception:
+                    data = {}
+            r["_criteria"] = data if isinstance(data, dict) else {}
+            for k in r["_criteria"]:
+                if k not in crit_keys:
+                    crit_keys.append(k)
+
+        rec_ar = {"accept": "قبول", "waitlist": "قائمة انتظار", "unsuitable": "غير مناسب"}
+        stage_ar = {5: "المقابلة الأولى", 6: "المقابلة الثانية"}
+        header = (["معرّف المتقدم", "المتقدم", "الرقم القومي", "المرحلة", "رقم اللجنة", "عضو اللجنة"]
+                  + crit_keys + ["الإجمالي", "الحد الأقصى", "النسبة %", "التوصية", "ملاحظات", "التاريخ"])
+
+        buf = io.StringIO()
+        buf.write("﻿")  # BOM so Excel renders Arabic correctly
+        writer = csv.writer(buf)
+        writer.writerow(header)
+        for r in rows:
+            tm = float(r["total_max"] or 0)
+            pct = round(float(r["total_score"]) / tm * 100, 1) if tm else 0
+            writer.writerow(
+                [r["trainee_id"], r.get("applicant") or "", r.get("national_id") or "",
+                 stage_ar.get(r["stage_id"], r["stage_id"]), r.get("committee_id") or "",
+                 r["committee_member_name"]]
+                + [r["_criteria"].get(k, "") for k in crit_keys]
+                + [r["total_score"], r["total_max"], pct,
+                   rec_ar.get(r["recommendation"], ""), (r.get("notes") or "").replace("\n", " "),
+                   str(r.get("updated_at") or "")]
+            )
+        buf.seek(0)
+        return StreamingResponse(
+            iter([buf.getvalue()]),
+            media_type="text/csv; charset=utf-8",
+            headers={"Content-Disposition": "attachment; filename=NTA_Interview_Evaluations.csv"},
+        )
     finally:
         cursor.close()
         db.close()

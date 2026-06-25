@@ -43,6 +43,7 @@
       navItem("coordinator-interviews.html", "interviews", ICONS.interviews, "طابور المقابلات", activePage) +
       navItem("coordinator-interview-evaluate.html", "evaluate", ICONS.evaluations, "تقييم مقابلة", activePage) +
       navItem("coordinator-evaluations.html", "evaluations", ICONS.evaluations, "متابعة التقييمات", activePage) +
+      navItem("coordinator-committees.html", "committees", ICONS.interviews, "لجان المقابلات", activePage) +
       '<div class="nta-sidebar__divider"></div>' +
       '<div class="nta-sidebar__nav-lbl">الإدارة</div>' +
       navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage) +

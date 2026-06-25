@@ -44,7 +44,10 @@
           <div id="critAnalysis"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
         </div>
         <div class="coord-table-wrap">
-          <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">القرارات ومعدّل الإنجاز</h3>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;flex-wrap:wrap">
+            <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">القرارات ومعدّل الإنجاز</h3>
+            <button id="exportBtn" style="border:none;cursor:pointer;font-family:inherit;background:rgba(34,197,94,.12);color:#86efac;border-radius:999px;padding:.3rem .8rem;font-size:.78rem;font-weight:700">⬇ تصدير CSV</button>
+          </div>
           <p style="margin:0 0 1rem;color:var(--text-subtle);font-size:.8rem">توزيع التوصيات ونسبة اكتمال التقييم.</p>
           <div id="decSummary"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
         </div>
@@ -93,6 +96,15 @@
         html+='<div class="ev-total" style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap"><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.average_interview_percentage+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">متوسط النسبة</span></div><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.evaluation_completion_rate+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">اكتمال التقييم</span></div></div>';
         document.getElementById('decSummary').innerHTML=html;
       }).catch(function(){document.getElementById('decSummary').innerHTML='<span style="color:var(--text-subtle)">تعذّر التحميل</span>';});
+
+      document.getElementById('exportBtn').addEventListener('click', function(){
+        var btn=this, old=btn.textContent; btn.textContent='...جاري التصدير'; btn.disabled=true;
+        window.coordinatorAuth.fetch('/api/coordinator/interviews/export').then(function(r){ if(!r.ok) throw 0; return r.blob(); }).then(function(blob){
+          var url=URL.createObjectURL(blob), a=document.createElement('a');
+          a.href=url; a.download='NTA_Interview_Evaluations.csv'; document.body.appendChild(a); a.click();
+          a.remove(); URL.revokeObjectURL(url); btn.textContent=old; btn.disabled=false;
+        }).catch(function(){ btn.textContent='تعذّر التصدير'; setTimeout(function(){btn.textContent=old;btn.disabled=false;},1500); });
+      });
     </script>
   </body>
 </html>
