@@ -67,7 +67,8 @@ if %errorlevel% neq 0 (
 :START_SERVER
 echo [SUCCESS] Virtual environment and database verified.
 echo [STARTING] Starting Coordinator Portal Backend (Port 8005)...
-echo [INFO] Open http://localhost:8005/coordinator-login.html in your browser.
+echo [INFO] Open http://127.0.0.1:8005/coordinator-login.html in your browser.
+start "" powershell -NoProfile -WindowStyle Hidden -Command "Start-Sleep -Seconds 3; Start-Process 'http://127.0.0.1:8005/coordinator-login.html'"
 echo [INFO] If the window closes immediately, check the output above for errors.
 "backend\venv\Scripts\python.exe" -m uvicorn main:app --app-dir backend --port 8005 --host 127.0.0.1 --http h11 --loop asyncio
 if %errorlevel% neq 0 (

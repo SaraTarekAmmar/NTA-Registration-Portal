@@ -58,6 +58,8 @@ if %errorlevel% neq 0 (
 :START_SERVER
 echo [SUCCESS] Virtual environment and database verified.
 echo [STARTING] Starting Admin Portal Backend (Port 8002)...
+echo [INFO] Open http://127.0.0.1:8002/admin-login.html in your browser.
+start "" powershell -NoProfile -WindowStyle Hidden -Command "Start-Sleep -Seconds 3; Start-Process 'http://127.0.0.1:8002/admin-login.html'"
 echo [INFO] If the window closes immediately, check the output above for errors.
 "backend\venv\Scripts\python.exe" -m uvicorn backend.main:app --port 8002 --host 127.0.0.1 --http h11 --loop asyncio
 if %errorlevel% neq 0 (
