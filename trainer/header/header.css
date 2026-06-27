@@ -1,259 +1,607 @@
-/* ===== NTA Header - Neon Glow Style ===== */
-.nta-header {
-    position: relative;
-    z-index: 100;
-    margin: 1.25rem auto;
-    width: 95%;
-    padding: 0.6rem 1.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 55%),
-        var(--bg-header, rgba(10, 20, 40, 0.96));
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border-accent, rgba(59, 130, 246, 0.35));
-    border-radius: 999px;
-    box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 1),
-        0 0 24px rgba(37, 99, 235, 0.45),
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+/* ═══════════════════════════════════════════════════════════════
+   NTA PREMIUM SIDEBAR — Dark Navy Government Design System
+   Loaded by admin/header.js and editor/js/editor-layout.js
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --sb-w: 256px;
 }
-div#ntaHeader {
+
+/* ── Override legacy horizontal-header containers ── */
+#ntaHeader,
+#editorSidebar,
+#coordinatorSidebar {
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  left: auto !important;
+  width: var(--sb-w) !important;
+  height: 100vh !important;
+  z-index: 9000 !important;
+  display: block !important;
+  flex-direction: unset !important;
+  justify-content: unset !important;
+  padding: 0 !important;
+}
+
+/* ── Body: make room for sidebar on all content pages ── */
+body[data-page] {
+  padding-right: var(--sb-w) !important;
+  padding-top: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  min-height: 100vh !important;
+}
+
+/* ════════════════════════════════════════
+   SIDEBAR SHELL
+   ════════════════════════════════════════ */
+.nta-sidebar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.05), transparent 52%),
+    rgba(3,5,14,0.99);
+  backdrop-filter: blur(52px) saturate(130%);
+  -webkit-backdrop-filter: blur(52px) saturate(130%);
+  border-left: 1px solid rgba(255,255,255,0.052);
+  overflow: hidden;
+}
+
+
+/* Ambient glow at top-right */
+.nta-sidebar::after {
+  content: "";
+  position: absolute;
+  top: -80px; right: -50px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(185,28,28,0.055), transparent 70%);
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   BRAND ZONE
+   ════════════════════════════════════════ */
+.nta-sidebar__brand {
+  padding: 1.5rem 1.2rem 1.05rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.nta-sidebar__logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nta-sidebar__logo-img {
+  height: 38px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.nta-sidebar__logo-fallback {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #991b1b, #450a0a);
+  display: none;
+  align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.82rem;
+  color: #fecaca;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(185,28,28,0.42);
+  flex-shrink: 0;
+}
+
+.nta-sidebar__logo-text {
+  display: flex; flex-direction: column;
+  gap: 0.14rem; line-height: 1; min-width: 0;
+}
+
+.nta-sidebar__logo-main {
+  font-size: 0.9rem; font-weight: 800;
+  color: #f1f5f9; letter-spacing: 0.1em;
+}
+
+.nta-sidebar__logo-sub {
+  font-size: 0.47rem;
+  color: rgba(148,163,184,0.7);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.nta-sidebar__logo-ar {
+  font-size: 0.58rem;
+  color: rgba(148,163,184,0.7);
+}
+
+/* Role badge */
+.nta-sidebar__role {
+  margin-top: 0.78rem;
+  display: inline-flex; align-items: center; gap: 0.34rem;
+  padding: 0.2rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.58rem; font-weight: 700;
+  background: rgba(185,28,28,0.08);
+  border: 1px solid rgba(185,28,28,0.18);
+  color: #fca5a5; letter-spacing: 0.04em;
+}
+
+.nta-sidebar__role-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #ef4444; flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(239,68,68,0.55);
+  animation: ntaSbPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes ntaSbPulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  50%      { opacity: 0.25; box-shadow: none; }
+}
+
+/* ════════════════════════════════════════
+   NAVIGATION
+   ════════════════════════════════════════ */
+.nta-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.55rem 0.58rem;
+  display: flex; flex-direction: column; gap: 0.1rem;
+  scrollbar-width: none;
+  position: relative; z-index: 1;
+}
+.nta-sidebar__nav::-webkit-scrollbar { display: none; }
+
+.nta-sidebar__nav-lbl {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #94a3b8;
+  padding: 0.72rem 0.65rem 0.26rem;
+  user-select: none;
+}
+
+.nta-sidebar__item {
+  position: relative;
+  display: flex; align-items: center; gap: 0.68rem;
+  padding: 0.64rem 0.78rem;
+  border-radius: 9px;
+  text-decoration: none;
+  color: rgba(100,116,139,0.82);
+  font-size: 0.81rem; font-weight: 600;
+  transition: color 0.16s ease, background 0.16s ease;
+  white-space: nowrap; overflow: hidden;
+}
+
+.nta-sidebar__item:hover {
+  color: #cbd5e1;
+  background: rgba(255,255,255,0.03);
+}
+
+.nta-sidebar__item.active {
+  color: #fecaca;
+  background: rgba(185,28,28,0.08);
+}
+
+/* Active indicator stripe on left (inner edge of RTL sidebar) */
+.nta-sidebar__item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 18%; bottom: 18%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #f87171, #b91c1c);
+  box-shadow: 0 0 10px rgba(248,113,113,0.42);
+}
+
+.nta-sidebar__item svg {
+  width: 15px; height: 15px; flex-shrink: 0;
+  opacity: 0.58; transition: opacity 0.16s;
+}
+.nta-sidebar__item:hover svg  { opacity: 0.82; }
+.nta-sidebar__item.active svg { opacity: 1; color: #fca5a5; }
+
+.nta-sidebar__item-lbl { flex: 1; }
+
+.nta-sidebar__divider {
+  height: 1px;
+  background: rgba(255,255,255,0.044);
+  margin: 0.3rem 0.6rem;
+}
+
+/* ════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════ */
+.nta-sidebar__footer {
+  flex-shrink: 0;
+  padding: 0.82rem 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; gap: 0.55rem;
+  position: relative; z-index: 1;
+}
+
+.nta-sidebar__user {
+  display: flex; align-items: center; gap: 0.56rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.016);
+  border: 1px solid rgba(255,255,255,0.044);
+}
+
+.nta-sidebar__avatar {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: linear-gradient(135deg, #1b2d4f, #0b1930);
+  border: 1px solid rgba(255,255,255,0.065);
+  display: flex; align-items: center; justify-content: center;
+  color: #334155; flex-shrink: 0;
+}
+.nta-sidebar__avatar svg { width: 13px; height: 13px; }
+
+.nta-sidebar__user-info { flex: 1; min-width: 0; }
+
+.nta-sidebar__user-name {
+  font-size: 0.71rem; font-weight: 700; color: #cbd5e1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.nta-sidebar__user-role-lbl {
+  font-size: 0.57rem; color: rgba(51,65,85,0.9);
+}
+
+.nta-sidebar__logout {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.38rem; padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239,68,68,0.13);
+  background: rgba(239,68,68,0.03);
+  color: rgba(252,165,165,0.82);
+  font-family: inherit; font-size: 0.73rem; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.nta-sidebar__logout:hover {
+  background: rgba(239,68,68,0.09);
+  border-color: rgba(239,68,68,0.34);
+  color: #fca5a5;
+}
+.nta-sidebar__logout svg { width: 13px; height: 13px; }
+
+.nta-sidebar__bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.nta-sidebar__bottom-row .nta-sidebar__logout {
+  flex: 1;
+}
+.nta-sidebar__theme-btn {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: rgba(148,163,184,0.6);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.nta-sidebar__theme-btn:hover {
+  background: rgba(185,28,28,0.1);
+  border-color: rgba(185,28,28,0.35);
+  color: #fca5a5;
+}
+html.light-mode .nta-sidebar__theme-btn {
+  border-color: rgba(185,28,28,0.2);
+  color: #b91c1c;
+}
+
+
+/* Hide the floating FAB on sidebar pages — sidebar footer has #themeToggle */
+body[data-page] .nta-theme-fab,
+body[data-page] #ntaThemeFab {
+  display: none !important;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+@media (max-width: 1024px) { :root { --sb-w: 220px; } }
+
+/* Mobile hamburger + backdrop are hidden on desktop */
+.nta-nav-toggle { display: none; }
+.nta-nav-backdrop { display: none; }
+
+@media (max-width: 700px) {
+  :root { --sb-w: 0px; }
+  body[data-page] { padding-right: 0 !important; }
+
+  /* Reserve clearance for the fixed hamburger so page titles/headers
+     never sit underneath it (RTL: both live in the top-right corner).
+     Covers every flow's content wrapper, even when nested in a container. */
+  body[data-page] > main,
+  body[data-page] .editor-main,
+  body[data-page] .mat-page,
+  body[data-page] .trainee-main,
+  body[data-page] .main-content,
+  body[data-page] .rec-wrap,
+  body[data-page] .coordinator-main {
+    padding-top: 4.25rem;
+    min-width: 0;
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-.nta-header__logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    color: inherit;
-}
+    max-width: 100%;
+  }
 
-.nta-header__logo-img {
-    height: 48px;
-    width: auto;
-}
+  /* Sidebar slides in as a drawer instead of disappearing */
+  #ntaHeader, #editorSidebar, #coordinatorSidebar {
+    width: 260px !important;
+    max-width: 100vw !important;
+    transform: translateX(100%);
+    transition: transform 0.28s ease;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.55);
+  }
+  body.nta-nav-open #ntaHeader,
+  body.nta-nav-open #editorSidebar,
+  body.nta-nav-open #coordinatorSidebar { transform: translateX(0); }
 
-.nta-header__logo-text {
-    display: flex;
-    flex-direction: column;
-}
+  /* Hamburger toggle */
+  .nta-nav-toggle {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 0.7rem; right: 0.7rem; z-index: 9600;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(3,5,14,0.92);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff; cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    transition: right 0.28s ease;
+  }
+  .nta-nav-toggle svg { width: 22px; height: 22px; }
+  body.nta-nav-open .nta-nav-toggle { right: calc(260px + 0.7rem); }
 
-.nta-header__logo-main {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--text-main, #f1f5f9);
-}
-
-.nta-header__logo-sub {
-    font-size: 0.72rem;
-    color: var(--text-muted, #94a3b8);
-    letter-spacing: 0.04em;
-}
-
-.nta-header__logo-ar {
-    font-size: 0.7rem;
-    color: var(--text-subtle, #64748b);
-}
-
-.nta-header__nav {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  /* Backdrop */
+  .nta-nav-backdrop {
+    display: block; position: fixed; inset: 0; z-index: 8900;
+    background: rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+  }
+  body.nta-nav-open .nta-nav-backdrop { opacity: 1; pointer-events: auto; }
 }
 
-.nta-header__center {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    text-align: center;
+html.light-mode .nta-nav-toggle {
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(0,0,0,0.1);
+  color: #b91c1c;
 }
 
-.nta-header__section-label {
-    display: inline-block;
-    color: var(--text-main, #e2e8f0);
-    font-size: 0.85rem;
-    opacity: 0.85;
+
+/* ════════════════════════════════════════
+   LIGHT MODE SIDEBAR (Overrides)
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.04), transparent 52%),
+    rgba(255, 255, 255, 0.99);
+  border-left: 1px solid rgba(0,0,0,0.06);
 }
 
-.nta-header__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.25rem;
-    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
-    border: none;
-    border-radius: 14px;
-    color: white;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+html.light-mode .nta-sidebar::after {
+  background: radial-gradient(circle, rgba(185,28,28,0.08), transparent 70%);
 }
 
-.nta-header__btn:hover {
-    background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+html.light-mode .nta-sidebar__logo-main {
+  color: #1e293b;
 }
 
-.nta-header__btn.active {
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+html.light-mode .nta-sidebar__logo-sub,
+html.light-mode .nta-sidebar__logo-ar {
+  color: rgba(71,85,105,0.8);
 }
 
-/* Center tabs inside nav: show as outlined pills even if they use nta-header__btn */
-.nta-header__nav .nta-header__btn {
-    padding: 0.38rem 1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8);
-    background: transparent;
-    color: #bfdbfe;
-    font-size: 0.8rem;
-    box-shadow: none;
+html.light-mode .nta-sidebar__nav-lbl {
+  color: #64748b;
 }
 
-.nta-header__nav .nta-header__btn:hover,
-.nta-header__nav .nta-header__btn.active {
-    border-color: rgba(96, 165, 250, 1);
-    background: transparent;
-    color: #f9fafb;
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+html.light-mode .nta-sidebar__item {
+  color: rgba(51,65,85,0.82);
 }
 
-.nta-header__btn svg {
-    width: 20px;
-    height: 20px;
+html.light-mode .nta-sidebar__item:hover {
+  color: #0f172a;
+  background: rgba(0,0,0,0.03);
 }
 
-/* Center tabs (simple chips) */
-.nta-header__chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.38rem 1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8);
-    background: transparent;
-    color: #bfdbfe;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+html.light-mode .nta-sidebar__item.active {
+  color: #b91c1c;
+  background: rgba(185,28,28,0.06);
 }
 
-.nta-header__chip:hover {
-    border-color: rgba(96, 165, 250, 1);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+html.light-mode .nta-sidebar__item svg {
+  color: rgba(51,65,85,0.82);
 }
 
-.nta-header__chip.active {
-    border-color: rgba(59, 130, 246, 1);
-    background: transparent;
-    color: #f9fafb;
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(37, 99, 235, 0.75);
+html.light-mode .nta-sidebar__item.active svg {
+  color: #b91c1c;
 }
 
-.nta-header__chip svg {
-    width: 17px;
-    height: 17px;
+html.light-mode .nta-sidebar__brand,
+html.light-mode .nta-sidebar__footer {
+  border-color: rgba(0,0,0,0.06);
 }
 
-.nta-header__label {
-    color: #f1f5f9;
-    font-size: 1rem;
-    font-weight: 500;
+html.light-mode .nta-sidebar__user {
+  background: rgba(0,0,0,0.016);
+  border-color: rgba(0,0,0,0.044);
 }
 
-.nta-header__theme {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--theme-btn-bg, rgba(251, 191, 36, 0.15));
-    border: 1px solid var(--theme-btn-border, rgba(251, 191, 36, 0.4));
-    color: var(--theme-btn-color, #fbbf24);
-    cursor: pointer;
-    transition: background 0.25s ease, box-shadow 0.25s ease;
-    flex-shrink: 0;
-    z-index: 2;
+html.light-mode .nta-sidebar__user-name {
+  color: #1e293b;
 }
 
-.nta-header__theme:hover {
-    background: rgba(251, 191, 36, 0.25);
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+html.light-mode .nta-sidebar__divider {
+  background: rgba(0,0,0,0.044);
 }
 
-.nta-header__theme svg {
-    width: 22px;
-    height: 22px;
+html.light-mode .nta-sidebar__logout {
+  border-color: rgba(239,68,68,0.2);
+  background: rgba(239,68,68,0.05);
+  color: rgba(220,38,38,0.9);
 }
 
-.nta-header__btn--logout {
-    padding: 0.4rem 1.2rem;
-    border-radius: 999px;
-    background: transparent;
-    border: 1px solid rgba(248, 113, 113, 0.8);
-    color: #fecaca;
-    box-shadow: none;
+html.light-mode .nta-sidebar__logout:hover {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.4);
+  color: #b91c1c;
 }
 
-.nta-header__btn--logout:hover {
-    background: rgba(127, 29, 29, 0.25);
-    border-color: rgba(248, 113, 113, 1);
-    box-shadow: 0 0 16px rgba(248, 113, 113, 0.55);
+
+/* ════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.03), transparent 52%),
+    #ffffff;
+  border-left: 1px solid rgba(0,0,0,0.08);
 }
 
-/* Login button style (left big pill) */
-.nta-header__btn--login {
-    padding-inline: 1.4rem;
+html.light-mode .nta-sidebar__logo-main {
+  color: #1e293b;
 }
 
-.nta-header__btn--login svg {
-    width: 18px;
-    height: 18px;
+html.light-mode .nta-sidebar__logo-sub,
+html.light-mode .nta-sidebar__logo-ar {
+  color: #64748b;
 }
 
-/* Actions container (left side) */
-.nta-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+html.light-mode .nta-sidebar__nav-lbl {
+  color: #94a3b8;
 }
 
-/* Trainee app: reuse same pill header layout as login (no overrides) */
-
-/* Responsive header */
-@media (max-width: 768px) {
-    .nta-header {
-        flex-wrap: wrap;
-        padding: 0.75rem 1rem;
-        gap: 0.75rem;
-    }
-
-    .nta-header__logo-text .nta-header__logo-sub,
-    .nta-header__logo-ar {
-        display: none;
-    }
-
-    .nta-header__nav {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
+html.light-mode .nta-sidebar__item {
+  color: #475569;
 }
+
+html.light-mode .nta-sidebar__item:hover {
+  color: #0f172a;
+  background: rgba(0,0,0,0.03);
+}
+
+html.light-mode .nta-sidebar__item.active {
+  color: #991b1b;
+  background: rgba(185,28,28,0.08);
+}
+
+html.light-mode .nta-sidebar__user-name {
+  color: #1e293b;
+}
+
+html.light-mode .nta-sidebar__user-email {
+  color: #64748b;
+}
+
+html.light-mode .nta-sidebar__brand,
+html.light-mode .nta-sidebar__footer {
+  border-color: rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar__theme-btn,
+html.light-mode .nta-sidebar__logout {
+  background: rgba(0,0,0,0.03);
+  color: #475569;
+  border-color: rgba(0,0,0,0.06);
+}
+
+html.light-mode .nta-sidebar__theme-btn:hover,
+html.light-mode .nta-sidebar__logout:hover {
+  background: rgba(0,0,0,0.06);
+  color: #0f172a;
+}
+
+
+/* ════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   ════════════════════════════════════════ */
+html.light-mode .nta-sidebar {
+  background:
+    radial-gradient(ellipse 140% 28% at 50% 0%, rgba(185,28,28,0.02), transparent 52%),
+    rgba(255,255,255,0.98);
+  border-left: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-sidebar::after {
+  background: radial-gradient(circle, rgba(185,28,28,0.03), transparent 70%);
+}
+html.light-mode .nta-sidebar__brand {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-nav__link {
+  color: #475569;
+}
+html.light-mode .nta-nav__link:hover {
+  background: rgba(0,0,0,0.03);
+  color: #0f172a;
+}
+html.light-mode .nta-nav__link--active {
+  background: rgba(220,38,38,0.08);
+  color: #b91c1c;
+  border-right: 3px solid #dc2626;
+}
+html.light-mode .nta-nav__link--active .nta-nav__icon {
+  color: #b91c1c;
+}
+html.light-mode .nta-user__info {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+html.light-mode .nta-user__name {
+  color: #0f172a;
+}
+html.light-mode .nta-user__role {
+  color: #64748b;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ADDITIONAL MOBILE REFINEMENTS — Sidebar UX
+   ══════════════════════════════════════════════════════════════ */
+
+/* On very small screens, make the sidebar scrollable so all nav items
+   are reachable even on short viewports (e.g. landscape iPhone) */
+@media (max-width: 700px) {
+  .nta-sidebar {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100dvh;
+  }
+  /* Increase nav link tap targets for touch */
+  .nta-nav__link {
+    min-height: 44px;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+  /* Ensure logout / theme buttons are comfortably tappable */
+  .nta-sidebar__theme-btn,
+  .nta-sidebar__logout {
+    min-height: 44px;
+  }
+  /* Avoid hamburger covering any page content in landscape */
+  body[data-page] > main,
+  body[data-page] .editor-main,
+  body[data-page] .trainee-main,
+  body[data-page] .coordinator-main {
+    padding-top: 4.5rem;
+  }
+}
+
+/* Ensure brand section text doesn't overflow on sidebar open */
+@media (max-width: 360px) {
+  .nta-sidebar__brand-name { font-size: 0.85rem; }
+  .nta-sidebar__brand-sub  { font-size: 0.6rem; }
+}
+

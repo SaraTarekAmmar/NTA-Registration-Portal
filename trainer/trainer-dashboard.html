@@ -3,837 +3,364 @@
   <head>
     <script src="/common/js/theme.js"></script>
     <script src="js/trainer-guard.js"></script>
-    <link rel="stylesheet" href="/common/css/theme.css" />
-    <!-- data-nta-theme-injected -->
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="header/header.css?v=9" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة المدرب - NTA</title>
-    <link rel="stylesheet" href="trainee.css" />
-    <link rel="stylesheet" href="header/header.css" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <title>لوحة المدرب — الأكاديمية الوطنية للتدريب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-      :root {
-        --nta-bg: var(--bg-main, #030712);
-        --nta-card: var(--bg-card, rgba(15, 23, 42, 0.6));
-        --nta-border: var(--border-main, rgba(255, 255, 255, 0.08));
-        --nta-accent: #c1121f;
-        --nta-indigo: var(--accent, #6366f1);
-        --nta-green: #10b981;
-        --nta-text: var(--text-main, #f1f5f9);
-        --nta-muted: var(--text-muted, #94a3b8);
-        --nta-orange: #f59e0b;
+      * { box-sizing: border-box; }
+      body { overflow-x: hidden; font-family: "Tajawal", sans-serif; }
+
+      /* ══ Layout ══ */
+      .trainer-main { padding: 2rem; min-height: 100vh; min-width: 0; }
+
+      /* ══ Top Bar ══ */
+      .dash-topbar {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 0.85rem 1.5rem; border-radius: 18px;
+        background: rgba(8,12,32,0.55); backdrop-filter: blur(24px) saturate(130%);
+        border: 1px solid rgba(255,255,255,0.07); margin-bottom: 1.25rem; flex-wrap: wrap;
+      }
+      .dash-topbar__user { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+      .dash-topbar__avatar {
+        width: 42px; height: 42px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(185,28,28,0.35), rgba(185,28,28,0.15));
+        border: 2px solid rgba(185,28,28,0.4);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1rem; font-weight: 800; color: #fca5a5; flex-shrink: 0;
+      }
+      .dash-topbar__name { font-size: 0.9rem; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .dash-topbar__role {
+        font-size: 0.68rem; font-weight: 600; color: #fca5a5;
+        background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.25);
+        border-radius: 999px; padding: 0.15rem 0.6rem; white-space: nowrap;
+      }
+      .dash-topbar__actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+      .dash-topbar__date { font-size: 0.75rem; color: var(--text-subtle); padding: 0.3rem 0.85rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; white-space: nowrap; }
+
+      /* ══ Hero ══ */
+      .dash-hero {
+        padding: 1.5rem 1.8rem; border-radius: 20px; margin-bottom: 1.5rem;
+        background:
+          radial-gradient(circle at top right, rgba(185,28,28,0.11), transparent 52%),
+          radial-gradient(circle at bottom left, rgba(30,50,100,0.1), transparent 55%),
+          rgba(4,6,18,0.78);
+        border: 1px solid rgba(185,28,28,0.18);
+        position: relative; overflow: hidden;
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      }
+      .dash-hero::before {
+        content: ""; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(185,28,28,0.09), transparent 70%); pointer-events: none;
+      }
+      .dash-hero__title { font-size: 1.9rem; font-weight: 800; margin: 0 0 0.25rem; color: var(--text-main); letter-spacing: -0.02em; }
+      .dash-hero__sub { font-size: 0.84rem; color: var(--text-subtle); margin: 0; }
+      .dash-hero__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem; flex-shrink: 0; }
+      .dash-hero__live { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-subtle); }
+      .dash-hero__live-dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; animation: livePulse 2s infinite; }
+      @keyframes livePulse {
+        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+        70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
       }
 
-      html.light-mode .dashboard-container {
-        box-shadow: var(--shadow-card, 0 10px 40px -15px rgba(15, 23, 42, 0.12));
-      }
+      /* ══ KPI Row ══ */
+      .dash-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.9rem; margin-bottom: 1.5rem; }
+      @media (max-width: 900px) { .dash-kpi-row { grid-template-columns: repeat(2,1fr); } }
+      @media (max-width: 480px) { .dash-kpi-row { grid-template-columns: 1fr; } }
 
-      body.trainee-app {
-        color: var(--nta-text);
-        font-family: "Tajawal", sans-serif;
+      .dash-kpi {
+        padding: 1.2rem 1.3rem; border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.07); background: rgba(8,12,32,0.4); backdrop-filter: blur(18px);
+        display: flex; flex-direction: column; gap: 0.45rem;
+        position: relative; overflow: hidden; text-decoration: none;
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
+        animation: kpiEnter 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
       }
+      .dash-kpi::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+        background: linear-gradient(90deg, transparent, var(--kpi-accent, #f87171), transparent);
+        opacity: 0; transition: opacity 0.3s;
+      }
+      .dash-kpi:hover { transform: translateY(-5px) scale(1.02); }
+      .dash-kpi:hover::before { opacity: 1; }
+      .dash-kpi:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.28), 0 0 24px var(--kpi-glow, rgba(185,28,28,0.2)); }
+      @keyframes kpiEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-      .dashboard-container {
-        position: relative;
-        z-index: 1;
-        max-width: 1000px;
-        margin: 100px auto;
-        padding: 40px;
-        background: var(--nta-card);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--nta-border);
-        border-radius: 24px;
-        text-align: center;
-        animation: fadeIn 0.6s ease-out;
-      }
+      .dash-kpi--crimson { --kpi-accent: #f87171; --kpi-glow: rgba(185,28,28,0.3); background: linear-gradient(135deg, rgba(185,28,28,0.18), rgba(185,28,28,0.06)); border-color: rgba(185,28,28,0.35); }
+      .dash-kpi--green   { --kpi-accent: #34d399; --kpi-glow: rgba(16,185,129,0.25); }
+      .dash-kpi--amber   { --kpi-accent: #fbbf24; --kpi-glow: rgba(245,158,11,0.25); }
+      .dash-kpi--blue    { --kpi-accent: #60a5fa; --kpi-glow: rgba(59,130,246,0.25); }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+      .dash-kpi__icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.1rem; border: 1px solid; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+      .dash-kpi:hover .dash-kpi__icon { transform: scale(1.1); }
+      .dash-kpi--crimson .dash-kpi__icon { background: rgba(185,28,28,0.2);  border-color: rgba(185,28,28,0.4);  color: #fca5a5; }
+      .dash-kpi--green   .dash-kpi__icon { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; }
+      .dash-kpi--amber   .dash-kpi__icon { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: #fde68a; }
+      .dash-kpi--blue    .dash-kpi__icon { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); color: #93c5fd; }
+      .dash-kpi__icon svg { width: 18px; height: 18px; }
+      .dash-kpi__val { font-size: 2rem; font-weight: 800; color: var(--text-main); line-height: 1; letter-spacing: -0.5px; }
+      .dash-kpi--crimson .dash-kpi__val { color: #fecaca; }
+      .dash-kpi__lbl { font-size: 0.74rem; font-weight: 600; color: var(--text-subtle); line-height: 1.3; }
+      .dash-kpi--crimson .dash-kpi__lbl { color: rgba(252,165,165,0.75); }
 
-      .welcome-icon {
-        width: 80px;
-        height: 80px;
-        background: rgba(193, 18, 31, 0.15);
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 24px;
-        color: var(--nta-accent);
-      }
+      /* ══ Section title ══ */
+      .adm-section-title { font-size: 0.86rem; font-weight: 700; color: var(--text-subtle); margin: 0 0 0.9rem; display: flex; align-items: center; gap: 0.45rem; }
+      .adm-section-title::before { content: ""; width: 3px; height: 15px; border-radius: 999px; background: linear-gradient(180deg, #f87171, #b91c1c); flex-shrink: 0; }
 
-      h1 {
-        font-size: 2.2rem;
-        font-weight: 800;
-        margin-bottom: 12px;
-        background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
+      /* ══ Quick Actions ══ */
+      .dash-panel { padding: 1.2rem 1.3rem; border-radius: 18px; background: rgba(8,12,32,0.5); backdrop-filter: blur(18px) saturate(130%); border: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; margin-bottom: 1.25rem; }
+      .dash-panel:hover { border-color: rgba(185,28,28,0.22); }
 
-      html.light-mode .dashboard-container h1 {
-        background: none;
-        -webkit-background-clip: unset;
-        background-clip: unset;
-        -webkit-text-fill-color: var(--text-main);
-        color: var(--text-main);
-      }
+      .trainer-quick-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.85rem; }
+      @media (max-width: 600px) { .trainer-quick-grid { grid-template-columns: 1fr; } }
 
-      .welcome-text {
-        color: var(--nta-muted);
-        font-size: 1.1rem;
-        line-height: 1.6;
-        max-width: 600px;
-        margin: 0 auto 30px;
+      .trainer-quick {
+        display: flex; align-items: center; gap: 0.9rem;
+        padding: 1.05rem 1.2rem; border-radius: 16px;
+        background: rgba(8,12,32,0.48); backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main, rgba(255,255,255,0.08));
+        text-decoration: none; color: var(--text-main);
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s;
+        position: relative; overflow: hidden;
       }
+      .trainer-quick::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--q-bg, transparent); opacity: 0; transition: opacity 0.25s; }
+      .trainer-quick:hover { transform: translateY(-4px) scale(1.01); }
+      .trainer-quick:hover::before { opacity: 1; }
 
-      .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 20px;
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: var(--nta-green);
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 0.9rem;
-      }
+      .trainer-quick--courses  { --q-bg: rgba(185,28,28,0.08);   border-color: rgba(185,28,28,0.2); }
+      .trainer-quick--courses:hover  { border-color: rgba(185,28,28,0.52); box-shadow: 0 10px 32px rgba(185,28,28,0.14); color: #fca5a5; }
+      .trainer-quick--trainees { --q-bg: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.2); }
+      .trainer-quick--trainees:hover { border-color: rgba(16,185,129,0.55); box-shadow: 0 10px 32px rgba(16,185,129,0.14); color: #6ee7b7; }
+      .trainer-quick--quiz     { --q-bg: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); }
+      .trainer-quick--quiz:hover     { border-color: rgba(167,139,250,0.5); box-shadow: 0 10px 32px rgba(167,139,250,0.13); color: #c4b5fd; }
+      .trainer-quick--grades   { --q-bg: rgba(245,158,11,0.07);  border-color: rgba(245,158,11,0.2); }
+      .trainer-quick--grades:hover   { border-color: rgba(245,158,11,0.5); box-shadow: 0 10px 32px rgba(245,158,11,0.12); color: #fde68a; }
 
-      /* Courses Grid */
-      #trainerCourses {
-        margin-top: 50px;
-        text-align: right;
-      }
+      .trainer-quick__icon { width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); border: 1px solid; }
+      .trainer-quick:hover .trainer-quick__icon { transform: scale(1.12) rotate(-5deg); }
+      .trainer-quick--courses  .trainer-quick__icon { background: rgba(185,28,28,0.14);   border-color: rgba(185,28,28,0.32);   color: #fca5a5; }
+      .trainer-quick--trainees .trainer-quick__icon { background: rgba(16,185,129,0.15);  border-color: rgba(16,185,129,0.35);  color: #6ee7b7; }
+      .trainer-quick--quiz     .trainer-quick__icon { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.35); color: #c4b5fd; }
+      .trainer-quick--grades   .trainer-quick__icon { background: rgba(245,158,11,0.15);  border-color: rgba(245,158,11,0.35);  color: #fde68a; }
+      .trainer-quick__icon svg { width: 20px; height: 20px; }
+      .trainer-quick__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+      .trainer-quick__title { font-size: 0.89rem; font-weight: 700; margin: 0 0 0.18rem; line-height: 1.3; }
+      .trainer-quick__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
+      .trainer-quick__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
+      .trainer-quick:hover .trainer-quick__arrow { transform: translateX(-5px); opacity: 1; }
 
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--nta-border);
-      }
+      /* ══ Courses Table Panel ══ */
+      .dash-courses-panel { padding: 1.2rem 1.3rem; border-radius: 18px; background: rgba(8,12,32,0.5); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.07); margin-bottom: 1.25rem; }
+      .dash-courses-panel:hover { border-color: rgba(185,28,28,0.22); transition: border-color 0.25s; }
+      .dash-panel__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem; }
+      .dash-panel__title-wrap { display: flex; align-items: center; gap: 0.55rem; }
+      .dash-panel__icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; background: rgba(185,28,28,0.1); border: 1px solid rgba(185,28,28,0.22); color: #fca5a5; }
+      .dash-panel__icon svg { width: 12px; height: 12px; }
+      .dash-panel__title { font-size: 0.82rem; font-weight: 700; color: var(--text-main); margin: 0; }
 
-      .section-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: var(--nta-text);
+      .course-row {
+        display: flex; align-items: center; gap: 1rem; padding: 0.85rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: var(--text-main);
+        transition: background 0.2s; border-radius: 8px; padding: 0.7rem 0.6rem;
       }
+      .course-row:hover { background: rgba(185,28,28,0.06); }
+      .course-row:last-child { border-bottom: none; }
+      .course-row__badge { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.25); color: #fca5a5; }
+      .course-row__badge svg { width: 16px; height: 16px; }
+      .course-row__body { flex: 1; min-width: 0; }
+      .course-row__name { font-size: 0.88rem; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+      .course-row__meta { font-size: 0.72rem; color: var(--text-subtle); margin: 0.1rem 0 0; }
+      .course-row__arrow { font-size: 0.9rem; opacity: 0.3; flex-shrink: 0; transition: transform 0.2s, opacity 0.2s; }
+      .course-row:hover .course-row__arrow { transform: translateX(-4px); opacity: 0.8; }
 
-      .courses-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 24px;
-        margin-top: 30px;
-      }
-
-      .course-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--nta-border);
-        border-radius: 20px;
-        padding: 22px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        overflow: hidden;
-        text-align: right;
-      }
-
-      .course-card:hover {
-        transform: translateY(-8px);
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.15);
-      }
-
- 
-
-
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-
-.btn-outline:hover {
-    background: var(--nta-indigo);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); 
-}
-
-.btn:hover i {
-    transform: scale(1.1) rotate(-5deg); 
-    transition: transform 0.3s ease;
-}
-
-
-.btn:hover::after {
-    left: 100%;
-}
-      .course-title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #fff;
-        margin: 15px 0 10px;
-      }
-
-      .course-meta {
-        display: flex;
-        gap: 16px;
-        font-size: 0.85rem;
-        color: var(--nta-muted);
-        margin-bottom: 25px;
-      }
-
- 
-      .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .card-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: auto;
-      }
-
-      .btn-full {
-        grid-column: span 2;
-      }
-
-      /* Modal Styles */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(8px);
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
-        background: #0f172a;
-        border: 1px solid var(--nta-border);
-        padding: 32px;
-        border-radius: 24px;
-        width: 90%;
-        max-width: 700px;
-        max-height: 85vh;
-        overflow-y: auto;
-        text-align: right;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-        border-bottom: 1px solid var(--nta-border);
-        padding-bottom: 16px;
-      }
-
-      .modal-title {
-        font-size: 1.3rem;
-        font-weight: 800;
-        color: #fff;
-      }
-
-      .close-btn {
-        cursor: pointer;
-        color: var(--nta-muted);
-        transition: color 0.2s;
-      }
-      .close-btn:hover {
-        color: #fff;
-      }
-
-      .form-group {
-        margin-bottom: 20px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--nta-subtle);
-      }
-      .form-group input,
-      .form-group textarea {
-        width: 100%;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--nta-border);
-        border-radius: 12px;
-        color: #fff;
-        font-family: inherit;
-      }
-      .form-group input:focus {
-        border-color: var(--nta-indigo);
-        outline: none;
-      }
-
-      .assignment-item {
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid var(--nta-border);
-        border-radius: 16px;
-        margin-bottom: 16px;
-        transition: all 0.2s;
-      }
-      .assignment-item:hover {
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(255, 255, 255, 0.12);
-      }
-
-      .btn {
-        padding: 10px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        cursor: pointer;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-family: inherit;
-        transition: 0.2s;
-      }
-      .btn-primary {
-        background: var(--nta-accent);
-        color: white;
-      }
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: white;
-      }
-      .btn-success {
-        background: var(--nta-green);
-        color: white;
-      }
-      .btn-blue {
-        background: var(--nta-indigo);
-        color: white;
-      }
-      .btn-outline {
-        background: transparent;
-        border: 1px solid var(--nta-indigo);
-        color: var(--nta-indigo);
-      }
-  
-
-      .submission-status {
-        font-size: 0.75rem;
-        padding: 4px 12px;
-        border-radius: 50px;
-        font-weight: 700;
-      }
-      .status-graded {
-        background: rgba(16, 185, 129, 0.15);
-        color: var(--nta-green);
-      }
-      .status-pending {
-        background: rgba(245, 158, 11, 0.15);
-        color: #f59e0b;
-      }
-
-      #delayMessage {
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 12px;
-        color: var(--nta-muted);
-      }
-
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-
-      .btn-primary {
-        background: var(--nta-accent);
-        color: white;
-      }
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: white;
-      }
-      .btn-success {
-        background: var(--nta-green);
-        color: white;
-      }
-      .btn-blue {
-        background: var(--nta-indigo);
-        color: white;
-      }
-      .course-description {
-        font-size: 0.875rem;
-        color: var(--nta-muted);
-        margin: 10px 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3; 
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* Remove all shadows as requested */
-      .dashboard-container,
-      .course-card,
-      .course-card:hover,
-      .btn,
-      .btn:hover,
-      .modal-content,
-      html.light-mode .dashboard-container {
-        box-shadow: none !important;
-        text-shadow: none !important;
-      }
+      /* ══ Skeleton ══ */
+      .kpi-skeleton { height: 110px; border-radius: 18px; background: rgba(255,255,255,0.04); animation: skelPulse 1.5s ease-in-out infinite; }
+      .row-skeleton  { height: 54px;  border-radius: 10px; background: rgba(255,255,255,0.04); animation: skelPulse 1.5s ease-in-out infinite; margin-bottom: 0.5rem; }
+      @keyframes skelPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
   </head>
-  <body class="trainee-app has-header">
-    <div class="trainee-bg" aria-hidden="true"></div>
+  <body data-page="dashboard">
     <div id="ntaHeader"></div>
+    <main class="trainer-main">
 
-    <div class="dashboard-container">
-      <div class="welcome-icon">
-        <i data-lucide="graduation-cap" size="40"></i>
-      </div>
-      <h1>مرحباً بك، <span id="trainerName">...</span></h1>
-      <p class="welcome-text">
-        أهلاً بك في لوحة تحكم المدربين. يمكنك من هنا إدارة دوراتك التدريبية
-        والتواصل مع المتدربين ومتابعة تكليفاتهم.
-      </p>
-
-      <div id="delayMessage">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-          "
-        >
-          <i data-lucide="loader-2" class="animate-spin"></i>
-          <span>جاري تحميل الدورات المسندة إليك...</span>
-        </div>
-      </div>
-
-      <div id="trainerCourses" style="display: none">
-        <div class="section-header">
-          <div
-            class="welcome-icon"
-            style="width: 32px; height: 32px; margin: 0"
-          >
-            <i data-lucide="book-open" size="18"></i>
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div class="dash-topbar__user">
+          <div class="dash-topbar__avatar" id="topbarAvatar">م</div>
+          <div>
+            <div class="dash-topbar__name" id="topbarName">المدرب</div>
+            <div class="dash-topbar__role">مدرب</div>
           </div>
-          <h2 class="section-title">دوراتي المسندة</h2>
         </div>
-        <div id="coursesGrid" class="courses-grid">
-          <!-- Courses will be injected here -->
+        <div class="dash-topbar__actions">
+          <div class="dash-topbar__date" id="topbarDate"></div>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="dash-hero">
+        <div>
+          <h1 class="dash-hero__title">لوحة تحكم المدرب</h1>
+          <p class="dash-hero__sub">متابعة الكورسات المسندة، المتدربين، والتقييمات</p>
+        </div>
+        <div class="dash-hero__meta">
+          <div class="dash-hero__live">
+            <div class="dash-hero__live-dot"></div>
+            <span>بيانات مباشرة</span>
+          </div>
         </div>
       </div>
 
-      <div style="margin-top: 40px">
-        <div class="status-badge">
-          <i data-lucide="check-circle" size="16"></i>
-          الحساب نشط
+      <!-- KPI Cards -->
+      <div class="dash-kpi-row" id="kpiRow">
+        <div class="kpi-skeleton"></div><div class="kpi-skeleton"></div>
+        <div class="kpi-skeleton"></div><div class="kpi-skeleton"></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <p class="adm-section-title">الإجراءات السريعة</p>
+      <div class="dash-panel">
+        <div class="trainer-quick-grid">
+          <a href="view trainees/view-trainees.html" class="trainer-quick trainer-quick--trainees">
+            <div class="trainer-quick__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <div class="trainer-quick__body">
+              <div class="trainer-quick__title">المتدربون</div>
+              <div class="trainer-quick__sub">عرض قائمة المتدربين المسجلين في كورساتك</div>
+            </div>
+            <div class="trainer-quick__arrow">←</div>
+          </a>
+
+          <a href="generate quiz/generate-quiz.html" class="trainer-quick trainer-quick--quiz">
+            <div class="trainer-quick__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+              </svg>
+            </div>
+            <div class="trainer-quick__body">
+              <div class="trainer-quick__title">توليد اختبار بالذكاء الاصطناعي</div>
+              <div class="trainer-quick__sub">إنشاء أسئلة اختبار تلقائياً</div>
+            </div>
+            <div class="trainer-quick__arrow">←</div>
+          </a>
         </div>
       </div>
-    </div>
 
-    <!-- Assignment Modal -->
-    <div id="assignmentModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="modalTitle" class="modal-title">إدارة التكليفات</h2>
-          <i data-lucide="x" class="close-btn" onclick="closeModal()"></i>
-        </div>
-
-        <div id="assignmentListSection">
-          <button
-            class="btn btn-success"
-            onclick="showCreateForm()"
-            style="margin-bottom: 20px"
-          >
-            <i data-lucide="plus"></i> إضافة تكليف جديد
-          </button>
-          <div id="assignmentList"></div>
-        </div>
-
-        <div id="createAssignmentForm" style="display: none">
-          <form id="newAssignmentForm">
-            <input type="hidden" id="targetCourseId" />
-            <div class="form-group">
-              <label for="assignTitle">عنوان التكليف <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-              <input
-                type="text"
-                id="assignTitle"
-                placeholder="مثال: الواجب الأول - أساسيات بايثون"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="assignDesc">الوصف</label>
-              <textarea
-                id="assignDesc"
-                rows="4"
-                placeholder="اكتب تفاصيل التكليف هنا..."
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="assignDeadline">الموعد النهائي <span class="req-mark" aria-hidden="true">*</span><span class="sr-only">مطلوب</span></label>
-              <input type="datetime-local" id="assignDeadline" required />
-            </div>
-            <div class="form-group">
-              <label for="assignMaxGrade">الدرجة القصوى</label>
-              <input type="number" id="assignMaxGrade" value="10" step="0.5" />
-            </div>
-            <div class="form-group">
-              <label for="assignFile">ملف التعليمات <span class="sr-only">(اختياري)</span></label>
-              <input type="file" id="assignFile" />
-            </div>
-            <div style="display: flex; gap: 12px; margin-top: 30px">
-              <button type="submit" class="btn btn-primary">
-                <i data-lucide="save"></i> حفظ التكليف
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="showList()"
-              >
-                إلغاء
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div id="submissionsSection" style="display: none">
-          <button
-            class="btn btn-secondary"
-            onclick="showList()"
-            style="margin-bottom: 20px"
-          >
-            <i data-lucide="arrow-right"></i> عودة للقائمة
-          </button>
-          <div id="submissionsList"></div>
+      <!-- Assigned Courses -->
+      <p class="adm-section-title">الكورسات المسندة</p>
+      <div class="dash-courses-panel">
+        <div id="coursesList">
+          <div class="row-skeleton"></div>
+          <div class="row-skeleton"></div>
+          <div class="row-skeleton"></div>
         </div>
       </div>
-    </div>
 
-    <script src="header/header.js"></script>
+    </main>
+
+    <script src="js/trainer-layout.js"></script>
     <script>
-      let currentCourseId = null;
-
-      document.addEventListener("DOMContentLoaded", function () {
-        if (window.lucide) window.lucide.createIcons();
-
-        const sessionRaw = localStorage.getItem("ntaTrainer");
-        if (!sessionRaw) {
-          window.location.href = "index.html";
-          return;
-        }
-        const session = JSON.parse(sessionRaw);
-        if (session.role !== "trainer") {
-          window.location.href = "index.html";
-          return;
-        }
-        document.getElementById("trainerName").textContent =
-          session.fullName || "المدرب";
-
-        // Load courses immediately if session is ready
-        if (session && session.nationalId) {
-            fetchTrainerCourses(session.nationalId);
-        } else {
-            // Fallback delay if session is being initialized
-            setTimeout(function () {
-              if (session.nationalId) fetchTrainerCourses(session.nationalId);
-            }, 500);
-        }
-
+      // Date
+      document.getElementById("topbarDate").textContent = new Date().toLocaleDateString("ar-EG", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric"
       });
 
-      function fetchTrainerCourses(nationalId) {
-        window.authenticatedFetch("/api/courses/trainer/" + nationalId)
-          .then((res) => res.json())
-          .then((courses) => {
-            const grid = document.getElementById("coursesGrid");
-            const delayMessage = document.getElementById("delayMessage");
-            if (delayMessage) delayMessage.style.display = "none";
-            
-            document.getElementById("trainerCourses").style.display = "block";
-            grid.innerHTML = "";
-            
-            if (Array.isArray(courses) && courses.length > 0) {
-              grid.innerHTML = courses.map(c => `
-                <div class="course-card">
-                  <h3 class="course-title">${c.title}</h3>
-                  <div class="course-meta">
-                    <div class="meta-item"><i data-lucide="calendar" size="14"></i><span>${c.duration_weeks} أسابيع</span></div>
-                    <div class="meta-item"><i data-lucide="layers" size="14"></i><span>${c.total_sessions} جلسة</span></div>
-                  </div>
-                  <div class="card-actions">
-                    <button class="btn btn-secondary" onclick="viewTrainees(${c.id}, '${c.title}')"><i data-lucide="users" size="16"></i> المتدربين</button>
-                    <button class="btn btn-secondary" onclick="openAssignmentModal(${c.id}, '${c.title}')"><i data-lucide="clipboard-list" size="16"></i> التكليفات</button>
-                    <button class="btn btn-outline btn-full" onclick="generateQuiz(${c.id}, '${c.title}')"><i data-lucide="brain-circuit" size="16"></i> إنشاء اختبار ذكي (AI)</button>
-                  </div>
-                </div>
-              `).join("");
-            } else {
-              grid.innerHTML = '<div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">لم يتم العثور على دورات مسندة حالياً.</div>';
-            }
-            grid.style.display = "grid";
-            if (window.lucide) window.lucide.createIcons();
-          })
-          .catch((err) => {
-            console.error("Error fetching courses:", err);
-            const delayMessage = document.getElementById("delayMessage");
-            if (delayMessage) delayMessage.style.display = "none";
-          });
+      // Name from token
+      (function() {
+        try {
+          var raw = localStorage.getItem("ntaTrainer");
+          if (!raw) return;
+          var token = raw.startsWith("{") ? JSON.parse(raw).token : raw;
+          var p = JSON.parse(atob(token.split(".")[1]));
+          var name = p.name || p.full_name_ar || "المدرب";
+          document.getElementById("topbarName").textContent = name;
+          document.getElementById("topbarAvatar").textContent = name.charAt(0);
+        } catch(e) {}
+      })();
+
+      // Auth helper
+      function trainerFetch(url, opts) {
+        try {
+          var raw = localStorage.getItem("ntaTrainer");
+          if (!raw) return fetch(url, opts);
+          var token = raw.startsWith("{") ? JSON.parse(raw).token : raw;
+          opts = opts || {};
+          opts.headers = Object.assign({}, opts.headers, { "Authorization": "Bearer " + token });
+        } catch(e) {}
+        return fetch(url, opts);
       }
 
-
-      function generateQuiz(courseId, courseTitle) {
-        window.location.href = `generate%20quiz/generate-quiz.html?course_id=${courseId}&course_name=${encodeURIComponent(courseTitle)}`;
+      // KPI cards
+      function renderKPIs(courses) {
+        var total = courses.length;
+        var totalTrainees = courses.reduce(function(s,c){ return s + (c.enrolled_count || 0); }, 0);
+        var ongoing = courses.filter(function(c){ return (c.status||"").toLowerCase() === "ongoing"; }).length;
+        var kpis = [
+          { val: total,         lbl: "كورساتي",            variant: "dash-kpi--crimson", icon: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' },
+          { val: ongoing,       lbl: "جارية الآن",          variant: "dash-kpi--green",   icon: '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
+          { val: totalTrainees, lbl: "متدرب مسجل",          variant: "dash-kpi--blue",    icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>' },
+          { val: total - ongoing, lbl: "كورسات أخرى",       variant: "dash-kpi--amber",   icon: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>' }
+        ];
+        var html = "";
+        kpis.forEach(function(k,i) {
+          html += '<div class="dash-kpi ' + k.variant + '" style="animation-delay:' + (i*0.08) + 's">'
+            + '<div class="dash-kpi__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + k.icon + '</svg></div>'
+            + '<div class="dash-kpi__val">' + k.val + '</div>'
+            + '<div class="dash-kpi__lbl">' + k.lbl + '</div></div>';
+        });
+        document.getElementById("kpiRow").innerHTML = html;
       }
 
-      function viewTrainees(courseId, courseTitle) {
-        window.location.href = `view%20trainees/view-trainees.html?course_id=${courseId}&course_name=${encodeURIComponent(courseTitle)}`;
-      }
-
-      function openAssignmentModal(courseId, courseTitle) {
-        currentCourseId = courseId;
-        document.getElementById("modalTitle").textContent =
-          `التكليفات: ${courseTitle}`;
-        document.getElementById("assignmentModal").style.display = "flex";
-        showList();
-        loadAssignments();
-      }
-
-      function closeModal() {
-        document.getElementById("assignmentModal").style.display = "none";
-      }
-
-      function showCreateForm() {
-        document.getElementById("assignmentListSection").style.display = "none";
-        document.getElementById("submissionsSection").style.display = "none";
-        document.getElementById("createAssignmentForm").style.display = "block";
-        if (window.lucide) window.lucide.createIcons();
-      }
-
-      function showList() {
-        document.getElementById("assignmentListSection").style.display =
-          "block";
-        document.getElementById("createAssignmentForm").style.display = "none";
-        document.getElementById("submissionsSection").style.display = "none";
-        if (window.lucide) window.lucide.createIcons();
-      }
-
-      function loadAssignments() {
-        fetch(`/api/assignments/course/${currentCourseId}`)
-          .then((res) => res.json())
-          .then((data) => {
-            const list = document.getElementById("assignmentList");
-            if (data.length === 0) {
-              list.innerHTML =
-                '<div style="padding: 40px; text-align: center; color: var(--nta-muted);"><i data-lucide="file-x-2" size="40" style="margin-bottom: 15px;"></i><p>لا توجد تكليفات مضافة بعد.</p></div>';
-              if (window.lucide) window.lucide.createIcons();
-              return;
-            }
-            list.innerHTML = data
-              .map(
-                (a) => `
-                        <div class="assignment-item">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
-                                <div>
-                                    <strong style="color: #fff; font-size: 1.1rem;">${a.title}</strong>
-                                    <div style="font-size: 0.8rem; color: var(--nta-muted); margin-top: 5px; display: flex; align-items: center; gap: 5px;">
-                                        <i data-lucide="clock" size="12"></i>
-                                        الموعد: ${new Date(a.deadline).toLocaleString("ar-EG")}
-                                    </div>
-                                </div>
-                                <button class="btn btn-blue" onclick="viewSubmissions(${a.id}, '${a.title}')">
-                                    <i data-lucide="users" size="14"></i>
-                                    رؤية التسليمات
-                                </button>
-                            </div>
-                        </div>
-                    `,
-              )
-              .join("");
-            if (window.lucide) window.lucide.createIcons();
-          });
-      }
-
-      document.getElementById("newAssignmentForm").onsubmit = function (e) {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("course_id", currentCourseId);
-        formData.append("title", document.getElementById("assignTitle").value);
-        formData.append(
-          "description",
-          document.getElementById("assignDesc").value,
-        );
-        formData.append(
-          "deadline",
-          document.getElementById("assignDeadline").value,
-        );
-        formData.append(
-          "max_grade",
-          document.getElementById("assignMaxGrade").value,
-        );
-        const fileInput = document.getElementById("assignFile");
-        if (fileInput.files[0]) formData.append("file", fileInput.files[0]);
-
-        fetch("/api/assignments/create", {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            alert("تمت إضافة التكليف بنجاح");
-            showList();
-            loadAssignments();
-            document.getElementById("newAssignmentForm").reset();
-          })
-          .catch((err) => alert("فشل حفظ التكليف"));
-      };
-
-      function viewSubmissions(assignId, title) {
-        document.getElementById("modalTitle").textContent = `تسليمات: ${title}`;
-        document.getElementById("assignmentListSection").style.display = "none";
-        document.getElementById("submissionsSection").style.display = "block";
-
-        fetch(`/api/assignments/${assignId}/submissions`)
-          .then((res) => res.json())
-          .then((data) => {
-            const list = document.getElementById("submissionsList");
-            if (data.length === 0) {
-              list.innerHTML =
-                '<div style="padding: 40px; text-align: center; color: var(--nta-muted);"><i data-lucide="inbox" size="40" style="margin-bottom: 15px;"></i><p>لا توجد تسليمات بعد.</p></div>';
-              if (window.lucide) window.lucide.createIcons();
-              return;
-            }
-            list.innerHTML = data
-              .map(
-                (s) => `
-                        <div class="assignment-item" style="border-right: 4px solid ${s.status === "graded" ? "var(--nta-green)" : "#f59e0b"};">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <strong style="color: #fff;">${s.trainee_name}</strong>
-                                    <div style="font-size: 0.75rem; color: var(--nta-muted); margin-top: 4px;">
-                                        <i data-lucide="calendar" size="12"></i>
-                                        ${new Date(s.submitted_at).toLocaleString("ar-EG")}
-                                    </div>
-                                </div>
-                                <span class="submission-status ${s.status === "graded" ? "status-graded" : "status-pending"}">
-                                    ${s.status === "graded" ? "مقيم" : "في انتظار التقييم"}
-                                </span>
-                            </div>
-                            
-                            <div style="margin-top: 15px; display: flex; gap: 12px; align-items: center;">
-                                <a href="/${s.file_path}" target="_blank" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
-                                    <i data-lucide="download" size="14"></i> تحميل الملف
-                                </a>
-                                
-                                ${
-                                  s.status === "graded"
-                                    ? `
-                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--nta-border);">
-                                        <span style="font-size: 0.85rem; font-weight: 800; color: var(--nta-green);">الدرجة: ${s.grade}</span>
-                                    </div>
-                                `
-                                    : `
-                                    <button class="btn btn-success" onclick="showGradeForm(${s.id})" style="font-size: 0.8rem; padding: 6px 12px;">
-                                        <i data-lucide="check-square" size="14"></i> رصد درجة
-                                    </button>
-                                `
-                                }
-                            </div>
-
-                            <div id="gradeForm_${s.id}" style="display: none; margin-top: 20px; border-top: 1px solid var(--nta-border); padding-top: 20px; animation: fadeIn 0.3s ease;">
-                                <div style="display: flex; gap: 10px; align-items: flex-start;">
-                                    <div style="flex: 0 0 100px;">
-                                        <label style="font-size: 0.8rem; color: var(--nta-muted); margin-bottom: 5px; display: block;">الدرجة</label>
-                                        <input type="number" id="grade_${s.id}" placeholder="0.0" style="padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid var(--nta-border); color: #fff; width: 100%;">
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <label style="font-size: 0.8rem; color: var(--nta-muted); margin-bottom: 5px; display: block;">ملاحظات</label>
-                                        <input type="text" id="feedback_${s.id}" placeholder="أضف تعليقاً..." style="padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid var(--nta-border); color: #fff; width: 100%;">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="submitGrade(${s.id}, ${assignId})" style="margin-top: 25px; padding: 8px 16px;">
-                                        حفظ
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `,
-              )
-              .join("");
-            if (window.lucide) window.lucide.createIcons();
-          });
-      }
-
-      function showGradeForm(subId) {
-        document.getElementById(`gradeForm_${subId}`).style.display = "block";
-      }
-
-      function submitGrade(subId, assignId) {
-        const grade = document.getElementById(`grade_${subId}`).value;
-        const feedback = document.getElementById(`feedback_${subId}`).value;
-
-        const formData = new FormData();
-        formData.append("grade", grade);
-        formData.append("feedback", feedback);
-
-        fetch(`/api/assignments/submissions/${subId}/grade`, {
-          method: "PATCH",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then(() => {
-            alert("تم رصد الدرجة بنجاح");
-            viewSubmissions(assignId, ""); // Refresh list
-          });
-      }
-
-      // Close modal when clicking outside
-      window.onclick = function (event) {
-        if (event.target == document.getElementById("assignmentModal")) {
-          closeModal();
+      // Course rows
+      function renderCourses(courses) {
+        if (!courses || !courses.length) {
+          document.getElementById("coursesList").innerHTML = '<p style="text-align:center;color:var(--text-subtle);padding:2rem;font-size:0.9rem;">لا توجد كورسات مسندة حالياً</p>';
+          return;
         }
-      };
+        var html = "";
+        courses.forEach(function(c) {
+          var statusMap = { Ongoing: "جارية", Upcoming: "قادمة", Completed: "منتهية" };
+          html += '<a href="view trainees/view-trainees.html?courseId=' + (c.id||"") + '" class="course-row">'
+            + '<div class="course-row__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>'
+            + '<div class="course-row__body">'
+            + '<p class="course-row__name">' + (c.title || c.name || "كورس") + '</p>'
+            + '<p class="course-row__meta">' + (statusMap[c.status] || c.status || "") + ' · ' + (c.enrolled_count || 0) + ' متدرب</p>'
+            + '</div><div class="course-row__arrow">←</div></a>';
+        });
+        document.getElementById("coursesList").innerHTML = html;
+      }
+
+      // Load data
+      (function() {
+        try {
+          var raw = localStorage.getItem("ntaTrainer");
+          var token = raw ? (raw.startsWith("{") ? JSON.parse(raw).token : raw) : null;
+          var p = token ? JSON.parse(atob(token.split(".")[1])) : null;
+          var trainerId = p ? (p.sub || p.user_id) : null;
+          if (!trainerId) throw new Error("no id");
+          trainerFetch("/api/courses/trainer/" + trainerId)
+            .then(function(r){ return r.ok ? r.json() : []; })
+            .then(function(courses) {
+              renderKPIs(courses);
+              renderCourses(courses);
+            })
+            .catch(function() {
+              renderKPIs([]);
+              renderCourses([]);
+            });
+        } catch(e) {
+          renderKPIs([]);
+          renderCourses([]);
+        }
+      })();
     </script>
   </body>
 </html>
