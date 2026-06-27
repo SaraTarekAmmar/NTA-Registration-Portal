@@ -116,6 +116,12 @@ data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
     app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
 
+# Serve the shared common/ assets (theme.css, theme.js, nta-dashboard.css, …) so
+# /common/* references resolve like the other portals (was previously 404).
+common_path = Path(__file__).parent.parent.parent / "common"
+if os.path.exists(common_path):
+    app.mount("/common", StaticFiles(directory=str(common_path)), name="common")
+
 # Serve trainer frontend files
 static_path = Path(__file__).parent.parent
 app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="static")

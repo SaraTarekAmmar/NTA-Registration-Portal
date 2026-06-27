@@ -5,6 +5,7 @@
     <script src="js/trainer-guard.js"></script>
     <link rel="stylesheet" href="/common/css/theme.css?v=4" />
     <link rel="stylesheet" href="header/header.css?v=9" />
+    <link rel="stylesheet" href="/common/css/nta-dashboard.css?v=1" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>لوحة المدرب — الأكاديمية الوطنية للتدريب</title>
@@ -187,81 +188,58 @@
     <div id="ntaHeader"></div>
     <main class="trainer-main">
 
-      <!-- Top Bar -->
-      <div class="dash-topbar">
-        <div class="dash-topbar__user">
-          <div class="dash-topbar__avatar" id="topbarAvatar">م</div>
-          <div>
-            <div class="dash-topbar__name" id="topbarName">المدرب</div>
-            <div class="dash-topbar__role">مدرب</div>
-          </div>
-        </div>
-        <div class="dash-topbar__actions">
-          <div class="dash-topbar__date" id="topbarDate"></div>
-        </div>
-      </div>
-
       <!-- Hero -->
-      <div class="dash-hero">
+      <div class="ed-hero" style="padding: 1.5rem 2rem; min-height: auto;">
         <div>
-          <h1 class="dash-hero__title">لوحة تحكم المدرب</h1>
-          <p class="dash-hero__sub">متابعة الكورسات المسندة، المتدربين، والتقييمات</p>
+          <p class="ed-hero__greeting" id="heroGreeting">مرحباً، المدرب</p>
+          <h1 class="ed-hero__title">لوحة تحكم المدرب</h1>
+          <p class="ed-hero__sub">متابعة الكورسات المسندة، المتدربين، والتقييمات</p>
         </div>
-        <div class="dash-hero__meta">
-          <div class="dash-hero__live">
-            <div class="dash-hero__live-dot"></div>
-            <span>بيانات مباشرة</span>
-          </div>
+        <div class="ed-hero__side" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+          <div class="ed-hero__date" id="heroDate"></div>
+          <div class="ed-hero__live"><span class="ed-hero__live-dot"></span><span>بيانات مباشرة</span></div>
         </div>
       </div>
 
       <!-- KPI Cards -->
-      <div class="dash-kpi-row" id="kpiRow">
-        <div class="kpi-skeleton"></div><div class="kpi-skeleton"></div>
-        <div class="kpi-skeleton"></div><div class="kpi-skeleton"></div>
+      <div class="ed-section"><div class="ed-section__left">إحصائيات عامة</div></div>
+      <div class="ed-kpi-row" id="kpiRow">
+        <div class="ed-kpi ed-kpi--blue"></div><div class="ed-kpi ed-kpi--green"></div>
+        <div class="ed-kpi ed-kpi--yellow"></div><div class="ed-kpi ed-kpi--slate"></div>
       </div>
 
       <!-- Quick Actions -->
-      <p class="adm-section-title">الإجراءات السريعة</p>
-      <div class="dash-panel">
-        <div class="trainer-quick-grid">
-          <a href="view trainees/view-trainees.html" class="trainer-quick trainer-quick--trainees">
-            <div class="trainer-quick__icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-              </svg>
-            </div>
-            <div class="trainer-quick__body">
-              <div class="trainer-quick__title">المتدربون</div>
-              <div class="trainer-quick__sub">عرض قائمة المتدربين المسجلين في كورساتك</div>
-            </div>
-            <div class="trainer-quick__arrow">←</div>
-          </a>
+      <div class="ed-section"><div class="ed-section__left">إجراءات سريعة</div></div>
+      <div class="ed-actions-grid">
+        <a href="view trainees/view-trainees.html" class="ed-action ed-action--list">
+          <div class="ed-action__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">المتدربون</div>
+            <div class="ed-action__sub">عرض قائمة المتدربين المسجلين في كورساتك</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
 
-          <a href="generate quiz/generate-quiz.html" class="trainer-quick trainer-quick--quiz">
-            <div class="trainer-quick__icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-              </svg>
-            </div>
-            <div class="trainer-quick__body">
-              <div class="trainer-quick__title">توليد اختبار بالذكاء الاصطناعي</div>
-              <div class="trainer-quick__sub">إنشاء أسئلة اختبار تلقائياً</div>
-            </div>
-            <div class="trainer-quick__arrow">←</div>
-          </a>
-        </div>
+        <a href="generate quiz/generate-quiz.html" class="ed-action ed-action--create">
+          <div class="ed-action__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <div class="ed-action__body">
+            <div class="ed-action__title">توليد اختبار بالذكاء الاصطناعي</div>
+            <div class="ed-action__sub">إنشاء أسئلة اختبار تلقائياً</div>
+          </div>
+          <span class="ed-action__arrow">←</span>
+        </a>
       </div>
 
       <!-- Assigned Courses -->
-      <p class="adm-section-title">الكورسات المسندة</p>
-      <div class="dash-courses-panel">
-        <div id="coursesList">
-          <div class="row-skeleton"></div>
-          <div class="row-skeleton"></div>
-          <div class="row-skeleton"></div>
-        </div>
+      <div class="ed-section"><div class="ed-section__left">الكورسات المسندة</div></div>
+      <div id="coursesList">
+        <div class="row-skeleton"></div>
+        <div class="row-skeleton"></div>
+        <div class="row-skeleton"></div>
       </div>
 
     </main>
@@ -269,20 +247,21 @@
     <script src="js/trainer-layout.js"></script>
     <script>
       // Date
-      document.getElementById("topbarDate").textContent = new Date().toLocaleDateString("ar-EG", {
+      document.getElementById("heroDate").textContent = new Date().toLocaleDateString("ar-EG", {
         weekday: "long", year: "numeric", month: "long", day: "numeric"
       });
 
-      // Name from token
+      // Greeting name from session/token
       (function() {
         try {
           var raw = localStorage.getItem("ntaTrainer");
           if (!raw) return;
-          var token = raw.startsWith("{") ? JSON.parse(raw).token : raw;
-          var p = JSON.parse(atob(token.split(".")[1]));
-          var name = p.name || p.full_name_ar || "المدرب";
-          document.getElementById("topbarName").textContent = name;
-          document.getElementById("topbarAvatar").textContent = name.charAt(0);
+          var session = raw.startsWith("{") ? JSON.parse(raw) : {};
+          var token = session.token || raw;
+          var p = {};
+          try { p = JSON.parse(atob(token.split(".")[1])); } catch(e) {}
+          var name = session.name || session.fullName || p.name || p.full_name_ar || "المدرب";
+          document.getElementById("heroGreeting").textContent = "مرحباً، " + name;
         } catch(e) {}
       })();
 
@@ -304,17 +283,17 @@
         var totalTrainees = courses.reduce(function(s,c){ return s + (c.enrolled_count || 0); }, 0);
         var ongoing = courses.filter(function(c){ return (c.status||"").toLowerCase() === "ongoing"; }).length;
         var kpis = [
-          { val: total,         lbl: "كورساتي",            variant: "dash-kpi--crimson", icon: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' },
-          { val: ongoing,       lbl: "جارية الآن",          variant: "dash-kpi--green",   icon: '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
-          { val: totalTrainees, lbl: "متدرب مسجل",          variant: "dash-kpi--blue",    icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>' },
-          { val: total - ongoing, lbl: "كورسات أخرى",       variant: "dash-kpi--amber",   icon: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>' }
+          { val: total,         lbl: "كورساتي",     variant: "ed-kpi--blue",   icon: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' },
+          { val: ongoing,       lbl: "جارية الآن",   variant: "ed-kpi--green",  icon: '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
+          { val: totalTrainees, lbl: "متدرب مسجل",   variant: "ed-kpi--yellow", icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>' },
+          { val: total - ongoing, lbl: "كورسات أخرى", variant: "ed-kpi--slate",  icon: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>' }
         ];
         var html = "";
         kpis.forEach(function(k,i) {
-          html += '<div class="dash-kpi ' + k.variant + '" style="animation-delay:' + (i*0.08) + 's">'
-            + '<div class="dash-kpi__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + k.icon + '</svg></div>'
-            + '<div class="dash-kpi__val">' + k.val + '</div>'
-            + '<div class="dash-kpi__lbl">' + k.lbl + '</div></div>';
+          html += '<div class="ed-kpi ' + k.variant + '" style="animation-delay:' + (0.05 + i*0.05) + 's">'
+            + '<div class="ed-kpi__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + k.icon + '</svg></div>'
+            + '<div class="ed-kpi__val">' + k.val + '</div>'
+            + '<div class="ed-kpi__lbl">' + k.lbl + '</div></div>';
         });
         document.getElementById("kpiRow").innerHTML = html;
       }
