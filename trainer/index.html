@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل دخول المدربين - NTA</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Hide the native Edge/Chrome password reveal icon */
+      input[type="password"]::-ms-reveal,
+      input[type="password"]::-ms-clear {
+        display: none;
+      }
+      
+      .login-input-wrap { position: relative; }
+      #loginPassword { padding-left: 35px; }
+      .password-toggle {
+        position: absolute;
+        left: 15px;
+        background: none;
+        border: none;
+        color: var(--text-subtle);
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+      }
+      .password-toggle:hover { color: var(--text-main); }
+      .password-toggle svg { width: 20px; height: 20px; }
+      
+      .forgot-password-link {
+        display: block;
+        text-align: left;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #d4af37;
+        text-decoration: none;
+        transition: opacity 0.3s;
+      }
+      .forgot-password-link:hover { opacity: 0.8; text-decoration: underline; }
+    </style>
+  </head>
+
+  <body class="has-header">
+    <a href="#loginCard" class="skip-link">الانتقال إلى نموذج تسجيل الدخول</a>
+    <div class="login-bg"></div>
+
+    <div class="login-card" id="loginCard">
+      <div class="logo-container">
+        <img
+          src="images/logo2.png"
+          alt="الأكاديمية الوطنية للتدريب"
+          class="login-logo"
+        />
+        <div class="logo-subtitle">بوابة المدربين</div>
+      </div>
+
+      <h1>تسجيل الدخول</h1>
+      <p class="subtitle">مرحباً بك في لوحة تحكم المدربين (NTA)</p>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="nationalIdLogin">الرقم القومى <span class="req-mark" aria-hidden="true">*</span></label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 8h6M9 12h6M9 16h6"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="nationalIdLogin"
+              name="nationalId"
+              placeholder="أدخل الرقم القومي"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="username"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginEmail">البريد الإلكتروني <span class="req-mark" aria-hidden="true">*</span></label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 6h16v12H4V6Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="m4 7 8 6 8-6"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <input
+              type="email"
+              id="loginEmail"
+              name="email"
+              placeholder="name@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">كلمة المرور <span class="req-mark" aria-hidden="true">*</span></label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="M4 11V9a8 8 0 1 1 16 0v2M4 11h16v10H4V11Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+              </svg>
+            </span>
+            <input
+              type="password"
+              name="password"
+              id="loginPassword"
+              placeholder="أدخل كلمة المرور الخاصة بك"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="password-toggle" id="togglePasswordVisibility" aria-label="Toggle password visibility">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span class="login-btn-text">تسجيل الدخول</span>
+          <span class="arrow-icon">←</span>
+          <span class="login-btn-loader" aria-hidden="true"></span>
+        </button>
+      <div id="loginErrorMsg" role="alert" aria-live="assertive" class="field-error" style="display:none;"></div>
+      </form>
+    </div>
+
+    <script>
+      // ---- Password Visibility Toggle ----
+      const togglePasswordBtn = document.getElementById("togglePasswordVisibility");
+      const loginPasswordInput = document.getElementById("loginPassword");
+      if (togglePasswordBtn && loginPasswordInput) {
+        togglePasswordBtn.addEventListener("click", function() {
+          const isHidden = loginPasswordInput.getAttribute("type") === "password";
+          loginPasswordInput.setAttribute("type", isHidden ? "text" : "password");
+          this.setAttribute("aria-label", isHidden ? "إخفاء كلمة المرور" : "إظهار كلمة المرور");
+          const eyeIcon = this.querySelector(".eye-icon");
+          const eyeOffIcon = this.querySelector(".eye-off-icon");
+          eyeIcon.style.display = isHidden ? "none" : "block";
+          eyeOffIcon.style.display = isHidden ? "block" : "none";
+        });
+      }
+
+      // Auto-redirect if already logged in
+      if (localStorage.getItem("ntaTrainer")) {
+        window.location.replace("trainer-dashboard.html");
+      }
+
+      // ---- Login Form Submit ----
+      (function () {
+        var form = document.getElementById("loginForm");
+        var btn = document.getElementById("loginBtn");
+        var errorDiv = document.getElementById("loginErrorMsg");
+
+        function showLoginError(msg) {
+          if (errorDiv) {
+            errorDiv.textContent = msg;
+            errorDiv.style.display = "block";
+          }
+        }
+
+        function clearLoginError() {
+          if (errorDiv) {
+            errorDiv.textContent = "";
+            errorDiv.style.display = "none";
+          }
+        }
+
+        if (form && btn) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            clearLoginError();
+            btn.classList.add("loading");
+
+            var nationalId = form.nationalId.value.trim();
+            var email = form.email.value.trim();
+            var password = form.password.value.trim();
+
+            fetch("/api/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, nationalId, password, role: "trainer" }),
+            })
+              .then((response) => {
+                if (!response.ok)
+                  return response.json().then((err) => { throw new Error(err.detail || "Login failed"); });
+                return response.json();
+              })
+              .then((data) => {
+                localStorage.setItem("ntaTrainer", JSON.stringify({
+                  token: data.access_token,
+                  userId: data.userId,
+                  role: data.role,
+                  email,
+                  nationalId,
+                  fullName: data.fullName || "",
+                }));
+                window.location.replace("trainer-dashboard.html");
+              })
+              .catch((err) => {
+                btn.classList.remove("loading");
+                let msg = "بيانات الدخول غير صحيحة";
+                if (err.message === "Failed to fetch" || err.message.toLowerCase().includes("network") || err.message.toLowerCase().includes("connection")) {
+                  msg = "خطأ في الاتصال، يرجى المحاولة مرة أخرى لاحقاً";
+                } else if (err.message && err.message.includes("Unexpected token")) {
+                  msg = "حدث خطأ غير متوقع في النظام، يرجى المحاولة لاحقاً";
+                } else {
+                  msg = err.message;
+                }
+                showLoginError(msg);
+              });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

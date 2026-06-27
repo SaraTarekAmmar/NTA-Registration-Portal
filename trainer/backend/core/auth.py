@@ -222,9 +222,9 @@ async def login(req: Request, request: LoginRequest):
         role = request.role.strip().lower()
         national_id_req = request.nationalId.strip() if request.nationalId else None
 
-        # --- Trainee portal: only allow trainee logins ---
-        if role != "trainee":
-            raise HTTPException(status_code=403, detail="هذه البوابة مخصصة للمتدربين فقط. المدربون يسجلون الدخول من بوابتهم الخاصة.")
+        # --- Trainer portal: only allow trainer logins ---
+        if role != "trainer":
+            raise HTTPException(status_code=403, detail="هذه البوابة مخصصة للمدربين فقط")
 
         # Check user exists by email and role
         query = "SELECT id, full_name_ar, email, role, national_id, password_hash FROM users WHERE email = %s AND role = %s"

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -35,21 +35,7 @@
 
       <form id="loginForm" novalidate>
 
-        <div class="form-group login-role-group">
-          <fieldset class="login-role-fieldset">
-          <legend class="login-role-legend">نوع الحساب</legend>
-          <div class="login-role-toggle">
-            <label class="login-role-option">
-              <input type="radio" name="loginRole" value="trainee" checked />
-              <span>متدرب</span>
-            </label>
-            <label class="login-role-option">
-              <input type="radio" name="loginRole" value="trainer" />
-              <span>مدرب</span>
-            </label>
-          </div>
-          </fieldset>
-        </div>
+        <!-- Trainer portal moved to dedicated port 8006 -->
 
         <div class="form-group">
           <label for="nationalIdLogin">الرقم القومى <span class="req-mark" aria-hidden="true">*</span></label>
@@ -167,6 +153,9 @@
         </button>
         <p class="login-register-link">
           <a href="registration.html" id="registerLink" class="login__register-link">إنشاء حساب جديد</a>
+        </p>
+        <p class="login-register-link" style="margin-top:8px;">
+          مدرب؟ <a href="http://127.0.0.1:8006/" class="login__register-link" style="color:#c1121f;">بوابة المدربين ←</a>
         </p>
       <div id="loginErrorMsg" role="alert" aria-live="assertive" class="field-error" style="display:none;"></div>
       </form>
@@ -526,10 +515,9 @@
         }
       });
 
-      // Auto-redirect if already logged in
+      // Auto-redirect if already logged in as trainee
       if (localStorage.getItem("ntaTrainee")) {
-        const session = JSON.parse(localStorage.getItem("ntaTrainee"));
-        window.location.href = session.role === "trainer" ? "trainer-dashboard.html" : "courses.html";
+        window.location.href = "courses.html";
       }
 
       // ---- Login Form Submit ----
@@ -556,8 +544,7 @@
           form.addEventListener("submit", function (e) {
             e.preventDefault();
             clearLoginError();
-            const checkedRole = form.querySelector('input[name="loginRole"]:checked');
-            const role = checkedRole ? checkedRole.value : 'trainee';
+            const role = 'trainee';
             btn.classList.add("loading");
 
             var nationalId = form.nationalId.value.trim();
@@ -583,7 +570,7 @@
                   nationalId,
                   fullName: data.fullName || "",
                 }));
-                window.location.href = data.role === "trainer" ? "trainer-dashboard.html" : "courses.html";
+                window.location.href = "courses.html";
               })
               .catch((err) => {
                 btn.classList.remove("loading");
