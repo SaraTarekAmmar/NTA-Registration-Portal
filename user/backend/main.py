@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 from core import auth
 from core.logger_util import log_activity
 from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, reg_steps, registration_flow
-from fastapi import Request
+from fastapi import Request, Depends
 
 load_dotenv()
 
@@ -165,6 +165,12 @@ app.include_router(trainer.router)
 app.include_router(reg_steps.router)
 app.include_router(registration_flow.router)
 
+
+from fastapi.responses import RedirectResponse
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/index.html", status_code=307)
 
 @app.get("/api/health")
 async def health_check():
