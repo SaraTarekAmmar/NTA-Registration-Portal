@@ -4,43 +4,347 @@
     <script src="/common/js/theme.js"></script>
     <link rel="stylesheet" href="/common/css/theme.css?v=4" />
     <link rel="stylesheet" href="/admin/header/header.css?v=8" />
-    <link rel="stylesheet" href="coordinator.css?v=3" />
+    <link rel="stylesheet" href="coordinator.css?v=4" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة التحكم | المنسق</title>
+    <title>لوحة التحكم | المنسق — الأكاديمية الوطنية للتدريب</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/coordinator-guard.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+      body { overflow-x: hidden; }
+
+      /* ══ Top Bar ══ */
+      .dash-topbar {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 0.85rem 1.5rem; border-radius: 18px;
+        background: rgba(8,12,32,0.55);
+        backdrop-filter: blur(24px) saturate(130%);
+        border: 1px solid rgba(255,255,255,0.07);
+        margin-bottom: 1.25rem; flex-wrap: wrap;
+      }
+      .dash-topbar__user { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+      .dash-topbar__avatar {
+        width: 42px; height: 42px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(185,28,28,0.35), rgba(185,28,28,0.15));
+        border: 2px solid rgba(185,28,28,0.4);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1rem; font-weight: 800; color: #fca5a5; flex-shrink: 0;
+      }
+      .dash-topbar__name { font-size: 0.9rem; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .dash-topbar__role {
+        font-size: 0.68rem; font-weight: 600; color: #fca5a5;
+        background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.25);
+        border-radius: 999px; padding: 0.15rem 0.6rem; white-space: nowrap;
+      }
+      .dash-topbar__actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+      .dash-topbar__date {
+        font-size: 0.75rem; color: var(--text-subtle);
+        padding: 0.3rem 0.85rem; border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px; white-space: nowrap;
+      }
+
+      /* ══ Hero ══ */
+      .dash-hero {
+        padding: 1.5rem 1.8rem; border-radius: 20px; margin-bottom: 1.5rem;
+        background:
+          radial-gradient(circle at top right, rgba(185,28,28,0.11), transparent 52%),
+          radial-gradient(circle at bottom left, rgba(30,50,100,0.1), transparent 55%),
+          rgba(4,6,18,0.78);
+        border: 1px solid rgba(185,28,28,0.18);
+        position: relative; overflow: hidden;
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 1rem;
+      }
+      .dash-hero::before {
+        content: ""; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(185,28,28,0.09), transparent 70%);
+        pointer-events: none;
+      }
+      .dash-hero__title { font-size: 1.9rem; font-weight: 800; margin: 0 0 0.25rem; color: var(--text-main); letter-spacing: -0.02em; }
+      .dash-hero__sub { font-size: 0.84rem; color: var(--text-subtle); margin: 0; }
+      .dash-hero__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem; flex-shrink: 0; }
+      .dash-hero__live { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-subtle); }
+      .dash-hero__live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-success, #10b981); animation: livePulse 2s infinite; }
+      @keyframes livePulse {
+        0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+        70%  { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+        100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+      }
+
+      /* ══ KPI Row ══ */
+      .dash-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.9rem; margin-bottom: 1.5rem; }
+      @media (max-width: 900px)  { .dash-kpi-row { grid-template-columns: repeat(2,1fr); } }
+      @media (max-width: 480px)  { .dash-kpi-row { grid-template-columns: 1fr; } }
+
+      .dash-kpi {
+        padding: 1.2rem 1.3rem; border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.07);
+        background: rgba(8,12,32,0.4); backdrop-filter: blur(18px);
+        display: flex; flex-direction: column; gap: 0.45rem;
+        position: relative; overflow: hidden; text-decoration: none;
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
+        animation: kpiEnter 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+      }
+      .dash-kpi::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+        background: linear-gradient(90deg, transparent, var(--kpi-accent, var(--accent)), transparent);
+        opacity: 0; transition: opacity 0.3s;
+      }
+      .dash-kpi:hover { transform: translateY(-5px) scale(1.02); }
+      .dash-kpi:hover::before { opacity: 1; }
+      .dash-kpi:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.28), 0 0 24px var(--kpi-glow, rgba(185,28,28,0.2)); }
+      @keyframes kpiEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+      .dash-kpi--green   { --kpi-accent: #34d399; --kpi-glow: rgba(16,185,129,0.25); }
+      .dash-kpi--red     { --kpi-accent: #f87171; --kpi-glow: rgba(185,28,28,0.3); background: linear-gradient(135deg, rgba(185,28,28,0.18), rgba(185,28,28,0.06)); border-color: rgba(185,28,28,0.35); }
+      .dash-kpi--amber   { --kpi-accent: #fbbf24; --kpi-glow: rgba(245,158,11,0.25); }
+      .dash-kpi--blue    { --kpi-accent: #60a5fa; --kpi-glow: rgba(59,130,246,0.25); }
+
+      .dash-kpi__icon {
+        width: 40px; height: 40px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 0.1rem; border: 1px solid;
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      }
+      .dash-kpi:hover .dash-kpi__icon { transform: scale(1.1); }
+      .dash-kpi--green .dash-kpi__icon { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; }
+      .dash-kpi--red    .dash-kpi__icon { background: rgba(185,28,28,0.2);  border-color: rgba(185,28,28,0.4); color: #fca5a5; }
+      .dash-kpi--amber  .dash-kpi__icon { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: #fde68a; }
+      .dash-kpi--blue   .dash-kpi__icon { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); color: #93c5fd; }
+      .dash-kpi__icon svg { width: 18px; height: 18px; }
+
+      .dash-kpi__val { font-size: 2rem; font-weight: 800; color: var(--text-main); line-height: 1; letter-spacing: -0.5px; }
+      .dash-kpi--red .dash-kpi__val { color: #fecaca; }
+      .dash-kpi__lbl { font-size: 0.74rem; font-weight: 600; color: var(--text-subtle); line-height: 1.3; }
+      .dash-kpi--red .dash-kpi__lbl { color: rgba(252,165,165,0.75); }
+
+      /* ══ Quick Actions Panel ══ */
+      .dash-panel {
+        padding: 1.2rem 1.3rem; border-radius: 18px;
+        background: rgba(8,12,32,0.5); backdrop-filter: blur(18px) saturate(130%);
+        border: 1px solid rgba(255,255,255,0.07);
+        display: flex; flex-direction: column; margin-bottom: 1.25rem;
+      }
+      .dash-panel:hover { border-color: rgba(185,28,28,0.22); }
+      .dash-panel__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem; }
+      .dash-panel__title-wrap { display: flex; align-items: center; gap: 0.55rem; }
+      .dash-panel__icon {
+        width: 26px; height: 26px; border-radius: 7px;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(185,28,28,0.1); border: 1px solid rgba(185,28,28,0.22); color: #fca5a5;
+      }
+      .dash-panel__icon svg { width: 12px; height: 12px; }
+      .dash-panel__title { font-size: 0.82rem; font-weight: 700; color: var(--text-main); margin: 0; }
+
+      /* ══ Quick Action Cards ══ */
+      .coord-actions-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.85rem; }
+      @media (max-width: 600px) { .coord-actions-grid { grid-template-columns: 1fr; } }
+
+      .coord-action {
+        display: flex; align-items: center; gap: 0.9rem;
+        padding: 1.05rem 1.2rem; border-radius: 16px;
+        background: rgba(8,12,32,0.48); backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main, rgba(255,255,255,0.08));
+        text-decoration: none; color: var(--text-main);
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s;
+        position: relative; overflow: hidden;
+      }
+      .coord-action::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--q-bg, transparent); opacity: 0; transition: opacity 0.25s; }
+      .coord-action:hover { transform: translateY(-4px) scale(1.01); }
+      .coord-action:hover::before { opacity: 1; }
+
+      .coord-action--att  { --q-bg: rgba(16,185,129,0.07); border-color: rgba(16,185,129,0.2); }
+      .coord-action--att:hover  { border-color: rgba(16,185,129,0.5); box-shadow: 0 10px 32px rgba(16,185,129,0.14); color: #6ee7b7; }
+      .coord-action--perm { --q-bg: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); }
+      .coord-action--perm:hover { border-color: rgba(167,139,250,0.5); box-shadow: 0 10px 32px rgba(167,139,250,0.13); color: #c4b5fd; }
+      .coord-action--int  { --q-bg: rgba(96,165,250,0.07);  border-color: rgba(96,165,250,0.2); }
+      .coord-action--int:hover  { border-color: rgba(96,165,250,0.5); box-shadow: 0 10px 32px rgba(96,165,250,0.13); color: #93c5fd; }
+      .coord-action--eval { --q-bg: rgba(251,191,36,0.07);  border-color: rgba(251,191,36,0.2); }
+      .coord-action--eval:hover { border-color: rgba(251,191,36,0.5); box-shadow: 0 10px 32px rgba(251,191,36,0.12); color: #fde68a; }
+
+      .coord-action__icon {
+        width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        position: relative; z-index: 1;
+        transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); border: 1px solid;
+      }
+      .coord-action:hover .coord-action__icon { transform: scale(1.12) rotate(-5deg); }
+      .coord-action--att  .coord-action__icon { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+      .coord-action--perm .coord-action__icon { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.35); color: #c4b5fd; }
+      .coord-action--int  .coord-action__icon { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.35); color: #93c5fd; }
+      .coord-action--eval .coord-action__icon { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.35); color: #fde68a; }
+      .coord-action__icon svg { width: 20px; height: 20px; }
+
+      .coord-action__body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+      .coord-action__title { font-size: 0.89rem; font-weight: 700; margin: 0 0 0.18rem; line-height: 1.3; }
+      .coord-action__sub { font-size: 0.7rem; color: var(--text-subtle); margin: 0; line-height: 1.4; }
+      .coord-action__arrow { font-size: 0.95rem; opacity: 0.35; position: relative; z-index: 1; transition: transform 0.25s, opacity 0.25s; flex-shrink: 0; }
+      .coord-action:hover .coord-action__arrow { transform: translateX(-5px); opacity: 1; }
+
+      /* ══ Section title ══ */
+      .adm-section-title {
+        font-size: 0.86rem; font-weight: 700; color: var(--text-subtle);
+        margin: 0 0 0.9rem; display: flex; align-items: center; gap: 0.45rem;
+      }
+      .adm-section-title::before {
+        content: ""; width: 3px; height: 15px; border-radius: 999px;
+        background: linear-gradient(180deg, #f87171, #b91c1c); flex-shrink: 0;
+      }
+
+      /* ══ Skeleton ══ */
+      .coord-skeleton { height: 110px; border-radius: 18px; background: rgba(255,255,255,0.04); animation: skelPulse 1.5s ease-in-out infinite; }
+      @keyframes skelPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    </style>
   </head>
   <body data-page="dashboard">
     <div id="coordinatorSidebar"></div>
     <main class="coordinator-main">
-      <header class="coord-page-header">
-        <h1 class="coord-page-header__title">نظرة عامة</h1>
-        <p class="coord-page-header__sub" id="coordDate"></p>
-      </header>
-      <div class="coord-kpi-row" id="dashboardKpis"><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div></div>
-      <div class="coord-actions-grid">
-        <a href="coordinator-interviews.html" class="coord-action coord-action--att"><div class="coord-action__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div class="coord-action__body"><h3 class="coord-action__title">طابور المقابلات</h3><p class="coord-action__sub">متابعة المتقدمين في المقابلة الأولى والثانية</p></div><div class="coord-action__arrow">←</div></a>
-        <a href="coordinator-evaluations.html" class="coord-action coord-action--perm"><div class="coord-action__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 11l3 3L22 4"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="coord-action__body"><h3 class="coord-action__title">متابعة التقييمات</h3><p class="coord-action__sub">عرض التقييمات الناقصة ومتابعة اللجان</p></div><div class="coord-action__arrow">←</div></a>
-        <a href="coordinator-attendance.html" class="coord-action coord-action--att"><div class="coord-action__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div><div class="coord-action__body"><h3 class="coord-action__title">سجل الحضور</h3><p class="coord-action__sub">متابعة الحضور والغياب اليومي للمتدربين</p></div><div class="coord-action__arrow">←</div></a>
-        <a href="coordinator-permissions.html" class="coord-action coord-action--perm"><div class="coord-action__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><div class="coord-action__body"><h3 class="coord-action__title">إدارة الإذونات</h3><p class="coord-action__sub">مراجعة واعتماد طلبات الاستئذان</p></div><div class="coord-action__arrow">←</div></a>
+
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div class="dash-topbar__user">
+          <div class="dash-topbar__avatar" id="topbarAvatar">م</div>
+          <div>
+            <div class="dash-topbar__name" id="topbarName">المنسق</div>
+            <div class="dash-topbar__role">منسّق</div>
+          </div>
+        </div>
+        <div class="dash-topbar__actions">
+          <div class="dash-topbar__date" id="topbarDate"></div>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="dash-hero">
+        <div>
+          <h1 class="dash-hero__title">لوحة تحكم المنسّق</h1>
+          <p class="dash-hero__sub">متابعة الحضور، الإذونات، المقابلات، والتقييمات</p>
+        </div>
+        <div class="dash-hero__meta">
+          <div class="dash-hero__live">
+            <div class="dash-hero__live-dot"></div>
+            <span>بيانات مباشرة</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="dash-kpi-row" id="dashboardKpis">
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+        <div class="coord-skeleton"></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <p class="adm-section-title">الإجراءات السريعة</p>
+      <div class="dash-panel">
+        <div class="coord-actions-grid">
+          <a href="coordinator-interviews.html" class="coord-action coord-action--int">
+            <div class="coord-action__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div class="coord-action__body">
+              <h3 class="coord-action__title">طابور المقابلات</h3>
+              <p class="coord-action__sub">متابعة المتقدمين في المقابلة الأولى والثانية</p>
+            </div>
+            <div class="coord-action__arrow">←</div>
+          </a>
+
+          <a href="coordinator-evaluations.html" class="coord-action coord-action--eval">
+            <div class="coord-action__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 11l3 3L22 4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+              </svg>
+            </div>
+            <div class="coord-action__body">
+              <h3 class="coord-action__title">متابعة التقييمات</h3>
+              <p class="coord-action__sub">عرض التقييمات الناقصة ومتابعة اللجان</p>
+            </div>
+            <div class="coord-action__arrow">←</div>
+          </a>
+
+          <a href="coordinator-attendance.html" class="coord-action coord-action--att">
+            <div class="coord-action__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+              </svg>
+            </div>
+            <div class="coord-action__body">
+              <h3 class="coord-action__title">سجل الحضور</h3>
+              <p class="coord-action__sub">متابعة الحضور والغياب اليومي للمتدربين</p>
+            </div>
+            <div class="coord-action__arrow">←</div>
+          </a>
+
+          <a href="coordinator-permissions.html" class="coord-action coord-action--perm">
+            <div class="coord-action__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <div class="coord-action__body">
+              <h3 class="coord-action__title">إدارة الإذونات</h3>
+              <p class="coord-action__sub">مراجعة واعتماد طلبات الاستئذان</p>
+            </div>
+            <div class="coord-action__arrow">←</div>
+          </a>
+        </div>
       </div>
     </main>
+
     <script src="js/coordinator-layout.js"></script>
     <script>
-      document.getElementById("coordDate").textContent = new Date().toLocaleDateString("ar-EG", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      // Topbar date
+      document.getElementById("topbarDate").textContent = new Date().toLocaleDateString("ar-EG", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric"
+      });
+
+      // Topbar name from token
+      (function() {
+        try {
+          var t = localStorage.getItem("coordinator_token");
+          if (t) {
+            var p = JSON.parse(atob(t.split(".")[1]));
+            if (p.name || p.full_name_ar) {
+              var name = p.name || p.full_name_ar;
+              document.getElementById("topbarName").textContent = name;
+              document.getElementById("topbarAvatar").textContent = name.charAt(0);
+            }
+          }
+        } catch(e) {}
+      })();
+
+      // KPI cards
       function renderKPIs(data) {
-        var html = '';
         var kpis = [
-          { val: data.present_today || 0, lbl: "حضور اليوم", variant: "coord-kpi--green", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />' },
-          { val: data.absent_today || 0, lbl: "غياب اليوم", variant: "coord-kpi--red", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />' },
-          { val: data.pending_excuses || 0, lbl: "إذونات معلقة", variant: "coord-kpi--yellow", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />' },
-          { val: data.total_enrolled || 0, lbl: "إجمالي المتدربين", variant: "coord-kpi--blue", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />' }
+          { val: data.present_today || 0,  lbl: "حضور اليوم",        variant: "dash-kpi--green", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />' },
+          { val: data.absent_today || 0,   lbl: "غياب اليوم",         variant: "dash-kpi--red",   icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />' },
+          { val: data.pending_excuses || 0, lbl: "إذونات معلقة",      variant: "dash-kpi--amber", icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />' },
+          { val: data.total_enrolled || 0, lbl: "إجمالي المتدربين",   variant: "dash-kpi--blue",  icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />' }
         ];
-        kpis.forEach(function(k) { html += '<div class="coord-kpi ' + k.variant + '"><div class="coord-kpi__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">' + k.icon + '</svg></div><div class="coord-kpi__body"><div class="coord-kpi__val">' + k.val + '</div><div class="coord-kpi__lbl">' + k.lbl + '</div></div></div>'; });
+        var html = "";
+        kpis.forEach(function(k, i) {
+          html += '<div class="dash-kpi ' + k.variant + '" style="animation-delay:' + (i * 0.08) + 's">'
+            + '<div class="dash-kpi__icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">' + k.icon + '</svg></div>'
+            + '<div class="dash-kpi__val">' + k.val + '</div>'
+            + '<div class="dash-kpi__lbl">' + k.lbl + '</div>'
+            + '</div>';
+        });
         document.getElementById("dashboardKpis").innerHTML = html;
       }
-      window.coordinatorAuth.fetch("/api/coordinator/attendance/summary").then(function(r) { if (!r.ok) throw new Error("Network response was not ok"); return r.json(); }).then(renderKPIs).catch(function() { document.getElementById("dashboardKpis").innerHTML = '<div class="coord-state"><div class="coord-state__text" style="color:#fca5a5">فشل تحميل الإحصائيات</div></div>'; });
+
+      window.coordinatorAuth.fetch("/api/coordinator/attendance/summary")
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(renderKPIs)
+        .catch(function() {
+          renderKPIs({ present_today: "—", absent_today: "—", pending_excuses: "—", total_enrolled: "—" });
+        });
     </script>
   </body>
 </html>

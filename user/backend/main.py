@@ -13,7 +13,22 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import trainees, courses, chat, skills, exams, ai_services, permissions, lookups, assignments, trainer, ai_proxy, reg_steps, registration_flow
+from routers import (
+    trainees,
+    courses,
+    chat,
+    skills,
+    exams,
+    ai_services,
+    permissions,
+    lookups,
+    assignments,
+    trainer,
+    ai_proxy,
+    reg_steps,
+    registration_flow,
+    notifications,
+)
 from fastapi import Request, Depends
 
 load_dotenv()
@@ -21,14 +36,18 @@ load_dotenv()
 app = FastAPI(
     title="NTA Trainee Portal API",
     description="Backend API for managing trainee registrations.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # CORS origins — env-driven so production can drop localhost (set ALLOWED_ORIGINS).
-_ALLOWED_ORIGINS = [o.strip() for o in os.getenv(
-    "ALLOWED_ORIGINS",
-    "https://academy.nta.eg,https://reg.nta.eg,http://localhost:7771,http://localhost:8002,http://localhost:8003,http://localhost:8004"
-).split(",") if o.strip()]
+_ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv(
+        "ALLOWED_ORIGINS",
+        "https://academy.nta.eg,https://reg.nta.eg,http://localhost:7771,http://localhost:8002,http://localhost:8003,http://localhost:8004",
+    ).split(",")
+    if o.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -48,10 +67,18 @@ from fastapi.responses import JSONResponse as _JSONResponse
 @app.exception_handler(_StarletteHTTPException)
 async def _sanitize_http_exception(request, exc):
     detail = exc.detail
-    if isinstance(getattr(exc, "status_code", 0), int) and exc.status_code >= 500 and os.getenv("NTA_DEBUG") != "1":
+    if (
+        isinstance(getattr(exc, "status_code", 0), int)
+        and exc.status_code >= 500
+        and os.getenv("NTA_DEBUG") != "1"
+    ):
         print(f"[5xx] {request.method} {request.url.path}: {detail}")
         detail = "Internal server error"
-    return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
+    return _JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": detail},
+        headers=getattr(exc, "headers", None),
+    )
 
 
 @app.middleware("http")
@@ -68,7 +95,11 @@ async def csrf_middleware(request: Request, call_next):
     # Require the double-submit token that registration.js sends from the csrf_token cookie.
     if unsafe_method and path == "/api/trainee/register":
         header_token = request.headers.get("X-CSRF-Token")
-        if request.cookies.get("csrf_token") is None or not header_token or header_token != request.cookies.get("csrf_token"):
+        if (
+            request.cookies.get("csrf_token") is None
+            or not header_token
+            or header_token != request.cookies.get("csrf_token")
+        ):
             response = JSONResponse(
                 status_code=403,
                 content={"detail": "Invalid or missing CSRF token"},
@@ -98,7 +129,21 @@ async def csrf_middleware(request: Request, call_next):
 async def log_requests(request: Request, call_next):
     # Skip logging for static assets like css, images, js to avoid noise
     path = request.url.path
-    if any(path.endswith(ext) for ext in [".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".woff", ".woff2"]):
+    if any(
+        path.endswith(ext)
+        for ext in [
+            ".css",
+            ".js",
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".gif",
+            ".svg",
+            ".ico",
+            ".woff",
+            ".woff2",
+        ]
+    ):
         return await call_next(request)
 
     ip = request.client.host if request.client else "unknown"
@@ -164,25 +209,33 @@ app.include_router(assignments.router)
 app.include_router(trainer.router)
 app.include_router(reg_steps.router)
 app.include_router(registration_flow.router)
+app.include_router(notifications.router)
 
 
 from fastapi.responses import RedirectResponse
 
+
 @app.get("/")
 async def root():
     return RedirectResponse(url="/index.html", status_code=307)
+
 
 @app.get("/api/health")
 async def health_check():
     """Simple liveness probe — returns 200 OK when the server is up."""
     return {"status": "ok", "service": "user"}
 
+
 @app.post("/api/debug/log")
-async def debug_log(request: Request, current_user: dict = Depends(auth.get_current_user)):
+async def debug_log(
+    request: Request, current_user: dict = Depends(auth.get_current_user)
+):
     """Frontend error logger — requires a valid user JWT to prevent log injection abuse."""
     data = await request.json()
     user_id = current_user.get("id", "anon")
-    print(f"\n[FRONTEND ERROR LOG] user={user_id} error={data.get('error')}\n[STACK]: {data.get('stack')}\n")
+    print(
+        f"\n[FRONTEND ERROR LOG] user={user_id} error={data.get('error')}\n[STACK]: {data.get('stack')}\n"
+    )
     return {"status": "ok"}
 
 
@@ -192,13 +245,23 @@ class PrivateDataStaticFiles(StaticFiles):
     Protected files (trainee docs, admin photos, uploads, exams) are served only
     through authenticated API routes, not this public mount."""
 
-    _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
+    _BLOCKED = {
+        "trainees",
+        "trainers",
+        "admins",
+        "admission",
+        "uploads",
+        "temp",
+        "standard_exams",
+        "log",
+    }
 
     async def get_response(self, path, scope):
         norm = path.replace("\\", "/").strip("/").lower()
         segs = [s for s in norm.split("/") if s]
         if (segs and segs[0] in self._BLOCKED) or any(s.startswith(".") for s in segs):
             from starlette.responses import PlainTextResponse
+
             return PlainTextResponse("Not Found", status_code=404)
         return await super().get_response(path, scope)
 
@@ -218,7 +281,11 @@ class GuardedStaticFiles(StaticFiles):
     async def get_response(self, path, scope):
         norm = path.replace("\\", "/").strip("/").lower()
         segs = [s for s in norm.split("/") if s]
-        if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
+        if (
+            (segs and segs[0] == "backend")
+            or norm.endswith(".py")
+            or any(s.startswith(".") for s in segs)
+        ):
             return _PlainTextResponse("Not Found", status_code=404)
         return await super().get_response(path, scope)
 
@@ -228,6 +295,7 @@ app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="
 
 if __name__ == "__main__":
     import uvicorn
+
     # Default to 7771 to match run_system.py launcher
     port = int(os.getenv("PORT", 7771))
     uvicorn.run(app, host="0.0.0.0", port=port)
