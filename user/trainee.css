@@ -16,9 +16,8 @@ body.trainee-app {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background:
-    linear-gradient(to bottom, var(--overlay-gradient-top, rgba(3, 7, 18, 0.45)), var(--overlay-gradient-bottom, rgba(15, 23, 42, 0.65))),
-    url("images/analytical-background.png") center top / cover no-repeat fixed;
+  /* Match the admin/editor clean flat background instead of the analytical image. */
+  background: var(--bg-main, #030712);
   pointer-events: none;
 }
 
