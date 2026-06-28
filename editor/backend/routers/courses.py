@@ -253,7 +253,15 @@ async def upload_course_cover(
 
 
 VALID_ADMISSION_TYPES = {
-    'admission_test', 'interview', 'essay', 'background_check', 
+    # Fixed core stages
+    'electronic_registration', 'electronic_screening', 'security_clearance',
+    'psychometric_test', 'qualifying_exams',
+    # Custom/additional stages
+    'first_interview', 'second_interview', 'committee_review',
+    'document_verification', 'pre_assessment', 'practical_test',
+    'online_exam', 'custom_step',
+    # Legacy stages (for backwards compatibility)
+    'admission_test', 'interview', 'essay', 'background_check',
     'admin_review', 'acceptance_decision'
 }
 
@@ -264,19 +272,247 @@ async def get_admission_steps(course_id: int, editor: dict = Depends(require_edi
     try:
         cursor.execute("SELECT step_key, step_type, title_ar, step_order, is_required, config_json FROM course_steps WHERE course_id=%s AND path_type='admission' ORDER BY step_order", (course_id,))
         steps = cursor.fetchall()
+        
+        # 5 core stages with their default properties
+        fixed_defaults = [
+            {
+                'step_key': 'electronic_registration',
+                'step_type': 'electronic_registration',
+                'title_ar': 'التسجيل الإلكتروني',
+                'description_ar': 'Applicant fills the customized registration form through the portal and uploads the required documents.',
+                'is_required': 1,
+                'config_json': {'is_active': True, 'fixed': True, 'canDelete': False, 'canDisable': False}
+            },
+            {
+                'step_key': 'electronic_screening',
+                'step_type': 'electronic_screening',
+                'title_ar': 'الفرز الإلكتروني',
+                'description_ar': 'The system evaluates the basic eligibility criteria using the rules engine, with optional manual review.',
+                'is_required': 1,
+                'config_json': {'is_active': True, 'fixed': True, 'canDelete': False, 'canDisable': False}
+            },
+            {
+                'step_key': 'security_clearance',
+                'step_type': 'security_clearance',
+                'title_ar': 'الاستعلام الأمني',
+                'description_ar': 'Eligible applicants’ data is sent to the relevant security authority for verification and approval.',
+                'is_required': 1,
+                'config_json': {'is_active': True, 'fixed': True, 'canDelete': False, 'canDisable': False}
+            },
+            {
+                'step_key': 'psychometric_test',
+                'step_type': 'psychometric_test',
+                'title_ar': 'اختبار السمات',
+                'description_ar': 'Psychometric / traits assessment with pass/fail result and related score details.',
+                'is_required': 1,
+                'config_json': {'is_active': True, 'fixed': True, 'canDelete': False, 'canDisable': False}
+            },
+            {
+                'step_key': 'qualifying_exams',
+                'step_type': 'qualifying_exams',
+                'title_ar': 'الاختبارات التأهيلية',
+                'description_ar': 'Automated qualifying exams such as foreign languages, Arabic language, general knowledge, and any program-specific exam.',
+                'is_required': 1,
+                'config_json': {'is_active': True, 'fixed': True, 'canDelete': False, 'canDisable': False}
+            }
+        ]
+
+        # Convert config_json from string to dict safely
         for s in steps:
-            if isinstance(s.get('config_json'), str):
+            cfg = s.get('config_json')
+            if isinstance(cfg, str):
                 try:
-                    s['config_json'] = json.loads(s['config_json'])
+                    s['config_json'] = json.loads(cfg)
                 except:
                     s['config_json'] = {}
-        return steps
+            elif isinstance(cfg, dict):
+                s['config_json'] = cfg
+            else:
+                s['config_json'] = {}
+
+        # If empty, return fixed defaults directly
+        if not steps:
+            for idx, fd in enumerate(fixed_defaults):
+                fd['step_order'] = idx
+            return fixed_defaults
+
+        normalized = []
+        matched_keys = set()
+
+        for s in steps:
+            key = s.get('step_key', '')
+            type_ = s.get('step_type', '')
+
+            # Match to a fixed step by key or type
+            matching_def = None
+            for fd in fixed_defaults:
+                if fd['step_key'] == key or (fd['step_type'] == type_ and fd['step_key'] not in matched_keys):
+                    matching_def = fd
+                    break
+
+            if matching_def:
+                s['step_key'] = matching_def['step_key']
+                s['step_type'] = matching_def['step_type']
+                s['title_ar'] = matching_def['title_ar'] # Fixed title label from business document
+                s['is_required'] = 1
+                if not isinstance(s.get('config_json'), dict):
+                    s['config_json'] = {}
+                s['config_json'].update({
+                    'is_active': True,
+                    'fixed': True,
+                    'canDelete': False,
+                    'canDisable': False
+                })
+                matched_keys.add(matching_def['step_key'])
+                normalized.append(s)
+            else:
+                if not isinstance(s.get('config_json'), dict):
+                    s['config_json'] = {}
+                s['config_json'].update({
+                    'fixed': False,
+                    'canDelete': True,
+                    'canDisable': True
+                })
+                normalized.append(s)
+
+        # Re-add any missing fixed steps
+        for fd in fixed_defaults:
+            if fd['step_key'] not in matched_keys:
+                import copy
+                missing_step = copy.deepcopy(fd)
+                normalized.append(missing_step)
+
+        # Enforce relative ordering of fixed steps
+        fixed_steps = []
+        custom_steps = []
+        for s in normalized:
+            if s.get('config_json', {}).get('fixed') is True:
+                fixed_steps.append(s)
+            else:
+                custom_steps.append(s)
+
+        fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams']
+        fixed_steps.sort(key=lambda x: fixed_order_keys.index(x['step_key']))
+
+        # Match custom steps to their original intervals relative to fixed steps
+        original_orders = {}
+        for k in fixed_order_keys:
+            orig = next((s for s in steps if s.get('step_key') == k or s.get('step_type') == k), None)
+            if orig:
+                original_orders[k] = orig.get('step_order', 0)
+
+        if 'electronic_registration' not in original_orders:
+            original_orders['electronic_registration'] = 0
+        if 'electronic_screening' not in original_orders:
+            original_orders['electronic_screening'] = original_orders['electronic_registration'] + 10
+        if 'security_clearance' not in original_orders:
+            original_orders['security_clearance'] = original_orders['electronic_screening'] + 10
+        if 'psychometric_test' not in original_orders:
+            original_orders['psychometric_test'] = original_orders['security_clearance'] + 10
+        if 'qualifying_exams' not in original_orders:
+            original_orders['qualifying_exams'] = original_orders['psychometric_test'] + 10
+
+        intervals = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
+        for cs in custom_steps:
+            co = cs.get('step_order', 0)
+            if co < original_orders['electronic_registration']:
+                intervals[1].append(cs)
+            elif co < original_orders['electronic_screening']:
+                intervals[1].append(cs)
+            elif co < original_orders['security_clearance']:
+                intervals[2].append(cs)
+            elif co < original_orders['psychometric_test']:
+                intervals[3].append(cs)
+            elif co < original_orders['qualifying_exams']:
+                intervals[4].append(cs)
+            else:
+                intervals[5].append(cs)
+
+        final_list = []
+        final_list.append(fixed_steps[0])
+        final_list.extend(intervals[1])
+        final_list.append(fixed_steps[1])
+        final_list.extend(intervals[2])
+        final_list.append(fixed_steps[2])
+        final_list.extend(intervals[3])
+        final_list.append(fixed_steps[3])
+        final_list.extend(intervals[4])
+        final_list.append(fixed_steps[4])
+        final_list.extend(intervals[5])
+
+        for idx, s in enumerate(final_list):
+            s['step_order'] = idx
+
+        return final_list
     finally:
         cursor.close()
         db.close()
 
 @router.put("/{course_id}/admission-steps")
 async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), editor: dict = Depends(require_editor)):
+    # Validation logic for fixed steps
+    fixed_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams']
+    
+    expected_titles = {
+        'electronic_registration': 'التسجيل الإلكتروني',
+        'electronic_screening': 'الفرز الإلكتروني',
+        'security_clearance': 'الاستعلام الأمني',
+        'psychometric_test': 'اختبار السمات',
+        'qualifying_exams': 'الاختبارات التأهيلية'
+    }
+    
+    # 1. Check if all 5 fixed steps exist in the payload
+    payload_keys = [s.get('step_key') for s in steps]
+    for fk in fixed_keys:
+        if fk not in payload_keys:
+            raise HTTPException(status_code=400, detail=f"خطوة إجبارية مفقودة: {fk}")
+            
+    # 2. Check each fixed step for correct flags and order
+    last_fixed_index = -1
+    for fk in fixed_keys:
+        step = next((s for s in steps if s.get('step_key') == fk), None)
+        if not step:
+            raise HTTPException(status_code=400, detail=f"خطوة إجبارية مفقودة: {fk}")
+        
+        if step.get('step_type') != fk:
+            raise HTTPException(status_code=400, detail=f"نوع الخطوة الإجبارية {fk} غير صحيح")
+            
+        if step.get('title_ar') != expected_titles[fk]:
+            raise HTTPException(status_code=400, detail=f"عنوان الخطوة الإجبارية {fk} غير صحيح أو تم تعديله")
+            
+        if not step.get('is_required'):
+            raise HTTPException(status_code=400, detail=f"الخطوة الإجبارية {fk} يجب أن تكون مطلوبة")
+            
+        cfg = step.get('config_json')
+        if isinstance(cfg, str):
+            try:
+                cfg = json.loads(cfg)
+            except:
+                cfg = {}
+        elif isinstance(cfg, dict):
+            pass
+        else:
+            cfg = {}
+                
+        if cfg.get('is_active') is False:
+            raise HTTPException(status_code=400, detail=f"الخطوة الإجبارية {fk} لا يمكن تعطيلها")
+        if cfg.get('fixed') is not True:
+            raise HTTPException(status_code=400, detail=f"الخطوة الإجبارية {fk} يجب أن تحمل علم ثابت")
+        if cfg.get('canDelete') is not False:
+            raise HTTPException(status_code=400, detail=f"الخطوة الإجبارية {fk} لا يمكن حذفها")
+        if cfg.get('canDisable') is not False:
+            raise HTTPException(status_code=400, detail=f"الخطوة الإجبارية {fk} لا يمكن إلغاء تفعيلها")
+            
+        current_index = steps.index(step)
+        if current_index < last_fixed_index:
+            raise HTTPException(status_code=400, detail=f"الخطوات الإجبارية خارج الترتيب المحدد: {fk}")
+        last_fixed_index = current_index
+        
+    # Check that 'electronic_registration' is at index 0
+    reg_step = next(s for s in steps if s.get('step_key') == 'electronic_registration')
+    if steps.index(reg_step) != 0:
+        raise HTTPException(status_code=400, detail="الخطوة الأولى يجب أن تكون التسجيل الإلكتروني (electronic_registration)")
+
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -287,6 +523,17 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
             if step_type not in VALID_ADMISSION_TYPES:
                 raise HTTPException(status_code=400, detail=f"Invalid admission step type: {step_type}")
                 
+            cfg = step.get('config_json')
+            if isinstance(cfg, str):
+                try:
+                    cfg = json.loads(cfg)
+                except:
+                    cfg = {}
+            elif isinstance(cfg, dict):
+                pass
+            else:
+                cfg = {}
+            
             cursor.execute(
                 """INSERT INTO course_steps 
                    (course_id, path_type, step_key, step_type, title_ar, step_order, is_required, config_json) 
@@ -296,9 +543,9 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
                     step.get('step_key', f"admission_{idx}"),
                     step_type,
                     step.get('title_ar', 'بدون عنوان'),
-                    step.get('step_order', idx),
+                    idx, # Use actual list index as the step_order
                     int(step.get('is_required', 1)),
-                    json.dumps(step.get('config_json', {}), ensure_ascii=False)
+                    json.dumps(cfg, ensure_ascii=False)
                 )
             )
         db.commit()

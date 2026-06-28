@@ -116,12 +116,15 @@ def install_trainees():
             # 3. Ensure application exists
             cursor.execute("SELECT id FROM applications WHERE user_id = %s", (user_id,))
             if not cursor.fetchone():
+                cursor.execute("SELECT id FROM courses LIMIT 1")
+                course_row = cursor.fetchone()
+                valid_course_id = course_row['id'] if course_row else 1
                 cursor.execute("""
                     INSERT INTO applications (user_id, course_id, status, motivation_data, 
                         research_publication, references_data, logistics, 
                         identity_photos, quiz_results, quiz_scores)
-                    VALUES (%s, 1, 'idle', '{}', '[]', '[]', '{}', '{}', '[]', '{}')
-                """, (user_id,))
+                    VALUES (%s, %s, 'idle', '{}', '[]', '[]', '{}', '{}', '[]', '{}')
+                """, (user_id, valid_course_id))
 
             # 4. Ensure pipeline state exists
             cursor.execute("SELECT id FROM pipeline_state WHERE trainee_id = %s", (user_id,))

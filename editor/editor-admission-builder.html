@@ -3,6 +3,7 @@
   <head>
     <script src="/common/js/theme.js"></script>
     <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>مسار القبول - بوابة المحرر</title>
@@ -298,6 +299,19 @@
       html.light-mode .timeline-num { background: #f1f5f9; border-color: rgba(0,0,0,0.15); color: var(--text-subtle); }
       html.light-mode .timeline-item::after { background: rgba(0,0,0,0.08); }
       html.light-mode #noStepSelectedMsg svg { stroke: rgba(0,0,0,0.2); }
+      
+      /* Readonly input/textarea override */
+      .editor-input[readonly], .editor-textarea[readonly] {
+        background: rgba(255,255,255,0.02) !important;
+        color: var(--text-subtle);
+        cursor: not-allowed;
+        border-color: rgba(255,255,255,0.05) !important;
+      }
+      html.light-mode .editor-input[readonly], html.light-mode .editor-textarea[readonly] {
+        background: #f8fafc !important;
+        color: #64748b;
+        border-color: #cbd5e1 !important;
+      }
     </style>
   </head>
   <body data-page="admission-builder">
@@ -387,12 +401,27 @@
                     <span class="ui-select__chevron">▼</span>
                   </button>
                   <div class="ui-select__menu" role="listbox" hidden>
-                    <button type="button" class="ui-select__option" data-value="admission_test" role="option"><span>اختبار قبول</span><span class="ui-select__check">✓</span></button>
-                    <button type="button" class="ui-select__option" data-value="interview" role="option"><span>مقابلة شخصية</span><span class="ui-select__check">✓</span></button>
-                    <button type="button" class="ui-select__option" data-value="essay" role="option"><span>مقال / تقييم كتابي</span><span class="ui-select__check">✓</span></button>
-                    <button type="button" class="ui-select__option" data-value="background_check" role="option"><span>فحص أمني / تدقيق</span><span class="ui-select__check">✓</span></button>
-                    <button type="button" class="ui-select__option" data-value="admin_review" role="option"><span>مراجعة إدارية</span><span class="ui-select__check">✓</span></button>
-                    <button type="button" class="ui-select__option" data-value="acceptance_decision" role="option"><span>قرار القبول النهائي</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="electronic_registration" role="option"><span>التسجيل الإلكتروني (Electronic Registration)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="electronic_screening" role="option"><span>الفرز الإلكتروني (Electronic Screening)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="security_clearance" role="option"><span>الاستعلام الأمني (Security Clearance)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="psychometric_test" role="option"><span>اختبار السمات (Psychometric Test)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="qualifying_exams" role="option"><span>الاخـتبارات التأهيلية (Qualifying Exams)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="first_interview" role="option"><span>المقابلة الأولى (First Interview)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="second_interview" role="option"><span>المقابلة الثانية (Second Interview)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="committee_review" role="option"><span>مراجعة اللجنة (Committee Review)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="document_verification" role="option"><span>تدقيق المستندات (Document Verification)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="pre_assessment" role="option"><span>الاختبار القبلي (Pre Assessment)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="practical_test" role="option"><span>اختبار عملي (Practical Test)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="online_exam" role="option"><span>اختبار أونلاين (Online Exam)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="custom_step" role="option"><span>مرحلة مخصصة (Custom Step)</span><span class="ui-select__check">✓</span></button>
+                    
+                    <!-- Legacy types -->
+                    <button type="button" class="ui-select__option" data-value="admission_test" role="option"><span>اختبار قبول (قديم)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="interview" role="option"><span>مقابلة شخصية (قديم)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="essay" role="option"><span>مقال (قديم)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="background_check" role="option"><span>فحص أمني (قديم)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="admin_review" role="option"><span>مراجعة إدارية (قديم)</span><span class="ui-select__check">✓</span></button>
+                    <button type="button" class="ui-select__option" data-value="acceptance_decision" role="option"><span>قرار القبول (قديم)</span><span class="ui-select__check">✓</span></button>
                   </div>
                 </div>
               </div>
@@ -483,7 +512,7 @@
     </main>
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
-    <script src="js/editor-layout.js?v=7"></script>
+    <script src="js/editor-layout.js?v=8"></script>
     <script src="js/icons.js"></script>
     <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('exams', 36);</script>
     <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
@@ -509,13 +538,27 @@
           ind.className = "status-saved";
         }
       }
+
       var ADM_TYPE_LABELS = {
-        'admission_test': 'اختبار قبول',
-        'interview': 'مقابلة شخصية',
-        'essay': 'مقال / تقييم كتابي',
-        'background_check': 'فحص أمني / تدقيق',
-        'admin_review': 'مراجعة إدارية',
-        'acceptance_decision': 'قرار القبول النهائي'
+        'electronic_registration': 'التسجيل الإلكتروني',
+        'electronic_screening': 'الفرز الإلكتروني',
+        'security_clearance': 'الاستعلام الأمني',
+        'psychometric_test': 'اختبار السمات',
+        'qualifying_exams': 'الاختبارات التأهيلية',
+        'first_interview': 'المقابلة الأولى',
+        'second_interview': 'المقابلة الثانية',
+        'committee_review': 'مراجعة اللجنة',
+        'document_verification': 'تدقيق المستندات',
+        'pre_assessment': 'الاختبار القبلي',
+        'practical_test': 'اختبار عملي',
+        'online_exam': 'اختبار أونلاين',
+        'custom_step': 'مرحلة مخصصة',
+        'admission_test': 'اختبار قبول (قديم)',
+        'interview': 'مقابلة شخصية (قديم)',
+        'essay': 'مقال (قديم)',
+        'background_check': 'فحص أمني (قديم)',
+        'admin_review': 'مراجعة إدارية (قديم)',
+        'acceptance_decision': 'قرار القبول (قديم)'
       };
 
       function authFetch(url, opts) {
@@ -554,6 +597,190 @@
       }
       loadCourses();
 
+      function normalizeAdmissionSteps(data) {
+        var fixed_defaults = [
+          {
+            step_key: 'electronic_registration',
+            step_type: 'electronic_registration',
+            title_ar: 'التسجيل الإلكتروني',
+            description_ar: 'Applicant fills the customized registration form through the portal and uploads the required documents.',
+            is_required: true,
+            fixed: true,
+            required: true,
+            canDelete: false,
+            canDisable: false,
+            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+          },
+          {
+            step_key: 'electronic_screening',
+            step_type: 'electronic_screening',
+            title_ar: 'الفرز الإلكتروني',
+            description_ar: 'The system evaluates the basic eligibility criteria using the rules engine, with optional manual review.',
+            is_required: true,
+            fixed: true,
+            required: true,
+            canDelete: false,
+            canDisable: false,
+            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+          },
+          {
+            step_key: 'security_clearance',
+            step_type: 'security_clearance',
+            title_ar: 'الاستعلام الأمني',
+            description_ar: 'Eligible applicants’ data is sent to the relevant security authority for verification and approval.',
+            is_required: true,
+            fixed: true,
+            required: true,
+            canDelete: false,
+            canDisable: false,
+            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+          },
+          {
+            step_key: 'psychometric_test',
+            step_type: 'psychometric_test',
+            title_ar: 'اختبار السمات',
+            description_ar: 'Psychometric / traits assessment with pass/fail result and related score details.',
+            is_required: true,
+            fixed: true,
+            required: true,
+            canDelete: false,
+            canDisable: false,
+            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+          },
+          {
+            step_key: 'qualifying_exams',
+            step_type: 'qualifying_exams',
+            title_ar: 'الاختبارات التأهيلية',
+            description_ar: 'Automated qualifying exams such as foreign languages, Arabic language, general knowledge, and any program-specific exam.',
+            is_required: true,
+            fixed: true,
+            required: true,
+            canDelete: false,
+            canDisable: false,
+            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+          }
+        ];
+
+        var steps = data || [];
+        
+        // Reconstruct step object flags
+        steps.forEach(function(s) {
+          if (!s.config_json) s.config_json = {};
+          
+          var isFixed = false;
+          var key = s.step_key;
+          var type = s.step_type;
+          
+          if (s.config_json.fixed === true) {
+            isFixed = true;
+          } else if (['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(key) !== -1 || ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(type) !== -1) {
+            isFixed = true;
+          }
+          
+          if (isFixed) {
+            s.fixed = true;
+            s.required = true;
+            s.is_required = true;
+            s.canDelete = false;
+            s.canDisable = false;
+            s.config_json.fixed = true;
+            s.config_json.is_active = true;
+            s.config_json.canDelete = false;
+            s.config_json.canDisable = false;
+            
+            // Sync with default values to be robust
+            var matchingDefault = fixed_defaults.find(function(fd) { return fd.step_key === key || fd.step_type === type; });
+            if (matchingDefault) {
+              s.step_key = matchingDefault.step_key;
+              s.step_type = matchingDefault.step_type;
+              s.title_ar = matchingDefault.title_ar;
+            }
+          } else {
+            s.fixed = false;
+            s.canDelete = true;
+            s.canDisable = true;
+            s.config_json.fixed = false;
+            s.config_json.canDelete = true;
+            s.config_json.canDisable = true;
+          }
+        });
+
+        // Ensure all 5 fixed steps always exist
+        fixed_defaults.forEach(function(fd) {
+          var exists = steps.some(function(s) { return s.step_key === fd.step_key; });
+          if (!exists) {
+            steps.push(JSON.parse(JSON.stringify(fd)));
+          }
+        });
+
+        // Separate fixed and custom steps
+        var fixedSteps = [];
+        var customSteps = [];
+        steps.forEach(function(s) {
+          if (s.fixed) {
+            fixedSteps.push(s);
+          } else {
+            customSteps.push(s);
+          }
+        });
+
+        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
+        fixedSteps.sort(function(a, b) {
+          return fixed_order_keys.indexOf(a.step_key) - fixed_order_keys.indexOf(b.step_key);
+        });
+
+        // Re-align custom steps in their correct relative positions
+        var original_orders = {};
+        fixed_order_keys.forEach(function(k) {
+          var orig = (data || []).find(function(s) { return s.step_key === k || s.step_type === k; });
+          if (orig) {
+            original_orders[k] = orig.step_order || 0;
+          }
+        });
+
+        if (original_orders['electronic_registration'] === undefined) original_orders['electronic_registration'] = 0;
+        if (original_orders['electronic_screening'] === undefined) original_orders['electronic_screening'] = original_orders['electronic_registration'] + 10;
+        if (original_orders['security_clearance'] === undefined) original_orders['security_clearance'] = original_orders['electronic_screening'] + 10;
+        if (original_orders['psychometric_test'] === undefined) original_orders['psychometric_test'] = original_orders['security_clearance'] + 10;
+        if (original_orders['qualifying_exams'] === undefined) original_orders['qualifying_exams'] = original_orders['psychometric_test'] + 10;
+
+        var intervals = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []};
+        customSteps.forEach(function(cs) {
+          var co = cs.step_order || 0;
+          if (co < original_orders['electronic_registration']) {
+            intervals[1].push(cs);
+          } else if (co < original_orders['electronic_screening']) {
+            intervals[1].push(cs);
+          } else if (co < original_orders['security_clearance']) {
+            intervals[2].push(cs);
+          } else if (co < original_orders['psychometric_test']) {
+            intervals[3].push(cs);
+          } else if (co < original_orders['qualifying_exams']) {
+            intervals[4].push(cs);
+          } else {
+            intervals[5].push(cs);
+          }
+        });
+
+        var final_list = [];
+        final_list.push(fixedSteps[0]);
+        final_list = final_list.concat(intervals[1]);
+        final_list.push(fixedSteps[1]);
+        final_list = final_list.concat(intervals[2]);
+        final_list.push(fixedSteps[2]);
+        final_list = final_list.concat(intervals[3]);
+        final_list.push(fixedSteps[3]);
+        final_list = final_list.concat(intervals[4]);
+        final_list.push(fixedSteps[4]);
+        final_list = final_list.concat(intervals[5]);
+
+        final_list.forEach(function(s, idx) {
+          s.step_order = idx;
+        });
+
+        return final_list;
+      }
+
       function loadAdmissionSteps() {
         var sel = document.getElementById("courseSelect");
         var courseId = sel.value;
@@ -582,16 +809,7 @@
         authFetch("/api/courses/" + courseId + "/admission-steps")
           .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
           .then(function(data) {
-            admissionSteps = data || [];
-            if (admissionSteps.length === 0) {
-              admissionSteps = [
-                  { step_type: 'admission_test', step_key: 'step_1', title_ar: 'اختبار تقييم أولي', description_ar: '', is_required: true, config_json: { is_active: true } },
-                  { step_type: 'interview', step_key: 'step_2', title_ar: 'المقابلة الشخصية', description_ar: '', is_required: true, config_json: { is_active: true } },
-                  { step_type: 'background_check', step_key: 'step_3', title_ar: 'الفحص الأمني', description_ar: '', is_required: true, config_json: { is_active: true } },
-                  { step_type: 'admin_review', step_key: 'step_4', title_ar: 'المراجعة الإدارية', description_ar: '', is_required: true, config_json: { is_active: true } },
-                  { step_type: 'acceptance_decision', step_key: 'step_5', title_ar: 'قرار القبول النهائي', description_ar: '', is_required: true, config_json: { is_active: true } }
-              ];
-            }
+            admissionSteps = normalizeAdmissionSteps(data);
             selectedStepIndex = admissionSteps.length > 0 ? 0 : -1;
             hasUnsavedChanges = false;
             document.getElementById("loadingState").style.display = "none";
@@ -599,17 +817,15 @@
             renderAdmSteps();
           })
           .catch(function(err) {
+            admissionSteps = normalizeAdmissionSteps([]);
+            selectedStepIndex = 0;
+            hasUnsavedChanges = false;
             document.getElementById("loadingState").style.display = "none";
-            document.getElementById("pageBannerText").textContent = "حدث خطأ أثناء تحميل بيانات المسار. يرجى التحقق من الاتصال وإعادة المحاولة.";
-            document.getElementById("pageBanner").style.display = "flex";
-            var emptyState = document.getElementById("emptyState");
-            emptyState.style.display = "flex";
-            emptyState.querySelector(".editor-state__title").textContent = "تعذر تحميل المسار";
-            emptyState.querySelector(".editor-state__text").textContent = "لم نتمكن من تحميل خطوات القبول لهذه الدورة.";
+            document.getElementById("builderArea").style.display = "block";
+            renderAdmSteps();
           });
       }
 
-      
       var draggedIndex = -1;
 
       function handleDragStart(e, index) {
@@ -626,8 +842,39 @@
           e.preventDefault();
           if (draggedIndex === -1 || draggedIndex === dropIndex) return;
 
-          var item = admissionSteps.splice(draggedIndex, 1)[0];
-          admissionSteps.splice(dropIndex, 0, item);
+          // Electronic Registration (first step) must remain at index 0
+          if (draggedIndex === 0 || dropIndex === 0) {
+              notify("التسجيل الإلكتروني يجب أن يظل الخطوة الأولى دائماً.", "error");
+              return;
+          }
+
+          var tempSteps = admissionSteps.slice();
+          var item = tempSteps.splice(draggedIndex, 1)[0];
+          tempSteps.splice(dropIndex, 0, item);
+
+          // Verify fixed steps relative order is preserved
+          var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
+          var relative_order_indices = [];
+          tempSteps.forEach(function(s) {
+              if (s.fixed) {
+                  relative_order_indices.push(fixed_order_keys.indexOf(s.step_key));
+              }
+          });
+
+          var isSorted = true;
+          for (var i = 0; i < relative_order_indices.length - 1; i++) {
+              if (relative_order_indices[i] > relative_order_indices[i+1]) {
+                  isSorted = false;
+                  break;
+              }
+          }
+
+          if (!isSorted) {
+              notify("لا يمكن تغيير الترتيب النسبي للمراحل الأساسية.", "error");
+              return;
+          }
+
+          admissionSteps = tempSteps;
           
           if (selectedStepIndex === draggedIndex) {
               selectedStepIndex = dropIndex;
@@ -644,18 +891,21 @@
 
       var selectedStepIndex = -1;
 
-
       function addAdmStep() {
         var num = admissionSteps.length + 1;
-        var key = 'step_' + num;
+        var key = 'custom_step_' + num;
         admissionSteps.push({
-            step_type: 'admission_test',
+            step_type: 'custom_step',
             step_key: key,
             title_ar: 'مرحلة جديدة',
             description_ar: '',
-            is_required: true,
+            is_required: false,
+            fixed: false,
             config_json: {
-                is_active: true
+                is_active: true,
+                fixed: false,
+                canDelete: true,
+                canDisable: true
             },
             _isNew: true
         });
@@ -664,7 +914,6 @@
         notify("تم إضافة مرحلة جديدة. لا تنس حفظ التغييرات.");
         renderAdmSteps();
         
-        // Scroll to bottom slowly
         setTimeout(function() {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 100);
@@ -695,9 +944,9 @@
           renderStepsListOnly();
       }
       
-      
       async function removeStepDirectly(e, idx) {
           e.stopPropagation();
+          if (admissionSteps[idx] && admissionSteps[idx].fixed) return;
           if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(idx, 1);
               if (selectedStepIndex === idx) {
@@ -712,6 +961,7 @@
 
       async function removeSelectedStep() {
           if (selectedStepIndex === -1) return;
+          if (admissionSteps[selectedStepIndex] && admissionSteps[selectedStepIndex].fixed) return;
           if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(selectedStepIndex, 1);
               selectedStepIndex = -1;
@@ -737,19 +987,21 @@
         }
         noMsg.style.display = "none";
         
-        var totalReq = 0;
-        
         var html = "";
         admissionSteps.forEach(function(s, i) {
-          if(s.is_required) totalReq++;
           var isSelected = i === selectedStepIndex;
+          
           var activeBadge = (s.config_json && s.config_json.is_active === false) 
               ? '<span class="badge badge--neutral">غير مفعلة</span>' 
-              : '';
+              : '<span class="badge badge--green">مفعّلة</span>';
               
           var reqBadge = s.is_required 
-              ? '' 
+              ? '<span class="badge badge--green">مطلوبة</span>' 
               : '<span class="badge badge--neutral">اختيارية</span>';
+              
+          var fixedBadge = s.fixed
+              ? '<span class="badge badge--red">مرحلة أساسية (Fixed)</span>'
+              : '<span class="badge badge--blue">مرحلة إضافية (Custom)</span>';
               
           var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
           
@@ -773,17 +1025,19 @@
           html += '        <div class="builder-step-title">' + safeStepTitle + '</div>';
           html += '        <div class="builder-step-meta">';
           html += '          <span>'+typeLabel+'</span>';
-          if(activeBadge || reqBadge) html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;">' + reqBadge + activeBadge + '</div>';
+          html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;">' + fixedBadge + reqBadge + activeBadge + '</div>';
           html += '        </div>';
           html += '      </div>';
           html += '      <div style="display:flex; align-items:center; gap:0.5rem;">';
           html += '        <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>';
-          html += '        <div class="ui-menu" onclick="event.stopPropagation()">';
-          html += '          <button type="button" class="ui-menu__trigger" style="padding:0.2rem 0.4rem; font-size: 1.2rem;">⋮</button>';
-          html += '          <div class="ui-menu__content" hidden>';
-          html += '            <button type="button" class="ui-menu__item is-danger" onclick="removeStepDirectly(event, '+i+')">حذف المرحلة</button>';
-          html += '          </div>';
-          html += '        </div>';
+          if (!s.fixed) {
+            html += '        <div class="ui-menu" onclick="event.stopPropagation()">';
+            html += '          <button type="button" class="ui-menu__trigger" style="padding:0.2rem 0.4rem; font-size: 1.2rem;">⋮</button>';
+            html += '          <div class="ui-menu__content" hidden>';
+            html += '            <button type="button" class="ui-menu__item is-danger" onclick="removeStepDirectly(event, '+i+')">حذف المرحلة</button>';
+            html += '          </div>';
+            html += '        </div>';
+          }
           html += '      </div>';
           html += '    </div>';
           html += '    <div class="transition-logic">';
@@ -814,9 +1068,22 @@
         
         var hasErrors = false;
         var errorMsgs = [];
-        admissionSteps.forEach(function(s) {
-            if(!s.title_ar || s.title_ar.trim() === '') hasErrors = true;
+        
+        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
+        fixed_order_keys.forEach(function(fk) {
+          var exists = admissionSteps.some(function(s) { return s.step_key === fk; });
+          if (!exists) {
+            hasErrors = true;
+            errorMsgs.push("مرحلة أساسية مفقودة: " + (ADM_TYPE_LABELS[fk] || fk));
+          }
         });
+
+        admissionSteps.forEach(function(s) {
+            if(!s.title_ar || s.title_ar.trim() === '') {
+              hasErrors = true;
+            }
+        });
+
         if(admissionSteps.length === 0) {
             hasErrors = true;
             errorMsgs.push("المسار فارغ");
@@ -827,7 +1094,7 @@
         if(hasErrors) {
             valBar.className = "validation-bar validation-bar--error";
             valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-            valText.innerHTML = 'غير جاهز للنشر <span>· توجد أخطاء في إعداد بعض المراحل</span>';
+            valText.innerHTML = 'غير جاهز للنشر <span>· توجد أخطاء في إعداد بعض المراحل أو مراحل مفقودة</span>';
         } else {
             valBar.className = "validation-bar validation-bar--ready";
             valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
@@ -883,9 +1150,13 @@
           
           document.getElementById('panelStageTitle').textContent = "إعدادات المرحلة: " + (s.title_ar || "بدون عنوان");
           
-          document.getElementById("settingTitle").value = s.title_ar || "";
+          var titleInput = document.getElementById("settingTitle");
+          titleInput.value = s.title_ar || "";
+          titleInput.readOnly = !!s.fixed;
+          
           var stepType = s.step_type || "";
           var typeInput = document.getElementById("settingType");
+          var typeTrigger = document.querySelector("#settingTypeContainer .ui-select__trigger");
           if(typeInput && typeInput.uiSelectApi) {
             typeInput.uiSelectApi.setValue(stepType);
           } else if(typeInput) {
@@ -895,9 +1166,21 @@
               if(tOption) typeInput.nextElementSibling.querySelector('.ui-select__value').textContent = tOption.querySelector('span').textContent;
             }
           }
+          
+          if(typeTrigger) {
+            typeTrigger.disabled = !!s.fixed;
+            typeTrigger.style.opacity = s.fixed ? "0.6" : "1";
+            typeTrigger.style.pointerEvents = s.fixed ? "none" : "auto";
+          }
+          
           document.getElementById("settingOrder").value = selectedStepIndex + 1;
-          document.getElementById("settingKey").value = s.step_key || "";
+          
+          var keyInput = document.getElementById("settingKey");
+          keyInput.value = s.step_key || "";
+          keyInput.readOnly = !!s.fixed;
+          
           document.getElementById("settingDesc").value = s.description_ar || "";
+          
           var tp = cfg.transition_pass || "next";
           var tpInput = document.getElementById("settingTransitionPass");
           if(tpInput && tpInput.uiSelectApi) tpInput.uiSelectApi.setValue(tp);
@@ -919,16 +1202,48 @@
               if(tfo) tfInput.nextElementSibling.querySelector('.ui-select__value').textContent = tfo.querySelector('span').textContent;
             }
           }
-          document.getElementById("settingRequired").checked = !!s.is_required;
-          document.getElementById("settingActive").checked = cfg.is_active !== false;
+          
+          var reqInput = document.getElementById("settingRequired");
+          reqInput.checked = !!s.is_required;
+          reqInput.disabled = !!s.fixed;
+          
+          var actInput = document.getElementById("settingActive");
+          actInput.checked = cfg.is_active !== false;
+          actInput.disabled = !!s.fixed;
       }
 
       function saveAdmissionSteps() {
         var courseId = document.getElementById("courseSelect").value;
         if (!courseId) return;
 
-        // Re-assign step_order
-        admissionSteps.forEach(function(s, i) { s.step_order = i; if(!s.step_key) s.step_key = "step_" + (i+1); });
+        // Verify all 5 fixed steps exist before saving
+        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
+        var missingKeys = [];
+        fixed_order_keys.forEach(function(fk) {
+            var exists = admissionSteps.some(function(s) { return s.step_key === fk; });
+            if (!exists) missingKeys.push(fk);
+        });
+        
+        if (missingKeys.length > 0) {
+            notify("خطأ: بعض المراحل الأساسية مفقودة من التدفق.", "error");
+            return;
+        }
+
+        // Re-assign step_order and ensure config_json properties are strict
+        admissionSteps.forEach(function(s, i) { 
+          s.step_order = i; 
+          if(!s.config_json) s.config_json = {};
+          if(s.fixed) {
+            s.config_json.fixed = true;
+            s.config_json.is_active = true;
+            s.config_json.canDelete = false;
+            s.config_json.canDisable = false;
+          } else {
+            s.config_json.fixed = false;
+            s.config_json.canDelete = true;
+            s.config_json.canDisable = true;
+          }
+        });
           
         fetch("/api/courses/" + courseId + "/admission-steps", {
           method: "PUT",
@@ -938,9 +1253,9 @@
           .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
           .then(function() {
             markSaved();
-            showEditorToast("تم حفظ مسار القبول بنجاح", "success");
+            notify("تم حفظ مسار القبول بنجاح", "success");
           })
-          .catch(function(err) { showEditorToast(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
+          .catch(function(err) { notify(err.message || "حدث خطأ أثناء الحفظ.", "error"); });
       }
     </script>
   </body>

@@ -1,4 +1,18 @@
 (function () {
+  // The sidebar markup uses the shared `.nta-sidebar` classes and the layout/
+  // animation rules for `.editor-main` live in admin/header/header.css. Inject it
+  // (once) so editor pages render the fixed sidebar and the main content fades in
+  // instead of staying at opacity:0 with an unstyled, full-height sidebar.
+  (function () {
+    if (document.getElementById('ntaSbCss')) return;
+    if (document.querySelector('link[href*="header/header.css"]')) return;
+    var l = document.createElement('link');
+    l.id = 'ntaSbCss';
+    l.rel = 'stylesheet';
+    l.href = '/admin/header/header.css?v=8';
+    document.head.appendChild(l);
+  })();
+
   var EDITOR_TOKEN_KEY = "editor_token";
 
   function ic(path) {
@@ -25,8 +39,7 @@
       navItem('editor-materials.html', 'materials', icons.materials, 'المواد التعليمية', activePage) +
       navItem('editor-sessions.html', 'sessions', icons.sessions, 'الجلسات', activePage) +
       navItem('editor-registration-builder.html?v=' + Date.now(), 'registration-builder', icons.flow, 'مسار التسجيل', activePage) +
-      navItem('editor-admission-builder.html', 'admission-builder', icons.exams, 'مسار القبول', activePage) +
-      navItem('editor-admission-scenarios.html', 'admission-scenarios', icons.scenarios, 'سيناريوهات القبول', activePage);
+      navItem('editor-admission-builder.html', 'admission-builder', icons.exams, 'مسار القبول', activePage);
     return '<aside class="nta-sidebar"><div class="nta-sidebar__brand"><a href="editor-dashboard.html" class="nta-sidebar__logo-link"><img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" onerror="' + onerr + '"><span class="nta-sidebar__logo-fallback">NTA</span><div class="nta-sidebar__logo-text"><span class="nta-sidebar__logo-main">NTA</span><span class="nta-sidebar__logo-sub">NATIONAL TRAINING ACADEMY</span><span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span></div></a></div><nav class="nta-sidebar__nav" aria-label="قائمة المحرر">' + nav + '</nav><div class="nta-sidebar__footer"><div class="nta-sidebar__bottom-row"><button type="button" class="nta-sidebar__logout" id="editorLogoutBtn">' + icons.logout + 'تسجيل الخروج</button><button type="button" class="nta-sidebar__theme-btn" id="themeToggle" aria-label="تبديل المظهر" title="تبديل المظهر">☼</button></div></div></aside>';
   }
   function setupMobileNav(container) {
@@ -56,8 +69,85 @@
   }
   window.showEditorToast = window.showEditorToast || function (msg) { alert(msg); };
   window.editorConfirm = window.editorConfirm || function () { return Promise.resolve(confirm('تأكيد؟')); };
-  window.initUISelects = window.initUISelects || function () {};
-  window.initUIMenus = window.initUIMenus || function () {};
+  // ── Custom UI Select / UI Menu widgets ──────────────────────────────
+  // Real implementation (was previously a no-op, leaving every custom
+  // dropdown — e.g. the course pickers on the admission/registration
+  // builders — dead). Uses capture-phase delegation so it also works for
+  // widgets injected at runtime and inside containers that stopPropagation.
+  function closeAllUISelects(except) {
+    document.querySelectorAll('.ui-select__menu:not([hidden])').forEach(function (menu) {
+      var sel = menu.closest('.ui-select');
+      if (sel === except) return;
+      menu.setAttribute('hidden', '');
+      var t = sel && sel.querySelector('.ui-select__trigger');
+      if (t) t.setAttribute('aria-expanded', 'false');
+      if (sel) sel.classList.remove('is-open');
+    });
+  }
+  function closeAllUIMenus(except) {
+    document.querySelectorAll('.ui-menu__content:not([hidden])').forEach(function (c) {
+      if (c.closest('.ui-menu') === except) return;
+      c.setAttribute('hidden', '');
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest && e.target.closest('.ui-select__trigger');
+    if (trigger) {
+      e.preventDefault();
+      var sel = trigger.closest('.ui-select');
+      var menu = sel.querySelector('.ui-select__menu');
+      var willOpen = menu.hasAttribute('hidden');
+      closeAllUISelects(sel); closeAllUIMenus();
+      if (willOpen) { menu.removeAttribute('hidden'); trigger.setAttribute('aria-expanded', 'true'); sel.classList.add('is-open'); }
+      else { menu.setAttribute('hidden', ''); trigger.setAttribute('aria-expanded', 'false'); sel.classList.remove('is-open'); }
+      return;
+    }
+    var option = e.target.closest && e.target.closest('.ui-select__option');
+    if (option) {
+      e.preventDefault();
+      var os = option.closest('.ui-select');
+      var input = os.querySelector('input');
+      var valueEl = os.querySelector('.ui-select__value');
+      var val = option.getAttribute('data-value') || '';
+      var labelSpan = option.querySelector('span:not(.ui-select__check)') || option;
+      var label = labelSpan.textContent.trim();
+      if (valueEl) { valueEl.textContent = label; valueEl.classList.toggle('is-placeholder', val === ''); }
+      os.querySelectorAll('.ui-select__option').forEach(function (o) { o.removeAttribute('aria-selected'); o.classList.remove('is-selected'); });
+      option.setAttribute('aria-selected', 'true'); option.classList.add('is-selected');
+      closeAllUISelects();
+      if (input) { input.value = val; input.dispatchEvent(new Event('change', { bubbles: true })); }
+      return;
+    }
+    var menuTrigger = e.target.closest && e.target.closest('.ui-menu__trigger');
+    if (menuTrigger) {
+      e.preventDefault();
+      var content = menuTrigger.closest('.ui-menu').querySelector('.ui-menu__content');
+      var willShow = content && content.hasAttribute('hidden');
+      closeAllUIMenus(); closeAllUISelects();
+      if (content) { if (willShow) content.removeAttribute('hidden'); else content.setAttribute('hidden', ''); }
+      return;
+    }
+    closeAllUISelects(); closeAllUIMenus();
+  }, true);
+
+  function initUISelects(scope) {
+    var root = (scope && scope.querySelectorAll) ? scope : document;
+    var list = (root.classList && root.classList.contains('ui-select')) ? [root] : root.querySelectorAll('.ui-select');
+    [].forEach.call(list, function (sel) {
+      var input = sel.querySelector('input');
+      var valueEl = sel.querySelector('.ui-select__value');
+      if (!input || !valueEl) return;
+      var cur = sel.querySelector('.ui-select__option[data-value="' + (input.value || '') + '"]');
+      if (cur) {
+        var sp = cur.querySelector('span:not(.ui-select__check)') || cur;
+        valueEl.textContent = sp.textContent.trim();
+        valueEl.classList.toggle('is-placeholder', !input.value);
+      }
+    });
+  }
+  function initUIMenus() { /* interactions handled via delegation above */ }
+  window.initUISelects = initUISelects;
+  window.initUIMenus = initUIMenus;
   document.addEventListener("DOMContentLoaded", function () {
     var container = document.getElementById("editorSidebar");
     if (container) container.innerHTML = buildSidebar(document.body.getAttribute("data-page") || "");

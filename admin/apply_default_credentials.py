@@ -250,6 +250,7 @@ def apply_defaults():
         VALUES
             (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
+            role = VALUES(role),
             password_hash = VALUES(password_hash)
     """
 

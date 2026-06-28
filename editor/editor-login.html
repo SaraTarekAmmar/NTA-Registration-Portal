@@ -219,13 +219,101 @@
     <script>
       (function () {
         var EDITOR_TOKEN_KEY = "editor_token";
+        var EDITOR_LOGIN_ENDPOINT = "/api/editor/auth/login";
+        var EDITOR_API_PORTS = [8004, 8003];
+
+        function isLocalDev() {
+          return window.location.protocol === "file:" ||
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1" ||
+            window.location.hostname === "::1";
+        }
+
+        function uniqueBases(list) {
+          return list.filter(function (base, index, arr) {
+            return arr.indexOf(base) === index;
+          });
+        }
+
+        function getLoginBases(ports) {
+          var bases = [];
+          if (window.location.protocol !== "file:") {
+            bases.push("");
+          }
+          if (isLocalDev()) {
+            ports.forEach(function (port) {
+              bases.push("http://127.0.0.1:" + port);
+              bases.push("http://localhost:" + port);
+            });
+          }
+          return uniqueBases(bases);
+        }
+
+        function getDashboardBase(port) {
+          if (window.location.protocol === "file:") {
+            return "http://127.0.0.1:" + port;
+          }
+          return "";
+        }
+
+        function postJsonWithFallback(endpoint, payload, ports) {
+          var bases = getLoginBases(ports);
+
+          function attempt(index) {
+            if (index >= bases.length) {
+              return Promise.reject(new Error("Failed to fetch"));
+            }
+
+            var base = bases[index];
+            return fetch(base + endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            }).then(function (res) {
+              if ((res.status === 404 || res.status === 405) && index + 1 < bases.length && isLocalDev()) {
+                return attempt(index + 1);
+              }
+
+              return res.text().then(function (text) {
+                var data = {};
+                if (text) {
+                  try {
+                    data = JSON.parse(text);
+                  } catch (parseErr) {
+                    if (res.ok && index + 1 < bases.length && isLocalDev()) {
+                      return attempt(index + 1);
+                    }
+                    var formatErr = new Error("استجابة غير متوقعة من الخادم");
+                    formatErr.retryable = false;
+                    throw formatErr;
+                  }
+                }
+
+                if (!res.ok) {
+                  var apiErr = new Error(data.detail || "فشل تسجيل الدخول");
+                  apiErr.retryable = false;
+                  throw apiErr;
+                }
+
+                return { data: data, base: base };
+              });
+            }).catch(function (err) {
+              if (index + 1 < bases.length && isLocalDev() && err && err.retryable !== false) {
+                return attempt(index + 1);
+              }
+              throw err;
+            });
+          }
+
+          return attempt(0);
+        }
 
         var existingToken = localStorage.getItem(EDITOR_TOKEN_KEY);
         if (existingToken) {
           try {
             var p = JSON.parse(atob(existingToken.split(".")[1]));
             if (p && p.role === "editor" && (!p.exp || p.exp > Date.now() / 1000)) {
-              window.location.replace("editor-dashboard.html");
+              window.location.replace(getDashboardBase(EDITOR_API_PORTS[0]) + "/editor-dashboard.html");
             }
           } catch (e) {}
         }
@@ -276,21 +364,19 @@
           btn.classList.add("loading");
           btn.disabled = true;
 
-          fetch("/api/editor/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email, nationalId: nationalId, password: password })
-          })
-            .then(function (res) {
-              if (!res.ok) return res.json().then(function (err) { throw new Error(err.detail || "فشل تسجيل الدخول"); });
-              return res.json();
-            })
-            .then(function (data) {
+          postJsonWithFallback(EDITOR_LOGIN_ENDPOINT, {
+            email: email,
+            nationalId: nationalId,
+            password: password
+          }, EDITOR_API_PORTS)
+            .then(function (result) {
+              var data = result.data;
               if (!data.access_token || data.role !== "editor") {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المحرر.");
               }
               localStorage.setItem(EDITOR_TOKEN_KEY, data.access_token);
-              window.location.replace("editor-dashboard.html");
+              var dashboardUrl = result.base ? result.base + "/editor-dashboard.html" : getDashboardBase(EDITOR_API_PORTS[0]) + "/editor-dashboard.html";
+              window.location.replace(dashboardUrl);
             })
             .catch(function (err) {
               btn.classList.remove("loading");

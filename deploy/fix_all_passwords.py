@@ -43,6 +43,14 @@ if __name__ == "__main__":
     # Fix Editor
     print("\nFixing Editor...")
     fix_user_password("29505051234567", "NTA@Editor2026")
+
+    # Fix Coordinator
+    print("\nFixing Coordinator...")
+    fix_user_password("29304041234567", "NTA@Coord2026")
+
+    # Fix Super Admin
+    print("\nFixing Super Admin...")
+    fix_user_password("10000000000000", "NTA@Super2026")
     
     # Fix Trainee
     print("\nFixing Trainee...")

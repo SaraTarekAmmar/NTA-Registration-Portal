@@ -1,0 +1,27 @@
+# Foundational Tools
+pip
+setuptools
+wheel
+
+# Web Framework & Server
+fastapi
+uvicorn
+python-multipart
+httpx
+requests
+
+# Database Connector
+mysql-connector-python
+
+# AI Services
+google-generativeai
+
+# Authentication & Security
+python-dotenv
+pydantic[email]
+email-validator
+python-jose[cryptography]
+passlib[bcrypt,argon2]
+bcrypt
+argon2-cffi
+cryptography
