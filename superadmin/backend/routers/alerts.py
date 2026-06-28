@@ -5,6 +5,7 @@ from datetime import datetime
 import mysql.connector
 import os
 from .auth import get_current_user
+from core.security import get_superadmin_user
 
 router = APIRouter(prefix="/alerts", tags=["Alerts"])
 
@@ -26,7 +27,7 @@ class AlertOut(BaseModel):
     creator_name: Optional[str] = None
 
 @router.post("/", response_model=AlertOut)
-async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_current_user)):
+async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -52,7 +53,7 @@ async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_curr
         conn.close()
 
 @router.get("/", response_model=List[AlertOut])
-async def list_alerts(current_user: dict = Depends(get_current_user)):
+async def list_alerts(current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -74,7 +75,7 @@ async def list_alerts(current_user: dict = Depends(get_current_user)):
         conn.close()
 
 @router.delete("/{alert_id}")
-async def delete_alert(alert_id: int, current_user: dict = Depends(get_current_user)):
+async def delete_alert(alert_id: int, current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     

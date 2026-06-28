@@ -111,10 +111,26 @@ class GuardedStaticFiles(StaticFiles):
         return await super().get_response(path, scope)
 
 
+class PrivateDataStaticFiles(StaticFiles):
+    """Blocks PII / sensitive subdirectories from unauthenticated static access.
+    Protected files (trainee docs, admin photos, uploads, exams) are served only
+    through authenticated API routes, not this public mount."""
+
+    _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
+
+    async def get_response(self, path, scope):
+        from starlette.responses import PlainTextResponse as _PT
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] in self._BLOCKED) or any(s.startswith(".") for s in segs):
+            return _PT("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 # Serve the data folder (for profile photos, uploads, etc.)
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
 # Serve the shared common/ assets (theme.css, theme.js, nta-dashboard.css, …) so
 # /common/* references resolve like the other portals (was previously 404).
