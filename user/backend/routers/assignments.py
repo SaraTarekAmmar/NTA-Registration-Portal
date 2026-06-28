@@ -13,6 +13,15 @@ router = APIRouter(prefix="/api/assignments", tags=["Assignments"])
 # Project root for path management
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
+# Assignment authoring (create/grade/list submissions) is for trainers and staff.
+_TRAINER_OR_STAFF = {"trainer", "admin", "editor", "superadmin"}
+
+
+def require_trainer_or_staff(current: dict = Depends(get_current_user)):
+    if current["role"] not in _TRAINER_OR_STAFF:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return current
+
 def get_course_folder(cursor, course_id: int) -> str:
     """Returns the correctly formatted course folder name: {title_slug}_{id}"""
     import re
@@ -35,7 +44,8 @@ async def create_assignment(
     description: str = Form(None),
     deadline: str = Form(...),
     max_grade: float = Form(10.0),
-    file: Optional[UploadFile] = File(None)
+    file: Optional[UploadFile] = File(None),
+    current: dict = Depends(require_trainer_or_staff)
 ):
     db = get_db_connection()
     cursor = db.cursor()
@@ -99,7 +109,7 @@ async def create_assignment(
         db.close()
 
 @router.get("/course/{course_id}", response_model=List[Assignment])
-async def get_assignments(course_id: int):
+async def get_assignments(course_id: int, current: dict = Depends(get_current_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -110,7 +120,7 @@ async def get_assignments(course_id: int):
         db.close()
 
 @router.get("/{assignment_id}/submissions", response_model=List[dict])
-async def get_assignment_submissions(assignment_id: int):
+async def get_assignment_submissions(assignment_id: int, current: dict = Depends(require_trainer_or_staff)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -127,7 +137,7 @@ async def get_assignment_submissions(assignment_id: int):
         db.close()
 
 @router.patch("/submissions/{submission_id}/grade")
-async def grade_submission(submission_id: int, grade: float = Form(...), feedback: str = Form(None)):
+async def grade_submission(submission_id: int, grade: float = Form(...), feedback: str = Form(None), current: dict = Depends(require_trainer_or_staff)):
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -149,9 +159,10 @@ async def grade_submission(submission_id: int, grade: float = Form(...), feedbac
 @router.post("/submit", response_model=Submission)
 async def submit_assignment(
     assignment_id: int = Form(...),
-    trainee_id: int = Form(...),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    current: dict = Depends(get_current_user)
 ):
+    trainee_id = current["id"]
     db = get_db_connection()
     cursor = db.cursor()
     try:
@@ -219,7 +230,9 @@ async def submit_assignment(
         db.close()
 
 @router.get("/my-submission/{assignment_id}/{trainee_id}", response_model=Optional[Submission])
-async def get_my_submission(assignment_id: int, trainee_id: int):
+async def get_my_submission(assignment_id: int, trainee_id: int, current: dict = Depends(get_current_user)):
+    if current["role"] not in _TRAINER_OR_STAFF and current["id"] != trainee_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
