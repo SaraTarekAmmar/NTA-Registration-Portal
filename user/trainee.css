@@ -25,6 +25,8 @@ body.trainee-app {
 .trainee-main {
   position: relative;
   z-index: 1;
+  /* width:100% stops the flex sidebar body from collapsing this to content width */
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -1575,10 +1577,22 @@ a.course-card__btn {
 }
 
 .profile-section h2 {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   margin: 0 0 1rem;
-  color: var(--color-info-soft);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.profile-section h2::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f87171, #b91c1c);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.35);
+  flex-shrink: 0;
 }
 
 .profile-data {
