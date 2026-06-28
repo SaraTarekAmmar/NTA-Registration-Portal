@@ -47,7 +47,7 @@ async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_supe
         return new_alert
     except Exception as e:
         conn.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()
@@ -69,7 +69,7 @@ async def list_alerts(current_user: dict = Depends(get_superadmin_user)):
         cursor.execute(query)
         return cursor.fetchall()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()
@@ -87,7 +87,7 @@ async def delete_alert(alert_id: int, current_user: dict = Depends(get_superadmi
         return {"message": "Alert deleted"}
     except Exception as e:
         conn.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()

@@ -54,7 +54,7 @@ async def get_activity_logs(
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/stats")
 async def get_log_stats(current_user: dict = Depends(get_superadmin_user)):
@@ -128,7 +128,7 @@ async def get_log_stats(current_user: dict = Depends(get_superadmin_user)):
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/notifications")
 async def get_notifications(limit: int = Query(20, ge=1, le=100), current_user: dict = Depends(get_superadmin_user)):
@@ -181,7 +181,7 @@ async def get_notifications(limit: int = Query(20, ge=1, le=100), current_user: 
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/trace/{trace_id}")
 async def get_trace_details(trace_id: str, current_user: dict = Depends(get_superadmin_user)):
@@ -211,4 +211,4 @@ async def get_trace_details(trace_id: str, current_user: dict = Depends(get_supe
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")

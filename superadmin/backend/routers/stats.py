@@ -97,7 +97,7 @@ async def get_overview_stats(current_user: dict = Depends(get_superadmin_user)):
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/files")
 async def get_lecture_files(current_user: dict = Depends(get_superadmin_user)):
@@ -131,7 +131,7 @@ async def get_courses(current_user: dict = Depends(get_superadmin_user)):
         conn.close()
         return {"courses": courses}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/sessions/{course_id}")
 async def get_sessions(course_id: int, current_user: dict = Depends(get_superadmin_user)):
@@ -144,7 +144,7 @@ async def get_sessions(course_id: int, current_user: dict = Depends(get_superadm
         conn.close()
         return {"sessions": sessions}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/trainees")
 async def list_all_trainees(current_user: dict = Depends(get_superadmin_user)):
@@ -157,4 +157,4 @@ async def list_all_trainees(current_user: dict = Depends(get_superadmin_user)):
         conn.close()
         return trainees
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")

@@ -457,12 +457,12 @@ async def generate_quiz(req: Request, current_user: dict = Depends(get_current_u
                 return resp_json
             except Exception as e:
                 db.rollback()
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail="Internal server error")
             finally:
                 cursor.close()
                 db.close()
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail="Internal server error")
         finally:
             for f in opened_files: f.close()
 @router.post("/quizzes/{quiz_id}/activate")
