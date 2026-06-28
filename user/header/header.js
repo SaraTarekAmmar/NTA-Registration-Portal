@@ -53,7 +53,6 @@
       navItem('courses.html?filter=my', ['enrolled-courses'], ICONS.mine, 'دوراتي', activePage) +
       '<div class="nta-sidebar__divider"></div>' +
       '<div class="nta-sidebar__nav-lbl">حسابي</div>' +
-      navItem('admissions.html', ['admissions'], ICONS.admissions, 'مراحل القبول', activePage) +
       navItem('profile.html', ['profile'], ICONS.profile, 'الملف الشخصي', activePage) +
       navItem('trainee-permissions.html', ['permissions'], ICONS.permissions, 'الإذونات', activePage);
 
