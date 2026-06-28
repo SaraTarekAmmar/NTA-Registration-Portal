@@ -2,6 +2,9 @@ from fastapi import APIRouter, HTTPException, Request
 from core.database import get_db_connection
 import mysql.connector
 import os
+import json
+import hmac
+import hashlib
 import base64
 import time
 from pathlib import Path
@@ -13,8 +16,31 @@ async def attendance_webhook(request: Request):
     """
     Inbound webhook for Face Recognition attendance events.
     Expected payload: { "national_id": "...", "session_id": "...", "match_score": 0.95, "image_b64": "...", "image_path": "..." }
+    Authenticated via an HMAC-SHA256 signature of the raw body in the
+    X-Signature header, keyed on ATTENDANCE_WEBHOOK_SECRET (shared with the
+    attendance device). Fails closed if the secret is not configured.
     """
-    data = await request.json()
+    raw_body = await request.body()
+
+    secret = os.getenv("ATTENDANCE_WEBHOOK_SECRET")
+    if not secret:
+        raise HTTPException(status_code=503, detail="Webhook not configured")
+
+    provided_sig = request.headers.get("X-Signature", "")
+    expected_sig = hmac.new(secret.encode(), raw_body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(provided_sig, expected_sig):
+        from core.logger_util import log_activity
+        log_activity(
+            category="SECURITY",
+            event_type="ATTENDANCE_WEBHOOK_BAD_SIGNATURE",
+            details={"ip": request.client.host if request.client else "unknown"},
+        )
+        raise HTTPException(status_code=401, detail="Invalid signature")
+
+    try:
+        data = json.loads(raw_body)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
     national_id = data.get("national_id")
     session_id = data.get("session_id")
     match_score = data.get("match_score", 0.0)
