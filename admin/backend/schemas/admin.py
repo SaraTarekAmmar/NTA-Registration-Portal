@@ -46,4 +46,7 @@ class StageReviewCreate(BaseModel):
 class SecurityDecisionCreate(BaseModel):
     decision: Literal["clear", "hold", "silent_reject", "block_future"]
     internal_reason: Optional[str] = Field(default=None, max_length=5000)
+    # Public, masked (technical) reason shown to the applicant on a silent reject —
+    # NEVER reveals the real security reason. Defaults to a generic technical reason.
+    masked_reason: Optional[str] = Field(default=None, max_length=1000)
     course_id: Optional[int] = None

@@ -847,36 +847,56 @@ async def create_security_decision(
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT id, national_id, passport_number FROM users WHERE id = %s", (trainee_id,))
+        cursor.execute("SELECT id, national_id FROM users WHERE id = %s", (trainee_id,))
         u_data = cursor.fetchone()
         if not u_data:
             raise HTTPException(status_code=404, detail="Trainee not found")
 
+        # Silent rejection: the REAL reason (internal_reason) is security and stays
+        # admin-only. The applicant only ever sees a masked technical reason. If the
+        # admin didn't supply one, fall back to a neutral technical reason that never
+        # mentions security.
+        is_silent = decision_data.decision in ("silent_reject", "block_future")
+        masked = (decision_data.masked_reason or "").strip() or \
+            "تعذّر استكمال إجراءات القبول الخاصة بك في الوقت الحالي."
+
         cursor.execute("""
             INSERT INTO admission_security_decisions
-                (applicant_user_id, national_id, passport_number, course_id, decision, internal_reason, decided_by, decided_at, created_at)
+                (applicant_user_id, national_id, course_id, decision, internal_reason, masked_reason, decided_by, decided_at, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
         """, (
             u_data["id"],
             u_data["national_id"],
-            u_data["passport_number"],
             decision_data.course_id,
             decision_data.decision,
             decision_data.internal_reason,
+            masked,
             admin["id"]
         ))
         decision_id = cursor.lastrowid
+
+        # Silently halt the pipeline: mark the applicant rejected but write ONLY the
+        # masked (technical) reason into the public rejection_note. The security
+        # reason is never written to pipeline_state, so it can never leak to the
+        # applicant. The security stage result itself is never announced separately —
+        # the applicant just sees a generic technical block.
+        if is_silent:
+            cursor.execute(
+                "UPDATE pipeline_state SET status = 'rejected', rejection_note = %s, updated_at = NOW() "
+                "WHERE trainee_id = %s",
+                (masked, trainee_id),
+            )
         db.commit()
 
         log_activity(
             category="SECURITY_DECISION",
-            event_type="NON_DESTRUCTIVE_DECISION",
+            event_type="SILENT_REJECTION" if is_silent else "NON_DESTRUCTIVE_DECISION",
             user_id=admin["id"],
             role=admin["role"],
-            details={"trainee_id": trainee_id, "decision": decision_data.decision, "decision_id": decision_id}
+            details={"trainee_id": trainee_id, "decision": decision_data.decision, "decision_id": decision_id, "silent": is_silent}
         )
 
-        return {"message": "Security decision recorded successfully", "decision_id": decision_id}
+        return {"message": "Security decision recorded successfully", "decision_id": decision_id, "silent": is_silent}
     except HTTPException:
         db.rollback()
         raise
@@ -893,7 +913,7 @@ async def get_security_decisions(trainee_id: int, admin: dict = Depends(get_admi
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT id, decision, internal_reason, course_id, decided_by, decided_at
+            SELECT id, decision, internal_reason, masked_reason, course_id, decided_by, decided_at
             FROM admission_security_decisions
             WHERE applicant_user_id = %s
             ORDER BY decided_at DESC

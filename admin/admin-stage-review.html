@@ -164,6 +164,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Silent Rejection (الاستبعاد الصامت): real reason is admin-only; applicant only ever sees a masked technical reason -->
+                    <div class="stage-review-card" style="grid-column:1/-1;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.05);border-radius:14px;padding:1.1rem;margin-top:.75rem">
+                      <span class="stage-review-card__label" style="color:#fca5a5">🔒 الاستبعاد الصامت (سري)</span>
+                      <p style="font-size:.78rem;color:var(--text-subtle,#94a3b8);margin:.3rem 0 .85rem;line-height:1.6">في حالة عدم اللياقة الأمنية: يُحفظ السبب الحقيقي داخلياً للمشرفين فقط ولا يُعلَن أبداً. يُوقَف مسار المتقدم بصمت ويظهر له سبب فني عام فقط، ولا تُعلَن نتيجة الاستعلام الأمني بشكل منفرد.</p>
+                      <label class="stage-review-card__label" for="s2-internal-reason">السبب الأمني الحقيقي (للمشرفين فقط)</label>
+                      <textarea id="s2-internal-reason" class="stage-review-textarea" placeholder="يُحفظ داخلياً ولا يظهر للمتقدم إطلاقاً..."></textarea>
+                      <label class="stage-review-card__label" for="s2-masked-reason" style="margin-top:.6rem">السبب الفني المعلَن للمتقدم (اختياري)</label>
+                      <input type="text" id="s2-masked-reason" class="stage-review-input" placeholder="تعذّر استكمال إجراءات القبول الخاصة بك في الوقت الحالي.">
+                      <div style="display:flex;align-items:center;gap:.8rem;margin-top:.85rem;flex-wrap:wrap">
+                        <button type="button" id="s2-silent-reject-btn" style="padding:.6rem 1.4rem;border-radius:9px;border:1px solid #b91c1c;background:rgba(185,28,28,.22);color:#fca5a5;font-family:inherit;font-weight:700;cursor:pointer">تطبيق الاستبعاد الصامت</button>
+                        <span id="s2-silent-msg" style="font-size:.82rem"></span>
+                      </div>
+                    </div>
                 </section>
                 <section class="admin-stage-panel" data-stage-panel="3">
                     <h2 class="admin-stage-panel__title">الاختبار النفسي</h2>
@@ -1022,6 +1036,31 @@
             fetchTraineeData();
             fetchReviews();
             activateStage(currentStageId);
+
+            // ── Stage 2: Silent Rejection (الاستبعاد الصامت) ──
+            (function () {
+                var btn = document.getElementById('s2-silent-reject-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function () {
+                    var internal = (document.getElementById('s2-internal-reason') || {}).value || '';
+                    var masked = (document.getElementById('s2-masked-reason') || {}).value || '';
+                    var msg = document.getElementById('s2-silent-msg');
+                    internal = internal.trim();
+                    if (!internal) { msg.style.color = '#fca5a5'; msg.textContent = 'يرجى إدخال السبب الأمني الحقيقي (للمشرفين).'; return; }
+                    if (!confirm('سيتم استبعاد المتقدم بصمت: السبب الأمني يُحفظ داخلياً فقط، ويظهر للمتقدم سبب فني عام. متابعة؟')) return;
+                    btn.disabled = true; msg.style.color = 'var(--text-subtle)'; msg.textContent = '...جارٍ التطبيق';
+                    window.authenticatedFetch('/api/admin/trainees/' + traineeId + '/security-decision', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ decision: 'silent_reject', internal_reason: internal, masked_reason: masked.trim() || null })
+                    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+                      .then(function (res) {
+                          btn.disabled = false;
+                          if (res.ok) { msg.style.color = '#86efac'; msg.textContent = 'تم الاستبعاد الصامت — السبب الأمني محفوظ داخلياً فقط.'; document.getElementById('s2-internal-reason').value = ''; document.getElementById('s2-masked-reason').value = ''; }
+                          else { msg.style.color = '#fca5a5'; msg.textContent = (res.d && res.d.detail) || 'تعذّر التطبيق.'; }
+                      }).catch(function () { btn.disabled = false; msg.style.color = '#fca5a5'; msg.textContent = 'خطأ في الاتصال بالخادم.'; });
+                });
+            })();
 
             // ── Stage 1: AI Verification Integration ──
 
