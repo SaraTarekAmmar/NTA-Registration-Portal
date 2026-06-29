@@ -552,8 +552,17 @@ async def submit_review(
         # BUG 17 FIX (belt-and-suspenders): schema validator already normalises
         # review.result to 'Active'/'Rejected', but use .lower() here so this
         # branch stays correct even if called from non-Pydantic paths.
+        # Waitlist (interview stages): the score + recommendation are saved, but
+        # the candidate is held at the current stage — not advanced, not rejected.
+        is_waitlist = (
+            review.stage_id in (5, 6)
+            and bool(review.details)
+            and review.details.get("recommendation") == "waitlist"
+        )
         if review.result.lower() == "active":
-            if review.stage_id < 7:
+            if is_waitlist:
+                pass  # Waitlist: score + recommendation saved; candidate held, not advanced, not rejected.
+            elif review.stage_id < 7:
                 cursor.execute(
                     "UPDATE pipeline_state SET current_stage_id = current_stage_id + 1 WHERE trainee_id = %s",
                     (review.trainee_id,),

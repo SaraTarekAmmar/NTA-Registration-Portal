@@ -733,6 +733,20 @@
                 });
             });
 
+            // Inject a Waitlist (قائمة انتظار) option into interview stages 5 & 6.
+            [5, 6].forEach(function (sid) {
+                var grp = document.querySelector('[data-stage-panel="' + sid + '"] .stage-review-status');
+                if (grp && !grp.querySelector('[data-status="waitlist"]')) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'stage-status-btn stage-status-btn--secondary';
+                    b.setAttribute('data-status', 'waitlist');
+                    b.innerHTML = '<span>(Waitlist) قائمة انتظار</span>';
+                    var active = grp.querySelector('[data-status="active"]');
+                    grp.insertBefore(b, active || null);
+                }
+            });
+
             // wire accept/reject buttons
             document.querySelectorAll('.stage-status-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
@@ -740,6 +754,8 @@
                     const stageId = parseInt(panel.getAttribute('data-stage-panel'));
                     const status = btn.getAttribute('data-status');
                     const isAccept = status === 'active';
+                    const isReject = status === 'rejected';
+                    const isWaitlist = status === 'waitlist';
 
                     const reviewerName = panel.querySelector('.stage-review-input[placeholder="اسم المسؤول"]')?.value || "";
                     const notes = panel.querySelector('.stage-review-textarea')?.value || "";
@@ -766,8 +782,8 @@
                         }
                     }
 
-                    // 2. Mandatory Rejection Reason
-                    if (!isAccept && !notes) {
+                    // 2. Mandatory Rejection Reason (waitlist does not require one)
+                    if (isReject && !notes) {
                         window.showDropdownMessage('يرجى إدخال سبب الرفض في خانة الملاحظات', true);
                         return;
                     }
@@ -781,7 +797,7 @@
                         }
                     }
 
-                    if (!confirm(isAccept ? 'تأكيد القبول؟' : 'تأكيد الرفض؟')) return;
+                    if (!confirm(isWaitlist ? 'تأكيد إدراج المتقدم في قائمة الانتظار؟' : (isAccept ? 'تأكيد القبول؟' : 'تأكيد الرفض؟'))) return;
 
                     const submitReview = (attachmentPath) => {
                         // Collect Stage-Specific Details
@@ -789,12 +805,15 @@
                         panel.querySelectorAll('[data-field]').forEach(input => {
                             details[input.getAttribute('data-field')] = input.value;
                         });
+                        if (stageId === 5 || stageId === 6) {
+                            details.recommendation = isWaitlist ? 'waitlist' : (isReject ? 'unsuitable' : 'accept');
+                        }
 
                         const payload = {
                             trainee_id: traineeId,
                             stage_id: stageId,
                             reviewer_id: session.userId || 1,
-                            result: isAccept ? 'Active' : 'Rejected',
+                            result: isReject ? 'Rejected' : 'Active',
                             reviewer_name: reviewerName || (stageId === 4 ? 'النظام الآلي' : ''),
                             notes: notes,
                             attachment_path: attachmentPath,

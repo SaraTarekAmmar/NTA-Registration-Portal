@@ -747,6 +747,20 @@
                 });
             });
 
+            // Inject a Waitlist (قائمة انتظار) option into interview stages 5 & 6.
+            [5, 6].forEach(function (sid) {
+                var grp = document.querySelector('[data-stage-panel="' + sid + '"] .stage-review-status');
+                if (grp && !grp.querySelector('[data-status="waitlist"]')) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'stage-status-btn stage-status-btn--secondary';
+                    b.setAttribute('data-status', 'waitlist');
+                    b.innerHTML = '<span>(Waitlist) قائمة انتظار</span>';
+                    var active = grp.querySelector('[data-status="active"]');
+                    grp.insertBefore(b, active || null);
+                }
+            });
+
             // wire accept/reject buttons
             document.querySelectorAll('.stage-status-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
@@ -754,6 +768,8 @@
                     const stageId = parseInt(panel.getAttribute('data-stage-panel'));
                     const status = btn.getAttribute('data-status');
                     const isAccept = status === 'active';
+                    const isReject = status === 'rejected';
+                    const isWaitlist = status === 'waitlist';
 
                     const reviewerName = panel.querySelector('.stage-review-input[placeholder="اسم المسؤول"]')?.value || "";
                     const notes = panel.querySelector('.stage-review-textarea')?.value || "";
@@ -780,8 +796,8 @@
                         }
                     }
 
-                    // 2. Mandatory Rejection Reason
-                    if (!isAccept && !notes) {
+                    // 2. Mandatory Rejection Reason (waitlist does not require one)
+                    if (isReject && !notes) {
                         window.showDropdownMessage('يرجى إدخال سبب الرفض في خانة الملاحظات', true);
                         return;
                     }
@@ -796,13 +812,16 @@
                     }
 
                     // Custom confirm — no native confirm()
-                    const _confirmMsg = isAccept ? 'تأكيد القبول؟ سيتم ترقية المتدرب للمرحلة التالية.' : 'تأكيد الرفض؟ لا يمكن التراجع عن هذا القرار.';
+                    const _positive = isAccept || isWaitlist;
+                    const _confirmMsg = isWaitlist
+                        ? 'تأكيد إدراج المتقدم في قائمة الانتظار؟ سيبقى في نفس المرحلة.'
+                        : (isAccept ? 'تأكيد القبول؟ سيتم ترقية المتدرب للمرحلة التالية.' : 'تأكيد الرفض؟ لا يمكن التراجع عن هذا القرار.');
                     const _overlay = document.createElement('div');
                     _overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
                     _overlay.innerHTML = '<div style="background:#0f1628;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:2rem 2.5rem;max-width:400px;width:90%;font-family:Tajawal,sans-serif;text-align:center;">'
                       + '<p style="color:#e2e8f0;font-size:1rem;font-weight:600;margin:0 0 1.5rem;">' + _confirmMsg + '</p>'
                       + '<div style="display:flex;gap:0.75rem;justify-content:center;">'
-                      + '<button id="_srConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid ' + (isAccept ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)') + ';background:' + (isAccept ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)') + ';color:' + (isAccept ? '#6ee7b7' : '#fca5a5') + ';font-weight:700;cursor:pointer;font-family:inherit;font-size:0.9rem;">تأكيد</button>'
+                      + '<button id="_srConfirmOk" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid ' + (_positive ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)') + ';background:' + (_positive ? 'rgba(16,185,129,0.18)' : 'rgba(239,68,68,0.18)') + ';color:' + (_positive ? '#6ee7b7' : '#fca5a5') + ';font-weight:700;cursor:pointer;font-family:inherit;font-size:0.9rem;">تأكيد</button>'
                       + '<button id="_srConfirmCancel" style="padding:0.55rem 1.4rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#94a3b8;font-weight:600;cursor:pointer;font-family:inherit;font-size:0.9rem;">إلغاء</button>'
                       + '</div></div>';
                     document.body.appendChild(_overlay);
@@ -819,6 +838,10 @@
                         panel.querySelectorAll('[data-field]').forEach(input => {
                             details[input.getAttribute('data-field')] = input.value;
                         });
+                        // Interview decision: accept / waitlist / reject -> details.recommendation
+                        if (stageId === 5 || stageId === 6) {
+                            details.recommendation = isWaitlist ? 'waitlist' : (isReject ? 'unsuitable' : 'accept');
+                        }
 
                         const payload = {
                             trainee_id: traineeId,
@@ -827,7 +850,7 @@
                             // The backend always overrides it with the authenticated admin's
                             // ID from the JWT token to prevent audit trail forgery.
                             reviewer_id: session.userId,
-                            result: isAccept ? 'Active' : 'Rejected',
+                            result: isReject ? 'Rejected' : 'Active',
                             reviewer_name: reviewerName || (stageId === 4 ? 'النظام الآلي' : ''),
                             notes: notes,
                             attachment_path: attachmentPath,
