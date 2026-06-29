@@ -13,18 +13,12 @@
   }
 
   function requireTrainer() {
-    var sessionRaw = localStorage.getItem(TRAINER_TOKEN_KEY);
-    if (!sessionRaw) {
+    var token = localStorage.getItem(TRAINER_TOKEN_KEY);
+    if (!token) {
       redirectToLogin();
       return;
     }
     try {
-      var session = JSON.parse(sessionRaw);
-      var token = session.token;
-      if (!token) {
-        redirectToLogin();
-        return;
-      }
       var payload = parseJwt(token);
       if (!payload || payload.role !== "trainer") {
         localStorage.removeItem(TRAINER_TOKEN_KEY);

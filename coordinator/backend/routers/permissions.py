@@ -15,6 +15,8 @@ router = APIRouter(prefix="/api/coordinator/permissions", tags=["Coordinator Per
 async def list_permissions(
     status: Optional[str] = Query(None),
     course_id: Optional[int] = Query(None),
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
     coordinator: dict = Depends(require_coordinator),
 ):
     """List all permission/excuse requests with optional filters."""
@@ -41,7 +43,9 @@ async def list_permissions(
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
 
-        query += " ORDER BY p.created_at DESC"
+        query += " ORDER BY p.created_at DESC LIMIT %s OFFSET %s"
+        params.extend([limit, offset])
+        
         cursor.execute(query, tuple(params))
         return cursor.fetchall() or []
     finally:
@@ -80,21 +84,24 @@ async def update_permission(
         raise HTTPException(status_code=400, detail="الحالة يجب أن تكون 'accepted' أو 'rejected'")
 
     db = get_db_connection()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute(
-            "UPDATE attendance_permissions SET status = %s WHERE id = %s",
-            (update.status, permission_id),
-        )
-        db.commit()
-        if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="الطلب غير موجود")
-
-        cursor.close()
-
-        cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT * FROM attendance_permissions WHERE id = %s", (permission_id,))
-        return cursor.fetchone()
+        existing = cursor.fetchone()
+        if not existing:
+            raise HTTPException(status_code=404, detail="الطلب غير موجود")
+            
+        if existing["status"] != update.status:
+            cursor.execute(
+                "UPDATE attendance_permissions SET status = %s WHERE id = %s",
+                (update.status, permission_id),
+            )
+            db.commit()
+            
+            cursor.execute("SELECT * FROM attendance_permissions WHERE id = %s", (permission_id,))
+            existing = cursor.fetchone()
+
+        return existing
     finally:
         cursor.close()
         db.close()

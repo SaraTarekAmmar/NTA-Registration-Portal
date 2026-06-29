@@ -35,7 +35,7 @@ async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
 
         cursor.execute(
             "SELECT id, full_name_ar, email, role, national_id, password_hash "
-            "FROM users WHERE email = %s AND role = 'coordinator'",
+            "FROM users WHERE email = %s AND role IN ('coordinator', 'committee_member')",
             (email,),
         )
         user = cursor.fetchone()

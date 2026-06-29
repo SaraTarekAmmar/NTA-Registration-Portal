@@ -36,7 +36,7 @@
     var token = getToken();
     if (!token) { redirectToLogin(); return null; }
     var payload = parseJwt(token);
-    if (!payload || payload.role !== "coordinator") {
+    if (!payload || (payload.role !== "coordinator" && payload.role !== "committee_member")) {
       localStorage.removeItem(TOKEN_KEY);
       redirectToLogin();
       return null;

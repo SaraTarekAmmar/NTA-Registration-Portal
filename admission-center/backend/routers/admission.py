@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, Depends, File, UploadFile
 from typing import List, Optional
 from schemas.admin import TraineeSummary, StageReviewCreate
 from core.database import get_db_connection
-from core.auth import get_admission_manager_user, get_password_hash
+from core.auth import get_admission_manager_user, get_reviewer_user, get_password_hash
 from core.upload_manager import save_upload_file, move_user_files_to_user_folder, move_admission_file_to_folder
 from core.security import generate_temp_password
 from core.notifications import send_credential_email
@@ -142,11 +142,103 @@ async def get_trainees(stage: Optional[int] = Query(None), role: Optional[str] =
         cursor.close()
         db.close()
 @router.post("/stage-review")
-async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_admission_manager_user)):
+async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_reviewer_user)):
+    review.reviewer_id = admin["id"]
     db = get_db_connection()
-    cursor = db.cursor(buffered=True)
+    cursor = db.cursor(buffered=True, dictionary=False)
     try:
-        # ── NEW: Move attachment to admission folder ({trainee_nid}_{admin_nid}) ──
+        # 1. Assignment ownership verification for committee members
+        if admin["role"] == "committee_member":
+            if review.stage_id not in (5, 6):
+                raise HTTPException(
+                    status_code=403,
+                    detail="غير مسموح لأعضاء اللجنة بتقييم هذه المرحلة."
+                )
+            cursor.execute(
+                "SELECT id FROM interview_assignments WHERE trainee_id = %s AND stage_id = %s AND reviewer_id = %s AND status = 'pending'",
+                (review.trainee_id, review.stage_id, admin["id"])
+            )
+            if not cursor.fetchone():
+                raise HTTPException(
+                    status_code=403,
+                    detail="لا توجد مقابلة معلقة معينة لك لهذا المتقدم."
+                )
+
+        # 2. Score validation & calculation for Interview stages
+        if review.stage_id in (5, 6):
+            if not review.details:
+                raise HTTPException(status_code=422, detail="تفاصيل التقييم مطلوبة لمراحل المقابلة.")
+            
+            criteria_keys = ["comm_skills", "confidence", "appearance"]
+            scores_dict = {}
+            for key in criteria_keys:
+                val = review.details.get(key)
+                if val is None:
+                    raise HTTPException(status_code=422, detail=f"التقييم الخاص بـ '{key}' مطلوب.")
+                try:
+                    val_int = int(val)
+                    if not (1 <= val_int <= 5):
+                        raise ValueError()
+                    scores_dict[key] = val_int
+                except ValueError:
+                    raise HTTPException(status_code=422, detail=f"قيمة التقييم لـ '{key}' يجب أن تكون رقماً بين 1 و 5.")
+
+            total_score = sum(scores_dict.values())
+            total_max = len(criteria_keys) * 5
+
+            # Get course_id from active application
+            cursor.execute(
+                "SELECT course_id FROM applications WHERE user_id = %s ORDER BY applied_at DESC, id DESC LIMIT 1",
+                (review.trainee_id,)
+            )
+            course_row = cursor.fetchone()
+            course_id = course_row[0] if course_row else None
+
+            # Determine recommendation
+            recommendation = 'accept' if review.result == 'Active' else 'unsuitable'
+            if review.details.get("recommendation") in ('accept', 'waitlist', 'unsuitable'):
+                recommendation = review.details.get("recommendation")
+
+            criteria_json_str = json.dumps(scores_dict)
+
+            # UPSERT detailed scores
+            cursor.execute("""
+                INSERT INTO admission_interview_scores (trainee_id, course_id, stage_id, reviewer_id, committee_member_name, criteria_json, total_score, total_max, recommendation, notes, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                ON DUPLICATE KEY UPDATE
+                criteria_json = VALUES(criteria_json),
+                total_score = VALUES(total_score),
+                total_max = VALUES(total_max),
+                recommendation = VALUES(recommendation),
+                notes = VALUES(notes),
+                updated_at = NOW()
+            """, (
+                review.trainee_id,
+                course_id,
+                review.stage_id,
+                admin["id"],
+                review.reviewer_name or admin.get("full_name_ar", "المقيم"),
+                criteria_json_str,
+                total_score,
+                total_max,
+                recommendation,
+                review.notes
+            ))
+
+            # Mark assignment as completed
+            cursor.execute("""
+                UPDATE interview_assignments 
+                SET status = 'completed' 
+                WHERE trainee_id = %s AND stage_id = %s AND reviewer_id = %s
+            """, (review.trainee_id, review.stage_id, admin["id"]))
+
+            # Populate details with calculated values for normalized stage tables
+            review.details["score"] = total_score
+            review.details["interviewer_name"] = review.reviewer_name or admin.get("full_name_ar", "المقيم")
+            review.details["interview_date"] = datetime.now().strftime("%Y-%m-%d")
+            review.details["result"] = review.result
+
+        # ── Move attachment to admission folder ({trainee_nid}_{admin_nid}) ──
         if review.attachment_path:
             # Fetch Trainee NID
             cursor.execute("SELECT national_id FROM users WHERE id = %s", (review.trainee_id,))
@@ -166,9 +258,6 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
             table_map = {
                 2: "admission_stage_2_security",
                 3: "admission_stage_3_psychological",
-                # Stage 4 is handled separately below — exam scores come from
-                # trainee_exam_submissions (written by the exam portal) and are
-                # mirrored into admission_stage_4_exams for the admin audit trail.
                 4: None,
                 5: "admission_stage_5_interview1",
                 6: "admission_stage_6_interview2",
@@ -176,18 +265,57 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
             }
             target_table = table_map.get(review.stage_id)
             if target_table:
-                # Prepare keys and values from details
-                columns = ["trainee_id"] + list(review.details.keys())
-                placeholders = ["%s"] * len(columns)
-                values = [review.trainee_id] + list(review.details.values())
+                # Whitelisted columns per stage table
+                allowed_columns_map = {
+                    "admission_stage_2_security": {"result", "notes", "officer_name", "check_date", "clearance_level"},
+                    "admission_stage_3_psychological": {"result", "notes", "psychologist_name", "test_date", "score"},
+                    "admission_stage_5_interview1": {"comm_skills", "confidence", "appearance", "panel_members"},
+                    "admission_stage_6_interview2": {"comm_skills", "confidence", "appearance", "panel_members"},
+                    "admission_stage_7_final": {"result", "notes", "decision_maker", "decision_date", "final_score"}
+                }
+                allowed = allowed_columns_map.get(target_table, set())
+                safe_details = {k: v for k, v in review.details.items() if k in allowed}
+                
+                if safe_details:
+                    columns = ["trainee_id"] + list(safe_details.keys())
+                    placeholders = ["%s"] * len(columns)
+                    values = [review.trainee_id] + list(safe_details.values())
 
-                # Check for existing record to UPSERT
-                cursor.execute(f"SELECT id FROM {target_table} WHERE trainee_id = %s", (review.trainee_id,))
-                if cursor.fetchone():
-                    update_set = ", ".join([f"{col} = %s" for col in review.details.keys()])
-                    cursor.execute(f"UPDATE {target_table} SET {update_set} WHERE trainee_id = %s", list(review.details.values()) + [review.trainee_id])
-                else:
-                    cursor.execute(f"INSERT INTO {target_table} ({', '.join(columns)}) VALUES ({', '.join(placeholders)})", tuple(values))
+                    # Check for existing record to UPSERT
+                    cursor.execute(f"SELECT id FROM {target_table} WHERE trainee_id = %s", (review.trainee_id,))
+                    if cursor.fetchone():
+                        update_set = ", ".join([f"{col} = %s" for col in safe_details.keys()])
+                        cursor.execute(f"UPDATE {target_table} SET {update_set} WHERE trainee_id = %s", list(safe_details.values()) + [review.trainee_id])
+                    else:
+                        cursor.execute(f"INSERT INTO {target_table} ({', '.join(columns)}) VALUES ({', '.join(placeholders)})", tuple(values))
+
+        # Insert active reviews into stage_reviews to persist history
+        if review.result.lower() == "active" and review.stage_id in (5, 6):
+            cursor.execute(
+                "SELECT id FROM stage_reviews WHERE trainee_id = %s AND stage_id = %s AND reviewer_id = %s",
+                (review.trainee_id, review.stage_id, admin["id"])
+            )
+            existing_review = cursor.fetchone()
+            if existing_review:
+                cursor.execute("""
+                    UPDATE stage_reviews
+                    SET result = %s, reviewer_name = %s, notes = %s, attachment_path = %s, details = %s, created_at = NOW()
+                    WHERE id = %s
+                """, (review.result, review.reviewer_name, review.notes, review.attachment_path, json.dumps(review.details), existing_review[0]))
+            else:
+                cursor.execute("""
+                    INSERT INTO stage_reviews (trainee_id, reviewer_id, stage_id, result, reviewer_name, review_date, notes, attachment_path, details, created_at)
+                    VALUES (%s, %s, %s, %s, %s, CURDATE(), %s, %s, %s, NOW())
+                """, (
+                    review.trainee_id,
+                    admin["id"],
+                    review.stage_id,
+                    review.result,
+                    review.reviewer_name or admin.get("full_name_ar", "المقيم"),
+                    review.notes,
+                    review.attachment_path,
+                    json.dumps(review.details)
+                ))
 
         # ── Stage 4: Sync exam scores into admission_stage_4_exams ──
         # Stage 4 exam results are written by the exam portal into
@@ -381,6 +509,9 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_adm
         
         db.commit()
         return {"message": "Review submitted successfully"}
+    except HTTPException as e:
+        db.rollback()
+        raise e
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))

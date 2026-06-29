@@ -26,9 +26,22 @@ sql_file = Path(__file__).parent / "create_tables.sql"
 sql = sql_file.read_text(encoding="utf-8")
 
 cursor = conn.cursor()
-for statement in sql.split(";"):
-    stmt = statement.strip()
-    if stmt and not stmt.startswith("--"):
+statements = []
+current_stmt = []
+for line in sql.splitlines():
+    # Strip inline comments
+    clean_line = line.split("--")[0].strip()
+    if clean_line:
+        current_stmt.append(clean_line)
+        if clean_line.endswith(";"):
+            statements.append(" ".join(current_stmt))
+            current_stmt = []
+if current_stmt:
+    statements.append(" ".join(current_stmt))
+
+for stmt in statements:
+    stmt = stmt.strip()
+    if stmt:
         try:
             cursor.execute(stmt)
             conn.commit()

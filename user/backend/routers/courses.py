@@ -15,7 +15,9 @@ async def get_courses():
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT * FROM courses")
+        # Only show courses that have been published by the Editor (Ongoing) or Completed
+        # We explicitly exclude 'Upcoming' (draft) courses so trainees don't apply to unfinished setups.
+        cursor.execute("SELECT * FROM courses WHERE status IN ('Ongoing', 'Completed') AND is_public = 1")
         return cursor.fetchall()
     finally:
         cursor.close()

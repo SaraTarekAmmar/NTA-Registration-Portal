@@ -538,6 +538,9 @@ async def apply_to_course(data: CourseApplication, current_user: dict = Depends(
         
         if course[0] == 'Completed':
             raise HTTPException(status_code=400, detail="عذراً، هذه الدورة انتهت ولا يمكن التقديم لها")
+            
+        if course[0] == 'Upcoming':
+            raise HTTPException(status_code=400, detail="عذراً، هذه الدورة لا تزال في مرحلة الإعداد ولم تفتح للتقديم بعد")
 
         # Check if already applied
         cursor.execute("SELECT id FROM applications WHERE user_id = %s AND course_id = %s", (current_user["id"], data.course_id))

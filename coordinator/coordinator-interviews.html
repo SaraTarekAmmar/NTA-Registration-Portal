@@ -17,16 +17,121 @@
     <main class="coordinator-main">
       <header class="coord-page-header"><h1 class="coord-page-header__title">طابور المقابلات</h1><p class="coord-page-header__sub">متابعة المتقدمين الموجودين في مراحل المقابلة الأولى والثانية.</p></header>
       <div class="coord-kpi-row" id="interviewKpis"><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div></div>
-      <section class="coord-table-wrap"><table class="coord-table"><thead><tr><th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th></tr></thead><tbody id="queueBody"><tr><td colspan="6">جاري التحميل...</td></tr></tbody></table></section>
+      <section class="coord-table-wrap"><table class="coord-table"><thead><tr><th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>المقيم المعين</th><th>آخر مراجعة</th><th>العمليات</th></tr></thead><tbody id="queueBody"><tr><td colspan="8">جاري التحميل...</td></tr></tbody></table></section>
     </main>
     <script src="js/coordinator-layout.js"></script>
     <script>
       function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
       function stageLabel(id){return Number(id)===6?'المقابلة الثانية':'المقابلة الأولى';}
       function renderKPIs(d){var items=[{val:d.waiting_interviews||0,lbl:'في طابور المقابلات',cls:'coord-kpi--blue'},{val:d.missing_evaluations||0,lbl:'تقييمات ناقصة',cls:'coord-kpi--yellow'},{val:d.completed_today||0,lbl:'مكتملة اليوم',cls:'coord-kpi--green'},{val:d.rejected_today||0,lbl:'مرفوضة اليوم',cls:'coord-kpi--red'}];document.getElementById('interviewKpis').innerHTML=items.map(function(k){return '<div class="coord-kpi '+k.cls+'"><div class="coord-kpi__body"><div class="coord-kpi__val">'+k.val+'</div><div class="coord-kpi__lbl">'+k.lbl+'</div></div></div>';}).join('');}
-      function renderQueue(rows){var body=document.getElementById('queueBody');if(!rows.length){body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';return;}body.innerHTML=rows.map(function(r){var done=!!r.review_id;return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td></tr>';}).join('');}
+      
+      var committeeMembers = [];
+      var userRole = window.coordinatorAuth.payload.role;
+      var userId = Number(window.coordinatorAuth.payload.sub);
+
+      function renderQueue(rows){
+        var body=document.getElementById('queueBody');
+        if(!rows.length){
+          body.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';
+          return;
+        }
+        body.innerHTML=rows.map(function(r){
+          var done=!!r.review_id;
+          
+          // Render dropdown or text for reviewer
+          var reviewerHtml = '';
+          if (userRole === "coordinator") {
+            var optionsHtml = '<option value="">-- غير معين --</option>';
+            committeeMembers.forEach(function(m) {
+              var selected = r.assigned_reviewer_id === m.id ? 'selected' : '';
+              optionsHtml += '<option value="'+m.id+'" '+selected+'>'+esc(m.full_name_ar)+'</option>';
+            });
+            reviewerHtml = '<select class="coord-select" data-trainee="'+r.id+'" data-stage="'+r.stage_id+'" data-course="'+(r.course_id || '')+'" data-prev="'+(r.assigned_reviewer_id || '')+'" onchange="handleAssignChange(this)">'+optionsHtml+'</select>';
+          } else {
+            reviewerHtml = esc(r.assigned_reviewer_name || 'غير معين');
+          }
+
+          // Render actions
+          var actionHtml = '—';
+          if (userRole === "committee_member" && !done && r.assigned_reviewer_id === userId) {
+            actionHtml = '<a href="http://localhost:7776/stage-review.html?id='+r.id+'" target="_blank" class="coord-badge coord-badge--ok" style="text-decoration:none;cursor:pointer;">بدء التقييم</a>';
+          }
+
+          return '<tr>' +
+            '<td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td>' +
+            '<td>'+esc(r.email)+'</td>' +
+            '<td>'+esc(r.course_title_ar||r.course_title||'—')+'</td>' +
+            '<td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td>' +
+            '<td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td>' +
+            '<td>'+reviewerHtml+'</td>' +
+            '<td>'+esc(r.reviewed_at||'—')+'</td>' +
+            '<td>'+actionHtml+'</td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      window.handleAssignChange = function(select) {
+        var traineeId = select.getAttribute('data-trainee');
+        var stageId = select.getAttribute('data-stage');
+        var courseId = select.getAttribute('data-course');
+        var prevReviewerId = select.getAttribute('data-prev');
+        var nextReviewerId = select.value;
+
+        if (!nextReviewerId && prevReviewerId) {
+          // Unassign
+          if (confirm('هل تريد إلغاء تعيين هذا المقيم؟')) {
+            window.coordinatorAuth.fetch('/api/coordinator/interviews/assign/' + traineeId + '/' + stageId + '/' + prevReviewerId, {
+              method: 'DELETE'
+            }).then(function(res) {
+              if (res.ok) {
+                select.setAttribute('data-prev', '');
+                loadQueue();
+              } else {
+                alert('فشل إلغاء التعيين');
+                select.value = prevReviewerId;
+              }
+            });
+          } else {
+            select.value = prevReviewerId;
+          }
+        } else if (nextReviewerId) {
+          // Assign
+          window.coordinatorAuth.fetch('/api/coordinator/interviews/assign', {
+            method: 'POST',
+            body: JSON.stringify({
+              trainee_id: Number(traineeId),
+              stage_id: Number(stageId),
+              reviewer_id: Number(nextReviewerId),
+              course_id: courseId ? Number(courseId) : null
+            })
+          }).then(function(res) {
+            if (res.ok) {
+              select.setAttribute('data-prev', nextReviewerId);
+              loadQueue();
+            } else {
+              alert('فشل تعيين المقيم');
+              select.value = prevReviewerId;
+            }
+          });
+        }
+      };
+
+      function loadQueue() {
+        window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="8">فشل تحميل الطابور</td></tr>';});
+      }
+
       window.coordinatorAuth.fetch('/api/coordinator/interviews/summary').then(function(r){return r.json();}).then(renderKPIs).catch(function(){document.getElementById('interviewKpis').innerHTML='<div class="coord-state">فشل تحميل الإحصائيات</div>';});
-      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="6">فشل تحميل الطابور</td></tr>';});
+
+      if (userRole === "coordinator") {
+        window.coordinatorAuth.fetch('/api/coordinator/interviews/committee-members').then(function(r){return r.json();}).then(function(data){
+          committeeMembers = data;
+          loadQueue();
+        }).catch(function() {
+          loadQueue();
+        });
+      } else {
+        loadQueue();
+      }
     </script>
   </body>
 </html>

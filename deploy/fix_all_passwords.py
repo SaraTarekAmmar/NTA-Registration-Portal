@@ -59,3 +59,8 @@ if __name__ == "__main__":
     # Fix Trainee
     print("\nFixing Trainee...")
     fix_user_password("29808081234567", "NTA@Trainee2026")
+
+    # Fix Committee Members
+    print("\nFixing Committee Members...")
+    fix_user_password("29402021234567", "NTA@Member2026")
+    fix_user_password("29403031234567", "NTA@Member2026")

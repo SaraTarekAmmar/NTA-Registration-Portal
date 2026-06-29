@@ -65,6 +65,11 @@ def get_admission_manager_user(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - لمدير القبول فقط")
     return current_user
 
+def get_reviewer_user(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ("admin", "admission_manager", "committee_member"):
+        raise HTTPException(status_code=403, detail="صلاحيات غير كافية - للمقيمين والمدراء فقط")
+    return current_user
+
 MAX_FAILED_ATTEMPTS = 5
 BLOCK_WINDOW_MINUTES = 15
 
@@ -101,9 +106,9 @@ async def login(req: Request, request: LoginRequest):
         if not check_rate_limit(cursor, client_ip, request.email):
             raise HTTPException(status_code=429, detail=f"محاولات فاشلة كثيرة. تم حظر الدخول مؤقتاً لمدة {BLOCK_WINDOW_MINUTES} دقيقة.")
 
-        # Check user exists by email and role
-        query = "SELECT id, full_name_ar, email, role, national_id, password_hash FROM users WHERE email = %s AND role = %s"
-        cursor.execute(query, (request.email, request.role))
+        # Check user exists by email and allow admission_manager, committee_member, or admin
+        query = "SELECT id, full_name_ar, email, role, national_id, password_hash FROM users WHERE email = %s AND role IN ('admission_manager', 'committee_member', 'admin')"
+        cursor.execute(query, (request.email,))
         user = cursor.fetchone()
         
         if not user:

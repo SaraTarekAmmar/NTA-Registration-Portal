@@ -68,6 +68,34 @@ REPORT_TARGETS = {
                 (SELECT ROUND(AVG(qa.score), 2) FROM quiz_attempts qa WHERE qa.course_id = c.id) as "Avg Course Quiz Score"
             FROM courses c
         """
+    },
+    "interview_evaluations": {
+        "label": "Trainee Interview Evaluations",
+        "query": """
+            SELECT 
+                u.full_name_ar AS "Trainee Name",
+                u.national_id AS "Trainee National ID",
+                u.email AS "Trainee Email",
+                c.title_ar AS "Course Title",
+                CASE ais.stage_id 
+                    WHEN 5 THEN 'المقابلة الأولى (Stage 5)'
+                    WHEN 6 THEN 'المقابلة الثانية (Stage 6)'
+                    ELSE CONCAT('Stage ', ais.stage_id)
+                END AS "Interview Stage",
+                ais.committee_member_name AS "Reviewer Name",
+                ais.total_score AS "Total Score",
+                ais.total_max AS "Max Score",
+                ais.recommendation AS "Recommendation",
+                ais.notes AS "Notes",
+                JSON_EXTRACT(ais.criteria_json, '$.comm_skills') AS "Communication Skills (1-5)",
+                JSON_EXTRACT(ais.criteria_json, '$.confidence') AS "Self-Confidence (1-5)",
+                JSON_EXTRACT(ais.criteria_json, '$.appearance') AS "Appearance (1-5)",
+                ais.created_at AS "Evaluation Date"
+            FROM admission_interview_scores ais
+            JOIN users u ON u.id = ais.trainee_id
+            LEFT JOIN courses c ON c.id = ais.course_id
+            ORDER BY ais.created_at DESC
+        """
     }
 }
 

@@ -75,6 +75,11 @@ def get_admin_user(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمشرفين فقط")
     return current_user
 
+def get_reviewer_user(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ("admin", "superadmin", "admission_manager", "committee_member"):
+        raise HTTPException(status_code=403, detail="صلاحيات غير كافية - للمقيمين والمدراء فقط")
+    return current_user
+
 def get_staff_user(current_user: dict = Depends(get_current_user)):
     if current_user["role"] not in ["admin", "superadmin", "editor"]:
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمشرفين والمحررين فقط")

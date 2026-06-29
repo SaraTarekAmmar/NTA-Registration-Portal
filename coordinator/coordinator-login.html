@@ -208,7 +208,7 @@
           if (t) {
             try {
               var p = JSON.parse(atob(t.split(".")[1]));
-              if (p.role === "coordinator" && p.exp > Date.now() / 1000) {
+              if ((p.role === "coordinator" || p.role === "committee_member") && p.exp > Date.now() / 1000) {
                 location.replace("coordinator-dashboard.html");
               }
             } catch(e) {}
@@ -275,7 +275,7 @@
               return res.json();
             })
             .then(function (data) {
-              if (!data.access_token || data.role !== "coordinator") {
+              if (!data.access_token || (data.role !== "coordinator" && data.role !== "committee_member")) {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المنسق.");
               }
               localStorage.setItem(TOKEN_KEY, data.access_token);

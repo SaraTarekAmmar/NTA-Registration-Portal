@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Literal
 from datetime import date, datetime
 
 
@@ -15,8 +15,7 @@ class PermissionCreate(PermissionBase):
 
 
 class PermissionUpdate(BaseModel):
-    status: str
-
+    status: Literal["accepted", "rejected"]
 
 class Permission(PermissionBase):
     id: int
