@@ -22,7 +22,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+            const { useState, useEffect, useRef } = React;
 
         const Icon = ({ name, size = 20, className = "" }) => {
             const iconRef = useRef(null);
@@ -115,8 +115,8 @@
                                     <Icon name="search" size={28} />
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-black text-[var(--text-main)] tracking-tight">Deep-Dive Diagnostic</h3>
-                                    <p className="text-xs text-[var(--text-muted)] mt-1 uppercase tracking-widest font-bold">Trace ID: <span className="text-[var(--status-indigo)] select-all">{log.trace_id || 'N/A'}</span></p>
+                                    <h3 className="text-2xl font-black text-[var(--text-main)] tracking-tight">{t('deepDiveDiagnostic')}</h3>
+                                    <p className="text-xs text-[var(--text-muted)] mt-1 uppercase tracking-widest font-bold">{t('traceId')}: <span className="text-[var(--status-indigo)] select-all">{log.trace_id || (lang === 'ar' ? '—' : 'N/A')}</span></p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-3 hover:bg-[var(--hover-bg)] rounded-full transition-colors text-[var(--text-muted)] hover:text-[var(--text-main)]">
@@ -128,27 +128,27 @@
                             <div className="space-y-8">
                                 <section>
                                     <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                        <Icon name="file-text" size={12} className="text-[var(--status-indigo)]" /> Event Summary
+                                        <Icon name="file-text" size={12} className="text-[var(--status-indigo)]" /> {t('eventSummary')}
                                     </h4>
                                     <div className="p-6 panel-glass rounded-2xl space-y-4">
                                         <div className="flex justify-between">
-                                            <span className="text-[var(--text-muted)]">Component</span>
+                                            <span className="text-[var(--text-muted)]">{t('component')}</span>
                                             <span className="text-[var(--text-main)] font-bold">{log.component}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-[var(--text-muted)]">Event Type</span>
+                                            <span className="text-[var(--text-muted)]">{t('eventType')}</span>
                                             <span className="text-[var(--status-indigo)] font-bold">{log.event_type}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-[var(--text-muted)]">Request Path</span>
+                                            <span className="text-[var(--text-muted)]">{t('requestPath')}</span>
                                             <span className="text-[var(--text-main)] font-mono">{log.request_path || 'Internal'}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-[var(--text-muted)]">Status Code</span>
+                                            <span className="text-[var(--text-muted)]">{t('statusCode')}</span>
                                             <span className={`font-bold ${log.status_code >= 400 ? 'text-[var(--status-rose)]' : 'text-emerald-500'}`}>{log.status_code || '---'}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-[var(--text-muted)]">Latency</span>
+                                            <span className="text-[var(--text-muted)]">{t('latency')}</span>
                                             <span className="text-[var(--text-main)] font-bold">{log.duration_ms ? `${log.duration_ms}ms` : '---'}</span>
                                         </div>
                                     </div>
@@ -157,7 +157,7 @@
                                 {log.payload_json && (
                                     <section>
                                         <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                            <Icon name="box" size={12} className="text-purple-400" /> Request Payload
+                                            <Icon name="box" size={12} className="text-purple-400" /> {t('requestPayload')}
                                         </h4>
                                         <pre className="p-6 panel-deep rounded-2xl text-[11px] font-mono text-[var(--text-muted)] overflow-x-auto">
                                             {JSON.stringify(log.payload_json, null, 2)}
@@ -168,7 +168,7 @@
                                 {log.details && (
                                     <section>
                                         <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                            <Icon name="database" size={12} className="text-[var(--status-emerald)]" /> Metadata / LLM Details
+                                            <Icon name="database" size={12} className="text-[var(--status-emerald)]" /> {t('metadataDetails')}
                                         </h4>
                                         <pre className="p-6 panel-deep rounded-2xl text-[11px] font-mono text-[var(--status-emerald)]/70 overflow-x-auto">
                                             {JSON.stringify(log.details, null, 2)}
@@ -180,7 +180,7 @@
                             <div className="space-y-8">
                                 <section>
                                     <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                        <Icon name="code" size={12} className="text-[var(--status-rose)]" /> Python Traceback
+                                        <Icon name="code" size={12} className="text-[var(--status-rose)]" /> {t('pythonTraceback')}
                                     </h4>
                                     <div className="p-6 bg-rose-500/5 border border-rose-500/10 rounded-2xl max-h-[400px] overflow-y-auto">
                                         {log.traceback ? (
@@ -190,7 +190,7 @@
                                         ) : (
                                             <div className="text-center py-10 text-[var(--text-muted)]">
                                                 <Icon name="shield-check" size={24} className="mx-auto mb-2 opacity-20" />
-                                                <p className="text-[10px] uppercase font-bold tracking-widest">No Exception Trace Captured</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest">{t('noExceptionTrace')}</p>
                                             </div>
                                         )}
                                     </div>
@@ -198,11 +198,11 @@
 
                                 <section>
                                     <h4 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                        <Icon name="git-branch" size={12} className="text-[var(--status-amber)]" /> Distributed Execution Timeline
+                                        <Icon name="git-branch" size={12} className="text-[var(--status-amber)]" /> {t('distributedExecutionTimeline')}
                                     </h4>
                                     <div className="space-y-3">
                                         {isLoadingTrace ? (
-                                            <div className="text-center py-10 animate-pulse text-[var(--text-muted)] uppercase text-[10px] font-bold">Assembling Trace Timeline...</div>
+                                            <div className="text-center py-10 animate-pulse text-[var(--text-muted)] uppercase text-[10px] font-bold">{t('assemblingTraceTimeline')}</div>
                                         ) : traceLogs.length > 1 ? (
                                             traceLogs.map((t, idx) => (
                                                 <div key={t.id} className="flex gap-4 items-start relative pb-6 group">
@@ -222,7 +222,7 @@
                                                 </div>
                                             ))
                                         ) : (
-                                            <p className="text-center py-6 text-[var(--text-muted)] text-[10px] uppercase font-bold tracking-widest italic">Single-point Execution Trace</p>
+                                            <p className="text-center py-6 text-[var(--text-muted)] text-[10px] uppercase font-bold tracking-widest italic">{t('singlePointTrace')}</p>
                                         )}
                                     </div>
                                 </section>
@@ -230,8 +230,8 @@
                         </div>
 
                         <div className="p-8 border-t border-[var(--card-border)] bg-[var(--hover-bg)] flex justify-end gap-4">
-                            <button onClick={onClose} className="px-8 py-3 rounded-2xl bg-[var(--hover-bg)] hover:panel-glass text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest transition-all">Close Diagnostic</button>
-                            <button onClick={() => { window.print(); }} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all">Export Report</button>
+                            <button onClick={onClose} className="px-8 py-3 rounded-2xl bg-[var(--hover-bg)] hover:panel-glass text-[var(--text-muted)] font-bold text-xs uppercase tracking-widest transition-all">{t('closeDiagnostic')}</button>
+                            <button onClick={() => { window.print(); }} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all">{t('exportReport')}</button>
                         </div>
                     </div>
                 </div>
@@ -244,10 +244,11 @@
             const [loginError, setLoginError] = useState('');
             const [activeTab, setActiveTab] = useState('system-log-dashboard');
             const [token, setToken] = useState(localStorage.getItem('superadmin_token'));
+            const initialLang = localStorage.getItem('sa_lang') || 'ar';
 
             const [logs, setLogs] = useState([
-                { id: 1, time: new Date().toLocaleTimeString(), type: 'system', msg: 'Core AI Proxy Host Initialized.' },
-                { id: 2, time: new Date().toLocaleTimeString(), type: 'system', msg: 'Authenticated Secure Tunnel: Active.' }
+                { id: 1, time: new Date().toLocaleTimeString(), type: 'system', msg: initialLang === 'ar' ? 'تم تشغيل مضيف بروكسي الذكاء الاصطناعي الأساسي.' : 'Core AI Proxy Host Initialized.' },
+                { id: 2, time: new Date().toLocaleTimeString(), type: 'system', msg: initialLang === 'ar' ? 'القناة الآمنة للمصادقة: نشطة.' : 'Authenticated Secure Tunnel: Active.' }
             ]);
 
             const [wireLogs, setWireLogs] = useState([]);
@@ -262,7 +263,7 @@
                 avg_latency: 420,
                 ocr_pct: 0
             });
-            const [batchStatus, setBatchStatus] = useState({ is_running: false, total: 0, current: 0, last_message: 'Idle' });
+            const [batchStatus, setBatchStatus] = useState({ is_running: false, total: 0, current: 0, last_message: initialLang === 'ar' ? 'خامل' : 'Idle' });
             const [availableFiles, setAvailableFiles] = useState([]);
             const [theme, setTheme] = useState(() => {
                 const stored = localStorage.getItem('nta-theme');
@@ -270,7 +271,7 @@
                 const legacy = localStorage.getItem('sa_theme');
                 return legacy === 'light' || legacy === 'dark' ? legacy : 'dark';
             });
-            const [lang, setLang] = useState(localStorage.getItem('sa_lang') || 'ar');
+            const [lang, setLang] = useState(initialLang);
 
             useEffect(() => {
                 document.documentElement.setAttribute('data-theme', theme);
@@ -329,14 +330,36 @@
                     startBatch: "Start Batch Verification Process",
                     quizTitle: "vLLM Quiz Generator",
                     quizDesc: "Forge course-grounded quizzes directly from physical lecture files.",
+                    deepDiveDiagnostic: "Deep-Dive Diagnostic",
+                    traceId: "Trace ID",
+                    eventSummary: "Event Summary",
+                    component: "Component",
+                    eventType: "Event Type",
+                    requestPath: "Request Path",
+                    statusCode: "Status Code",
+                    latency: "Latency",
+                    requestPayload: "Request Payload",
+                    metadataDetails: "Metadata / LLM Details",
+                    pythonTraceback: "Python Traceback",
+                    noExceptionTrace: "No Exception Trace Captured",
+                    distributedExecutionTimeline: "Distributed Execution Timeline",
+                    assemblingTraceTimeline: "Assembling Trace Timeline...",
+                    singlePointTrace: "Single-point Execution Trace",
+                    closeDiagnostic: "Close Diagnostic",
+                    exportReport: "Export Report",
+                    trainees: "Trainees",
+                    activeScope: "Active",
+                    allTime: "All Time",
                     perfectBalance: "Perfect Balance!",
-                    target20: "Target: Exactly 20 Questions",
+                    target20: "Target: Exactly 20 Questions Total",
                     quizTargetNote: "Total questions must be exactly 20 to proceed.",
                     sourceLecture: "Source Lecture Content",
                     mcq: "Multiple Choice",
                     written: "Written Response",
                     tf: "True / False",
+                    mixedSelects: "Mixed (AI Selects)",
                     quantity: "Quantity",
+                    quantityRange: "Quantity (1-20)",
                     difficulty: "Group Difficulty",
                     easy: "Conceptual (Easy)",
                     moderate: "Moderate",
@@ -353,6 +376,28 @@
                     systemFeedback: "System Feedback",
                     monitoringHub: "Monitoring AI Hub activity...",
                     noActiveSessions: "No active batch sessions recorded in this session.",
+                    sourceSession: "Source Session",
+                    questionType: "Question Type",
+                    selectMaterial: "Select Material",
+                    noSpecificMaterials: "No specific materials - using dummy grounding...",
+                    noValidFilePath: "No valid file path found...",
+                    materialParseError: "Material parse error",
+                    addAnotherContentSource: "Add Another Content Source",
+                    dispatchingSequentialBatch: "Dispatching Sequential Batch...",
+                    dispatchGenerationBatch: "Dispatch Generation Batch",
+                    selectCourseAndTarget: "Select Course & Target Session",
+                    needMoreQuestions: "Need more questions",
+                    needFewerQuestions: "Need fewer questions",
+                    selectActiveQuiz: "Select Active Quiz",
+                    selectQuizToManage: "--- Select Quiz to Manage ---",
+                    activeExceptions: "Active Exceptions",
+                    traineesExtended: "Trainees Extended",
+                    trainee: "Trainee",
+                    selectTrainee: "--- Select Trainee ---",
+                    newDeadline: "New Deadline",
+                    grantAccess: "Grant Access",
+                    extendedUntil: "Extended Until",
+                    reason: "Reason",
                     matrixTitle: "Trainer & Class Matrix",
                     matrixDesc: "Optimize trainee distribution using multi-factor AI matching algorithms.",
                     targetCourse: "Target Course for Optimization",
@@ -497,6 +542,26 @@
                     startBatch: "بدء عملية التحقق الجماعي",
                     quizTitle: "مولد الاختبارات vLLM",
                     quizDesc: "إنشاء اختبارات مرتبطة بالمحتوى مباشرة من ملفات المحاضرات.",
+                    deepDiveDiagnostic: "تشخيص متعمق",
+                    traceId: "معرّف التتبع",
+                    eventSummary: "ملخص الحدث",
+                    component: "المكوّن",
+                    eventType: "نوع الحدث",
+                    requestPath: "مسار الطلب",
+                    statusCode: "رمز الحالة",
+                    latency: "زمن الاستجابة",
+                    requestPayload: "حمولة الطلب",
+                    metadataDetails: "البيانات الوصفية / تفاصيل النموذج",
+                    pythonTraceback: "التتبع البرمجي",
+                    noExceptionTrace: "لم يتم التقاط أي تتبع استثنائي",
+                    distributedExecutionTimeline: "الخط الزمني للتنفيذ الموزع",
+                    assemblingTraceTimeline: "جارٍ تجميع الخط الزمني للتتبع...",
+                    singlePointTrace: "تتبع نقطة واحدة",
+                    closeDiagnostic: "إغلاق التشخيص",
+                    exportReport: "تصدير التقرير",
+                    trainees: "متدربون",
+                    activeScope: "نشط",
+                    allTime: "كل الأوقات",
                     perfectBalance: "توازن مثالي!",
                     target20: "الهدف: 20 سؤالاً بالضبط",
                     quizTargetNote: "يجب أن يكون إجمالي الأسئلة 20 سؤالاً للمتابعة.",
@@ -504,7 +569,9 @@
                     mcq: "اختيار من متعدد",
                     written: "إجابة مكتوبة",
                     tf: "صح / خطأ",
+                    mixedSelects: "مختلط (يختاره الذكاء الاصطناعي)",
                     quantity: "الكمية",
+                    quantityRange: "الكمية (1-20)",
                     difficulty: "صعوبة المجموعة",
                     easy: "مفاهيمي (سهل)",
                     moderate: "متوسط",
@@ -521,6 +588,28 @@
                     systemFeedback: "ملاحظات النظام",
                     monitoringHub: "جاري مراقبة نشاط مركز الذكاء الاصطناعي...",
                     noActiveSessions: "لا توجد جلسات نشطة مسجلة في هذه الجلسة.",
+                    sourceSession: "جلسة المصدر",
+                    questionType: "نوع السؤال",
+                    selectMaterial: "اختيار المادة",
+                    noSpecificMaterials: "لا توجد مواد محددة - سيتم استخدام مادة افتراضية...",
+                    noValidFilePath: "لم يتم العثور على مسار ملف صالح...",
+                    materialParseError: "خطأ في تحليل المادة",
+                    addAnotherContentSource: "إضافة مصدر محتوى آخر",
+                    dispatchingSequentialBatch: "جارٍ إرسال الدفعة المتسلسلة...",
+                    dispatchGenerationBatch: "إرسال دفعة الإنشاء",
+                    selectCourseAndTarget: "اختر الدورة والدفعة المستهدفة",
+                    needMoreQuestions: "بحاجة لمزيد من الأسئلة",
+                    needFewerQuestions: "بحاجة لعدد أقل من الأسئلة",
+                    selectActiveQuiz: "اختيار اختبار نشط",
+                    selectQuizToManage: "--- اختر الاختبار المراد إدارته ---",
+                    activeExceptions: "الاستثناءات النشطة",
+                    traineesExtended: "تم تمديد الوصول لـ",
+                    trainee: "المتدرب",
+                    selectTrainee: "--- اختر متدربًا ---",
+                    newDeadline: "الموعد الجديد",
+                    grantAccess: "منح الوصول",
+                    extendedUntil: "ممدد حتى",
+                    reason: "السبب",
                     matrixTitle: "مصفوفة المدربين والفصول",
                     matrixDesc: "تحسين توزيع المتدربين باستخدام خوارزميات مطابقة الذكاء الاصطناعي متعددة العوامل.",
                     targetCourse: "الدورة التدريبية المستهدفة للتحسين",
@@ -842,7 +931,7 @@
                     // Helper to handle unauthorized responses
                     const handleResp = async (resp) => {
                         if (resp.status === 401) {
-                            addLog('Session expired. Redirecting to login...', 'error');
+                            addLog(lang === 'ar' ? 'انتهت الجلسة. جارٍ التحويل إلى صفحة الدخول...' : 'Session expired. Redirecting to login...', 'error');
                             setIsLoggedIn(false);
                             setToken(null);
                             localStorage.removeItem('superadmin_token');
@@ -873,9 +962,9 @@
                         setServiceHealth(healthData);
                         const offlineServices = Object.entries(healthData).filter(([_, status]) => status !== 'online');
                         if (offlineServices.length > 0) {
-                            addLog(`Service Alert: ${offlineServices.length} AI nodes are offline.`, 'error');
+                            addLog(lang === 'ar' ? `تنبيه خدمة: عدد ${offlineServices.length} من عقد الذكاء الاصطناعي غير متاحة.` : `Service Alert: ${offlineServices.length} AI nodes are offline.`, 'error');
                         } else {
-                            addLog('System Health: All AI microservices are responsive.', 'success');
+                            addLog(lang === 'ar' ? 'حالة النظام: جميع خدمات الذكاء الاصطناعي تعمل بشكل طبيعي.' : 'System Health: All AI microservices are responsive.', 'success');
                         }
                     }
 
@@ -919,10 +1008,10 @@
                     const reportTargetsData = await handleResp(reportTargetsResp);
                     if (reportTargetsData) setReportTargets(reportTargetsData);
 
-                    addLog('Database Sync: Current trainee and OCR metrics synchronized.', 'system');
+                    addLog(lang === 'ar' ? 'تمت مزامنة بيانات المتدربين الحاليين ومؤشرات OCR بنجاح.' : 'Database Sync: Current trainee and OCR metrics synchronized.', 'system');
                 } catch (err) {
                     console.error("Failed to fetch dashboard data", err);
-                    addLog('Sync Error: Failed to reach backend service registry.', 'error');
+                    addLog(lang === 'ar' ? 'خطأ في المزامنة: تعذر الوصول إلى سجل خدمات الخلفية.' : 'Sync Error: Failed to reach backend service registry.', 'error');
                 }
             };
 
@@ -936,7 +1025,7 @@
                         setManagementUsers(data);
                     } else {
                         const err = await resp.json().catch(() => ({ detail: 'Unknown error' }));
-                        addLog(`Failed to fetch management users: ${err.detail}`, 'error');
+                        addLog(lang === 'ar' ? `تعذر جلب مستخدمي الإدارة: ${err.detail}` : `Failed to fetch management users: ${err.detail}`, 'error');
                     }
                 } catch (err) {
                     console.error("Failed to fetch management users", err);
@@ -944,21 +1033,21 @@
             };
 
             const handleDeleteManagementUser = async (userId) => {
-                if (!confirm('Are you sure you want to delete this user? They will lose all access immediately.')) return;
+                if (!confirm(lang === 'ar' ? 'هل تريد حذف هذا المستخدم؟ سيُفقد الوصول فورًا.' : 'Are you sure you want to delete this user? They will lose all access immediately.')) return;
                 try {
                     const resp = await fetch(`/api/management/users/${userId}`, {
                         method: 'DELETE',
                         headers: { 'Authorization': `Bearer ${localStorage.getItem('superadmin_token')}` }
                     });
                     if (resp.ok) {
-                        addLog('Administrative user removed successfully.', 'success');
+                        addLog(lang === 'ar' ? 'تم حذف المستخدم الإداري بنجاح.' : 'Administrative user removed successfully.', 'success');
                         fetchManagementUsers();
                     } else {
                         const err = await resp.json();
-                        addLog(`Failed to delete user: ${err.detail || 'Unknown error'}`, 'error');
+                        addLog(lang === 'ar' ? `فشل حذف المستخدم: ${err.detail || 'خطأ غير معروف'}` : `Failed to delete user: ${err.detail || 'Unknown error'}`, 'error');
                     }
                 } catch (err) {
-                    addLog('Connection error during user deletion.', 'error');
+                    addLog(lang === 'ar' ? 'خطأ في الاتصال أثناء حذف المستخدم.' : 'Connection error during user deletion.', 'error');
                 }
             };
 
@@ -1011,14 +1100,14 @@
                         localStorage.setItem('superadmin_token', data.access_token);
                         setToken(data.access_token);
                         setIsLoggedIn(true);
-                        addLog('Super Admin session established with secure JWT.', 'success');
+                        addLog(lang === 'ar' ? 'تم إنشاء جلسة المسؤول العام بنجاح باستخدام JWT آمن.' : 'Super Admin session established with secure JWT.', 'success');
                         fetchDashboardData();
                     } else {
                         const errData = await response.json().catch(() => ({ detail: 'Authentication failed' }));
                         setLoginError(errData.detail || 'Invalid email or password');
                     }
                 } catch (err) {
-                    setLoginError('Console connection error. Verification failed.');
+                    setLoginError(lang === 'ar' ? 'خطأ في الاتصال بلوحة التحكم. فشل التحقق.' : 'Console connection error. Verification failed.');
                 }
             };
 
@@ -1081,7 +1170,7 @@
                     }, ...prev]);
 
                     if (response.ok) {
-                        addLog(`SUCCESS: ${serviceName} downstream response received.`, 'success');
+                        addLog(lang === 'ar' ? `نجاح: تم استلام الاستجابة النهائية من ${serviceName}.` : `SUCCESS: ${serviceName} downstream response received.`, 'success');
                         setIsProcessing(null);
                         return true;
                     } else {
@@ -1090,7 +1179,7 @@
                         return false;
                     }
                 } catch (err) {
-                    addLog(`CRITICAL: Proxy tunnel timeout or fetch error.`, 'webhook');
+                    addLog(lang === 'ar' ? 'حرج: انتهت مهلة نفق البروكسي أو حدث خطأ في الجلب.' : 'CRITICAL: Proxy tunnel timeout or fetch error.', 'webhook');
                     setIsProcessing(null);
                     return false;
                 }
@@ -1104,14 +1193,14 @@
                 setIsProcessing('Quiz Engine');
                 setGeneratedQuiz(null);
 
-                addLog(`Initiating Sequential Generation Batch: ${gid}`, 'system');
+                addLog(lang === 'ar' ? `بدء دفعة توليد متسلسلة: ${gid}` : `Initiating Sequential Generation Batch: ${gid}`, 'system');
                 let allQuestions = [];
 
                 try {
                     for (let i = 0; i < quizEntries.length; i++) {
                         setActiveEntryIdx(i);
                         const entry = quizEntries[i];
-                        addLog(`Processing Entry ${i + 1} of ${quizEntries.length}...`, 'dispatch');
+                        addLog(lang === 'ar' ? `جارٍ معالجة المدخل ${i + 1} من ${quizEntries.length}...` : `Processing Entry ${i + 1} of ${quizEntries.length}...`, 'dispatch');
 
                         const payload = {
                             course_id: selectedCourse,
@@ -1140,11 +1229,11 @@
                         const responseData = await response.json();
                         if (response.ok) {
                             allQuestions = [...allQuestions, ...(responseData.questions || [])];
-                            addLog(`Entry ${i + 1} SUCCESS.`, 'success');
+                            addLog(lang === 'ar' ? `تمت معالجة المدخل ${i + 1} بنجاح.` : `Entry ${i + 1} SUCCESS.`, 'success');
                         } else {
                             const errorDetail = responseData.detail || "Unknown AI Service Error";
-                            addLog(`CRITICAL: Sequence aborted at entry ${i + 1}. Error: ${errorDetail}`, 'error');
-                            alert(`AI Dispatch Error at entry ${i + 1}: ${errorDetail}`);
+                            addLog(lang === 'ar' ? `حرج: توقفت السلسلة عند المدخل ${i + 1}. الخطأ: ${errorDetail}` : `CRITICAL: Sequence aborted at entry ${i + 1}. Error: ${errorDetail}`, 'error');
+                            alert(lang === 'ar' ? `خطأ في إرسال الذكاء الاصطناعي عند المدخل ${i + 1}: ${errorDetail}` : `AI Dispatch Error at entry ${i + 1}: ${errorDetail}`);
                             return;
                         }
                     }
@@ -1152,13 +1241,13 @@
                     if (allQuestions.length > 0) {
                         setGeneratedQuiz({ questions: allQuestions });
                         setShowPreview(true);
-                        addLog(`Batch Process Completed for ID: ${gid}`, 'success');
+                        addLog(lang === 'ar' ? `اكتملت المعالجة الدُفعية للمعرّف: ${gid}` : `Batch Process Completed for ID: ${gid}`, 'success');
                     } else {
-                        addLog(`WARNING: Generation finished but no questions were returned.`, 'error');
-                        alert("AI Error: The generator returned no questions. Please check your materials or source sessions.");
+                        addLog(lang === 'ar' ? 'تحذير: انتهت عملية التوليد لكن لم يتم إرجاع أي أسئلة.' : 'WARNING: Generation finished but no questions were returned.', 'error');
+                        alert(lang === 'ar' ? 'خطأ في الذكاء الاصطناعي: لم يُرجع المولد أي أسئلة. يُرجى مراجعة المواد أو الجلسات المصدر.' : 'AI Error: The generator returned no questions. Please check your materials or source sessions.');
                     }
                 } catch (err) {
-                    addLog(`CRITICAL: Generation failed: ${err.message}`, 'error');
+                    addLog(lang === 'ar' ? `حرج: فشل التوليد: ${err.message}` : `CRITICAL: Generation failed: ${err.message}`, 'error');
                 } finally {
                     setIsProcessing(null);
                     setActiveEntryIdx(null);
@@ -1216,10 +1305,10 @@
                             const newQuestions = [...quiz.questions];
                             newQuestions[idx] = data.questions[0];
                             setGeneratedQuiz({ ...quiz, questions: newQuestions });
-                            addLog(`Question ${idx + 1} regenerated successfully.`, 'success');
+                            addLog(lang === 'ar' ? `تمت إعادة توليد السؤال ${idx + 1} بنجاح.` : `Question ${idx + 1} regenerated successfully.`, 'success');
                         }
                     } catch (err) {
-                        addLog(`Failed to regenerate question ${idx + 1}`, 'error');
+                        addLog(lang === 'ar' ? `فشل في إعادة توليد السؤال ${idx + 1}` : `Failed to regenerate question ${idx + 1}`, 'error');
                     }
                     setRegeneratingId(null);
                 };
@@ -1263,9 +1352,9 @@
                                                         q.type === 'true_false' ? 'bg-[var(--status-emerald-bg)] text-[var(--status-emerald)] border border-emerald-500/20' :
                                                         'bg-[var(--status-amber-bg)] text-[var(--status-amber)] border border-amber-500/20'
                                                     }`}>
-                                                        {q.type.replace('_', ' ')}
+                                                        {lang === 'ar' ? (q.type === 'mcq' ? 'اختيار من متعدد' : q.type === 'true_false' ? 'صح / خطأ' : q.type === 'written' ? 'إجابة كتابية' : 'مخلوط') : q.type.replace('_', ' ')}
                                                     </span>
-                                                    <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{q.difficulty || 'Medium'}</span>
+                                                    <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{lang === 'ar' ? (q.difficulty === 'easy' ? 'سهل' : q.difficulty === 'hard' ? 'متقدم' : 'متوسط') : (q.difficulty || 'Medium')}</span>
                                                 </div>
                                                 <p className="text-[var(--text-main)] font-medium mb-4 leading-relaxed">{q.question}</p>
 
@@ -1282,7 +1371,7 @@
 
                                                 {q.type === 'true_false' && (
                                                     <div className="flex gap-3 mb-4">
-                                                        {['True', 'False'].map(val => (
+                                                        {(lang === 'ar' ? ['صح', 'خطأ'] : ['True', 'False']).map(val => (
                                                             <div key={val} className={`px-4 py-2 rounded-xl border text-sm font-bold ${String(q.answer).toLowerCase() === val.toLowerCase() ? 'bg-[var(--status-emerald-bg)] border-emerald-500/30 text-[var(--status-emerald)]' : 'panel-deep text-[var(--text-muted)]'}`}>
                                                                 {val}
                                                             </div>
@@ -1306,7 +1395,7 @@
                             </div>
                             <div className="p-6 border-t border-[var(--card-border)] bg-[var(--hover-bg)] flex justify-end gap-4">
                                 <button onClick={onClose} className="px-6 py-2.5 rounded-xl border border-[var(--card-border)] text-[var(--text-muted)] font-bold text-sm hover:bg-[var(--hover-bg)] transition-all">{t('discard')}</button>
-                                <button onClick={() => { addLog('Quiz published to Trainee Portal.', 'success'); onClose(); }} className="px-8 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm shadow-xl shadow-indigo-500/20 transition-all">{t('approveRelease')}</button>
+                                <button onClick={() => { addLog(lang === 'ar' ? 'تم نشر الاختبار في بوابة المتدربين.' : 'Quiz published to Trainee Portal.', 'success'); onClose(); }} className="px-8 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm shadow-xl shadow-indigo-500/20 transition-all">{t('approveRelease')}</button>
                             </div>
                         </div>
                     </div>
@@ -1330,7 +1419,7 @@
                         })
                     });
                     if (resp.ok) {
-                        addLog('System Alert Pushed successfully.', 'success');
+                        addLog(lang === 'ar' ? 'تم إرسال تنبيه النظام بنجاح.' : 'System Alert Pushed successfully.', 'success');
                         setNewAlert({ text: '', type: 'global', targetId: '' });
                         fetchDashboardData();
                     }
@@ -1344,7 +1433,7 @@
                     const headers = { 'Authorization': `Bearer ${token}` };
                     const resp = await fetch(`/api/alerts/${id}`, { method: 'DELETE', headers });
                     if (resp.ok) {
-                        addLog('System Alert removed.', 'system');
+                        addLog(lang === 'ar' ? 'تمت إزالة تنبيه النظام.' : 'System Alert removed.', 'system');
                         fetchDashboardData();
                     }
                 } catch (err) {
@@ -1355,7 +1444,7 @@
             const handleGenerateReport = async () => {
                 if (selectedReportTargets.length === 0) return;
                 setIsGeneratingReport(true);
-                addLog(`Generating system-wide report for ${selectedReportTargets.length} targets...`, 'dispatch');
+                addLog(lang === 'ar' ? `جارٍ إنشاء تقرير شامل لعدد ${selectedReportTargets.length} من الجهات...` : `Generating system-wide report for ${selectedReportTargets.length} targets...`, 'dispatch');
 
                 try {
                     const response = await fetch('/api/reports/generate', {
@@ -1379,12 +1468,12 @@
                         document.body.appendChild(a);
                         a.click();
                         a.remove();
-                        addLog('Report generated and downloaded successfully.', 'success');
+                        addLog(lang === 'ar' ? 'تم إنشاء التقرير وتنزيله بنجاح.' : 'Report generated and downloaded successfully.', 'success');
                     } else {
-                        addLog('Failed to generate report.', 'error');
+                        addLog(lang === 'ar' ? 'فشل إنشاء التقرير.' : 'Failed to generate report.', 'error');
                     }
                 } catch (err) {
-                    addLog('Connection error during report generation.', 'error');
+                    addLog(lang === 'ar' ? 'خطأ في الاتصال أثناء إنشاء التقرير.' : 'Connection error during report generation.', 'error');
                 } finally {
                     setIsGeneratingReport(false);
                 }
@@ -1397,7 +1486,7 @@
                         <div className={`w-2 h-2 rounded-full ${status === 'online' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-rose-500'}`} />
                         <span className="text-sm font-medium text-[var(--text-main)]">{name}</span>
                     </div>
-                    <span className="text-xs font-mono text-[var(--text-muted)]">Port {port}</span>
+                    <span className="text-xs font-mono text-[var(--text-muted)]">{lang === 'ar' ? 'المنفذ' : 'Port'} {port}</span>
                 </div>
             );
 
@@ -1408,9 +1497,9 @@
                             <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
                             <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
                         </div>
-                        <div className="w-full max-w-md panel-glass backdrop-blur-2xl rounded-[2.5rem] p-10 relative z-10 shadow-2xl">
+                        <div className="w-full max-w-lg panel-glass backdrop-blur-2xl rounded-[28px] p-8 md:p-10 relative z-10 shadow-[0_30px_90px_rgba(2,6,23,0.45)] border border-[var(--card-border)]">
                             <div className="flex flex-col items-center mb-10">
-                                <div className="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-6">
+                                <div className="w-20 h-20 bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-[1.5rem] flex items-center justify-center shadow-lg shadow-[rgba(230,57,70,0.28)] mb-6">
                                     <Icon name="brain-circuit" size={40} className="text-[var(--text-main)]" />
                                 </div>
                                 <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tight">{t('loginTitle')}</h1>
@@ -1425,13 +1514,13 @@
                                 )}
                                 <div>
                                     <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block mb-2 px-1 tracking-wider">{t('emailAddress')}</label>
-                                    <input type="email" required value={loginData.user} onChange={(e) => setLoginData({...loginData, user: e.target.value})} className="w-full panel-glass rounded-2xl px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="superadmin@nta.edu.eg" />
+                                    <input type="email" required value={loginData.user} onChange={(e) => setLoginData({...loginData, user: e.target.value})} className="w-full panel-glass rounded-[18px] px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="superadmin@nta.edu.eg" />
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block mb-2 px-1 tracking-wider">{t('securityPassword')}</label>
-                                    <input type="password" required value={loginData.pass} onChange={(e) => setLoginData({...loginData, pass: e.target.value})} className="w-full panel-glass rounded-2xl px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="••••••••" />
+                                    <input type="password" required value={loginData.pass} onChange={(e) => setLoginData({...loginData, pass: e.target.value})} className="w-full panel-glass rounded-[18px] px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="••••••••" />
                                 </div>
-                                <button type="submit" className="w-full py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-indigo-500/10 text-sm uppercase tracking-widest">
+                                <button type="submit" className="w-full py-5 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white font-bold rounded-[18px] hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-[rgba(230,57,70,0.18)] text-sm uppercase tracking-widest">
                                     {t('loginButton')}
                                 </button>
                                 <div className="text-center pt-4 border-t border-[var(--card-border)]">
@@ -1802,8 +1891,8 @@
                                                             {isTargetMet ? <Icon name="check-circle" size={20} /> : <Icon name="info" size={20} />}
                                                         </div>
                                                         <div>
-                                                            <h4 className={`text-sm font-bold ${isTargetMet ? 'text-[var(--status-emerald)]' : 'text-[var(--status-amber)]'}`}>{isTargetMet ? 'Perfect Balance!' : 'Target: Exactly 20 Questions Total'}</h4>
-                                                            <p className="text-xs text-[var(--text-muted)]">Add entries and adjust counts to reach exactly 20.</p>
+                                                            <h4 className={`text-sm font-bold ${isTargetMet ? 'text-[var(--status-emerald)]' : 'text-[var(--status-amber)]'}`}>{isTargetMet ? (lang === 'ar' ? 'توازن مثالي!' : 'Perfect Balance!') : (lang === 'ar' ? 'الهدف: 20 سؤالًا بالضبط' : 'Target: Exactly 20 Questions Total')}</h4>
+                                                            <p className="text-xs text-[var(--text-muted)]">{lang === 'ar' ? 'أضف بنودًا وعدّل الكميات حتى تصل إلى 20 سؤالًا تمامًا.' : 'Add entries and adjust counts to reach exactly 20.'}</p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
@@ -1816,47 +1905,47 @@
                                                 <div className="space-y-4 mb-8">
                                                     {quizEntries.map((entry, index) => (
                                                         <div key={entry.id} className="p-6 panel-glass rounded-2xl relative group/entry">
-                                                            <div className="absolute -top-3 left-6 px-3 py-1 bg-indigo-600 rounded-full text-[10px] font-bold uppercase tracking-widest text-white">Entry #{index + 1}</div>
+                                                            <div className="absolute -top-3 left-6 px-3 py-1 bg-indigo-600 rounded-full text-[10px] font-bold uppercase tracking-widest text-white">{lang === 'ar' ? `البند #${index + 1}` : `Entry #${index + 1}`}</div>
                                                             <button onClick={() => removeQuizEntry(entry.id)} className="absolute top-4 right-4 p-2 text-[var(--text-muted)] hover:text-[var(--status-rose)] transition-colors opacity-0 group-hover/entry:opacity-100">
                                                                 <Icon name="trash-2" size={18} />
                                                             </button>
                                                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-2">
                                                                 <div>
-                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Source Session</label>
+                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'جلسة المصدر' : 'Source Session'}</label>
                                                                     <select value={entry.sourceSessionId} onChange={(e) => updateQuizEntry(entry.id, 'sourceSessionId', e.target.value)} className="w-full panel-deep rounded-lg px-3 py-2 text-xs text-[var(--text-main)]">
-                                                                        <option value="">--- Source ---</option>
+                                                                        <option value="">{lang === 'ar' ? '--- المصدر ---' : '--- Source ---'}</option>
                                                                         {sessions.map(s => <option key={s.id} value={s.id}>{s.topic}</option>)}
                                                                     </select>
                                                                 </div>
                                                                 <div>
-                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Question Type</label>
+                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'نوع السؤال' : 'Question Type'}</label>
                                                                     <select value={entry.type} onChange={(e) => updateQuizEntry(entry.id, 'type', e.target.value)} className="w-full panel-deep rounded-lg px-3 py-2 text-xs text-[var(--text-main)]">
-                                                                        <option value="mcq">Multiple Choice</option>
-                                                                        <option value="true_false">True / False</option>
-                                                                        <option value="written">Written Response</option>
-                                                                        <option value="mixed">Mixed (AI Selects)</option>
+                                                                        <option value="mcq">{lang === 'ar' ? 'اختيار من متعدد' : 'Multiple Choice'}</option>
+                                                                        <option value="true_false">{lang === 'ar' ? 'صح / خطأ' : 'True / False'}</option>
+                                                                        <option value="written">{lang === 'ar' ? 'إجابة كتابية' : 'Written Response'}</option>
+                                                                        <option value="mixed">{lang === 'ar' ? 'مخلوط (يختاره الذكاء الاصطناعي)' : 'Mixed (AI Selects)'}</option>
                                                                     </select>
                                                                 </div>
                                                                 <div>
-                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Difficulty</label>
+                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'الصعوبة' : 'Difficulty'}</label>
                                                                     <select value={entry.difficulty} onChange={(e) => updateQuizEntry(entry.id, 'difficulty', e.target.value)} className="w-full panel-deep rounded-lg px-3 py-2 text-xs text-[var(--text-main)]">
-                                                                        <option value="easy">Easy</option>
-                                                                        <option value="medium">Medium</option>
-                                                                        <option value="hard">Hard</option>
+                                                                        <option value="easy">{lang === 'ar' ? 'سهل' : 'Easy'}</option>
+                                                                        <option value="medium">{lang === 'ar' ? 'متوسط' : 'Medium'}</option>
+                                                                        <option value="hard">{lang === 'ar' ? 'صعب' : 'Hard'}</option>
                                                                     </select>
                                                                 </div>
                                                                 <div>
-                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Quantity (1-20)</label>
+                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'الكمية (1-20)' : 'Quantity (1-20)'}</label>
                                                                     <select value={entry.count} onChange={(e) => updateQuizEntry(entry.id, 'count', parseInt(e.target.value))} className="w-full panel-deep rounded-lg px-3 py-2 text-xs text-[var(--text-main)]">
                                                                         {[...Array(20)].map((_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}
                                                                     </select>
                                                                 </div>
                                                                 <div>
-                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Select Material</label>
+                                                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'اختيار المادة' : 'Select Material'}</label>
                                                                     <div className="space-y-1 max-h-24 overflow-y-auto p-2 panel-deep rounded-lg">
                                                                         {(() => {
                                                                             const session = sessions.find(s => String(s.id) === String(entry.sourceSessionId));
-                                                                            if (!session || !session.materials) return <span className="text-[9px] text-[var(--text-muted)] italic">No specific materials - using dummy grounding...</span>;
+                                                                            if (!session || !session.materials) return <span className="text-[9px] text-[var(--text-muted)] italic">{lang === 'ar' ? 'لا توجد مواد محددة - سيتم استخدام مادة افتراضية...' : 'No specific materials - using dummy grounding...'}</span>;
 
                                                                             try {
                                                                                 const mats = JSON.parse(session.materials);
@@ -1874,7 +1963,7 @@
                                                                                 }
 
                                                                                 if (files.length === 0) {
-                                                                                    return <span className="text-[9px] text-[var(--text-muted)] italic">No valid file path found...</span>;
+                                                                                    return <span className="text-[9px] text-[var(--text-muted)] italic">{lang === 'ar' ? 'لم يتم العثور على مسار ملف صالح...' : 'No valid file path found...'}</span>;
                                                                                 }
 
                                                                                 return files.map((path, pIdx) => {
@@ -1894,7 +1983,7 @@
                                                                                     );
                                                                                 });
                                                                             } catch (e) {
-                                                                                return <span className="text-[9px] text-[var(--status-rose)] italic">Material parse error</span>;
+                                                                                return <span className="text-[9px] text-[var(--status-rose)] italic">{lang === 'ar' ? 'خطأ في تحليل المادة' : 'Material parse error'}</span>;
                                                                             }
                                                                         })()}
                                                                         {/* Fallback Dummy Material */}
@@ -1917,7 +2006,7 @@
                                                     ))}
                                                     <button onClick={addQuizEntry} className="w-full py-3 border-2 border-dashed border-[var(--card-border)] rounded-2xl text-[var(--text-muted)] hover:text-[var(--status-indigo)] hover:border-indigo-500/40 hover:bg-[var(--status-indigo-bg)] transition-all text-sm font-bold flex items-center justify-center gap-2">
                                                         <Icon name="plus" size={16} />
-                                                        Add Another Content Source
+                                                        {lang === 'ar' ? 'إضافة مصدر محتوى آخر' : 'Add Another Content Source'}
                                                     </button>
                                                 </div>
 
@@ -1925,10 +2014,16 @@
                                                     {isProcessing === 'Quiz Engine' ? (
                                                         <div className="flex items-center justify-center gap-3">
                                                             <Icon name="loader-2" className="animate-spin" size={20} />
-                                                            <span>Dispatching Sequential Batch...</span>
+                                                            <span>{lang === 'ar' ? 'جارٍ إرسال الدفعة المتسلسلة...' : 'Dispatching Sequential Batch...'}</span>
                                                         </div>
                                                     ) : (
-                                                        isTargetMet && selectedCourse && targetSessionId ? 'Dispatch Generation Batch' : (!selectedCourse || !targetSessionId ? 'Select Course & Target Session' : `Need ${20 - totalQuestions > 0 ? (20 - totalQuestions) + ' more' : (totalQuestions - 20) + ' fewer'} questions total`)
+                                                        isTargetMet && selectedCourse && targetSessionId
+                                                            ? (lang === 'ar' ? 'إرسال دفعة الإنشاء' : 'Dispatch Generation Batch')
+                                                            : (!selectedCourse || !targetSessionId
+                                                                ? (lang === 'ar' ? 'اختر الدورة والجلسة المستهدفة' : 'Select Course & Target Session')
+                                                                : (lang === 'ar'
+                                                                    ? `تحتاج ${20 - totalQuestions > 0 ? (20 - totalQuestions) + ' سؤالًا إضافيًا' : (totalQuestions - 20) + ' سؤالًا أقل'}`
+                                                                    : `Need ${20 - totalQuestions > 0 ? (20 - totalQuestions) + ' more' : (totalQuestions - 20) + ' fewer'} questions total`))
                                                     )}
                                                 </button>
                                             </div>
@@ -1937,15 +2032,15 @@
                                             <div className="p-8 panel-glass rounded-3xl">
                                                 <div className="flex items-center justify-between mb-8">
                                                     <div>
-                                                        <h2 className="text-xl font-bold text-[var(--text-main)]">Quiz Access Overrides</h2>
-                                                        <p className="text-[var(--text-muted)] text-xs">Grant manual extensions to specific trainees for expired or active quizzes.</p>
+                                                        <h2 className="text-xl font-bold text-[var(--text-main)]">{lang === 'ar' ? 'تجاوزات الوصول للاختبارات' : 'Quiz Access Overrides'}</h2>
+                                                        <p className="text-[var(--text-muted)] text-xs">{lang === 'ar' ? 'منح تمديد يدوي لمتدربين محددين للاختبارات المنتهية أو النشطة.' : 'Grant manual extensions to specific trainees for expired or active quizzes.'}</p>
                                                     </div>
                                                     <Icon name="shield-check" className="text-[var(--status-emerald)]" size={28} />
                                                 </div>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                                     <div>
-                                                        <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Select Active Quiz</label>
+                                                        <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'اختر الاختبار النشط' : 'Select Active Quiz'}</label>
                                                         <select
                                                             value={selectedQuizForOverride?.id || ''}
                                                             onChange={(e) => {
@@ -1955,15 +2050,15 @@
                                                             }}
                                                             className="w-full panel-deep rounded-xl px-4 py-3 text-sm text-[var(--text-main)] outline-none focus:ring-2 focus:ring-emerald-500/40"
                                                         >
-                                                            <option value="">--- Select Quiz to Manage ---</option>
+                                                            <option value="">{lang === 'ar' ? '--- اختر اختبارًا لإدارته ---' : '--- Select Quiz to Manage ---'}</option>
                                                             {activeQuizzes.map(q => (
                                                                 <option key={q.id} value={q.id}>[{q.course_title}] {q.name} - {q.session_topic}</option>
                                                             ))}
                                                         </select>
                                                     </div>
                                                     <div>
-                                                        <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Active Exceptions</label>
-                                                        <div className="text-lg font-black text-[var(--status-emerald)]">{quizOverrides.length} Trainees Extended</div>
+                                                        <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'الاستثناءات النشطة' : 'Active Exceptions'}</label>
+                                                        <div className="text-lg font-black text-[var(--status-emerald)]">{quizOverrides.length} {lang === 'ar' ? 'متدرب ممدد لهم' : 'Trainees Extended'}</div>
                                                     </div>
                                                 </div>
 
@@ -1971,20 +2066,20 @@
                                                     <div className="space-y-6">
                                                         <div className="flex items-center gap-4 p-4 bg-[var(--status-emerald-bg)] border border-emerald-500/20 rounded-2xl">
                                                             <div className="flex-1">
-                                                                <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">Trainee</label>
+                                                                <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'المتدرب' : 'Trainee'}</label>
                                                                 <select
                                                                     value={overrideTraineeId}
                                                                     onChange={(e) => setOverrideTraineeId(e.target.value)}
                                                                     className="w-full panel-deep rounded-lg px-3 py-2 text-xs text-[var(--text-main)]"
                                                                 >
-                                                                    <option value="">--- Select Trainee ---</option>
+                                                                    <option value="">{lang === 'ar' ? '--- اختر متدربًا ---' : '--- Select Trainee ---'}</option>
                                                                     {traineesList.map(t => (
                                                                         <option key={t.id || t.user_id} value={t.id || t.user_id}>{t.full_name_ar || t.full_name_en} ({t.national_id})</option>
                                                                     ))}
                                                                 </select>
                                                             </div>
                                                             <div className="flex-1">
-                                                                <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">New Deadline</label>
+                                                                <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2 block tracking-wider">{lang === 'ar' ? 'الموعد الجديد' : 'New Deadline'}</label>
                                                                 <input
                                                                     type="datetime-local"
                                                                     value={overrideDeadline}
@@ -1998,7 +2093,7 @@
                                                                     disabled={!overrideTraineeId || !overrideDeadline}
                                                                     className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition-all shadow-lg shadow-emerald-900/20"
                                                                 >
-                                                                    Grant Access
+                                                                    {lang === 'ar' ? 'منح الوصول' : 'Grant Access'}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -2008,10 +2103,10 @@
                                                                 <table className="w-full text-left text-xs text-[var(--text-main)]">
                                                                     <thead className="bg-[var(--hover-bg)] text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
                                                                         <tr>
-                                                                            <th className="px-6 py-4">Trainee</th>
-                                                                            <th className="px-6 py-4">National ID</th>
-                                                                            <th className="px-6 py-4">Extended Until</th>
-                                                                            <th className="px-6 py-4">Reason</th>
+                                                                            <th className="px-6 py-4">{lang === 'ar' ? 'المتدرب' : 'Trainee'}</th>
+                                                                            <th className="px-6 py-4">{lang === 'ar' ? 'الرقم القومي' : 'National ID'}</th>
+                                                                            <th className="px-6 py-4">{lang === 'ar' ? 'ممدد حتى' : 'Extended Until'}</th>
+                                                                            <th className="px-6 py-4">{lang === 'ar' ? 'السبب' : 'Reason'}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody className="divide-y divide-white/5">
@@ -2194,7 +2289,7 @@
                                                         <div className="p-2 bg-[var(--status-emerald-bg)] rounded-lg text-[var(--status-emerald)]">
                                                             <Icon name="check-circle" size={18} />
                                                         </div>
-                                                        <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">System Health</span>
+                                                        <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{lang === 'ar' ? 'حالة النظام' : 'System Health'}</span>
                                                     </div>
                                                     <p className="text-3xl font-black text-[var(--text-main)]">100%</p>
                                                     <p className="text-[10px] text-[var(--text-muted)] mt-1">{t('uptime')}</p>
@@ -2613,7 +2708,7 @@
                                                                     <div className="text-[10px] text-[var(--text-muted)] uppercase font-bold">{t('selectedDomains')}</div>
                                                                 </div>
                                                                 <div className="text-right">
-                                                                    <div className="text-2xl font-black text-[var(--status-indigo)]">{reportDateRange.start ? 'Active' : 'All Time'}</div>
+                                                                    <div className="text-2xl font-black text-[var(--status-indigo)]">{reportDateRange.start ? (lang === 'ar' ? 'نشط' : 'Active') : (lang === 'ar' ? 'كل الفترات' : 'All Time')}</div>
                                                                     <div className="text-[10px] text-[var(--text-muted)] uppercase font-bold">{t('temporalScope')}</div>
                                                                 </div>
                                                             </div>
@@ -2814,7 +2909,7 @@
                                                                 <button 
                                                                     onClick={async () => {
                                                                         if (!managementUser.full_name || !managementUser.email || !managementUser.national_id) {
-                                                                            addLog('Please fill all required fields.', 'error');
+                                                                            addLog(lang === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة.' : 'Please fill all required fields.', 'error');
                                                                             return;
                                                                         }
                                                                         setIsCreatingUser(true);
@@ -2829,19 +2924,19 @@
                                                                             });
                                                                             const result = await response.json();
                                                                             if (response.ok) {
-                                                                                addLog(`User ${managementUser.full_name} created successfully!`, 'success');
+                                                                                addLog(lang === 'ar' ? `تم إنشاء المستخدم ${managementUser.full_name} بنجاح!` : `User ${managementUser.full_name} created successfully!`, 'success');
                                                                                 if (result.email_sent) {
-                                                                                    addLog(`Credentials sent to ${managementUser.email}.`, 'success');
+                                                                                    addLog(lang === 'ar' ? `تم إرسال بيانات الاعتماد إلى ${managementUser.email}.` : `Credentials sent to ${managementUser.email}.`, 'success');
                                                                                 } else {
-                                                                                    addLog(`User created but email failed. Temp Password: ${result.temp_password}`, 'warning');
+                                                                                    addLog(lang === 'ar' ? `تم إنشاء المستخدم لكن فشل إرسال البريد. كلمة المرور المؤقتة: ${result.temp_password}` : `User created but email failed. Temp Password: ${result.temp_password}`, 'warning');
                                                                                 }
                                                                                 setManagementUser({ national_id: '', full_name: '', email: '', role: 'admin' });
                                                                                 fetchManagementUsers();
                                                                             } else {
-                                                                                addLog(`Failed to create user: ${result.detail || 'Unknown error'}`, 'error');
+                                                                                addLog(lang === 'ar' ? `فشل إنشاء المستخدم: ${result.detail || 'خطأ غير معروف'}` : `Failed to create user: ${result.detail || 'Unknown error'}`, 'error');
                                                                             }
                                                                         } catch (err) {
-                                                                            addLog('Connection error during user creation.', 'error');
+                                                                            addLog(lang === 'ar' ? 'خطأ في الاتصال أثناء إنشاء المستخدم.' : 'Connection error during user creation.', 'error');
                                                                         } finally {
                                                                             setIsCreatingUser(false);
                                                                         }
@@ -2879,7 +2974,7 @@
                                                                 <tbody className="divide-y divide-white/5">
                                                                     {managementUsers.length === 0 ? (
                                                                         <tr>
-                                                                            <td colSpan="4" className="px-6 py-12 text-center text-[var(--text-muted)] italic">No administrative users found.</td>
+                                                                            <td colSpan="4" className="px-6 py-12 text-center text-[var(--text-muted)] italic">{lang === 'ar' ? 'لا يوجد مستخدمون إداريون حتى الآن.' : 'No administrative users found.'}</td>
                                                                         </tr>
                                                                     ) : managementUsers.map(u => (
                                                                         <tr key={u.id} className="bg-[var(--hover-bg)] transition-colors group">
@@ -2906,7 +3001,7 @@
                                                                                 <button 
                                                                                     onClick={() => handleDeleteManagementUser(u.id)}
                                                                                     className="p-2 text-[var(--text-muted)] hover:text-[var(--status-rose)] hover:bg-[var(--status-rose-bg)] rounded-lg transition-all"
-                                                                                    title="Delete User"
+                                                                                    title={lang === 'ar' ? 'حذف المستخدم' : 'Delete User'}
                                                                                 >
                                                                                     <Icon name="trash-2" size={16} />
                                                                                 </button>

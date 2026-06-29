@@ -151,13 +151,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول</span>
+                                    <span>قبول</span>
                                 </button>
                             </div>
                         </div>
@@ -211,13 +211,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول</span>
+                                    <span>قبول</span>
                                 </button>
                             </div>
                         </div>
@@ -263,13 +263,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول</span>
+                                    <span>قبول</span>
                                 </button>
                             </div>
                         </div>
@@ -330,13 +330,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول</span>
+                                    <span>قبول</span>
                                 </button>
                             </div>
                         </div>
@@ -397,13 +397,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول</span>
+                                    <span>قبول</span>
                                 </button>
                             </div>
                         </div>
@@ -449,13 +449,13 @@
                                 <button type="button" class="stage-status-btn stage-status-btn--secondary"
                                     data-status="rejected">
                                     <span class="stage-status-btn__icon">✖</span>
-                                    <span>(Rejected) رفض</span>
+                                    <span>رفض</span>
                                 </button>
                                 <button type="button"
                                     class="stage-status-btn stage-status-btn--primary stage-status-btn--active"
                                     data-status="active">
                                     <span class="stage-status-btn__icon">✔</span>
-                                    <span>(Active) قبول واعتماد</span>
+                                    <span>قبول واعتماد</span>
                                 </button>
                             </div>
                         </div>
@@ -489,7 +489,7 @@
                 var cls = 's1-score-badge s1-score-badge--low';
                 if (score >= 80) cls = 's1-score-badge s1-score-badge--high';
                 else if (score >= 50) cls = 's1-score-badge s1-score-badge--mid';
-                return '<span class="' + cls + '">' + score + '% Match</span>';
+                return '<span class="' + cls + '">' + score + '% مطابقة</span>';
             }
 
             // -- Unified Dropdown Notification System (Toast) --
@@ -741,7 +741,7 @@
                     b.type = 'button';
                     b.className = 'stage-status-btn stage-status-btn--secondary';
                     b.setAttribute('data-status', 'waitlist');
-                    b.innerHTML = '<span>(Waitlist) قائمة انتظار</span>';
+                    b.innerHTML = '<span>قائمة انتظار</span>';
                     var active = grp.querySelector('[data-status="active"]');
                     grp.insertBefore(b, active || null);
                 }
@@ -920,7 +920,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Density (%)',
+                            label: 'الكثافة (%)',
                             data: values,
                             backgroundColor: accentRgb,
                             borderColor: accent,
@@ -998,6 +998,32 @@
                 return scoreBadgeHtml(score);
             }
 
+            function labelStage1Field(key) {
+                const labels = {
+                    full_name: 'الاسم الكامل',
+                    national_id: 'الرقم القومي',
+                    date_of_birth: 'تاريخ الميلاد',
+                    passport_number: 'رقم الجواز',
+                    gender: 'النوع',
+                    nationality: 'الجنسية',
+                    issue_date: 'تاريخ الإصدار',
+                    expiry_date: 'تاريخ الانتهاء',
+                    document_type: 'نوع المستند'
+                };
+                return labels[key] || key.replace(/_/g, ' ');
+            }
+
+            function labelStage1Status(value) {
+                const labels = {
+                    Verified: 'موثق',
+                    Matched: 'متطابق',
+                    Pending: 'قيد المراجعة',
+                    Rejected: 'مرفوض',
+                    Accepted: 'مقبول'
+                };
+                return labels[value] || value || '—';
+            }
+
             function renderStage1Result(result) {
                 const el = document.getElementById('stage1Content');
                 const details = result.details || {};
@@ -1022,7 +1048,7 @@
                         <div class="s1-review-card">
                             <div class="s1-card-head">
                                 <div>
-                                    <h4 class="s1-ai-section-title">1. التحقق من الهوية (Identity)</h4>
+                                    <h4 class="s1-ai-section-title">1. التحقق من الهوية</h4>
                                     <p class="s1-ai-section-desc">مطابقة البيانات المستخرجة من البطاقة/الجواز مع البيانات المسجلة.</p>
                                 </div>
                                 <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('idScan')">عرض المستند</button>
@@ -1030,7 +1056,7 @@
                             <div class="s1-card-body">
                                 ${Object.entries(details.identity?.match_results || {}).map(([key, val]) => `
                                     <div class="s1-field-row">
-                                        <span class="s1-ai-muted" style="text-transform: capitalize;">${key.replace('_', ' ')}</span>
+                                        <span class="s1-ai-muted">${labelStage1Field(key)}</span>
                                         <div class="s1-field-pair">
                                             <span class="s1-ai-text" style="font-size: 0.9rem;">${val.ai || '—'}</span>
                                             ${getScoreBadge(val.score)}
@@ -1044,7 +1070,7 @@
                         <div class="s1-review-card">
                             <div class="s1-card-head">
                                 <div>
-                                    <h4 class="s1-ai-section-title">2. الفحص المهني (Professional CV)</h4>
+                                    <h4 class="s1-ai-section-title">2. الفحص المهني للسيرة الذاتية</h4>
                                     <p class="s1-ai-section-desc">مطابقة محتوى السيرة الذاتية مع الخبرات والمهارات المدخلة.</p>
                                 </div>
                                 <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('cvResume')">عرض السيرة الذاتية</button>
@@ -1063,14 +1089,14 @@
                         <div class="s1-review-card">
                             <div class="s1-card-head">
                                 <div>
-                                    <h4 class="s1-ai-section-title">3. التدقيق الأكاديمي (Education)</h4>
+                                    <h4 class="s1-ai-section-title">3. التدقيق الأكاديمي</h4>
                                     <p class="s1-ai-section-desc">التحقق من صحة الشهادات المرفوعة ومطابقتها للمؤهل المعلن.</p>
                                 </div>
                                 <button class="s1-view-doc-btn" onclick="window.viewTraineeDoc('graduationCertificate')">عرض الشهادة</button>
                             </div>
                             <div class="s1-card-body">
                                 <div class="s1-ai-body">
-                                    <strong>الحالة:</strong> <span class="${details.education?.status === 'Verified' ? 's1-ai-verified' : 's1-ai-pending'}">${details.education?.status || 'N/A'}</span>
+                                    <strong>الحالة:</strong> <span class="${details.education?.status === 'Verified' ? 's1-ai-verified' : 's1-ai-pending'}">${labelStage1Status(details.education?.status)}</span>
                                     <br>
                                     <strong>التقييم:</strong> ${getScoreBadge(details.education?.confidence || 0)}
                                 </div>
