@@ -1,0 +1,50 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Emergency Contacts</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>عدد جهات اتصال الطوارئ (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="emergencyContactsCount" name="emergencyContactsCount" required="">
+<option value="">اختر العدد</option>
+<option value="1">1</option>
+<option value="2">2</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - الاسم (اجبارى)</label>
+<input name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - الرقم (اجبارى)</label>
+<input name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - العنوان (اجبارى)</label>
+<input name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - رقم الهوية (اختيارى)</label>
+<input name="emergencyId1" placeholder="رقم الهوية (اختياري)" type="text"/>
+</div><div id="emergencyContact2Block" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - الاسم (اختيارى)</label>
+<input id="emergencyName2" name="emergencyName2" placeholder="الاسم بالكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - الرقم (اختيارى)</label>
+<input id="emergencyPhone2" name="emergencyPhone2" placeholder="+201..." type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - العنوان (اختيارى)</label>
+<input id="emergencyAddress2" name="emergencyAddress2" placeholder="العنوان بالكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - رقم الهوية (اختيارى)</label>
+<input name="emergencyId2" placeholder="رقم الهوية (اختياري)" type="text"/>
+</div>
+</div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Legal & References</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟ (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPriorCriminalConvictions" name="hasPriorCriminalConvictions" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="legalStatusBlock" style="display: none">
+<div class="form-group">
+<label>وصف الحكم الجنائي (اجبارى)</label>
+<input dir="auto" id="priorConvictionDescription" name="priorConvictionDescription" placeholder="وصف إلزامي للحكم" type="text"/>
+</div>
+<div class="form-group">
+<label>تحميل صحيفة الحالة الجنائية (الفيش والتشبيه) (إرشادات الرفع: يرجى رفع الفيش والتشبيه بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اجبارى)</label>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" id="sectionSevenCriminalRecordCertificate" name="sectionSevenCriminalRecordCertificate" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
+</div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

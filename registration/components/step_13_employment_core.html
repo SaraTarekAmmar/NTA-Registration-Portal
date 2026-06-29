@@ -1,0 +1,312 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Employment History</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل لديك خبرة عملية؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="empExperienceStatus" name="empExperienceStatus">
+<option value="">اختر</option>
+<option value="have_experience">
+                        لدي خبرة
+                      </option>
+<option value="no_experience">
+                        لا أملك خبرة
+                      </option>
+</select>
+</div>
+</div><div id="empHaveExperienceBlock" style="display: none">
+<div class="form-group" id="empCvUploadGroup">
+<label>تحميل السيرة الذاتية (PDF, DOC, DOCX) (اجبارى)
+</label>
+<input accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="employmentSectionCv" name="employmentSectionCv" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت — السيرة الذاتية الكاملة المحدّثة.</small>
+</div>
+<div id="employmentHistoryContainer">
+<div class="emp-history-card academic-history-card">
+<div class="form-group">
+<label>نوع الوظيفة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-job-type" name="empJobType">
+<option value="">اختر</option>
+<option value="governmental">
+                              حكومي
+                            </option>
+<option value="private">
+                              قطاع خاص
+                            </option>
+<option value="entrepreneur">
+                              رائد أعمال
+                            </option>
+<option value="freelance">
+                              عمل حر
+                            </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>طبيعة الوظيفة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select emp-work-nature-wrap">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-work-nature" name="empWorkNature">
+<option value="">اختر طبيعة الوظيفة</option>
+</select>
+</div>
+</div>
+<div class="emp-block-gov" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>الوزارة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ministry" name="empMinistry">
+<option value="">اختر الوزارة</option>
+<option value="education">
+                                  التربية والتعليم
+                                </option>
+<option value="health">الصحة</option>
+<option value="finance">المالية</option>
+<option value="communications">
+                                  الاتصالات
+                                </option>
+<option value="solidarity">
+                                  التضامن الاجتماعي
+                                </option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة التابعة للوزارة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ministry-sub optional-select" name="empMinistrySub">
+<option value="">اختر الجهة</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<div class="reg-form__row emp-block-dates">
+<div class="form-group">
+<label>تاريخ الالتحاق بالعمل (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="emp-joining-date" name="empJoiningDate" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>ما زلت أعمل في هذه الوظيفة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-currently-working optional-select" name="empCurrentlyWorking">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div>
+<div class="form-group emp-end-date-wrap">
+<label>تاريخ الانتهاء من العمل (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="emp-end-date" name="empEndDate" type="date"/>
+</div>
+</div>
+</div>
+<div class="emp-block-org" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>المسمى الوظيفي (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-job-title" name="empJobTitle">
+<option value="">اختر</option>
+<option value="admin">موظف إداري</option>
+<option value="engineer">مهندس</option>
+<option value="specialist">أخصائي</option>
+<option value="manager">مدير</option>
+<option value="consultant">مستشار</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>المستوى الوظيفي / الأقدمية (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-seniority optional-select" name="empSeniority">
+<option value="">اختر</option>
+<option value="junior">مبتدئ</option>
+<option value="mid">متوسط</option>
+<option value="senior">خبير</option>
+<option value="lead">رئيس فريق</option>
+<option value="manager">مدير</option>
+</select>
+</div>
+</div>
+</div>
+<div class="form-group">
+<label>القسم / الإدارة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-department optional-select" name="empDepartment">
+<option value="">اختر (يُفلتر حسب المسمى)</option>
+<option value="hr">الموارد البشرية</option>
+<option value="it">تقنية المعلومات</option>
+<option value="finance">المالية</option>
+<option value="operations">العمليات</option>
+<option value="legal">الشؤون القانونية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>التخصص المهني (اختيارى)
+</label>
+<input class="emp-speciality" name="empSpeciality" placeholder="يُقترح حسب المسمى أو أدخل يدويًا" type="text"/>
+</div>
+<div class="form-group">
+<label>وصف الوظيفة والمسؤوليات (اختيارى)
+</label>
+<input name="empJobDescription" placeholder="اختياري" type="text"/>
+</div>
+<div class="form-group">
+<label>عنوان جهة العمل (اختيارى)
+</label>
+<input name="empCompanyAddress" placeholder="العنوان بالكامل" type="text"/>
+</div>
+</div>
+<div class="emp-block-free" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>مجال العمل / طبيعة النشاط (أول) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-industry-primary optional-select" name="empIndustryPrimary">
+<option value="">اختر</option>
+<option value="tech">تقنية</option>
+<option value="finance">مالية</option>
+<option value="health">صحة</option>
+<option value="education">تعليم</option>
+<option value="industry">صناعة</option>
+<option value="trade">تجارة</option>
+<option value="media">إعلام</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>مجال العمل (ثانٍ — اختياري، حتى مجالين) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-industry-secondary optional-select" name="empIndustrySecondary">
+<option value="">—</option>
+<option value="tech">تقنية</option>
+<option value="finance">مالية</option>
+<option value="health">صحة</option>
+<option value="education">تعليم</option>
+<option value="industry">صناعة</option>
+<option value="trade">تجارة</option>
+<option value="media">إعلام</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline emp-remove-card" style="display: none" type="button">
+                        حذف هذه الخبرة
+                      </button>
+<div class="reg-form__row">
+
+
+</div>
+
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (Start Date) (اجبارى)</label>
+<input class="emp-start-date" name="startDate[]" required="" type="date"/>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (End Date) (اجبارى إذا لم تكن تعمل حالياً)</label>
+<input class="emp-end-date" name="endDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>المسؤوليات الرئيسية (Key Responsibilities) (اختياري)</label>
+<textarea class="emp-responsibilities" name="keyResponsibilities[]"></textarea>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addEmploymentCardBtn" type="button">
+                    + إضافة خبرة عمل أخرى
+                  </button>
+<hr class="reg-divider"/>
+<h3 class="reg-step__title" style="font-size: 1.1rem; margin-top: 1rem">
+                    الجزء 4.1: المراجع
+                  </h3>
+<p class="reg-step__desc">
+                    يُشترط مرجع واحد على الأقل عند وجود خبرة عمل.
+                  </p>
+<div id="empReferencesContainer">
+<div class="emp-ref-row employment-ref-card" style="
+                        border: 1px solid rgba(100, 116, 139, 0.35);
+                        border-radius: 12px;
+                        padding: 1rem;
+                        margin-bottom: 1rem;
+                      ">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم المرجع (اختيارى)
+</label>
+<input class="emp-ref-name" name="empRefName[]" type="text"/>
+</div>
+<div class="form-group">
+<label>رقم هاتف المرجع (اختيارى)
+</label>
+<input class="emp-ref-phone" name="empRefPhone[]" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>البريد الإلكتروني للمرجع (اختيارى)
+</label>
+<input class="emp-ref-email" name="empRefEmail[]" type="email"/>
+</div>
+<div class="form-group">
+<label>مكان العمل المشترك (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ref-place-select optional-select" name="empRefPlaceIndex[]">
+<option value="">اختر من الخبرات المدخلة</option>
+</select>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline emp-remove-ref" style="display: none" type="button">
+                        حذف المرجع
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addEmpReferenceBtn" type="button">
+                    + إضافة مرجع
+                  </button>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

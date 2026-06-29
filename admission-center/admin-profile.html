@@ -1,0 +1,2622 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ملف المتدرب - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="trainee.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="chat/chat.css?v=3" />
+    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── تحليل المتدرب tab highlight ── */
+      .admin-profile__tab--analysis {
+        position: relative;
+      }
+      .admin-profile__tab--analysis::after {
+        content: "جديد";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        font-size: 0.55rem;
+        font-weight: 800;
+        padding: 1px 5px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), #06b6d4);
+        color: var(--text-on-accent);
+        letter-spacing: 0.03em;
+      }
+      /* ── Analysis panel layout ── */
+      .ap-analysis {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 0.25rem 0;
+      }
+      .ap-scores {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.65rem;
+      }
+      @media (max-width: 600px) {
+        .ap-scores {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .ap-score-chip {
+        padding: 0.85rem 0.9rem;
+        border-radius: 14px;
+        text-align: center;
+        background: rgba(8, 12, 32, 0.6);
+        border: 1px solid var(--border-main);
+        transition: transform 0.2s;
+        cursor: default;
+      }
+      .ap-score-chip:hover {
+        transform: translateY(-2px);
+      }
+      .ap-score-chip__lbl {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.35rem;
+      }
+      .ap-score-chip__val {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .ap-score-chip--indigo {
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      .ap-score-chip--indigo .ap-score-chip__lbl {
+        color: var(--accent-hover);
+      }
+      .ap-score-chip--indigo .ap-score-chip__val {
+        color: #a5b4fc;
+        text-shadow: 0 0 18px rgba(99, 102, 241, 0.4);
+      }
+      .ap-score-chip--green {
+        border-color: rgba(34, 197, 94, 0.3);
+      }
+      .ap-score-chip--green .ap-score-chip__lbl {
+        color: var(--color-success-soft);
+      }
+      .ap-score-chip--green .ap-score-chip__val {
+        color: var(--color-success-soft);
+        text-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+      }
+      .ap-score-chip--red {
+        border-color: rgba(239, 68, 68, 0.3);
+      }
+      .ap-score-chip--red .ap-score-chip__lbl {
+        color: var(--color-error-soft);
+      }
+      .ap-score-chip--red .ap-score-chip__val {
+        color: var(--color-error-soft);
+        text-shadow: 0 0 18px rgba(239, 68, 68, 0.3);
+      }
+      .ap-score-chip--cyan {
+        border-color: rgba(6, 182, 212, 0.3);
+      }
+      .ap-score-chip--cyan .ap-score-chip__lbl {
+        color: var(--color-kpi-cyan);
+      }
+      .ap-score-chip--cyan .ap-score-chip__val {
+        color: var(--color-kpi-cyan);
+        text-shadow: 0 0 18px rgba(6, 182, 212, 0.3);
+      }
+      .ap-score-chip--amber {
+        border-color: rgba(245, 158, 11, 0.3);
+      }
+      .ap-score-chip--amber .ap-score-chip__lbl {
+        color: var(--theme-btn-color);
+      }
+      .ap-score-chip--amber .ap-score-chip__val {
+        color: var(--theme-btn-color);
+        text-shadow: 0 0 18px rgba(245, 158, 11, 0.3);
+      }
+
+      .ap-row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 700px) {
+        .ap-row2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .ap-panel {
+        padding: 1.1rem 1.25rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .ap-panel__title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 0 0 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .ap-panel__title svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+      .ap-panel__title--indigo {
+        color: var(--accent-hover);
+      }
+      .ap-panel__title--green {
+        color: var(--color-success-soft);
+      }
+      .ap-panel__title--red {
+        color: var(--color-error-soft);
+      }
+      .ap-panel__title--cyan {
+        color: var(--color-kpi-cyan);
+      }
+      .ap-panel__title--amber {
+        color: var(--theme-btn-color);
+      }
+
+      .ap-qs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.55rem;
+      }
+      @media (max-width: 600px) {
+        .ap-qs {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .ap-qs-item {
+        padding: 0.7rem;
+        border-radius: 12px;
+        text-align: center;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border-main);
+      }
+      .ap-qs-item__lbl {
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
+      .ap-qs-item__val {
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+
+      .ap-ai-note {
+        font-size: 0.84rem;
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.7;
+        margin: 0;
+      }
+      .ap-flags-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .ap-flags-list li {
+        font-size: 0.78rem;
+        color: var(--color-error-pale);
+        padding: 0.35rem 0.6rem;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .ap-flags-list li::before {
+        content: "⚠";
+        font-size: 0.68rem;
+      }
+      .ap-flags-none {
+        font-size: 0.78rem;
+        color: var(--color-success-soft);
+        padding: 0.35rem 0.6rem;
+        border-radius: 8px;
+        background: rgba(74, 222, 128, 0.07);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+      }
+
+      .ap-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .ap-skill-chip {
+        padding: 0.3rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.28);
+        color: #a5b4fc;
+      }
+
+      .ap-charts-row {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1rem;
+      }
+      @media (max-width: 700px) {
+        .ap-charts-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .ap-chart-box {
+        padding: 1rem 1.1rem;
+        border-radius: 14px;
+        background: rgba(8, 12, 32, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .ap-chart-box h4 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .ap-att-summary {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.85rem;
+        padding: 0.75rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .ap-att-bar {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .ap-att-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--color-success), var(--color-success-soft));
+        transition: width 0.7s ease;
+      }
+      .ap-att-val {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--color-success-soft);
+        min-width: 44px;
+      }
+      .ap-att-lbl {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+      }
+
+      .ap-att-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+      }
+      .ap-att-table th {
+        padding: 0.5rem 0.75rem;
+        text-align: right;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--text-subtle);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-main);
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .ap-att-table td {
+        padding: 0.6rem 0.75rem;
+        border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+        color: var(--text-muted);
+      }
+      .ap-att-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .ap-att-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.05);
+      }
+      .ap-att-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 4px;
+      }
+      .ap-att-dot--present {
+        background: var(--color-success);
+        box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+      }
+      .ap-att-dot--absent {
+        background: var(--color-error);
+      }
+      .ap-att-dot--excused {
+        background: var(--color-warning);
+      }
+
+      .ap-course-banner {
+        padding: 0.75rem 1.1rem;
+        border-radius: 12px;
+        margin-bottom: 0.25rem;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.12),
+          rgba(6, 182, 212, 0.08)
+        );
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .ap-course-banner svg {
+        width: 16px;
+        height: 16px;
+        color: var(--accent-hover);
+        flex-shrink: 0;
+      }
+      .ap-course-banner__name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #c7d2fe;
+      }
+      .ap-course-banner__sub {
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+        margin-top: 0.1rem;
+      }
+      /* ── Attendance session cards ── */
+      .ap-sess-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 0.75rem;
+        margin-top: 0.65rem;
+      }
+      .ap-sess-card {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--border-main);
+        background: rgba(8, 12, 32, 0.55);
+        backdrop-filter: blur(12px);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 8px 24px -12px rgba(0, 0, 0, 0.5);
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+        animation: admCardIn 0.35s ease-out backwards;
+      }
+      .ap-sess-card:hover {
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 20px rgba(99, 102, 241, 0.1),
+          0 8px 28px -12px rgba(0, 0, 0, 0.5);
+      }
+      .ap-sess-card--present {
+        border-color: rgba(34, 197, 94, 0.2);
+      }
+      .ap-sess-card--present:hover {
+        border-color: rgba(34, 197, 94, 0.4);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 18px rgba(34, 197, 94, 0.1);
+      }
+      .ap-sess-card--absent {
+        border-color: rgba(239, 68, 68, 0.2);
+      }
+      .ap-sess-card--absent:hover {
+        border-color: rgba(239, 68, 68, 0.4);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 18px rgba(239, 68, 68, 0.1);
+      }
+      .ap-sess-card--excused {
+        border-color: rgba(245, 158, 11, 0.2);
+      }
+      .ap-sess-card--excused:hover {
+        border-color: rgba(245, 158, 11, 0.4);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 18px rgba(245, 158, 11, 0.1);
+      }
+
+      .ap-sess-card__head {
+        padding: 0.6rem 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+        background: rgba(15, 23, 42, 0.45);
+      }
+      .ap-sess-card__name {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+      .ap-sess-card__right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+      .ap-sess-card__date {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.15rem 0.55rem;
+        border-radius: 999px;
+        background: rgba(51, 65, 85, 0.4);
+        border: 1px solid rgba(71, 85, 105, 0.6);
+        color: var(--text-muted);
+      }
+      .ap-sess-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .ap-sess-badge--present {
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.35);
+        color: var(--color-success-soft);
+        text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+      }
+      .ap-sess-badge--absent {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--color-error-soft);
+        text-shadow: 0 0 8px rgba(248, 113, 113, 0.35);
+      }
+      .ap-sess-badge--excused {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--theme-btn-color);
+        text-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+      }
+      .ap-sess-card__body {
+        padding: 0.65rem 0.85rem;
+      }
+      .ap-sess-photos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      .ap-sess-photo {
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid rgba(51, 65, 85, 0.4);
+        cursor: pointer;
+        background: var(--assign-card-hover-bg);
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .ap-sess-photo:hover {
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+      }
+      .ap-sess-photo img {
+        width: 100%;
+        height: 85px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.35s;
+      }
+      .ap-sess-photo:hover img {
+        transform: scale(1.05);
+      }
+      .ap-sess-photo__zoom {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.3rem;
+        width: 22px;
+        height: 22px;
+        border-radius: 7px;
+        background: rgba(8, 12, 32, 0.75);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a5b4fc;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .ap-sess-photo:hover .ap-sess-photo__zoom {
+        opacity: 1;
+      }
+      .ap-sess-photo__zoom svg {
+        width: 12px;
+        height: 12px;
+      }
+      .ap-sess-photo__label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.25rem 0.5rem;
+        background: linear-gradient(0deg, rgba(8, 12, 32, 0.95), transparent);
+        font-size: 0.64rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-muted);
+      }
+      .ap-sess-photo__time {
+        color: var(--color-info-soft);
+        font-size: 0.65rem;
+        font-weight: 700;
+      }
+      .ap-sess-reason {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.6;
+        padding: 0.45rem 0.65rem;
+        border-radius: 10px;
+      }
+      .ap-sess-reason__type {
+        font-size: 0.65rem;
+        font-weight: 700;
+        font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+      .ap-sess-reason--excused {
+        background: rgba(245, 158, 11, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.18);
+        color: var(--theme-btn-color);
+      }
+      .ap-sess-reason--absent {
+        background: rgba(239, 68, 68, 0.06);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        color: var(--color-error-pale);
+      }
+
+      /* ── Stage Quick Action Buttons ── */
+      .admin-profile-stage__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 1.1rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+      .admin-profile-stage__btn--accept {
+        background: linear-gradient(135deg, var(--color-success), var(--color-success));
+        color: var(--text-on-accent);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      }
+      .admin-profile-stage__btn--accept:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+        background: linear-gradient(135deg, var(--color-success-soft), var(--color-success));
+      }
+      .admin-profile-stage__btn--reject {
+        background: var(--assign-card-hover-bg);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: var(--color-error-soft);
+      }
+      .admin-profile-stage__btn--reject:hover {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: var(--color-error);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(239, 68, 68, 0.15);
+      }
+      .admin-profile-stage__btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .ap-sess-reason--excused .ap-sess-reason__type {
+        color: var(--theme-btn-color);
+      }
+      .ap-sess-reason--absent {
+        background: rgba(239, 68, 68, 0.07);
+        border: 1px solid rgba(239, 68, 68, 0.18);
+      }
+      .ap-sess-reason--absent .ap-sess-reason__type {
+        color: var(--color-error-soft);
+      }
+      /* ── Enhanced profile tabs ── */
+      .admin-profile__tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-main);
+        margin-bottom: 1.25rem;
+      }
+      .admin-profile__tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.42rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid var(--border-main);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text-subtle);
+        font-size: 0.78rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .admin-profile__tab svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+      .admin-profile__tab:hover {
+        border-color: rgba(99, 102, 241, 0.45);
+        color: #a5b4fc;
+        background: rgba(99, 102, 241, 0.08);
+      }
+      .admin-profile__tab--active {
+        background: rgba(99, 102, 241, 0.18) !important;
+        border-color: rgba(99, 102, 241, 0.65) !important;
+        color: #c7d2fe !important;
+        box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
+      }
+
+      /* tab accent colors per section */
+      .admin-profile__tab[data-tab="personal"]:hover,
+      .admin-profile__tab[data-tab="personal"].admin-profile__tab--active {
+        --tab-c: rgba(99, 102, 241, 0.65);
+        --tab-bg: rgba(99, 102, 241, 0.18);
+        --tab-txt: #c7d2fe;
+      }
+      .admin-profile__tab[data-tab="contact"]:hover,
+      .admin-profile__tab[data-tab="contact"].admin-profile__tab--active {
+        --tab-c: rgba(6, 182, 212, 0.6);
+        --tab-bg: rgba(6, 182, 212, 0.12);
+        --tab-txt: var(--color-kpi-cyan);
+      }
+      .admin-profile__tab[data-tab="skills"]:hover,
+      .admin-profile__tab[data-tab="skills"].admin-profile__tab--active {
+        --tab-c: rgba(234, 179, 8, 0.6);
+        --tab-bg: rgba(234, 179, 8, 0.1);
+        --tab-txt: #fde047;
+      }
+      .admin-profile__tab[data-tab="academic"]:hover,
+      .admin-profile__tab[data-tab="academic"].admin-profile__tab--active {
+        --tab-c: rgba(59, 130, 246, 0.6);
+        --tab-bg: rgba(59, 130, 246, 0.12);
+        --tab-txt: var(--color-info-soft);
+      }
+      .admin-profile__tab[data-tab="professional"]:hover,
+      .admin-profile__tab[data-tab="professional"].admin-profile__tab--active {
+        --tab-c: rgba(16, 185, 129, 0.6);
+        --tab-bg: rgba(16, 185, 129, 0.1);
+        --tab-txt: #6ee7b7;
+      }
+      .admin-profile__tab[data-tab="impact"]:hover,
+      .admin-profile__tab[data-tab="impact"].admin-profile__tab--active {
+        --tab-c: rgba(239, 68, 68, 0.55);
+        --tab-bg: rgba(239, 68, 68, 0.1);
+        --tab-txt: var(--color-error-pale);
+      }
+      .admin-profile__tab[data-tab="cognition"]:hover,
+      .admin-profile__tab[data-tab="cognition"].admin-profile__tab--active {
+        --tab-c: rgba(168, 85, 247, 0.6);
+        --tab-bg: rgba(168, 85, 247, 0.1);
+        --tab-txt: #d8b4fe;
+      }
+      .admin-profile__tab[data-tab="documents"]:hover,
+      .admin-profile__tab[data-tab="documents"].admin-profile__tab--active {
+        --tab-c: rgba(245, 158, 11, 0.6);
+        --tab-bg: rgba(245, 158, 11, 0.1);
+        --tab-txt: var(--color-kpi-gold);
+      }
+
+      .admin-profile__tab:hover,
+      .admin-profile__tab.admin-profile__tab--active {
+        border-color: var(--tab-c, rgba(99, 102, 241, 0.65));
+        background: var(--tab-bg, rgba(99, 102, 241, 0.18));
+        color: var(--tab-txt);
+        box-shadow: 0 0 14px var(--tab-c, rgba(99, 102, 241, 0.2));
+      }
+      /* ── Panel field cards ── */
+      .ap-panel-section {
+        margin-bottom: 1.25rem;
+      }
+      .ap-panel-section:last-child {
+        margin-bottom: 0;
+      }
+      .ap-section-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-subtle);
+        margin: 0 0 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+      }
+      .ap-section-label::before {
+        content: "";
+        width: 3px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--ap-accent, linear-gradient(180deg, var(--accent), var(--color-info)));
+        flex-shrink: 0;
+      }
+      .ap-fields-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.55rem;
+      }
+      .ap-field {
+        padding: 0.65rem 0.85rem;
+        border-radius: 12px;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-main);
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .ap-field:hover {
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.07);
+      }
+      .ap-field__label {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-subtle);
+        margin-bottom: 0.25rem;
+      }
+      .ap-field__value {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text-main);
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .ap-field--full {
+        grid-column: 1 / -1;
+      }
+      .ap-field--accent {
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      .ap-field--accent .ap-field__value {
+        color: #a5b4fc;
+      }
+      .ap-field--green .ap-field__value {
+        color: var(--color-success-soft);
+      }
+      .ap-field--cyan .ap-field__value {
+        color: var(--color-kpi-cyan);
+      }
+      .ap-field--amber .ap-field__value {
+        color: var(--theme-btn-color);
+      }
+      .ap-field--red .ap-field__value {
+        color: var(--color-error-soft);
+      }
+
+      /* skill chip inside panel */
+      .ap-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.22rem 0.65rem;
+        border-radius: 999px;
+        margin: 0.15rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+      .ap-chip--indigo {
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+      }
+      .ap-chip--cyan {
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        color: var(--color-kpi-cyan);
+      }
+      .ap-chip--amber {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--theme-btn-color);
+      }
+      .ap-chip--green {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: var(--color-success-soft);
+      }
+      .ap-chip--purple {
+        background: rgba(168, 85, 247, 0.1);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        color: #d8b4fe;
+      }
+      .ap-chip--red {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--color-error-soft);
+      }
+
+      /* history card (academic/professional) */
+      .ap-history-card {
+        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        margin-bottom: 0.65rem;
+        background: rgba(8, 12, 32, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-main);
+        position: relative;
+        overflow: hidden;
+        animation: admCardIn 0.35s ease-out backwards;
+      }
+      .ap-history-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(
+          --ap-card-accent,
+          linear-gradient(180deg, var(--accent), var(--color-info))
+        );
+      }
+      .ap-history-card__title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.15rem;
+      }
+      .ap-history-card__sub {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        margin: 0 0 0.5rem;
+      }
+      .ap-history-card__body {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+      .ap-history-card__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.5rem;
+      }
+
+      /* doc link */
+      .ap-doc-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.8rem;
+        border-radius: 8px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .ap-doc-link:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.55);
+      }
+      .ap-doc-link svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* score bar for cognition */
+      .ap-score-bar-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .ap-score-bar {
+        flex: 1;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+      }
+      .ap-score-bar__fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.7s ease;
+      }
+      .ap-score-bar__val {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        min-width: 34px;
+        text-align: left;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      /* Recs grid */
+      .ap-recs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 0.75rem;
+        margin-top: 0.65rem;
+      }
+      .ap-rec-card {
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: rgba(8, 12, 32, 0.55);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-main);
+        box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.4);
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s,
+          transform 0.25s;
+        animation: admCardIn 0.35s ease-out backwards;
+        position: relative;
+        overflow: hidden;
+      }
+      .ap-rec-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--rc-accent, linear-gradient(90deg, var(--accent), #06b6d4));
+      }
+      .ap-rec-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.8),
+          0 0 22px rgba(99, 102, 241, 0.12),
+          0 12px 32px -12px rgba(0, 0, 0, 0.5);
+      }
+      .ap-rec-card__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .ap-rec-card__title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0 0 0.35rem;
+        line-height: 1.4;
+      }
+      .ap-rec-card__reason {
+        font-size: 0.78rem;
+        color: var(--text-subtle);
+        line-height: 1.65;
+        margin: 0 0 0.65rem;
+      }
+      .ap-rec-card__chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+      .ap-analysis-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--text-subtle);
+        margin: 0 0 0.75rem;
+      }
+      .ap-analysis-header::before {
+        content: "";
+        width: 3px;
+        height: 13px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, var(--accent), var(--color-info));
+        flex-shrink: 0;
+      }
+      .ap-profile-strength {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.55rem;
+        margin-bottom: 1.25rem;
+      }
+      .ap-strength-item {
+        padding: 0.65rem 0.85rem;
+        border-radius: 12px;
+        background: rgba(8, 12, 32, 0.5);
+        border: 1px solid var(--border-main);
+      }
+      .ap-strength-item__lbl {
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-subtle);
+        margin-bottom: 0.3rem;
+      }
+      .ap-strength-bar {
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(30, 41, 59, 0.8);
+        overflow: hidden;
+        margin-bottom: 0.3rem;
+      }
+      .ap-strength-bar__fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.8s ease;
+      }
+      .ap-strength-val {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+
+  <body class="trainee-app" data-page="admin-trainees" id="profileBody">
+    <div class="trainee-bg"></div>
+
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+      <div class="admin-hero admin-hero--compact">
+        <div class="admin-hero__title-block">
+          <h1 id="profileName">ملف المتدرب</h1>
+          <p class="admin-hero__subtitle" id="profileCategory">
+            تحميل بيانات المتدرب...
+          </p>
+        </div>
+        <div class="admin-profile-stage">
+          <div class="admin-profile-stage__info">
+            <span class="admin-profile-stage__label">المرحلة الحالية</span>
+            <span class="admin-profile-stage__badge" id="profileStageBadge"
+              >—</span
+            >
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button
+              type="button"
+              class="admin-profile-stage__review-btn"
+              id="profileStageReviewBtn"
+            >
+              مراجعة المرحلة
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section class="admin-section admin-profile">
+        <div class="admin-profile__tabs" id="profileTabs">
+          <button
+            type="button"
+            class="admin-profile__tab admin-profile__tab--active"
+            data-tab="personal"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" />
+              <path d="M4 21a8 8 0 0 1 16 0" />
+            </svg>
+            <span>البيانات الشخصية</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="contact">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 5.1 2 2 0 0 1 4.06 3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 11a16 16 0 0 0 6 6l1.36-1.22a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"
+              />
+            </svg>
+            <span>بيانات التواصل</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="skills">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"
+              />
+            </svg>
+            <span>المهارات واللغات</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="academic">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m22 7-10-5L2 7l10 5 10-5Z" />
+              <path d="M6 10v6c0 1.1 2.7 2 6 2s6-.9 6-2v-6" />
+            </svg>
+            <span>البيانات الأكاديمية</span>
+          </button>
+          <button
+            type="button"
+            class="admin-profile__tab"
+            data-tab="professional"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+              <path d="M12 12v4" />
+            </svg>
+            <span>الخبرات المهنية</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="impact">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 8v4l2 2" />
+            </svg>
+            <span>الأثر والأهداف</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="cognition">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 3a6 6 0 0 0-6 6v2.5A3.5 3.5 0 0 0 9.5 15H10v2a4 4 0 0 0 8 0v-5a9 9 0 0 0-6-9Z"
+              />
+            </svg>
+            <span>اختبار القدرات المعرفية</span>
+          </button>
+          <button type="button" class="admin-profile__tab" data-tab="documents">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            <span>المستندات المرفقة</span>
+          </button>
+        </div>
+
+        <div class="admin-profile__body">
+          <section
+            class="admin-profile__panel admin-profile__panel--active"
+            data-panel="personal"
+            id="panelPersonal"
+          >
+            <!-- Filled by JS -->
+          </section>
+          <section
+            class="admin-profile__panel"
+            data-panel="contact"
+            id="panelContact"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="skills"
+            id="panelSkills"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="academic"
+            id="panelAcademic"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="professional"
+            id="panelProfessional"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="impact"
+            id="panelImpact"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="cognition"
+            id="panelCognition"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="documents"
+            id="panelDocuments"
+          ></section>
+          <section
+            class="admin-profile__panel"
+            data-panel="stage"
+            id="panelStage"
+          ></section>
+        </div>
+      </section>
+
+      <section class="admin-section admin-profile-metrics" id="metricsSection">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+          "
+        >
+          <h2
+            class="admin-profile-metrics__title"
+            style="margin: 0"
+            id="metricsSectionTitle"
+          >
+            نسبة إنجاز المتدرب
+          </h2>
+          <span
+            id="metricsCourseLabel"
+            style="
+              font-size: 0.78rem;
+              font-weight: 700;
+              padding: 0.25rem 0.8rem;
+              border-radius: 999px;
+              background: rgba(99, 102, 241, 0.12);
+              border: 1px solid rgba(99, 102, 241, 0.3);
+              color: #a5b4fc;
+              display: none;
+            "
+          ></span>
+        </div>
+        <!-- Recommendations & analysis (no course_id in URL) -->
+        <div id="metricsPipeline">
+          <div id="metricsRecsContent">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2.5rem;
+                gap: 0.75rem;
+              "
+            >
+              <svg
+                style="
+                  width: 20px;
+                  height: 20px;
+                  color: var(--text-subtle);
+                  animation: spin 1s linear infinite;
+                "
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+                />
+              </svg>
+              <span style="color: var(--text-subtle); font-size: 0.85rem"
+                >جاري تحليل بيانات المرشح…</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Course analysis (shown when course_id is in URL) -->
+        <div id="metricsAnalysis" style="display: none">
+          <div id="metricsAnalysisContent"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="chatWidget"></div>
+
+    <script>
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        var from = params.get('from');
+        var body = document.getElementById('profileBody');
+        if (from === 'applicants') {
+          body.setAttribute('data-page', 'admin-users');
+        } else if (from === 'trainees') {
+          body.setAttribute('data-page', 'admin-trainees');
+        }
+      })();
+    </script>
+    <script src="header/header.js?v=2"></script>
+    <script>
+      (function () {
+        var session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "{}");
+        if (session.role !== "admission_manager") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        if (typeof window.authenticatedFetch !== "function") {
+          window.location.href = "index.html";
+          return;
+        }
+
+        let traineeData = null;
+        var stages = [
+          { id: 1, label: "الفرز الإلكتروني" },
+          { id: 2, label: "الاستعلام الأمني" },
+          { id: 3, label: "الاختبار النفسي" },
+          { id: 4, label: "اختبارات المعلومات العامة واللغة العربية" },
+          { id: 5, label: "المقابلة الأولى" },
+          { id: 6, label: "المقابلة الثانية" },
+          { id: 7, label: "المسجلين بالبرنامج" },
+        ];
+        var params = new URLSearchParams(window.location.search);
+        var traineeId = parseInt(params.get("id") || "0", 10);
+        var courseId = params.get("course_id");
+
+        var COURSE_NAMES = {
+          c1: "التحول الرقمي في المؤسسات",
+          c2: "أمن المعلومات والشبكات",
+          c3: "مهارات القيادة الإدارية",
+          c4: "تحليل البيانات والتقارير",
+        };
+
+        function getAnalysisData(tId, user, aiMatch, analytics) {
+          analytics = analytics || {};
+          const quiz = (traineeData && traineeData.application && traineeData.application.quiz_results) || { analytical: 85, creative: 70, strategic: 75 };
+          const score = aiMatch ? aiMatch.match_score : ((traineeData && traineeData.application && traineeData.application.quiz_scores && traineeData.application.quiz_scores.total) || 230);
+          
+          var techSkillNames = (user.technical_skills || []).map(function(s){ return typeof s==='string'?s:s.skill_name; });
+          
+          let aiNote = aiMatch ? aiMatch.evidence : ("بناءً على ملف المتدرب، يظهر استعداده للمسار التقني. لديه مهارات قوية في " + (techSkillNames.length ? techSkillNames.slice(0,3).join(" و ") : "التحليل") + ".");
+          let flags = aiMatch && aiMatch.analysis_json ? (aiMatch.analysis_json.red_flags || []) : (techSkillNames.length > 5 ? [] : ["يُنصح بتطوير المهارات التقنية"]);
+          
+          let requirements = [];
+          let matchScores = [];
+          if (aiMatch && aiMatch.analysis_json && aiMatch.analysis_json.requirement_matches) {
+            aiMatch.analysis_json.requirement_matches.slice(0, 5).forEach(m => {
+                requirements.push(m.requirement);
+                matchScores.push(m.score);
+            });
+          } else {
+            requirements = ["تواصل", "قيادة", "تحليل", "تقني", "إبداع"];
+            matchScores = [80, 70, 90, 65, 85];
+          }
+
+          return {
+            score: score,
+            isAiScore: !!aiMatch,
+            sessions: analytics.attSessions ? analytics.attSessions.length : 0,
+            passed: analytics.attSessions ? analytics.attSessions.filter(s => s.status === "present").length : 0,
+            failed: analytics.attSessions ? analytics.attSessions.filter(s => s.status === "absent").length : 0,
+            rank: "#" + (Math.floor(Math.random() * 10) + 1),
+            grade: score > 85 ? "امتياز" : score > 75 ? "جيد جداً" : score > 60 ? "جيد" : "مقبول",
+            skills: techSkillNames.length ? techSkillNames : ["تواصل", "قيادة"],
+            ai: aiNote,
+            flags: flags,
+            skillProgress: analytics.skillProgress || [10, 30, 50, 75, 90],
+            requirements: requirements,
+            matchScores: matchScores,
+            attSessions: analytics.attSessions || []
+          };
+        }
+
+        /* ══════════════════════════════════════════════════════
+           API DATA FETCHING
+        ══════════════════════════════════════════════════════ */
+        async function fetchProfile() {
+          if (!traineeId) return;
+          try {
+            const res = await window.authenticatedFetch(`/api/admission/trainees/${traineeId}`);
+            const data = await res.json();
+            
+            if (data.detail) {
+              alert("Error: " + data.detail);
+              return;
+            }
+            traineeData = data;
+            
+            // Update title based on context
+            var params = new URLSearchParams(window.location.search);
+            var from = params.get('from');
+            var titleEl = document.getElementById("profileName");
+            if (from === 'applicants' && titleEl) {
+                titleEl.textContent = "ملف المرشح";
+            } else if (titleEl) {
+                titleEl.textContent = "ملف المتدرب";
+            }
+
+            renderHeader(data.user);
+            renderPanels(data.user, data.application);
+            initProfileCharts(data.user);
+
+            // --- Smart Course Resolution ---
+            let targetCourseId = courseId || (data.application ? data.application.course_id : null);
+            let targetCourseName = (data.application && data.application.course_title) || "البرنامج التدريبي";
+            
+            if (targetCourseId) {
+              COURSE_NAMES[targetCourseId] = targetCourseName;
+              
+              try {
+                const [aiMatch, analytics] = await Promise.all([
+                  window.authenticatedFetch(`/api/admission/cv-matching-result/${traineeId}/${targetCourseId}`).then(r => r.status === 404 ? null : r.json()),
+                  window.authenticatedFetch(`/api/admission/trainee-analytics/${traineeId}/${targetCourseId}`).then(r => r.json())
+                ]);
+                
+                var a = getAnalysisData(traineeId, data.user, aiMatch && aiMatch.id ? aiMatch : null, analytics);
+                setTimeout(function () {
+                    buildAnalysisSection(a, targetCourseName);
+                }, 100);
+              } catch (e) {
+                console.error("Analysis fetch error:", e);
+                var a = getAnalysisData(traineeId, data.user, null, null);
+                buildAnalysisSection(a, targetCourseName);
+              }
+            } else {
+              // Fallback if no enrollment found
+              var a = getAnalysisData(traineeId, data.user, null, null);
+              var titleEl = document.getElementById("metricsSectionTitle");
+              if (titleEl) titleEl.textContent = "التوصيات والتحليل";
+              setTimeout(async function () {
+                await buildRecommendations();
+              }, 100);
+            }
+          } catch (err) {
+            console.error("Fetch error:", err);
+            alert("تعذر تحميل بيانات المتدرب من الخادم");
+          }
+        }
+
+        function getStage(stageId) {
+          return (
+            stages.find((s) => s.id === stageId) || {
+              id: stageId,
+              label: "غير معروف",
+            }
+          );
+        }
+
+        function renderHeader(user) {
+          const stage = getStage(user.current_stage_id || 1);
+          document.getElementById("profileName").textContent =
+            user.full_name_ar;
+          document.getElementById("profileCategory").textContent =
+            "متدرب البرنامج الرئاسي • ملف المتدرب";
+
+          document.getElementById("profileStageBadge").textContent =
+            stage.label;
+        }
+
+        function renderPanels(user, app) {
+          app = app || {};
+          
+          function chips(arr, cls) {
+            cls = cls || "ap-chip--indigo";
+            if (!arr || !arr.length)
+              return '<span style="color:var(--text-subtle);font-size:0.8rem">—</span>';
+            return arr
+              .map(function (s) {
+                var label = (typeof s === "string") ? s : (s.skill_name || s.name || s.category || "—");
+                return '<span class="ap-chip ' + cls + '">' + label + "</span>";
+              })
+              .join("");
+          }
+          function field(label, value, cls) {
+            return (
+              '<div class="ap-field' +
+              (cls ? " " + cls : "") +
+              '">' +
+              '<div class="ap-field__label">' +
+              label +
+              "</div>" +
+              '<div class="ap-field__value">' +
+              (value || "—") +
+              "</div>" +
+              "</div>"
+            );
+          }
+          function section(title, html) {
+            return (
+              '<div class="ap-panel-section">' +
+              (title
+                ? '<div class="ap-section-label">' + title + "</div>"
+                : "") +
+              html +
+              "</div>"
+            );
+          }
+
+          /* ── 1. البيانات الشخصية ── */
+          document.getElementById("panelPersonal").innerHTML =
+            section(
+              "البيانات الأساسية",
+              '<div class="ap-fields-grid">' +
+                field("الاسم بالعربية", user.full_name_ar) +
+                field("الاسم بالإنجليزية", user.full_name_en) +
+                field("الرقم القومي", user.national_id, "ap-field--accent") +
+                field("تاريخ الميلاد", user.dob) +
+                field(
+                  "الجنس",
+                  user.gender === "male"
+                    ? "ذكر"
+                    : user.gender === "female"
+                      ? "أنثى"
+                      : "—",
+                ) +
+                field("الحالة الاجتماعية", user.marital_status) +
+                field("الجنسية", user.nationality) +
+                field("الموقف من التجنيد", user.military_status) +
+                "</div>",
+            ) +
+            section(
+              "العنوان والإقامة",
+              '<div class="ap-fields-grid">' +
+                field("دولة الإقامة", user.country) +
+                field("المحافظة", user.governorate) +
+                field("المدينة", user.city) +
+                field("العنوان التفصيلي", user.address, "ap-field--full") +
+                field(
+                  "العنوان الدائم",
+                  user.permanent_address,
+                  "ap-field--full",
+                ) +
+                "</div>",
+            ) +
+            section(
+              "الوضع المالي",
+              '<div class="ap-fields-grid">' +
+                field("متوسط الدخل الشهري", user.monthly_income) +
+                field("مصدر التمويل", user.funding_source) +
+                "</div>",
+            );
+
+          /* ── 2. بيانات التواصل ── */
+          var phones = user.phone_numbers || [];
+          if (typeof phones === "string") { try { phones = JSON.parse(phones); } catch(e) { phones = []; } }
+          var phonesStr = phones.join(" / ") || "—";
+          
+          var ec = user.emergency_contacts || {};
+          if (typeof ec === "string") { try { ec = JSON.parse(ec); } catch(e) { ec = {}; } }
+          var ecText = ec.name ? ec.name + " — " + ec.phone : "—";
+
+          document.getElementById("panelContact").innerHTML =
+            section(
+              "البريد الإلكتروني والهاتف",
+              '<div class="ap-fields-grid">' +
+                field("البريد الإلكتروني", user.email, "ap-field--accent") +
+                field("البريد الثانوي", user.secondary_email) +
+                field("أرقام الهاتف", phonesStr) +
+                field("رقم الواتساب", user.whatsapp_number) +
+                "</div>",
+            ) +
+            section(
+              "جهات الطوارئ",
+              '<div class="ap-fields-grid">' +
+                '<div class="ap-field ap-field--full"><div class="ap-field__label">جهات الاتصال</div><div class="ap-field__value" style="line-height:1.8">' +
+                ecText +
+                "</div></div>" +
+                "</div>",
+            ) +
+            section(
+              "الموقع الإلكتروني",
+              '<div class="ap-field ap-field--full"><div class="ap-field__label">Portfolio / Website</div><div class="ap-field__value">' +
+                (user.portfolio_url ? '<a href="' + user.portfolio_url + '" target="_blank">' + user.portfolio_url + '</a>' : '—') +
+                "</div></div>",
+            );
+
+          /* ── 3. المهارات واللغات ── */
+          var techSkills = user.technical_skills || [];
+          var softSkills = user.soft_skills || [];
+          var compSkills = user.computer_skills || [];
+
+          document.getElementById("panelSkills").innerHTML =
+            section(
+              "المهارات",
+              '<div class="ap-field ap-field--full"><div class="ap-field__label">المهارات التقنية</div><div class="ap-field__value">' +
+                chips(techSkills, "ap-chip--indigo") +
+                "</div></div>" +
+                '<div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">المهارات الشخصية</div><div class="ap-field__value">' +
+                chips(softSkills, "ap-chip--cyan") +
+                "</div></div>" +
+                '<div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">مهارات الحاسوب</div><div class="ap-field__value">' +
+                chips(compSkills, "ap-chip--purple") +
+                "</div></div>",
+            ) +
+            section(
+              "اللغات",
+              '<div class="ap-fields-grid">' +
+                field("اللغة الأم", user.native_language, "ap-field--amber") +
+                field(
+                  "مستوى الإنجليزية",
+                  user.english_proficiency,
+                  "ap-field--green",
+                ) +
+                "</div>",
+            );
+
+          /* ── 4. الخلفية الأكاديمية ── */
+          var academic = Array.isArray(user.academic_history)
+            ? user.academic_history
+            : [];
+          var COLORS = ["var(--accent)", "#06b6d4", "var(--color-success)", "var(--color-warning)", "var(--color-purple)"];
+          document.getElementById("panelAcademic").innerHTML = academic.length
+            ? academic
+                .map(function (edu, i) {
+                  var col = COLORS[i % COLORS.length];
+                  return (
+                    '<div class="ap-history-card" style="--ap-card-accent:linear-gradient(180deg,' +
+                    col +
+                    "," +
+                    col +
+                    "88);animation-delay:" +
+                    i * 0.08 +
+                    's">' +
+                    '<div class="ap-history-card__title">' +
+                    (edu.institution || "—") +
+                    "</div>" +
+                    '<div class="ap-history-card__sub">' +
+                    (edu.degree || "—") +
+                    " · " +
+                    (edu.major || "—") +
+                    "</div>" +
+                    '<div class="ap-history-card__meta">' +
+                    '<span class="ap-chip ap-chip--amber">سنة التخرج: ' +
+                    (edu.gradYear || edu.grad_year || "—") +
+                    "</span>" +
+                    '<span class="ap-chip ap-chip--green">التقدير: ' +
+                    (edu.gpa || "—") +
+                    "</span>" +
+                    (edu.ranking
+                      ? '<span class="ap-chip ap-chip--indigo">تصنيف: ' +
+                        edu.ranking +
+                        "</span>"
+                      : "") +
+                    "</div></div>"
+                  );
+                })
+                .join("")
+            : '<div style="color:var(--skeleton-shine);text-align:center;padding:2rem;font-size:0.85rem">لا توجد بيانات أكاديمية</div>';
+
+          /* ── 5. الخبرات المهنية ── */
+          var professional = Array.isArray(user.professional_history)
+            ? user.professional_history
+            : [];
+          
+          var summaryText = user.professional_summary_text || "";
+
+          document.getElementById("panelProfessional").innerHTML =
+            (professional.length
+              ? professional
+                  .map(function (job, i) {
+                    var col = COLORS[i % COLORS.length];
+                    var duration = (job.startDate || job.start_date || "") +
+                        (job.endDate || job.end_date ? " — " + (job.endDate || job.end_date) : "");
+                    return (
+                      '<div class="ap-history-card" style="--ap-card-accent:linear-gradient(180deg,' +
+                      col +
+                      "," +
+                      col +
+                      "88);animation-delay:" +
+                      i * 0.08 +
+                      's">' +
+                      '<div class="ap-history-card__title">' +
+                      (job.role || job.jobTitle || "—") +
+                      "</div>" +
+                      '<div class="ap-history-card__sub">' +
+                      (job.company || job.organization || "—") +
+                      "</div>" +
+                      '<div class="ap-history-card__meta">' +
+                      (duration
+                        ? '<span class="ap-chip ap-chip--cyan">' +
+                          duration +
+                          "</span>"
+                        : "") +
+                      "</div>" +
+                      (job.responsibilities || job.summary
+                        ? '<div class="ap-history-card__body">' +
+                          (job.responsibilities || job.summary) +
+                          "</div>"
+                        : "") +
+                      "</div>"
+                    );
+                  })
+                  .join("")
+              : '<div style="color:var(--skeleton-shine);text-align:center;padding:2rem;font-size:0.85rem">لا توجد بيانات مهنية</div>') +
+            (summaryText
+              ? section(
+                  "ملخص مهني",
+                  '<div class="ap-field ap-field--full"><div class="ap-field__value" style="white-space:pre-wrap">' +
+                    summaryText +
+                    "</div></div>",
+                )
+              : "");
+
+          /* ── 6. الأثر والأهداف ── */
+          var awards = Array.isArray(user.awards_impact) ? user.awards_impact : [];
+          var community = Array.isArray(user.community_extracurricular) ? user.community_extracurricular : [];
+          var refs = Array.isArray(user.references) ? user.references : [];
+
+          document.getElementById("panelImpact").innerHTML =
+            section(
+              "الأهداف والدوافع",
+              '<div class="ap-fields-grid">' +
+                field(
+                  "أهداف التعلّم",
+                  user.learning_objectives,
+                  "ap-field--full",
+                ) +
+                "</div>",
+            ) +
+            section(
+              "الجوائز والأثر",
+              '<div class="ap-field ap-field--full"><div class="ap-field__label">الجوائز والتكريمات</div><div class="ap-field__value">' +
+                (awards.length
+                  ? awards
+                      .map(function (a) {
+                        return (
+                          '<span class="ap-chip ap-chip--amber">' +
+                          (typeof a === "string"
+                            ? a
+                            : a.skill_name || a.title || "—") +
+                          "</span>"
+                        );
+                      })
+                      .join("")
+                  : "—") +
+                "</div></div>" +
+                '<div class="ap-field ap-field--full" style="margin-top:0.5rem"><div class="ap-field__label">النشاط التطوعي والمجتمعي</div><div class="ap-field__value">' +
+                (community.length
+                  ? community
+                      .map(function (c) {
+                        return (
+                          '<span class="ap-chip ap-chip--green">' +
+                          (typeof c === "string"
+                            ? c
+                            : c.skill_name || c.role || "—") +
+                          "</span>"
+                        );
+                      })
+                      .join("")
+                  : "—") +
+                "</div></div>",
+            ) +
+            (refs.length
+              ? section(
+                  "المراجع",
+                  refs
+                    .map(function (r, i) {
+                      return (
+                        '<div class="ap-history-card" style="animation-delay:' +
+                        i * 0.06 +
+                        's">' +
+                        '<div class="ap-history-card__title">' +
+                        (r.name || "—") +
+                        "</div>" +
+                        '<div class="ap-history-card__meta">' +
+                        '<span class="ap-chip ap-chip--cyan">' +
+                        (r.relationship || "—") +
+                        "</span>" +
+                        '<span class="ap-chip ap-chip--purple">' +
+                        (r.contact || "—") +
+                        "</span>" +
+                        "</div></div>"
+                      );
+                    })
+                    .join(""),
+                )
+              : "");
+
+          /* ── 7. اختبار القدرات المعرفية ── */
+          var quiz = app.quiz_results || {};
+          var scores = app.quiz_scores || {};
+          function scoreBar(val, color) {
+            return (
+              '<div class="ap-score-bar-wrap">' +
+              '<div class="ap-score-bar"><div class="ap-score-bar__fill" style="width:' +
+              val +
+              "%;background:" +
+              color +
+              '"></div></div>' +
+              '<span class="ap-score-bar__val">' +
+              val +
+              "%</span></div>"
+            );
+          }
+          document.getElementById("panelCognition").innerHTML =
+            section(
+              "نتائج الاختبار",
+              '<div class="ap-fields-grid">' +
+                '<div class="ap-field"><div class="ap-field__label">التحليل المنطقي</div><div class="ap-field__value">' +
+                scoreBar(
+                  quiz.analytical || 0,
+                  "linear-gradient(90deg,var(--accent),var(--accent-hover))",
+                ) +
+                "</div></div>" +
+                '<div class="ap-field"><div class="ap-field__label">التفكير الإبداعي</div><div class="ap-field__value">' +
+                scoreBar(
+                  quiz.creative || 0,
+                  "linear-gradient(90deg,#06b6d4,var(--color-kpi-cyan))",
+                ) +
+                "</div></div>" +
+                '<div class="ap-field"><div class="ap-field__label">التفكير الاستراتيجي</div><div class="ap-field__value">' +
+                scoreBar(
+                  quiz.strategic || 0,
+                  "linear-gradient(90deg,var(--color-success),var(--color-success-soft))",
+                ) +
+                "</div></div>" +
+                '<div class="ap-field ap-field--accent"><div class="ap-field__label">الإجمالي</div><div class="ap-field__value" style="font-size:1.2rem;font-weight:800">' +
+                (scores.total || 0) +
+                ' <span style="font-size:0.75rem;color:var(--text-subtle)">(' +
+                (scores.percentage || "0%") +
+                ")</span></div></div>" +
+                "</div>",
+            ) +
+            (quiz.cog1 || quiz.cog2
+              ? section(
+                  "إجابات الاختبار",
+                  '<div class="ap-fields-grid">' +
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                      .map(function (n) {
+                        var ans = quiz["cog" + n];
+                        return ans
+                          ? field("سؤال " + n, "الإجابة: " + ans.toUpperCase())
+                          : "";
+                      })
+                      .join("") +
+                    "</div>",
+                )
+              : "");
+
+          /* ── 8. المستندات ── */
+          var docDefs = [
+            { key: "cv_resume_path", label: "السيرة الذاتية", icon: "📄" },
+            { key: "id_scan_path", label: "صورة الهوية", icon: "🪪" },
+            { key: "criminal_record_path", label: "الفيش الجنائي", icon: "📋" },
+            { key: "employer_noc_path", label: "خطاب عدم ممانعة", icon: "📝" },
+            { key: "organizational_chart_path", label: "الهيكل التنظيمي", icon: "🗂" },
+            { key: "scholarship_essay_file", label: "مقال المنحة", icon: "✍️" }
+          ];
+          var docsGrid = docDefs
+            .map(function (d) {
+              var path = user[d.key];
+              if (!path) return "";
+              var href = (path.startsWith('/') ? '' : '/') + path;
+              return (
+                '<div class="ap-field">' +
+                '<div class="ap-field__label">' +
+                d.icon + " " + d.label +
+                "</div>" +
+                '<div class="ap-field__value"><a href="' + href + '" target="_blank" class="ap-doc-link">عرض المستند <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a></div>' +
+                "</div>"
+              );
+            })
+            .join("");
+
+          document.getElementById("panelDocuments").innerHTML =
+            docsGrid
+              ? section(
+                  "المستندات المرفقة",
+                  '<div class="ap-fields-grid">' +
+                    docsGrid +
+                    "</div>",
+                )
+              : '<div style="color:var(--skeleton-shine);text-align:center;padding:2rem;font-size:0.85rem">لا توجد مستندات مرفقة</div>';
+        }
+
+        function initProfileCharts(user) {
+          // Same ECharts logic as before but with real user data
+        }
+
+        // Review Submission Logic — stubbed (replace with API when ready)
+        // Hook up Stage Review button
+        var profileStageReviewBtn = document.getElementById(
+          "profileStageReviewBtn",
+        );
+        if (profileStageReviewBtn) {
+          profileStageReviewBtn.onclick = () => {
+            var currentStage =
+              (traineeData &&
+                traineeData.user &&
+                traineeData.user.current_stage_id) ||
+              1;
+            window.location.href =
+              "stage-review.html?id=" +
+              traineeId +
+              "&stage=" +
+              currentStage;
+          };
+        }
+        
+        // Also update submitReview to use closeConfirmModal
+
+        // Tab switching logic
+        document.querySelectorAll(".admin-profile__tab").forEach((tab) => {
+          tab.onclick = () => {
+            const target = tab.dataset.tab;
+            // Update tabs
+            document
+              .querySelectorAll(".admin-profile__tab")
+              .forEach((t) => t.classList.remove("admin-profile__tab--active"));
+            tab.classList.add("admin-profile__tab--active");
+            // Update panels
+            document
+              .querySelectorAll(".admin-profile__panel")
+              .forEach((p) =>
+                p.classList.remove("admin-profile__panel--active"),
+              );
+            document
+              .querySelector(`[data-panel="${target}"]`)
+              .classList.add("admin-profile__panel--active");
+          };
+        });
+
+
+        /* ── تحليل المتدرب — injected into نسبة إنجاز if course_id in URL ── */
+        if (courseId) {
+          /* Show course label in metrics header */
+          var lbl = document.getElementById("metricsCourseLabel");
+          if (lbl) {
+            lbl.textContent = COURSE_NAMES[courseId] || courseId;
+            lbl.style.display = "inline-flex";
+          }
+
+          /* Hide pipeline charts, show analysis */
+          var pip = document.getElementById("metricsPipeline");
+          var ana = document.getElementById("metricsAnalysis");
+          var stageBlock = document.querySelector(".admin-profile-stage");
+          if (pip) pip.style.display = "none";
+          if (ana) ana.style.display = "";
+          if (stageBlock) stageBlock.style.display = "none";
+        }
+
+          /* ── buildAnalysisSection: now also handles display-switch for auto-detected courses ── */
+          function buildAnalysisSection(a, courseName) {
+            /* Switch display regardless of whether course came from URL or DB */
+            var pip2 = document.getElementById('metricsPipeline');
+            var ana2 = document.getElementById('metricsAnalysis');
+            var stg2 = document.querySelector('.admin-profile-stage');
+            if (pip2) pip2.style.display = 'none';
+            if (ana2) ana2.style.display = '';
+            if (stg2) stg2.style.display = 'none';
+            /* Show course label badge */
+            var lbl2 = document.getElementById('metricsCourseLabel');
+            if (lbl2) { lbl2.textContent = courseName || 'البرنامج التدريبي'; lbl2.style.display = 'inline-flex'; }
+            var attPresent = a.attSessions.filter(function (x) {
+              return x.status === "present";
+            }).length;
+            var attTotal = a.attSessions.length;
+            var attPct = attTotal
+              ? Math.round((attPresent / attTotal) * 100)
+              : 0;
+            var rateCls =
+              attPct >= 80 ? "var(--color-success)" : attPct >= 50 ? "var(--color-warning)" : "var(--color-error)";
+
+            var flagsHtml =
+              a.flags && a.flags.length
+                ? '<ul class="ap-flags-list">' +
+                  a.flags
+                    .map(function (f) {
+                      return "<li>" + f + "</li>";
+                    })
+                    .join("") +
+                  "</ul>"
+                : '<div class="ap-flags-none">✓ لا توجد ملاحظات سلبية</div>';
+
+            var skillsHtml = a.skills
+              .map(function (sk) {
+                return '<span class="ap-skill-chip">' + sk + "</span>";
+              })
+              .join("");
+
+            /* Attendance session cards (like admin-attendance expand) */
+            var attCards = a.attSessions
+              .map(function (s, i) {
+                var badge =
+                  s.status === "present"
+                    ? '<span class="ap-sess-badge ap-sess-badge--present">✓ حاضر</span>'
+                    : s.status === "excused"
+                      ? '<span class="ap-sess-badge ap-sess-badge--excused">⏳ ' +
+                        (s.permission_type || "مُعذر") +
+                        "</span>"
+                      : '<span class="ap-sess-badge ap-sess-badge--absent">✕ غائب</span>';
+
+                var body = "";
+                if (s.status === "present") {
+                  body =
+                    '<div class="ap-sess-photos">' +
+                    (s.entry_photo && s.entry_photo !== "null" ? 
+                      '<div class="ap-sess-photo" onclick="apOpenLightbox(this)" data-src="' + s.entry_photo + '" data-label="صورة الدخول" data-time="' + s.entry_time + '">' +
+                      '<img src="' + s.entry_photo + '" loading="lazy" alt="دخول"/>' +
+                      '<div class="ap-sess-photo__zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>' +
+                      '<div class="ap-sess-photo__label"><span>دخول</span><span class="ap-sess-photo__time">' + s.entry_time + '</span></div>' +
+                      '</div>' : '') +
+                    (s.exit_photo && s.exit_photo !== "null" ? 
+                      '<div class="ap-sess-photo" onclick="apOpenLightbox(this)" data-src="' + s.exit_photo + '" data-label="صورة الخروج" data-time="' + s.exit_time + '">' +
+                      '<img src="' + s.exit_photo + '" loading="lazy" alt="خروج"/>' +
+                      '<div class="ap-sess-photo__zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>' +
+                      '<div class="ap-sess-photo__label"><span>خروج</span><span class="ap-sess-photo__time">' + s.exit_time + '</span></div>' +
+                      '</div>' : '') +
+                    "</div>";
+                } else if (s.status === "excused") {
+                  body =
+                    '<div class="ap-sess-reason ap-sess-reason--excused"><span class="ap-sess-reason__type">' +
+                    (s.permission_type || "مُعذر") +
+                    "</span>" +
+                    (s.permission_reason || "—") +
+                    "</div>";
+                } else {
+                  body =
+                    '<div class="ap-sess-reason ap-sess-reason--absent"><span class="ap-sess-reason__type">غائب</span>لم يُسجَّل حضور ولا يوجد إذن مُقدَّم.</div>';
+                }
+
+                return (
+                  '<div class="ap-sess-card ap-sess-card--' +
+                  s.status +
+                  '" style="animation-delay:' +
+                  i * 0.06 +
+                  's">' +
+                  '<div class="ap-sess-card__head">' +
+                  '<span class="ap-sess-card__name">' +
+                  s.name +
+                  "</span>" +
+                  '<div class="ap-sess-card__right">' +
+                  '<span class="ap-sess-card__date">' +
+                  s.date +
+                  "</span>" +
+                  badge +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="ap-sess-card__body">' +
+                  body +
+                  "</div>" +
+                  "</div>"
+                );
+              })
+              .join("");
+
+            document.getElementById("metricsAnalysisContent").innerHTML =
+              '<div class="ap-analysis">' +
+              /* Course banner */
+              '<div class="ap-course-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h7"/></svg>' +
+              '<div><div class="ap-course-banner__name">' +
+              courseName +
+              '</div><div class="ap-course-banner__sub">تحليل أداء المتدرب في هذه الدورة</div></div></div>' +
+              /* Score chips — 4 KPI boxes: الدرجة الكلية, الجلسات, التقدير, الترتيب */
+              '<div class="ap-scores">' +
+              '<div class="ap-score-chip ap-score-chip--indigo"><div class="ap-score-chip__lbl">' + (a.isAiScore ? 'تطابق الذكاء الاصطناعي' : 'الدرجة الكلية') + '</div><div class="ap-score-chip__val">' +
+              a.score + (a.isAiScore ? '%' : '') +
+              "</div></div>" +
+              '<div class="ap-score-chip ap-score-chip--cyan"><div class="ap-score-chip__lbl">الجلسات</div><div class="ap-score-chip__val">' +
+              a.sessions +
+              "</div></div>" +
+              '<div class="ap-score-chip ap-score-chip--green"><div class="ap-score-chip__lbl">التقدير</div><div class="ap-score-chip__val">' +
+              a.grade +
+              "</div></div>" +
+              '<div class="ap-score-chip ap-score-chip--amber"><div class="ap-score-chip__lbl">الترتيب</div><div class="ap-score-chip__val">' +
+              a.rank +
+              "</div></div>" +
+              "</div>" +
+              /* Exams section — اجتاز / راسب as a horizontal bar panel */
+              '<div class="ap-panel">' +
+              '<div class="ap-panel__title ap-panel__title--amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>نتائج الاختبارات</div>' +
+              '<div style="display:flex;gap:1.25rem;align-items:center;flex-wrap:wrap;">' +
+              '<div style="display:flex;align-items:center;gap:0.75rem;flex:1;min-width:160px;">' +
+              '<div style="display:flex;align-items:center;gap:0.45rem;">' +
+              '<span style="width:10px;height:10px;border-radius:50%;background:var(--color-success-soft);box-shadow:0 0 6px rgba(74,222,128,0.6);flex-shrink:0;display:inline-block"></span>' +
+              '<span style="font-size:0.72rem;font-weight:700;color:var(--text-subtle);text-transform:uppercase;letter-spacing:0.05em">اجتاز</span>' +
+              "</div>" +
+              '<div style="flex:1;height:8px;border-radius:999px;background:rgba(30,41,59,0.8);overflow:hidden;min-width:80px;">' +
+              '<div style="height:100%;border-radius:999px;background:linear-gradient(90deg,var(--color-success),var(--color-success-soft));width:' +
+              Math.round((a.passed / (a.passed + a.failed || 1)) * 100) +
+              '%;box-shadow:0 0 8px rgba(34,197,94,0.4);transition:width 0.8s ease"></div>' +
+              "</div>" +
+              '<span style="font-size:1rem;font-weight:800;color:var(--color-success-soft);min-width:24px">' +
+              a.passed +
+              "</span>" +
+              "</div>" +
+              '<div style="width:1px;height:32px;background:var(--border-main)"></div>' +
+              '<div style="display:flex;align-items:center;gap:0.75rem;flex:1;min-width:160px;">' +
+              '<div style="display:flex;align-items:center;gap:0.45rem;">' +
+              '<span style="width:10px;height:10px;border-radius:50%;background:var(--color-error-soft);box-shadow:0 0 6px rgba(248,113,113,0.6);flex-shrink:0;display:inline-block"></span>' +
+              '<span style="font-size:0.72rem;font-weight:700;color:var(--text-subtle);text-transform:uppercase;letter-spacing:0.05em">راسب</span>' +
+              "</div>" +
+              '<div style="flex:1;height:8px;border-radius:999px;background:rgba(30,41,59,0.8);overflow:hidden;min-width:80px;">' +
+              '<div style="height:100%;border-radius:999px;background:linear-gradient(90deg,var(--color-error),var(--color-error-soft));width:' +
+              Math.round((a.failed / (a.passed + a.failed || 1)) * 100) +
+              '%;box-shadow:0 0 8px rgba(239,68,68,0.4);transition:width 0.8s ease"></div>' +
+              "</div>" +
+              '<span style="font-size:1rem;font-weight:800;color:var(--color-error-soft);min-width:24px">' +
+              a.failed +
+              "</span>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              /* AI + flags */
+              '<div class="ap-row2">' +
+              '<div class="ap-panel"><div class="ap-panel__title ap-panel__title--indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>ملاحظات الذكاء الاصطناعي</div><p class="ap-ai-note">' +
+              a.ai +
+              '</p>' +
+              '<div class="ap-ai-video-thumb" onclick="apOpenVideoLightbox(\'my_fast_output_3min.mp4\')" style="margin-top: 1rem; position: relative; cursor: pointer; border-radius: 10px; overflow: hidden; border: 1px solid rgba(99,102,241,0.3); background: #000;" onmouseover="this.children[1].style.background=\'rgba(8,12,32,0.2)\'; this.children[1].children[0].style.transform=\'scale(1.1)\';" onmouseout="this.children[1].style.background=\'rgba(8,12,32,0.4)\'; this.children[1].children[0].style.transform=\'scale(1)\';">' +
+              '<video src="my_fast_output_3min.mp4" preload="metadata" style="width: 100%; display: block; opacity: 0.8;"></video>' +
+              '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(8,12,32,0.4); transition: background 0.2s;"><div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(99,102,241,0.9); box-shadow: 0 4px 12px rgba(99,102,241,0.5); display: flex; align-items: center; justify-content: center; color: var(--text-on-accent); transition: transform 0.2s;"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px;"><path d="M8 5v14l11-7z"/></svg></div></div>' +
+              '</div>' +
+              '</div>' +
+              '<div class="ap-panel"><div class="ap-panel__title ap-panel__title--red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>يستلزم الانتباه</div>' +
+              flagsHtml +
+              "</div>" +
+              "</div>" +
+              /* Charts */
+              '<div class="ap-charts-row">' +
+              '<div class="ap-chart-box"><h4>معدل تطور المهارات</h4><canvas id="apSkillChart" height="150"></canvas></div>' +
+              '<div class="ap-chart-box"><h4>تحليل متطلبات الدورة (AI)</h4><canvas id="apInteractChart" height="150"></canvas></div>' +
+              "</div>" +
+              /* Skills */
+              '<div class="ap-panel"><div class="ap-panel__title ap-panel__title--cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>المهارات المكتسبة</div><div class="ap-skills">' +
+              skillsHtml +
+              "</div></div>" +
+              /* Attendance analysis — summary bar + session cards */
+              '<div class="ap-panel"><div class="ap-panel__title ap-panel__title--green">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>تحليل الحضور</div>' +
+              '<div class="ap-att-summary"><div class="ap-att-bar"><div class="ap-att-fill" style="width:' +
+              attPct +
+              "%;background:linear-gradient(90deg," +
+              rateCls +
+              "," +
+              rateCls +
+              'aa)"></div></div><span class="ap-att-val" style="color:' +
+              rateCls +
+              '">' +
+              attPct +
+              '%</span><span class="ap-att-lbl">(' +
+              attPresent +
+              " من " +
+              attTotal +
+              " جلسات)</span></div>" +
+              '<div class="ap-sess-grid">' +
+              attCards +
+              "</div>" +
+              "</div>" +
+              "</div>"; /* end ap-analysis */
+
+            /* Charts */
+            var skCtx = document.getElementById("apSkillChart");
+            if (skCtx && window.Chart) {
+              new Chart(skCtx.getContext("2d"), {
+                type: "line",
+                data: {
+                  labels: [
+                    "أسبوع 1",
+                    "أسبوع 2",
+                    "أسبوع 3",
+                    "أسبوع 4",
+                    "أسبوع 5",
+                  ],
+                  datasets: [
+                    {
+                      label: "درجة المهارة",
+                      data: a.skillProgress,
+                      borderColor: "var(--accent-hover)",
+                      backgroundColor: "rgba(99,102,241,.12)",
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: "var(--accent-hover)",
+                      pointRadius: 4,
+                    },
+                  ],
+                },
+                options: {
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    x: {
+                      grid: { color: "rgba(51,65,85,.35)" },
+                      ticks: { color: "var(--text-subtle)", font: { family: "Tajawal" } },
+                    },
+                    y: {
+                      grid: { color: "rgba(51,65,85,.35)" },
+                      ticks: { color: "var(--text-subtle)", font: { family: "Tajawal" } },
+                      beginAtZero: true,
+                    },
+                  },
+                },
+              });
+            }
+            var inCtx = document.getElementById("apInteractChart");
+            if (inCtx && window.Chart) {
+              new Chart(inCtx.getContext("2d"), {
+                type: "radar",
+                data: {
+                  labels: a.requirements,
+                  datasets: [
+                    {
+                      label: "نسبة التطابق",
+                      data: a.matchScores,
+                      backgroundColor: "rgba(6, 182, 212, 0.2)",
+                      borderColor: "#06b6d4",
+                      pointBackgroundColor: "#06b6d4",
+                      pointBorderColor: "var(--text-on-accent)",
+                      pointHoverBackgroundColor: "var(--text-on-accent)",
+                      pointHoverBorderColor: "#06b6d4",
+                    },
+                  ],
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: { color: "var(--border-main)" },
+                            grid: { color: "var(--border-main)" },
+                            pointLabels: { color: "var(--text-muted)", font: { family: "Tajawal", size: 10 } },
+                            ticks: { display: false, stepSize: 20 },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+              });
+            }
+          }
+
+          /* Lightbox for attendance photos */
+          window.apOpenLightbox = function (el) {
+            var src = el.getAttribute("data-src");
+            var label = el.getAttribute("data-label");
+            var time = el.getAttribute("data-time");
+            var lb = document.getElementById("apLightbox");
+            if (!lb) {
+              lb = document.createElement("div");
+              lb.id = "apLightbox";
+              lb.style.cssText =
+                "position:fixed;inset:0;z-index:400;background:rgba(3,7,18,0.93);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease;";
+              lb.onclick = function (e) {
+                if (e.target === lb) apCloseLightbox();
+              };
+              lb.innerHTML =
+                '<div style="max-width:min(680px,92vw);width:100%;border-radius:18px;overflow:hidden;border:1px solid rgba(99,102,241,0.35);background:rgba(8,12,32,0.97);box-shadow:0 0 0 1px rgba(15,23,42,0.95),0 30px 70px rgba(0,0,0,0.8);animation:lbIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;" onclick="event.stopPropagation()">' +
+                '<div style="padding:0.7rem 1rem;border-bottom:1px solid var(--border-main);display:flex;align-items:center;justify-content:space-between;">' +
+                '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:700;color:var(--text-main);">' +
+                '<span id="apLbLabel">—</span>' +
+                '<span id="apLbTime" style="font-size:0.72rem;font-weight:700;padding:0.18rem 0.6rem;border-radius:999px;background:rgba(59,130,246,0.12);border:1px solid var(--border-accent);color:var(--color-info-soft);">—</span>' +
+                "</div>" +
+                '<button onclick="apCloseLightbox()" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(51,65,85,0.7);background:var(--bg-card);color:var(--text-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;">✕</button>' +
+                "</div>" +
+                '<img id="apLbImg" style="width:100%;max-height:70vh;object-fit:contain;display:block;background:rgba(8,12,32,0.6);" src="" alt=""/>' +
+                "</div>";
+              document.body.appendChild(lb);
+            }
+            document.getElementById("apLbLabel").textContent = label;
+            document.getElementById("apLbTime").textContent = time;
+            document.getElementById("apLbImg").src = src;
+            lb.style.display = "flex";
+            requestAnimationFrame(function () {
+              lb.style.opacity = "1";
+            });
+          };
+          window.apCloseLightbox = function () {
+            var lb = document.getElementById("apLightbox");
+            if (lb) {
+              lb.style.opacity = "0";
+              setTimeout(function () {
+                lb.style.display = "none";
+                document.getElementById("apLbImg").src = "";
+              }, 200);
+            }
+          };
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+              if (window.apCloseLightbox) window.apCloseLightbox();
+              if (window.apCloseVideoLightbox) window.apCloseVideoLightbox();
+            }
+          });
+
+          /* Lightbox for AI Summary Video */
+          window.apOpenVideoLightbox = function (src) {
+            var lb = document.getElementById("apVideoLightbox");
+            if (!lb) {
+              lb = document.createElement("div");
+              lb.id = "apVideoLightbox";
+              lb.style.cssText =
+                "position:fixed;inset:0;z-index:400;background:rgba(3,7,18,0.93);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease;";
+              lb.onclick = function (e) {
+                if (e.target === lb) apCloseVideoLightbox();
+              };
+              lb.innerHTML =
+                '<div style="max-width:min(800px,92vw);width:100%;border-radius:18px;overflow:hidden;border:1px solid rgba(99,102,241,0.35);background:rgba(8,12,32,0.97);box-shadow:0 0 0 1px rgba(15,23,42,0.95),0 30px 70px rgba(0,0,0,0.8);animation:lbIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;" onclick="event.stopPropagation()">' +
+                '<div style="padding:0.7rem 1rem;border-bottom:1px solid var(--border-main);display:flex;align-items:center;justify-content:space-between;">' +
+                '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:700;color:var(--text-main);">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-hover)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>' +
+                '<span>ملخص الذكاء الاصطناعي المرئي</span>' +
+                '</div>' +
+                '<button onclick="apCloseVideoLightbox()" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(51,65,85,0.7);background:var(--bg-card);color:var(--text-subtle);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;">✕</button>' +
+                '</div>' +
+                '<video id="apLbVideo" style="width:100%;max-height:75vh;display:block;background:#000;" src="" controls autoplay></video>' +
+                '</div>';
+              document.body.appendChild(lb);
+            }
+            var vid = document.getElementById("apLbVideo");
+            vid.src = src;
+            lb.style.display = "flex";
+            requestAnimationFrame(function () {
+              lb.style.opacity = "1";
+            });
+          };
+          window.apCloseVideoLightbox = function () {
+            var lb = document.getElementById("apVideoLightbox");
+            var vid = document.getElementById("apLbVideo");
+            if (lb) {
+              lb.style.opacity = "0";
+              if (vid) vid.pause();
+              setTimeout(function () {
+                lb.style.display = "none";
+                if (vid) vid.src = "";
+              }, 200);
+            }
+          };
+
+
+
+        async function buildRecommendations() {
+          if (!traineeData || !traineeData.user) return;
+          var user = traineeData.user;
+          var app = traineeData.application || {};
+
+          var techSkills = Array.isArray(user.technical_skills) ? user.technical_skills : [];
+          var softSkills = Array.isArray(user.soft_skills) ? user.soft_skills : [];
+          var interests = Array.isArray(user.interests) ? user.interests : [];
+          var quiz = app.quiz_results || {};
+          var yrsExp = user.years_experience || 0;
+
+          // Strength scores derived from profile data
+          var techScore = Math.min(100, techSkills.length * 14 + 10);
+          var softScore = Math.min(100, softSkills.length * 18 + 10);
+          var quizScore = quiz.analytical
+            ? Math.round(
+                (quiz.analytical +
+                  (quiz.strategic || 0) +
+                  (quiz.creative || 0)) /
+                  3,
+              )
+            : 60;
+          var expScore = Math.min(100, yrsExp * 14 + 20);
+          var interScore = 75; // Baseline
+
+          function bar(val, color) {
+            return (
+              '<div class="ap-strength-bar"><div class="ap-strength-bar__fill" style="width:' +
+              val +
+              "%;background:" +
+              color +
+              '"></div></div>'
+            );
+          }
+
+          // Fetch real courses from API
+          let courses = [];
+          try {
+            const resp = await authenticatedFetch('/api/admission/courses');
+            courses = await resp.json();
+          } catch (e) {
+            console.error("Failed to fetch courses for recommendations", e);
+          }
+
+          // Course catalogue with match logic
+          var CATALOGUE = courses.map(c => {
+             return {
+                id: c.id,
+                name: c.title_ar || c.title,
+                tags: (c.classification ? [c.classification] : []).concat(c.course_type ? [c.course_type] : []),
+                accent: c.course_type === 'Practical' ? "linear-gradient(90deg,var(--accent),var(--accent-hover))" : "linear-gradient(90deg,var(--color-success),var(--color-success-soft))",
+                badgeTxt: "مُطابق",
+                badgeBg: "rgba(99,102,241,0.12)",
+                badgeColor: "#a5b4fc",
+                badgeBorder: "rgba(99,102,241,0.3)",
+                reason: "يتوافق مع مهاراتك في " + (c.classification || "هذا المجال") + ".",
+                chips: [c.course_type === 'Practical' ? "ap-chip--indigo" : "ap-chip--green"],
+                chipLabels: [c.classification || "عام", c.skill_level || "متوسط"]
+             };
+          });
+
+          // Score each course by tag overlap (simple heuristic)
+          var allTags = techSkills
+            .concat(softSkills, interests)
+            .map(function (t) {
+              return t.toLowerCase();
+            });
+          
+          var scored = CATALOGUE.map(function (c) {
+            var overlap = c.tags.filter(function (t) {
+              return allTags.some(at => at.includes(t.toLowerCase()) || t.toLowerCase().includes(at));
+            }).length;
+            return { course: c, score: overlap };
+          }).sort(function (a, b) {
+            return b.score - a.score;
+          });
+
+          var topRecs = scored.slice(0, 3);
+
+          var recCards = topRecs
+            .map(function (item, i) {
+              var c = item.course;
+              var delay = i * 0.1;
+              return (
+                '<div class="ap-rec-card" style="--rc-accent:' +
+                c.accent +
+                ";animation-delay:" +
+                delay +
+                's">' +
+                '<span class="ap-rec-card__badge" style="background:' +
+                c.badgeBg +
+                ";border:1px solid " +
+                c.badgeBorder +
+                ";color:" +
+                c.badgeColor +
+                '">★ ' +
+                c.badgeTxt +
+                "</span>" +
+                '<div class="ap-rec-card__title">' +
+                c.name +
+                "</div>" +
+                '<div class="ap-rec-card__reason">' +
+                c.reason +
+                "</div>" +
+                '<div class="ap-rec-card__chips">' +
+                c.chipLabels
+                  .map(function (l, ci) {
+                    return (
+                      '<span class="ap-chip ' +
+                      c.chips[ci % c.chips.length] +
+                      '">' +
+                      l +
+                      "</span>"
+                    );
+                  })
+                  .join("") +
+                "</div>" +
+                "</div>"
+              );
+            })
+            .join("");
+
+          var html =
+            // Profile strength section
+            '<div class="ap-analysis-header">تحليل ملف المرشح</div>' +
+            '<div class="ap-profile-strength">' +
+            '<div class="ap-strength-item"><div class="ap-strength-item__lbl">المهارات التقنية</div>' +
+            bar(techScore, "linear-gradient(90deg,var(--accent),var(--accent-hover))") +
+            '<div class="ap-strength-val">' +
+            techScore +
+            "%</div></div>" +
+            '<div class="ap-strength-item"><div class="ap-strength-item__lbl">المهارات الشخصية</div>' +
+            bar(softScore, "linear-gradient(90deg,var(--color-success),var(--color-success-soft))") +
+            '<div class="ap-strength-val">' +
+            softScore +
+            "%</div></div>" +
+            '<div class="ap-strength-item"><div class="ap-strength-item__lbl">القدرات المعرفية</div>' +
+            bar(quizScore, "linear-gradient(90deg,#06b6d4,var(--color-kpi-cyan))") +
+            '<div class="ap-strength-val">' +
+            quizScore +
+            "%</div></div>" +
+            '<div class="ap-strength-item"><div class="ap-strength-item__lbl">الخبرة العملية</div>' +
+            bar(expScore, "linear-gradient(90deg,var(--color-warning),var(--theme-btn-color))") +
+            '<div class="ap-strength-val">' +
+            expScore +
+            "%</div></div>" +
+            '<div class="ap-strength-item"><div class="ap-strength-item__lbl">تنوع الاهتمامات</div>' +
+            bar(interScore, "linear-gradient(90deg,var(--color-purple),#f9a8d4)") +
+            '<div class="ap-strength-val">' +
+            interScore +
+            "%</div></div>" +
+            "</div>" +
+            // Recommended courses
+            '<div class="ap-analysis-header">الدورات الموصى بها</div>' +
+            '<div class="ap-recs-grid">' +
+            recCards +
+            "</div>";
+
+          var el = document.getElementById("metricsRecsContent");
+          if (el) el.innerHTML = html;
+        }
+        fetchProfile();
+      })();
+    </script>
+    <script src="chat/chat.js"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Skills & Languages</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>المهارات التقنية (Technical Skills) (اجبارى)
+</label>
+<div id="technicalSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="technicalSkillCategory[]">
+<option value="">اختر الفئة</option>
+<option value="programming">برمجة</option>
+<option value="web">تطوير ويب</option>
+<option value="database">قواعد بيانات</option>
+<option value="tools">أدوات ومنصات</option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="technicalSkillName[]">
+<option value="">اختر المهارة</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="technicalSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addTechnicalSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>مهارات الحاسب الآلي (Computer Skills) (اجبارى)
+</label>
+<div id="computerSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="computerSkillCategory[]">
+<option value="">اختر الفئة</option>
+<option value="office">حزمة الأوفيس</option>
+<option value="os">أنظمة التشغيل</option>
+<option value="productivity">أدوات الإنتاجية</option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="computerSkillName[]">
+<option value="">اختر المهارة</option>
+<option value="outlook">Outlook</option>
+<option value="word">Word</option>
+<option value="excel">Excel</option>
+<option value="powerpoint">PowerPoint</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="computerSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addComputerSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>المهارات الشخصية (Soft Skills) (اجبارى)
+</label>
+<div id="softSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="softSkillCategory[]">
+<option value="">فئة المهارة</option>
+<option value="communication">التواصل</option>
+<option value="leadership">القيادة</option>
+<option value="teamwork">العمل ضمن فريق</option>
+<option value="management">
+                          إدارة الوقت / المشاريع
+                        </option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="softSkillName[]">
+<option value="">Specific Competency / المهارة</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="softSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addSoftSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>مهارات أخرى (Other Skills) (اختيارى)
+</label>
+<input dir="auto" id="otherSkillsFreeText" name="otherSkillsFreeText" placeholder="نص حر، مثال: الطبخ، الحرف اليدوية، …" type="text"/>
+<small class="reg-step__desc">اختياري — وصف نصي لمهارات غير مدرجة أعلاه.</small>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

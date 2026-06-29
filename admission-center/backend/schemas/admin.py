@@ -1,0 +1,44 @@
+from pydantic import BaseModel, field_validator
+from typing import List, Optional
+from datetime import date
+
+class TraineeSummary(BaseModel):
+    id: int
+    name: str
+    email: str
+    stage: Optional[int] = None
+    status: Optional[str] = None
+    gender: str
+    dob: date
+    category: Optional[str] = None
+    course_id: Optional[int] = None
+    ai_match_score: Optional[int] = 0
+    progress_percentage: Optional[int] = 0
+    image_url: Optional[str] = None
+    role: Optional[str] = None
+    age: Optional[int] = None
+    education: Optional[str] = None
+    att_rate: Optional[float] = 0.0
+
+class StageReviewCreate(BaseModel):
+    trainee_id: int
+    stage_id: int
+    reviewer_id: int
+    result: str
+    reviewer_name: str
+    notes: str
+    attachment_path: str
+    details: Optional[dict] = None
+
+    @field_validator('result')
+    @classmethod
+    def normalize_result(cls, v: str) -> str:
+        """BUG 17 FIX: Normalize result to canonical casing before it reaches the router.
+        A bare 'active'/'ACTIVE'/'accepted' would otherwise fall into the rejection
+        branch and trigger account deletion — a catastrophic silent failure."""
+        normalized = v.strip().lower()
+        if normalized in ('active', 'accepted', 'approved'):
+            return 'Active'
+        if normalized in ('rejected', 'reject', 'denied'):
+            return 'Rejected'
+        raise ValueError(f"result must be 'Active' or 'Rejected', got: '{v}'")

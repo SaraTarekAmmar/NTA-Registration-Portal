@@ -1,0 +1,71 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Activities & Social</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل حصلت على أي جوائز أو تكريمات؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPrizesAwards" name="hasPrizesAwards" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="prizesAwardsBlock" style="display: none">
+<div id="prizesAwardsContainer">
+<div class="prize-entry-card academic-history-card">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم الجائزة / التكريم (اختيارى)
+</label>
+<input name="prizeName[]" placeholder="اسم الجائزة" type="text"/>
+</div>
+<div class="form-group">
+<label>تاريخ الحصول عليها (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input name="prizeDateAchieved[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>فئة الجائزة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" name="prizeCategory[]">
+<option value="">اختر</option>
+<option value="artistic">فنية</option>
+<option value="scientific">
+                                علمية
+                              </option>
+<option value="sport">رياضية</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة المانحة (اختيارى)
+</label>
+<input name="prizeIssuingBody[]" placeholder="اسم الجهة المانحة" type="text"/>
+</div>
+</div>
+<div class="form-group">
+<label>تحميل صورة الشهادة (PDF أو صورة) (اختيارى)
+</label>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" class="prize-cert-input" name="prizeCertificate[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 3 ميجابايت — صورة أو وثيقة الجائزة/التكريم.</small>
+</div>
+<button class="reg-btn reg-btn--outline prize-remove-btn" style="display: none" type="button">
+                        حذف هذه الجائزة
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addPrizeEntryBtn" type="button">
+                    + إضافة جائزة أخرى
+                  </button>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

@@ -1,0 +1,13 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Personal Information</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>الاسم بالكامل (بالعربية أو الإنجليزية) (اجبارى)</label>
+<input name="fullName" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
+</div><div class="form-group">
+<label>الاسم بالإنجليزية (كما في الوثائق) / Full name in English (اجبارى)</label>
+<input name="fullNameEn" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

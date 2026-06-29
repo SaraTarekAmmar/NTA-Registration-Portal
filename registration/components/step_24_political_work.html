@@ -1,0 +1,31 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Activities & Social</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل شاركت في أي عمل سياسي؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPoliticalParticipation" name="hasPoliticalParticipation" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="politicalWorkBlock" style="display: none">
+<div class="form-group">
+<label>اسم الحزب أو التنظيم السياسي (اجبارى)</label>
+<input dir="auto" id="politicalPartyName" name="politicalPartyName" placeholder="الاسم الكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>الدور السياسي (اجبارى)</label>
+<input dir="auto" id="politicalRole" name="politicalRole" placeholder="المنصب أو الدور" type="text"/>
+</div>
+<div class="form-group">
+<label>تفاصيل العمل السياسي (اجبارى)</label>
+<input dir="auto" id="politicalWorkDetails" name="politicalWorkDetails" placeholder="التواريخ والأنشطة باختصار" type="text"/>
+</div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

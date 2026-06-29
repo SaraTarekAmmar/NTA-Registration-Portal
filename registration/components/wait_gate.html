@@ -1,0 +1,18 @@
+<div class="step-card wait-gate" style="text-align: center; padding: 3rem 2rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 64px; height: 64px; color: var(--color-warning); margin: 0 auto 1.5rem;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <h2 style="margin-bottom: 1rem;">قيد الانتظار...</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.6;" id="waitGateMessage">
+        هذه المرحلة معلقة حالياً بانتظار موعد محدد.
+    </p>
+    
+    <div style="background: var(--quiz-accent-tint-bg); border: 1px solid var(--border-accent); border-radius: 8px; padding: 1.5rem; display: inline-block;">
+        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.5rem; font-weight: bold;">
+            تاريخ الفتح المتوقع
+        </div>
+        <div id="waitGateDate" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">
+            --/--/----
+        </div>
+    </div>
+</div>

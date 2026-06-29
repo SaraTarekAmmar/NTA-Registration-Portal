@@ -1,0 +1,6 @@
+INSERT INTO Categories (category_id, name_en, name_ar, description_en, description_ar)
+VALUES 
+(1, 'Technical Skills', 'المهارات التقنية', 'Reflects technical readiness for digital transformation', 'يعكس الاستعداد التقني للتحول الرقمي'),
+(2, 'Computer Skills', 'مهارات الحاسب الآلي', 'Defines proficiency in general and specialized software', 'يحدد الكفاءة في البرامج العامة والمتخصصة'),
+(3, 'Soft Skills', 'المهارات الشخصية', 'Defines personal abilities like leadership and communication', 'يحدد القدرات الشخصية مثل القيادة والتواصل'),
+(4, 'Other Skills', 'مهارات أخرى', 'Includes any relevant skills not covered above', 'يتضمن أي مهارات ذات صلة غير مغطاة أعلاه');

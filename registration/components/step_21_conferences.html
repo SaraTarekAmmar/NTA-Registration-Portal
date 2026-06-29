@@ -1,0 +1,87 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Activities & Social</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل شاركت في أي مؤتمرات أو ورش عمل؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasConferencesWorkshops" name="hasConferencesWorkshops" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="conferencesWorkshopsBlock" style="display: none">
+<div id="conferencesWorkshopsContainer">
+<div class="cw-entry-card academic-history-card">
+<div class="reg-form__row">
+<div class="form-group">
+<label>النوع (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select name="cwActivityType[]">
+<option value="">اختر</option>
+<option value="conference">
+                                مؤتمر
+                              </option>
+<option value="workshop">
+                                ورشة عمل
+                              </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الفعالية (اختيارى)
+</label>
+<input name="cwEventName[]" placeholder="اسم المؤتمر أو الورشة" type="text"/>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة المنظمة (اختيارى)
+</label>
+<input name="cwOrganizingEntity[]" placeholder="اسم الجهة المنظمة" type="text"/>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="cw-start-date" name="cwStartDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="cw-end-date" name="cwEndDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="form-group">
+<label>مستوى المشاركة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" name="cwParticipationLevel[]">
+<option value="">اختر</option>
+<option value="volunteer">متطوع</option>
+<option value="host">مضيف / منظم</option>
+<option value="speaker">متحدث</option>
+</select>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline cw-remove-btn" style="display: none" type="button">
+                        حذف هذه الفعالية
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addConferenceWorkshopBtn" type="button">
+                    + إضافة فعالية أخرى
+                  </button>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>
