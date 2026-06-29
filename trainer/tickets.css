@@ -1,0 +1,352 @@
+/* Premium NTA Theme for Ticket Center */
+
+:root {
+    --ticket-msg-sent: rgba(99, 102, 241, 0.15);
+    --ticket-msg-received: rgba(255, 255, 255, 0.05);
+}
+
+/* The body tag styling is now inherited from the global trainee-app class */
+
+.tickets-container {
+    display: flex;
+    overflow: hidden;
+    max-width: 1200px;
+    height: calc(100vh - 160px);
+    margin: 120px auto 40px;
+    width: 95%;
+    
+    /* Premium Glassmorphism */
+    background: var(--bg-card, rgba(15, 23, 42, 0.6));
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.6s ease-out;
+}
+
+html.light-mode .tickets-container {
+    box-shadow: 0 10px 40px -15px rgba(15, 23, 42, 0.12);
+}
+
+.tickets-sidebar {
+    width: 320px;
+    border-left: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.tickets-sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tickets-sidebar-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main, #f1f5f9);
+}
+
+/* Premium Buttons */
+.premium-btn {
+    background: var(--accent, #6366f1);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+}
+
+.premium-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    background: var(--accent-hover, #4f46e5);
+}
+
+.tickets-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.ticket-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ticket-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.ticket-item.active {
+    background: rgba(99, 102, 241, 0.1);
+    border-right: 4px solid var(--accent, #6366f1);
+}
+
+.ticket-item-subject {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-main, #fff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-item-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted, #94a3b8);
+    display: flex;
+    justify-content: space-between;
+}
+
+.tickets-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+}
+
+.chat-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main, #fff);
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.status-badge.closed {
+    background: rgba(148, 163, 184, 0.15);
+    border-color: rgba(148, 163, 184, 0.3);
+    color: #94a3b8;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.message-bubble {
+    max-width: 75%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    line-height: 1.6;
+    position: relative;
+    font-size: 0.95rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.message-sent {
+    align-self: flex-end;
+    background: var(--accent, #6366f1);
+    color: #ffffff;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.message-received {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    color: var(--text-main, #f1f5f9);
+    border-bottom-right-radius: 4px;
+}
+
+.message-meta {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 6px;
+    display: block;
+    font-weight: 600;
+}
+
+.chat-input-area {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-input-area textarea {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    border-radius: 12px;
+    padding: 14px;
+    resize: none;
+    font-family: inherit;
+    color: var(--text-main, #fff);
+    outline: none;
+    transition: all 0.2s;
+}
+
+.chat-input-area textarea:focus {
+    border-color: var(--accent, #6366f1);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.send-btn {
+    padding: 0 20px;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+    background: var(--bg-card, #0f172a);
+    width: 90%;
+    max-width: 550px;
+    border-radius: 24px;
+    border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-main, #fff);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--text-main, #fff);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    border-radius: 12px;
+    color: var(--text-main, #fff);
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--accent, #6366f1);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.form-group select option {
+    background: #0f172a;
+    color: #fff;
+}
+
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+    display: flex;
+    justify-content: flex-end;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-muted, #94a3b8);
+    padding: 60px 20px;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+/* Custom Scrollbars */
+.tickets-list::-webkit-scrollbar, .chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.tickets-list::-webkit-scrollbar-track, .chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+.tickets-list::-webkit-scrollbar-thumb, .chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.tickets-list::-webkit-scrollbar-thumb:hover, .chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
