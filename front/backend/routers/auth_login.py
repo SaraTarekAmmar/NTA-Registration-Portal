@@ -17,8 +17,17 @@ router = APIRouter(prefix="/api/auth", tags=["Front Auth"])
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
+
+def _portal_url(env_name: str, default: str, legacy_value: str | None = None) -> str:
+    value = os.getenv(env_name, default)
+    # Keep older local .env files working after the trainer portal moved off 7772.
+    if legacy_value and value == legacy_value:
+        return default
+    return value
+
+
 TRAINEE_URL = os.getenv("TRAINEE_PORTAL_URL", "http://localhost:7771")
-TRAINER_URL = os.getenv("TRAINER_PORTAL_URL", "http://localhost:7772")
+TRAINER_URL = _portal_url("TRAINER_PORTAL_URL", "http://localhost:8006", legacy_value="http://localhost:7772")
 
 # Rate-limit constants (mirrors other portals)
 MAX_FAILED = 5

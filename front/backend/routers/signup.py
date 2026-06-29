@@ -5,15 +5,45 @@ signup.py
 Stores records in `front_signups` — completely independent of
 the registration done in trainee/trainer portals.
 """
+from datetime import date
+import json
+
 from fastapi import APIRouter, HTTPException, Request
-from schemas.signup import SignupCreate, SignupResponse
+from passlib.context import CryptContext
+
 from core.database import get_db_connection
 from core.logger_util import log_activity
-from passlib.context import CryptContext
+from schemas.signup import SignupCreate, SignupResponse
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 router = APIRouter(prefix="/api/signup", tags=["Front Signup"])
+
+
+def _derive_profile_basics(national_id: str) -> tuple[date, str]:
+    national_id = national_id.strip()
+    if len(national_id) != 14 or not national_id.isdigit():
+        raise HTTPException(status_code=400, detail="National ID must be 14 digits.")
+
+    century_code = national_id[0]
+    if century_code == "2":
+        century = 1900
+    elif century_code == "3":
+        century = 2000
+    else:
+        raise HTTPException(status_code=400, detail="Unsupported National ID century code.")
+
+    try:
+        dob = date(
+            century + int(national_id[1:3]),
+            int(national_id[3:5]),
+            int(national_id[5:7]),
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail="National ID contains an invalid birth date.") from exc
+
+    gender = "male" if int(national_id[12]) % 2 else "female"
+    return dob, gender
 
 
 @router.get("/check/{national_id}")
@@ -37,6 +67,7 @@ async def check_national_id(national_id: str):
 async def create_signup(req: Request, body: SignupCreate):
     """Submit a completed 4-step registration."""
     ip = req.client.host if req.client else "unknown"
+    dob, gender = _derive_profile_basics(body.national_id)
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
@@ -68,16 +99,29 @@ async def create_signup(req: Request, body: SignupCreate):
 
         # Insert into users
         cursor.execute(
-            """INSERT INTO users (national_id, full_name_ar, phone, email, password_hash, role)
-               VALUES (%s, %s, %s, %s, %s, 'trainee')""",
-            (body.national_id, body.full_name, body.phone, body.email, hashed_pw)
+            """INSERT INTO users (
+                   national_id, full_name_ar, full_name_en, email,
+                   dob, gender, marital_status, password_hash, role
+               )
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'trainee')""",
+            (
+                body.national_id,
+                body.full_name,
+                body.full_name,
+                body.email,
+                dob,
+                gender,
+                "single",
+                hashed_pw,
+            )
         )
         user_id = cursor.lastrowid
-        
-        # Insert stub into trainee_profiles
+
+        # Seed the trainee profile with the public signup data the main portal expects.
         cursor.execute(
-            """INSERT INTO trainee_profiles (user_id) VALUES (%s)""",
-            (user_id,)
+            """INSERT INTO trainee_profiles (user_id, phone_numbers, secondary_email)
+               VALUES (%s, %s, %s)""",
+            (user_id, json.dumps([body.phone]), body.email)
         )
 
         # Optional: Keep inserting into front_signups for analytics
