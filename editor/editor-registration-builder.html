@@ -901,6 +901,42 @@
       }
       loadCourses();
 
+      // Overlay the course's saved flow onto the full default catalog so every
+      // default step/field still shows; saved ones are selected (is_active),
+      // the rest unselected. Saved custom steps/fields not in the default are
+      // appended so nothing is lost.
+      function mergeRegSteps(saved, defaults) {
+        defaults = defaults || DEFAULT_REGISTRATION_STEPS;
+        saved = saved || [];
+        var savedByKey = {};
+        saved.forEach(function(s) { savedByKey[s.step_key] = s; });
+        var merged = JSON.parse(JSON.stringify(defaults));
+        merged.forEach(function(step) {
+          var cfg = step.config_json || (step.config_json = {});
+          var fields = cfg.fields || (cfg.fields = []);
+          var sv = savedByKey[step.step_key];
+          if (!sv) {
+            cfg.is_active = false;
+            fields.forEach(function(f) { f.is_active = false; });
+            return;
+          }
+          cfg.is_active = true;
+          if (sv.is_required != null) step.is_required = sv.is_required;
+          var svFields = {};
+          (((sv.config_json || {}).fields) || []).forEach(function(f) { svFields[f.field_id] = f; });
+          fields.forEach(function(f) {
+            var svf = svFields[f.field_id];
+            f.is_active = svf ? (svf.is_active !== false) : false;
+            if (svf && svf.is_required != null) f.is_required = svf.is_required;
+            delete svFields[f.field_id];
+          });
+          Object.keys(svFields).forEach(function(k) { fields.push(svFields[k]); });
+          delete savedByKey[step.step_key];
+        });
+        Object.keys(savedByKey).forEach(function(k) { merged.push(savedByKey[k]); });
+        return merged;
+      }
+
       function loadRegistrationSteps() {
         var courseSelectInput = document.getElementById("courseSelect");
         var courseId = courseSelectInput ? courseSelectInput.value : null;
@@ -920,7 +956,7 @@
         authFetch("/api/courses/" + courseId + "/registration-steps")
           .then(function(r) { if(!r.ok) throw new Error(); return r.json(); })
           .then(function(data) {
-            registrationSteps = (data && data.length > 0) ? data : JSON.parse(JSON.stringify(DEFAULT_REGISTRATION_STEPS));
+            registrationSteps = (data && data.length > 0) ? mergeRegSteps(data) : JSON.parse(JSON.stringify(DEFAULT_REGISTRATION_STEPS));
             selectedStepIndex = registrationSteps.length > 0 ? 0 : -1;
             document.getElementById("loadingState").style.display = "none";
             document.getElementById("builderArea").style.display = "block";
