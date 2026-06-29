@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import admin, courses, chat, ai_services, exams, class_matrix, quiz_results
+from routers import admin, courses, chat, ai_services, exams, class_matrix, quiz_results, tickets
 from fastapi import Request
 
 load_dotenv()
@@ -175,6 +175,7 @@ app.include_router(ai_services.router)
 app.include_router(exams.router)
 app.include_router(class_matrix.router)
 app.include_router(quiz_results.router)
+app.include_router(tickets.router)
 
 # Health check endpoint
 @app.get("/api/health")

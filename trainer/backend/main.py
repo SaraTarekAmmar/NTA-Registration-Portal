@@ -15,7 +15,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import courses, assignments, trainer
+from routers import courses, assignments, trainer, tickets
 
 load_dotenv()
 
@@ -88,6 +88,7 @@ app.include_router(courses.router)
 app.include_router(assignments.router)
 # Trainer-specific routes (view trainees, analytics, AI quiz)
 app.include_router(trainer.router)
+app.include_router(tickets.router)
 
 
 @app.get("/")

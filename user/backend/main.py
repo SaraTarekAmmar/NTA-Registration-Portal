@@ -28,6 +28,7 @@ from routers import (
     reg_steps,
     registration_flow,
     notifications,
+    tickets,
 )
 from fastapi import Request, Depends
 
@@ -210,6 +211,7 @@ app.include_router(trainer.router)
 app.include_router(reg_steps.router)
 app.include_router(registration_flow.router)
 app.include_router(notifications.router)
+app.include_router(tickets.router)
 
 
 from fastapi.responses import RedirectResponse
