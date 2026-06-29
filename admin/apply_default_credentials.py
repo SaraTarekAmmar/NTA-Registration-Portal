@@ -70,6 +70,17 @@ def apply_defaults():
             "marital_status": "single",
             "password": "NTA@Coord2026",
         },
+        {
+            "full_name_ar": "مدير القبول",
+            "full_name_en": "Admission Manager",
+            "email": "admission@nta.edu.eg",
+            "national_id": "29703031234567",
+            "role": "admission_manager",
+            "dob": "1997-03-03",
+            "gender": "male",
+            "marital_status": "single",
+            "password": "NTA@Admission2026",
+        },
         # ── Trainers ─────────────────────────────────────────────────────────
         {
             "full_name_ar": "غادة عبد اللطيف",

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
     <script src="/common/js/theme.js"></script>
@@ -6,7 +6,7 @@
     <!-- data-nta-theme-injected -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تقديم طلب إذن / عذر - الأكاديمية الوطنية للتدريب</title>
+    <title>الإذونات والأعذار - الأكاديمية الوطنية للتدريب</title>
     <link rel="stylesheet" href="trainee.css?v=4" />
     <link rel="stylesheet" href="header/header.css?v=9" />
     <link
@@ -14,261 +14,540 @@
       rel="stylesheet"
     />
     <style>
-      .excuse-wrap {
+      .permissions-shell {
         position: relative;
         z-index: 1;
-        max-width: 800px;
+        max-width: 1180px;
         margin: 0 auto;
-        padding: 2rem 1.5rem;
-      }
-      
-      .excuse-card {
-        background: rgba(15, 23, 42, 0.8);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        border-radius: 24px;
-        padding: 2.5rem;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        animation: formIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 2rem 1.5rem 3rem;
       }
 
-      @keyframes formIn {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
+      .permissions-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.92rem;
+        margin-bottom: 1.25rem;
+        transition: color 0.2s ease, transform 0.2s ease;
       }
 
-      .excuse-header {
-        text-align: center;
-        margin-bottom: 2.5rem;
+      .permissions-back-link:hover {
+        color: var(--text-main);
+        transform: translateX(-2px);
       }
 
-      .excuse-header h1 {
-        font-size: 1.8rem;
+      .permissions-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        gap: 1.25rem;
+        align-items: start;
+      }
+
+      .permissions-card {
+        background: linear-gradient(
+          145deg,
+          rgba(15, 23, 42, 0.94),
+          rgba(15, 23, 42, 0.82)
+        );
+        border: 1px solid rgba(230, 57, 70, 0.18);
+        border-radius: 26px;
+        box-shadow: 0 24px 60px rgba(2, 6, 23, 0.42);
+        backdrop-filter: blur(18px);
+        overflow: hidden;
+      }
+
+      .permissions-card__inner {
+        padding: 1.6rem;
+      }
+
+      .permissions-hero {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .permissions-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at top right, rgba(230, 57, 70, 0.2), transparent 35%),
+          radial-gradient(circle at bottom left, rgba(193, 18, 31, 0.18), transparent 40%);
+        pointer-events: none;
+      }
+
+      .permissions-hero__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.38rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(230, 57, 70, 0.1);
+        border: 1px solid rgba(230, 57, 70, 0.22);
+        color: #fecdd3;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .permissions-hero h1 {
+        margin: 0;
+        font-size: clamp(1.7rem, 3vw, 2.3rem);
+        color: var(--text-main);
         font-weight: 800;
-        color: #f1f5f9;
-        margin-bottom: 0.5rem;
       }
 
-      .excuse-header p {
-        color: #94a3b8;
+      .permissions-hero p {
+        margin: 0.7rem 0 0;
+        color: var(--text-subtle);
+        line-height: 1.9;
+        font-size: 0.96rem;
+        max-width: 42rem;
+      }
+
+      .permissions-meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.9rem;
+        margin-top: 1.4rem;
+      }
+
+      .permissions-meta__item {
+        padding: 1rem 1.05rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .permissions-meta__label {
+        display: block;
+        color: var(--text-subtle);
+        font-size: 0.77rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .permissions-meta__value {
+        color: var(--text-main);
+        font-weight: 700;
         font-size: 0.95rem;
       }
 
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.15rem;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 1.12rem;
+        font-weight: 800;
+      }
+
+      .section-title p {
+        margin: 0.3rem 0 0;
+        color: var(--text-subtle);
+        font-size: 0.84rem;
+      }
+
+      .form-stack {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
       .form-group {
-        margin-bottom: 1.5rem;
+        display: grid;
+        gap: 0.55rem;
       }
 
       .form-label {
-        display: block;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #cbd5e1;
-        margin-bottom: 0.6rem;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        font-weight: 700;
       }
 
       .form-control {
         width: 100%;
-        background: rgba(30, 41, 59, 0.5);
-        border: 1px solid rgba(51, 65, 85, 0.5);
-        border-radius: 12px;
-        padding: 0.8rem 1rem;
-        color: #f1f5f9;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 16px;
+        padding: 0.92rem 1rem;
+        color: var(--text-main);
         font-family: inherit;
         font-size: 0.95rem;
-        transition: all 0.3s ease;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
       }
 
       .form-control:focus {
         outline: none;
-        border-color: #6366f1;
-        background: rgba(30, 41, 59, 0.8);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        border-color: rgba(230, 57, 70, 0.65);
+        box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+        background: rgba(15, 23, 42, 0.92);
       }
 
       select.form-control {
         appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5e1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
+        background-size: 1.15rem;
         background-position: left 1rem center;
-        background-size: 1.2em;
+        padding-left: 2.6rem;
       }
 
       textarea.form-control {
-        min-height: 120px;
+        min-height: 148px;
         resize: vertical;
+        line-height: 1.85;
       }
 
-      .file-upload {
-        position: relative;
-        margin-top: 1rem;
+      .helper-note {
+        padding: 1rem 1.05rem;
+        border-radius: 18px;
+        background: rgba(230, 57, 70, 0.08);
+        border: 1px dashed rgba(230, 57, 70, 0.22);
+        color: #fecaca;
+        font-size: 0.84rem;
+        line-height: 1.8;
       }
 
-      .file-upload-label {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-        border: 2px dashed rgba(51, 65, 85, 0.5);
-        border-radius: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: rgba(30, 41, 59, 0.3);
+      .helper-note strong {
+        color: #ffe4e6;
       }
 
-      .file-upload-label:hover {
-        border-color: #6366f1;
-        background: rgba(99, 102, 241, 0.05);
-      }
-
-      .file-upload-icon {
-        width: 40px;
-        height: 40px;
-        color: #6366f1;
-        margin-bottom: 1rem;
-      }
-
-      .file-upload-text {
-        font-size: 0.85rem;
-        color: #94a3b8;
-        text-align: center;
-      }
-
-      .btn-submit {
-        width: 100%;
-        margin-top: 2rem;
-        padding: 1rem;
-        background: linear-gradient(135deg, #6366f1, #4f46e5);
-        color: white;
-        border: none;
-        border-radius: 14px;
-        font-size: 1rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.6rem;
-      }
-
-      .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-      }
-
-      .btn-submit:active {
-        transform: translateY(0);
-      }
-
-      .btn-submit:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .back-link {
+      .submit-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        color: #94a3b8;
-        text-decoration: none;
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
-        transition: color 0.2s;
+        justify-content: center;
+        gap: 0.65rem;
+        width: 100%;
+        border: none;
+        border-radius: 18px;
+        padding: 1rem 1.2rem;
+        background: linear-gradient(135deg, #e63946, #c1121f);
+        color: #fff;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 18px 34px rgba(193, 18, 31, 0.28);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
       }
 
-      .back-link:hover {
-        color: #f1f5f9;
+      .submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(193, 18, 31, 0.35);
+        filter: brightness(1.04);
       }
 
-      /* Success Toast */
+      .submit-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+        box-shadow: none;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.34rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .status-pill--pending {
+        color: #fcd34d;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.26);
+      }
+
+      .status-pill--approved {
+        color: #6ee7b7;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.26);
+      }
+
+      .status-pill--rejected {
+        color: #fda4af;
+        background: rgba(244, 63, 94, 0.12);
+        border: 1px solid rgba(244, 63, 94, 0.25);
+      }
+
+      .status-pill--muted {
+        color: var(--text-muted);
+        background: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+      }
+
+      .permission-list {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .permission-item {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        padding: 1rem 1.05rem;
+      }
+
+      .permission-item__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.9rem;
+      }
+
+      .permission-item__title {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 0.96rem;
+        font-weight: 800;
+      }
+
+      .permission-item__subtitle {
+        color: var(--text-subtle);
+        font-size: 0.78rem;
+        margin-top: 0.25rem;
+      }
+
+      .permission-item__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.85rem;
+      }
+
+      .permission-chip {
+        padding: 0.32rem 0.62rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        color: var(--text-muted);
+        font-size: 0.74rem;
+        font-weight: 600;
+      }
+
+      .permission-item__reason {
+        margin: 0.95rem 0 0;
+        padding: 0.9rem 1rem;
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.54);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        color: var(--text-muted);
+        line-height: 1.9;
+        font-size: 0.86rem;
+      }
+
+      .empty-state,
+      .loading-state {
+        padding: 1.15rem;
+        border-radius: 18px;
+        text-align: center;
+        color: var(--text-subtle);
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px dashed rgba(148, 163, 184, 0.18);
+        line-height: 1.8;
+      }
+
+      .history-hint {
+        color: var(--text-subtle);
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
       .toast {
         position: fixed;
+        inset-inline-start: 50%;
         bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%) translateY(100px);
-        background: #10b981;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 99px;
-        font-weight: 700;
-        display: flex;
+        transform: translateX(-50%) translateY(110px);
+        z-index: 9999;
+        display: inline-flex;
         align-items: center;
         gap: 0.8rem;
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 10000;
+        padding: 1rem 1.4rem;
+        border-radius: 999px;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        background: linear-gradient(135deg, rgba(10, 40, 28, 0.98), rgba(10, 56, 34, 0.98));
+        color: #d1fae5;
+        font-weight: 700;
+        box-shadow: 0 20px 40px rgba(6, 78, 59, 0.28);
+        transition: transform 0.35s ease, opacity 0.35s ease;
+        opacity: 0;
       }
 
       .toast.active {
         transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      @media (max-width: 980px) {
+        .permissions-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .permissions-shell {
+          padding: 1.25rem 0.95rem 2rem;
+        }
+
+        .permissions-card__inner {
+          padding: 1.15rem;
+        }
+
+        .permissions-meta,
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .permission-item__head,
+        .section-title {
+          flex-direction: column;
+          align-items: stretch;
+        }
       }
     </style>
   </head>
-  <body class="trainee-app">
+  <body class="trainee-app" data-page="permissions">
     <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
     <div class="trainee-bg"></div>
     <div id="ntaHeader"></div>
 
-    <main id="main-content" class="excuse-wrap">
-      <a href="courses.html" class="back-link">
+    <main id="main-content" class="permissions-shell">
+      <a href="courses.html?filter=my" class="permissions-back-link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
         العودة إلى دوراتي
       </a>
 
-      <div class="excuse-card">
-        <div class="excuse-header">
-          <h1>تقديم طلب إذن / عذر</h1>
-          <p id="courseDisplay">تحميل بيانات الدورة...</p>
-        </div>
+      <section class="permissions-card permissions-hero">
+        <div class="permissions-card__inner">
+          <span class="permissions-hero__eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" />
+            </svg>
+            مركز الإذونات والأعذار
+          </span>
+          <h1>قدّم إذنك أو عذرك من مكان واحد</h1>
+          <p>
+            الصفحة دي بقت تشتغل مباشرة من القائمة الجانبية أو من داخل أي دورة. اختَر الدورة المعنية، اكتب السبب،
+            وراجع كل طلباتك السابقة وحالتها بدون ما ترجع لصفحات تانية.
+          </p>
 
-        <form id="excuseForm">
-          <div class="form-group">
-            <label class="form-label">نوع الطلب</label>
-            <select class="form-control" name="type" required>
-              <option value="" disabled selected>اختر نوع الطلب</option>
-              <option value="غياب">إذن غياب كامل</option>
-              <option value="تأخير">إذن تأخير</option>
-              <option value="مغادرة مبكرة">إذن مغادرة مبكرة</option>
-              <option value="تأجيل">تأجيل اختبار</option>
-              <option value="عدم حضور امتحان">عذر عدم حضور امتحان</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">تاريخ اليوم المعني</label>
-            <input type="date" class="form-control" name="date" required />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">سبب الطلب بالتفصيل</label>
-            <textarea class="form-control" name="reason" placeholder="يرجى شرح السبب بوضوح لضمان سرعة المراجعة..." required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">المرفقات (اختياري)</label>
-            <div class="file-upload">
-              <label class="file-upload-label">
-                <svg class="file-upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                <span class="file-upload-text">اضغط هنا أو اسحب الملفات لرفع التقارير الطبية أو المستندات الداعمة</span>
-                <input type="file" style="display: none;" name="attachment" id="fileInput" />
-              </label>
-              <div id="fileStatus" style="margin-top: 5px; color: #4ade80; font-size: 0.8rem; text-align: center;"></div>
+          <div class="permissions-meta">
+            <div class="permissions-meta__item">
+              <span class="permissions-meta__label">الدورة المختارة</span>
+              <strong class="permissions-meta__value" id="selectedCourseSummary">جاري تحميل الدورات...</strong>
+            </div>
+            <div class="permissions-meta__item">
+              <span class="permissions-meta__label">عدد الطلبات السابقة</span>
+              <strong class="permissions-meta__value" id="permissionsCount">0 طلب</strong>
+            </div>
+            <div class="permissions-meta__item">
+              <span class="permissions-meta__label">آخر حالة</span>
+              <strong class="permissions-meta__value" id="latestStatusSummary">لا توجد طلبات بعد</strong>
             </div>
           </div>
+        </div>
+      </section>
 
-          <button type="submit" class="btn-submit" id="submitBtn">
-            <span>إرسال الطلب للمراجعة</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-        </form>
+      <div class="permissions-grid" style="margin-top: 1.25rem;">
+        <section class="permissions-card">
+          <div class="permissions-card__inner">
+            <div class="section-title">
+              <div>
+                <h2>إرسال طلب جديد</h2>
+                <p>اختر الدورة والنوع ثم اشرح السبب بالتفصيل لضمان سرعة المراجعة.</p>
+              </div>
+              <span class="history-hint" id="courseContextHint">يمكنك استخدام الصفحة بدون رابط دورة مسبق.</span>
+            </div>
+
+            <form id="permissionForm" class="form-stack">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="courseSelect">الدورة</label>
+                  <select class="form-control" id="courseSelect" name="course_id" required>
+                    <option value="">جاري تحميل الدورات...</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="typeSelect">نوع الطلب</label>
+                  <select class="form-control" id="typeSelect" name="type" required>
+                    <option value="">اختر نوع الطلب</option>
+                    <option value="غياب">إذن غياب كامل</option>
+                    <option value="تأخير">إذن تأخير</option>
+                    <option value="مغادرة مبكرة">إذن مغادرة مبكرة</option>
+                    <option value="تأجيل">تأجيل اختبار</option>
+                    <option value="عدم حضور امتحان">عذر عدم حضور امتحان</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="requestDate">تاريخ اليوم المعني</label>
+                  <input class="form-control" id="requestDate" name="date" type="date" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">حالة الصفحة</label>
+                  <div class="helper-note">
+                    <strong>ملحوظة:</strong> إرسال المرفقات لم يتم تفعيله على الـ API الحالي بعد، لذلك الطلب هيُرسل
+                    بالنوع والتاريخ والسبب فقط حتى تشتغل العملية بشكل صحيح بدل ما تكون الواجهة مضللة.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reasonInput">سبب الطلب بالتفصيل</label>
+                <textarea
+                  class="form-control"
+                  id="reasonInput"
+                  name="reason"
+                  placeholder="اكتب السبب بشكل واضح، واذكر التاريخ أو الظرف أو أي تفاصيل تساعد المسؤول على اتخاذ القرار."
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="submit-btn" id="submitBtn">
+                <span id="submitLabel">إرسال الطلب للمراجعة</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <section class="permissions-card">
+          <div class="permissions-card__inner">
+            <div class="section-title">
+              <div>
+                <h2>طلباتك السابقة</h2>
+                <p>كل الطلبات المرتبطة بحسابك ستظهر هنا مع حالتها الحالية.</p>
+              </div>
+              <span class="history-hint" id="historyStatus">جاري التحميل...</span>
+            </div>
+
+            <div id="permissionsList" class="permission-list">
+              <div class="loading-state">جاري تحميل الطلبات...</div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -276,76 +555,342 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="20" height="20">
         <path d="M20 6L9 17l-5-5" />
       </svg>
-      <span>تم إرسال طلبك بنجاح وسيتم إشعارك بالرد قريباً.</span>
+      <span>تم إرسال طلبك بنجاح. تم تحديث السجل أسفل الصفحة.</span>
     </div>
 
     <script src="header/header.js?v=10"></script>
     <script>
-      (function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const courseId = urlParams.get('course_id');
-        const courseName = urlParams.get('course_name');
-
-        if (!courseId) {
-          window.location.href = 'courses.html';
+      (function () {
+        const session = JSON.parse(localStorage.getItem("ntaTrainee") || "{}");
+        if (!session.token || !session.userId) {
+          window.location.href = "index.html";
           return;
         }
 
-        document.getElementById('courseDisplay').textContent = `دورة: ${courseName || 'جاري التحميل...'}`;
+        const params = new URLSearchParams(window.location.search);
+        const preselectedCourseId = parseInt(params.get("course_id") || "", 10);
+        const preselectedCourseName = params.get("course_name");
 
-        const form = document.getElementById('excuseForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const toast = document.getElementById('successToast');
-        const fileInput = document.getElementById('fileInput');
-        const fileStatus = document.getElementById('fileStatus');
+        const form = document.getElementById("permissionForm");
+        const courseSelect = document.getElementById("courseSelect");
+        const submitBtn = document.getElementById("submitBtn");
+        const submitLabel = document.getElementById("submitLabel");
+        const permissionsList = document.getElementById("permissionsList");
+        const permissionsCount = document.getElementById("permissionsCount");
+        const latestStatusSummary = document.getElementById("latestStatusSummary");
+        const selectedCourseSummary = document.getElementById("selectedCourseSummary");
+        const courseContextHint = document.getElementById("courseContextHint");
+        const historyStatus = document.getElementById("historyStatus");
+        const successToast = document.getElementById("successToast");
 
-        fileInput.addEventListener('change', (e) => {
-          if (e.target.files.length > 0) {
-            fileStatus.textContent = `تم اختيار: ${e.target.files[0].name}`;
+        let availableCourses = [];
+        let permissions = [];
+
+        function escapeHtml(value) {
+          return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        function authenticatedFetch(url, options) {
+          const headers = Object.assign(
+            {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + session.token,
+            },
+            (options && options.headers) || {},
+          );
+
+          return fetch(
+            url,
+            Object.assign({}, options || {}, {
+              headers: headers,
+            }),
+          ).then((response) => {
+            if (response.status === 401) {
+              localStorage.removeItem("ntaTrainee");
+              window.location.href = "index.html";
+              throw new Error("انتهت الجلسة");
+            }
+            return response;
+          });
+        }
+
+        function normalizeStatus(status) {
+          const raw = String(status || "").toLowerCase();
+          if (raw === "approved" || raw === "accepted" || raw === "done") {
+            return { label: "تمت الموافقة", className: "status-pill--approved" };
           }
-        });
+          if (raw === "rejected" || raw === "declined") {
+            return { label: "مرفوض", className: "status-pill--rejected" };
+          }
+          if (!raw || raw === "pending" || raw === "submitted" || raw === "waiting") {
+            return { label: "قيد المراجعة", className: "status-pill--pending" };
+          }
+          return { label: status, className: "status-pill--muted" };
+        }
 
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
+        function formatDate(value) {
+          if (!value) return "غير محدد";
+          try {
+            return new Intl.DateTimeFormat("ar-EG", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }).format(new Date(value));
+          } catch (error) {
+            return value;
+          }
+        }
+
+        function formatDateTime(value) {
+          if (!value) return "غير متاح";
+          try {
+            return new Intl.DateTimeFormat("ar-EG", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+            }).format(new Date(value));
+          } catch (error) {
+            return value;
+          }
+        }
+
+        function getDisplayCourses(profileCourses) {
+          const filtered = (profileCourses || []).filter((course) => {
+            return course && course.course_id && course.title && course.status !== "rejected";
+          });
+
+          const normalized = filtered.map((course) => ({
+            id: Number(course.course_id),
+            title: course.title,
+            status: course.status || "",
+            appliedAt: course.applied_at,
+          }));
+
+          if (
+            Number.isFinite(preselectedCourseId) &&
+            preselectedCourseId > 0 &&
+            !normalized.some((course) => course.id === preselectedCourseId)
+          ) {
+            normalized.unshift({
+              id: preselectedCourseId,
+              title: preselectedCourseName || "الدورة المختارة",
+              status: "linked",
+              appliedAt: null,
+            });
+          }
+
+          return normalized;
+        }
+
+        function updateCourseSummary() {
+          const selectedId = Number(courseSelect.value);
+          const selected = availableCourses.find((course) => course.id === selectedId);
+          if (selected) {
+            selectedCourseSummary.textContent = selected.title;
+            return;
+          }
+          if (availableCourses.length) {
+            selectedCourseSummary.textContent = "اختر الدورة المناسبة";
+          } else {
+            selectedCourseSummary.textContent = "لا توجد دورات متاحة حالياً";
+          }
+        }
+
+        function renderCourseOptions() {
+          if (!availableCourses.length) {
+            courseSelect.innerHTML = '<option value="">لا توجد دورات متاحة للإذن حالياً</option>';
+            courseSelect.disabled = true;
+            submitBtn.disabled = true;
+            courseContextHint.textContent = "سجّل في دورة أو انتظر قبولك أولاً قبل تقديم إذن.";
+            updateCourseSummary();
+            return;
+          }
+
+          courseSelect.disabled = false;
+          submitBtn.disabled = false;
+          courseSelect.innerHTML =
+            '<option value="">اختر الدورة المعنية</option>' +
+            availableCourses
+              .map((course) => {
+                const statusText =
+                  course.status === "approved"
+                    ? " - مقبول"
+                    : course.status === "waiting"
+                      ? " - قيد المراجعة"
+                      : "";
+                return (
+                  '<option value="' +
+                  escapeHtml(course.id) +
+                  '">' +
+                  escapeHtml(course.title + statusText) +
+                  "</option>"
+                );
+              })
+              .join("");
+
+          const defaultCourseId =
+            Number.isFinite(preselectedCourseId) && preselectedCourseId > 0
+              ? preselectedCourseId
+              : availableCourses[0].id;
+
+          courseSelect.value = String(defaultCourseId);
+          if (!courseSelect.value && availableCourses[0]) {
+            courseSelect.value = String(availableCourses[0].id);
+          }
+
+          courseContextHint.textContent =
+            Number.isFinite(preselectedCourseId) && preselectedCourseId > 0
+              ? "تم تحميل الدورة من الرابط مباشرة ويمكنك تغييرها إذا لزم."
+              : "تم تحميل دوراتك المسجلة ويمكنك اختيار أي دورة منها.";
+          updateCourseSummary();
+        }
+
+        function renderPermissions() {
+          permissionsCount.textContent = permissions.length + (permissions.length === 1 ? " طلب" : " طلبات");
+
+          if (!permissions.length) {
+            latestStatusSummary.textContent = "لا توجد طلبات بعد";
+            historyStatus.textContent = "لم يتم إرسال أي طلب حتى الآن";
+            permissionsList.innerHTML =
+              '<div class="empty-state">لا توجد طلبات مسجلة على حسابك حتى الآن. بعد الإرسال، سيظهر الطلب هنا فورًا مع حالته.</div>';
+            return;
+          }
+
+          const latestStatus = normalizeStatus(permissions[0].status);
+          latestStatusSummary.textContent = latestStatus.label;
+          historyStatus.textContent = "تم العثور على " + permissions.length + " طلب/طلبات";
+
+          permissionsList.innerHTML = permissions
+            .map((permission) => {
+              const status = normalizeStatus(permission.status);
+              return (
+                '<article class="permission-item">' +
+                '<div class="permission-item__head">' +
+                "<div>" +
+                '<h3 class="permission-item__title">' +
+                escapeHtml(permission.type || "طلب إذن") +
+                "</h3>" +
+                '<div class="permission-item__subtitle">' +
+                escapeHtml(permission.courseName || "دورة غير معروفة") +
+                " • " +
+                escapeHtml(formatDate(permission.date)) +
+                "</div>" +
+                "</div>" +
+                '<span class="status-pill ' +
+                status.className +
+                '">' +
+                escapeHtml(status.label) +
+                "</span>" +
+                "</div>" +
+                '<div class="permission-item__meta">' +
+                '<span class="permission-chip">تاريخ الإرسال: ' +
+                escapeHtml(formatDateTime(permission.created_at)) +
+                "</span>" +
+                '<span class="permission-chip">الطالب: ' +
+                escapeHtml(permission.studentName || session.fullName || "أنت") +
+                "</span>" +
+                "</div>" +
+                '<p class="permission-item__reason">' +
+                escapeHtml(permission.reason || "لا يوجد سبب مسجل") +
+                "</p>" +
+                "</article>"
+              );
+            })
+            .join("");
+        }
+
+        async function loadProfile() {
+          const response = await authenticatedFetch("/api/trainee/profile/" + session.userId);
+          if (!response.ok) {
+            throw new Error("تعذر تحميل بيانات الدورات");
+          }
+          const data = await response.json();
+          availableCourses = getDisplayCourses(data.courses || []);
+          renderCourseOptions();
+        }
+
+        async function loadPermissions() {
+          permissionsList.innerHTML = '<div class="loading-state">جاري تحميل الطلبات...</div>';
+          historyStatus.textContent = "جاري تحديث السجل...";
+          const response = await authenticatedFetch("/api/permissions");
+          if (!response.ok) {
+            throw new Error("تعذر تحميل الطلبات");
+          }
+          permissions = await response.json();
+          renderPermissions();
+        }
+
+        async function initialize() {
+          document.getElementById("requestDate").value = new Date().toISOString().slice(0, 10);
+          try {
+            await Promise.all([loadProfile(), loadPermissions()]);
+          } catch (error) {
+            permissionsList.innerHTML =
+              '<div class="empty-state">حدث خطأ أثناء تحميل الصفحة. حاول التحديث أو تسجيل الدخول مرة أخرى.</div>';
+            historyStatus.textContent = "تعذر التحميل";
+            selectedCourseSummary.textContent = "تعذر تحميل الدورات";
+            console.error(error);
+          }
+        }
+
+        courseSelect.addEventListener("change", updateCourseSummary);
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const courseId = Number(courseSelect.value);
+          if (!courseId) {
+            alert("اختر الدورة أولاً قبل إرسال الطلب.");
+            courseSelect.focus();
+            return;
+          }
+
           submitBtn.disabled = true;
-          submitBtn.querySelector('span').textContent = 'جاري الإرسال...';
+          submitLabel.textContent = "جاري الإرسال...";
 
-          const formData = new FormData(form);
-          const data = {
-            course_id: parseInt(courseId),
-            type: formData.get('type'),
-            date: formData.get('date'),
-            reason: formData.get('reason')
+          const payload = {
+            course_id: courseId,
+            type: document.getElementById("typeSelect").value,
+            date: document.getElementById("requestDate").value,
+            reason: document.getElementById("reasonInput").value.trim(),
           };
 
           try {
-            const session = JSON.parse(localStorage.getItem('ntaTrainee') || '{}');
-            const response = await fetch('/api/permissions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.token}`
-              },
-              body: JSON.stringify(data)
+            const response = await authenticatedFetch("/api/permissions", {
+              method: "POST",
+              body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-              toast.classList.add('active');
-              setTimeout(() => {
-                window.location.href = 'courses.html';
-              }, 2500);
-            } else {
-              const err = await response.json();
-              alert('خطأ: ' + (err.detail || 'تعذر الإرسال'));
-              submitBtn.disabled = false;
-              submitBtn.querySelector('span').textContent = 'إرسال الطلب للمراجعة';
+            if (!response.ok) {
+              const error = await response.json().catch(() => ({}));
+              throw new Error(error.detail || "تعذر إرسال الطلب");
             }
-          } catch (err) {
-            alert('خطأ في الاتصال بالخادم');
-            submitBtn.disabled = false;
-            submitBtn.querySelector('span').textContent = 'إرسال الطلب للمراجعة';
+
+            await response.json();
+            document.getElementById("typeSelect").value = "";
+            document.getElementById("reasonInput").value = "";
+            document.getElementById("requestDate").value = new Date().toISOString().slice(0, 10);
+            await loadPermissions();
+            successToast.classList.add("active");
+            window.setTimeout(function () {
+              successToast.classList.remove("active");
+            }, 2600);
+          } catch (error) {
+            alert(error.message || "حدث خطأ أثناء إرسال الطلب");
+          } finally {
+            submitBtn.disabled = !availableCourses.length;
+            submitLabel.textContent = "إرسال الطلب للمراجعة";
           }
         });
+
+        initialize();
       })();
     </script>
   </body>

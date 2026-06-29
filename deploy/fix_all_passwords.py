@@ -48,6 +48,10 @@ if __name__ == "__main__":
     print("\nFixing Coordinator...")
     fix_user_password("29304041234567", "NTA@Coord2026")
 
+    # Fix Admission Manager
+    print("\nFixing Admission Manager...")
+    fix_user_password("29703031234567", "NTA@Admission2026")
+
     # Fix Super Admin
     print("\nFixing Super Admin...")
     fix_user_password("10000000000000", "NTA@Super2026")

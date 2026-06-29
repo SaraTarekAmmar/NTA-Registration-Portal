@@ -16,6 +16,7 @@ DB_CONFIG = {
     "charset": "utf8mb4"
 }
 
+connection_pool = None
 try:
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="nta_pool",
@@ -27,5 +28,13 @@ try:
 except mysql.connector.Error as err:
     print(f"Error creating connection pool: {err}")
 
+def _create_direct_connection():
+    return mysql.connector.connect(**DB_CONFIG)
+
 def get_db_connection():
-    return connection_pool.get_connection()
+    if connection_pool is not None:
+        try:
+            return connection_pool.get_connection()
+        except mysql.connector.Error:
+            pass
+    return _create_direct_connection()

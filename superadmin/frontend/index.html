@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTA AI Control Center - Super Admin</title>
+    <title>بوابة السوبر أدمن - الأكاديمية الوطنية للتدريب</title>
     <!-- React & ReactDOM CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -270,7 +270,7 @@
                 const legacy = localStorage.getItem('sa_theme');
                 return legacy === 'light' || legacy === 'dark' ? legacy : 'dark';
             });
-            const [lang, setLang] = useState(localStorage.getItem('sa_lang') || 'en');
+            const [lang, setLang] = useState(localStorage.getItem('sa_lang') || 'ar');
 
             useEffect(() => {
                 document.documentElement.setAttribute('data-theme', theme);

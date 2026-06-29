@@ -1,4 +1,4 @@
-/* ===== NTA Header - Neon Glow Style ===== */
+/* ===== NTA Header - Crimson Glass Style ===== */
 .nta-header {
     position: relative;
     z-index: 100;
@@ -10,15 +10,15 @@
     justify-content: space-between;
     gap: 1.5rem;
     background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 55%),
+        radial-gradient(circle at 0% 0%, rgba(230, 57, 70, 0.12), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(193, 18, 31, 0.12), transparent 55%),
         var(--bg-header, rgba(10, 20, 40, 0.96));
     backdrop-filter: blur(16px);
-    border: 1px solid var(--border-accent, var(--border-accent));
+    border: 1px solid rgba(230, 57, 70, 0.24);
     border-radius: 999px;
     box-shadow:
         0 0 0 1px rgba(15, 23, 42, 1),
-        0 0 24px rgba(37, 99, 235, 0.45),
+        0 0 24px rgba(193, 18, 31, 0.28),
         0 0 60px var(--bg-card),
         inset 0 1px 0 var(--surface-glass-border);
 }
@@ -91,7 +91,7 @@ div#ntaHeader {
     justify-content: center;
     gap: 0.5rem;
     padding: 0.6rem 1.25rem;
-    background: linear-gradient(180deg, var(--color-info) 0%, var(--color-info) 100%);
+    background: linear-gradient(180deg, #c1121f 0%, #e63946 100%);
     border: none;
     border-radius: 14px;
     color: white;
@@ -101,12 +101,12 @@ div#ntaHeader {
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 26px rgba(193, 18, 31, 0.2);
 }
 
 .nta-header__btn:hover {
-    background: linear-gradient(180deg, var(--color-info-soft) 0%, var(--color-info) 100%);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(180deg, #e63946 0%, #c1121f 100%);
+    box-shadow: 0 14px 32px rgba(193, 18, 31, 0.24);
 }
 
 .nta-header__btn.active {
@@ -117,7 +117,7 @@ div#ntaHeader {
 .nta-header__nav .nta-header__btn {
     padding: 0.38rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8);
+    border: 1px solid rgba(230, 57, 70, 0.5);
     background: transparent;
     color: var(--chip-text);
     font-size: 0.8rem;
@@ -126,10 +126,10 @@ div#ntaHeader {
 
 .nta-header__nav .nta-header__btn:hover,
 .nta-header__nav .nta-header__btn.active {
-    border-color: rgba(96, 165, 250, 1);
-    background: transparent;
+    border-color: rgba(248, 113, 113, 0.95);
+    background: rgba(230, 57, 70, 0.1);
     color: var(--text-main);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(193, 18, 31, 0.28);
 }
 
 .nta-header__btn svg {
@@ -145,7 +145,7 @@ div#ntaHeader {
     gap: 0.4rem;
     padding: 0.38rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(59, 130, 246, 0.8) !important;
+    border: 1px solid rgba(230, 57, 70, 0.5) !important;
     background: transparent !important;
     color: var(--chip-text);
     font-size: 0.8rem;
@@ -156,15 +156,15 @@ div#ntaHeader {
 }
 
 .nta-header__chip:hover {
-    border-color: rgba(96, 165, 250, 1);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(37, 99, 235, 0.6);
+    border-color: rgba(248, 113, 113, 0.95);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 16px rgba(193, 18, 31, 0.28);
 }
 
 .nta-header__chip.active {
-    border-color: rgba(59, 130, 246, 1) !important;
-    background: transparent !important;
+    border-color: rgba(248, 113, 113, 0.95) !important;
+    background: rgba(230, 57, 70, 0.1) !important;
     color: var(--text-main);
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(37, 99, 235, 0.75);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), 0 0 18px rgba(193, 18, 31, 0.34);
 }
 
 .nta-header__chip svg {
