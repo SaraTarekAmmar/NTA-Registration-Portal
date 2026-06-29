@@ -8,8 +8,9 @@ import {
   LogIn,
   ShieldCheck,
   UserRound,
-  X
+  X,
 } from 'lucide-react';
+import { useLang } from '../../i18n';
 
 type AuthMode = 'login' | 'signup';
 type LoginRole = 'trainee' | 'trainer';
@@ -37,30 +38,18 @@ const emptySignup: SignupState = {
   phone: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 };
-
-const stepTitles = [
-  'National ID',
-  'Full name',
-  'Phone number',
-  'Password'
-] as const;
-
-const stepHints = [
-  'We will use this to check if the trainee profile already exists.',
-  'Enter the name you want to appear in the registration records.',
-  'Add a reachable mobile number for updates and verification.',
-  'Finish by setting your password and optional email address.'
-];
 
 export function AuthModal({
   open,
   mode,
   loginRole,
   onClose,
-  onLoginRoleChange
+  onLoginRoleChange,
 }: AuthModalProps) {
+  const { t, lang } = useLang();
+  const auth = t.auth;
   const [step, setStep] = useState(1);
   const [loginNationalId, setLoginNationalId] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -68,13 +57,19 @@ export function AuthModal({
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const stepTitles = [
+    auth.signupNationalId,
+    auth.signupFullName,
+    auth.signupPhone,
+    auth.signupPassword,
+  ];
+  const stepHints = auth.signupHints;
+
   useEffect(() => {
     if (!open) return;
     setError('');
     setLoading(false);
-    if (mode === 'signup') {
-      setStep(1);
-    }
+    if (mode === 'signup') setStep(1);
   }, [mode, open]);
 
   useEffect(() => {
@@ -96,17 +91,17 @@ export function AuthModal({
 
   const validateNationalId = async (nationalId: string) => {
     if (!/^\d{10,20}$/.test(nationalId)) {
-      throw new Error('National ID must be 10 to 20 digits.');
+      throw new Error(auth.nationalIdError);
     }
 
     const response = await fetch(`/api/signup/check/${nationalId}`);
     if (!response.ok) {
-      throw new Error('Could not validate National ID right now.');
+      throw new Error(auth.nationalIdValidationError);
     }
 
     const data = await response.json();
     if (!data.available) {
-      throw new Error('This National ID is already registered.');
+      throw new Error(auth.nationalIdTakenError);
     }
   };
 
@@ -118,24 +113,22 @@ export function AuthModal({
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           national_id: loginNationalId.trim(),
           password: loginPassword,
-          role: loginRole
-        })
+          role: loginRole,
+        }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.detail || 'Login failed.');
+        throw new Error(data.detail || auth.loginFailed);
       }
 
       window.location.href = data.redirect_url;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed.');
+      setError(err instanceof Error ? err.message : auth.loginFailed);
       setLoading(false);
     }
   };
@@ -147,39 +140,27 @@ export function AuthModal({
       if (step === 1) {
         await validateNationalId(signup.nationalId.trim());
       } else if (step === 2) {
-        if (signup.fullName.trim().length < 3) {
-          throw new Error('Full name must be at least 3 characters.');
-        }
+        if (signup.fullName.trim().length < 3) throw new Error(auth.fullNameError);
       } else if (step === 3) {
-        if (signup.phone.trim().length < 7) {
-          throw new Error('Please enter a valid phone number.');
-        }
+        if (signup.phone.trim().length < 7) throw new Error(auth.phoneError);
       } else if (step === 4) {
-        if (signup.password.length < 6) {
-          throw new Error('Password must be at least 6 characters.');
-        }
-        if (signup.password !== signup.confirmPassword) {
-          throw new Error('Passwords do not match.');
-        }
+        if (signup.password.length < 6) throw new Error(auth.passwordError);
+        if (signup.password !== signup.confirmPassword) throw new Error(auth.passwordMismatch);
 
         setLoading(true);
         const response = await fetch('/api/signup', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             national_id: signup.nationalId.trim(),
             full_name: signup.fullName.trim(),
             phone: signup.phone.trim(),
             email: signup.email.trim() || null,
-            password: signup.password
-          })
+            password: signup.password,
+          }),
         });
         await response.json();
-        if (!response.ok) {
-          throw new Error('Signup failed.');
-        }
+        if (!response.ok) throw new Error(auth.signupFailed);
 
         window.location.href = '/registration/index.html';
         return;
@@ -187,7 +168,7 @@ export function AuthModal({
 
       setStep((current) => Math.min(current + 1, 4));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Signup failed.');
+      setError(err instanceof Error ? err.message : auth.signupFailed);
     } finally {
       setLoading(false);
     }
@@ -213,22 +194,20 @@ export function AuthModal({
         <div className="flex items-start justify-between gap-4 border-b border-gray-100 px-6 py-5">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-[#E51B2B]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#E51B2B]">
-              {isSignup ? 'Public registration' : 'Portal access'}
+              {isSignup ? auth.publicRegistration : auth.portalAccess}
             </p>
             <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#081827]">
-              {isSignup ? 'Join the NTA trainee pipeline' : 'Sign in to your portal'}
+              {isSignup ? auth.signupTitle : auth.loginTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-[#081827]/70">
-              {isSignup
-                ? 'The flow matches the original four-step signup path.'
-                : 'Pick the right portal, then we will redirect you after validation.'}
+              {isSignup ? auth.signupSubtitle : auth.loginSubtitle}
             </p>
           </div>
           <button
             type="button"
             onClick={resetAndClose}
             className="grid h-10 w-10 place-items-center rounded-full border border-gray-200 text-[#081827] transition hover:bg-gray-50"
-            aria-label="Close dialog"
+            aria-label={auth.closeDialog}
           >
             <X className="h-5 w-5" />
           </button>
@@ -243,7 +222,7 @@ export function AuthModal({
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-[#081827]">
-                    Step {step} of 4
+                    {auth.signupStep} {step} {auth.signupOf} 4
                   </p>
                   <p className="text-xs text-[#081827]/60">{stepTitles[step - 1]}</p>
                 </div>
@@ -284,7 +263,7 @@ export function AuthModal({
                   <div className="space-y-4">
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                        National ID
+                        {auth.signupNationalId}
                       </span>
                       <input
                         type="text"
@@ -293,11 +272,11 @@ export function AuthModal({
                         onChange={(event) =>
                           setSignup((current) => ({
                             ...current,
-                            nationalId: event.target.value
+                            nationalId: event.target.value,
                           }))
                         }
                         className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
-                        placeholder="e.g. 29505051234567"
+                        placeholder={lang === 'ar' ? 'مثال: 29505051234567' : 'e.g. 29505051234567'}
                       />
                     </label>
                   </div>
@@ -306,7 +285,7 @@ export function AuthModal({
                 {step === 2 && (
                   <label className="block">
                     <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                      Full name
+                      {auth.signupFullName}
                     </span>
                     <input
                       type="text"
@@ -314,11 +293,11 @@ export function AuthModal({
                       onChange={(event) =>
                         setSignup((current) => ({
                           ...current,
-                          fullName: event.target.value
+                          fullName: event.target.value,
                         }))
                       }
                       className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
-                      placeholder="Your full name"
+                      placeholder={lang === 'ar' ? 'اسمك الكامل' : 'Your full name'}
                     />
                   </label>
                 )}
@@ -326,7 +305,7 @@ export function AuthModal({
                 {step === 3 && (
                   <label className="block">
                     <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                      Phone number
+                      {auth.signupPhone}
                     </span>
                     <input
                       type="tel"
@@ -334,11 +313,11 @@ export function AuthModal({
                       onChange={(event) =>
                         setSignup((current) => ({
                           ...current,
-                          phone: event.target.value
+                          phone: event.target.value,
                         }))
                       }
                       className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
-                      placeholder="e.g. 01012345678"
+                      placeholder={lang === 'ar' ? 'مثال: 01012345678' : 'e.g. 01012345678'}
                     />
                   </label>
                 )}
@@ -347,7 +326,8 @@ export function AuthModal({
                   <div className="space-y-4">
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                        Email address <span className="font-normal text-[#081827]/50">(optional)</span>
+                        {lang === 'ar' ? 'البريد الإلكتروني' : 'Email address'}{' '}
+                        <span className="font-normal text-[#081827]/50">({lang === 'ar' ? 'اختياري' : 'optional'})</span>
                       </span>
                       <input
                         type="email"
@@ -355,18 +335,18 @@ export function AuthModal({
                         onChange={(event) =>
                           setSignup((current) => ({
                             ...current,
-                            email: event.target.value
+                            email: event.target.value,
                           }))
                         }
                         className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
-                        placeholder="you@example.com"
+                        placeholder={lang === 'ar' ? 'you@example.com' : 'you@example.com'}
                       />
                     </label>
 
                     <div className="grid gap-4 sm:grid-cols-2">
                       <label className="block">
                         <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                          Password
+                          {auth.signupPassword}
                         </span>
                         <input
                           type="password"
@@ -374,7 +354,7 @@ export function AuthModal({
                           onChange={(event) =>
                             setSignup((current) => ({
                               ...current,
-                              password: event.target.value
+                              password: event.target.value,
                             }))
                           }
                           className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
@@ -383,7 +363,7 @@ export function AuthModal({
                       </label>
                       <label className="block">
                         <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                          Confirm password
+                          {lang === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm password'}
                         </span>
                         <input
                           type="password"
@@ -391,7 +371,7 @@ export function AuthModal({
                           onChange={(event) =>
                             setSignup((current) => ({
                               ...current,
-                              confirmPassword: event.target.value
+                              confirmPassword: event.target.value,
                             }))
                           }
                           className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
@@ -417,7 +397,7 @@ export function AuthModal({
                   className="inline-flex h-11 items-center gap-2 rounded-full border border-gray-200 px-4 text-sm font-semibold text-[#081827] transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  Back
+                  {auth.backButton}
                 </button>
                 <button
                   type="button"
@@ -432,7 +412,7 @@ export function AuthModal({
                   ) : (
                     <ArrowRight className="h-4 w-4" />
                   )}
-                  {step === 4 ? 'Submit' : 'Next'}
+                  {step === 4 ? auth.submitButton : auth.continueButton}
                 </button>
               </div>
             </div>
@@ -447,9 +427,9 @@ export function AuthModal({
                       {loginRole === 'trainer' ? <GraduationCap className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}
                     </span>
                     <div>
-                      <p className="text-sm font-semibold text-[#081827]">Selected portal</p>
+                      <p className="text-sm font-semibold text-[#081827]">{auth.rolePrompt}</p>
                       <p className="text-xs text-[#081827]/60">
-                        {loginRole === 'trainer' ? 'Trainer portal' : 'Trainee portal'}
+                        {loginRole === 'trainer' ? auth.roleTrainer : auth.roleTrainee}
                       </p>
                     </div>
                   </div>
@@ -464,7 +444,7 @@ export function AuthModal({
                         : 'border-gray-200 text-[#081827] hover:bg-white'
                     }`}
                   >
-                    <span>Trainee portal</span>
+                    <span>{auth.roleTrainee}</span>
                     <UserRound className="h-4 w-4" />
                   </button>
                   <button
@@ -476,7 +456,7 @@ export function AuthModal({
                         : 'border-gray-200 text-[#081827] hover:bg-white'
                     }`}
                   >
-                    <span>Trainer portal</span>
+                    <span>{auth.roleTrainer}</span>
                     <GraduationCap className="h-4 w-4" />
                   </button>
                 </div>
@@ -487,7 +467,7 @@ export function AuthModal({
               <div className="space-y-4">
                 <label className="block">
                   <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                    National ID
+                    {auth.loginNationalId}
                   </span>
                   <input
                     type="text"
@@ -495,12 +475,12 @@ export function AuthModal({
                     value={loginNationalId}
                     onChange={(event) => setLoginNationalId(event.target.value)}
                     className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-[#081827] outline-none transition focus:border-[#E51B2B] focus:ring-4 focus:ring-[#E51B2B]/10"
-                    placeholder="e.g. 1234567890"
+                    placeholder={lang === 'ar' ? 'مثال: 1234567890' : 'e.g. 1234567890'}
                   />
                 </label>
                 <label className="block">
                   <span className="mb-2 block text-sm font-semibold text-[#081827]">
-                    Password
+                    {auth.loginPassword}
                   </span>
                   <input
                     type="password"
@@ -522,12 +502,8 @@ export function AuthModal({
                   disabled={loading}
                   className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#E51B2B] px-5 text-sm font-semibold text-white transition hover:bg-[#c4131f] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <LogIn className="h-4 w-4" />
-                  )}
-                  Sign in
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
+                  {auth.loginButton}
                 </button>
               </div>
             </form>

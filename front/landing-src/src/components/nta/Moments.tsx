@@ -9,6 +9,7 @@ import {
   RevealGroup,
   RevealItem } from
 './motion';
+import { useLang } from '../../i18n';
 const FEATURED = {
   src: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=1400&q=80&auto=format&fit=crop',
   label: 'Featured',
@@ -42,27 +43,28 @@ function PlayBadge({ size = 'lg' }: {size?: 'lg' | 'sm';}) {
 
 }
 export function Moments({ id = 'community' }: { id?: string }) {
+  const { t } = useLang();
   return (
     <section id={id} className={`${SECTION} bg-[#F6F7F9] scroll-mt-24`}>
       <div className={CONTAINER}>
         <Reveal className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <div className="max-w-xl">
-            <Eyebrow className="mb-4">NTA Moments</Eyebrow>
+            <Eyebrow className="mb-4">{t.moments.eyebrow}</Eyebrow>
             <h2
               className="text-[#081827] font-bold tracking-tight"
               style={{
                 fontSize: 'clamp(2rem, 3.4vw, 2.875rem)',
                 lineHeight: 1.1
               }}>
-              
-              Inside the Academy.
+
+              {t.moments.heading}
             </h2>
           </div>
           <a
             href="#contact"
             className="group inline-flex items-center gap-1.5 text-[#E51B2B] text-sm font-semibold">
             
-            View all videos
+            {t.moments.viewAll}
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
               →
             </span>
@@ -77,7 +79,7 @@ export function Moments({ id = 'community' }: { id?: string }) {
               
               <ImageWithFallback
                 src={FEATURED.src}
-                alt={FEATURED.title}
+                alt={t.moments.featured.title}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
               
               <div className="absolute inset-0 bg-gradient-to-t from-[#081827]/90 via-[#081827]/20 to-transparent" />
@@ -86,10 +88,10 @@ export function Moments({ id = 'community' }: { id?: string }) {
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-7">
                 <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#E51B2B] text-white text-[11px] font-semibold tracking-wider uppercase mb-3">
-                  {FEATURED.label}
+                  {t.moments.featured.label}
                 </span>
                 <h3 className="text-white max-w-xl text-2xl font-semibold leading-snug">
-                  {FEATURED.title}
+                  {t.moments.featured.title}
                 </h3>
                 <div className="mt-2 text-white/75 text-sm">
                   {FEATURED.duration}
@@ -99,15 +101,15 @@ export function Moments({ id = 'community' }: { id?: string }) {
           </RevealItem>
 
           <RevealItem className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
-            {SECONDARY.map((v) =>
+            {SECONDARY.map((v, i) =>
             <button
-              key={v.title}
+              key={i}
               type="button"
               className="group relative block w-full rounded-2xl overflow-hidden text-left aspect-[16/10] lg:aspect-[16/11]">
               
                 <ImageWithFallback
                 src={v.src}
-                alt={v.title}
+                alt={t.moments.secondary[i].title}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
               
                 <div className="absolute inset-0 bg-gradient-to-t from-[#081827]/90 via-[#081827]/10 to-transparent" />
@@ -116,10 +118,10 @@ export function Moments({ id = 'community' }: { id?: string }) {
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-5">
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur text-white text-[10px] font-semibold tracking-wider uppercase mb-2">
-                    {v.label}
+                    {t.moments.secondary[i].label}
                   </span>
                   <h3 className="text-white text-base font-semibold leading-snug">
-                    {v.title}
+                    {t.moments.secondary[i].title}
                   </h3>
                 </div>
               </button>

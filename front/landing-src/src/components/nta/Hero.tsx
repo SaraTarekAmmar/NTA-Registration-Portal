@@ -3,8 +3,10 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { CONTAINER } from './motion';
+import { useLang } from '../../i18n';
 const EASE = [0.22, 1, 0.36, 1] as const;
 export function Hero({ id = 'hero' }: { id?: string }) {
+  const { t } = useLang();
   const reduce = useReducedMotion();
   const [slide, setSlide] = useState(0);
   const container: Variants = {
@@ -58,11 +60,11 @@ export function Hero({ id = 'hero' }: { id?: string }) {
               lineHeight: 1.05
             }}>
             
-            Empowering Leaders.
+            {t.hero.lead}
             <br />
-            Transforming{' '}
+            {t.hero.rest}{' '}
             <span className="relative inline-block">
-              <span className="relative z-10">Communities.</span>
+              <span className="relative z-10">{t.hero.highlight}</span>
               <span className="absolute -bottom-1 left-0 right-0 h-[6px] bg-[#E51B2B] -skew-x-6" />
             </span>
           </motion.h1>
@@ -71,9 +73,7 @@ export function Hero({ id = 'hero' }: { id?: string }) {
             variants={item}
             className="mt-6 text-white/85 text-lg leading-relaxed max-w-[58ch]">
             
-            Egypt's premier institution for leadership development, capacity
-            building, and executive education, preparing the next generation to
-            shape national progress.
+            {t.hero.subtitle}
           </motion.p>
 
           <motion.div
@@ -84,14 +84,14 @@ export function Hero({ id = 'hero' }: { id?: string }) {
               href="#programs"
               className="group inline-flex items-center gap-2 h-12 px-6 rounded-xl bg-[#E51B2B] text-white font-semibold hover:bg-[#c4131f] active:scale-[0.98] transition-[background-color,transform] duration-200 shadow-lg shadow-[#E51B2B]/25">
               
-              Explore Programs
+              {t.hero.explore}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
             <a
               href="#about"
               className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border border-white/30 text-white font-semibold hover:bg-white/10 active:scale-[0.98] backdrop-blur-sm transition-[background-color,transform] duration-200">
               
-              About NTA
+              {t.hero.about}
               <ChevronRight className="h-4 w-4" />
             </a>
           </motion.div>

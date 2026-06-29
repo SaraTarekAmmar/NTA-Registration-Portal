@@ -10,8 +10,17 @@ import { Testimonials } from './components/nta/Testimonials';
 import { News } from './components/nta/News';
 import { Footer } from './components/nta/Footer';
 import { AuthModal } from './components/nta/AuthModal';
+import { LangProvider, useLang } from './i18n';
 export function App() {
+  return (
+    <LangProvider>
+      <AppInner />
+    </LangProvider>);
+
+}
+function AppInner() {
   useScreenInit();
+  const { dir, lang } = useLang();
   const [authOpen, setAuthOpen] = React.useState(false);
   const [authMode, setAuthMode] = React.useState<'login' | 'signup'>('login');
   const [loginRole, setLoginRole] = React.useState<'trainee' | 'trainer'>('trainee');
@@ -29,9 +38,12 @@ export function App() {
 
   return (
     <div
+      dir={dir}
       className="min-h-screen w-full bg-white text-[#081827]"
       style={{
-        fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif'
+        fontFamily: lang === 'ar'
+          ? 'Tajawal, ui-sans-serif, system-ui, sans-serif'
+          : 'Inter, ui-sans-serif, system-ui, sans-serif'
       }}>
       
       <a href="#main" className="nta-skip-link">

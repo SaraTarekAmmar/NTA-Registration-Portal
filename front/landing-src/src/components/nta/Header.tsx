@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Globe, Menu, X, GraduationCap, UserRound } from 'lucide-react';
 import { NtaLogo } from './NtaLogo';
+import { useLang } from '../../i18n';
 type HeaderProps = {
   onOpenLogin: (role: 'trainee' | 'trainer') => void;
   onOpenSignup: () => void;
 };
 
-const NAV = [
-  { label: 'About', href: '#about' },
-  { label: 'Programs', href: '#programs' },
-  { label: 'Community', href: '#community' },
-  { label: 'Partners', href: '#partners' },
-  { label: 'News', href: '#news' },
-  { label: 'Contact', href: '#contact' }
-] as const;
+const HREFS = ['#about', '#programs', '#community', '#partners', '#news', '#contact'];
 
 export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
+  const { t, toggle } = useLang();
+  const NAV = HREFS.map((href, i) => ({ href, label: t.header.nav[i] }));
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -81,22 +77,19 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
               setLoginOpen(false);
             }}
             className={`h-10 w-10 grid place-items-center rounded-full transition duration-200 ${onDark ? 'text-white hover:bg-white/10' : 'text-[#081827] hover:bg-gray-100'}`}
-            aria-label="Search"
+            aria-label={t.header.search}
             aria-expanded={searchOpen}
             aria-controls="site-search">
             
             <Search className="h-[18px] w-[18px]" aria-hidden="true" />
           </button>
           <button
-            className={`h-10 px-3 inline-flex items-center gap-2 rounded-full transition duration-200 text-sm ${onDark ? 'text-white hover:bg-white/10' : 'text-[#081827] hover:bg-gray-100'}`}
-            aria-label="Change language, currently English">
-            
+            onClick={toggle}
+            className={`h-10 px-3 inline-flex items-center gap-2 rounded-full transition duration-200 text-sm font-semibold ${onDark ? 'text-white hover:bg-white/10' : 'text-[#081827] hover:bg-gray-100'}`}
+            aria-label="Switch language / تبديل اللغة">
+
             <Globe className="h-[16px] w-[16px]" aria-hidden="true" />
-            <span>EN</span>
-            <span className="opacity-50" aria-hidden="true">
-              |
-            </span>
-            <span className="opacity-70">AR</span>
+            <span>{t.header.other}</span>
           </button>
 
           <span
@@ -112,7 +105,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
               }}
               className={`inline-flex items-center h-10 px-4 rounded-full font-semibold transition duration-200 text-sm ${onDark ? 'text-white hover:bg-white/10' : 'text-[#081827] hover:bg-gray-100'}`}>
 
-              Log in
+              {t.header.login}
             </button>
             {loginOpen &&
             <div className="absolute top-full right-0 mt-3 w-56 rounded-2xl border border-gray-200 bg-white shadow-xl p-2">
@@ -127,7 +120,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
                   <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#E51B2B]/10 text-[#E51B2B]">
                     <GraduationCap className="h-4 w-4" />
                   </span>
-                  Trainer portal
+                  {t.header.trainerPortal}
                 </button>
                 <button
                 type="button"
@@ -140,7 +133,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
                   <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#E51B2B]/10 text-[#E51B2B]">
                     <UserRound className="h-4 w-4" />
                   </span>
-                  Trainee portal
+                  {t.header.traineePortal}
                 </button>
               </div>
             }
@@ -149,7 +142,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
             onClick={onOpenSignup}
             className="inline-flex items-center h-10 px-5 rounded-full bg-[#E51B2B] text-white font-semibold hover:bg-[#c4131f] active:scale-[0.98] transition duration-200 text-sm shadow-sm">
 
-            Sign up
+            {t.header.signup}
           </button>
         </div>
 
@@ -160,9 +153,9 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
           onSubmit={(e) => e.preventDefault()}
           className="absolute left-0 right-0 top-full bg-white border-t border-gray-200/70 shadow-md">
           
-          <div className="max-w-[1200px] mx-auto px-6 md:px-8 py-4 flex items-center gap-3">
+              <div className="max-w-[1200px] mx-auto px-6 md:px-8 py-4 flex items-center gap-3">
               <label htmlFor="site-search-input" className="sr-only">
-                Search the site
+                {t.header.searchSite}
               </label>
               <Search
               className="h-5 w-5 text-[#081827]/60 shrink-0"
@@ -172,20 +165,20 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
               id="site-search-input"
               type="search"
               autoFocus
-              placeholder="Search programs, news, alumni…"
+              placeholder={t.header.searchPlaceholder}
               className="flex-1 h-11 bg-transparent outline-none text-[#081827] placeholder:text-[#081827]/50" />
             
               <button
               type="submit"
               className="h-10 px-5 rounded-full bg-[#E51B2B] text-white font-semibold hover:bg-[#c4131f] active:scale-[0.98] transition duration-200 text-sm">
               
-                Search
+                {t.header.search}
               </button>
               <button
               type="button"
               onClick={() => setSearchOpen(false)}
               className="h-10 w-10 grid place-items-center rounded-full text-[#081827] hover:bg-gray-100 transition duration-200"
-              aria-label="Close search">
+              aria-label={t.header.closeSearch}>
               
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -196,7 +189,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
         <button
           className={`lg:hidden h-10 w-10 grid place-items-center rounded-lg transition-colors ${onDark ? 'text-white' : 'text-[#081827]'}`}
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-label={mobileOpen ? t.header.closeMenu : t.header.openMenu}
           aria-expanded={mobileOpen}>
           
           {mobileOpen ?
@@ -230,7 +223,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
               }}
               className="flex-1 inline-flex items-center justify-center h-11 rounded-full border border-gray-200 text-[#081827] text-sm font-semibold hover:bg-gray-50 transition">
 
-              Log in
+              {t.header.login}
             </button>
             <a
             href="#signup"
@@ -241,7 +234,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
             }}
             className="flex-1 inline-flex items-center justify-center h-11 rounded-full bg-[#E51B2B] text-white text-sm font-semibold hover:bg-[#c4131f] transition">
 
-              Sign up
+              {t.header.signup}
             </a>
           </div>
         </div>

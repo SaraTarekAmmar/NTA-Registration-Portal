@@ -16,6 +16,7 @@ import {
   RevealGroup,
   RevealItem } from
 './motion';
+import { useLang } from '../../i18n';
 const PROGRAMS = [
 {
   icon: Crown,
@@ -49,31 +50,30 @@ const PROGRAMS = [
 }];
 
 export function ExecutiveEducation({ id = 'programs' }: { id?: string }) {
+  const { t } = useLang();
   return (
     <section id={id} className={`${SECTION} bg-white scroll-mt-24`}>
       <div className={CONTAINER}>
         <Reveal className="max-w-2xl mb-14">
-          <Eyebrow className="mb-4">Executive Education</Eyebrow>
+          <Eyebrow className="mb-4">{t.programs.eyebrow}</Eyebrow>
           <h2
             className="text-[#081827] font-bold tracking-tight text-balance"
             style={{
               fontSize: 'clamp(2rem, 3.4vw, 2.875rem)',
               lineHeight: 1.1
             }}>
-            
-            Programs that shape national leaders.
+
+            {t.programs.heading}
           </h2>
           <p className="mt-5 text-[#081827]/70 text-lg leading-relaxed max-w-[60ch]">
-            Carefully designed curricula combining global best practice with
-            local insight, preparing executives, policymakers, and emerging
-            leaders to deliver lasting impact.
+            {t.programs.intro}
           </p>
         </Reveal>
 
         <RevealGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROGRAMS.map(({ icon: Icon, title, desc }) =>
+          {PROGRAMS.map(({ icon: Icon }, i) =>
           <RevealItem
-            key={title}
+            key={i}
             as="article"
             className="group relative bg-white rounded-2xl border border-gray-200 p-7 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-900/5 overflow-hidden">
             
@@ -84,17 +84,17 @@ export function ExecutiveEducation({ id = 'programs' }: { id?: string }) {
               </div>
 
               <h3 className="text-[#081827] mb-3 text-xl font-semibold leading-snug">
-                {title}
+                {t.programs.items[i].title}
               </h3>
               <p className="text-[#081827]/70 leading-relaxed text-[15px]">
-                {desc}
+                {t.programs.items[i].desc}
               </p>
 
               <a
               href="#contact"
               className="mt-6 inline-flex items-center gap-1.5 text-[#E51B2B] text-sm font-semibold group/link">
-              
-                Learn more
+
+                {t.programs.learnMore}
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-0.5" />
               </a>
             </RevealItem>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { CONTAINER, SECTION, Eyebrow, Reveal } from './motion';
+import { useLang } from '../../i18n';
 const PARTNERS = [
 'Harvard Kennedy School',
 'INSEAD',
@@ -14,6 +15,7 @@ const PARTNERS = [
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 export function Partners({ id = 'partners' }: { id?: string }) {
+  const { t } = useLang();
   const reduce = useReducedMotion();
   const [page, setPage] = useState(0);
   const perPage = 4;
@@ -24,15 +26,15 @@ export function Partners({ id = 'partners' }: { id?: string }) {
       <div className={CONTAINER}>
         <Reveal className="flex items-end justify-between mb-12 flex-wrap gap-6">
           <div className="max-w-xl">
-            <Eyebrow className="mb-4">Our Partners</Eyebrow>
+            <Eyebrow className="mb-4">{t.partners.eyebrow}</Eyebrow>
             <h2
               className="text-[#081827] font-bold tracking-tight text-balance"
               style={{
                 fontSize: 'clamp(2rem, 3.4vw, 2.875rem)',
                 lineHeight: 1.1
               }}>
-              
-              In collaboration with the world's leading institutions.
+
+              {t.partners.heading}
             </h2>
           </div>
           <div className="flex items-center gap-3">
@@ -115,7 +117,7 @@ export function Partners({ id = 'partners' }: { id?: string }) {
             href="#contact"
             className="group inline-flex items-center gap-2 h-11 px-5 rounded-full border border-[#081827]/15 text-[#081827] font-semibold hover:bg-[#081827] hover:text-white active:scale-[0.98] transition duration-200 text-sm">
             
-            View All Partners
+            {t.partners.viewAll}
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
         </div>

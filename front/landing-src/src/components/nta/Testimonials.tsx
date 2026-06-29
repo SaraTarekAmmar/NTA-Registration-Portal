@@ -3,37 +3,14 @@ import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { CONTAINER, Eyebrow, Reveal } from './motion';
-const ITEMS = [
-{
-  quote:
-  'NTA reshaped how I think about leadership at a national scale. The program combined rigor, empathy, and a deep sense of purpose I have not encountered elsewhere.',
-  name: 'Dr. Layla Hassan',
-  role: 'Senior Advisor, Ministry of Planning',
-  avatar:
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop'
-},
-{
-  quote:
-  'The Presidential Leadership Program brought together extraordinary peers and faculty. It is the most consequential professional experience of my career.',
-  name: 'Ahmed El-Sayed',
-  role: 'Director General, Digital Egypt',
-  avatar:
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80&auto=format&fit=crop'
-},
-{
-  quote:
-  "An institution that holds itself to a global standard while remaining grounded in Egypt's priorities. NTA is genuinely shaping the future of public service.",
-  name: 'Nour Abdelrahman',
-  role: 'Chief of Staff, Governorate Office',
-  avatar:
-  'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80&auto=format&fit=crop'
-}];
-
+import { useLang } from '../../i18n';
 const EASE = [0.22, 1, 0.36, 1] as const;
 export function Testimonials({ id = 'testimonials' }: { id?: string }) {
   const reduce = useReducedMotion();
+  const { t, lang } = useLang();
   const [i, setI] = useState(0);
-  const item = ITEMS[i];
+  const items = t.testimonials.items;
+  const item = items[i];
   return (
     <section id={id} className="relative py-24 md:py-32 bg-[#081827] overflow-hidden scroll-mt-24">
       <svg
@@ -61,14 +38,14 @@ export function Testimonials({ id = 'testimonials' }: { id?: string }) {
 
       <div className={`relative ${CONTAINER}`}>
         <Reveal className="text-center mb-14">
-          <Eyebrow className="mb-3">Testimonials</Eyebrow>
+          <Eyebrow className="mb-3">{t.testimonials.eyebrow}</Eyebrow>
           <h2
             className="text-white font-bold tracking-tight"
             style={{
               fontSize: 'clamp(2rem, 3.4vw, 2.75rem)'
             }}>
             
-            Voices from our alumni.
+            {t.testimonials.heading}
           </h2>
         </Reveal>
 
@@ -109,7 +86,7 @@ export function Testimonials({ id = 'testimonials' }: { id?: string }) {
                 <span className="h-14 w-14 rounded-full overflow-hidden ring-2 ring-[#E51B2B]/40 shrink-0">
                   <ImageWithFallback
                     src={item.avatar}
-                    alt={`Portrait of ${item.name}`}
+                    alt={lang === 'ar' ? `صورة ${item.name}` : `Portrait of ${item.name}`}
                     className="h-full w-full object-cover" />
                   
                 </span>
@@ -128,18 +105,18 @@ export function Testimonials({ id = 'testimonials' }: { id?: string }) {
 
         <div className="mt-10 flex items-center justify-center gap-6">
           <button
-            onClick={() => setI((i - 1 + ITEMS.length) % ITEMS.length)}
+            onClick={() => setI((i - 1 + items.length) % items.length)}
             className="h-11 w-11 rounded-full border border-white/25 grid place-items-center text-white hover:bg-[#E51B2B] hover:border-[#E51B2B] active:scale-95 transition duration-200"
-            aria-label="Previous testimonial">
+            aria-label={t.testimonials.prev}>
             
             <ArrowLeft className="h-4 w-4" />
           </button>
           <div
             className="flex items-center gap-2"
             role="tablist"
-            aria-label="Testimonials">
+            aria-label={t.testimonials.eyebrow}>
             
-            {ITEMS.map((_, idx) => {
+            {items.map((_, idx) => {
               const active = idx === i;
               return (
                 <button
@@ -148,15 +125,15 @@ export function Testimonials({ id = 'testimonials' }: { id?: string }) {
                   aria-selected={active}
                   onClick={() => setI(idx)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${active ? 'w-8 bg-[#E51B2B]' : 'w-2 bg-white/30 hover:bg-white/60'}`}
-                  aria-label={`Testimonial ${idx + 1}`} />);
+                  aria-label={t.testimonials.tabLabel(idx)} />);
 
 
             })}
           </div>
           <button
-            onClick={() => setI((i + 1) % ITEMS.length)}
+            onClick={() => setI((i + 1) % items.length)}
             className="h-11 w-11 rounded-full border border-white/25 grid place-items-center text-white hover:bg-[#E51B2B] hover:border-[#E51B2B] active:scale-95 transition duration-200"
-            aria-label="Next testimonial">
+            aria-label={t.testimonials.next}>
             
             <ArrowRight className="h-4 w-4" />
           </button>
