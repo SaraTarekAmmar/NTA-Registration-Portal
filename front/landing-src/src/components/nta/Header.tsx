@@ -45,7 +45,7 @@ export function Header({ onOpenLogin, onOpenSignup }: HeaderProps) {
   const onDark = !scrolled;
   return (
     <header
-      className={`relative fixed top-0 inset-x-0 z-50 transition-[background-color,box-shadow,border-color] duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md border-b border-gray-200/70 shadow-sm' : 'bg-transparent'}`}>
+      className={`fixed top-0 inset-x-0 z-50 transition-[background-color,box-shadow,border-color] duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md border-b border-gray-200/70 shadow-sm' : 'bg-transparent'}`}>
       
       <div className="max-w-[1200px] mx-auto px-6 md:px-8 h-[72px] flex items-center justify-between gap-4">
         <a
