@@ -16,30 +16,46 @@ REM 2. Check if Python is installed
 where python >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Python is not installed or not in your PATH.
+    echo Please install Python 3.10+ from https://python.org
     pause
     exit /b 1
 )
 
-REM 3. Check for virtual environment
+REM 3. Create the virtual environment if it does not exist yet
 if not exist "backend\venv\Scripts\python.exe" (
-    echo [ERROR] Virtual environment missing at superadmin\backend\venv
+    echo [SETUP] Virtual environment not found. Creating it now...
+    python -m venv backend\venv
+    if %errorlevel% neq 0 (
+        echo [ERROR] Failed to create virtual environment.
+        pause
+        exit /b 1
+    )
+    echo [SETUP] Installing dependencies ^(first run may take a minute^)...
+    "backend\venv\Scripts\python.exe" -m pip install --upgrade pip
+    "backend\venv\Scripts\python.exe" -m pip install --default-timeout=100 -r backend\requirements.txt
+)
+
+REM 4. Verify venv can actually run
+"backend\venv\Scripts\python.exe" --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Broken virtual environment. Delete 'backend\venv' and run this again.
     pause
     exit /b 1
 )
 
-echo [NTA] Starting Super Admin Backend on Port 8003...
-echo [NTA] Dashboard: http://localhost:8003
+REM 5. Synchronize dependencies
+echo [SYNC] Synchronizing backend dependencies...
+"backend\venv\Scripts\python.exe" -m pip install --default-timeout=100 -r backend\requirements.txt >nul 2>&1
 
-REM Launch browser automatically
-start http://localhost:8003
-
-REM Run the FastAPI app
-cd backend
-"venv\Scripts\python.exe" -m uvicorn main:app --port 8003 --reload
+echo.
+echo [STARTING] Starting Super Admin Backend (Port 8003)...
+echo [INFO] Open http://127.0.0.1:8003/ in your browser.
+start "" powershell -NoProfile -WindowStyle Hidden -Command "Start-Sleep -Seconds 3; Start-Process 'http://127.0.0.1:8003/'"
+echo [INFO] If the window closes immediately, check the output above for errors.
+"backend\venv\Scripts\python.exe" -m uvicorn main:app --app-dir backend --port 8003 --host 127.0.0.1
 if %errorlevel% neq 0 (
     echo.
-    echo [CRASH] Super Admin server exited with an error.
+    echo [CRASH] Server exited with an error. See output above.
 )
-
 pause
 exit /b 0
