@@ -1160,7 +1160,7 @@
             تحميل بيانات المتدرب...
           </p>
         </div>
-        <div class="admin-profile-stage">
+        <div class="admin-profile-stage" style="display: none;">
           <div class="admin-profile-stage__info">
             <span class="admin-profile-stage__label">المرحلة الحالية</span>
             <span class="admin-profile-stage__badge" id="profileStageBadge"
@@ -1612,6 +1612,10 @@
               var a = getAnalysisData(traineeId, data.user, null, null);
               var titleEl = document.getElementById("metricsSectionTitle");
               if (titleEl) titleEl.textContent = "التوصيات والتحليل";
+              
+              var stageBlock = document.querySelector(".admin-profile-stage");
+              if (stageBlock) stageBlock.style.display = "flex";
+              
               setTimeout(async function () {
                 await buildRecommendations();
               }, 100);
