@@ -54,7 +54,7 @@
           // Render actions
           var actionHtml = '—';
           if (userRole === "committee_member" && !done && r.assigned_reviewer_id === userId) {
-            actionHtml = '<a href="http://localhost:7776/stage-review.html?id='+r.id+'" target="_blank" class="coord-badge coord-badge--ok" style="text-decoration:none;cursor:pointer;">بدء التقييم</a>';
+            actionHtml = '<a href="http://localhost:7776/stage-review.html?id='+r.id+'&stage='+r.stage_id+'" target="_blank" class="coord-badge coord-badge--ok" style="text-decoration:none;cursor:pointer;">بدء التقييم</a>';
           }
 
           return '<tr>' +
