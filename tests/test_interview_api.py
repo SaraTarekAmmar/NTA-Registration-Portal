@@ -1,5 +1,12 @@
-import mysql.connector
-import requests
+import os
+
+import pytest
+
+if os.getenv("NTA_INTEGRATION", "").lower() not in {"1", "true", "yes"}:
+    pytest.skip("Set NTA_INTEGRATION=1 to run live interview integration tests.", allow_module_level=True)
+
+mysql_connector = pytest.importorskip("mysql.connector")
+requests = pytest.importorskip("requests")
 import json
 
 COORDINATOR_BASE = "http://localhost:8005"
@@ -7,7 +14,7 @@ ADMISSION_BASE = "http://localhost:7776"
 ADMIN_BASE = "http://localhost:8002"
 
 def get_db():
-    return mysql.connector.connect(
+    return mysql_connector.connect(
         host="localhost", user="root", password="sara@16112000", database="nta_portal"
     )
 

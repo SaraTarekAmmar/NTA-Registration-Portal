@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 import os
 import secrets
 from dotenv import load_dotenv
@@ -91,6 +92,33 @@ app.include_router(lookups.router)
 app.include_router(ai_services.router)
 app.include_router(progress.router)
 
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
+@app.middleware("http")
+async def limit_json_body(request: Request, call_next):
+    if request.method in ("POST", "PUT", "PATCH"):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 1_048_576:
+            return JSONResponse(
+                status_code=413,
+                content={"detail": "حجم الطلب كبير جدًا. الحد الأقصى 1 ميجابايت."},
+            )
+    return await call_next(request)
+
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok", "service": "registration"}
+
 @app.post("/api/debug/log")
 async def debug_log(request: Request):
     data = await request.json()
@@ -98,13 +126,37 @@ async def debug_log(request: Request):
     return {"status": "ok"}
 
 # Serve the centralized data folder (optional, if needed by lookups)
+class PrivateDataStaticFiles(StaticFiles):
+    _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] in self._BLOCKED) or any(s.startswith(".") for s in segs):
+            from starlette.responses import PlainTextResponse
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
 # Serve static files (HTML, CSS, JS) from the registration directory
+from starlette.responses import PlainTextResponse as _PlainTextResponse
+
+
+class GuardedStaticFiles(StaticFiles):
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
+            return _PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 static_path = Path(__file__).parent.parent
-app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn

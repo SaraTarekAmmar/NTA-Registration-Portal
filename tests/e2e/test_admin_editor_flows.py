@@ -3,7 +3,9 @@ import re
 import uuid
 
 import pytest
-from playwright.sync_api import expect
+
+playwright = pytest.importorskip("playwright.sync_api")
+expect = playwright.expect
 
 
 RUN_E2E = os.getenv("NTA_E2E", "").lower() in {"1", "true", "yes"}
