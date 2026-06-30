@@ -1031,7 +1031,10 @@
             trainees = trainees.filter(function(t) { return t.status === 'rejected'; });
           }
 
-          var url = "/api/admin/trainees?role=applicant";
+          // Candidates = people still moving through the admission pipeline.
+          // The system stores them as role 'trainee' (there is no 'applicant'
+          // role in the DB); we narrow to in-pipeline status below.
+          var url = "/api/admin/trainees?role=trainee";
           // Fetch all then filter client-side for pill flexibility
           window
             .authenticatedFetch(url)
@@ -1056,7 +1059,8 @@
                   // Exclude stage 7 (المسجلين بالبرنامج) — they are shown in قائمة المتدربين
                 })
                 .filter(function (t) {
-                  return t.stage !== 7;
+                  // Keep only people actively in the pipeline (not enrolled / no pipeline row).
+                  return (t.status === "active" || t.status === "rejected") && t.stage !== 7;
                 });
               isLoading = false;
               document.getElementById("auSkeleton").style.display = "none";
