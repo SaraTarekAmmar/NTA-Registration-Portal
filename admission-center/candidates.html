@@ -1016,7 +1016,7 @@
             trainees = trainees.filter(function(t) { return t.status === 'rejected'; });
           }
 
-          var url = "/api/admission/trainees?role=applicant";
+          var url = "/api/admission/trainees";
           // Fetch all then filter client-side for pill flexibility
           window
             .authenticatedFetch(url)

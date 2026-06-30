@@ -61,8 +61,8 @@ def get_staff_user(current_user: dict = Depends(get_current_user)):
     return current_user
 
 def get_admission_manager_user(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admission_manager":
-        raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - لمدير القبول فقط")
+    if current_user["role"] not in ["admission_manager", "admin", "superadmin"]:
+        raise HTTPException(status_code=403, detail="الصلاحيات غير كافية - مخصص لمديري القبول")
     return current_user
 
 def get_reviewer_user(current_user: dict = Depends(get_current_user)):

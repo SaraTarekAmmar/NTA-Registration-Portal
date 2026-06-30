@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة القبول - الأكاديمية الوطنية للتدريب</title>
+    <link rel="stylesheet" href="/header/header.css?v=8" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+      .has-header { padding-right: 280px; }
+      
+      .trainee-main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      .admin-hero h1 {
+        font-size: 2.5rem;
+        margin: 0 0 0.5rem 0;
+        color: var(--text-main);
+      }
+      .admin-hero p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin: 0;
+      }
+
+      .dash-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .dash-kpi {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        padding: 1.5rem;
+        border-radius: 20px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+      .dash-kpi:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        border-color: #fca5a5;
+      }
+
+      .dash-kpi::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        width: 150px; height: 150px;
+        background: #fca5a5;
+        filter: blur(80px);
+        opacity: 0.15;
+        border-radius: 50%;
+        transform: translate(30%, -30%);
+      }
+
+      .dash-kpi__icon {
+        width: 54px; height: 54px;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(185, 28, 28, 0.1);
+        color: #fca5a5;
+        flex-shrink: 0;
+      }
+      .dash-kpi__icon svg { width: 28px; height: 28px; }
+
+      .dash-kpi__body { flex: 1; }
+      .dash-kpi__val {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1.1;
+        margin-bottom: 0.25rem;
+      }
+      .dash-kpi__lbl {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-subtle);
+      }
+    </style>
+  </head>
+  <body data-page="admission-dashboard" class="has-header bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+    <div id="ntaHeader"></div>
+
+    <main class="trainee-main admin-main">
+      <div class="admin-hero">
+        <h1>لوحة القبول</h1>
+        <p>مرحباً بك في مركز إدارة القبول والفرز</p>
+      </div>
+
+      <div class="dash-kpi-row" id="dashboardStats">
+        <div class="dash-kpi" onclick="window.location.href='candidates.html'">
+          <div class="dash-kpi__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="dash-kpi__body">
+            <div class="dash-kpi__val" id="totalCands">-</div>
+            <div class="dash-kpi__lbl">إجمالي المرشحين</div>
+          </div>
+        </div>
+
+        <div class="dash-kpi" onclick="window.location.href='candidates.html'">
+          <div class="dash-kpi__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="dash-kpi__body">
+            <div class="dash-kpi__val" id="stage1Cands">-</div>
+            <div class="dash-kpi__lbl">الفرز الإلكتروني (المرحلة 1)</div>
+          </div>
+        </div>
+
+        <div class="dash-kpi" onclick="window.location.href='candidates.html'">
+          <div class="dash-kpi__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="dash-kpi__body">
+            <div class="dash-kpi__val" id="stage4Cands">-</div>
+            <div class="dash-kpi__lbl">الانتظار والمقابلات</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/header/header.js?v=5"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var session = JSON.parse(sessionStorage.getItem("ntaTrainee") || "null");
+        if (!session || !["admission_manager", "admin", "superadmin"].includes(session.role)) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        window.authenticatedFetch("/api/admission/trainees")
+          .then(res => res.json())
+          .then(data => {
+             document.getElementById("totalCands").textContent = data.length || 0;
+             var stage1 = data.filter(d => (d.stage || 1) === 1).length;
+             var stage4 = data.filter(d => d.stage === 4 || d.stage === 5).length;
+             document.getElementById("stage1Cands").textContent = stage1;
+             document.getElementById("stage4Cands").textContent = stage4;
+          })
+          .catch(err => {
+             console.error(err);
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -118,7 +118,7 @@
 
     var nav =
       navLabel("الرئيسية") +
-      navItem("/candidates.html", "candidates", icons.home, "لوحة القبول", page) +
+      navItem("/admission-dashboard.html", "admission-dashboard", icons.home, "لوحة القبول", page) +
       divider() +
       navLabel("المتابعة") +
       navItem(
