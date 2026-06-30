@@ -747,6 +747,70 @@
                 });
             });
 
+            // ── Official interview criteria (program-aware) for stages 5 & 6 ──
+            // PLP = 15 criteria (/75), children = 10 criteria (/50). Rendered as
+            // 1–5 sliders; submitted under details.criteria + details.program_type.
+            var IV_CRITERIA = {
+                plp: [
+                    ['appearance', 'المظهر'], ['personality', 'تقييم الشخصية'], ['motivation', 'الدافعية والحماس'],
+                    ['confidence', 'الثقة بالنفس'], ['initiative', 'المبادرة'], ['presentation', 'مهارات العرض'],
+                    ['comm_skills', 'مهارات التواصل'], ['expression', 'القدرة على التعبير عن نفسه بألفاظ صحيحة'],
+                    ['problem_solving', 'حل المشكلات'], ['analytical', 'المهارات التحليلية'], ['leadership', 'القيادة'],
+                    ['creativity', 'الإبداع'], ['career_goals', 'الطموحات العملية'], ['decision_making', 'اتخاذ القرار'],
+                    ['flexibility', 'المرونة / القدرة على التكيف']
+                ],
+                children: [
+                    ['appearance', 'المظهر العام'], ['conversing', 'أسلوبه في الحديث والتواصل'],
+                    ['participation', 'الحماس والرغبة في المشاركة'], ['confidence', 'الثقة بالنفس'],
+                    ['teamwork', 'التعاون والقدرة على العمل الجماعي'], ['respect', 'احترامه للآخرين وأسلوبه في الحوار'],
+                    ['expression', 'قدرته على التعبير عن نفسه بوضوح'], ['responsiveness', 'مرونته واستجابته للتوجيهات'],
+                    ['behavior', 'سلوكه العام (هدوؤه أو اندفاعه)'], ['hobbies', 'وجود هوايات أو اهتمامات خاصة']
+                ]
+            };
+            function ivUpdateTotal(panel) {
+                var els = panel.querySelectorAll('.iv-crit');
+                var sum = 0; els.forEach(function (e) { sum += parseInt(e.value) || 0; });
+                var t = panel.querySelector('.iv-total');
+                if (t) t.textContent = 'الإجمالي: ' + sum + ' / ' + (els.length * 5);
+            }
+            window.ivUpdateTotal = function (el) { ivUpdateTotal(el.closest('.admin-stage-panel')); };
+            function ivRender(panel, program) {
+                var host = panel.querySelector('.iv-criteria-host');
+                if (!host) return;
+                var list = IV_CRITERIA[program] || IV_CRITERIA.plp;
+                host.innerHTML = list.map(function (c) {
+                    return '<div class="stage-field"><label class="stage-field__label">' + c[1] + '</label>'
+                        + '<div style="display:flex;align-items:center;gap:10px;">'
+                        + '<input type="range" class="stage-field__range iv-crit" data-crit="' + c[0] + '" min="1" max="5" value="3" '
+                        + 'oninput="this.nextElementSibling.textContent=this.value; window.ivUpdateTotal(this);">'
+                        + '<span class="stage-score-display">3</span></div></div>';
+                }).join('');
+                ivUpdateTotal(panel);
+            }
+            [5, 6].forEach(function (sid) {
+                var panel = document.querySelector('[data-stage-panel="' + sid + '"]');
+                var grid = panel && panel.querySelector('.stage-fields-grid');
+                if (!grid || panel.querySelector('.iv-criteria-host')) return;
+                grid.querySelectorAll('.stage-field').forEach(function (f) {
+                    if (f.querySelector('[data-field="comm_skills"],[data-field="confidence"],[data-field="appearance"]')) f.remove();
+                });
+                var ctrl = document.createElement('div');
+                ctrl.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:4px 0;flex-wrap:wrap;';
+                ctrl.innerHTML = '<label class="stage-field__label" style="margin:0;">نوع البرنامج</label>'
+                    + '<select class="program-select stage-field__select" style="max-width:280px;">'
+                    + '<option value="plp">البرنامج الرئاسي — 15 معيار (/75)</option>'
+                    + '<option value="children">برنامج الأطفال — 10 معايير (/50)</option></select>'
+                    + '<span class="iv-total" style="margin-inline-start:auto;font-weight:800;color:#fca5a5;"></span>';
+                grid.insertBefore(ctrl, grid.firstChild);
+                var host = document.createElement('div');
+                host.className = 'iv-criteria-host';
+                host.style.cssText = 'grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;';
+                grid.appendChild(host);
+                var sel = ctrl.querySelector('.program-select');
+                sel.addEventListener('change', function () { ivRender(panel, sel.value); });
+                ivRender(panel, sel.value);
+            });
+
             // Inject a Waitlist (قائمة انتظار) option into interview stages 5 & 6.
             [5, 6].forEach(function (sid) {
                 var grp = document.querySelector('[data-stage-panel="' + sid + '"] .stage-review-status');
@@ -841,6 +905,13 @@
                         // Interview decision: accept / waitlist / reject -> details.recommendation
                         if (stageId === 5 || stageId === 6) {
                             details.recommendation = isWaitlist ? 'waitlist' : (isReject ? 'unsuitable' : 'accept');
+                            var critEls = panel.querySelectorAll('[data-crit]');
+                            if (critEls.length) {
+                                details.criteria = {};
+                                critEls.forEach(function (s) { details.criteria[s.getAttribute('data-crit')] = parseInt(s.value); });
+                                var progSel = panel.querySelector('.program-select');
+                                if (progSel) details.program_type = progSel.value;
+                            }
                         }
 
                         const payload = {

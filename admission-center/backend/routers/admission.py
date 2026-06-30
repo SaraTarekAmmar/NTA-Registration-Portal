@@ -169,22 +169,26 @@ async def submit_review(review: StageReviewCreate, admin: dict = Depends(get_rev
             if not review.details:
                 raise HTTPException(status_code=422, detail="تفاصيل التقييم مطلوبة لمراحل المقابلة.")
             
-            criteria_keys = ["comm_skills", "confidence", "appearance"]
+            # Criteria are program-specific (PLP = 15, children = 10, …). The
+            # frontend sends them as details.criteria = {key: 1..5}. Fall back to
+            # the legacy flat 3-key shape for older clients.
+            crit = review.details.get("criteria")
+            if not isinstance(crit, dict) or not crit:
+                crit = {k: review.details[k] for k in ("comm_skills", "confidence", "appearance") if k in review.details}
+            if not crit:
+                raise HTTPException(status_code=422, detail="معايير التقييم مطلوبة لمراحل المقابلة.")
             scores_dict = {}
-            for key in criteria_keys:
-                val = review.details.get(key)
-                if val is None:
-                    raise HTTPException(status_code=422, detail=f"التقييم الخاص بـ '{key}' مطلوب.")
+            for key, val in crit.items():
                 try:
                     val_int = int(val)
                     if not (1 <= val_int <= 5):
                         raise ValueError()
                     scores_dict[key] = val_int
-                except ValueError:
+                except (ValueError, TypeError):
                     raise HTTPException(status_code=422, detail=f"قيمة التقييم لـ '{key}' يجب أن تكون رقماً بين 1 و 5.")
 
             total_score = sum(scores_dict.values())
-            total_max = len(criteria_keys) * 5
+            total_max = len(scores_dict) * 5
 
             # Get course_id from active application
             cursor.execute(
