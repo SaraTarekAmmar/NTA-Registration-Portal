@@ -514,6 +514,160 @@
                 { id: 7, label: 'القبول النهائي' }
             ];
 
+            var INTERVIEW_CRITERIA = {
+                5: [
+                    { key: 'appearance', ar: 'المظهر العام', en: 'Appearance' },
+                    { key: 'personality', ar: 'تقييم الشخصية', en: 'Personality' },
+                    { key: 'motivation', ar: 'الدافعية والحماس', en: 'Motivation and enthusiasm' },
+                    { key: 'confidence', ar: 'الثقة بالنفس', en: 'Self-confidence' },
+                    { key: 'initiation', ar: 'المبادرة', en: 'Initiation' },
+                    { key: 'presentation', ar: 'مهارات العرض', en: 'Presentation skills' },
+                    { key: 'communication', ar: 'مهارات التواصل', en: 'Communication skills' },
+                    { key: 'expression', ar: 'القدرة على التعبير عن نفسه بوضوح', en: 'Ability to express himself clearly' },
+                    { key: 'problem_solving', ar: 'حل المشكلات', en: 'Problem-solving' },
+                    { key: 'analytical', ar: 'المهارات التحليلية', en: 'Analytical skills' },
+                    { key: 'leadership', ar: 'القيادة', en: 'Leadership' },
+                    { key: 'creativity', ar: 'الإبداع', en: 'Creativity' },
+                    { key: 'career_goals', ar: 'الطموحات العملية', en: 'Career goals' },
+                    { key: 'decision', ar: 'اتخاذ القرار', en: 'Decision making' },
+                    { key: 'flexibility', ar: 'المرونة والقدرة على التكيف', en: 'Flexibility / adaptability' }
+                ],
+                6: [
+                    { key: 'appearance', ar: 'المظهر العام', en: 'Appearance' },
+                    { key: 'personality', ar: 'تقييم الشخصية', en: 'Personality' },
+                    { key: 'motivation', ar: 'الدافعية والحماس', en: 'Motivation and enthusiasm' },
+                    { key: 'confidence', ar: 'الثقة بالنفس', en: 'Self-confidence' },
+                    { key: 'initiation', ar: 'المبادرة', en: 'Initiation' },
+                    { key: 'presentation', ar: 'مهارات العرض', en: 'Presentation skills' },
+                    { key: 'communication', ar: 'مهارات التواصل', en: 'Communication skills' },
+                    { key: 'expression', ar: 'القدرة على التعبير عن نفسه بوضوح', en: 'Ability to express himself clearly' },
+                    { key: 'problem_solving', ar: 'حل المشكلات', en: 'Problem-solving' },
+                    { key: 'analytical', ar: 'المهارات التحليلية', en: 'Analytical skills' },
+                    { key: 'leadership', ar: 'القيادة', en: 'Leadership' },
+                    { key: 'creativity', ar: 'الإبداع', en: 'Creativity' },
+                    { key: 'career_goals', ar: 'الطموحات العملية', en: 'Career goals' },
+                    { key: 'decision', ar: 'اتخاذ القرار', en: 'Decision making' },
+                    { key: 'flexibility', ar: 'المرونة والقدرة على التكيف', en: 'Flexibility / adaptability' }
+                ]
+            };
+            var INTERVIEW_LABELS = {
+                appearance: 'المظهر العام',
+                personality: 'تقييم الشخصية',
+                motivation: 'الدافعية والحماس',
+                confidence: 'الثقة بالنفس',
+                initiation: 'المبادرة',
+                presentation: 'مهارات العرض',
+                communication: 'مهارات التواصل',
+                expression: 'القدرة على التعبير عن نفسه بوضوح',
+                problem_solving: 'حل المشكلات',
+                analytical: 'المهارات التحليلية',
+                leadership: 'القيادة',
+                creativity: 'الإبداع',
+                career_goals: 'الطموحات العملية',
+                decision: 'اتخاذ القرار',
+                flexibility: 'المرونة والقدرة على التكيف'
+            };
+            var INTERVIEW_KEY_ALIASES = {
+                comm_skills: 'communication'
+            };
+
+            function interviewCriteria(stageId) {
+                return INTERVIEW_CRITERIA[stageId] || [];
+            }
+
+            function interviewLabel(key) {
+                var normalized = INTERVIEW_KEY_ALIASES[key] || key;
+                return INTERVIEW_LABELS[normalized] || key;
+            }
+
+            function renderInterviewRubrics() {
+                [5, 6].forEach(function (stageId) {
+                    var container = document.getElementById('s' + stageId + '-interview-rubric');
+                    if (!container) return;
+
+                    var crit = interviewCriteria(stageId);
+                    var title = stageId === 5 ? 'نموذج المقابلة الأولى' : 'نموذج المقابلة الثانية';
+                    var html = ''
+                        + '<div class="interview-rubric__head">'
+                        + '  <div>'
+                        + '    <div class="interview-rubric__title">' + title + '</div>'
+                        + '    <div class="interview-rubric__subtitle">15 محوراً · إجمالي 75 درجة · اختر درجة من 1 إلى 5 لكل محور.</div>'
+                        + '  </div>'
+                        + '  <div class="interview-rubric__badge">15 / 75</div>'
+                        + '</div>'
+                        + '<div class="interview-rubric__hidden" id="s' + stageId + '-interview-hidden" hidden>'
+                        + crit.map(function (item) {
+                            return '<input type="hidden" id="s' + stageId + '-interview-field-' + item.key + '" data-field="' + item.key + '" value="">';
+                        }).join('')
+                        + '</div>'
+                        + '<div class="interview-rubric__table-scroll">'
+                        + '  <table class="interview-rubric__table">'
+                        + '    <thead>'
+                        + '      <tr>'
+                        + '        <th style="width:34%">مجال التقييم<br><small>Evaluation subject</small></th>'
+                        + '        <th>ضعيف<br>1</th>'
+                        + '        <th>مقبول<br>2</th>'
+                        + '        <th>جيد<br>3</th>'
+                        + '        <th>جيد جداً<br>4</th>'
+                        + '        <th>ممتاز<br>5</th>'
+                        + '      </tr>'
+                        + '    </thead>'
+                        + '    <tbody>';
+
+                    crit.forEach(function (item, idx) {
+                        html += '<tr>'
+                            + '<td class="interview-rubric__criterion">' + (idx + 1) + '. ' + esc(item.ar) + '<small>' + esc(item.en) + '</small></td>';
+                        for (var score = 1; score <= 5; score++) {
+                            html += '<td>'
+                                + '<label class="interview-rubric__choice">'
+                                + '<input type="radio" name="s' + stageId + '_' + item.key + '" value="' + score + '" data-stage="' + stageId + '" data-rubric-key="' + item.key + '">'
+                                + '<span>' + score + '</span>'
+                                + '</label>'
+                                + '</td>';
+                        }
+                        html += '</tr>';
+                    });
+
+                    html += '</tbody></table></div>';
+                    container.innerHTML = html;
+
+                    if (!container.dataset.bound) {
+                        container.addEventListener('change', function (ev) {
+                            var radio = ev.target && ev.target.matches && ev.target.matches('input[type="radio"][data-rubric-key]') ? ev.target : null;
+                            if (!radio) return;
+                            var key = radio.getAttribute('data-rubric-key');
+                            var hidden = document.getElementById('s' + stageId + '-interview-field-' + key);
+                            if (hidden) hidden.value = radio.value;
+                        });
+                        container.dataset.bound = '1';
+                    }
+                });
+            }
+
+            function syncInterviewRubric(panel, details) {
+                if (!panel) return;
+                var stageId = parseInt(panel.getAttribute('data-stage-panel'), 10);
+                if (stageId !== 5 && stageId !== 6) return;
+
+                panel.querySelectorAll('input[type="radio"][data-rubric-key]').forEach(function (radio) {
+                    radio.checked = false;
+                });
+
+                var fields = panel.querySelectorAll('.interview-rubric [data-field]');
+                fields.forEach(function (input) {
+                    var value = input.value;
+                    if (!value && value !== 0) return;
+                    var key = input.getAttribute('data-field');
+                    var radio = panel.querySelector('input[type="radio"][data-rubric-key="' + key + '"][value="' + value + '"]');
+                    if (radio) radio.checked = true;
+                });
+
+                if (details && details.comm_skills && !details.communication) {
+                    var aliasRadio = panel.querySelector('input[type="radio"][data-rubric-key="communication"][value="' + details.comm_skills + '"]');
+                    if (aliasRadio) aliasRadio.checked = true;
+                }
+            }
+
             let trainee = null;
             let traineeApp = null;
             let reviews = [];
@@ -668,16 +822,23 @@
 
                         // Populate Stage-Specific Fields
                         if (review.details) {
-                            Object.keys(review.details).forEach(key => {
+                            const detailValues = Object.assign({}, review.details);
+                            if ((stageId === 5 || stageId === 6) && detailValues.comm_skills && !detailValues.communication) {
+                                detailValues.communication = detailValues.comm_skills;
+                            }
+
+                            Object.keys(detailValues).forEach(key => {
                                 const input = panel.querySelector(`[data-field="${key}"]`);
                                 if (input) {
-                                    input.value = review.details[key];
+                                    input.value = detailValues[key];
                                     // Trigger range update if it's a range input
                                     if (input.type === 'range' && input.nextElementSibling) {
                                         input.nextElementSibling.textContent = input.value;
                                     }
                                 }
                             });
+
+                            syncInterviewRubric(panel, detailValues);
                         }
                     }
                 });
@@ -904,10 +1065,11 @@
                                 let tableRows = '';
                                 Object.keys(crit).forEach((k, idx) => {
                                     const score = parseInt(crit[k], 10);
+                                    const label = interviewLabel(k);
                                     tableRows += `
                                         <tr>
                                             <td style="text-align:center;">${idx + 1}</td>
-                                            <td style="text-align:left;">${esc(k)}</td>
+                                            <td style="text-align:left;">${esc(label)}</td>
                                             <td style="text-align:center;">${score === 1 ? '✔️' : ''}</td>
                                             <td style="text-align:center;">${score === 2 ? '✔️' : ''}</td>
                                             <td style="text-align:center;">${score === 3 ? '✔️' : ''}</td>
@@ -1030,6 +1192,7 @@
                 if (btn) activateStage(btn.getAttribute('data-stage'));
             });
 
+            renderInterviewRubrics();
             fetchTraineeData();
             fetchReviews();
             activateStage(currentStageId);

@@ -383,6 +383,112 @@
             text-align: center;
         }
 
+        .interview-rubric {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.16);
+            background: rgba(8, 12, 32, 0.35);
+        }
+        .interview-rubric__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .interview-rubric__title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0 0 0.35rem;
+        }
+        .interview-rubric__subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .interview-rubric__badge {
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.22);
+            color: #c7d2fe;
+            font-weight: 800;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+        .interview-rubric__table-scroll {
+            overflow-x: auto;
+            border-radius: 14px;
+        }
+        .interview-rubric__table {
+            width: 100%;
+            min-width: 920px;
+            border-collapse: collapse;
+            background: rgba(15, 23, 42, 0.28);
+        }
+        .interview-rubric__table thead th,
+        .interview-rubric__table tbody td {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .interview-rubric__table thead th {
+            padding: 0.7rem 0.55rem;
+            background: rgba(99, 102, 241, 0.13);
+            color: var(--text-main);
+            font-size: 0.74rem;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.35;
+        }
+        .interview-rubric__table thead th:first-child {
+            text-align: right;
+        }
+        .interview-rubric__table tbody td {
+            padding: 0.6rem 0.55rem;
+            text-align: center;
+        }
+        .interview-rubric__criterion {
+            text-align: right !important;
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+        .interview-rubric__criterion small {
+            display: block;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.72rem;
+        }
+        .interview-rubric__choice {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            width: 100%;
+            min-height: 44px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .interview-rubric__choice input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+        .interview-rubric__choice span {
+            line-height: 1;
+        }
+        .interview-rubric__choice input:checked + span {
+            color: var(--accent);
+        }
+
         .stage-review-grid {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;

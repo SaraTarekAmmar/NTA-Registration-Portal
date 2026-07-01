@@ -369,13 +369,8 @@ async def submit_review(
                 if review.stage_id == 4:
                     cursor.execute(
                         """
-                        SELECT subject, score
-                        FROM trainee_exam_submissions
-                        WHERE trainee_id = %s
-                        ORDER BY submitted_at DESC
-                        """,
-                        (review.trainee_id,),
-                    )
+                    query = "SELECT subject, score FROM trainee_exam_submissions WHERE trainee_id = %s ORDER BY submitted_at DESC"
+                    cursor.execute(query, (review.trainee_id,))
                     exam_rows = cursor.fetchall()
                     # Since ordered by submitted_at DESC, loop in reverse so newer scores overwrite older
                     scores = {}
