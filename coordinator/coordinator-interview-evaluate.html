@@ -161,6 +161,9 @@
         });
       }
       function onApplicant(){
+        var selected = document.getElementById('applicantSel').selectedOptions[0];
+        var stage = selected && selected.getAttribute('data-stage');
+        if(stage){ document.getElementById('stageSel').value = String(stage); }
         recalc();
         var id = document.getElementById('applicantSel').value;
         var ex = document.getElementById('existing'); ex.innerHTML='';
