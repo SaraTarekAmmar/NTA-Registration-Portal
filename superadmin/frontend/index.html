@@ -245,6 +245,8 @@
             const [isLoggedIn, setIsLoggedIn] = useState(false);
             const [loginData, setLoginData] = useState({ user: '', pass: '' });
             const [loginError, setLoginError] = useState('');
+            const [loginErrors, setLoginErrors] = useState({ email: '', password: '' });
+            const [loginSubmitting, setLoginSubmitting] = useState(false);
             const [activeTab, setActiveTab] = useState('system-log-dashboard');
             const [token, setToken] = useState(localStorage.getItem('superadmin_token'));
 
@@ -1003,6 +1005,23 @@
             const handleLogin = async (e) => {
                 e.preventDefault();
                 setLoginError('');
+                const nextErrors = { email: '', password: '' };
+
+                if (!loginData.user.trim()) {
+                    nextErrors.email = 'البريد الإلكتروني مطلوب.';
+                }
+                if (!loginData.pass) {
+                    nextErrors.password = 'كلمة المرور مطلوبة.';
+                }
+
+                if (nextErrors.email || nextErrors.password) {
+                    setLoginErrors(nextErrors);
+                    return;
+                }
+
+                setLoginErrors(nextErrors);
+                setLoginSubmitting(true);
+
                 try {
                     const response = await fetch('/api/auth/login', {
                         method: 'POST',
@@ -1023,6 +1042,8 @@
                     }
                 } catch (err) {
                     setLoginError('Console connection error. Verification failed.');
+                } finally {
+                    setLoginSubmitting(false);
                 }
             };
 
@@ -1407,42 +1428,82 @@
 
             if (!isLoggedIn) {
                 return (
-                    <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center p-6 font-sans superadmin-login">
+                    <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center p-6 font-sans superadmin-login relative overflow-hidden">
                         <div className="login-bg absolute inset-0 overflow-hidden pointer-events-none">
-                            <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
-                            <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
                         </div>
-                        <div className="login-card w-full max-w-md panel-glass backdrop-blur-2xl rounded-[2.5rem] p-10 relative z-10 shadow-2xl">
-                            <div className="flex flex-col items-center mb-10">
-                                <div className="logo-container">
-                                    <img src="/images/logo2.png" alt="الأكاديمية الوطنية للتدريب" className="login-logo" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                                    <div className="logo-subtitle">{t('logoSubtitle')}</div>
-                                </div>
-                                <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tight">{t('loginTitle')}</h1>
-                                <p className="subtitle text-[var(--text-muted)] text-sm mt-2">{t('loginSubtitle')}</p>
+                        <div className="login-card w-full max-w-md relative z-10">
+                            <div className="logo-container">
+                                <img src="/images/logo2.png" alt="الأكاديمية الوطنية للتدريب" className="login-logo" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                <div className="logo-subtitle">{t('logoSubtitle')}</div>
                             </div>
-                            <form onSubmit={handleLogin} className="space-y-6">
-                                {loginError && (
-                                    <div className="bg-[var(--status-rose-bg)] border border-rose-500/20 text-[var(--status-rose)] text-xs py-3 px-4 rounded-xl flex items-center gap-3 animate-pulse">
-                                        <Icon name="alert-circle" size={16} />
-                                        {loginError}
+                            <h1>{t('loginTitle')}</h1>
+                            <p className="subtitle">{t('loginSubtitle')}</p>
+
+                            <form onSubmit={handleLogin} noValidate>
+                                <div className="form-group">
+                                    <label htmlFor="superadminEmail">{t('emailAddress')}</label>
+                                    <div className="login-input-wrap">
+                                        <span className="login-input-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M4 6h16v12H4V6Z" /><path d="m4 7 8 6 8-6" />
+                                            </svg>
+                                        </span>
+                                        <input
+                                            type="email"
+                                            id="superadminEmail"
+                                            name="email"
+                                            required
+                                            autoComplete="email"
+                                            value={loginData.user}
+                                            onChange={(e) => setLoginData({ ...loginData, user: e.target.value })}
+                                            placeholder="superadmin@nta.edu.eg"
+                                            aria-describedby="superadminEmailError"
+                                            aria-invalid={loginErrors.email ? 'true' : 'false'}
+                                        />
                                     </div>
-                                )}
-                                <div>
-                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block mb-2 px-1 tracking-wider">{t('emailAddress')}</label>
-                                    <input type="email" required value={loginData.user} onChange={(e) => setLoginData({...loginData, user: e.target.value})} className="w-full panel-glass rounded-2xl px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="superadmin@nta.edu.eg" />
+                                    <p id="superadminEmailError" className="field-error" style={{ display: loginErrors.email ? 'block' : 'none' }} aria-live="polite">
+                                        {loginErrors.email || 'البريد الإلكتروني مطلوب.'}
+                                    </p>
                                 </div>
-                                <div>
-                                    <label className="text-[10px] font-bold text-[var(--text-muted)] uppercase block mb-2 px-1 tracking-wider">{t('securityPassword')}</label>
-                                    <input type="password" required value={loginData.pass} onChange={(e) => setLoginData({...loginData, pass: e.target.value})} className="w-full panel-glass rounded-2xl px-5 py-4 text-[var(--text-main)] outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all placeholder:text-[var(--text-muted)]" placeholder="••••••••" />
+                                <div className="form-group">
+                                    <label htmlFor="superadminPassword">{t('securityPassword')}</label>
+                                    <div className="login-input-wrap">
+                                        <span className="login-input-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M7 11V8a5 5 0 0 1 10 0v3" /><path d="M6 11h12v10H6V11Z" /><path d="M12 15v2" />
+                                            </svg>
+                                        </span>
+                                        <input
+                                            type="password"
+                                            id="superadminPassword"
+                                            name="password"
+                                            required
+                                            autoComplete="current-password"
+                                            value={loginData.pass}
+                                            onChange={(e) => setLoginData({ ...loginData, pass: e.target.value })}
+                                            placeholder="••••••••"
+                                            aria-describedby="superadminPasswordError"
+                                            aria-invalid={loginErrors.password ? 'true' : 'false'}
+                                        />
+                                    </div>
+                                    <p id="superadminPasswordError" className="field-error" style={{ display: loginErrors.password ? 'block' : 'none' }} aria-live="polite">
+                                        {loginErrors.password || 'كلمة المرور مطلوبة.'}
+                                    </p>
                                 </div>
-                                <button type="submit" className="w-full py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-indigo-500/10 text-sm">
-                                    {t('loginButton')}
+                                <button type="submit" className={`login-btn ${loginSubmitting ? 'loading' : ''}`} id="superadminLoginBtn" disabled={loginSubmitting}>
+                                    <span className="login-btn-text">{t('loginButton')}</span>
+                                    <span className="arrow-icon">←</span>
+                                    <span className="login-btn-loader" aria-hidden="true"></span>
                                 </button>
-                                <div className="text-center pt-4 border-t border-[var(--card-border)]">
-                                    <p className="text-[9px] text-[var(--text-muted)] uppercase font-bold tracking-tighter">{t('secureEnv')}</p>
-                                </div>
                             </form>
+                            {loginError && (
+                                <div className="login-error-msg" role="alert" aria-live="assertive">
+                                    {loginError}
+                                </div>
+                            )}
+                            <div className="text-center pt-4 border-t border-[var(--card-border)] mt-4">
+                                <p className="text-[9px] text-[var(--text-muted)] uppercase font-bold tracking-tighter">{t('secureEnv')}</p>
+                            </div>
                         </div>
                     </div>
                 );
