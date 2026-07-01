@@ -1106,105 +1106,73 @@
       loadCourses();
 
       function normalizeAdmissionSteps(data) {
-        var fixed_defaults = [
+        var default_steps = [
           {
             step_key: 'electronic_registration',
             step_type: 'electronic_registration',
             title_ar: 'التسجيل الإلكتروني',
             description_ar: 'Applicant fills the customized registration form through the portal and uploads the required documents.',
-            is_required: true,
-            fixed: true,
-            required: true,
-            canDelete: false,
-            canDisable: false,
-            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+            is_required: false,
+            fixed: false,
+            required: false,
+            canDelete: true,
+            canDisable: true,
+            config_json: { is_active: true, fixed: false, canDelete: true, canDisable: true }
           },
           {
             step_key: 'electronic_screening',
             step_type: 'electronic_screening',
             title_ar: 'الفرز الإلكتروني',
             description_ar: 'The system evaluates the basic eligibility criteria using the rules engine, with optional manual review.',
-            is_required: true,
-            fixed: true,
-            required: true,
-            canDelete: false,
-            canDisable: false,
-            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+            is_required: false,
+            fixed: false,
+            required: false,
+            canDelete: true,
+            canDisable: true,
+            config_json: { is_active: true, fixed: false, canDelete: true, canDisable: true }
           },
           {
             step_key: 'security_clearance',
             step_type: 'security_clearance',
             title_ar: 'الاستعلام الأمني',
             description_ar: 'Eligible applicants’ data is sent to the relevant security authority for verification and approval.',
-            is_required: true,
-            fixed: true,
-            required: true,
-            canDelete: false,
-            canDisable: false,
-            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+            is_required: false,
+            fixed: false,
+            required: false,
+            canDelete: true,
+            canDisable: true,
+            config_json: { is_active: true, fixed: false, canDelete: true, canDisable: true }
           },
           {
             step_key: 'psychometric_test',
             step_type: 'psychometric_test',
             title_ar: 'اختبار السمات',
             description_ar: 'Psychometric / traits assessment with pass/fail result and related score details.',
-            is_required: true,
-            fixed: true,
-            required: true,
-            canDelete: false,
-            canDisable: false,
-            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+            is_required: false,
+            fixed: false,
+            required: false,
+            canDelete: true,
+            canDisable: true,
+            config_json: { is_active: true, fixed: false, canDelete: true, canDisable: true }
           },
           {
             step_key: 'qualifying_exams',
             step_type: 'qualifying_exams',
             title_ar: 'الاختبارات التأهيلية',
             description_ar: 'Automated qualifying exams such as foreign languages, Arabic language, general knowledge, and any program-specific exam.',
-            is_required: true,
-            fixed: true,
-            required: true,
-            canDelete: false,
-            canDisable: false,
-            config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
+            is_required: false,
+            fixed: false,
+            required: false,
+            canDelete: true,
+            canDisable: true,
+            config_json: { is_active: true, fixed: false, canDelete: true, canDisable: true }
           }
         ];
 
-        var steps = data || [];
+        var steps = data && data.length ? data : JSON.parse(JSON.stringify(default_steps));
         
-        // Reconstruct step object flags
-        steps.forEach(function(s) {
-          if (!s.config_json) s.config_json = {};
-          
-          var isFixed = false;
-          var key = s.step_key;
-          var type = s.step_type;
-          
-          if (s.config_json.fixed === true) {
-            isFixed = true;
-          } else if (['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(key) !== -1 || ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(type) !== -1) {
-            isFixed = true;
-          }
-          
-          if (isFixed) {
-            s.fixed = true;
-            s.required = true;
-            s.is_required = true;
-            s.canDelete = false;
-            s.canDisable = false;
-            s.config_json.fixed = true;
-            s.config_json.is_active = true;
-            s.config_json.canDelete = false;
-            s.config_json.canDisable = false;
-            
-            // Keep core identity stable without wiping editor changes.
-            var matchingDefault = fixed_defaults.find(function(fd) { return fd.step_key === key || fd.step_type === type; });
-            if (matchingDefault) {
-              s.step_key = matchingDefault.step_key;
-              s.step_type = matchingDefault.step_type;
-              s.title_ar = s.title_ar || matchingDefault.title_ar;
-              s.description_ar = s.description_ar || s.config_json.description_ar || matchingDefault.description_ar || '';
-            }
-          } else {
+        steps.forEach(function(s, idx) {
+            if (!s.config_json) s.config_json = {};
             s.fixed = false;
             s.canDelete = true;
             s.canDisable = true;
@@ -1212,83 +1180,18 @@
             s.config_json.canDelete = true;
             s.config_json.canDisable = true;
             s.description_ar = s.description_ar || s.config_json.description_ar || '';
-          }
+            s.step_order = s.step_order !== undefined ? s.step_order : idx;
         });
 
-        // Ensure all 5 fixed steps always exist
-        fixed_defaults.forEach(function(fd) {
-          var exists = steps.some(function(s) { return s.step_key === fd.step_key; });
-          if (!exists) {
-            steps.push(JSON.parse(JSON.stringify(fd)));
-          }
+        steps.sort(function(a, b) {
+            return a.step_order - b.step_order;
         });
 
-        // Separate fixed and custom steps
-        var fixedSteps = [];
-        var customSteps = [];
-        steps.forEach(function(s) {
-          if (s.fixed) {
-            fixedSteps.push(s);
-          } else {
-            customSteps.push(s);
-          }
+        steps.forEach(function(s, idx) {
+            s.step_order = idx;
         });
 
-        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
-        fixedSteps.sort(function(a, b) {
-          return fixed_order_keys.indexOf(a.step_key) - fixed_order_keys.indexOf(b.step_key);
-        });
-
-        // Re-align custom steps in their correct relative positions
-        var original_orders = {};
-        fixed_order_keys.forEach(function(k) {
-          var orig = (data || []).find(function(s) { return s.step_key === k || s.step_type === k; });
-          if (orig) {
-            original_orders[k] = orig.step_order || 0;
-          }
-        });
-
-        if (original_orders['electronic_registration'] === undefined) original_orders['electronic_registration'] = 0;
-        if (original_orders['electronic_screening'] === undefined) original_orders['electronic_screening'] = original_orders['electronic_registration'] + 10;
-        if (original_orders['security_clearance'] === undefined) original_orders['security_clearance'] = original_orders['electronic_screening'] + 10;
-        if (original_orders['psychometric_test'] === undefined) original_orders['psychometric_test'] = original_orders['security_clearance'] + 10;
-        if (original_orders['qualifying_exams'] === undefined) original_orders['qualifying_exams'] = original_orders['psychometric_test'] + 10;
-
-        var intervals = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []};
-        customSteps.forEach(function(cs) {
-          var co = cs.step_order || 0;
-          if (co < original_orders['electronic_registration']) {
-            intervals[1].push(cs);
-          } else if (co < original_orders['electronic_screening']) {
-            intervals[1].push(cs);
-          } else if (co < original_orders['security_clearance']) {
-            intervals[2].push(cs);
-          } else if (co < original_orders['psychometric_test']) {
-            intervals[3].push(cs);
-          } else if (co < original_orders['qualifying_exams']) {
-            intervals[4].push(cs);
-          } else {
-            intervals[5].push(cs);
-          }
-        });
-
-        var final_list = [];
-        final_list.push(fixedSteps[0]);
-        final_list = final_list.concat(intervals[1]);
-        final_list.push(fixedSteps[1]);
-        final_list = final_list.concat(intervals[2]);
-        final_list.push(fixedSteps[2]);
-        final_list = final_list.concat(intervals[3]);
-        final_list.push(fixedSteps[3]);
-        final_list = final_list.concat(intervals[4]);
-        final_list.push(fixedSteps[4]);
-        final_list = final_list.concat(intervals[5]);
-
-        final_list.forEach(function(s, idx) {
-          s.step_order = idx;
-        });
-
-        return final_list;
+        return steps;
       }
 
       function loadAdmissionSteps() {
