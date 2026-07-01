@@ -6,7 +6,7 @@ Port: 7770 (standalone) | Serves index.html + all front page assets.
 """
 import sys, os, uuid, time
 from pathlib import Path
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
@@ -60,7 +60,8 @@ async def global_debugger_middleware(request: Request, call_next):
             payload = jose_jwt.decode(auth_header.split(" ")[1], SECRET_KEY, algorithms=[ALGORITHM])
             sid  = payload.get("sid")
             role = payload.get("role")
-        except: pass
+        except Exception:
+            pass
 
     session_token = session_context.set(sid)
     path      = request.url.path
@@ -106,15 +107,55 @@ app.include_router(page_content.router)
 app.include_router(media.router)
 
 # ── Static file mounts ────────────────────────────────────────────────────────
-# Serve uploads (CV files, media)
+class GuardedUploadsStaticFiles(StaticFiles):
+    """Serve public uploads but never expose applicant CVs directly."""
+
+    async def get_response(self, path: str, scope):
+        parts = [part for part in Path(path).parts if part not in ("", ".")]
+        if parts and parts[0].lower() in {"cvs", "cv", "resumes", "resume"}:
+            raise HTTPException(status_code=404, detail="File not found")
+        if any(part.startswith(".") for part in parts):
+            raise HTTPException(status_code=404, detail="File not found")
+        return await super().get_response(path, scope)
+
+
+class PrivateDataStaticFiles(StaticFiles):
+    """Block direct static access to private data stored in /data."""
+
+    BLOCKED_TOP_LEVEL = {
+        "trainees",
+        "trainers",
+        "admins",
+        "admission",
+        "uploads",
+        "temp",
+        "standard_exams",
+        "log",
+    }
+
+    async def get_response(self, path: str, scope):
+        parts = [part for part in Path(path).parts if part not in ("", ".")]
+        lowered = [part.lower() for part in parts]
+        if any(part.startswith(".") for part in parts):
+            raise HTTPException(status_code=404, detail="File not found")
+        if lowered and lowered[0] in self.BLOCKED_TOP_LEVEL:
+            raise HTTPException(status_code=404, detail="File not found")
+        # Assignment submissions contain trainee work/PII and must be fetched via
+        # authenticated APIs, never by guessing a static /data URL.
+        if lowered and lowered[0] == "courses" and "submissions" in lowered:
+            raise HTTPException(status_code=404, detail="File not found")
+        return await super().get_response(path, scope)
+
+
+# Serve public media uploads while CVs are served through authenticated API routes.
 uploads_path = Path(__file__).parent.parent / "uploads"
 uploads_path.mkdir(exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(uploads_path)), name="uploads")
+app.mount("/uploads", GuardedUploadsStaticFiles(directory=str(uploads_path)), name="uploads")
 
-# Serve shared data folder
+# Serve only public-safe shared data paths.
 data_path = Path(__file__).parent.parent.parent / "data"
 if data_path.exists():
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
 # Serve front/ as the web root — index.html becomes http://localhost:7770/
 static_path = Path(__file__).parent.parent
