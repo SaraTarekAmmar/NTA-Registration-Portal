@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTA AI Control Center - Super Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- React & ReactDOM CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -1403,12 +1404,12 @@
 
             if (!isLoggedIn) {
                 return (
-                    <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center p-6 font-sans">
-                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center p-6 font-sans superadmin-login">
+                        <div className="login-bg absolute inset-0 overflow-hidden pointer-events-none">
                             <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
                             <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
                         </div>
-                        <div className="w-full max-w-md panel-glass backdrop-blur-2xl rounded-[2.5rem] p-10 relative z-10 shadow-2xl">
+                        <div className="login-card w-full max-w-md panel-glass backdrop-blur-2xl rounded-[2.5rem] p-10 relative z-10 shadow-2xl">
                             <div className="flex flex-col items-center mb-10">
                                 <div className="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-6">
                                     <Icon name="brain-circuit" size={40} className="text-[var(--text-main)]" />
@@ -1444,12 +1445,12 @@
             }
 
             return (
-                <div className="min-h-screen bg-[var(--bg-dark)] text-[var(--text-main)] font-sans selection:bg-indigo-500/30">
+                <div className="min-h-screen bg-[var(--bg-dark)] text-[var(--text-main)] font-sans selection:bg-indigo-500/30 superadmin-app">
                     <div className="fixed inset-0 overflow-hidden pointer-events-none">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
                         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
                     </div>
-                    <div className="relative flex h-screen overflow-hidden">
+                    <div className="superadmin-shell relative flex h-screen overflow-hidden">
                         <aside className="w-72 bg-[var(--sidebar-bg)] border-r border-[var(--card-border)] backdrop-blur-xl flex flex-col overflow-y-auto custom-scrollbar">
                             <div className="p-6">
                                 <div className="flex items-center gap-3 mb-8">
