@@ -366,47 +366,53 @@ body {
     transform: translateY(0);
 }
 
-.floating-controls {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+.nta-sidebar__bottom-row {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    z-index: 1000;
+    align-items: center;
+    gap: 0.45rem;
 }
 
-[dir="rtl"] .floating-controls {
-    right: auto;
-    left: 2rem;
+.nta-sidebar__bottom-row .nta-sidebar__logout {
+    width: auto;
+    flex: 1;
 }
 
-.control-btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 1.25rem;
+.nta-sidebar__theme-btn {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--header-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--card-border);
-    color: var(--text-main);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(148, 163, 184, 0.75);
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.control-btn:hover {
-    transform: translateY(-2px);
-    background: var(--accent-primary);
-    border-color: transparent;
-    color: #fff;
+.nta-sidebar__theme-btn:hover {
+    background: rgba(185, 28, 28, 0.1);
+    border-color: rgba(185, 28, 28, 0.35);
+    color: #fca5a5;
+    transform: translateY(-1px);
 }
 
-.control-btn:active {
+.nta-sidebar__theme-btn:active {
     transform: translateY(0);
+}
+
+.nta-sidebar__theme-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.nta-sidebar__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
 }
 
 input,
@@ -480,14 +486,9 @@ textarea:focus {
         border-bottom: 1px solid var(--card-border) !important;
     }
 
-    .floating-controls {
-        bottom: 1rem;
-        right: 1rem;
-    }
-
-    [dir="rtl"] .floating-controls {
-        right: auto;
-        left: 1rem;
+    .nta-sidebar__theme-btn,
+    .nta-sidebar__logout {
+        min-height: 44px;
     }
 }
 
@@ -546,14 +547,15 @@ html.light-mode .superadmin-shell header {
     background: rgba(255, 255, 255, 0.92) !important;
 }
 
-html.light-mode .control-btn {
-    background: rgba(255, 255, 255, 0.92);
+html.light-mode .nta-sidebar__theme-btn {
+    border-color: rgba(185, 28, 28, 0.2);
     color: #b91c1c;
-    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.9);
 }
 
-html.light-mode .control-btn:hover {
+html.light-mode .nta-sidebar__theme-btn:hover {
     color: #ffffff;
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
 }
 
 html.light-mode [class*="bg-indigo-"],
