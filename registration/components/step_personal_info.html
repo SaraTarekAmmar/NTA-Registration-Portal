@@ -1,0 +1,18 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">البيانات الشخصية</h2>
+    <form id="stepForm">
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>الاسم الرباعي (عربي) <span style="color: var(--color-error-soft);">*</span></label>
+            <input type="text" name="fullNameAr" class="inp" required placeholder="أدخل اسمك بالكامل">
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Full Name (English) <span style="color: var(--color-error-soft);">*</span></label>
+            <input type="text" name="fullNameEn" class="inp" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>الرقم القومي <span style="color: var(--color-error-soft);">*</span></label>
+            <input type="text" name="nationalId" class="inp" required pattern="^[0-9]{14}$" placeholder="14 رقم">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">حفظ ومتابعة</button>
+    </form>
+</div>

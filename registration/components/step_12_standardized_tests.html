@@ -1,0 +1,74 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Educational Background</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>الاختبارات والشهادات المعيارية (اختيارى)
+</label>
+<div id="testScoresContainer">
+<div class="test-score-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">اختبار #1 (Test #1)</span>
+<button aria-label="حذف الاختبار" class="acc-delete-btn remove-test-row-btn" style="display: none" title="حذف الاختبار" type="button">
+<span class="acc-delete-btn__icon">✕</span>
+</button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم الاختبار (Test Name) (اختيارى)
+</label>
+<input class="test-name" name="standardizedTestName[]" placeholder="مثال: GMAT / GRE / CFA / IELTS" type="text"/>
+</div>
+<div class="form-group">
+<label>درجة الاختبار (Test Score) (اختيارى)
+</label>
+<input class="test-score" min="0" name="standardizedTestScore[]" placeholder="مثال: 700" type="number"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة الإصدار (Issuing Authority) (اختيارى)
+</label>
+<input class="test-authority" name="standardizedTestAuthority[]" placeholder="اسم الجهة المانحة" type="text"/>
+</div>
+<div class="form-group">
+<label>تاريخ الحصول (Date Obtained) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="standardized-test-date" name="standardizedTestDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>Attach Document (اختيارى)
+</label>
+<input accept=".pdf,.jpg,.jpeg,.png" class="test-document" name="standardizedTestDocument[]" type="file"/>
+</div>
+<div class="form-group">
+<label>رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)</label>
+<input class="test-url" name="standardizedTestUrl[]" placeholder="https://..." type="url"/>
+</div>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-test-row-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                          </button>
+</div>
+</div>
+</div>
+</div>
+<small class="reg-step__desc">
+                    أضف أي اختبارات أو شهادات معيارية حصلت عليها.
+                  </small>
+<button class="reg-btn reg-btn--outline" id="addTestScoreBtn" type="button">
+                    + إضافة اختبار معياري
+                  </button>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

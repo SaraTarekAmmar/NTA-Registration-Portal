@@ -517,7 +517,7 @@ async def bulk_enroll(
         return {"message": f"Successfully processed {count} {mode}.", "enrolled_count": count, "mode": mode}
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()

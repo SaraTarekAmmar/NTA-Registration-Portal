@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=3" />
+    <!-- data-nta-theme-injected -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بوابة المدير - NTA</title>
+    <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="header/header.css" />
+    <link rel="stylesheet" href="chat/chat.css?v=3" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="has-header">
+    <div class="login-bg"></div>
+
+    <div class="login-card" id="loginCard">
+      <div class="logo-container">
+        <img
+          src="images/logo2.png"
+          alt="الأكاديمية الوطنية للتدريب"
+          class="login-logo"
+        />
+        <div class="logo-subtitle">بوابة المدير</div>
+      </div>
+
+      <h1>تسجيل دخول مدير القبول</h1>
+      <p class="subtitle">نظام إدارة المرشحين والدورات</p>
+
+      <form id="loginForm">
+        <!-- Admission portal: role is always 'admission_manager' -->
+        <input type="hidden" name="loginRole" value="admission_manager" />
+
+        <div class="form-group">
+          <label>الرقم القومى</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 8h6M9 12h6M9 16h6"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <input
+              type="text"
+              name="nationalId"
+              required
+              inputmode="numeric"
+              autocomplete="username"
+              placeholder="أدخل الرقم القومي"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 6h16v12H4V6Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="m4 7 8 6 8-6"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <input
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="name@example.com"
+            />
+          </div>
+        </div>
+
+        <div class="form-group" id="passwordGroup">
+          <label>كلمة المرور</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M7 11V8a5 5 0 0 1 10 0v3"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6 11h12v10H6V11Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 15v2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+            <input
+              type="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="أدخل كلمة المرور"
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span class="login-btn-text">دخول النظام</span>
+          <span class="arrow-icon">←</span>
+          <span class="login-btn-loader" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <div id="loginError" class="login-error-msg" role="alert" aria-live="assertive" style="display:none;"></div>
+    </div>
+
+    <script>
+      (function () {
+        var form = document.getElementById("loginForm");
+        var btn = document.getElementById("loginBtn");
+        if (form && btn) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            btn.classList.add("loading");
+
+            // Admission portal: role is always 'admission_manager'
+            var role = 'admission_manager';
+            var nationalId = form.nationalId.value.trim();
+            var email = form.email.value.trim();
+            var password = form.password.value;
+
+            // Points to standalone Admin API (Relative path for same-origin)
+            fetch("/api/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: email,
+                nationalId: nationalId,
+                role: role,
+                password: password,
+              }),
+            })
+              .then((response) => {
+                if (!response.ok)
+                  return response.json().then((err) => {
+                    throw new Error(err.detail || "Login failed");
+                  });
+                return response.json();
+              })
+              .then((data) => {
+                sessionStorage.setItem(
+                  "ntaTrainee",
+                  JSON.stringify({
+                    token: data.access_token,
+                    userId: data.userId,
+                    role: role,
+                    email: email,
+                    nationalId: nationalId,
+                  }),
+                );
+                // Admission portal redirects to candidates.html
+                window.location.href = "candidates.html";
+              })
+              .catch((err) => {
+                btn.classList.remove("loading");
+                var errEl = document.getElementById("loginError");
+                if (errEl) {
+                  errEl.textContent = "خطأ في تسجيل الدخول: " + err.message;
+                  errEl.style.display = "block";
+                }
+              });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

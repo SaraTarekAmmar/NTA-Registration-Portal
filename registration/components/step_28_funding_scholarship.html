@@ -1,0 +1,44 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Motivation & Goals</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>مصدر التمويل (Funding Source) (اجبارى)</label>
+<select name="fundingSource">
+<option value="">اختر مصدر التمويل</option>
+<option value="self_funded">
+                        تمويل ذاتي (Self-Funded)
+                      </option>
+<option value="company_sponsored">
+                        تمويل من جهة العمل (Company-Sponsored)
+                      </option>
+<option value="government_scholarship">
+                        منحة حكومية (Government Scholarship)
+                      </option>
+<option value="institutional_scholarship">
+                        منحة من جهة تعليمية (Institutional Scholarship)
+                      </option>
+<option value="other">أخرى</option>
+</select>
+<small class="reg-step__desc">
+                      يوضح هذا القسم نية التمويل الخاصة بك.
+                    </small>
+</div><div class="form-group">
+<label>مقال المنحة (Scholarship Essay) (اختياري) - الحد الأقصى 5000 حرف</label>
+<textarea id="scholarshipEssay" maxlength="5000" name="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
+<small class="reg-step__desc" id="essayWordCount" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
+<small class="reg-step__desc">
+                      يمكنك أيضًا رفع ملف يحتوي على مقال المنحة إن وجد.
+                    </small>
+<input name="scholarshipEssayFile" type="file"/>
+</div><div class="form-group">
+<label>مقال المنحة (Scholarship Essay) (اختياري) - الحد الأقصى 5000 حرف</label>
+<textarea id="scholarshipEssay" maxlength="5000" name="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
+<small class="reg-step__desc" id="essayWordCount" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
+<small class="reg-step__desc">
+                      يمكنك أيضًا رفع ملف يحتوي على مقال المنحة إن وجد.
+                    </small>
+<input name="scholarshipEssayFile" type="file"/>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

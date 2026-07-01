@@ -1,0 +1,35 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Activities & Social</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل تستخدم وسائل التواصل الاجتماعي؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="usesSocialMedia" name="usesSocialMedia" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div class="form-group" id="socialMediaPlatformsBlock" style="display: none">
+<label>منصات التواصل (تشغيل / إيقاف لكل منصة) (اجبارى)
+</label>
+<div class="social-toggle-grid">
+<label class="social-toggle"><input name="socialPlatformFacebook" type="checkbox" value="1"/>
+                      Facebook</label>
+<label class="social-toggle"><input name="socialPlatformInstagram" type="checkbox" value="1"/>
+                      Instagram</label>
+<label class="social-toggle"><input name="socialPlatformX" type="checkbox" value="1"/>
+                      X</label>
+<label class="social-toggle"><input name="socialPlatformLinkedIn" type="checkbox" value="1"/>
+                      LinkedIn</label>
+<label class="social-toggle"><input name="socialPlatformTikTok" type="checkbox" value="1"/>
+                      TikTok</label>
+</div>
+<small class="reg-step__desc">يُقفل هذا القسم للقراءة فقط بعد المتابعة من هذه
+                    الخطوة.</small>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

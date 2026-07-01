@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 # Add current directory to sys.path for standalone portability
 sys.path.append(str(Path(__file__).parent))
 
-from routers import attendance, auth, ai_proxy, stats, logs, alerts, reports, management
+from routers import attendance, auth, ai_proxy, stats, logs, alerts, reports, management, tickets
 import os
 import uuid
 import time
@@ -142,6 +142,7 @@ app.include_router(logs.router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(management.router, prefix="/api")
+app.include_router(tickets.router)
 
 @app.get("/api/status")
 @app.get("/status")

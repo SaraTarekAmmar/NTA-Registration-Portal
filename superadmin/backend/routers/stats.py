@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from core.database import get_db_connection
 from core.security import get_superadmin_user
 import mysql.connector
@@ -97,7 +97,7 @@ async def get_overview_stats(current_user: dict = Depends(get_superadmin_user)):
         if 'conn' in locals() and conn.is_connected():
             cursor.close()
             conn.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/files")
 async def get_lecture_files(current_user: dict = Depends(get_superadmin_user)):
@@ -131,7 +131,7 @@ async def get_courses(current_user: dict = Depends(get_superadmin_user)):
         conn.close()
         return {"courses": courses}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/sessions/{course_id}")
 async def get_sessions(course_id: int, current_user: dict = Depends(get_superadmin_user)):
@@ -144,17 +144,24 @@ async def get_sessions(course_id: int, current_user: dict = Depends(get_superadm
         conn.close()
         return {"sessions": sessions}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/trainees")
-async def list_all_trainees(current_user: dict = Depends(get_superadmin_user)):
+async def list_all_trainees(
+    limit: int = Query(1000, ge=1, le=5000),
+    offset: int = Query(0, ge=0),
+    current_user: dict = Depends(get_superadmin_user),
+):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, full_name_ar, full_name_en, national_id FROM users WHERE role = 'trainee' ORDER BY full_name_ar ASC")
+        cursor.execute(
+            "SELECT id, full_name_ar, full_name_en, national_id FROM users WHERE role = 'trainee' ORDER BY full_name_ar ASC LIMIT %s OFFSET %s",
+            (limit, offset),
+        )
         trainees = cursor.fetchall()
         cursor.close()
         conn.close()
         return trainees
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")

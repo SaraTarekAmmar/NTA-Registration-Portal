@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<script src="/common/js/theme.js"></script>
+<link href="/common/css/theme.css?v=3" rel="stylesheet"/>
+<!-- data-nta-theme-injected -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>التسجيل - الأكاديمية الوطنية للتدريب</title>
+<link href="/trainee/styles.css?v=2" rel="stylesheet"/>
+<link href="registration.css?v=2" rel="stylesheet"/>
+<link href="/trainee/header/header.css?v=2" rel="stylesheet"/>
+<link href="/trainee/chat/chat.css?v=3" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+  /* Premium Dynamic Role Alert Banner Styles */
+  .role-alert-banner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    font-family: 'Tajawal', sans-serif;
+    animation: slideDown 0.5s ease;
+  }
+  
+  .role-alert-banner.trainee {
+    background: rgba(46, 213, 115, 0.08);
+    border: 1px solid rgba(46, 213, 115, 0.35);
+    color: #2ed573;
+  }
+  .role-alert-banner.trainer {
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    color: #d4af37;
+  }
+  .role-alert-icon {
+    font-size: 20px;
+  }
+  .role-alert-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .role-alert-title {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+  #roleAlertLabel {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0);      }
+  }
+  .emp-work-nature-wrap {
+    transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    will-change: opacity, transform;
+  }
+  .emp-work-nature-wrap.is-updating { opacity: 0.72; transform: translateY(-2px); }
+  .registration-page .emp-work-nature-wrap select {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+  /* File upload instruction hints */
+  .file-upload-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+    direction: rtl;
+  }
+  body.dark-mode .file-upload-hint { color: #94a3b8; }
+</style>
+</head>
+<body class="registration-page">
+<div class="reg-bg"></div>
+<div class="reg-logo">
+<img alt="" class="reg-header__logo-img reg-logo__img" src="images/logo2.png"/>
+</div>
+<a class="reg-back-btn" href="/trainee/index.html">
+<span class="reg-back-btn__icon">←</span>
+<span>العودة لتسجيل الدخول</span>
+</a>
+<div class="reg-container">
+<div class="reg-main">
+<h1 class="reg-page-title">التسجيل في الأكاديمية الوطنية للتدريب</h1>
+<div class="reg-stepper">
+<div class="reg-stepper__bar-wrap">
+<div class="reg-stepper__bar" id="progressBar" style="--progress: 2.5%"></div>
+</div>
+<h3 id="currentPhaseLabel" style="margin-top:10px;text-align:center;color:#fff;">Personal Information</h3>
+</div>
+<div class="reg-card">
+<div class="reg-content">
+<form class="reg-form" id="regForm">
+<!-- Premium Dynamic Role Alert Banner -->
+<div class="role-alert-banner" id="roleAlertBanner" style="display: none;">
+<div class="role-alert-icon" id="roleAlertIcon">💡</div>
+<div class="role-alert-text">
+<span class="role-alert-title">مسار التسجيل النشط:</span>
+<span id="roleAlertLabel">تحميل البيانات...</span>
+</div>
+</div>
+<div class="reg-step active" data-phase="Personal Information" data-step="1">
+<h2 class="reg-step__title">Personal Information</h2>
+<div class="form-group">
+<label>الاسم بالكامل (بالعربية أو الإنجليزية) (اجبارى)</label>
+<input name="fullName" pattern="^[\u0600-\u06FFa-zA-Z]+\s+[\u0600-\u06FFa-zA-Z\s]+$" placeholder="أدخل الاسم الأول والثاني على الأقل" required="" title="يجب إدخال الاسم بحروف عربية أو إنجليزية، مع وجود مسافة بين الاسم الأول والثاني" type="text"/>
+</div><div class="form-group">
+<label>الاسم بالإنجليزية (كما في الوثائق) / Full name in English (اجبارى)</label>
+<input name="fullNameEn" pattern="^[a-zA-Z\s]+$" placeholder="First and last name in English (letters only)" required="" title="حروف إنجليزية ومسافات فقط" type="text"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Personal Information" data-step="2">
+<h2 class="reg-step__title">Personal Information</h2>
+<div class="form-group">
+<label>تاريخ الميلاد (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input id="dob" name="dob" required="" type="date"/>
+</div>
+</div><div class="form-group">
+<label>النوع (اجبارى)</label>
+<div class="reg-radio-group">
+<label class="reg-radio">
+<input name="gender" required="" type="radio" value="male"/>
+<span>ذكر</span>
+</label>
+<label class="reg-radio">
+<input name="gender" required="" type="radio" value="female"/>
+<span>أنثى</span>
+</label>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Personal Information" data-step="3">
+<h2 class="reg-step__title">Personal Information</h2>
+<div class="form-group">
+<label>الحالة الاجتماعية (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select name="maritalStatus" required="">
+<option value="">اختر الحالة الاجتماعية</option>
+<option value="single">أعزب/آنية</option>
+<option value="married">متزوج/ة</option>
+<option value="divorced">مطلق/ة</option>
+<option value="widowed">أرمل/ة</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>متوسط الدخل الشهري (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select name="monthlyAverageIncome" required="">
+<option value="">اختر متوسط الدخل</option>
+<option value="below_5000">أقل من 5,000</option>
+<option value="5000_10000">5,000 - 10,000</option>
+<option value="10000_20000">10,000 - 20,000</option>
+<option value="20000_50000">20,000 - 50,000</option>
+<option value="above_50000">أكثر من 50,000</option>
+</select>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Contact Details" data-step="4">
+<h2 class="reg-step__title">Contact Details</h2>
+<div class="form-group">
+<label>دولة الإقامة (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="countryOfStay" name="countryOfStay" required="">
+<option value="">اختر الدولة</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>المحافظة أو الولاية (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="governmentOrState" name="governmentOrState" required="">
+<option value="">اختر المحافظة / الولاية</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>المدينة (اجبارى)</label>
+<input name="city" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
+</div><div class="form-group">
+<label>العنوان (اجبارى)</label>
+<input minlength="10" name="address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
+</div><div class="form-group">
+<label>رقم الموبايل الأول (اجبارى)</label>
+<input name="mobileNumber1" placeholder="+201..." required="" type="tel"/>
+</div><div class="form-group">
+<label>رقم الموبايل الثاني (اختيارى)</label>
+<input name="mobileNumber2" placeholder="+201..." type="tel"/>
+</div><div class="form-group">
+<label>رقم الواتساب (اجبارى)</label>
+<input id="whatsappNumber" name="whatsappNumber" placeholder="+201..." required="" type="tel"/>
+<label style="display: flex; align-items: center; gap: 5px; margin-top: 5px; cursor: pointer; font-size: 0.85rem; user-select: none;">
+<input id="whatsappSameAsMobile" style="width: auto; margin: 0;" type="checkbox"/>
+هو نفس الموبايل
+</label>
+</div>
+</div>
+<div class="reg-step" data-phase="Contact Details" data-step="5">
+<h2 class="reg-step__title">Contact Details</h2>
+<div class="form-group">
+<label>البريد الإلكتروني (اجبارى)</label>
+<input name="primaryEmail" placeholder="example@domain.com" required="" type="email"/>
+</div><div class="form-group">
+<label>البريد الإلكتروني الثانوي (اختيارى)</label>
+<input name="secondaryEmail" placeholder="example2@domain.com" type="email"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Identity &amp; Military" data-step="6">
+<h2 class="reg-step__title">Identity &amp; Military</h2>
+<div class="form-group identity-doc-group">
+<label>نوع وثيقة الهوية (اجبارى)</label>
+<div class="identity-doc-grid">
+<label class="identity-doc-option" for="identityDocNationalId">
+<input id="identityDocNationalId" name="identityDocType" required="" type="checkbox" value="national_id"/>
+<span class="identity-doc-option__content">
+<span class="identity-doc-option__text">
+<span class="identity-doc-option__title">البطاقة الشخصية</span>
+<span class="identity-doc-option__hint">National ID</span>
+</span>
+</span>
+</label>
+<label class="identity-doc-option" for="identityDocPassport">
+<input id="identityDocPassport" name="identityDocType" required="" type="checkbox" value="passport"/>
+<span class="identity-doc-option__content">
+<span class="identity-doc-option__text">
+<span class="identity-doc-option__title">جواز السفر</span>
+<span class="identity-doc-option__hint">Passport</span>
+</span>
+</span>
+</label>
+</div>
+</div><div class="form-group" id="nationalIdGroup" style="display: none">
+<label>رقم البطاقة الشخصية (الرقم القومي) (اجبارى)</label>
+<input id="nationalId" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
+</div><div class="form-group" id="passportNumberGroup" style="display: none">
+<label>رقم جواز السفر (اختيارى)</label>
+<input id="passportNumber" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
+</div><div class="form-group" id="identityDocScanGroup" style="display: none">
+<label>صورة وثيقة الهوية (البطاقة أو الجواز) (إرشادات الرفع: يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG لا يتعدى حجم الملف الواحد 5 ميجابايت) (اجبارى)</label>
+<div style="display: flex; gap: 10px; align-items: center;">
+<input accept=".jpg,.jpeg,.png,.pdf" id="identityDocumentScan" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
+<button class="reg-btn reg-btn--outline" id="aiExtractBtn" style="white-space: nowrap; padding: 0 15px; height: 48px; border-radius: 10px;" type="button">استخراج البيانات بالذكاء الاصطناعي</button>
+</div>
+<small class="reg-step__desc">الحد الأقصى 3 ملفات (JPG, PNG, PDF).</small>
+<div id="aiExtractStatus" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
+</div>
+</div>
+<div class="reg-step" data-phase="Identity &amp; Military" data-step="7">
+<h2 class="reg-step__title">Identity &amp; Military</h2>
+<div class="form-group">
+<label>عدد الجنسيات (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="numberOfNationalities" name="numberOfNationalities" required="">
+<option value="">اختر العدد</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>الجنسية (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select name="nationality" required="">
+<option value="">اختر الجنسية</option>
+</select>
+</div>
+</div><div class="form-group" id="secondNationalityGroup" style="display: none">
+<label>الجنسية الثانية (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="secondNationality" name="secondNationality">
+<option value="">اختر الجنسية الثانية</option>
+<option value="egyptian">مصرية</option>
+<option value="saudi">سعودية</option>
+<option value="emirati">إماراتية</option>
+<option value="kuwaiti">كويتية</option>
+<option value="qatari">قطرية</option>
+<option value="bahraini">بحرينية</option>
+<option value="omani">عمانية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div><div class="form-group" id="thirdNationalityGroup" style="display: none">
+<label>الجنسية الثالثة (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="thirdNationality" name="thirdNationality">
+<option value="">اختر الجنسية الثالثة</option>
+<option value="egyptian">مصرية</option>
+<option value="saudi">سعودية</option>
+<option value="emirati">إماراتية</option>
+<option value="kuwaiti">كويتية</option>
+<option value="qatari">قطرية</option>
+<option value="bahraini">بحرينية</option>
+<option value="omani">عمانية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Identity &amp; Military" data-step="8">
+<h2 class="reg-step__title">Identity &amp; Military</h2>
+<div class="form-group">
+<label>الموقف من التجنيد (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="militaryStatus" name="militaryStatus" required="">
+<option value="">اختر الموقف</option>
+<option value="completed">أدى الخدمة</option>
+<option value="exempted">إعفاء</option>
+<option value="postponed">تأجيل</option>
+<option value="currently_serving">
+                          مجند حالياً
+                        </option>
+</select>
+</div>
+</div><div class="form-group" id="militaryReasonGroup" style="display: none">
+<label>سبب الموقف من التجنيد (اجبارى عند الاختيار)</label>
+<input id="militaryReason" name="militaryReason" placeholder="اكتب سبب الموقف من التجنيد" type="text"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Emergency Contacts" data-step="9">
+<h2 class="reg-step__title">Emergency Contacts</h2>
+<div class="form-group">
+<label>عدد جهات اتصال الطوارئ (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="emergencyContactsCount" name="emergencyContactsCount" required="">
+<option value="">اختر العدد</option>
+<option value="1">1</option>
+<option value="2">2</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - الاسم (اجبارى)</label>
+<input name="emergencyName1" placeholder="الاسم بالكامل" required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - الرقم (اجبارى)</label>
+<input name="emergencyPhone1" placeholder="+201..." required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - العنوان (اجبارى)</label>
+<input name="emergencyAddress1" placeholder="العنوان بالكامل" required="" type="text"/>
+</div><div class="form-group">
+<label>جهة اتصال الطوارئ 1 - رقم الهوية (اختيارى)</label>
+<input name="emergencyId1" placeholder="رقم الهوية (اختياري)" type="text"/>
+</div><div id="emergencyContact2Block" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - الاسم (اختيارى)</label>
+<input id="emergencyName2" name="emergencyName2" placeholder="الاسم بالكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - الرقم (اختيارى)</label>
+<input id="emergencyPhone2" name="emergencyPhone2" placeholder="+201..." type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - العنوان (اختيارى)</label>
+<input id="emergencyAddress2" name="emergencyAddress2" placeholder="العنوان بالكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>جهة اتصال الطوارئ 2 - رقم الهوية (اختيارى)</label>
+<input name="emergencyId2" placeholder="رقم الهوية (اختياري)" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Educational Background" data-step="10">
+<h2 class="reg-step__title">Educational Background</h2>
+<div class="form-group">
+<label>أعلى مؤهل تعليمي تم الحصول عليه (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="eduHighestDegree" name="eduHighestDegree">
+<option value="">اختر المؤهل</option>
+<option value="higher_degree">
+                        مؤهل عالي (Higher Degree)
+                      </option>
+<option value="above_intermediate">
+                        مؤهل فوق المتوسط (Above Intermediate)
+                      </option>
+<option value="intermediate">
+                        مؤهل متوسط (Intermediate)
+                      </option>
+</select>
+</div>
+</div><div id="eduMainFieldsBlock" style="display: none">
+<div id="mainEducationContainer">
+<div class="main-education-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">مؤهل #1 (Degree #1)</span>
+<button aria-label="حذف المؤهل" class="acc-delete-btn remove-main-edu-btn" style="display: none" title="حذف المؤهل" type="button">
+<span class="acc-delete-btn__icon">✕</span>
+</button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="form-group edu-degree-country-group" style="display: none">
+<label>الدولة / Country (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-degree-country" name="eduDegreeCountry[]">
+<option value="">اختر الدولة</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-institution-group" style="display: none">
+<label>الجامعة / المعهد / University / Institute (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-institution" name="eduInstitution[]">
+<option value="">اختر من القائمة</option>
+<option data-faculty="1" value="cairo_univ">جامعة القاهرة</option>
+<option data-faculty="1" value="ain_shams_univ">جامعة عين شمس</option>
+<option data-faculty="1" value="alex_univ">جامعة الإسكندرية</option>
+<option data-faculty="1" value="assuit_univ">جامعة أسيوط</option>
+<option value="institute">معهد تعليمي</option>
+<option value="secondary_school">مدرسة ثانوية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-institute-name-group" style="display: none">
+<label>اسم المعهد / Institute Name (اجبارى)</label>
+<input class="edu-institute-name" name="eduInstituteName[]" placeholder="اكتب اسم المعهد" type="text"/>
+</div>
+<div class="form-group edu-school-name-group" style="display: none">
+<label>اسم المدرسة / School Name (اجبارى)</label>
+<input class="edu-school-name" name="eduSchoolName[]" placeholder="اكتب اسم المدرسة" type="text"/>
+</div>
+<div class="form-group edu-college-select-wrap" style="display: none">
+<label>الكلية / الكيان (قائمة) (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-college-faculty-select" name="eduCollegeFacultySelect[]">
+<option value="">اختر الكلية</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-college-text-wrap" style="display: none">
+<label>الكلية / قسم الدراسة بالمعهد / الإدارة التعليمية (اجبارى)</label>
+<input class="edu-college-faculty-text" name="eduCollegeFacultyText[]" placeholder="أدخل الاسم يدويًا" type="text"/>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>التخصص (اجبارى)</label>
+<input class="edu-speciality" name="eduSpeciality[]" placeholder="التخصص أو مجال الدراسة" type="text"/>
+</div>
+<div class="form-group edu-gpa-group" style="display: none">
+<label>المعدل التراكمي (GPA) (اجبارى)</label>
+<input class="edu-gpa" name="eduGpa[]" placeholder="مثال: 3.5 / 4.0" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group edu-total-score-group" style="display: none">
+<label>المجموع (اجبارى)</label>
+<input class="edu-total-score" name="eduTotalScore[]" placeholder="المجموع (رقم)" type="text"/>
+</div>
+<div class="form-group edu-percentage-group" style="display: none">
+<label>النسبة المئوية (اجبارى)</label>
+<input class="edu-percentage" name="eduPercentage[]" placeholder="مثال: 95%" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ التخرج (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-graduation-date" name="eduGraduationDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>صورة شهادة التخرج (إرشادات الرفع: يرجى رفع ملف شهادة التخرج بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اختيارى)</label>
+<input accept=".jpg,.jpeg,.png,.pdf" class="graduation-certificate-scan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
+</div>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-main-edu-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                          </button>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline mt-3 mb-4" id="addMainEduBtn" type="button">+ Add Another Entry (إضافة مؤهل آخر)</button>
+<div id="eduPostgraduateSection" style="display: none">
+<hr class="reg-divider"/>
+<div class="form-group">
+<label>درجة علمية أعلى (دراسات عليا) (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" id="eduHasPostgraduate" name="eduHasPostgraduate">
+<option value="">اختر</option>
+<option value="yes">نعم / Yes</option>
+<option value="no">لا / No</option>
+</select>
+</div>
+</div>
+<div id="eduPostgraduateDetails" style="display: none">
+<div id="higherEducationContainer">
+<div class="higher-education-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">دراسات عليا #1 (Postgraduate #1)</span>
+<button aria-label="حذف الدراسات العليا" class="acc-delete-btn remove-higher-edu-btn" style="display: none" title="حذف الدراسات العليا" type="button">
+                              ✕
+                            </button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="reg-form__row">
+<div class="form-group">
+<label>الدرجة (ماجستير - دكتوراه) (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-pg-degree-type" name="eduPostgraduateDegreeType[]">
+<option value="">اختر</option>
+<option value="master">Master / ماجستير</option>
+<option value="phd">PHD / دكتوراه</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة المانحة للدرجة (اجبارى)
+</label>
+<input class="edu-degree-issuer-entity" name="eduDegreeIssuerEntity[]" placeholder="الجهة التي أصدرت الدرجة" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>التخصص الرئيسي للدرجة (اجبارى)
+</label>
+<input class="edu-main-speciality-pg" name="eduMainSpecialityPg[]" placeholder="التخصص الرئيسي" type="text"/>
+</div>
+<div class="form-group">
+<label>التخصص الفرعي (اختيارى)
+</label>
+<input class="edu-secondary-speciality-pg" name="eduSecondarySpecialityPg[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-start-date" name="eduPgStartDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-end-date" name="eduPgEndDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تمويل شخصي أم جهة خارجية (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-funding optional-select" name="eduFunding[]">
+<option value="">اختر</option>
+<option value="personal">شخصي / Personally</option>
+<option value="third_party">جهة خارجية / Third Party</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة التي رشحتك (اختيارى)
+</label>
+<input class="edu-recommending-entity" name="eduRecommendingEntity[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="form-group edu-scholarship-group" style="display: none">
+<label>اسم جهة المنحة (اختيارى)
+</label>
+<input class="edu-scholarship-entity" name="eduScholarshipEntity[]" placeholder="اسم الجهة المانحة للمنحة" type="text"/>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-higher-edu-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                              </button>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline mt-3 mb-4" id="addHigherEduBtn" type="button">+ Add Another Entry (إضافة دراسة عليا أخرى)</button>
+</div>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Educational Background" data-step="11">
+<h2 class="reg-step__title">Educational Background</h2>
+<div id="eduPostgraduateSection" style="display: none">
+<hr class="reg-divider"/>
+<div class="form-group">
+<label>درجة علمية أعلى (دراسات عليا) (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" id="eduHasPostgraduate" name="eduHasPostgraduate">
+<option value="">اختر</option>
+<option value="yes">نعم / Yes</option>
+<option value="no">لا / No</option>
+</select>
+</div>
+</div>
+<div id="eduPostgraduateDetails" style="display: none">
+<div id="higherEducationContainer">
+<div class="higher-education-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">دراسات عليا #1 (Postgraduate #1)</span>
+<button aria-label="حذف الدراسات العليا" class="acc-delete-btn remove-higher-edu-btn" style="display: none" title="حذف الدراسات العليا" type="button">
+                              ✕
+                            </button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="reg-form__row">
+<div class="form-group">
+<label>الدرجة (ماجستير - دكتوراه) (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-pg-degree-type" name="eduPostgraduateDegreeType[]">
+<option value="">اختر</option>
+<option value="master">Master / ماجستير</option>
+<option value="phd">PHD / دكتوراه</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة المانحة للدرجة (اجبارى)
+</label>
+<input class="edu-degree-issuer-entity" name="eduDegreeIssuerEntity[]" placeholder="الجهة التي أصدرت الدرجة" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>التخصص الرئيسي للدرجة (اجبارى)
+</label>
+<input class="edu-main-speciality-pg" name="eduMainSpecialityPg[]" placeholder="التخصص الرئيسي" type="text"/>
+</div>
+<div class="form-group">
+<label>التخصص الفرعي (اختيارى)
+</label>
+<input class="edu-secondary-speciality-pg" name="eduSecondarySpecialityPg[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-start-date" name="eduPgStartDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-end-date" name="eduPgEndDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تمويل شخصي أم جهة خارجية (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-funding optional-select" name="eduFunding[]">
+<option value="">اختر</option>
+<option value="personal">شخصي / Personally</option>
+<option value="third_party">جهة خارجية / Third Party</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة التي رشحتك (اختيارى)
+</label>
+<input class="edu-recommending-entity" name="eduRecommendingEntity[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="form-group edu-scholarship-group" style="display: none">
+<label>اسم جهة المنحة (اختيارى)
+</label>
+<input class="edu-scholarship-entity" name="eduScholarshipEntity[]" placeholder="اسم الجهة المانحة للمنحة" type="text"/>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-higher-edu-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                              </button>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline mt-3 mb-4" id="addHigherEduBtn" type="button">+ Add Another Entry (إضافة دراسة عليا أخرى)</button>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Educational Background" data-step="12">
+<h2 class="reg-step__title">Educational Background</h2>
+<div class="form-group">
+<label>الاختبارات والشهادات المعيارية (اختيارى)
+</label>
+<div id="testScoresContainer">
+<div class="test-score-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">اختبار #1 (Test #1)</span>
+<button aria-label="حذف الاختبار" class="acc-delete-btn remove-test-row-btn" style="display: none" title="حذف الاختبار" type="button">
+<span class="acc-delete-btn__icon">✕</span>
+</button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم الاختبار (Test Name) (اختيارى)
+</label>
+<input class="test-name" name="standardizedTestName[]" placeholder="مثال: GMAT / GRE / CFA / IELTS" type="text"/>
+</div>
+<div class="form-group">
+<label>درجة الاختبار (Test Score) (اختيارى)
+</label>
+<input class="test-score" min="0" name="standardizedTestScore[]" placeholder="مثال: 700" type="number"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>جهة الإصدار (Issuing Authority) (اختيارى)
+</label>
+<input class="test-authority" name="standardizedTestAuthority[]" placeholder="اسم الجهة المانحة" type="text"/>
+</div>
+<div class="form-group">
+<label>تاريخ الحصول (Date Obtained) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="standardized-test-date" name="standardizedTestDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>Attach Document (اختيارى)
+</label>
+<input accept=".pdf,.jpg,.jpeg,.png" class="test-document" name="standardizedTestDocument[]" type="file"/>
+</div>
+<div class="form-group">
+<label>رابط التحقق من الشهادة (اجبارى عند ملء هذا القسم)</label>
+<input class="test-url" name="standardizedTestUrl[]" placeholder="https://..." type="url"/>
+</div>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-test-row-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                          </button>
+</div>
+</div>
+</div>
+</div>
+<small class="reg-step__desc">
+                    أضف أي اختبارات أو شهادات معيارية حصلت عليها.
+                  </small>
+<button class="reg-btn reg-btn--outline" id="addTestScoreBtn" type="button">
+                    + إضافة اختبار معياري
+                  </button>
+</div>
+</div>
+<div class="reg-step" data-phase="Employment History" data-step="13">
+<h2 class="reg-step__title">Employment History</h2>
+<div class="form-group">
+<label>هل لديك خبرة عملية؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="empExperienceStatus" name="empExperienceStatus">
+<option value="">اختر</option>
+<option value="have_experience">
+                        لدي خبرة
+                      </option>
+<option value="no_experience">
+                        لا أملك خبرة
+                      </option>
+</select>
+</div>
+</div><div id="empHaveExperienceBlock" style="display: none">
+<div class="form-group" id="empCvUploadGroup">
+<label>تحميل السيرة الذاتية (PDF, DOC, DOCX) (اجبارى)
+</label>
+<input accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="employmentSectionCv" name="employmentSectionCv" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، DOC، DOCX — الحجم الأقصى: 5 ميجابايت — السيرة الذاتية الكاملة المحدّثة.</small>
+</div>
+<div id="employmentHistoryContainer">
+<div class="emp-history-card academic-history-card">
+<div class="form-group">
+<label>نوع الوظيفة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-job-type" name="empJobType">
+<option value="">اختر</option>
+<option value="governmental">
+                              حكومي
+                            </option>
+<option value="private">
+                              قطاع خاص
+                            </option>
+<option value="entrepreneur">
+                              رائد أعمال
+                            </option>
+<option value="freelance">
+                              عمل حر
+                            </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>طبيعة الوظيفة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select emp-work-nature-wrap">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-work-nature" name="empWorkNature">
+<option value="">اختر طبيعة الوظيفة</option>
+</select>
+</div>
+</div>
+<div class="emp-block-gov" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>الوزارة (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ministry" name="empMinistry">
+<option value="">اختر الوزارة</option>
+<option value="education">
+                                  التربية والتعليم
+                                </option>
+<option value="health">الصحة</option>
+<option value="finance">المالية</option>
+<option value="communications">
+                                  الاتصالات
+                                </option>
+<option value="solidarity">
+                                  التضامن الاجتماعي
+                                </option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة التابعة للوزارة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ministry-sub optional-select" name="empMinistrySub">
+<option value="">اختر الجهة</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<div class="reg-form__row emp-block-dates">
+<div class="form-group">
+<label>تاريخ الالتحاق بالعمل (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="emp-joining-date" name="empJoiningDate" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>ما زلت أعمل في هذه الوظيفة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-currently-working optional-select" name="empCurrentlyWorking">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div>
+<div class="form-group emp-end-date-wrap">
+<label>تاريخ الانتهاء من العمل (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="emp-end-date" name="empEndDate" type="date"/>
+</div>
+</div>
+</div>
+<div class="emp-block-org" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>المسمى الوظيفي (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-job-title" name="empJobTitle">
+<option value="">اختر</option>
+<option value="admin">موظف إداري</option>
+<option value="engineer">مهندس</option>
+<option value="specialist">أخصائي</option>
+<option value="manager">مدير</option>
+<option value="consultant">مستشار</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>المستوى الوظيفي / الأقدمية (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-seniority optional-select" name="empSeniority">
+<option value="">اختر</option>
+<option value="junior">مبتدئ</option>
+<option value="mid">متوسط</option>
+<option value="senior">خبير</option>
+<option value="lead">رئيس فريق</option>
+<option value="manager">مدير</option>
+</select>
+</div>
+</div>
+</div>
+<div class="form-group">
+<label>القسم / الإدارة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-department optional-select" name="empDepartment">
+<option value="">اختر (يُفلتر حسب المسمى)</option>
+<option value="hr">الموارد البشرية</option>
+<option value="it">تقنية المعلومات</option>
+<option value="finance">المالية</option>
+<option value="operations">العمليات</option>
+<option value="legal">الشؤون القانونية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>التخصص المهني (اختيارى)
+</label>
+<input class="emp-speciality" name="empSpeciality" placeholder="يُقترح حسب المسمى أو أدخل يدويًا" type="text"/>
+</div>
+<div class="form-group">
+<label>وصف الوظيفة والمسؤوليات (اختيارى)
+</label>
+<input name="empJobDescription" placeholder="اختياري" type="text"/>
+</div>
+<div class="form-group">
+<label>عنوان جهة العمل (اختيارى)
+</label>
+<input name="empCompanyAddress" placeholder="العنوان بالكامل" type="text"/>
+</div>
+</div>
+<div class="emp-block-free" style="display: none">
+<div class="reg-form__row">
+<div class="form-group">
+<label>مجال العمل / طبيعة النشاط (أول) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-industry-primary optional-select" name="empIndustryPrimary">
+<option value="">اختر</option>
+<option value="tech">تقنية</option>
+<option value="finance">مالية</option>
+<option value="health">صحة</option>
+<option value="education">تعليم</option>
+<option value="industry">صناعة</option>
+<option value="trade">تجارة</option>
+<option value="media">إعلام</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>مجال العمل (ثانٍ — اختياري، حتى مجالين) (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-industry-secondary optional-select" name="empIndustrySecondary">
+<option value="">—</option>
+<option value="tech">تقنية</option>
+<option value="finance">مالية</option>
+<option value="health">صحة</option>
+<option value="education">تعليم</option>
+<option value="industry">صناعة</option>
+<option value="trade">تجارة</option>
+<option value="media">إعلام</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline emp-remove-card" style="display: none" type="button">
+                        حذف هذه الخبرة
+                      </button>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (Start Date) (اجبارى)</label>
+<input class="emp-start-date" name="startDate[]" required="" type="date"/>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (End Date) (اجبارى إذا لم تكن تعمل حالياً)</label>
+<input class="emp-end-date" name="endDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>المسؤوليات الرئيسية (Key Responsibilities) (اختياري)</label>
+<textarea class="emp-responsibilities" name="keyResponsibilities[]"></textarea>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addEmploymentCardBtn" type="button">
+                    + إضافة خبرة عمل أخرى
+                  </button>
+<hr class="reg-divider"/>
+<h3 class="reg-step__title" style="font-size: 1.1rem; margin-top: 1rem">
+                    الجزء 4.1: المراجع
+                  </h3>
+<p class="reg-step__desc">
+                    يُشترط مرجع واحد على الأقل عند وجود خبرة عمل.
+                  </p>
+<div id="empReferencesContainer">
+<div class="emp-ref-row employment-ref-card" style="
+                        border: 1px solid rgba(100, 116, 139, 0.35);
+                        border-radius: 12px;
+                        padding: 1rem;
+                        margin-bottom: 1rem;
+                      ">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم المرجع (اختيارى)
+</label>
+<input class="emp-ref-name" name="empRefName[]" type="text"/>
+</div>
+<div class="form-group">
+<label>رقم هاتف المرجع (اختيارى)
+</label>
+<input class="emp-ref-phone" name="empRefPhone[]" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>البريد الإلكتروني للمرجع (اختيارى)
+</label>
+<input class="emp-ref-email" name="empRefEmail[]" type="email"/>
+</div>
+<div class="form-group">
+<label>مكان العمل المشترك (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="emp-ref-place-select optional-select" name="empRefPlaceIndex[]">
+<option value="">اختر من الخبرات المدخلة</option>
+</select>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline emp-remove-ref" style="display: none" type="button">
+                        حذف المرجع
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addEmpReferenceBtn" type="button">
+                    + إضافة مرجع
+                  </button>
+</div>
+</div>
+<div class="reg-step" data-phase="Employment History" data-step="14">
+<h2 class="reg-step__title">Employment History</h2>
+<div class="form-group">
+<label>المسمى الوظيفي الحالي (Current Job Title) (اجبارى)
+</label>
+<input name="currentJobTitle" placeholder="أدخل مسماك الوظيفي الحالي" type="text"/>
+</div><div class="form-group">
+<label>سنوات الخبرة الإدارية (Years of Management
+                      Experience) (اختيارى)
+</label>
+<input name="yearsManagementExperience" placeholder="عدد السنوات" type="number"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Employment History" data-step="15">
+<h2 class="reg-step__title">Employment History</h2>
+<div class="form-group">
+<label>عدد المرؤوسين المباشرين (Direct Reports / Team
+                      Size) (اختيارى)
+</label>
+<input name="directReports" placeholder="عدد أعضاء الفريق" type="number"/>
+</div><div class="form-group">
+<label>الخبرة العالمية (Global Experience - سنوات في
+                      الخارج) (اختيارى)
+</label>
+<input name="globalExperience" placeholder="عدد السنوات في الخارج (إن وجد)" type="number"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Skills &amp; Languages" data-step="16">
+<h2 class="reg-step__title">Skills &amp; Languages</h2>
+<div class="form-group">
+<label for="nativeLanguage">اللغة الأم (Mother Language) (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="nativeLanguage" name="nativeLanguage" required="">
+<option value="">اختر اللغة</option>
+</select>
+</div>
+</div><div class="form-group">
+<label for="englishProficiency">اللغة الثانية (الإنجليزية) — مستوى الإجادة فقط (اجبارى)
+</label>
+<p class="reg-step__desc reg-lang-hint" dir="ltr" lang="en">
+                      Second language is fixed as English; choose proficiency
+                      only.
+                    </p>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="englishProficiency" name="englishProficiency" required="">
+<option value="">اختر المستوى</option>
+</select>
+</div>
+</div>
+<div id="additionalLanguagesContainer"></div>
+<button class="reg-btn reg-btn--outline mt-3" id="addLanguageBtn" type="button">+ إضافة لغة أخرى (اختياري)</button>
+</div>
+<div class="reg-step" data-phase="Skills &amp; Languages" data-step="17">
+<h2 class="reg-step__title">Skills &amp; Languages</h2>
+<div class="form-group">
+<label>المهارات التقنية (Technical Skills) (اجبارى)
+</label>
+<div id="technicalSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="technicalSkillCategory[]">
+<option value="">اختر الفئة</option>
+<option value="programming">برمجة</option>
+<option value="web">تطوير ويب</option>
+<option value="database">قواعد بيانات</option>
+<option value="tools">أدوات ومنصات</option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="technicalSkillName[]">
+<option value="">اختر المهارة</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="technicalSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addTechnicalSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>مهارات الحاسب الآلي (Computer Skills) (اجبارى)
+</label>
+<div id="computerSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="computerSkillCategory[]">
+<option value="">اختر الفئة</option>
+<option value="office">حزمة الأوفيس</option>
+<option value="os">أنظمة التشغيل</option>
+<option value="productivity">أدوات الإنتاجية</option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="computerSkillName[]">
+<option value="">اختر المهارة</option>
+<option value="outlook">Outlook</option>
+<option value="word">Word</option>
+<option value="excel">Excel</option>
+<option value="powerpoint">PowerPoint</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="computerSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addComputerSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>المهارات الشخصية (Soft Skills) (اجبارى)
+</label>
+<div id="softSkillsContainer">
+<div class="skill-row-inline">
+<select class="skill-category" name="softSkillCategory[]">
+<option value="">فئة المهارة</option>
+<option value="communication">التواصل</option>
+<option value="leadership">القيادة</option>
+<option value="teamwork">العمل ضمن فريق</option>
+<option value="management">
+                          إدارة الوقت / المشاريع
+                        </option>
+<option value="other">أخرى</option>
+</select>
+<select class="skill-name" name="softSkillName[]">
+<option value="">Specific Competency / المهارة</option>
+</select>
+<select aria-label="الإتقان 1-10" class="skill-proficiency" name="softSkillProficiency[]">
+<option value="">١–١٠</option>
+</select>
+<button class="skill-add-btn" id="addSoftSkillBtn" title="إضافة مهارة" type="button">
+                        +
+                      </button>
+</div>
+</div>
+<small class="reg-step__desc">حتى 20 مهارة: فئة ← اسم المهارة ← إتقان (1–10).</small>
+</div><div class="form-group">
+<label>مهارات أخرى (Other Skills) (اختيارى)
+</label>
+<input dir="auto" id="otherSkillsFreeText" name="otherSkillsFreeText" placeholder="نص حر، مثال: الطبخ، الحرف اليدوية، …" type="text"/>
+<small class="reg-step__desc">اختياري — وصف نصي لمهارات غير مدرجة أعلاه.</small>
+</div>
+</div>
+<div class="reg-step" data-phase="Skills &amp; Languages" data-step="18">
+<h2 class="reg-step__title">Skills &amp; Languages</h2>
+<div class="form-group">
+<label>وصف الاهتمامات (اجبارى)
+</label>
+<input dir="rtl" id="interestsDescription" name="interestsDescription" placeholder="مثال: مؤلفك المفضل في القراءة، رياضتك المفضلة، …" type="text"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="19">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل تستخدم وسائل التواصل الاجتماعي؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="usesSocialMedia" name="usesSocialMedia" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div class="form-group" id="socialMediaPlatformsBlock" style="display: none">
+<label>منصات التواصل (تشغيل / إيقاف لكل منصة) (اجبارى)
+</label>
+<div class="social-toggle-grid">
+<label class="social-toggle"><input name="socialPlatformFacebook" type="checkbox" value="1"/>
+                      Facebook</label>
+<label class="social-toggle"><input name="socialPlatformInstagram" type="checkbox" value="1"/>
+                      Instagram</label>
+<label class="social-toggle"><input name="socialPlatformX" type="checkbox" value="1"/>
+                      X</label>
+<label class="social-toggle"><input name="socialPlatformLinkedIn" type="checkbox" value="1"/>
+                      LinkedIn</label>
+<label class="social-toggle"><input name="socialPlatformTikTok" type="checkbox" value="1"/>
+                      TikTok</label>
+</div>
+<small class="reg-step__desc">يُقفل هذا القسم للقراءة فقط بعد المتابعة من هذه
+                    الخطوة.</small>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="20">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل حصلت على أي جوائز أو تكريمات؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPrizesAwards" name="hasPrizesAwards" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="prizesAwardsBlock" style="display: none">
+<div id="prizesAwardsContainer">
+<div class="prize-entry-card academic-history-card">
+<div class="reg-form__row">
+<div class="form-group">
+<label>اسم الجائزة / التكريم (اختيارى)
+</label>
+<input name="prizeName[]" placeholder="اسم الجائزة" type="text"/>
+</div>
+<div class="form-group">
+<label>تاريخ الحصول عليها (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input name="prizeDateAchieved[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>فئة الجائزة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" name="prizeCategory[]">
+<option value="">اختر</option>
+<option value="artistic">فنية</option>
+<option value="scientific">
+                                علمية
+                              </option>
+<option value="sport">رياضية</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة المانحة (اختيارى)
+</label>
+<input name="prizeIssuingBody[]" placeholder="اسم الجهة المانحة" type="text"/>
+</div>
+</div>
+<div class="form-group">
+<label>تحميل صورة الشهادة (PDF أو صورة) (اختيارى)
+</label>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" class="prize-cert-input" name="prizeCertificate[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 3 ميجابايت — صورة أو وثيقة الجائزة/التكريم.</small>
+</div>
+<button class="reg-btn reg-btn--outline prize-remove-btn" style="display: none" type="button">
+                        حذف هذه الجائزة
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addPrizeEntryBtn" type="button">
+                    + إضافة جائزة أخرى
+                  </button>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="21">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل شاركت في أي مؤتمرات أو ورش عمل؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasConferencesWorkshops" name="hasConferencesWorkshops" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="conferencesWorkshopsBlock" style="display: none">
+<div id="conferencesWorkshopsContainer">
+<div class="cw-entry-card academic-history-card">
+<div class="reg-form__row">
+<div class="form-group">
+<label>النوع (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select name="cwActivityType[]">
+<option value="">اختر</option>
+<option value="conference">
+                                مؤتمر
+                              </option>
+<option value="workshop">
+                                ورشة عمل
+                              </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الفعالية (اختيارى)
+</label>
+<input name="cwEventName[]" placeholder="اسم المؤتمر أو الورشة" type="text"/>
+</div>
+</div>
+<div class="form-group">
+<label>الجهة المنظمة (اختيارى)
+</label>
+<input name="cwOrganizingEntity[]" placeholder="اسم الجهة المنظمة" type="text"/>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="cw-start-date" name="cwStartDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="cw-end-date" name="cwEndDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="form-group">
+<label>مستوى المشاركة (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" name="cwParticipationLevel[]">
+<option value="">اختر</option>
+<option value="volunteer">متطوع</option>
+<option value="host">مضيف / منظم</option>
+<option value="speaker">متحدث</option>
+</select>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline cw-remove-btn" style="display: none" type="button">
+                        حذف هذه الفعالية
+                      </button>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline" id="addConferenceWorkshopBtn" type="button">
+                    + إضافة فعالية أخرى
+                  </button>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="23">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل شاركت في أي عمل عام أو تطوعي؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPublicVoluntaryWork" name="hasPublicVoluntaryWork" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="24">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل شاركت في أي عمل سياسي؟ (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPoliticalParticipation" name="hasPoliticalParticipation" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="politicalWorkBlock" style="display: none">
+<div class="form-group">
+<label>اسم الحزب أو التنظيم السياسي (اجبارى)</label>
+<input dir="auto" id="politicalPartyName" name="politicalPartyName" placeholder="الاسم الكامل" type="text"/>
+</div>
+<div class="form-group">
+<label>الدور السياسي (اجبارى)</label>
+<input dir="auto" id="politicalRole" name="politicalRole" placeholder="المنصب أو الدور" type="text"/>
+</div>
+<div class="form-group">
+<label>تفاصيل العمل السياسي (اجبارى)</label>
+<input dir="auto" id="politicalWorkDetails" name="politicalWorkDetails" placeholder="التواريخ والأنشطة باختصار" type="text"/>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="25">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<label>هل ترشحت لأي منصب سياسي؟ (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPoliticalCandidacy" name="hasPoliticalCandidacy">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="politicalCandidacyBlock" style="display: none">
+<div class="form-group">
+<label>اسم المنصب السياسي (اجبارى)</label>
+<input dir="auto" id="candidacyPositionName" name="candidacyPositionName" placeholder="المسمى المرشح له" type="text"/>
+</div>
+<div class="form-group">
+<label>النتيجة (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="candidacyResult" name="candidacyResult">
+<option value="">اختر</option>
+<option value="elected">
+                          تم الانتخاب / فوز
+                        </option>
+<option value="not_elected">
+                          لم يتم الانتخاب
+                        </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>وصف تجربة الترشح (اجبارى)</label>
+<input dir="auto" id="candidacyExperienceDescription" name="candidacyExperienceDescription" placeholder="تفاصيل التجربة" type="text"/>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Activities &amp; Social" data-step="26">
+<h2 class="reg-step__title">Activities &amp; Social</h2>
+<div class="form-group">
+<input class="optional-input" name="portfolioUrl" placeholder="رابط URL لملف الأعمال أو منشوراتك" type="url"/>
+</div><div class="form-group">
+<input class="optional-input" name="portfolioFile" type="file"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Motivation &amp; Goals" data-step="27">
+<h2 class="reg-step__title">Motivation &amp; Goals</h2>
+<div class="form-group">
+<label>الهدف التعليمي الرئيسي (Primary Learning Objective) (اجبارى)</label>
+<textarea name="primaryLearningObjective" placeholder="ما الذي تسعى لتعلمه أو تحقيقه من خلال هذا البرنامج؟" rows="3"></textarea>
+<small class="reg-step__desc">
+                    يساعد هذا القسم على مواءمة توقعاتك مع مخرجات البرنامج.
+                  </small>
+</div><div class="form-group">
+<label>مساهمتك الفريدة للدفعة (Unique Contribution to Cohort) (اجبارى)</label>
+<textarea name="uniqueContribution" placeholder="ما الذي يمكنك إضافته لزملائك في البرنامج؟ خبرات، مهارات، منظور مختلف، ..." rows="3"></textarea>
+<small class="reg-step__desc">
+                    يوضح هذا القسم ما الذي يميزك عن غيرك من المتقدمين.
+                  </small>
+</div><div class="form-group">
+<label>هدفـك المهني خلال 5 سنوات (Future Career Goal - 5 Years) (اجبارى)</label>
+<textarea name="futureCareerGoal" placeholder="صف طموحاتك المهنية على المدى المتوسط (خمس سنوات)." rows="3"></textarea>
+<small class="reg-step__desc">
+                    يساعد هذا القسم على فهم رؤيتك المهنية طويلة المدى.
+                  </small>
+</div>
+</div>
+<div class="reg-step" data-phase="Motivation &amp; Goals" data-step="28">
+<h2 class="reg-step__title">Motivation &amp; Goals</h2>
+<div class="form-group">
+<label>مصدر التمويل (Funding Source) (اجبارى)</label>
+<select name="fundingSource">
+<option value="">اختر مصدر التمويل</option>
+<option value="self_funded">
+                        تمويل ذاتي (Self-Funded)
+                      </option>
+<option value="company_sponsored">
+                        تمويل من جهة العمل (Company-Sponsored)
+                      </option>
+<option value="government_scholarship">
+                        منحة حكومية (Government Scholarship)
+                      </option>
+<option value="institutional_scholarship">
+                        منحة من جهة تعليمية (Institutional Scholarship)
+                      </option>
+<option value="other">أخرى</option>
+</select>
+<small class="reg-step__desc">
+                      يوضح هذا القسم نية التمويل الخاصة بك.
+                    </small>
+</div><div class="form-group">
+<label>مقال المنحة (Scholarship Essay) (اختياري) - الحد الأقصى 5000 حرف</label>
+<textarea id="scholarshipEssay" maxlength="5000" name="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
+<small class="reg-step__desc" id="essayWordCount" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
+<small class="reg-step__desc">
+                      يمكنك أيضًا رفع ملف يحتوي على مقال المنحة إن وجد.
+                    </small>
+<input name="scholarshipEssayFile" type="file"/>
+</div><div class="form-group">
+<label>مقال المنحة (Scholarship Essay) (اختياري) - الحد الأقصى 5000 حرف</label>
+<textarea id="scholarshipEssay" maxlength="5000" name="scholarshipEssay" placeholder="يمكنك لصق نص مقال المنحة هنا (اختياري)." rows="3"></textarea>
+<small class="reg-step__desc" id="essayWordCount" style="text-align: left; display: block; font-weight: bold; margin-top: 2px;">الحروف: 0 / 5000</small>
+<small class="reg-step__desc">
+                      يمكنك أيضًا رفع ملف يحتوي على مقال المنحة إن وجد.
+                    </small>
+<input name="scholarshipEssayFile" type="file"/>
+</div>
+</div>
+<div class="reg-step" data-phase="Legal &amp; References" data-step="29">
+<h2 class="reg-step__title">Legal &amp; References</h2>
+<div class="form-group">
+<label>هل صدرت ضدك أي أحكام جنائية أو جنح سابقة؟ (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPriorCriminalConvictions" name="hasPriorCriminalConvictions" required="">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="legalStatusBlock" style="display: none">
+<div class="form-group">
+<label>وصف الحكم الجنائي (اجبارى)</label>
+<input dir="auto" id="priorConvictionDescription" name="priorConvictionDescription" placeholder="وصف إلزامي للحكم" type="text"/>
+</div>
+<div class="form-group">
+<label>تحميل صحيفة الحالة الجنائية (الفيش والتشبيه) (إرشادات الرفع: يرجى رفع الفيش والتشبيه بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اجبارى)</label>
+<input accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" id="sectionSevenCriminalRecordCertificate" name="sectionSevenCriminalRecordCertificate" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة السجل الجنائي المعتمدة.</small>
+</div>
+</div>
+</div>
+<div class="reg-step" data-phase="Legal &amp; References" data-step="31">
+<h2 class="reg-step__title">Legal &amp; References</h2>
+<div class="form-group">
+<label>السيرة الذاتية الشاملة (Comprehensive CV / Resume) (إرشادات الرفع: يرجى رفع السيرة الذاتية الشاملة بصيغة PDF أو Word بحجم أقصى 5 ميجابايت) (اجبارى)</label>
+<input accept=".pdf,.doc,.docx" name="cvResume" required="" type="file"/>
+</div><div class="form-group">
+<label>خطابات التوصية (2) (Letters of Recommendation x2) (إرشادات الرفع: يمكنك رفع ملف أو أكثر من خطابات التوصية بصيغة PDF أو صور واضحة بحجم أقصى 5 ميجابايت) (اختيارى)</label>
+<input accept=".pdf,.doc,.docx,.jpg,.png" multiple="" name="lettersOfRecommendation" type="file"/>
+<small class="reg-step__desc">
+                        يمكنك رفع أكثر من ملف في هذا الحقل (ويُفضل خطابَي توصية) أو
+                        إرسالها لاحقًا عبر البريد الإلكتروني.
+                      </small>
+</div>
+</div>
+<div class="reg-step" data-phase="Logistics &amp; Needs" data-step="32">
+<h2 class="reg-step__title">Logistics &amp; Needs</h2>
+<div class="form-group">
+<label>قيود النظام الغذائي (Dietary Restrictions) (اختيارى)</label>
+<textarea name="dietaryRestrictions" placeholder="أدخل أي احتياجات غذائية خاصة إن وجدت" rows="3"></textarea>
+<small class="reg-step__desc">
+                    يساعد في توفير ما يناسبك خلال فعاليات البرنامج.
+                  </small>
+</div><div class="form-group">
+<label>متطلبات إمكانية الوصول (Accessibility Requirements) (اختيارى)</label>
+<textarea name="accessibilityRequirements" placeholder="أدخل أي احتياجات خاصة لإمكانية الوصول إن وجدت" rows="3"></textarea>
+<small class="reg-step__desc">
+                    يضمن أن بيئة البرنامج مناسبة لجميع المشاركين.
+                  </small>
+</div>
+</div>
+<div class="reg-step" data-phase="Logistics &amp; Needs" data-step="33">
+<h2 class="reg-step__title">Logistics &amp; Needs</h2>
+<div class="form-group">
+<label class="reg-checkbox">
+<input name="scheduleAcknowledgment" type="checkbox"/>
+<span>أؤكد إدراكي لجدول البرنامج المكثف والالتزام به.</span>
+</label>
+<small class="reg-step__desc">
+                    (I confirm my acknowledgment of the rigorous schedule of the
+                    program.)
+                  </small>
+</div><div class="form-group">
+<label class="reg-checkbox">
+<input id="dataAccuracyTermsConfirmed" name="dataAccuracyTermsConfirmed" required="" type="checkbox" value="1"/>
+<span>أقر بصحة جميع البيانات المدخلة وأوافق على كافة الشروط
+                      والأحكام الخاصة بالبرنامج</span>
+</label>
+<small class="reg-step__desc">(Data Accuracy &amp; Terms Confirmation — إلزامي قبل
+                    الإرسال)</small>
+</div>
+</div>
+<div class="reg-step" data-phase="Final Verification" data-step="40">
+<h2 class="reg-step__title">Final Verification</h2>
+<div id="socialVerifyUrlsBlock">
+<div class="form-group social-verify-row" data-requires-platform="socialPlatformFacebook" style="display: none">
+<label>رابط حساب فيسبوك (Facebook Account Link) (اجبارى)</label>
+<input dir="ltr" id="socialProfileFacebookUrl" name="socialProfileFacebookUrl" placeholder="https://facebook.com/..." type="url"/>
+</div>
+<div class="form-group social-verify-row" data-requires-platform="socialPlatformInstagram" style="display: none">
+<label>رابط حساب إنستجرام (Instagram Account Link) (اجبارى)</label>
+<input dir="ltr" id="socialProfileInstagramUrl" name="socialProfileInstagramUrl" placeholder="https://instagram.com/..." type="url"/>
+</div>
+<div class="form-group social-verify-row" data-requires-platform="socialPlatformX" style="display: none">
+<label>رابط حساب إكس / تويتر (X Account Link) (اجبارى)</label>
+<input dir="ltr" id="socialProfileXUrl" name="socialProfileXUrl" placeholder="https://x.com/..." type="url"/>
+</div>
+<div class="form-group social-verify-row" data-requires-platform="socialPlatformLinkedIn" style="display: none">
+<label>رابط حساب لينكد إن (LinkedIn Account Link) (اجبارى)</label>
+<input dir="ltr" id="socialProfileLinkedInUrl" name="socialProfileLinkedInUrl" placeholder="https://linkedin.com/in/..." type="url"/>
+</div>
+<div class="form-group social-verify-row" data-requires-platform="socialPlatformTikTok" style="display: none">
+<label>رابط حساب تيك توك (TikTok Account Link) (اجبارى)</label>
+<input dir="ltr" id="socialProfileTikTokUrl" name="socialProfileTikTokUrl" placeholder="https://tiktok.com/@..." type="url"/>
+</div>
+</div>
+</div>
+
+<!-- Step 1: Personal Information -->
+
+<!-- Step 2: Contact Details -->
+
+<!-- Step 3: Educational Background -->
+
+<!-- Step 4: Employment History -->
+
+<!-- Step 5: Skills, Languages & Interests -->
+
+<!-- Step 6: Prizes, Conferences & Workshops -->
+
+<!-- Step 7: Public/Political Experience & Legal Status -->
+
+<!-- Step 8: Logistics, documents & motivation (القسم الثامن) -->
+
+<!-- Step 9: Cognition & Personality (Quiz) -->
+
+<!-- Step 10: Verify & Final Confirmation -->
+
+</form>
+</div>
+<div class="reg-actions">
+<button class="reg-btn reg-btn--outline" disabled="" id="btnPrev" type="button">
+<span class="reg-btn__icon reg-btn__icon--prev">←</span>
+<span>السابق</span>
+</button>
+<button class="reg-btn reg-btn--primary" id="btnNext" type="button">
+<span>التالي</span>
+<span class="reg-btn__icon reg-btn__icon--arrow">→</span>
+</button>
+<button class="reg-btn reg-btn--primary reg-btn--submit" form="regForm" id="btnSubmit" style="display: none" type="submit">
+<span class="reg-btn__icon reg-btn__icon--check">✓</span>
+<span>إرسال التسجيل</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div id="chatWidget"></div>
+<script src="header/header.js?v=2"></script>
+<script src="registration.js"></script>
+<script src="chat/chat.js"></script>
+</body>
+</html>

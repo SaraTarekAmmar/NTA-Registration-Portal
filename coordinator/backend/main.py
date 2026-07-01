@@ -42,12 +42,13 @@ async def _sanitize_http_exception(request, exc):
     return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
 
 # ── Routers ──────────────────────────────────────────────────────────
-from routers import auth, attendance, permissions, interviews
+from routers import auth, attendance, permissions, interviews, tickets
 
 app.include_router(auth.router)
 app.include_router(attendance.router)
 app.include_router(permissions.router)
 app.include_router(interviews.router)
+app.include_router(tickets.router)
 
 
 @app.middleware("http")

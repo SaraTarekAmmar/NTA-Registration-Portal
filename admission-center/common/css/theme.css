@@ -1,0 +1,1352 @@
+/* ===== NTA Shared Theme Tokens (Dark default, Light via html.light-mode) ===== */
+:root {
+  /* Surfaces */
+  --bg-portal: #030712;
+  --bg-main: var(--bg-portal);
+  --bg-elevated: #0f172a;
+  --bg-card: rgba(15, 23, 42, 0.96);
+  --bg-card-solid: #0f172a;
+  --bg-input: rgba(15, 23, 42, 0.95);
+  --bg-header: rgba(10, 20, 40, 0.96);
+  --surface-glass: rgba(255, 255, 255, 0.03);
+  --surface-glass-border: rgba(255, 255, 255, 0.05);
+  --surface-glass-strong: rgba(255, 255, 255, 0.08);
+  --surface-overlay: rgba(0, 0, 0, 0.2);
+  --surface-modal: #0d1526;
+  --surface-modal-overlay: rgba(0, 0, 0, 0.85);
+
+  /* Semantic aliases */
+  --bg-primary: var(--bg-main);
+  --bg-surface: var(--bg-card);
+  --bg-surface-elevated: var(--bg-elevated);
+  --bg-surface-solid: var(--bg-card-solid);
+
+  /* Text */
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-on-accent: #ffffff;
+  --text-on-brand: #ffffff;
+
+  /* Borders */
+  --border-color: rgba(51, 65, 85, 0.9);
+  --border-main: var(--border-color);
+  --border-accent: rgba(59, 130, 246, 0.35);
+
+  /* Brand & accent */
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --accent-solid: #4f46e5;
+  --accent-glow: rgba(99, 102, 241, 0.4);
+  --brand-primary: #e63946;
+  --brand-primary-dark: #c1121f;
+  --brand-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+
+  /* Status */
+  --color-success: #10b981;
+  --color-success-soft: #34d399;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-success-border: rgba(16, 185, 129, 0.3);
+  --color-error: #ef4444;
+  --color-error-soft: #f87171;
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-error-border: rgba(244, 63, 94, 0.3);
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.15);
+  --color-info-soft: #60a5fa;
+
+  /* Toasts & banners */
+  --toast-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --toast-success-bg: var(--color-success-bg);
+  --toast-success-border: var(--color-success-border);
+  --toast-success-text: #6ee7b7;
+  --toast-error-bg: rgba(244, 63, 94, 0.12);
+  --toast-error-border: var(--color-error-border);
+  --toast-error-text: #fda4af;
+  --toast-info-bg: rgba(99, 102, 241, 0.12);
+  --toast-info-border: rgba(99, 102, 241, 0.3);
+  --toast-info-text: #a5b4fc;
+  --banner-warning-bg: #f8d7da;
+  --banner-warning-text: #721c24;
+  --reg-toast-success-bg: var(--color-success);
+  --reg-toast-error-bg: var(--color-error);
+
+  /* Assignments / feedback */
+  --assign-card-bg: rgba(15, 23, 42, 0.4);
+  --assign-card-hover-bg: rgba(15, 23, 42, 0.6);
+  --assign-card-border: var(--surface-glass-strong);
+  --assign-actions-border: var(--surface-glass-border);
+  --assign-btn-ghost-bg: var(--surface-glass);
+  --assign-btn-ghost-border: var(--surface-glass-strong);
+  --assign-upload-bg: var(--brand-primary-dark);
+  --feedback-box-bg: var(--surface-glass);
+  --feedback-box-border: var(--color-success);
+  --feedback-label: var(--color-success);
+  --feedback-text: var(--text-main);
+
+  /* Quiz preview tints */
+  --quiz-accent-tint-bg: rgba(99, 102, 241, 0.15);
+  --quiz-accent-tint-border: rgba(99, 102, 241, 0.25);
+  --quiz-accent-text: #818cf8;
+  --quiz-num-color: #a5b4fc;
+  --quiz-correct-color: #34d399;
+  --quiz-correct-bg: rgba(16, 185, 129, 0.08);
+  --quiz-correct-border: rgba(16, 185, 129, 0.3);
+  --quiz-mcq-bg: rgba(59, 130, 246, 0.1);
+  --quiz-mcq-color: #60a5fa;
+  --quiz-mcq-border: rgba(59, 130, 246, 0.2);
+  --quiz-tf-bg: rgba(16, 185, 129, 0.1);
+  --quiz-tf-color: #34d399;
+  --quiz-tf-border: rgba(16, 185, 129, 0.2);
+  --quiz-badge-slate-bg: rgba(100, 116, 139, 0.1);
+  --quiz-badge-slate-color: var(--text-muted);
+  --quiz-badge-slate-border: rgba(100, 116, 139, 0.2);
+  --quiz-explain-bg: rgba(99, 102, 241, 0.05);
+  --quiz-explain-border: rgba(99, 102, 241, 0.1);
+  --quiz-option-bg: var(--surface-overlay);
+  --quiz-option-border: var(--surface-glass-border);
+  --quiz-option-key-bg: var(--surface-glass);
+  --pulse-error-ring: rgba(244, 63, 94, 0.25);
+
+  /* Effects */
+  --shadow-card: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 18px 40px -22px rgba(15, 23, 42, 0.9);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
+  --shadow-strong: 0 24px 80px rgba(0, 0, 0, 0.7);
+  --shadow-accent: 0 8px 24px rgba(59, 130, 246, 0.25);
+  --overlay-gradient-top: rgba(3, 7, 18, 0.45);
+  --overlay-gradient-bottom: rgba(15, 23, 42, 0.65);
+  --login-card-bg: rgba(15, 23, 42, 0.85);
+  --login-border: rgba(99, 102, 241, 0.25);
+  --chip-bg: rgba(15, 23, 42, 0.9);
+  --chip-border: rgba(59, 130, 246, 0.5);
+  --chip-text: #bfdbfe;
+  --header-glow: rgba(37, 99, 235, 0.45);
+  --theme-btn-bg: rgba(251, 191, 36, 0.15);
+  --theme-btn-border: rgba(251, 191, 36, 0.4);
+  --theme-btn-color: #fbbf24;
+  --btn-primary-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+
+  /* Skeleton / shimmer */
+  --skeleton-base: #1e293b;
+  --skeleton-shine: #334155;
+
+  /* Primary button gradient */
+  --btn-primary-gradient: linear-gradient(135deg, var(--color-info), #2563eb);
+  --btn-primary-gradient-hover: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
+
+  /* Editor summary card accents */
+  --summary-inquiries: var(--color-success);
+  --summary-live: var(--color-info-soft);
+  --summary-status: var(--theme-btn-color);
+
+  /* Toast (trainee app) */
+  --toast-app-border: var(--color-success);
+  --toast-app-glow: rgba(34, 197, 94, 0.5);
+  --toast-app-icon-bg: rgba(34, 197, 94, 0.4);
+  --toast-app-icon-border: rgba(34, 197, 94, 0.8);
+  --toast-app-icon-color: var(--color-success-soft);
+  --toast-app-bg: linear-gradient(135deg, rgba(30, 51, 40, 0.98), rgba(20, 40, 30, 0.98));
+
+  /* Chat widget */
+  --chat-fab-gradient: linear-gradient(135deg, var(--color-info-soft), var(--color-info));
+  --chat-fab-bg:
+    radial-gradient(circle at 30% 0%, var(--color-info-soft), transparent 55%),
+    radial-gradient(circle at 70% 100%, var(--accent), transparent 55%),
+    var(--chat-fab-gradient);
+  --chat-fab-color: var(--text-on-accent);
+  --chat-fab-shadow: 0 18px 40px rgba(15, 23, 42, 0.8), 0 0 30px rgba(56, 189, 248, 0.55);
+  --chat-fab-shadow-hover: 0 22px 55px var(--bg-card), 0 0 40px rgba(56, 189, 248, 0.75);
+  --chat-backdrop-color: rgba(15, 23, 42, 0.8);
+  --chat-backdrop-accent: radial-gradient(
+    circle at 10% 0%,
+    rgba(15, 23, 42, 0.7),
+    transparent 55%
+  );
+  --chat-dialog-accent: radial-gradient(
+    circle at 0% 0%,
+    rgba(56, 189, 248, 0.1),
+    transparent 55%
+  );
+  --chat-dialog-border: rgba(37, 99, 235, 0.6);
+  --chat-dialog-shadow: 0 22px 70px rgba(15, 23, 42, 0.9), 0 0 40px rgba(37, 99, 235, 0.7);
+  --chat-divider: var(--border-color);
+  --chat-bot-bg: var(--bg-elevated);
+  --chat-bot-border: rgba(71, 85, 105, 0.4);
+  --chat-bot-text: var(--text-muted);
+  --chat-input-bg: var(--bg-input);
+  --chat-input-border: var(--border-main);
+  --chat-user-bubble-bg: linear-gradient(135deg, var(--color-info), var(--color-info-deep-1));
+  --chat-send-bg: var(--btn-primary-gradient);
+  --chat-send-color: var(--text-on-accent);
+
+  /* Extended palette (profile, charts, badges) */
+  --color-info-pale: #e0f2fe;
+  --color-info-pale-2: #bae6fd;
+  --color-info-deep-1: #0369a1;
+  --color-info-deep-2: #0c4a6e;
+  --color-info-deep-3: #0284c7;
+  --color-cyan: #06b6d4;
+  --color-success-pale: #bbf7d0;
+  --color-success-pale-2: #6ee7b7;
+  --color-success-pale-3: #a7f3d0;
+  --color-error-pale: #fecaca;
+  --color-accent-pale: #a5b4fc;
+  --color-accent-pale-2: #c7d2fe;
+  --color-warning-dark: #d97706;
+  --mask-cutout: #000;
+  --gradient-info-deep: linear-gradient(
+    135deg,
+    var(--color-info-soft),
+    var(--color-info-deep-1),
+    var(--color-info-deep-2),
+    var(--color-info-soft)
+  );
+  --gradient-info-shine: linear-gradient(
+    135deg,
+    var(--color-info-soft),
+    var(--color-info-soft),
+    var(--color-info-soft),
+    var(--color-info-deep-3)
+  );
+  --gradient-progress: linear-gradient(90deg, var(--color-info), var(--color-cyan));
+  --gradient-success-cta: linear-gradient(
+    135deg,
+    var(--color-success),
+    var(--color-success-soft)
+  );
+  --gradient-warning-border: linear-gradient(
+    120deg,
+    var(--color-warning),
+    var(--theme-btn-color),
+    var(--color-warning-dark)
+  );
+
+  /* Admin portal surfaces & borders */
+  --admin-surface-gradient: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(30, 41, 59, 0.9)
+  );
+  --admin-panel-gradient: linear-gradient(
+    135deg,
+    var(--bg-card),
+    rgba(30, 41, 59, 0.75)
+  );
+  --admin-section-gradient: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.5),
+    var(--assign-card-bg)
+  );
+  --admin-border-subtle: rgba(59, 130, 246, 0.25);
+  --admin-border-medium: rgba(59, 130, 246, 0.35);
+  --admin-border-input: rgba(59, 130, 246, 0.45);
+  --admin-input-bg: rgba(15, 23, 42, 0.95);
+  --admin-hover-surface: rgba(30, 41, 59, 0.85);
+  --admin-row-hover: rgba(59, 130, 246, 0.08);
+  --admin-toggle-active: rgba(59, 130, 246, 0.2);
+  --admin-skeleton-mid: rgba(100, 116, 139, 0.5);
+  --admin-skeleton-base: rgba(71, 85, 105, 0.4);
+  --admin-table-header-bg: rgba(15, 23, 42, 0.8);
+  --admin-table-border: rgba(71, 85, 105, 0.4);
+  --admin-focus-ring: rgba(59, 130, 246, 0.2);
+  --admin-border-focus: rgba(59, 130, 246, 0.8);
+  --admin-hero-glow: rgba(59, 130, 246, 0.15);
+  --admin-users-cta-gradient: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.2),
+    rgba(139, 92, 246, 0.15)
+  );
+  --admin-carousel-hover-gradient: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.25),
+    rgba(37, 99, 235, 0.2)
+  );
+  --admin-summary-icon-applied: linear-gradient(
+    135deg,
+    var(--border-accent),
+    rgba(37, 99, 235, 0.25)
+  );
+  --admin-summary-icon-enrolled: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.35),
+    rgba(22, 163, 74, 0.25)
+  );
+  --admin-summary-icon-dropped: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.35),
+    rgba(185, 28, 28, 0.25)
+  );
+  --admin-panel-bg: rgba(8, 12, 32, 0.55);
+  --admin-panel-bg-solid: rgba(8, 12, 32, 0.5);
+  --admin-card-bg: rgba(15, 23, 42, 0.6);
+  --admin-card-bg-hover: rgba(30, 41, 59, 0.6);
+  --admin-fields-bg: rgba(15, 23, 42, 0.3);
+  --admin-process-overlay: rgba(15, 23, 42, 0.9);
+  --admin-summary-applied: linear-gradient(
+    135deg,
+    #7dd3fc 0%,
+    var(--color-info-soft) 25%,
+    var(--color-info-soft) 50%,
+    var(--color-info-deep-3) 75%,
+    var(--color-info-deep-1) 100%
+  );
+  --admin-summary-enrolled: linear-gradient(
+    135deg,
+    #5eead4 0%,
+    #2dd4bf 25%,
+    #14b8a6 50%,
+    #0d9488 75%,
+    #0f766e 100%
+  );
+  --admin-summary-dropped: linear-gradient(
+    135deg,
+    #fde047 0%,
+    var(--theme-btn-color) 25%,
+    var(--color-warning) 50%,
+    #ca8a04 75%,
+    #a16207 100%
+  );
+  --color-purple-soft: #a78bfa;
+  --color-purple-muted: #c4b5fd;
+  --color-purple: #8b5cf6;
+  --color-purple-dark: #7c3aed;
+  --color-kpi-cyan: #67e8f9;
+  --color-kpi-gold: #fcd34d;
+  --color-kpi-mint: #4fffb0;
+  --color-success-text: #dcfce7;
+  --color-error-text: #fee2e2;
+  --color-success-surface: #ecfdf5;
+  --color-error-surface: #fef2e2;
+  --color-teal: #22d3ee;
+  --gradient-accent-btn: linear-gradient(90deg, var(--accent), var(--accent-solid));
+  --gradient-admin-ai-btn: linear-gradient(135deg, var(--color-info), var(--color-info));
+  --gradient-admin-purple: linear-gradient(135deg, var(--color-purple), var(--color-purple-dark));
+  --gradient-admin-success-btn: linear-gradient(135deg, var(--color-success), #059669);
+  --gradient-admin-cyan-card: linear-gradient(135deg, var(--color-teal), var(--color-cyan));
+  --verdict-line-accepted: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-success),
+    transparent
+  );
+  --verdict-line-rejected: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-error),
+    transparent
+  );
+}
+
+/* Native controls & autofill follow the active theme */
+html {
+  color-scheme: dark;
+}
+
+/* Base form fields (dark default; html.light-mode overrides below) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]),
+select,
+textarea {
+  background-color: var(--admin-input-bg, var(--bg-input));
+  color: var(--text-main);
+  border-color: var(--border-main);
+}
+
+select option,
+select optgroup {
+  background-color: var(--bg-card-solid, #0f172a);
+  color: var(--text-main);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-main) !important;
+  caret-color: var(--text-main);
+  -webkit-box-shadow: 0 0 0 1000px var(--admin-input-bg, var(--bg-input)) inset !important;
+  box-shadow: 0 0 0 1000px var(--admin-input-bg, var(--bg-input)) inset !important;
+  transition: background-color 99999s ease-out 0s;
+}
+
+html.light-mode {
+  color-scheme: light;
+  --bg-portal: #f8fafc;
+  --bg-main: var(--bg-portal);
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-solid: #ffffff;
+  --bg-input: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --surface-glass: rgba(15, 23, 42, 0.04);
+  --surface-glass-border: #e2e8f0;
+  --surface-glass-strong: #cbd5e1;
+  --surface-overlay: rgba(15, 23, 42, 0.06);
+  --surface-modal: #ffffff;
+  --surface-modal-overlay: rgba(15, 23, 42, 0.35);
+
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+
+  --border-color: #e2e8f0;
+  --border-main: var(--border-color);
+  --border-accent: rgba(99, 102, 241, 0.35);
+
+  --accent: #4f46e5;
+  --accent-hover: #6366f1;
+  --accent-solid: #4f46e5;
+  --accent-glow: rgba(79, 70, 229, 0.25);
+
+  --color-success: #059669;
+  --color-success-soft: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-success-border: rgba(16, 185, 129, 0.35);
+  --color-error: #dc2626;
+  --color-error-soft: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-error-border: rgba(239, 68, 68, 0.35);
+  --color-warning: #d97706;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-info: #2563eb;
+  --color-info-bg: rgba(59, 130, 246, 0.12);
+  --color-info-soft: #3b82f6;
+
+  --toast-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+  --toast-success-text: #047857;
+  --toast-error-text: #b91c1c;
+  --toast-info-text: #4338ca;
+  --banner-warning-bg: #fef2f2;
+  --banner-warning-text: #991b1b;
+
+  --assign-card-bg: var(--bg-card);
+  --assign-card-hover-bg: var(--bg-input);
+  --assign-card-border: var(--border-main);
+  --assign-actions-border: var(--border-main);
+  --assign-btn-ghost-bg: var(--bg-input);
+  --assign-btn-ghost-border: var(--border-main);
+  --feedback-box-bg: var(--bg-input);
+  --feedback-text: var(--text-main);
+
+  --quiz-accent-tint-bg: rgba(99, 102, 241, 0.1);
+  --quiz-accent-tint-border: rgba(99, 102, 241, 0.25);
+  --quiz-accent-text: #4f46e5;
+  --quiz-num-color: #4338ca;
+  --quiz-correct-color: #059669;
+  --quiz-correct-bg: rgba(16, 185, 129, 0.1);
+  --quiz-mcq-color: #2563eb;
+  --quiz-tf-color: #059669;
+  --quiz-badge-slate-color: var(--text-muted);
+  --quiz-option-bg: var(--bg-input);
+  --quiz-option-border: var(--border-main);
+  --quiz-option-key-bg: var(--bg-elevated);
+  --pulse-error-ring: rgba(239, 68, 68, 0.25);
+
+  --shadow-card: 0 10px 40px -15px rgba(15, 23, 42, 0.12);
+  --shadow-soft: 0 12px 32px -16px rgba(15, 23, 42, 0.15);
+  --overlay-gradient-top: rgba(248, 250, 252, 0.75);
+  --overlay-gradient-bottom: rgba(241, 245, 249, 0.85);
+  --login-card-bg: rgba(255, 255, 255, 0.95);
+  --login-border: rgba(99, 102, 241, 0.2);
+  --chip-bg: #f1f5f9;
+  --chip-border: rgba(99, 102, 241, 0.45);
+  --chip-text: #4338ca;
+  --header-glow: rgba(99, 102, 241, 0.2);
+  --theme-btn-bg: rgba(99, 102, 241, 0.1);
+  --theme-btn-border: rgba(99, 102, 241, 0.35);
+  --theme-btn-color: #4f46e5;
+  --btn-primary-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.25);
+
+  --skeleton-base: #e2e8f0;
+  --skeleton-shine: #f1f5f9;
+  --toast-app-bg: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  --toast-app-border: var(--color-success);
+  --toast-app-glow: rgba(16, 185, 129, 0.25);
+  --toast-app-icon-bg: rgba(16, 185, 129, 0.2);
+  --toast-app-icon-border: rgba(16, 185, 129, 0.45);
+  --toast-app-icon-color: var(--color-success);
+
+  --color-info-pale: #0c4a6e;
+  --color-info-pale-2: #0369a1;
+  --color-success-pale: #065f46;
+  --color-success-pale-2: #047857;
+  --color-success-pale-3: #059669;
+  --color-error-pale: #991b1b;
+  --color-accent-pale: #4338ca;
+  --color-accent-pale-2: #4f46e5;
+
+  --admin-panel-bg: rgba(248, 250, 252, 0.95);
+  --admin-panel-bg-solid: var(--bg-card);
+  --admin-card-bg: var(--bg-card);
+  --admin-card-bg-hover: var(--bg-input);
+  --admin-fields-bg: var(--bg-input);
+  --admin-process-overlay: rgba(15, 23, 42, 0.35);
+
+  --bg-primary: var(--bg-main);
+  --bg-surface: var(--bg-card);
+  --shadow-elevated: 0 4px 16px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 12px 32px rgba(15, 23, 42, 0.1);
+  --shadow-strong: 0 20px 50px rgba(15, 23, 42, 0.12);
+  --shadow-accent: 0 8px 24px rgba(99, 102, 241, 0.15);
+
+  --admin-surface-gradient: linear-gradient(135deg, #ffffff, var(--bg-input));
+  --admin-panel-gradient: linear-gradient(135deg, #ffffff, var(--bg-input));
+  --admin-section-gradient: linear-gradient(135deg, var(--bg-input), var(--bg-card));
+  --admin-border-subtle: var(--border-main);
+  --admin-border-medium: var(--border-accent);
+  --admin-border-input: var(--border-main);
+  --admin-input-bg: var(--bg-input);
+  --admin-hover-surface: var(--bg-input);
+  --admin-row-hover: rgba(99, 102, 241, 0.06);
+  --admin-toggle-active: rgba(99, 102, 241, 0.12);
+  --admin-skeleton-mid: var(--skeleton-shine);
+  --admin-skeleton-base: var(--skeleton-base);
+  --admin-table-header-bg: var(--bg-input);
+  --admin-table-border: var(--border-main);
+  --admin-focus-ring: rgba(99, 102, 241, 0.15);
+  --admin-border-focus: var(--border-accent);
+  --admin-hero-glow: rgba(99, 102, 241, 0.08);
+  --admin-users-cta-gradient: linear-gradient(
+    135deg,
+    var(--color-info-bg),
+    var(--quiz-accent-tint-bg)
+  );
+  --admin-carousel-hover-gradient: linear-gradient(
+    135deg,
+    var(--color-info-bg),
+    var(--quiz-accent-tint-bg)
+  );
+  --admin-summary-icon-applied: linear-gradient(
+    135deg,
+    var(--color-info-bg),
+    var(--bg-input)
+  );
+  --admin-summary-icon-enrolled: linear-gradient(
+    135deg,
+    var(--color-success-bg),
+    var(--bg-input)
+  );
+  --admin-summary-icon-dropped: linear-gradient(
+    135deg,
+    var(--color-error-bg),
+    var(--bg-input)
+  );
+
+  --chat-fab-shadow: 0 12px 32px rgba(15, 23, 42, 0.15), 0 0 24px rgba(59, 130, 246, 0.35);
+  --chat-fab-shadow-hover: 0 16px 40px rgba(15, 23, 42, 0.2), 0 0 32px rgba(59, 130, 246, 0.45);
+  --chat-backdrop-color: rgba(15, 23, 42, 0.35);
+  --chat-backdrop-accent: radial-gradient(
+    circle at 10% 0%,
+    rgba(15, 23, 42, 0.08),
+    transparent 55%
+  );
+  --chat-dialog-accent: radial-gradient(
+    circle at 0% 0%,
+    rgba(59, 130, 246, 0.08),
+    transparent 55%
+  );
+  --chat-dialog-border: var(--border-accent);
+  --chat-dialog-shadow: var(--shadow-strong), 0 0 24px rgba(99, 102, 241, 0.12);
+  --chat-bot-bg: var(--bg-input);
+  --chat-bot-border: var(--border-main);
+  --chat-bot-text: var(--text-main);
+}
+
+/* Shared utility classes for JS-injected markup */
+.nta-header__logo-fallback {
+  display: none;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-gradient);
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text-on-brand);
+}
+
+.global-toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+  pointer-events: none;
+}
+
+.reg-toast {
+  color: var(--text-on-accent);
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  font-size: 0.95rem;
+  text-align: right;
+  direction: rtl;
+  pointer-events: auto;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reg-toast--error {
+  background-color: var(--reg-toast-error-bg);
+}
+
+.reg-toast--success {
+  background-color: var(--reg-toast-success-bg);
+}
+
+.reg-toast__close {
+  background: transparent;
+  border: none;
+  color: var(--text-on-accent);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  margin-right: 10px;
+}
+
+.reg-skills-warning {
+  color: var(--banner-warning-text);
+  background: var(--banner-warning-bg);
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.assign-empty,
+.assign-error,
+.cd-empty-state {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.assign-error {
+  color: var(--color-error);
+}
+
+.assign-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.assign-status--overdue {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.assign-feedback {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--feedback-box-bg);
+  border-radius: 8px;
+  border-right: 3px solid var(--feedback-box-border);
+}
+
+.assign-feedback__label {
+  font-size: 0.75rem;
+  color: var(--feedback-label);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.assign-feedback__text {
+  font-size: 0.8rem;
+  color: var(--feedback-text);
+}
+
+.gq-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border-radius: 1.25rem;
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--toast-shadow);
+  white-space: nowrap;
+  max-width: calc(100vw - 48px);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.gq-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.gq-toast--success {
+  background: var(--toast-success-bg);
+  border: 1px solid var(--toast-success-border);
+  color: var(--toast-success-text);
+}
+
+.gq-toast--error {
+  background: var(--toast-error-bg);
+  border: 1px solid var(--toast-error-border);
+  color: var(--toast-error-text);
+}
+
+.gq-toast--info {
+  background: var(--toast-info-bg);
+  border: 1px solid var(--toast-info-border);
+  color: var(--toast-info-text);
+}
+
+.field-pulse-error {
+  box-shadow: 0 0 0 4px var(--pulse-error-ring);
+}
+
+/* ===== Login / index pages ===== */
+html.light-mode body {
+  color: var(--text-main);
+  background: var(--bg-main);
+}
+
+html.light-mode .login-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(139, 92, 246, 0.08), transparent),
+    radial-gradient(ellipse 50% 30% at 0% 80%, rgba(59, 130, 246, 0.06), transparent);
+}
+
+html.light-mode .login-card {
+  background: var(--login-card-bg);
+  border-color: var(--login-border);
+  box-shadow: var(--shadow-card), 0 0 0 1px var(--border-main);
+}
+
+html.light-mode .login-card h1 {
+  background: linear-gradient(
+    135deg,
+    var(--accent-solid) 0%,
+    var(--accent-hover) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.light-mode .login-card .subtitle,
+html.light-mode p.subtitle {
+  color: var(--text-muted);
+}
+
+html.light-mode .logo-subtitle {
+  color: var(--text-muted);
+}
+
+html.light-mode .form-group label {
+  color: var(--text-muted);
+}
+
+html.light-mode .login-role-toggle {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode .login-role-toggle:hover {
+  border-color: var(--border-accent);
+}
+
+html.light-mode .login-role-option span {
+  color: var(--text-muted);
+}
+
+html.light-mode .login-role-option:hover span {
+  color: var(--text-main);
+  background: var(--quiz-accent-tint-bg);
+}
+
+html.light-mode .login-role-option input:checked + span {
+  background: linear-gradient(
+    135deg,
+    var(--accent-solid) 0%,
+    var(--accent-hover) 100%
+  );
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+html.light-mode .login-input-wrap {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode .login-input-wrap:hover {
+  border-color: var(--border-accent);
+}
+
+html.light-mode .login-input-wrap:focus-within {
+  border-color: var(--accent-solid);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring, var(--accent-glow));
+}
+
+html.light-mode .login-input-icon {
+  color: var(--text-muted);
+}
+
+html.light-mode .login-input-wrap:focus-within .login-input-icon {
+  color: var(--accent-solid);
+}
+
+html.light-mode .login-input-wrap input,
+html.light-mode .login-input-wrap select {
+  color: var(--text-main);
+}
+
+html.light-mode .login-input-wrap input::placeholder {
+  color: var(--text-subtle);
+}
+
+html.light-mode .login-btn {
+  background: linear-gradient(
+    135deg,
+    var(--accent-solid) 0%,
+    var(--accent-hover) 100%
+  );
+  color: var(--text-on-accent);
+}
+
+html.light-mode .login-btn::before {
+  background: linear-gradient(
+    135deg,
+    var(--accent-hover) 0%,
+    var(--accent-solid) 100%
+  );
+}
+
+html.light-mode .login-btn:hover:not(.loading) {
+  box-shadow: var(--btn-primary-shadow);
+}
+
+html.light-mode .login-register-link {
+  color: var(--text-muted);
+}
+
+html.light-mode .login-register-link a {
+  color: var(--accent-solid);
+}
+
+html.light-mode .login-register-link a:hover {
+  color: var(--accent-hover);
+}
+
+html.light-mode .login-register-link a::after {
+  background: linear-gradient(90deg, var(--accent-solid), var(--accent-hover));
+}
+
+html.light-mode .registration-success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode .nta-theme-fab {
+  background: var(--theme-btn-bg);
+  border-color: var(--theme-btn-border);
+  color: var(--theme-btn-color);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ===== Trainee / admin app shell ===== */
+html.light-mode body.trainee-app {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+html.light-mode .trainee-bg {
+  background:
+    linear-gradient(to bottom, var(--overlay-gradient-top), var(--overlay-gradient-bottom)),
+    url("images/analytical-background.png") center top / cover no-repeat fixed;
+  opacity: 0.35;
+}
+
+html.light-mode .trainee-main h1,
+html.light-mode .admin-main h1,
+html.light-mode .course-card__title,
+html.light-mode .nta-header__logo-main,
+html.light-mode .nta-header__label {
+  color: var(--text-main);
+}
+
+/* Admin portal — stage review, panels, KPIs */
+html.light-mode .s1-verdict--accepted,
+html.light-mode .s1-verdict--rejected,
+html.light-mode .s1-reason-card,
+html.light-mode .s1-score-row,
+html.light-mode .s1-review-card,
+html.light-mode .stage-review-card,
+html.light-mode .stage-fields-grid,
+html.light-mode .exam-result-box,
+html.light-mode .s1-process-content {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+html.light-mode .s1-process-modal {
+  background: var(--surface-modal-overlay);
+}
+
+html.light-mode .stage-field__input,
+html.light-mode .stage-field__select,
+html.light-mode .stage-review-input,
+html.light-mode .stage-review-textarea {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .admin-summary-card {
+  background: var(--bg-card);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .course-card,
+html.light-mode .courses-editor-summary-card,
+html.light-mode .admin-summary-card {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .course-card__level-tag,
+html.light-mode .modal-content,
+html.light-mode .table-wrap {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+/* Profile page (الملف الشخصي) — match course cards / app shell */
+html.light-mode .profile-card,
+html.light-mode .profile-data,
+html.light-mode .profile-section--charts .profile-charts,
+html.light-mode .profile-stats__item,
+html.light-mode .profile-kpi,
+html.light-mode .profile-analytics-card,
+html.light-mode .profile-course-card,
+html.light-mode .profile-data__row {
+  background: var(--bg-card, #f1f5f9);
+  border: 1px solid var(--border-main, #cbd5e1);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .profile-data::before,
+html.light-mode .profile-section--charts .profile-charts::before,
+html.light-mode .profile-kpi::before,
+html.light-mode .profile-course-card::before {
+  display: none;
+}
+
+html.light-mode .profile-stats__item {
+  animation: none;
+  background: var(--bg-card, #f1f5f9);
+  border: 1px solid var(--border-main, #cbd5e1);
+}
+
+html.light-mode .profile-section h2,
+html.light-mode .profile-reg__h3,
+html.light-mode .edit-profile-section__title,
+html.light-mode .courses-modal__title {
+  color: var(--accent);
+}
+
+html.light-mode .profile-card__name,
+html.light-mode .profile-data__value,
+html.light-mode .profile-reg__v,
+html.light-mode .profile-reg__multiline,
+html.light-mode .profile-stats__label,
+html.light-mode .profile-stats__value,
+html.light-mode .profile-stats__value--muted,
+html.light-mode .profile-chart__title,
+html.light-mode .profile-kpi__value,
+html.light-mode .profile-chart__legend span {
+  color: var(--text-main);
+}
+
+html.light-mode .profile-data__label,
+html.light-mode .profile-reg__k,
+html.light-mode .profile-card__meta-tag--muted,
+html.light-mode .profile-kpi__label,
+html.light-mode .profile-kpi__value--muted,
+html.light-mode .profile-analytics-card h3 {
+  color: var(--text-muted);
+}
+
+html.light-mode .profile-card__meta-tag {
+  background: var(--bg-input, #f1f5f9);
+  border-color: var(--border-main, #cbd5e1);
+  color: var(--text-main);
+}
+
+html.light-mode .profile-data__row {
+  box-shadow: none;
+}
+
+html.light-mode .profile-data__icon,
+html.light-mode .profile-stats__label-icon {
+  background: var(--bg-input, #f1f5f9);
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+html.light-mode .profile-registration-full,
+html.light-mode .profile-reg__kv {
+  border-color: var(--border-main, #cbd5e1);
+}
+
+html.light-mode .profile-analytics-card:hover {
+  background: var(--bg-card, #f1f5f9);
+  border-color: var(--border-accent);
+}
+
+html.light-mode .courses-modal,
+html.light-mode .edit-profile-section {
+  background: var(--bg-card, #f1f5f9);
+  border-color: var(--border-main, #cbd5e1);
+  color: var(--text-main);
+}
+
+html.light-mode .courses-modal__icon-btn {
+  background: var(--bg-input, #f1f5f9);
+  border-color: var(--border-main, #e2e8f0);
+  color: var(--text-muted, #64748b);
+}
+
+html.light-mode .courses-modal__icon-btn:hover {
+  background: var(--accent, #4f46e5);
+  border-color: var(--accent, #4f46e5);
+  color: #fff;
+}
+
+/* Course details modal — ملخص سريع & تفاصيل البرنامج */
+html.light-mode .course-details-modal__desc {
+  color: var(--text-muted, #64748b);
+}
+
+html.light-mode .course-details-modal__section-title {
+  color: var(--accent, #4f46e5);
+  border-bottom-color: rgba(99, 102, 241, 0.2);
+}
+
+html.light-mode .course-details-modal__stat,
+html.light-mode .course-details-modal__kv-list {
+  background: var(--bg-input, #f8fafc);
+  border-color: var(--border-main, #e2e8f0);
+}
+
+html.light-mode .course-details-modal__stat:hover {
+  border-color: var(--border-accent);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+html.light-mode .course-details-modal__stat-text,
+html.light-mode .course-details-modal__v {
+  color: var(--text-main, #1e293b);
+}
+
+html.light-mode .course-details-modal__k,
+html.light-mode .course-details-modal__meta {
+  color: var(--text-muted, #64748b);
+}
+
+html.light-mode .course-details-modal__kv {
+  border-bottom-color: var(--border-main, #e2e8f0);
+}
+
+html.light-mode .course-details-modal__stat svg {
+  color: var(--accent, #4f46e5);
+}
+
+html.light-mode .course-details-modal__body {
+  scrollbar-color: var(--text-subtle, #94a3b8) var(--bg-input, #f1f5f9);
+}
+
+html.light-mode .course-details-modal__body::-webkit-scrollbar-track {
+  background: var(--bg-input, #f1f5f9);
+}
+
+html.light-mode .course-details-modal__body::-webkit-scrollbar-thumb {
+  background: var(--border-main);
+  box-shadow: none;
+}
+
+html.light-mode .course-details-modal__body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent, #4f46e5);
+  box-shadow: none;
+}
+
+html.light-mode .courses-modal__btn--ghost {
+  background: var(--bg-input, #f8fafc);
+  border: 1px solid var(--border-main, #e2e8f0);
+  color: var(--text-main, #1e293b);
+}
+
+html.light-mode .courses-modal__btn--ghost:hover {
+  background: var(--border-main, #e2e8f0);
+  border-color: var(--border-main, #cbd5e1);
+  color: var(--text-main, #0f172a);
+}
+
+html.light-mode .course-details-modal.courses-modal .courses-modal__footer {
+  border-top-color: var(--border-main, #e2e8f0);
+}
+
+html.light-mode .profile-skills {
+  background: var(--bg-input, #f1f5f9);
+  border-color: var(--border-main, #cbd5e1);
+}
+
+html.light-mode .profile-skill-chip {
+  background: var(--chip-bg, #f1f5f9);
+  border-color: var(--chip-border);
+  color: var(--chip-text);
+}
+
+html.light-mode .edit-profile-hint,
+html.light-mode .courses-modal__label {
+  color: var(--text-muted);
+}
+
+html.light-mode .edit-profile-section,
+html.light-mode .edit-profile-footer {
+  border-color: var(--border-main, #cbd5e1);
+}
+
+html.light-mode .course-card__desc,
+html.light-mode .course-card__meta,
+html.light-mode .courses-editor-summary-card__label,
+html.light-mode .nta-header__logo-sub,
+html.light-mode .nta-header__section-label {
+  color: var(--text-muted);
+}
+
+/* ===== Header ===== */
+html.light-mode .nta-header {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.06), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.06), transparent 55%),
+    var(--bg-header);
+  border-color: var(--border-accent);
+  box-shadow:
+    0 0 0 1px rgba(226, 232, 240, 1),
+    0 0 20px var(--header-glow),
+    0 8px 24px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+html.light-mode .nta-header__chip {
+  background: var(--chip-bg);
+  border-color: var(--chip-border);
+  color: var(--chip-text);
+}
+
+html.light-mode .nta-header__chip.active {
+  color: var(--text-main);
+  box-shadow: 0 0 0 1px var(--border-main), 0 0 12px var(--header-glow);
+}
+
+html.light-mode .nta-header__theme {
+  background: var(--theme-btn-bg);
+  border-color: var(--theme-btn-border);
+  color: var(--theme-btn-color);
+}
+
+html.light-mode .nta-header__btn--logout {
+  color: #b91c1c;
+  border-color: rgba(220, 38, 38, 0.5);
+}
+
+html.light-mode .nta-header__btn--logout:hover {
+  background: rgba(254, 226, 226, 0.8);
+}
+
+/* Trainee & trainer modals / panels */
+html.light-mode .modal-overlay,
+html.light-mode .cd-modal-overlay {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+html.light-mode .modal-content,
+html.light-mode .cd-modal,
+html.light-mode .enroll-modal__card {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border-main);
+}
+
+/* إنشاء حساب جديد — role picker overlay (user/index.html) */
+html.light-mode #roleModal .modal-content h3 {
+  color: var(--accent-solid);
+}
+
+html.light-mode #roleModal .modal-desc {
+  color: var(--text-muted);
+}
+
+html.light-mode #roleModal .role-title {
+  color: var(--text-main);
+}
+
+html.light-mode #roleModal .role-text {
+  color: var(--text-muted);
+}
+
+html.light-mode #roleModal .role-card {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode #roleModal .role-card:hover {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+}
+
+html.light-mode #roleModal .role-icon {
+  background: var(--quiz-accent-tint-bg);
+  color: var(--accent-solid);
+}
+
+html.light-mode #roleModal .role-card:hover .role-icon {
+  background: var(--accent-solid);
+  color: var(--text-on-accent);
+}
+
+html.light-mode #roleModal .modal-cancel {
+  color: var(--text-muted);
+  border-color: var(--border-main);
+}
+
+html.light-mode #roleModal .modal-cancel:hover {
+  color: var(--text-main);
+  background: var(--bg-input);
+}
+
+html.light-mode input,
+html.light-mode select,
+html.light-mode textarea {
+  background: var(--bg-input);
+  color: var(--text-main);
+  border-color: var(--border-main);
+}
+
+/* Chat widget — explicit light surfaces (vars alone can fail on layered backgrounds) */
+html.light-mode .chat-dialog-backdrop {
+  background-color: rgba(15, 23, 42, 0.35);
+  background-image: radial-gradient(
+    circle at 10% 0%,
+    rgba(15, 23, 42, 0.08),
+    transparent 55%
+  );
+}
+
+html.light-mode .chat-dialog {
+  background-color: #ffffff;
+  background-image: radial-gradient(
+    circle at 0% 0%,
+    rgba(59, 130, 246, 0.08),
+    transparent 55%
+  );
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-strong), 0 0 24px rgba(99, 102, 241, 0.12);
+}
+
+html.light-mode .chat-dialog__header,
+html.light-mode .chat-dialog__footer {
+  border-color: var(--border-main);
+}
+
+html.light-mode .chat-dialog__title {
+  color: var(--text-main);
+}
+
+html.light-mode .chat-dialog__subtitle,
+html.light-mode .chat-dialog__close {
+  color: var(--text-muted);
+}
+
+html.light-mode .chat-dialog__bubble--bot,
+html.light-mode .chat-dialog__bubble:not(.chat-dialog__bubble--user) {
+  background-color: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .chat-dialog__input {
+  background-color: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .chat-dialog__send {
+  background: var(--btn-primary-gradient);
+  color: var(--text-on-accent);
+}
+
+/* Theme controls must stay above modals/toasts */
+.nta-header__theme,
+.nta-theme-fab {
+  position: relative;
+  z-index: 10001;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Floating toggle (login pages without header) */
+.nta-theme-fab {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 10001;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--theme-btn-border, rgba(251, 191, 36, 0.4));
+  background: var(--theme-btn-bg, rgba(251, 191, 36, 0.15));
+  color: var(--theme-btn-color, #fbbf24);
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nta-theme-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+[dir="rtl"] .nta-theme-fab {
+  right: auto;
+  left: 1.25rem;
+}

@@ -660,8 +660,15 @@
         if (window.lucide) window.lucide.createIcons();
       }
 
+      function assignAuthHeader() {
+        try {
+          var s = JSON.parse(localStorage.getItem("ntaTrainee") || "{}");
+          return s.token ? { Authorization: "Bearer " + s.token } : {};
+        } catch (e) { return {}; }
+      }
+
       function loadAssignments() {
-        fetch(`/api/assignments/course/${currentCourseId}`)
+        window.authenticatedFetch(`/api/assignments/course/${currentCourseId}`)
           .then((res) => res.json())
           .then((data) => {
             const list = document.getElementById("assignmentList");
@@ -718,6 +725,7 @@
 
         fetch("/api/assignments/create", {
           method: "POST",
+          headers: assignAuthHeader(),
           body: formData,
         })
           .then((res) => res.json())
@@ -735,7 +743,7 @@
         document.getElementById("assignmentListSection").style.display = "none";
         document.getElementById("submissionsSection").style.display = "block";
 
-        fetch(`/api/assignments/${assignId}/submissions`)
+        window.authenticatedFetch(`/api/assignments/${assignId}/submissions`)
           .then((res) => res.json())
           .then((data) => {
             const list = document.getElementById("submissionsList");
@@ -819,6 +827,7 @@
 
         fetch(`/api/assignments/submissions/${subId}/grade`, {
           method: "PATCH",
+          headers: assignAuthHeader(),
           body: formData,
         })
           .then((res) => res.json())

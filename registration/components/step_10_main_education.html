@@ -1,0 +1,235 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Educational Background</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>أعلى مؤهل تعليمي تم الحصول عليه (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="eduHighestDegree" name="eduHighestDegree">
+<option value="">اختر المؤهل</option>
+<option value="higher_degree">
+                        مؤهل عالي (Higher Degree)
+                      </option>
+<option value="above_intermediate">
+                        مؤهل فوق المتوسط (Above Intermediate)
+                      </option>
+<option value="intermediate">
+                        مؤهل متوسط (Intermediate)
+                      </option>
+</select>
+</div>
+</div><div id="eduMainFieldsBlock" style="display: none">
+<div id="mainEducationContainer">
+<div class="main-education-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">مؤهل #1 (Degree #1)</span>
+<button aria-label="حذف المؤهل" class="acc-delete-btn remove-main-edu-btn" style="display: none" title="حذف المؤهل" type="button">
+<span class="acc-delete-btn__icon">✕</span>
+</button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="form-group edu-degree-country-group" style="display: none">
+<label>الدولة / Country (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-degree-country" name="eduDegreeCountry[]">
+<option value="">اختر الدولة</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-institution-group" style="display: none">
+<label>الجامعة / المعهد / University / Institute (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-institution" name="eduInstitution[]">
+<option value="">اختر من القائمة</option>
+<option data-faculty="1" value="cairo_univ">جامعة القاهرة</option>
+<option data-faculty="1" value="ain_shams_univ">جامعة عين شمس</option>
+<option data-faculty="1" value="alex_univ">جامعة الإسكندرية</option>
+<option data-faculty="1" value="assuit_univ">جامعة أسيوط</option>
+<option value="institute">معهد تعليمي</option>
+<option value="secondary_school">مدرسة ثانوية</option>
+<option value="other">أخرى</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-institute-name-group" style="display: none">
+<label>اسم المعهد / Institute Name (اجبارى)</label>
+<input class="edu-institute-name" name="eduInstituteName[]" placeholder="اكتب اسم المعهد" type="text"/>
+</div>
+<div class="form-group edu-school-name-group" style="display: none">
+<label>اسم المدرسة / School Name (اجبارى)</label>
+<input class="edu-school-name" name="eduSchoolName[]" placeholder="اكتب اسم المدرسة" type="text"/>
+</div>
+<div class="form-group edu-college-select-wrap" style="display: none">
+<label>الكلية / الكيان (قائمة) (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-college-faculty-select" name="eduCollegeFacultySelect[]">
+<option value="">اختر الكلية</option>
+</select>
+</div>
+</div>
+<div class="form-group edu-college-text-wrap" style="display: none">
+<label>الكلية / قسم الدراسة بالمعهد / الإدارة التعليمية (اجبارى)</label>
+<input class="edu-college-faculty-text" name="eduCollegeFacultyText[]" placeholder="أدخل الاسم يدويًا" type="text"/>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>التخصص (اجبارى)</label>
+<input class="edu-speciality" name="eduSpeciality[]" placeholder="التخصص أو مجال الدراسة" type="text"/>
+</div>
+<div class="form-group edu-gpa-group" style="display: none">
+<label>المعدل التراكمي (GPA) (اجبارى)</label>
+<input class="edu-gpa" name="eduGpa[]" placeholder="مثال: 3.5 / 4.0" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group edu-total-score-group" style="display: none">
+<label>المجموع (اجبارى)</label>
+<input class="edu-total-score" name="eduTotalScore[]" placeholder="المجموع (رقم)" type="text"/>
+</div>
+<div class="form-group edu-percentage-group" style="display: none">
+<label>النسبة المئوية (اجبارى)</label>
+<input class="edu-percentage" name="eduPercentage[]" placeholder="مثال: 95%" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ التخرج (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-graduation-date" name="eduGraduationDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>صورة شهادة التخرج (إرشادات الرفع: يرجى رفع ملف شهادة التخرج بصيغة PDF أو صورة واضحة JPG/PNG بحجم أقصى 5 ميجابايت) (اختيارى)</label>
+<input accept=".jpg,.jpeg,.png,.pdf" class="graduation-certificate-scan" name="graduationCertificateScan[]" type="file"/><small class="file-upload-hint">📎 الصيغ المقبولة: PDF، JPG، PNG — الحجم الأقصى: 5 ميجابايت — شهادة التخرج أو كشف الدرجات.</small>
+</div>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-main-edu-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                          </button>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline mt-3 mb-4" id="addMainEduBtn" type="button">+ Add Another Entry (إضافة مؤهل آخر)</button>
+<div id="eduPostgraduateSection" style="display: none">
+<hr class="reg-divider"/>
+<div class="form-group">
+<label>درجة علمية أعلى (دراسات عليا) (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="optional-select" id="eduHasPostgraduate" name="eduHasPostgraduate">
+<option value="">اختر</option>
+<option value="yes">نعم / Yes</option>
+<option value="no">لا / No</option>
+</select>
+</div>
+</div>
+<div id="eduPostgraduateDetails" style="display: none">
+<div id="higherEducationContainer">
+<div class="higher-education-card acc-item open mb-3">
+<div class="acc-header accordion-header">
+<span class="acc-title accordion-title">دراسات عليا #1 (Postgraduate #1)</span>
+<button aria-label="حذف الدراسات العليا" class="acc-delete-btn remove-higher-edu-btn" style="display: none" title="حذف الدراسات العليا" type="button">
+                              ✕
+                            </button>
+<svg class="acc-chevron accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 9l6 6 6-6"></path>
+</svg>
+</div>
+<div class="acc-body accordion-body">
+<div class="reg-form__row">
+<div class="form-group">
+<label>الدرجة (ماجستير - دكتوراه) (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-pg-degree-type" name="eduPostgraduateDegreeType[]">
+<option value="">اختر</option>
+<option value="master">Master / ماجستير</option>
+<option value="phd">PHD / دكتوراه</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة المانحة للدرجة (اجبارى)
+</label>
+<input class="edu-degree-issuer-entity" name="eduDegreeIssuerEntity[]" placeholder="الجهة التي أصدرت الدرجة" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>التخصص الرئيسي للدرجة (اجبارى)
+</label>
+<input class="edu-main-speciality-pg" name="eduMainSpecialityPg[]" placeholder="التخصص الرئيسي" type="text"/>
+</div>
+<div class="form-group">
+<label>التخصص الفرعي (اختيارى)
+</label>
+<input class="edu-secondary-speciality-pg" name="eduSecondarySpecialityPg[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تاريخ البدء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-start-date" name="eduPgStartDate[]" type="date"/>
+</div>
+</div>
+<div class="form-group">
+<label>تاريخ الانتهاء (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--date">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--calendar"></span>
+<input class="edu-pg-end-date" name="eduPgEndDate[]" type="date"/>
+</div>
+</div>
+</div>
+<div class="reg-form__row">
+<div class="form-group">
+<label>تمويل شخصي أم جهة خارجية (اختيارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select class="edu-funding optional-select" name="eduFunding[]">
+<option value="">اختر</option>
+<option value="personal">شخصي / Personally</option>
+<option value="third_party">جهة خارجية / Third Party</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>اسم الجهة التي رشحتك (اختيارى)
+</label>
+<input class="edu-recommending-entity" name="eduRecommendingEntity[]" placeholder="اختياري" type="text"/>
+</div>
+</div>
+<div class="form-group edu-scholarship-group" style="display: none">
+<label>اسم جهة المنحة (اختيارى)
+</label>
+<input class="edu-scholarship-entity" name="eduScholarshipEntity[]" placeholder="اسم الجهة المانحة للمنحة" type="text"/>
+</div>
+<div class="acc-actions">
+<button class="reg-btn reg-btn--danger remove-higher-edu-btn" style="display: none;" type="button">
+<span class="reg-btn__icon">✕</span> حذف (Remove)
+                              </button>
+</div>
+</div>
+</div>
+</div>
+<button class="reg-btn reg-btn--outline mt-3 mb-4" id="addHigherEduBtn" type="button">+ Add Another Entry (إضافة دراسة عليا أخرى)</button>
+</div>
+</div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

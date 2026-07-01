@@ -1,0 +1,41 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Activities & Social</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>هل ترشحت لأي منصب سياسي؟ (اختيارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="hasPoliticalCandidacy" name="hasPoliticalCandidacy">
+<option value="">اختر</option>
+<option value="yes">نعم</option>
+<option value="no">لا</option>
+</select>
+</div>
+</div><div id="politicalCandidacyBlock" style="display: none">
+<div class="form-group">
+<label>اسم المنصب السياسي (اجبارى)</label>
+<input dir="auto" id="candidacyPositionName" name="candidacyPositionName" placeholder="المسمى المرشح له" type="text"/>
+</div>
+<div class="form-group">
+<label>النتيجة (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="candidacyResult" name="candidacyResult">
+<option value="">اختر</option>
+<option value="elected">
+                          تم الانتخاب / فوز
+                        </option>
+<option value="not_elected">
+                          لم يتم الانتخاب
+                        </option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label>وصف تجربة الترشح (اجبارى)</label>
+<input dir="auto" id="candidacyExperienceDescription" name="candidacyExperienceDescription" placeholder="تفاصيل التجربة" type="text"/>
+</div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

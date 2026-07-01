@@ -143,6 +143,8 @@ async def get_trainees(
     stage: Optional[int] = Query(None),
     role: Optional[str] = Query(None),
     course_id: Optional[int] = Query(None),
+    limit: int = Query(1000, ge=1, le=5000),
+    offset: int = Query(0, ge=0),
     staff: dict = Depends(get_staff_user),
 ):
     db = get_db_connection()
@@ -194,6 +196,9 @@ async def get_trainees(
         if course_id is not None:
             query += " AND a.course_id = %s"
             params.append(course_id)
+
+        query += " ORDER BY u.id DESC LIMIT %s OFFSET %s"
+        params.extend([limit, offset])
 
         cursor.execute(query, tuple(params))
         results = cursor.fetchall()
@@ -671,7 +676,7 @@ async def submit_review(
         raise
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -1205,7 +1210,7 @@ async def create_security_decision(
         raise
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -1230,7 +1235,7 @@ async def get_security_decisions(
         results = cursor.fetchall()
         return results
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()

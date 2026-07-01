@@ -1,0 +1,24 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Identity & Military</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>الموقف من التجنيد (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="militaryStatus" name="militaryStatus" required="">
+<option value="">اختر الموقف</option>
+<option value="completed">أدى الخدمة</option>
+<option value="exempted">إعفاء</option>
+<option value="postponed">تأجيل</option>
+<option value="currently_serving">
+                          مجند حالياً
+                        </option>
+</select>
+</div>
+</div><div class="form-group" id="militaryReasonGroup" style="display: none">
+<label>سبب الموقف من التجنيد (اجبارى عند الاختيار)</label>
+<input id="militaryReason" name="militaryReason" placeholder="اكتب سبب الموقف من التجنيد" type="text"/>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

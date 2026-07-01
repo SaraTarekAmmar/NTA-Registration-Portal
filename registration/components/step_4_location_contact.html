@@ -1,0 +1,42 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Contact Details</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label>دولة الإقامة (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="countryOfStay" name="countryOfStay" required="">
+<option value="">اختر الدولة</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>المحافظة أو الولاية (اجبارى)</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="governmentOrState" name="governmentOrState" required="">
+<option value="">اختر المحافظة / الولاية</option>
+</select>
+</div>
+</div><div class="form-group">
+<label>المدينة (اجبارى)</label>
+<input name="city" pattern="^[\u0600-\u06FFa-zA-Z0-9\s]+$" placeholder="أدخل المدينة" required="" type="text"/>
+</div><div class="form-group">
+<label>العنوان (اجبارى)</label>
+<input minlength="10" name="address" placeholder="أدخل عنوانًا تفصيليًا" required="" type="text"/>
+</div><div class="form-group">
+<label>رقم الموبايل الأول (اجبارى)</label>
+<input name="mobileNumber1" placeholder="+201..." required="" type="tel"/>
+</div><div class="form-group">
+<label>رقم الموبايل الثاني (اختيارى)</label>
+<input name="mobileNumber2" placeholder="+201..." type="tel"/>
+</div><div class="form-group">
+<label>رقم الواتساب (اجبارى)</label>
+<input id="whatsappNumber" name="whatsappNumber" placeholder="+201..." required="" type="tel"/>
+<label style="display: flex; align-items: center; gap: 5px; margin-top: 5px; cursor: pointer; font-size: 0.85rem; user-select: none;">
+<input id="whatsappSameAsMobile" style="width: auto; margin: 0;" type="checkbox"/>
+هو نفس الموبايل
+</label>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

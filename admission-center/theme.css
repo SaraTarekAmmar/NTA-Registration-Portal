@@ -1,0 +1,895 @@
+/**
+ * Admin portal light-mode polish — pairs with html.light-mode from /common/js/theme.js
+ * Load after theme.css, trainee.css, admin.css, and admin-portal.css.
+ */
+
+/* ── Light mode: titles & accents stay readable ── */
+
+html.light-mode .admin-charts-section__title,
+html.light-mode .admin-section__title,
+html.light-mode .admin-stages-legend__label,
+html.light-mode .admin-stages-legend__item b {
+  color: var(--accent-solid);
+}
+
+html.light-mode .admin-summary-card--applied .admin-summary-card__value {
+  color: var(--color-info);
+}
+
+html.light-mode .admin-summary-card--enrolled .admin-summary-card__value {
+  color: var(--color-success);
+}
+
+html.light-mode .admin-summary-card--dropped .admin-summary-card__value {
+  color: var(--color-error);
+}
+
+html.light-mode .admin-summary-card__icon {
+  box-shadow: var(--shadow-elevated);
+}
+
+html.light-mode .admin-users-cta__link {
+  background: var(--color-info-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .admin-users-cta__link:hover {
+  color: var(--accent);
+  box-shadow: var(--shadow-accent);
+}
+
+html.light-mode .admin-users-cta__icon {
+  background: var(--color-info-bg);
+}
+
+html.light-mode .admin-hero::before {
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.08) 0%,
+    transparent 70%
+  );
+}
+
+html.light-mode .admin-profile-stage {
+  background: var(--bg-surface);
+  border-color: var(--border-accent);
+}
+
+html.light-mode .admin-profile__meta-chip {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .admin-profile__meta-chip--accent {
+  color: var(--accent-solid);
+  border-color: var(--border-accent);
+}
+
+/* Trainee cards inside admin users grid */
+html.light-mode .admin-cards-grid .course-card,
+html.light-mode .admin-carousel__track .course-card {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .admin-empty-state {
+  color: var(--text-muted);
+}
+
+/* Modals / overlays */
+html.light-mode .admin-modal__dialog,
+html.light-mode .admin-modal__dialog--success {
+  background: var(--bg-surface-solid);
+  color: var(--text-main);
+  box-shadow: var(--shadow-strong);
+}
+
+html.light-mode .admin-modal__dialog {
+  border-color: var(--color-error-border);
+}
+
+html.light-mode .admin-modal__dialog--success {
+  border-color: var(--color-success-border);
+}
+
+html.light-mode .admin-modal__title {
+  color: var(--color-error);
+}
+
+html.light-mode .admin-modal__dialog--success .admin-modal__title {
+  color: var(--color-success);
+}
+
+html.light-mode .admin-modal-overlay,
+html.light-mode .cd-modal-overlay {
+  background: var(--surface-modal-overlay);
+}
+
+html.light-mode .cd-modal {
+  background: var(--bg-surface-solid);
+  color: var(--text-main);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-strong);
+}
+
+/* Recommendations page (inline styles) */
+html.light-mode .rec-hero {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .rec-hero__badge {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .rec-back {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .rec-back:hover {
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+/* Recommendations — sidenav, KPIs, panels, cards */
+html.light-mode .rec-sidenav,
+html.light-mode .rec-kpi,
+html.light-mode .rec-panel,
+html.light-mode .rec-filter-bar,
+html.light-mode .rec-trainee-card,
+html.light-mode .rec-table-wrap,
+html.light-mode .rec-analytics-placeholder,
+html.light-mode .rec-user-header,
+html.light-mode .rec-chart-box,
+html.light-mode .rec-skills-panel,
+html.light-mode .rec-quickstat,
+html.light-mode .rec-engine-stats,
+html.light-mode .rec-course-card,
+html.light-mode .rec-cards-outer,
+html.light-mode .rec-card,
+html.light-mode .rec-course-strip {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .rec-cards-filter-bar,
+html.light-mode .rec-table-head {
+  background: var(--bg-input);
+}
+
+html.light-mode .rec-kpi__val,
+html.light-mode .rec-panel h2,
+html.light-mode .rec-panel h3,
+html.light-mode .rec-quickstat__val,
+html.light-mode .rec-score-chip__val {
+  color: var(--text-main);
+}
+
+html.light-mode .rec-kpi__lbl,
+html.light-mode .rec-panel p,
+html.light-mode .rec-filter-bar__label {
+  color: var(--text-muted);
+}
+
+html.light-mode .rec-sidenav__btn {
+  color: var(--text-muted);
+}
+
+html.light-mode .rec-sidenav__btn:hover,
+html.light-mode .rec-sidenav__btn.active {
+  color: var(--accent-solid);
+}
+
+html.light-mode .rec-search {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .rec-table th {
+  background: var(--bg-input);
+  color: var(--text-main);
+}
+
+html.light-mode .rec-table td {
+  color: var(--text-main);
+  border-bottom-color: var(--border-main);
+}
+
+html.light-mode .rec-table tbody tr:hover {
+  background: var(--admin-row-hover);
+}
+
+html.light-mode .rec-table-pill,
+html.light-mode .rec-skill-chip {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .rec-score-chip {
+  background: var(--bg-input);
+}
+
+html.light-mode .rec-course-pill {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .rec-course-pill:hover,
+html.light-mode .rec-course-pill.active {
+  color: var(--accent-solid);
+}
+
+html.light-mode .rec-course-card.active {
+  background: var(--admin-toggle-active);
+}
+
+/* AI insights panel — lighter card, dark readable text */
+html.light-mode .rec-ai-panel {
+  background: var(--bg-surface);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .rec-ai-panel__left {
+  border-left-color: var(--border-main);
+}
+
+html.light-mode .rec-ai-panel__heading,
+html.light-mode .rec-ai-stat__val {
+  color: var(--text-main);
+}
+
+html.light-mode .rec-ai-panel__text,
+html.light-mode .rec-ai-mat-list li {
+  color: var(--text-muted);
+}
+
+html.light-mode .rec-ai-panel__icon,
+html.light-mode .rec-ai-stat__label {
+  color: var(--accent-solid);
+}
+
+html.light-mode .rec-ai-stat {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+}
+
+html.light-mode .rec-ai-stat__sub {
+  color: var(--text-muted);
+}
+
+/* Attendance page */
+html.light-mode .adm-att-wrap .admin-section,
+html.light-mode .adm-att-card {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+}
+
+/* Permissions page */
+html.light-mode .perm-wrap .admin-section {
+  background: var(--bg-surface);
+  border-color: var(--border-main);
+}
+
+/* Course editor extra actions (admin-courses inline) */
+html.light-mode .course-card__extra-actions {
+  border-top-color: var(--border-main);
+}
+
+/* Stage tabs */
+html.light-mode .admin-stage-tab {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .admin-stage-tab.active {
+  background: var(--admin-toggle-active);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .admin-stage-panel {
+  color: var(--text-main);
+}
+
+/* Dropdowns native */
+html.light-mode select,
+html.light-mode .admin-stage-filter__select {
+  color: var(--text-main);
+}
+
+html.light-mode .admin-stage-filter__select option {
+  background: var(--bg-surface-solid);
+  color: var(--text-main);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   لوحة التحكم · قائمة المرشحين · قائمة المتدربين · الإذونات
+   Inline page styles → light surfaces & readable text
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Shared: course cards (admin grids using trainee.css) ── */
+html.light-mode .course-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .course-card::before {
+  display: none;
+}
+
+html.light-mode .course-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px) scale(1.01);
+}
+
+html.light-mode .course-card__title {
+  color: var(--text-main);
+}
+
+html.light-mode .course-card__desc,
+html.light-mode .course-card__meta {
+  color: var(--text-muted);
+}
+
+html.light-mode .course-card__meta span {
+  background: var(--bg-input);
+  border: 1px solid var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .course-card__level-tag {
+  background: var(--bg-input);
+  border: 1px solid var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .course-card__image-wrap,
+html.light-mode .course-card__image-placeholder {
+  background: linear-gradient(135deg, var(--bg-input), var(--border-main));
+}
+
+/* ── لوحة التحكم (admin.html) ── */
+html.light-mode .adm-hero {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .adm-hero__title {
+  color: var(--text-main);
+}
+
+html.light-mode .adm-hero__sub {
+  color: var(--text-muted);
+}
+
+html.light-mode .adm-kpi {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+  animation: admKpiEnter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+html.light-mode .at-kpi {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+  animation: kpi-enter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+html.light-mode .adm-kpi:hover,
+html.light-mode .at-kpi:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card);
+}
+
+html.light-mode .adm-kpi__val,
+html.light-mode .at-kpi__val {
+  color: var(--text-main);
+  text-shadow: none;
+}
+
+html.light-mode .adm-kpi__lbl,
+html.light-mode .at-kpi__lbl {
+  color: var(--text-muted);
+}
+
+html.light-mode .adm-kpi--blue .adm-kpi__icon,
+html.light-mode .at-kpi--students .at-kpi__icon {
+  background: var(--color-info-bg);
+  border-color: var(--border-accent);
+  color: var(--color-info);
+}
+
+html.light-mode .adm-kpi--green .adm-kpi__icon,
+html.light-mode .at-kpi--att .at-kpi__icon {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode .adm-kpi--red .adm-kpi__icon {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error);
+}
+
+html.light-mode .at-kpi--avg .at-kpi__icon {
+  background: var(--color-warning-bg);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: var(--color-warning);
+}
+
+html.light-mode .at-kpi--top .at-kpi__icon {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--color-info);
+}
+
+html.light-mode .adm-chart-card {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .adm-chart-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card);
+}
+
+html.light-mode .adm-chart-card__title,
+html.light-mode .adm-chart-card__header {
+  color: var(--text-main);
+}
+
+html.light-mode .adm-chart-card__icon {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .adm-chart-legend-item {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .adm-stages-wrap {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+html.light-mode .adm-stages-label {
+  color: var(--text-muted);
+}
+
+html.light-mode .adm-stage-item {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .adm-stage-item:hover {
+  background: var(--admin-toggle-active);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .adm-cta {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  color: var(--text-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .adm-cta:hover {
+  box-shadow: var(--shadow-card);
+}
+
+html.light-mode .adm-cta--candidates:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .adm-cta--trainees:hover {
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode .adm-cta__title {
+  color: var(--text-main);
+}
+
+html.light-mode .adm-cta__sub {
+  color: var(--text-muted);
+}
+
+/* ── قائمة المرشحين (admin-users.html) ── */
+html.light-mode .au-stage-pills,
+html.light-mode .at-course-strip {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+html.light-mode .au-stage-pill,
+html.light-mode .at-course-pill {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .au-stage-pill:hover,
+html.light-mode .at-course-pill:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .au-stage-pill.active,
+html.light-mode .at-course-pill.active {
+  background: var(--admin-toggle-active);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .au-card,
+html.light-mode .at-card {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .au-card:hover,
+html.light-mode .at-card:hover {
+  box-shadow: var(--shadow-card);
+  border-color: var(--border-accent);
+}
+
+html.light-mode .au-card__name,
+html.light-mode .at-card__name {
+  color: var(--text-main);
+}
+
+html.light-mode .au-card__meta,
+html.light-mode .at-card__meta,
+html.light-mode .at-card__att-label {
+  color: var(--text-muted);
+}
+
+html.light-mode .au-card__img-placeholder,
+html.light-mode .at-card__img-placeholder {
+  color: var(--accent-solid);
+  background: linear-gradient(
+    135deg,
+    var(--quiz-accent-tint-bg),
+    var(--color-info-bg)
+  );
+}
+
+html.light-mode .au-card__stage-badge,
+html.light-mode .at-card__stage-badge {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  color: var(--text-main);
+}
+
+html.light-mode .au-card__cat-badge,
+html.light-mode .at-card__cat-badge {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .au-card__progress-label {
+  color: var(--text-muted);
+}
+
+html.light-mode .au-card__progress-label span {
+  color: var(--text-muted);
+}
+
+html.light-mode .au-card__progress-bar {
+  background: var(--bg-input);
+}
+
+html.light-mode .at-card__att-bar,
+html.light-mode .at-card__img-prog {
+  background: var(--bg-input);
+}
+
+html.light-mode .at-card__att-val {
+  color: var(--color-success);
+}
+
+html.light-mode .at-card__btn {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .at-card__btn:hover {
+  background: var(--admin-toggle-active);
+  border-color: var(--accent-solid);
+  box-shadow: var(--shadow-soft);
+  color: var(--accent-solid);
+}
+
+html.light-mode .au-card__btn {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .au-card__btn:hover {
+  background: var(--admin-toggle-active);
+  color: var(--accent-solid);
+}
+
+/* ── إدارة الإذونات (admin-permissions.html) ── */
+html.light-mode .perm-card {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .perm-card--pending {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .perm-card--pending:hover {
+  border-color: var(--color-warning);
+  box-shadow: var(--shadow-card);
+}
+
+html.light-mode .perm-card__name {
+  color: var(--text-main);
+}
+
+html.light-mode .perm-card__course {
+  color: var(--color-info);
+}
+
+html.light-mode .perm-card__day,
+html.light-mode .perm-card__meta-label {
+  color: var(--text-muted);
+}
+
+html.light-mode .perm-card__reason {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .perm-card__type--absent {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error);
+}
+
+html.light-mode .perm-card__type--late {
+  background: var(--color-warning-bg);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: var(--color-warning);
+}
+
+html.light-mode .perm-card__type--early {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+}
+
+html.light-mode .perm-card__type--defer {
+  background: var(--color-info-bg);
+  border-color: var(--border-accent);
+  color: var(--color-info);
+}
+
+html.light-mode .perm-card__type--exam {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: var(--color-purple-dark);
+}
+
+html.light-mode .perm-action-btn--accept {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode .perm-action-btn--reject {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error);
+}
+
+html.light-mode .perm-status-badge--accepted {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+html.light-mode .perm-status-badge--rejected {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error);
+}
+
+html.light-mode .perm-empty {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .perm-title {
+  color: var(--text-main);
+}
+
+html.light-mode .perm-subtitle {
+  color: var(--text-muted);
+}
+
+/* Admin section shell on list pages */
+html.light-mode .admin-section,
+html.light-mode .admin-hero--compact {
+  background: var(--admin-section-gradient);
+  border-color: var(--border-main);
+}
+
+html.light-mode .admin-main h1,
+html.light-mode .admin-section h1 {
+  color: var(--text-main);
+}
+
+/* Page hero (قائمة المرشحين / قائمة المتدربين) */
+html.light-mode .admin-hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .admin-hero h1 {
+  color: var(--text-main);
+}
+
+html.light-mode .admin-hero__subtitle {
+  color: var(--text-muted);
+}
+
+/* Section header bar inside admin-section */
+html.light-mode .au-header__title,
+html.light-mode .at-header__title {
+  color: var(--text-main);
+}
+
+html.light-mode .au-header__count,
+html.light-mode .at-count {
+  background: var(--quiz-accent-tint-bg);
+  border: 1px solid var(--border-accent);
+  color: var(--accent-solid);
+}
+
+/* Search (au-search / at-search — not .admin-search) */
+html.light-mode .au-search,
+html.light-mode .at-search {
+  background: var(--bg-input);
+  border: 1px solid var(--border-main);
+}
+
+html.light-mode .au-search:focus-within,
+html.light-mode .at-search:focus-within {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 2px var(--admin-focus-ring);
+}
+
+html.light-mode .au-search svg,
+html.light-mode .at-search svg {
+  color: var(--text-muted);
+}
+
+html.light-mode .au-search input,
+html.light-mode .at-search input {
+  color: var(--text-main);
+}
+
+html.light-mode .au-search input::placeholder,
+html.light-mode .at-search input::placeholder {
+  color: var(--text-subtle);
+}
+
+/* View toggle & sort wand */
+html.light-mode .au-view-btn,
+html.light-mode .at-wand-btn {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+html.light-mode .au-view-btn:hover,
+html.light-mode .at-wand-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+  background: var(--quiz-accent-tint-bg);
+  box-shadow: var(--shadow-soft);
+}
+
+html.light-mode .au-view-btn.active,
+html.light-mode .at-wand-btn.active {
+  background: var(--admin-toggle-active);
+  border-color: var(--border-accent);
+  color: var(--accent-solid);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Card skeleton loading */
+html.light-mode .au-skel-card,
+html.light-mode .at-skel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+}
+
+html.light-mode .au-skel-img,
+html.light-mode .au-skel-line,
+html.light-mode .au-skel-btn,
+html.light-mode .at-skel-img,
+html.light-mode .at-skel-line,
+html.light-mode .at-skel-btn {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 75%
+  );
+}
+
+html.light-mode .au-empty,
+html.light-mode .at-empty {
+  background: var(--bg-input);
+  border-color: var(--border-main);
+  color: var(--text-muted);
+}
+
+/* Table view (candidates list) */
+html.light-mode .au-table-wrap {
+  background: var(--bg-card);
+  border-color: var(--border-main);
+}
+
+html.light-mode .au-table th {
+  background: var(--bg-input);
+  color: var(--text-muted);
+}
+
+html.light-mode .au-table td {
+  color: var(--text-main);
+  border-bottom-color: var(--border-main);
+}
+
+html.light-mode .au-table tbody tr:hover {
+  background: var(--admin-row-hover);
+}
+
+html.light-mode .au-table__avatar {
+  background: var(--quiz-accent-tint-bg);
+  border-color: var(--border-accent);
+}
+
+html.light-mode .au-table__avatar-fallback {
+  color: var(--accent-solid);
+}

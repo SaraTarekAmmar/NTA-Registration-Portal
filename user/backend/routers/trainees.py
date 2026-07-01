@@ -439,7 +439,7 @@ async def register_trainee(request: Request, data: TraineeRegistration):
                                     os.remove(full_path)
         except Exception as cleanup_e:
             pass
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -575,7 +575,7 @@ async def apply_to_course(data: CourseApplication, current_user: dict = Depends(
         raise he
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -772,7 +772,7 @@ async def update_profile(trainee_id: int, data: TraineeUpdate, current_user: dic
         raise
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -884,7 +884,7 @@ async def get_course_details(course_id: int, current_user: dict = Depends(get_cu
             "progress": progress
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()

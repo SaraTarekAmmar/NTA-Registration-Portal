@@ -123,7 +123,7 @@ async def run_full_admission_check(trainee_id: int, course_id: int = 1, staff: d
             raise HTTPException(status_code=500, detail=result.get("error"))
             
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/id/extract")
 async def extract_id_data(trainee_id: int, course_id: int = 1, staff: dict = Depends(get_staff_user)):

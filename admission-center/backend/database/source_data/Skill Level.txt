@@ -1,0 +1,792 @@
+[
+  {
+    "category_id": 1,
+    "name_en": "Technical Skills",
+    "name_ar": "المهارات التقنية",
+    "subcategories": [
+      {
+        "subcategory_id": 1,
+        "name_en": "Software Development",
+        "name_ar": "تطوير البرمجيات",
+        "skills": [
+          {"skill_id": 1, "name_en": "Frontend Development", "name_ar": "تطوير الواجهة الأمامية"},
+          {"skill_id": 2, "name_en": "Backend Development", "name_ar": "تطوير الخلفية"},
+          {"skill_id": 3, "name_en": "Fullstack Development", "name_ar": "تطوير كامل"},
+          {"skill_id": 4, "name_en": "Mobile App Development", "name_ar": "تطوير تطبيقات الهواتف"},
+          {"skill_id": 5, "name_en": "API Design & Integration", "name_ar": "تصميم ودمج واجهات برمجة التطبيقات"},
+          {"skill_id": 6, "name_en": "Infrastructure as Code (IaC)", "name_ar": "البنية التحتية كبرمجيات"},
+          {"skill_id": 7, "name_en": "Microservices & Serverless Architecture", "name_ar": "بنية الخدمات المصغرة والحوسبة بدون خادم"},
+          {"skill_id": 8, "name_en": "AI-Assisted Coding & Prompt Engineering", "name_ar": "البرمجة بمساعدة الذكاء الاصطناعي"},
+          {"skill_id": 9, "name_en": "API Security & Management", "name_ar": "أمن وإدارة واجهات برمجة التطبيقات"},
+          {"skill_id": 10, "name_en": "Legacy System Integration", "name_ar": "تكامل الأنظمة القديمة"}
+        ]
+      },
+      {
+        "subcategory_id": 2,
+        "name_en": "Data & Analytics",
+        "name_ar": "البيانات والتحليلات",
+        "skills": [
+          {"skill_id": 11, "name_en": "Data Analysis", "name_ar": "تحليل البيانات"},
+          {"skill_id": 12, "name_en": "Data Visualization", "name_ar": "تصوير البيانات"},
+          {"skill_id": 13, "name_en": "Data Modeling", "name_ar": "نمذجة البيانات"},
+          {"skill_id": 14, "name_en": "Real-time Data Streaming (Kafka/Flink)", "name_ar": "بث البيانات في الوقت الفعلي"},
+          {"skill_id": 15, "name_en": "Data Storytelling & Literacy", "name_ar": "سرد القصص من خلال البيانات والوعي المعلوماتي"},
+          {"skill_id": 16, "name_en": "Automated Machine Learning (AutoML)", "name_ar": "التعلم الآلي المؤتمت"},
+          {"skill_id": 17, "name_en": "Data Privacy Engineering", "name_ar": "هندسة خصوصية البيانات"},
+          {"skill_id": 18, "name_en": "Vector Databases (for AI)", "name_ar": "قواعد البيانات الشعاعية"}
+        ]
+      },
+      {
+        "subcategory_id": 3,
+        "name_en": "AI & Machine Learning",
+        "name_ar": "الذكاء الاصطناعي والتعلم الآلي",
+        "skills": [
+          {"skill_id": 19, "name_en": "Machine Learning", "name_ar": "التعلم الآلي"},
+          {"skill_id": 20, "name_en": "Deep Learning", "name_ar": "التعلم العميق"},
+          {"skill_id": 21, "name_en": "Natural Language Processing (NLP)", "name_ar": "معالجة اللغة الطبيعية"},
+          {"skill_id": 22, "name_en": "Predictive Modeling", "name_ar": "النمذجة التنبؤية"},
+          {"skill_id": 23, "name_en": "MLOps (Machine Learning Operations)", "name_ar": "عمليات التعلم الآلي"},
+          {"skill_id": 24, "name_en": "Generative AI & LLM Fine-tuning", "name_ar": "الذكاء الاصطناعي التوليدي وضبط النماذج اللغوية"},
+          {"skill_id": 25, "name_en": "Explainable AI (XAI)", "name_ar": "الذكاء الاصطناعي القابل للتفسير"},
+          {"skill_id": 26, "name_en": "AI Ethics & Bias Mitigation", "name_ar": "أخلاقيات الذكاء الاصطناعي والحد من الانحياز"},
+          {"skill_id": 27, "name_en": "Agentic System Design", "name_ar": "تصميم الأنظمة الوكيلة"}
+        ]
+      },
+      {
+        "subcategory_id": 4,
+        "name_en": "Cloud & Networking",
+        "name_ar": "الحوسبة السحابية والشبكات",
+        "skills": [
+          {"skill_id": 28, "name_en": "Cloud Architecture", "name_ar": "هندسة السحابة"},
+          {"skill_id": 29, "name_en": "AWS / Azure / GCP", "name_ar": "خدمات AWS / Azure / GCP"},
+          {"skill_id": 30, "name_en": "Network Management", "name_ar": "إدارة الشبكات"},
+          {"skill_id": 31, "name_en": "Edge Computing & Fog Networking", "name_ar": "حوسبة الحافة والشبكات الضبابية"},
+          {"skill_id": 32, "name_en": "Multi-Cloud Orchestration", "name_ar": "تنسيق السحابة المتعددة"},
+          {"skill_id": 33, "name_en": "Software-Defined Networking (SDN)", "name_ar": "الشبكات المعرفة بالبرمجيات"},
+          {"skill_id": 34, "name_en": "Site Reliability Engineering (SRE)", "name_ar": "هندسة موثوقية الموقع"},
+          {"skill_id": 35, "name_en": "FinOps (Cloud Cost Management)", "name_ar": "إدارة تكاليف السحابة"}
+        ]
+      },
+      {
+        "subcategory_id": 5,
+        "name_en": "Cybersecurity",
+        "name_ar": "الأمن السيبراني",
+        "skills": [
+          {"skill_id": 36, "name_en": "Network Security", "name_ar": "أمن الشبكات"},
+          {"skill_id": 37, "name_en": "Information Security", "name_ar": "أمن المعلومات"},
+          {"skill_id": 38, "name_en": "Penetration Testing", "name_ar": "اختبار الاختراق"},
+          {"skill_id": 39, "name_en": "Zero Trust Architecture", "name_ar": "بنية الثقة الصفرية"},
+          {"skill_id": 40, "name_en": "DevSecOps Integration", "name_ar": "دمج الأمن في عمليات التطوير"},
+          {"skill_id": 41, "name_en": "Cloud Security Posture Management (CSPM)", "name_ar": "إدارة وضع أمن السحابة"},
+          {"skill_id": 42, "name_en": "Incident Response & Digital Forensics", "name_ar": "الاستجابة للحوادث والتحقيق الرقمي"},
+          {"skill_id": 43, "name_en": "Post-Quantum Cryptography", "name_ar": "تشفير ما بعد الحوسبة الكمية"}
+        ]
+      },
+      {
+        "subcategory_id": 6,
+        "name_en": "Digital Transformation",
+        "name_ar": "التحول الرقمي",
+        "skills": [
+          {"skill_id": 44, "name_en": "Process Automation (RPA)", "name_ar": "أتمتة العمليات (RPA)"},
+          {"skill_id": 45, "name_en": "Digital Strategy & Execution", "name_ar": "الاستراتيجية الرقمية والتنفيذ"},
+          {"skill_id": 46, "name_en": "Change Management", "name_ar": "إدارة التغيير"},
+          {"skill_id": 47, "name_en": "Legacy System Modernization", "name_ar": "تحديث الأنظمة القديمة"},
+          {"skill_id": 48, "name_en": "Digital Leadership", "name_ar": "القيادة الرقمية"}
+        ]
+      },
+      {
+        "subcategory_id": 7,
+        "name_en": "Engineering & Manufacturing",
+        "name_ar": "الهندسة والتصنيع",
+        "skills": [
+          {"skill_id": 49, "name_en": "CAD / CAM Design", "name_ar": "تصميم CAD / CAM"},
+          {"skill_id": 50, "name_en": "Robotics Engineering", "name_ar": "هندسة الروبوتات"},
+          {"skill_id": 51, "name_en": "PLM (Product Lifecycle Management)", "name_ar": "إدارة دورة حياة المنتج (PLM)"},
+          {"skill_id": 52, "name_en": "Quality Control & Assurance", "name_ar": "مراقبة وضمان الجودة"},
+          {"skill_id": 53, "name_en": "Additive Manufacturing (3D Printing)", "name_ar": "التصنيع الإضافي (الطباعة ثلاثية الأبعاد)"}
+        ]
+      },
+      {
+        "subcategory_id": 8,
+        "name_en": "IoT & Embedded Systems",
+        "name_ar": "إنترنت الأشياء والأنظمة المدمجة",
+        "skills": [
+          {"skill_id": 54, "name_en": "Sensor Integration", "name_ar": "دمج أجهزة الاستشعار"},
+          {"skill_id": 55, "name_en": "Firmware Development", "name_ar": "تطوير البرمجيات الثابتة (Firmware)"},
+          {"skill_id": 56, "name_en": "Embedded C / C++", "name_ar": "برمجة الأنظمة المدمجة C / C++"},
+          {"skill_id": 57, "name_en": "MQTT & CoAP Protocols", "name_ar": "بروتوكولات MQTT و CoAP"},
+          {"skill_id": 58, "name_en": "Edge Analytics", "name_ar": "تحليلات الحافة"}
+        ]
+      },
+      {
+        "subcategory_id": 9,
+        "name_en": "Graphic Design & UX/UI",
+        "name_ar": "التصميم الجرافيكي وتجربة المستخدم",
+        "skills": [
+          {"skill_id": 59, "name_en": "Adobe Creative Suite", "name_ar": "مجموعة أدوبي الإبداعية"},
+          {"skill_id": 60, "name_en": "Wireframing & Prototyping", "name_ar": "التخطيط الهيكلي والنماذج الأولية"},
+          {"skill_id": 61, "name_en": "User Research", "name_ar": "بحث المستخدم"},
+          {"skill_id": 62, "name_en": "UI Animation & Motion Graphics", "name_ar": "رسوم متحركة لواجهة المستخدم"},
+          {"skill_id": 63, "name_en": "Typography & Branding", "name_ar": "تنسيق النصوص والهوية البصرية"}
+        ]
+      },
+      {
+        "subcategory_id": 10,
+        "name_en": "Marketing Technology",
+        "name_ar": "التكنولوجيا التسويقية",
+        "skills": [
+          {"skill_id": 64, "name_en": "SEO / SEM Strategy", "name_ar": "استراتيجية SEO / SEM"},
+          {"skill_id": 65, "name_en": "Marketing Automation (HubSpot/Marketo)", "name_ar": "أتمتة التسويق"},
+          {"skill_id": 66, "name_en": "Google Analytics 4", "name_ar": "تحليلات جوجل 4"},
+          {"skill_id": 67, "name_en": "Social Media Strategy", "name_ar": "استراتيجية وسائل التواصل الاجتماعي"},
+          {"skill_id": 68, "name_en": "CRM Management & Analytics", "name_ar": "إدارة وتحليلات CRM"}
+        ]
+      },
+      {
+        "subcategory_id": 11,
+        "name_en": "Finance Technology",
+        "name_ar": "التكنولوجيا المالية",
+        "skills": [
+          {"skill_id": 69, "name_en": "Algorithmic Trading", "name_ar": "التداول الخوارزمي"},
+          {"skill_id": 70, "name_en": "Blockchain & DeFi Systems", "name_ar": "البلوكشين وأنظمة التمويل اللامركزي"},
+          {"skill_id": 71, "name_en": "Risk Management Systems", "name_ar": "أنظمة إدارة المخاطر"},
+          {"skill_id": 72, "name_en": "Financial Modeling & Forecasting", "name_ar": "النمذجة والتنبؤ المالي"},
+          {"skill_id": 73, "name_en": "Payment Gateway Integration", "name_ar": "دمج بوابات الدفع"}
+        ]
+      },
+      {
+        "subcategory_id": 12,
+        "name_en": "HR Systems & Tools",
+        "name_ar": "نظم وأدوات الموارد البشرية",
+        "skills": [
+          {"skill_id": 74, "name_en": "ATS Management (Workday/Taleo)", "name_ar": "إدارة أنظمة تتبع المتقدمين (ATS)"},
+          {"skill_id": 75, "name_en": "Payroll Systems", "name_ar": "أنظمة الرواتب"},
+          {"skill_id": 76, "name_en": "Performance Management Tools", "name_ar": "أدوات إدارة الأداء"},
+          {"skill_id": 77, "name_en": "People Analytics", "name_ar": "تحليلات الموارد البشرية"},
+          {"skill_id": 78, "name_en": "Employee Engagement Platforms", "name_ar": "منصات مشاركة الموظفين"}
+        ]
+      },
+      {
+        "subcategory_id": 13,
+        "name_en": "IT Support & Helpdesk",
+        "name_ar": "دعم تكنولوجيا المعلومات وخدمة العملاء",
+        "skills": [
+          {"skill_id": 79, "name_en": "Desktop & Hardware Troubleshooting", "name_ar": "استكشاف أخطاء الأجهزة والمكتب"},
+          {"skill_id": 80, "name_en": "ITSM Tools (ServiceNow)", "name_ar": "أدوات إدارة خدمات تكنولوجيا المعلومات"},
+          {"skill_id": 81, "name_en": "Network Setup & Maintenance", "name_ar": "إعداد وصيانة الشبكات"},
+          {"skill_id": 82, "name_en": "Remote Support Protocols", "name_ar": "بروتوكولات الدعم عن بعد"},
+          {"skill_id": 83, "name_en": "IT Asset Management", "name_ar": "إدارة أصول تكنولوجيا المعلومات"}
+        ]
+      },
+      {
+        "subcategory_id": 14,
+        "name_en": "Quality Assurance & Testing",
+        "name_ar": "ضمان الجودة والاختبار",
+        "skills": [
+          {"skill_id": 84, "name_en": "Manual Regression Testing", "name_ar": "اختبار التراجع اليدوي"},
+          {"skill_id": 85, "name_en": "Automation Testing (Selenium/Cypress)", "name_ar": "أتمتة الاختبار"},
+          {"skill_id": 86, "name_en": "Unit & Integration Testing", "name_ar": "اختبار الوحدات والتكامل"},
+          {"skill_id": 87, "name_en": "Performance & Load Testing", "name_ar": "اختبار الأداء والحمل"},
+          {"skill_id": 88, "name_en": "Bug Tracking & Documentation", "name_ar": "تتبع الأخطاء والتوثيق"}
+        ]
+      },
+      {
+        "subcategory_id": 15,
+        "name_en": "DevOps & Automation",
+        "name_ar": "التطوير التشغيلي والأتمتة",
+        "skills": [
+          {"skill_id": 89, "name_en": "CI/CD Pipeline Design", "name_ar": "تصميم مسارات CI/CD"},
+          {"skill_id": 90, "name_en": "Containerization (Docker/Podman)", "name_ar": "الحاويات (Docker)"},
+          {"skill_id": 91, "name_en": "Infrastructure as Code (Terraform)", "name_ar": "البنية التحتية كبرمجيات (Terraform)"},
+          {"skill_id": 92, "name_en": "Monitoring & Logging (ELK/Grafana)", "name_ar": "المراقبة والتسجيل"},
+          {"skill_id": 93, "name_en": "Cloud Native Deployment", "name_ar": "النشر السحابي الأصيل"}
+        ]
+      },
+      {
+        "subcategory_id": 16,
+        "name_en": "Blockchain & Web3",
+        "name_ar": "البلوكشين والويب 3",
+        "skills": [
+          {"skill_id": 94, "name_en": "Smart Contract Development (Solidity)", "name_ar": "تطوير العقود الذكية"},
+          {"skill_id": 95, "name_en": "DApp Architecture", "name_ar": "بنية التطبيقات اللامركزية (DApp)"},
+          {"skill_id": 96, "name_en": "Cryptographic Fundamentals", "name_ar": "أساسيات التشفير"},
+          {"skill_id": 97, "name_en": "Tokenomics Design", "name_ar": "تطوير اقتصاديات التوكن"},
+          {"skill_id": 98, "name_en": "Web3.js & Ethers.js Implementation", "name_ar": "تنفيذ مكتبات Web3.js و Ethers.js"}
+        ]
+      },
+      {
+        "subcategory_id": 17,
+        "name_en": "Robotics & Mechatronics",
+        "name_ar": "الروبوتات والهندسة الميكاترونية",
+        "skills": [
+          {"skill_id": 99, "name_en": "PLC Programming", "name_ar": "برمجة PLC"},
+          {"skill_id": 100, "name_en": "Sensor Fusion & Perception", "name_ar": "دمج البيانات والاستشعار"},
+          {"skill_id": 101, "name_en": "Motion Control Systems", "name_ar": "أنظمة التحكم في الحركة"},
+          {"skill_id": 102, "name_en": "Industrial Automation Protocols", "name_ar": "بروتوكولات الأتمتة الصناعية"},
+          {"skill_id": 103, "name_en": "Robot Operating System (ROS)", "name_ar": "نظام تشغيل الروبوت (ROS)"}
+        ]
+      },
+      {
+        "subcategory_id": 18,
+        "name_en": "Technical Writing",
+        "name_ar": "الكتابة التقنية",
+        "skills": [
+          {"skill_id": 104, "name_en": "API Documentation", "name_ar": "توثيق واجهات برمجة التطبيقات"},
+          {"skill_id": 105, "name_en": "User Manuals & SOPs", "name_ar": "أدلة المستخدم وإجراءات التشغيل"},
+          {"skill_id": 106, "name_en": "Whitepapers & Proposals", "name_ar": "الأوراق البيضاء والمقترحات"},
+          {"skill_id": 107, "name_en": "Documentation Tools (DITA/Markdown)", "name_ar": "أدوات التوثيق"},
+          {"skill_id": 108, "name_en": "Information Architecture", "name_ar": "بنية المعلومات"}
+        ]
+      },
+      {
+        "subcategory_id": 19,
+        "name_en": "Simulation & Modeling",
+        "name_ar": "المحاكاة والنمذجة",
+        "skills": [
+          {"skill_id": 109, "name_en": "Monte Carlo Simulation", "name_ar": "محاكاة مونت كارلو"},
+          {"skill_id": 110, "name_en": "System Dynamics Modeling", "name_ar": "نمذجة ديناميكيات النظام"},
+          {"skill_id": 111, "name_en": "Finite Element Analysis (FEA)", "name_ar": "تحليل العناصر المحدودة (FEA)"},
+          {"skill_id": 112, "name_en": "Discrete Event Simulation", "name_ar": "محاكاة الأحداث المنفصلة"},
+          {"skill_id": 113, "name_en": "Digital Twin Technology", "name_ar": "تكنولوجيا التوأم الرقمي"}
+        ]
+      },
+      {
+        "subcategory_id": 20,
+        "name_en": "Product Management & Agile",
+        "name_ar": "إدارة المنتجات وأجايل",
+        "skills": [
+          {"skill_id": 114, "name_en": "Scrum & Kanban Methodologies", "name_ar": "منهجيات Scrum و Kanban"},
+          {"skill_id": 115, "name_en": "Product Roadmap Strategy", "name_ar": "استراتيجية خارطة طريق المنتج"},
+          {"skill_id": 116, "name_en": "User Stories & Backlog Refinement", "name_ar": "قصص المستخدم وتحسين قائمة المهام"},
+          {"skill_id": 117, "name_en": "Stakeholder Management", "name_ar": "إدارة أصحاب المصلحة"},
+          {"skill_id": 118, "name_en": "Agile Delivery & Metrics", "name_ar": "التسليم والمقاييس في أجايل"}
+        ]
+      },
+      {
+        "subcategory_id": 21,
+        "name_en": "Sustainable Tech (Green IT)",
+        "name_ar": "التقنيات المستدامة (تكنولوجيا خضراء)",
+        "skills": [
+          {"skill_id": 119, "name_en": "Energy Efficient Computing", "name_ar": "الحوسبة الموفرة للطاقة"},
+          {"skill_id": 120, "name_en": "E-waste Management", "name_ar": "إدارة النفايات الإلكترونية"},
+          {"skill_id": 121, "name_en": "Carbon Footprint Optimization", "name_ar": "تحسين البصمة الكربونية"},
+          {"skill_id": 122, "name_en": "Sustainable Data Centers", "name_ar": "مراكز البيانات المستدامة"},
+          {"skill_id": 123, "name_en": "Green Software Engineering", "name_ar": "هندسة البرمجيات الخضراء"}
+        ]
+      },
+      {
+        "subcategory_id": 22,
+        "name_en": "AR / VR / Spatial Computing",
+        "name_ar": "الواقع المعزز / الواقع الافتراضي / الحوسبة المكانية",
+        "skills": [
+          {"skill_id": 124, "name_en": "Unity & Unreal Engine Development", "name_ar": "تطوير Unity و Unreal Engine"},
+          {"skill_id": 125, "name_en": "3D Modeling for VR", "name_ar": "النمذجة ثلاثية الأبعاد للواقع الافتراضي"},
+          {"skill_id": 126, "name_en": "Immersive UX Design", "name_ar": "تصميم تجربة مستخدم غامرة"},
+          {"skill_id": 127, "name_en": "Spatial Mapping & Tracking", "name_ar": "الخرائط المكانية والتتبع"},
+          {"skill_id": 128, "name_en": "OpenXR Standards Implementation", "name_ar": "تنفيذ معايير OpenXR"}
+        ]
+      },
+      {
+        "subcategory_id": 23,
+        "name_en": "Low-Code / No-Code",
+        "name_ar": "البرمجة منخفضة / بدون كود",
+        "skills": [
+          {"skill_id": 129, "name_en": "Microsoft PowerApps & Automate", "name_ar": "مايكروسوفت PowerApps و Automate"},
+          {"skill_id": 130, "name_en": "Bubble & Webflow Design", "name_ar": "تصميم Bubble و Webflow"},
+          {"skill_id": 131, "name_en": "Rapid Prototyping Tools", "name_ar": "أدوات النماذج الأولية السريعة"},
+          {"skill_id": 132, "name_en": "Citizen Development Strategy", "name_ar": "استراتيجية تطوير المواطنين"},
+          {"skill_id": 133, "name_en": "AppSheet Implementation", "name_ar": "تنفيذ AppSheet"}
+        ]
+      },
+      {
+        "subcategory_id": 24,
+        "name_en": "Enterprise Systems (ERP)",
+        "name_ar": "أنظمة المؤسسات (ERP)",
+        "skills": [
+          {"skill_id": 134, "name_en": "SAP S/4HANA Management", "name_ar": "إدارة SAP S/4HANA"},
+          {"skill_id": 135, "name_en": "Oracle Cloud ERP", "name_ar": "أوراكل كلاود ERP"},
+          {"skill_id": 136, "name_en": "Microsoft Dynamics 365", "name_ar": "مايكروسوفت دايناميكس 365"},
+          {"skill_id": 137, "name_en": "Business Process Mapping", "name_ar": "خرائط عمليات الأعمال"},
+          {"skill_id": 138, "name_en": "ERP Implementation Lifecycle", "name_ar": "دورة حياة تنفيذ ERP"}
+        ]
+      },
+      {
+        "subcategory_id": 25,
+        "name_en": "Healthcare & Medical Technology",
+        "name_ar": "تكنولوجيا الرعاية الصحية والطبية",
+        "skills": [
+          {"skill_id": 139, "name_en": "EHR / EMR Systems Management", "name_ar": "إدارة أنظمة السجلات الصحية"},
+          {"skill_id": 140, "name_en": "Telemedicine Platforms", "name_ar": "منصات الطب عن بعد"},
+          {"skill_id": 141, "name_en": "Bioinformatics Analysis", "name_ar": "تحليل المعلوماتية الحيوية"},
+          {"skill_id": 142, "name_en": "Medical Device IoT Integration", "name_ar": "تكامل أجهزة إنترنت الأشياء الطبية"},
+          {"skill_id": 143, "name_en": "Digital Health Solution Design", "name_ar": "تصميم حلول الصحة الرقمية"}
+        ]
+      },
+      {
+        "subcategory_id": 26,
+        "name_en": "Legal & Compliance Technology",
+        "name_ar": "تكنولوجيا القانون والامتثال",
+        "skills": [
+          {"skill_id": 144, "name_en": "Contract Lifecycle Management (CLM)", "name_ar": "إدارة دورة حياة العقود"},
+          {"skill_id": 145, "name_en": "E-Discovery Tools & Techniques", "name_ar": "أدوات وتقنيات الاستكشاف الإلكتروني"},
+          {"skill_id": 146, "name_en": "Regulatory Compliance Monitoring", "name_ar": "مراقبة الامتثال التنظيمي"},
+          {"skill_id": 147, "name_en": "Intellectual Property Mgmt Systems", "name_ar": "أنظمة إدارة الملكية الفكرية"},
+          {"skill_id": 148, "name_en": "Legal Research & Analytics Platforms", "name_ar": "منصات البحث والتحليل القانوني"}
+        ]
+      }
+    ]
+  },
+  {
+    "category_id": 2,
+    "name_en": "Computer Skills",
+    "name_ar": "مهارات الحاسب الآلي",
+    "subcategories": [
+      {
+        "subcategory_id": 27,
+        "name_en": "Microsoft Office Suite",
+        "name_ar": "مجموعة برامج مايكروسوفت أوفيس",
+        "skills": [
+          {"skill_id": 149, "name_en": "Advanced Excel (VBA/Macros)", "name_ar": "إكسيل متقدم"},
+          {"skill_id": 150, "name_en": "Word Formatting & Document Prep", "name_ar": "وورد احترافي"},
+          {"skill_id": 151, "name_en": "PowerPoint Presentation Design", "name_ar": "تصميم العروض التقديمية"},
+          {"skill_id": 152, "name_en": "Outlook Calendar & Task Management", "name_ar": "إدارة أوتلوك"},
+          {"skill_id": 153, "name_en": "Access Database Management", "name_ar": "إدارة قواعد بيانات أكسس"}
+        ]
+      },
+      {
+        "subcategory_id": 28,
+        "name_en": "Operating Systems",
+        "name_ar": "أنظمة التشغيل",
+        "skills": [
+          {"skill_id": 154, "name_en": "Windows System Administration", "name_ar": "إدارة ويندوز"},
+          {"skill_id": 155, "name_en": "Linux Command Line Proficiency", "name_ar": "كفاءة سطر أوامر لينكس"},
+          {"skill_id": 156, "name_en": "macOS Configuration & Support", "name_ar": "تكوين ودعم ماك"},
+          {"skill_id": 157, "name_en": "Virtualization (VMware/VirtualBox)", "name_ar": "البيئة الافتراضية"},
+          {"skill_id": 158, "name_en": "Cloud Operating Environments", "name_ar": "بيئات التشغيل السحابية"}
+        ]
+      },
+      {
+        "subcategory_id": 29,
+        "name_en": "Specialized Professional Tools",
+        "name_ar": "أدوات احترافية متخصصة",
+        "skills": [
+          {"skill_id": 159, "name_en": "AutoCAD for Drafting", "name_ar": "أوتوكاد"},
+          {"skill_id": 160, "name_en": "ArcGIS (Geographic Info Systems)", "name_ar": "نظم المعلومات الجغرافية ArcGIS"},
+          {"skill_id": 161, "name_en": "SPSS / Stata Statistical Tools", "name_ar": "أدوات إحصائية SPSS"},
+          {"skill_id": 162, "name_en": "QuickBooks & Accounting Software", "name_ar": "برمجيات المحاسبة"},
+          {"skill_id": 163, "name_en": "Salesforce Ecosystem", "name_ar": "نظام سيلز فورس"}
+        ]
+      },
+      {
+        "subcategory_id": 30,
+        "name_en": "Digital Productivity & Collaboration",
+        "name_ar": "الإنتاجية الرقمية والتعاون",
+        "skills": [
+          {"skill_id": 164, "name_en": "Microsoft Teams & Slack", "name_ar": "تيمز وسلاك"},
+          {"skill_id": 165, "name_en": "Zoom & Google Meet Mastery", "name_ar": "زووم وجوجل ميت"},
+          {"skill_id": 166, "name_en": "Trello & Jira Tracking", "name_ar": "تتبع تريلو وجيرا"},
+          {"skill_id": 167, "name_en": "Notion & Asana Workspace", "name_ar": "نوشن وأسانا"},
+          {"skill_id": 168, "name_en": "SharePoint Collaborative Sites", "name_ar": "مواقع شيربوينت التعاونية"}
+        ]
+      },
+      {
+        "subcategory_id": 31,
+        "name_en": "Basic IT & Hardware Maintenance",
+        "name_ar": "أساسيات تكنولوجيا المعلومات وصيانة الأجهزة",
+        "skills": [
+          {"skill_id": 169, "name_en": "PC Assembly & Component Management", "name_ar": "تجميع وإدارة أجزاء الحاسب"},
+          {"skill_id": 170, "name_en": "Peripheral & Printer Setup", "name_ar": "إعداد الطابعات والطرفيات"},
+          {"skill_id": 171, "name_en": "Home/Office Basic Networking", "name_ar": "أساسيات الشبكات المنزلية/المكتبية"},
+          {"skill_id": 172, "name_en": "Virus & Malware Remediation", "name_ar": "علاج الفيروسات والبرمجيات الخبيثة"},
+          {"skill_id": 173, "name_en": "Data Backup & Recovery Systems", "name_ar": "أنظمة النسخ الاحتياطي واستعادة البيانات"}
+        ]
+      },
+      {
+        "subcategory_id": 32,
+        "name_en": "Digital Security & Information Privacy",
+        "name_ar": "الأمن الرقمي وخصوصية المعلومات",
+        "skills": [
+          {"skill_id": 174, "name_en": "Advanced Password Management", "name_ar": "إدارة كلمات المرور المتقدمة"},
+          {"skill_id": 175, "name_en": "Multi-Factor Authentication (MFA)", "name_ar": "المصادقة المتعددة العوامل"},
+          {"skill_id": 176, "name_en": "Privacy-First Browsing & Tools", "name_ar": "أدوات التصفح التي تدعم الخصوصية"},
+          {"skill_id": 177, "name_en": "Personal Data Encryption", "name_ar": "تشفير البيانات الشخصية"},
+          {"skill_id": 178, "name_en": "Digital Phishing Defense Mastery", "name_ar": "إتقان الدفاع ضد التصيد الرقمي"}
+        ]
+      },
+      {
+        "subcategory_id": 33,
+        "name_en": "Computer Programming Basics",
+        "name_ar": "أساسيات برمجة الحاسب",
+        "skills": [
+          {"skill_id": 179, "name_en": "Foundational Logic & Algorithms", "name_ar": "الأساسيات المنطقية والخوارزميات"},
+          {"skill_id": 180, "name_en": "HTML5 & CSS3 Structure", "name_ar": "هيكلة الويب HTML5 و CSS3"},
+          {"skill_id": 181, "name_en": "Introductory Python Scripting", "name_ar": "مقدمة في برمجة بايثون"},
+          {"skill_id": 182, "name_en": "Web Browser DevTools Usage", "name_ar": "استخدام أدوات المطور في المتصفح"},
+          {"skill_id": 183, "name_en": "Basic Version Control (Git)", "name_ar": "أساسيات تتبع الإصدارات (جيت)"}
+        ]
+      },
+      {
+        "subcategory_id": 34,
+        "name_en": "Data Analysis & Visualization",
+        "name_ar": "تحليل البيانات وتصويرها",
+        "skills": [
+          {"skill_id": 184, "name_en": "Advanced Spreadsheet Functions", "name_ar": "وظائف جداول البيانات المتقدمة"},
+          {"skill_id": 185, "name_en": "Data Cleaning Techniques", "name_ar": "تقنيات تنظيف البيانات"},
+          {"skill_id": 186, "name_en": "Basic SQL Querying", "name_ar": "أساسيات استعلامات SQL"},
+          {"skill_id": 187, "name_en": "Tableau/PowerBI Visualization Fundamentals", "name_ar": "أساسيات تصوير البيانات عبر Tableau/PowerBI"},
+          {"skill_id": 188, "name_en": "Statistical Chart Interpretation", "name_ar": "تفسير المخططات الإحصائية"}
+        ]
+      },
+      {
+        "subcategory_id": 35,
+        "name_en": "Cloud Computing Fundamentals",
+        "name_ar": "أساسيات الحوسبة السحابية",
+        "skills": [
+          {"skill_id": 189, "name_en": "Cloud Service Models (SaaS/PaaS/IaaS)", "name_ar": "نماذج خدمات السحاب"},
+          {"skill_id": 190, "name_en": "Shared Responsibility Model", "name_ar": "نموذج المسؤولية المشتركة"},
+          {"skill_id": 191, "name_en": "Basics of Cloud Storage (S3/Blob)", "name_ar": "أساسيات التخزين السحابي"},
+          {"skill_id": 192, "name_en": "Virtual Machine Deployment", "name_ar": "نشر الأجهزة الافتراضية"},
+          {"skill_id": 193, "name_en": "Cloud Security Basics", "name_ar": "أساسيات أمن السحاب"}
+        ]
+      },
+      {
+        "subcategory_id": 36,
+        "name_en": "Advanced Cyber Security & Privacy Tools",
+        "name_ar": "أدوات الأمن السيبراني والخصوصية المتقدمة",
+        "skills": [
+          {"skill_id": 194, "name_en": "Practical Data Encryption", "name_ar": "تشفير البيانات العملي"},
+          {"skill_id": 195, "name_en": "Secure VPN Configuration", "name_ar": "تكوين VPN آمن"},
+          {"skill_id": 196, "name_en": "Two-Factor Authentication (2FA) Setup", "name_ar": "إعداد المصادقة الثنائية"},
+          {"skill_id": 197, "name_en": "Privacy-Focused Search & Browsing", "name_ar": "البحث والتصفح الذي يركز على الخصوصية"},
+          {"skill_id": 198, "name_en": "Identifying Advanced Social Engineering", "name_ar": "تحديد الهندسة الاجتماعية المتقدمة"}
+        ]
+      },
+      {
+        "subcategory_id": 37,
+        "name_en": "Multimedia & Digital Design",
+        "name_ar": "الوسائط المتعددة والتصميم الرقمي",
+        "skills": [
+          {"skill_id": 199, "name_en": "Graphic Design with Adobe/Canva", "name_ar": "التصميم الجرافيكي عبر Adobe/Canva"},
+          {"skill_id": 200, "name_en": "Non-Linear Video Editing Basics", "name_ar": "أساسيات تحرير الفيديو غير الخطي"},
+          {"skill_id": 201, "name_en": "Audio Recording & Leveling", "name_ar": "تسجيل الموازنة الصوتية"},
+          {"skill_id": 202, "name_en": "UI/UX Design Fundamentals", "name_ar": "أساسيات تصميم واجهة وتجربة المستخدم"},
+          {"skill_id": 203, "name_en": "Digital Content Optimization", "name_ar": "تحسين المحتوى الرقمي"}
+        ]
+      },
+      {
+        "subcategory_id": 38,
+        "name_en": "Network & Connectivity Essentials",
+        "name_ar": "أساسيات الشبكات والاتصال",
+        "skills": [
+          {"skill_id": 204, "name_en": "Troubleshooting LAN/WAN Connections", "name_ar": "استكشاف أخطاء اتصالات LAN/WAN"},
+          {"skill_id": 205, "name_en": "WiFi Configuration & Security", "name_ar": "تكوين وأمن الواي فاي"},
+          {"skill_id": 206, "name_en": "Basic IP Addressing (IPv4)", "name_ar": "أساسيات عناوين IP"},
+          {"skill_id": 207, "name_en": "Understanding DNS & DHCP", "name_ar": "فهم DNS و DHCP"},
+          {"skill_id": 208, "name_en": "VPN & Remote Access Setup", "name_ar": "إعداد VPN والوصول عن بعد"}
+        ]
+      },
+      {
+        "subcategory_id": 39,
+        "name_en": "Workflow Automation & Scripting",
+        "name_ar": "أتمتة سير العمل والبرمجة النصية",
+        "skills": [
+          {"skill_id": 209, "name_en": "Microsoft Power Automate Flows", "name_ar": "تدفقات مايكروسوفت باور أوتومات"},
+          {"skill_id": 210, "name_en": "Simple Zapier/IFTTT Integrations", "name_ar": "تكاملات زابير / IFTTT البسيطة"},
+          {"skill_id": 211, "name_en": "Task Scheduling & Automation", "name_ar": "جدولة وأتمتة المهام"},
+          {"skill_id": 212, "name_en": "Basic Command Line Scripting", "name_ar": "البرمجة النصية لسطر الأوامر"},
+          {"skill_id": 213, "name_en": "Automating Repetitive Browser Tasks", "name_ar": "أتمتة مهام المتصفح المتكررة"}
+        ]
+      }
+    ]
+  },
+  {
+    "category_id": 3,
+    "name_en": "Soft Skills",
+    "name_ar": "المهارات الشخصية",
+    "subcategories": [
+      {
+        "subcategory_id": 40,
+        "name_en": "Leadership & Team Management",
+        "name_ar": "القيادة وإدارة الفرق",
+        "skills": [
+          {"skill_id": 214, "name_en": "Visionary Goal Setting", "name_ar": "تحديد الأهداف الرؤيوية"},
+          {"skill_id": 215, "name_en": "Team Empowerment & Delegation", "name_ar": "تمكين الفريق والتفويض"},
+          {"skill_id": 216, "name_en": "Executive Mentoring & Coaching", "name_ar": "الإرشاد والتدريب التنفيذي"},
+          {"skill_id": 217, "name_en": "Change Management Leadership", "name_ar": "قيادة إدارة التغيير"},
+          {"skill_id": 218, "name_en": "Strategic Organizational Alignment", "name_ar": "المواءمة التنظيمية الاستراتيجية"}
+        ]
+      },
+      {
+        "subcategory_id": 41,
+        "name_en": "Advanced Communication Skills",
+        "name_ar": "مهارات التواصل المتقدمة",
+        "skills": [
+          {"skill_id": 219, "name_en": "High-Impact Public Speaking", "name_ar": "التحدث أمام الجمهور عالي التأثير"},
+          {"skill_id": 220, "name_en": "Persuasive Pitching & Storytelling", "name_ar": "الإقناع وسرد القصص"},
+          {"skill_id": 221, "name_en": "Advanced Presentation Design", "name_ar": "تصميم العروض التقديمية المتقدمة"},
+          {"skill_id": 222, "name_en": "Media Interview Techniques", "name_ar": "تقنيات المقابلات الإعلامية"},
+          {"skill_id": 223, "name_en": "Influence & Persuasion Strategies", "name_ar": "استراتيجيات التأثير والإقناع"}
+        ]
+      },
+      {
+        "subcategory_id": 42,
+        "name_en": "Non-Verbal & Interpersonal Communication",
+        "name_ar": "التواصل غير اللفظي والاجتماعي",
+        "skills": [
+          {"skill_id": 224, "name_en": "Active Listening & Feedback Loops", "name_ar": "الاستماع الفعال وحلقات التغذية الراجعة"},
+          {"skill_id": 225, "name_en": "Interpreting Non-Verbal Cues", "name_ar": "تفسير الإشارات غير اللفظية"},
+          {"skill_id": 226, "name_en": "Professional Business Writing", "name_ar": "الكتابة المهنية للأعمال"},
+          {"skill_id": 227, "name_en": "Assertive Communication", "name_ar": "التواصل الحازم"},
+          {"skill_id": 228, "name_en": "Emotional Intelligence in Dialogue", "name_ar": "الذكاء العاطفي في الحوار"}
+        ]
+      },
+      {
+        "subcategory_id": 43,
+        "name_en": "Conflict Resolution & Mediation",
+        "name_ar": "حل النزاعات والوساطة",
+        "skills": [
+          {"skill_id": 229, "name_en": "Workplace Dispute De-escalation", "name_ar": "تهدئة النزاعات في مكان العمل"},
+          {"skill_id": 230, "name_en": "Interest-Based Negotiation", "name_ar": "التفاوض القائم على المصالح"},
+          {"skill_id": 231, "name_en": "Diplomatic Mediation Techniques", "name_ar": "تقنيات الوساطة الدبلوماسية"},
+          {"skill_id": 232, "name_en": "Facilitating Difficult Conversations", "name_ar": "تيسير المحادثات الصعبة"},
+          {"skill_id": 233, "name_en": "Collaborative Problem-Solving", "name_ar": "حل المشكلات بشكل تعاوني"}
+        ]
+      },
+      {
+        "subcategory_id": 44,
+        "name_en": "Strategic Networking & Relationship Building",
+        "name_ar": "بناء الشبكات الاستراتيجية والعلاقات",
+        "skills": [
+          {"skill_id": 234, "name_en": "Professional Network Development", "name_ar": "تطوير الشبكات المهنية"},
+          {"skill_id": 235, "name_en": "Stakeholder Relationship Management", "name_ar": "إدارة علاقات أصحاب المصلحة"},
+          {"skill_id": 236, "name_en": "Personal Branding & Positioning", "name_ar": "العلامة التجارية الشخصية"},
+          {"skill_id": 237, "name_en": "Managing Upwards & Cross-functionally", "name_ar": "الإدارة التصاعدية وعبر الوظائف"},
+          {"skill_id": 238, "name_en": "Strategic Partnership Building", "name_ar": "بناء الشراكات الاستراتيجية"}
+        ]
+      },
+      {
+        "subcategory_id": 45,
+        "name_en": "Cultural Competence & Global Diversity",
+        "name_ar": "الكفاءة الثقافية والتنوع العالمي",
+        "skills": [
+          {"skill_id": 239, "name_en": "Cross-Cultural Communication Proficiency", "name_ar": "كفاءة التواصل عبر الثقافات"},
+          {"skill_id": 240, "name_en": "Inclusive Leadership Practices", "name_ar": "ممارسات القيادة الشاملة"},
+          {"skill_id": 241, "name_en": "Diversity & Inclusion Awareness", "name_ar": "الوعي بالتنوع والشمول"},
+          {"skill_id": 242, "name_en": "Global Business Etiquette", "name_ar": "الإتيكيت العالمي للأعمال"},
+          {"skill_id": 243, "name_en": "Navigating Organizational Subcultures", "name_ar": "التنقل عبر الثقافات الفرعية التنظيمية"}
+        ]
+      },
+      {
+        "subcategory_id": 46,
+        "name_en": "Time Management & Personal Productivity",
+        "name_ar": "إدارة الوقت والإنتاجية الشخصية",
+        "skills": [
+          {"skill_id": 244, "name_en": "High-Value Goal Prioritization", "name_ar": "تحديد أولويات الأهداف عالية القيمة"},
+          {"skill_id": 245, "name_en": "Self-Management & Focus Techniques", "name_ar": "تقنيات الإدارة الذاتية والتركيز"},
+          {"skill_id": 246, "name_en": "Workflow Optimization (GTD)", "name_ar": "تحسين سير العمل (GTD)"},
+          {"skill_id": 247, "name_en": "Managing Digital Distractions", "name_ar": "إدارة المشتتات الرقمية"},
+          {"skill_id": 248, "name_en": "Capacity Planning & Delegation", "name_ar": "تخطيط السعة والتفويض"}
+        ]
+      },
+      {
+        "subcategory_id": 47,
+        "name_en": "Emotional Intelligence & Resilience",
+        "name_ar": "الذكاء العاطفي والمرونة",
+        "skills": [
+          {"skill_id": 249, "name_en": "Stress Regulation & Mental Agility", "name_ar": "تنظيم التوتر والرشاقة الذهنية"},
+          {"skill_id": 250, "name_en": "Developing Psychological Resilience", "name_ar": "تطوير المرونة النفسية"},
+          {"skill_id": 251, "name_en": "Empathy & Social Intelligence", "name_ar": "التعاطف والذكاء الاجتماعي"},
+          {"skill_id": 252, "name_en": "Self-Awareness & Impulse Control", "name_ar": "الوعي الذاتي وضبط النفس"},
+          {"skill_id": 253, "name_en": "Maintaining Composure Under Pressure", "name_ar": "الحفاظ على الهدوء تحت الضغط"}
+        ]
+      },
+      {
+        "subcategory_id": 48,
+        "name_en": "Critical Thinking & Cognitive Flexibility",
+        "name_ar": "التفكير النقدي والمرونة الذهنية",
+        "skills": [
+          {"skill_id": 254, "name_en": "Analytical Reasoning & Logic", "name_ar": "الاستنتاج التحليلي والمنطق"},
+          {"skill_id": 255, "name_en": "Systems Thinking & Mapping", "name_ar": "تفكير ورسم خرائط المنظومات"},
+          {"skill_id": 256, "name_en": "Managing Ambiguity & Uncertainty", "name_ar": "إدارة الغموض وعدم اليقين"},
+          {"skill_id": 257, "name_en": "Evidence-Based Decision Making", "name_ar": "اتخاذ القرار القائم على الأدلة"},
+          {"skill_id": 258, "name_en": "Cognitive Bias Identification", "name_ar": "تحديد التحيز المعرفي"}
+        ]
+      },
+      {
+        "subcategory_id": 49,
+        "name_en": "Creative Problem Solving & Innovation",
+        "name_ar": "حل المشكلات الإبداعي والابتكار",
+        "skills": [
+          {"skill_id": 259, "name_en": "Human-Centric Design Thinking", "name_ar": "التفكير التصميمي المتمحور حول الإنسان"},
+          {"skill_id": 260, "name_en": "Facilitating Brainstorming Sessions", "name_ar": "تيسير جلسات العصف الذهني"},
+          {"skill_id": 261, "name_en": "Growth Mindset & Idea Incubation", "name_ar": "عقلية النمو واحتضان الأفكار"},
+          {"skill_id": 262, "name_en": "Prototyping & Iterative Testing", "name_ar": "بناء النماذج والاختبار التكراري"},
+          {"skill_id": 263, "name_en": "Disruptive Innovation Strategies", "name_ar": "استراتيجيات الابتكار التمزيقي"}
+        ]
+      },
+      {
+        "subcategory_id": 50,
+        "name_en": "Ethical Judgment & Professional Integrity",
+        "name_ar": "الحكم الأخلاقي والنزاهة المهنية",
+        "skills": [
+          {"skill_id": 264, "name_en": "Ethical Decision-Making Frameworks", "name_ar": "أطر اتخاذ القرار الأخلاقي"},
+          {"skill_id": 265, "name_en": "Values-Based Professional Conduct", "name_ar": "السلوك المهني القائم على القيم"},
+          {"skill_id": 266, "name_en": "Corporate Social Responsibility Basics", "name_ar": "أساسيات المسؤولية الاجتماعية للشركات"},
+          {"skill_id": 267, "name_en": "Managing Ethical Dilemmas", "name_ar": "إدارة المعضلات الأخلاقية"},
+          {"skill_id": 268, "name_en": "Personal & Professional Accountability", "name_ar": "المساءلة الشخصية والمهنية"}
+        ]
+      },
+      {
+        "subcategory_id": 51,
+        "name_en": "Teamwork & Collaborative Dynamics",
+        "name_ar": "العمل الجماعي وديناميكيات التعاون",
+        "skills": [
+          {"skill_id": 269, "name_en": "Building High-Performance Team Synergy", "name_ar": "بناء تآزر الفرق عالية الأداء"},
+          {"skill_id": 270, "name_en": "Virtual & Hybrid Team Collaboration", "name_ar": "التعاون في الفرق الافتراضية والهجينة"},
+          {"skill_id": 271, "name_en": "Cross-functional Project Contribution", "name_ar": "المساهمة في المشاريع العابرة للوظائف"},
+          {"skill_id": 272, "name_en": "Peer Mentoring & Knowledge Sharing", "name_ar": "توجيه الزملاء ومشاركة المعرفة"},
+          {"skill_id": 273, "name_en": "Team Dynamics & Conflict Handling", "name_ar": "ديناميكيات الفريق والتعامل مع النزاعات"}
+        ]
+      }
+    ]
+  },
+  {
+    "category_id": 4,
+    "name_en": "Other Skills",
+    "name_ar": "مهارات أخرى",
+    "subcategories": [
+      {
+        "subcategory_id": 52,
+        "name_en": "Multilingual & Cross-Cultural Communication",
+        "name_ar": "التواصل متعدد اللغات والثقافات",
+        "skills": [
+          {"skill_id": 274, "name_en": "Professional Translation & Interpretation", "name_ar": "الترجمة التحريرية والفورية الاحترافية"},
+          {"skill_id": 275, "name_en": "Cultural Mediation & Diplomacy", "name_ar": "الوساطة الثقافية والدبلوماسية"},
+          {"skill_id": 276, "name_en": "Multilingual Document Creation", "name_ar": "إنشاء الوثائق متعددة اللغات"},
+          {"skill_id": 277, "name_en": "Cross-Cultural Sensitivity Training", "name_ar": "التدريب على الحساسية الثقافية"},
+          {"skill_id": 278, "name_en": "Terminological Research in Languages", "name_ar": "البحث المصطلحي في اللغات"}
+        ]
+      },
+      {
+        "subcategory_id": 53,
+        "name_en": "Entrepreneurship & Business Innovation",
+        "name_ar": "ريادة الأعمال والابتكار في الأعمال",
+        "skills": [
+          {"skill_id": 279, "name_en": "Business Model Canvas Development", "name_ar": "تطوير نموذج العمل التجاري"},
+          {"skill_id": 280, "name_en": "Startup Pitching & Fundraising", "name_ar": "عرض الشركات الناشئة وجمع التبرعات"},
+          {"skill_id": 281, "name_en": "Market Validation & Lean Startup", "name_ar": "التحقق من السوق والشركة الناشئة المرنة"},
+          {"skill_id": 282, "name_en": "Identifying Disruptive Opportunities", "name_ar": "تحديد الفرص الابتكارية التمزيقية"},
+          {"skill_id": 283, "name_en": "Scaling & Venture Operations", "name_ar": "توسيع النطاق وعمليات المشاريع"}
+        ]
+      },
+      {
+        "subcategory_id": 54,
+        "name_en": "Research, Analysis & Academic Skills",
+        "name_ar": "البحث والتحليل والمهارات الأكاديمية",
+        "skills": [
+          {"skill_id": 284, "name_en": "Quantitative & Qualitative Research", "name_ar": "البحث الكمي والنوعي"},
+          {"skill_id": 285, "name_en": "Academic & Scientific Writing", "name_ar": "الكتابة الأكاديمية والعلمية"},
+          {"skill_id": 286, "name_en": "Literature Review & Data Synthesis", "name_ar": "مراجعة الأدبيات وتوليف البيانات"},
+          {"skill_id": 287, "name_en": "Research Methodology Design", "name_ar": "تصميم منهجية البحث"},
+          {"skill_id": 288, "name_en": "Ethical Standards in Research", "name_ar": "المعايير الأخلاقية في البحث"}
+        ]
+      },
+      {
+        "subcategory_id": 55,
+        "name_en": "Mentorship, Coaching & Knowledge Transfer",
+        "name_ar": "الإرشاد والتوجيه ونقل المعرفة",
+        "skills": [
+          {"skill_id": 289, "name_en": "Peer Mentoring & Career Guidance", "name_ar": "توجيه الزملاء والإرشاد المهني"},
+          {"skill_id": 290, "name_en": "Designing Corporate Training Programs", "name_ar": "تصميم برامج التدريب المؤسسي"},
+          {"skill_id": 291, "name_en": "Knowledge Management Systems", "name_ar": "أنظمة إدارة المعرفة"},
+          {"skill_id": 292, "name_en": "Facilitating Group Learning", "name_ar": "تيسير التعلم الجماعي"},
+          {"skill_id": 293, "name_en": "Skills Assessment & Gap Analysis", "name_ar": "تقييم المهارات وتحليل الفجوات"}
+        ]
+      },
+      {
+        "subcategory_id": 56,
+        "name_en": "Digital Content Creation & Storytelling",
+        "name_ar": "صناعة المحتوى الرقمي وسرد القصص",
+        "skills": [
+          {"skill_id": 294, "name_en": "Strategic Copywriting & Blogging", "name_ar": "كتابة المحتوى الاستراتيجي والتدوين"},
+          {"skill_id": 295, "name_en": "Social Media Branding & Engagement", "name_ar": "العلامة التجارية والمشاركة عبر التواصل الاجتماعي"},
+          {"skill_id": 296, "name_en": "Digital Storytelling & Narration", "name_ar": "السرد القصصي الرقمي"},
+          {"skill_id": 297, "name_en": "Multimedia Content Strategy", "name_ar": "استراتيجية محتوى الوسائط المتعددة"},
+          {"skill_id": 298, "name_en": "Managing Online Communities", "name_ar": "إدارة المجتمعات عبر الإنترنت"}
+        ]
+      },
+      {
+        "subcategory_id": 57,
+        "name_en": "Project & Portfolio Management Fundamentals",
+        "name_ar": "أساسيات إدارة المشاريع والمحافظ",
+        "skills": [
+          {"skill_id": 299, "name_en": "Project Lifecycle Management", "name_ar": "إدارة دورة حياة المشروع"},
+          {"skill_id": 300, "name_en": "Task Prioritization (Agile/Kanban)", "name_ar": "تحديد أولويات المهام (أجايل/كانبان)"},
+          {"skill_id": 301, "name_en": "Resource & Budget Allocation", "name_ar": "تخصيص الموارد والميزانية"},
+          {"skill_id": 302, "name_en": "Risk Mitigation Planning", "name_ar": "تخطيط تخفيف المخاطر"},
+          {"skill_id": 303, "name_en": "Stakeholder Progress Reporting", "name_ar": "إعداد تقارير التقدم لأصحاب المصلحة"}
+        ]
+      },
+      {
+        "subcategory_id": 58,
+        "name_en": "Lifelong Learning & Personal Development",
+        "name_ar": "التعلم مدى الحياة والتطوير الشخصي",
+        "skills": [
+          {"skill_id": 304, "name_en": "Self-Directed Learning Strategies", "name_ar": "استراتيجيات التعلم الموجه ذاتياً"},
+          {"skill_id": 305, "name_en": "Rapid Skill Acquisition Methods", "name_ar": "طرق اكتساب المهارات السريعة"},
+          {"skill_id": 306, "name_en": "Setting SMART Personal Goals", "name_ar": "تحديد أهداف شخصية ذكية (SMART)"},
+          {"skill_id": 307, "name_en": "Personal Knowledge Management", "name_ar": "إدارة المعرفة الشخصية"},
+          {"skill_id": 308, "name_en": "Adaptability in Professional Growth", "name_ar": "التكيف في النمو المهني"}
+        ]
+      },
+      {
+        "subcategory_id": 59,
+        "name_en": "Professional Certifications & Accreditations",
+        "name_ar": "الشهادات المهنية والاعتمادات",
+        "skills": [
+          {"skill_id": 309, "name_en": "PMP Project Management Professional", "name_ar": "شهادة PMP للمحترفين"},
+          {"skill_id": 310, "name_en": "AWS / Azure Certified Cloud Practitioner", "name_ar": "شهادة ممارس سحابي معتمد"},
+          {"skill_id": 311, "name_en": "CISSP Information Security Master", "name_ar": "شهادة CISSP لأمن المعلومات"},
+          {"skill_id": 312, "name_en": "CPA / CFA Finance Certifications", "name_ar": "شهادات المالية المحاسب القانوني"},
+          {"skill_id": 313, "name_en": "ITIL Service Management Foundation", "name_ar": "أساسيات إدارة خدمات ITIL"}
+        ]
+      },
+      {
+        "subcategory_id": 60,
+        "name_en": "Volunteering, Social Impact & Community Service",
+        "name_ar": "التطوع والأثر الاجتماعي وخدمة المجتمع",
+        "skills": [
+          {"skill_id": 314, "name_en": "Large-Scale Event Organizing & Logistics", "name_ar": "تنظيم الفعاليات اللوجستي"},
+          {"skill_id": 315, "name_en": "Community Group Coaching & Mentoring", "name_ar": "تدريب وإرشاد المجموعات المجتمعية"},
+          {"skill_id": 316, "name_en": "Fundraising & Donor Relationship Mgmt", "name_ar": "إدارة علاقات المتبرعين وجمع التبرعات"},
+          {"skill_id": 317, "name_en": "Humanitarian Field Aid & Relief Ops", "name_ar": "عمليات الإغاثة والمساعدات الإنسانية"},
+          {"skill_id": 318, "name_en": "Environmental Advocacy & Sustainability", "name_ar": "الدفاع عن البيئة والاستدامة"}
+        ]
+      },
+      {
+        "subcategory_id": 61,
+        "name_en": "Artistic, Creative & Cultural Performance",
+        "name_ar": "الأداء الفني والإبداعي والثقافي",
+        "skills": [
+          {"skill_id": 319, "name_en": "Visual Arts (Painting & Sketching)", "name_ar": "الفنون البصرية (الرسم والتشكيل)"},
+          {"skill_id": 320, "name_en": "Music Theory & Instrumental Performance", "name_ar": "نظرية الموسيقى والأداء العزفي"},
+          {"skill_id": 321, "name_en": "Creative Writing & Narrative Storytelling", "name_ar": "الكتابة الإبداعية وسرد القصص"},
+          {"skill_id": 322, "name_en": "Digital Photography & Advanced Composition", "name_ar": "التصوير الرقمي المتقدم"},
+          {"skill_id": 323, "name_en": "Theater Performance & Acting Techniques", "name_ar": "الأداء المسرحي وتقنيات التمثيل"}
+        ]
+      },
+      {
+        "subcategory_id": 62,
+        "name_en": "Physical, Trades & Vocational Mastery",
+        "name_ar": "المهارات البدنية والحرفية والمهنية",
+        "skills": [
+          {"skill_id": 324, "name_en": "Technical Carpentry & Woodworking", "name_ar": "النجارة الفنية وأعمال الخشب"},
+          {"skill_id": 325, "name_en": "Electrical Systems Installation & Maintenance", "name_ar": "تركيب وصيانة الأنظمة الكهربائية"},
+          {"skill_id": 326, "name_en": "Professional Culinary Arts & Food Safety", "name_ar": "فنون الطهي الاحترافية وسلامة الغذاء"},
+          {"skill_id": 327, "name_en": "Logistics & High-Efficiency Warehouse Ops", "name_ar": "لوجستيات وعمليات المستودعات"},
+          {"skill_id": 328, "name_en": "Mechanical Repair & Industrial Crafts", "name_ar": "الإصلاح الميكانيكي والحرف الصناعية"}
+        ]
+      }
+    ]
+  }
+]

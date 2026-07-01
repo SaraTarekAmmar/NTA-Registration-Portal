@@ -1,0 +1,43 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Identity & Military</h2>
+    <form id="stepForm">
+        <div class="form-group identity-doc-group">
+<label>نوع وثيقة الهوية (اجبارى)</label>
+<div class="identity-doc-grid">
+<label class="identity-doc-option" for="identityDocNationalId">
+<input id="identityDocNationalId" name="identityDocType" required="" type="checkbox" value="national_id"/>
+<span class="identity-doc-option__content">
+<span class="identity-doc-option__text">
+<span class="identity-doc-option__title">البطاقة الشخصية</span>
+<span class="identity-doc-option__hint">National ID</span>
+</span>
+</span>
+</label>
+<label class="identity-doc-option" for="identityDocPassport">
+<input id="identityDocPassport" name="identityDocType" required="" type="checkbox" value="passport"/>
+<span class="identity-doc-option__content">
+<span class="identity-doc-option__text">
+<span class="identity-doc-option__title">جواز السفر</span>
+<span class="identity-doc-option__hint">Passport</span>
+</span>
+</span>
+</label>
+</div>
+</div><div class="form-group" id="nationalIdGroup" style="display: none">
+<label>رقم البطاقة الشخصية (الرقم القومي) (اجبارى)</label>
+<input id="nationalId" maxlength="14" minlength="14" name="nationalId" pattern="\d{14}" placeholder="14 رقم" required="" type="text"/>
+</div><div class="form-group" id="passportNumberGroup" style="display: none">
+<label>رقم جواز السفر (اختيارى)</label>
+<input id="passportNumber" name="passportNumber" pattern="^[a-zA-Z0-9]+$" placeholder="Passport Number" type="text"/>
+</div><div class="form-group" id="identityDocScanGroup" style="display: none">
+<label>صورة وثيقة الهوية (البطاقة أو الجواز) (إرشادات الرفع: يرجى رفع ملفات واضحة بصيغة PDF أو صور JPG/PNG لا يتعدى حجم الملف الواحد 5 ميجابايت) (اجبارى)</label>
+<div style="display: flex; gap: 10px; align-items: center;">
+<input accept=".jpg,.jpeg,.png,.pdf" id="identityDocumentScan" multiple="" name="identityDocumentScan" style="flex: 1;" type="file"/>
+<button class="reg-btn reg-btn--outline" id="aiExtractBtn" style="white-space: nowrap; padding: 0 15px; height: 48px; border-radius: 10px;" type="button">استخراج البيانات بالذكاء الاصطناعي</button>
+</div>
+<small class="reg-step__desc">الحد الأقصى 3 ملفات (JPG, PNG, PDF).</small>
+<div id="aiExtractStatus" style="font-size: 0.9em; margin-top: 5px; color: #3b82f6;"></div>
+</div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

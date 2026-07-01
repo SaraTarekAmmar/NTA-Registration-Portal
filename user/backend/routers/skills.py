@@ -43,7 +43,7 @@ async def get_skills_tree():
         
         return list(cat_map.values())
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()

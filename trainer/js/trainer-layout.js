@@ -20,6 +20,7 @@
     dashboard: ic('<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>'),
     trainees: ic('<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>'),
     quiz: ic('<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>'),
+    tickets: ic('<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>'),
     logout: ic('<path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>')
   };
 
@@ -40,7 +41,8 @@
       '<div class="nta-sidebar__divider"></div>' +
       '<div class="nta-sidebar__nav-lbl">التدريب</div>' +
       navItem('view trainees/view-trainees.html', 'trainees', ICONS.trainees, 'المتدربون', activePage) +
-      navItem('generate quiz/generate-quiz.html', 'quiz', ICONS.quiz, 'توليد اختبار', activePage);
+      navItem('generate quiz/generate-quiz.html', 'quiz', ICONS.quiz, 'توليد اختبار', activePage) +
+      navItem('trainer-tickets.html', 'tickets', ICONS.tickets, 'مركز التذاكر', activePage);
 
     var html = '<aside class="nta-sidebar"><div class="nta-sidebar__brand"><a href="trainer-dashboard.html" class="nta-sidebar__logo-link"><img src="/images/NTA-Logo1.png" alt="" class="nta-sidebar__logo-img" id="ntaLogoImg" onerror="' + onerr + '"><span class="nta-sidebar__logo-fallback">NTA</span><div class="nta-sidebar__logo-text"><span class="nta-sidebar__logo-main">NTA</span><span class="nta-sidebar__logo-sub">بوابة المدرب</span><span class="nta-sidebar__logo-ar">الأكاديمية الوطنية للتدريب</span></div></a></div><nav class="nta-sidebar__nav" aria-label="قائمة المدرب">' + nav + '</nav><div class="nta-sidebar__footer">';
     if (userName) html += '<div class="nta-sidebar__user"><div class="nta-sidebar__avatar">' + (userName.charAt(0) || 'م') + '</div><div class="nta-sidebar__user-info"><div class="nta-sidebar__user-name">' + userName + '</div><div class="nta-sidebar__user-role-lbl">مدرب</div></div></div>';

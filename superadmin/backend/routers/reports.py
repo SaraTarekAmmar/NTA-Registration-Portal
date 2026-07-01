@@ -168,7 +168,7 @@ async def generate_report(payload: ReportPayload, current_user: dict = Depends(g
 
     except Exception as e:
         print(f"Report Generation Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()

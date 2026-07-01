@@ -109,7 +109,7 @@
     if (!assignmentsList) return;
 
     try {
-      const res = await fetch(`/api/assignments/course/${courseId}`);
+      const res = await window.authenticatedFetch(`/api/assignments/course/${courseId}`);
       const assignments = await res.json();
       
       const sessionRaw = localStorage.getItem('ntaTrainee');
@@ -125,7 +125,7 @@
       for (const a of assignments) {
         let submission = null;
         if (traineeId) {
-          const sRes = await fetch(`/api/assignments/my-submission/${a.id}/${traineeId}`);
+          const sRes = await window.authenticatedFetch(`/api/assignments/my-submission/${a.id}/${traineeId}`);
           submission = await sRes.json();
         }
 
@@ -192,12 +192,12 @@
 
     const formData = new FormData();
     formData.append('assignment_id', assignmentId);
-    formData.append('trainee_id', trainee.id);
     formData.append('file', file);
 
     try {
       const res = await fetch('/api/assignments/submit', {
         method: 'POST',
+        headers: trainee.token ? { Authorization: 'Bearer ' + trainee.token } : {},
         body: formData
       });
       if (res.ok) {

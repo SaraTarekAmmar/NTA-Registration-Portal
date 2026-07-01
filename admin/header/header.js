@@ -35,6 +35,7 @@
       shield:  ic('<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>'),
       chart:   ic('<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>'),
       user:    ic('<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>'),
+      tickets: ic('<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>'),
       logout:  ic('<path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>'),
     };
 
@@ -49,7 +50,8 @@
       divider() +
       navLbl('الإدارة') +
       navItem('admin-courses.html',            'admin-courses',      ICONS.courses,'البرامج والدورات', page) +
-      navItem('admin-quiz-results.html',       'quiz-results',       ICONS.chart,  'نتائج الاختبارات', page);
+      navItem('admin-quiz-results.html',       'quiz-results',       ICONS.chart,  'نتائج الاختبارات', page) +
+      navItem('admin-tickets.html',            'tickets',            ICONS.tickets,'مركز التذاكر', page);
 
     return '<aside class="nta-sidebar">' +
       '<div class="nta-sidebar__brand">' +

@@ -17,6 +17,31 @@ SERVICE_REGISTRY = {
     "Quiz Engine": int(os.getenv("PORT_QUIZ_GEN", 2345))
 }
 
+
+def _assert_trainer_can_view_trainee(cursor, current_user, trainee_id):
+    """A trainer may only view a trainee enrolled (approved) in one of the
+    courses assigned to that trainer via course_trainers. Admin/superadmin are
+    unrestricted. Raises 403 otherwise."""
+    if current_user["role"] in ("admin", "superadmin"):
+        return
+    cursor.execute("SELECT national_id FROM users WHERE id = %s", (current_user["id"],))
+    row = cursor.fetchone()
+    trainer_nid = row["national_id"] if row else None
+    if not trainer_nid:
+        raise HTTPException(status_code=403, detail="غير مصرح لك بعرض هذا المتدرب")
+    cursor.execute(
+        """
+        SELECT 1 FROM applications a
+        JOIN course_trainers ct ON ct.course_id = a.course_id
+        WHERE a.user_id = %s AND a.status = 'approved'
+          AND ct.trainer_national_id = %s
+        LIMIT 1
+        """,
+        (trainee_id, trainer_nid),
+    )
+    if not cursor.fetchone():
+        raise HTTPException(status_code=403, detail="غير مصرح لك بعرض هذا المتدرب")
+
 @router.get("/courses/{course_id}/trainees")
 async def get_course_trainees(course_id: int, current_user: dict = Depends(get_current_user)):
     db = get_db_connection()
@@ -90,6 +115,7 @@ async def get_trainee_for_trainer(trainee_id: int, current_user: dict = Depends(
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
     try:
+        _assert_trainer_can_view_trainee(cursor, current_user, trainee_id)
         # 1. Fetch User and Profile Data
         cursor.execute("""
             SELECT u.id as user_id, u.*, tp.id as profile_id, tp.*, ps.current_stage_id, ps.status as pipeline_status
@@ -163,7 +189,8 @@ async def get_trainee_profile_for_trainer(trainee_id: int, current_user: dict = 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
     try:
-        cursor.execute("""SELECT u.*, tp.phone_numbers, tp.address, tp.technical_skills, tp.soft_skills, 
+        _assert_trainer_can_view_trainee(cursor, current_user, trainee_id)
+        cursor.execute("""SELECT u.*, tp.phone_numbers, tp.address, tp.technical_skills, tp.soft_skills,
                                 tp.academic_history, tp.professional_history, tp.documents
                           FROM users u 
                           LEFT JOIN trainee_profiles tp ON u.id = tp.user_id
@@ -190,6 +217,7 @@ async def get_trainee_analytics_for_trainer(trainee_id: int, course_id: Optional
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
     try:
+        _assert_trainer_can_view_trainee(cursor, current_user, trainee_id)
         # 1. Assignment stats + list
         if course_id:
             cursor.execute("""
@@ -317,6 +345,7 @@ async def get_trainee_completion_for_trainer(trainee_id: int, current_user: dict
     db = get_db_connection()
     cursor = db.cursor(dictionary=True, buffered=True)
     try:
+        _assert_trainer_can_view_trainee(cursor, current_user, trainee_id)
         # Assignments
         cursor.execute("""
             SELECT COUNT(DISTINCT a.id) as total, COUNT(DISTINCT asub.id) as submitted,
@@ -457,12 +486,12 @@ async def generate_quiz(req: Request, current_user: dict = Depends(get_current_u
                 return resp_json
             except Exception as e:
                 db.rollback()
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail="Internal server error")
             finally:
                 cursor.close()
                 db.close()
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail="Internal server error")
         finally:
             for f in opened_files: f.close()
 @router.post("/quizzes/{quiz_id}/activate")

@@ -131,7 +131,7 @@ async def get_management_users(current_user: dict = Depends(get_current_user)):
         users = cursor.fetchall()
         return users
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()
@@ -161,7 +161,7 @@ async def delete_management_user(user_id: int, current_user: dict = Depends(get_
         return {"status": "success", "message": "User deleted successfully"}
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         db.close()

@@ -5,6 +5,7 @@ from datetime import datetime
 import mysql.connector
 import os
 from .auth import get_current_user
+from core.security import get_superadmin_user
 
 router = APIRouter(prefix="/alerts", tags=["Alerts"])
 
@@ -26,7 +27,7 @@ class AlertOut(BaseModel):
     creator_name: Optional[str] = None
 
 @router.post("/", response_model=AlertOut)
-async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_current_user)):
+async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -46,13 +47,13 @@ async def create_alert(alert: AlertCreate, current_user: dict = Depends(get_curr
         return new_alert
     except Exception as e:
         conn.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()
 
 @router.get("/", response_model=List[AlertOut])
-async def list_alerts(current_user: dict = Depends(get_current_user)):
+async def list_alerts(current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -68,13 +69,13 @@ async def list_alerts(current_user: dict = Depends(get_current_user)):
         cursor.execute(query)
         return cursor.fetchall()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()
 
 @router.delete("/{alert_id}")
-async def delete_alert(alert_id: int, current_user: dict = Depends(get_current_user)):
+async def delete_alert(alert_id: int, current_user: dict = Depends(get_superadmin_user)):
     if current_user["role"] not in ["superadmin"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
@@ -86,7 +87,7 @@ async def delete_alert(alert_id: int, current_user: dict = Depends(get_current_u
         return {"message": "Alert deleted"}
     except Exception as e:
         conn.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         cursor.close()
         conn.close()

@@ -24,6 +24,7 @@
     permissions: ic('<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>'),
     interviews: ic('<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>'),
     evaluations: ic('<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>'),
+    tickets: ic('<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>'),
     logout: ic('<path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>'),
   };
 
@@ -41,10 +42,10 @@
         userRole = window.coordinatorAuth.payload.role || "";
       }
     } catch (e) {}
-    
+
     var onerr = "this.style.display='none';this.nextElementSibling.style.display='flex'";
     var isMember = (userRole === "committee_member");
-    
+
     var nav = '<div class="nta-sidebar__nav-lbl">الرئيسية</div>' +
       navItem("coordinator-dashboard.html", "dashboard", ICONS.dashboard, "لوحة التحكم", activePage) +
       '<div class="nta-sidebar__divider"></div>' +
@@ -52,13 +53,14 @@
       navItem("coordinator-interviews.html", "interviews", ICONS.interviews, "طابور المقابلات", activePage) +
       navItem("coordinator-interview-evaluate.html", "evaluate", ICONS.evaluations, "تقييم مقابلة", activePage) +
       navItem("coordinator-evaluations.html", "evaluations", ICONS.evaluations, "متابعة التقييمات", activePage);
-      
+
     if (!isMember) {
       nav += navItem("coordinator-committees.html", "committees", ICONS.interviews, "لجان المقابلات", activePage) +
         '<div class="nta-sidebar__divider"></div>' +
         '<div class="nta-sidebar__nav-lbl">الإدارة</div>' +
         navItem("coordinator-attendance.html", "attendance", ICONS.attendance, "الحضور والغياب", activePage) +
-        navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage);
+        navItem("coordinator-permissions.html", "permissions", ICONS.permissions, "الإذونات", activePage) +
+        navItem("coordinator-tickets.html", "tickets", ICONS.tickets, "مركز التذاكر", activePage);
     }
 
     var roleLabel = isMember ? "عضو لجنة" : "منسق";

@@ -1,0 +1,29 @@
+<div class="step-card">
+    <h2 style="margin-bottom: 1.5rem;">Skills & Languages</h2>
+    <form id="stepForm">
+        <div class="form-group">
+<label for="nativeLanguage">اللغة الأم (Mother Language) (اجبارى)
+</label>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="nativeLanguage" name="nativeLanguage" required="">
+<option value="">اختر اللغة</option>
+</select>
+</div>
+</div><div class="form-group">
+<label for="englishProficiency">اللغة الثانية (الإنجليزية) — مستوى الإجادة فقط (اجبارى)
+</label>
+<p class="reg-step__desc reg-lang-hint" dir="ltr" lang="en">
+                      Second language is fixed as English; choose proficiency
+                      only.
+                    </p>
+<div class="reg-input-wrap reg-input-wrap--select">
+<span aria-hidden="true" class="reg-input-icon reg-input-icon--chevron"></span>
+<select id="englishProficiency" name="englishProficiency" required="">
+<option value="">اختر المستوى</option>
+</select>
+</div>
+</div><div id="additionalLanguagesContainer"></div><button class="reg-btn reg-btn--outline mt-3" id="addLanguageBtn" type="button">+ إضافة لغة أخرى (اختياري)</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">حفظ ومتابعة</button>
+    </form>
+</div>

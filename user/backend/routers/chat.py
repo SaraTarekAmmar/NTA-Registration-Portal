@@ -92,7 +92,7 @@ async def ask_chatbot(req: Request, request: ChatRequest, current_user: Optional
             return {"reply": reply, "id": chat_id}
         except Exception as e:
             db.rollback()
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail="Internal server error")
         finally:
             cursor.close()
             db.close()
