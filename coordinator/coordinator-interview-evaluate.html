@@ -116,7 +116,18 @@
       var auth = window.coordinatorAuth;
       var params = new URLSearchParams(location.search);
 
-      function currentCriteria(){ return FORMS[document.getElementById('formSel').value]; }
+      var current_custom_matrix = null;
+
+      function currentCriteria(){ 
+        if(current_custom_matrix && current_custom_matrix.length > 0) {
+            // Map the custom matrix to the expected format: [key, name, max_score]
+            return current_custom_matrix.map(function(c, i) {
+                return ['custom_' + i, c.name, c.max_score || 5];
+            });
+        }
+        // Fallback to hardcoded forms
+        return FORMS[document.getElementById('formSel').value]; 
+      }
 
       function renderGrid(){
         var crit = currentCriteria();
@@ -124,9 +135,13 @@
         body.innerHTML = crit.map(function(c,i){
           var radios = '';
           for(var s=1;s<=5;s++){ radios += '<td><input type="radio" name="c_'+c[0]+'" value="'+s+'"></td>'; }
-          return '<tr><td class="crit">'+(i+1)+'. '+esc(c[1])+'<small>'+esc(c[2])+'</small></td>'+radios+'</tr>';
+          var desc = (current_custom_matrix && current_custom_matrix.length > 0) ? '(الحد الأقصى في القالب: ' + (c[2] || 5) + ')' : esc(c[2]);
+          return '<tr><td class="crit">'+(i+1)+'. '+esc(c[1])+'<small>'+desc+'</small></td>'+radios+'</tr>';
         }).join('');
+        
         document.getElementById('maxVal').textContent = crit.length*5;
+
+        body.removeEventListener('change', recalc);
         body.addEventListener('change', recalc);
         recalc();
       }
@@ -134,7 +149,7 @@
         var crit = currentCriteria(), out={};
         crit.forEach(function(c){
           var sel = document.querySelector('input[name="c_'+c[0]+'"]:checked');
-          if(sel) out[c[0]] = parseInt(sel.value,10);
+          if(sel) out[c[1]] = parseInt(sel.value,10); // Use the name as the key for custom
         });
         return out;
       }
@@ -142,11 +157,12 @@
         var crit = currentCriteria(), scores = collectScores();
         var keys = Object.keys(scores), total=0;
         keys.forEach(function(k){ total += scores[k]; });
+
         var max = crit.length*5;
+
         document.getElementById('totVal').textContent = total;
         document.getElementById('pctVal').textContent = (max? Math.round(total/max*1000)/10 : 0)+'%';
         document.getElementById('filledVal').textContent = keys.length+'/'+crit.length;
-        // require ALL criteria scored before enabling submit (prevent incomplete)
         document.getElementById('submitBtn').disabled = (keys.length !== crit.length) || !document.getElementById('applicantSel').value;
       }
       function loadApplicants(){
@@ -168,7 +184,27 @@
         var id = document.getElementById('applicantSel').value;
         var ex = document.getElementById('existing'); ex.innerHTML='';
         if(!id) return;
-        auth.fetch('/api/coordinator/interviews/applicant/'+id+'/scores').then(function(r){return r.json();}).then(function(d){
+        var stageId = document.getElementById('stageSel').value || '5';
+        auth.fetch('/api/coordinator/interviews/applicant/'+id+'/scores?stage_id='+encodeURIComponent(stageId)).then(function(r){return r.json();}).then(function(d){
+          if(d.custom_matrix && d.custom_matrix.length > 0) {
+              current_custom_matrix = d.custom_matrix;
+              document.getElementById('formSel').disabled = true;
+              var opt = document.createElement('option');
+              opt.value = 'custom';
+              opt.textContent = 'نموذج مخصص من المحرر';
+              opt.selected = true;
+              if(!document.querySelector('#formSel option[value="custom"]')) {
+                  document.getElementById('formSel').appendChild(opt);
+              }
+              document.getElementById('formSel').value = 'custom';
+              renderGrid();
+          } else {
+              current_custom_matrix = null;
+              document.getElementById('formSel').disabled = false;
+              var cOpt = document.querySelector('#formSel option[value="custom"]');
+              if(cOpt) cOpt.remove();
+              renderGrid();
+          }
           if(d.evaluations && d.evaluations.length){
             ex.innerHTML = '<strong>تقييمات سابقة ('+d.member_count+'):</strong> '+d.evaluations.map(function(e){
               return '<span class="pill">'+esc(e.committee_member_name)+': '+e.total_score+'/'+e.total_max+' ('+e.percentage+'%)</span>';
@@ -202,6 +238,11 @@
       }
       document.getElementById('formSel').addEventListener('change', renderGrid);
       document.getElementById('applicantSel').addEventListener('change', onApplicant);
+      document.getElementById('stageSel').addEventListener('change', function(){
+        if (document.getElementById('applicantSel').value) {
+          onApplicant();
+        }
+      });
       document.getElementById('submitBtn').addEventListener('click', submit);
       renderGrid(); loadApplicants();
       if (auth.payload && auth.payload.role === 'committee_member') {

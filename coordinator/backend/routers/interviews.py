@@ -15,10 +15,77 @@ from core.database import get_db_connection
 router = APIRouter(prefix="/api/coordinator/interviews", tags=["Coordinator Interviews"])
 
 INTERVIEW_STAGES = (5, 6)
+INTERVIEW_STAGE_STEP_TYPES = {
+    5: ("first_interview", "interview", "second_interview"),
+    6: ("second_interview", "interview", "first_interview"),
+}
 
 
 def _rows(cursor):
     return cursor.fetchall() or []
+
+
+def _load_interview_matrix(cursor, course_id, stage_id):
+    if not course_id:
+        return []
+
+    desired_types = INTERVIEW_STAGE_STEP_TYPES.get(stage_id, ("first_interview", "second_interview", "interview"))
+    cursor.execute(
+        """
+        SELECT step_type, config_json
+        FROM course_steps
+        WHERE course_id = %s AND path_type = 'admission'
+        ORDER BY step_order, id
+        """,
+        (course_id,),
+    )
+    steps = _rows(cursor)
+    for preferred in desired_types:
+        for step in steps:
+            if step.get("step_type") != preferred:
+                continue
+            cfg = step.get("config_json")
+            if isinstance(cfg, str):
+                try:
+                    cfg = json.loads(cfg)
+                except (json.JSONDecodeError, ValueError):
+                    cfg = {}
+            if not isinstance(cfg, dict):
+                cfg = {}
+            matrix = cfg.get("interview_matrix") or cfg.get("matrix") or cfg.get("criteria") or []
+            if isinstance(matrix, str):
+                try:
+                    matrix = json.loads(matrix)
+                except (json.JSONDecodeError, ValueError):
+                    matrix = []
+            if not isinstance(matrix, list):
+                continue
+            cleaned = []
+            for row in matrix:
+                if isinstance(row, dict):
+                    name = str(row.get("name") or row.get("label") or row.get("title") or "").strip()
+                    max_score = row.get("max_score", row.get("maxScore", 5))
+                elif isinstance(row, (list, tuple)):
+                    if len(row) >= 3:
+                        name = str(row[1] or row[0] or "").strip()
+                        max_score = row[2]
+                    elif len(row) >= 2:
+                        name = str(row[0] or "").strip()
+                        max_score = row[1]
+                    else:
+                        continue
+                else:
+                    continue
+                if not name:
+                    continue
+                try:
+                    max_score = int(max_score)
+                except (TypeError, ValueError):
+                    max_score = 5
+                cleaned.append({"name": name, "max_score": max(1, max_score)})
+            if cleaned:
+                return cleaned
+    return []
 
 
 @router.get("/summary")
@@ -426,11 +493,29 @@ async def submit_evaluation(body: dict, user: dict = Depends(require_coordinator
 
 
 @router.get("/applicant/{trainee_id}/scores")
-async def applicant_scores(trainee_id: int, user: dict = Depends(require_coordinator_or_member)):
+async def applicant_scores(trainee_id: int, stage_id: int = None, user: dict = Depends(require_coordinator_or_member)):
     """All committee evaluations for an applicant + average / variance across members."""
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
+        try:
+            stage_id = int(stage_id) if stage_id is not None else None
+        except (TypeError, ValueError):
+            stage_id = None
+        if stage_id not in INTERVIEW_STAGES:
+            stage_id = 5
+
+        course_id = None
+        cursor.execute(
+            """SELECT course_id FROM applications
+               WHERE user_id = %s AND status IN ('pending', 'approved')
+               ORDER BY applied_at DESC, id DESC LIMIT 1""",
+            (trainee_id,),
+        )
+        app_row = cursor.fetchone()
+        if app_row:
+            course_id = app_row.get("course_id")
+
         if user["role"] == "committee_member":
             cursor.execute(
                 """SELECT COUNT(*) AS cnt FROM interview_committee_applicants ica
@@ -440,6 +525,8 @@ async def applicant_scores(trainee_id: int, user: dict = Depends(require_coordin
             )
             if not cursor.fetchone()["cnt"]:
                 raise HTTPException(status_code=403, detail="غير مصرح لك بالوصول لبيانات هذا المتقدم")
+
+        custom_matrix = _load_interview_matrix(cursor, course_id, stage_id)
 
         cursor.execute(
             """SELECT id, stage_id, committee_id, committee_member_name,
@@ -465,6 +552,9 @@ async def applicant_scores(trainee_id: int, user: dict = Depends(require_coordin
         variance = round(max(pcts) - min(pcts), 1) if len(pcts) > 1 else 0
         return {
             "trainee_id": trainee_id,
+            "stage_id": stage_id,
+            "course_id": course_id,
+            "custom_matrix": custom_matrix,
             "evaluations": rows,
             "member_count": len(rows),
             "average_percentage": avg,

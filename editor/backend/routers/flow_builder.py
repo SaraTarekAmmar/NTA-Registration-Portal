@@ -192,7 +192,7 @@ async def add_step(template_id: int, body: StepCreate, editor: dict = Depends(re
             raise HTTPException(404, "القالب غير موجود")
         vis  = json.dumps(body.visibility_rules) if body.visibility_rules else None
         unl  = json.dumps(body.unlock_rules)     if body.unlock_rules     else None
-        cfg  = json.dumps(body.config_json)      if body.config_json      else None
+        cfg  = json.dumps(body.config_json)      if body.config_json is not None else None
         cursor.execute("""
             INSERT INTO flow_steps
               (flow_template_id, step_key, step_type, title_ar, description_ar,

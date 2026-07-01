@@ -475,6 +475,19 @@
               </div>
             </div>
 
+            <!-- Interview Rubric Builder -->
+            <div class="settings-section" id="rubricBuilderSection" style="display:none; border-top: 2px dashed var(--nta-red); padding-top:1rem; margin-top:1rem;">
+              <h4>Evaluation Rubric / معايير التقييم للمقابلة</h4>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:0.5rem;">أضف المعايير التي سيتم تقييم المتقدم عليها (مثل: المظهر العام، الثقة بالنفس). تُحفظ القائمة داخل <code>config_json.interview_matrix</code>.</p>
+              <div id="rubricCriteriaList" style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
+                <!-- Criteria will be injected here -->
+              </div>
+              <button class="btn btn-outline" style="width:100%; border-style:dashed;" onclick="addRubricCriterion()">
+                <svg style="width:16px;height:16px;margin-left:0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                إضافة معيار جديد
+              </button>
+            </div>
+
             <div class="settings-section">
               <h4>إعدادات متقدمة</h4>
               <div style="display:flex;gap:1rem;margin-bottom:1rem;">
@@ -576,12 +589,20 @@
       // Load courses
       function loadCourses() {
         authFetch("/api/courses")
-          .then(function(r) { return r.json(); })
+          .then(function(r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+          })
           .then(function(courses) {
             var menu = document.getElementById("courseSelectMenu");
             var html = '<button type="button" class="ui-select__option" data-value="" role="option"><span>— اختر دورة —</span><span class="ui-select__check">✓</span></button>';
-            courses.forEach(function(c) {
-              var safeTitle = window.ntaEscapeHTML ? ntaEscapeHTML(c.title_ar || c.title) : (c.title_ar || c.title);
+            var list = Array.isArray(courses) ? courses : (courses.items || courses.data || []);
+            if (!Array.isArray(list)) list = [];
+            if (list.length === 0) {
+              html += '<button type="button" class="ui-select__option" data-value="" disabled style="opacity:0.5; pointer-events:none;"><span>لا توجد دورات متاحة</span></button>';
+            }
+            list.forEach(function(c) {
+              var safeTitle = window.ntaEscapeHTML ? ntaEscapeHTML(c.title_ar || c.title) : (c.title_ar || c.title || 'دورة #'+c.id);
               html += '<button type="button" class="ui-select__option" data-value="' + c.id + '" role="option"><span>' + safeTitle + '</span><span class="ui-select__check">✓</span></button>';
             });
             menu.innerHTML = html;
@@ -593,17 +614,20 @@
                if (opt) { opt.click(); }
             }
           })
-          .catch(function() {});
+          .catch(function(err) {
+            console.error('loadCourses error:', err);
+            notify('فشل تحميل الدورات. تأكد من تسجيل الدخول.', 'error');
+          });
       }
       loadCourses();
 
       function normalizeAdmissionSteps(data) {
         var fixed_defaults = [
           {
-            step_key: 'electronic_registration',
-            step_type: 'electronic_registration',
-            title_ar: 'التسجيل الإلكتروني',
-            description_ar: 'Applicant fills the customized registration form through the portal and uploads the required documents.',
+            step_key: "electronic_registration",
+            step_type: "electronic_registration",
+            title_ar: "التسجيل الإلكتروني",
+            description_ar: "Applicant fills the customized registration form through the portal and uploads the required documents.",
             is_required: true,
             fixed: true,
             required: true,
@@ -612,10 +636,10 @@
             config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
           },
           {
-            step_key: 'electronic_screening',
-            step_type: 'electronic_screening',
-            title_ar: 'الفرز الإلكتروني',
-            description_ar: 'The system evaluates the basic eligibility criteria using the rules engine, with optional manual review.',
+            step_key: "electronic_screening",
+            step_type: "electronic_screening",
+            title_ar: "الفرز الإلكتروني",
+            description_ar: "The system evaluates the basic eligibility criteria using the rules engine, with optional manual review.",
             is_required: true,
             fixed: true,
             required: true,
@@ -624,10 +648,10 @@
             config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
           },
           {
-            step_key: 'security_clearance',
-            step_type: 'security_clearance',
-            title_ar: 'الاستعلام الأمني',
-            description_ar: 'Eligible applicants’ data is sent to the relevant security authority for verification and approval.',
+            step_key: "security_clearance",
+            step_type: "security_clearance",
+            title_ar: "الاستعلام الأمني",
+            description_ar: "Eligible applicants’ data is sent to the relevant security authority for verification and approval.",
             is_required: true,
             fixed: true,
             required: true,
@@ -636,10 +660,10 @@
             config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
           },
           {
-            step_key: 'psychometric_test',
-            step_type: 'psychometric_test',
-            title_ar: 'اختبار السمات',
-            description_ar: 'Psychometric / traits assessment with pass/fail result and related score details.',
+            step_key: "psychometric_test",
+            step_type: "psychometric_test",
+            title_ar: "اختبار السمات",
+            description_ar: "Psychometric / traits assessment with pass/fail result and related score details.",
             is_required: true,
             fixed: true,
             required: true,
@@ -648,10 +672,10 @@
             config_json: { is_active: true, fixed: true, canDelete: false, canDisable: false }
           },
           {
-            step_key: 'qualifying_exams',
-            step_type: 'qualifying_exams',
-            title_ar: 'الاختبارات التأهيلية',
-            description_ar: 'Automated qualifying exams such as foreign languages, Arabic language, general knowledge, and any program-specific exam.',
+            step_key: "qualifying_exams",
+            step_type: "qualifying_exams",
+            title_ar: "الاختبارات التأهيلية",
+            description_ar: "Automated qualifying exams such as foreign languages, Arabic language, general knowledge, and any program-specific exam.",
             is_required: true,
             fixed: true,
             required: true,
@@ -661,124 +685,104 @@
           }
         ];
 
-        var steps = data || [];
-        
-        // Reconstruct step object flags
+        var steps = Array.isArray(data) ? data : [];
         steps.forEach(function(s) {
           if (!s.config_json) s.config_json = {};
-          
-          var isFixed = false;
-          var key = s.step_key;
-          var type = s.step_type;
-          
-          if (s.config_json.fixed === true) {
-            isFixed = true;
-          } else if (['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(key) !== -1 || ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'].indexOf(type) !== -1) {
-            isFixed = true;
+          if (typeof s.config_json === "string") {
+            try { s.config_json = JSON.parse(s.config_json); } catch (err) { s.config_json = {}; }
           }
-          
-          if (isFixed) {
-            s.fixed = true;
-            s.required = true;
+        });
+
+        if (!steps.length) {
+          fixed_defaults.forEach(function(fd, idx) { fd.step_order = idx; });
+          return fixed_defaults;
+        }
+
+        var normalized = [];
+        var matchedKeys = new Set();
+
+        steps.forEach(function(s) {
+          var key = s.step_key || "";
+          var type_ = s.step_type || "";
+          var matchingDef = null;
+          fixed_defaults.forEach(function(fd) {
+            if (!matchingDef && (fd.step_key === key || (fd.step_type === type_ && !matchedKeys.has(fd.step_key)))) {
+              matchingDef = fd;
+            }
+          });
+
+          if (matchingDef) {
+            s.step_key = matchingDef.step_key;
+            s.step_type = matchingDef.step_type;
+            s.title_ar = matchingDef.title_ar;
             s.is_required = true;
-            s.canDelete = false;
-            s.canDisable = false;
-            s.config_json.fixed = true;
+            if (!s.config_json || typeof s.config_json !== "object") s.config_json = {};
             s.config_json.is_active = true;
+            s.config_json.fixed = true;
             s.config_json.canDelete = false;
             s.config_json.canDisable = false;
-            
-            // Sync with default values to be robust
-            var matchingDefault = fixed_defaults.find(function(fd) { return fd.step_key === key || fd.step_type === type; });
-            if (matchingDefault) {
-              s.step_key = matchingDefault.step_key;
-              s.step_type = matchingDefault.step_type;
-              s.title_ar = matchingDefault.title_ar;
-            }
+            matchedKeys.add(matchingDef.step_key);
+            normalized.push(s);
           } else {
-            s.fixed = false;
-            s.canDelete = true;
-            s.canDisable = true;
+            if (!s.config_json || typeof s.config_json !== "object") s.config_json = {};
             s.config_json.fixed = false;
             s.config_json.canDelete = true;
             s.config_json.canDisable = true;
+            normalized.push(s);
           }
         });
 
-        // Ensure all 5 fixed steps always exist
         fixed_defaults.forEach(function(fd) {
-          var exists = steps.some(function(s) { return s.step_key === fd.step_key; });
-          if (!exists) {
-            steps.push(JSON.parse(JSON.stringify(fd)));
+          if (!matchedKeys.has(fd.step_key)) {
+            var missing = JSON.parse(JSON.stringify(fd));
+            normalized.push(missing);
           }
         });
 
-        // Separate fixed and custom steps
+        var fixedOrderKeys = ["electronic_registration", "electronic_screening", "security_clearance", "psychometric_test", "qualifying_exams"];
         var fixedSteps = [];
         var customSteps = [];
-        steps.forEach(function(s) {
-          if (s.fixed) {
-            fixedSteps.push(s);
-          } else {
-            customSteps.push(s);
-          }
+        normalized.forEach(function(s) {
+          if (s.config_json && s.config_json.fixed === true) fixedSteps.push(s);
+          else customSteps.push(s);
         });
 
-        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
         fixedSteps.sort(function(a, b) {
-          return fixed_order_keys.indexOf(a.step_key) - fixed_order_keys.indexOf(b.step_key);
+          return fixedOrderKeys.indexOf(a.step_key) - fixedOrderKeys.indexOf(b.step_key);
         });
 
-        // Re-align custom steps in their correct relative positions
-        var original_orders = {};
-        fixed_order_keys.forEach(function(k) {
-          var orig = (data || []).find(function(s) { return s.step_key === k || s.step_type === k; });
-          if (orig) {
-            original_orders[k] = orig.step_order || 0;
-          }
+        var originalOrders = {};
+        fixedOrderKeys.forEach(function(k, idx) {
+          var orig = steps.find(function(s) { return s.step_key === k || s.step_type === k; });
+          if (orig) originalOrders[k] = orig.step_order || 0;
+          else if (idx === 0) originalOrders[k] = 0;
+          else originalOrders[k] = (originalOrders[fixedOrderKeys[idx - 1]] || 0) + 10;
         });
 
-        if (original_orders['electronic_registration'] === undefined) original_orders['electronic_registration'] = 0;
-        if (original_orders['electronic_screening'] === undefined) original_orders['electronic_screening'] = original_orders['electronic_registration'] + 10;
-        if (original_orders['security_clearance'] === undefined) original_orders['security_clearance'] = original_orders['electronic_screening'] + 10;
-        if (original_orders['psychometric_test'] === undefined) original_orders['psychometric_test'] = original_orders['security_clearance'] + 10;
-        if (original_orders['qualifying_exams'] === undefined) original_orders['qualifying_exams'] = original_orders['psychometric_test'] + 10;
-
-        var intervals = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []};
+        var intervals = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
         customSteps.forEach(function(cs) {
           var co = cs.step_order || 0;
-          if (co < original_orders['electronic_registration']) {
-            intervals[1].push(cs);
-          } else if (co < original_orders['electronic_screening']) {
-            intervals[1].push(cs);
-          } else if (co < original_orders['security_clearance']) {
-            intervals[2].push(cs);
-          } else if (co < original_orders['psychometric_test']) {
-            intervals[3].push(cs);
-          } else if (co < original_orders['qualifying_exams']) {
-            intervals[4].push(cs);
-          } else {
-            intervals[5].push(cs);
-          }
+          if (co < originalOrders.electronic_registration) intervals[0].push(cs);
+          else if (co < originalOrders.electronic_screening) intervals[1].push(cs);
+          else if (co < originalOrders.security_clearance) intervals[2].push(cs);
+          else if (co < originalOrders.psychometric_test) intervals[3].push(cs);
+          else if (co < originalOrders.qualifying_exams) intervals[4].push(cs);
+          else intervals[5].push(cs);
         });
 
-        var final_list = [];
-        final_list.push(fixedSteps[0]);
-        final_list = final_list.concat(intervals[1]);
-        final_list.push(fixedSteps[1]);
-        final_list = final_list.concat(intervals[2]);
-        final_list.push(fixedSteps[2]);
-        final_list = final_list.concat(intervals[3]);
-        final_list.push(fixedSteps[3]);
-        final_list = final_list.concat(intervals[4]);
-        final_list.push(fixedSteps[4]);
-        final_list = final_list.concat(intervals[5]);
+        var finalList = [];
+        finalList = finalList.concat(intervals[0], fixedSteps.filter(function(s) { return s.step_key === "electronic_registration"; }));
+        finalList = finalList.concat(intervals[1], fixedSteps.filter(function(s) { return s.step_key === "electronic_screening"; }));
+        finalList = finalList.concat(intervals[2], fixedSteps.filter(function(s) { return s.step_key === "security_clearance"; }));
+        finalList = finalList.concat(intervals[3], fixedSteps.filter(function(s) { return s.step_key === "psychometric_test"; }));
+        finalList = finalList.concat(intervals[4], fixedSteps.filter(function(s) { return s.step_key === "qualifying_exams"; }));
+        finalList = finalList.concat(intervals[5]);
 
-        final_list.forEach(function(s, idx) {
+        finalList.forEach(function(s, idx) {
           s.step_order = idx;
         });
 
-        return final_list;
+        return finalList;
       }
 
       function loadAdmissionSteps() {
@@ -842,37 +846,9 @@
           e.preventDefault();
           if (draggedIndex === -1 || draggedIndex === dropIndex) return;
 
-          // Electronic Registration (first step) must remain at index 0
-          if (draggedIndex === 0 || dropIndex === 0) {
-              notify("التسجيل الإلكتروني يجب أن يظل الخطوة الأولى دائماً.", "error");
-              return;
-          }
-
           var tempSteps = admissionSteps.slice();
           var item = tempSteps.splice(draggedIndex, 1)[0];
           tempSteps.splice(dropIndex, 0, item);
-
-          // Verify fixed steps relative order is preserved
-          var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
-          var relative_order_indices = [];
-          tempSteps.forEach(function(s) {
-              if (s.fixed) {
-                  relative_order_indices.push(fixed_order_keys.indexOf(s.step_key));
-              }
-          });
-
-          var isSorted = true;
-          for (var i = 0; i < relative_order_indices.length - 1; i++) {
-              if (relative_order_indices[i] > relative_order_indices[i+1]) {
-                  isSorted = false;
-                  break;
-              }
-          }
-
-          if (!isSorted) {
-              notify("لا يمكن تغيير الترتيب النسبي للمراحل الأساسية.", "error");
-              return;
-          }
 
           admissionSteps = tempSteps;
           
@@ -928,7 +904,11 @@
           if (selectedStepIndex === -1) return;
           admissionSteps[selectedStepIndex][field] = value;
           markUnsaved();
-          renderStepsListOnly();
+          if (field === 'step_type') {
+            renderAdmSteps();
+          } else {
+            renderStepsListOnly();
+          }
           if (field === 'title_ar') {
             document.getElementById('panelStageTitle').textContent = "إعدادات المرحلة: " + (value || "بدون عنوان");
           }
@@ -943,10 +923,90 @@
           markUnsaved();
           renderStepsListOnly();
       }
+
+      function getSelectedRubricMatrix() {
+          if (selectedStepIndex === -1 || !admissionSteps[selectedStepIndex]) return [];
+          var cfg = admissionSteps[selectedStepIndex].config_json || {};
+          var matrix = cfg.interview_matrix;
+          if (typeof matrix === "string") {
+              try { matrix = JSON.parse(matrix); } catch (err) { matrix = []; }
+          }
+          if (!Array.isArray(matrix)) return [];
+          return matrix.map(function(item) {
+              if (Array.isArray(item)) {
+                  return {
+                      name: String(item[1] != null ? item[1] : item[0] || "").trim(),
+                      max_score: Math.max(1, parseInt(item[2] != null ? item[2] : item[1], 10) || 5)
+                  };
+              }
+              if (!item || typeof item !== "object") {
+                  return { name: "", max_score: 5 };
+              }
+              return {
+                  name: String(item.name != null ? item.name : item.label || item.title || "").trim(),
+                  max_score: Math.max(1, parseInt(item.max_score != null ? item.max_score : item.maxScore, 10) || 5)
+              };
+          });
+      }
+
+      function writeRubricMatrix(matrix) {
+          if (selectedStepIndex === -1 || !admissionSteps[selectedStepIndex]) return;
+          if (!admissionSteps[selectedStepIndex].config_json) {
+              admissionSteps[selectedStepIndex].config_json = {};
+          }
+          admissionSteps[selectedStepIndex].config_json.interview_matrix = matrix;
+      }
+
+      function renderRubricCriteria() {
+          var list = document.getElementById("rubricCriteriaList");
+          if (!list) return;
+          var matrix = getSelectedRubricMatrix();
+          var html = "";
+          if (!matrix.length) {
+              html = '<div style="padding:0.8rem 1rem;border:1px dashed rgba(255,255,255,0.12);border-radius:10px;color:var(--text-secondary);font-size:0.85rem;">لم تتم إضافة معايير بعد. اضغط "إضافة معيار جديد" للبدء.</div>';
+          } else {
+              matrix.forEach(function(row, idx) {
+                  html += '<div class="rubric-row" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">' +
+                      '<input type="text" class="editor-input" placeholder="اسم المعيار" value="' + (window.ntaEscapeHTML ? ntaEscapeHTML(row.name || "") : String(row.name || "").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; })) + '" oninput="updateRubricCriterion(' + idx + ', \'name\', this.value)" style="flex:1;min-width:200px;">' +
+                      '<input type="number" class="editor-input" min="1" max="99" value="' + (row.max_score || 5) + '" oninput="updateRubricCriterion(' + idx + ', \'max_score\', this.value)" style="width:120px;text-align:center;">' +
+                      '<button type="button" class="btn btn--secondary" onclick="removeRubricCriterion(' + idx + ')" style="white-space:nowrap;">حذف</button>' +
+                  '</div>';
+              });
+          }
+          list.innerHTML = html;
+      }
+
+      function addRubricCriterion() {
+          var matrix = getSelectedRubricMatrix();
+          matrix.push({ name: "", max_score: 5 });
+          writeRubricMatrix(matrix);
+          markUnsaved();
+          renderRubricCriteria();
+      }
+
+      function updateRubricCriterion(index, field, value) {
+          var matrix = getSelectedRubricMatrix();
+          if (!matrix[index]) return;
+          if (field === "max_score") {
+              matrix[index][field] = Math.max(1, parseInt(value, 10) || 5);
+          } else {
+              matrix[index][field] = value;
+          }
+          writeRubricMatrix(matrix);
+          markUnsaved();
+      }
+
+      function removeRubricCriterion(index) {
+          var matrix = getSelectedRubricMatrix();
+          if (index < 0 || index >= matrix.length) return;
+          matrix.splice(index, 1);
+          writeRubricMatrix(matrix);
+          markUnsaved();
+          renderRubricCriteria();
+      }
       
       async function removeStepDirectly(e, idx) {
           e.stopPropagation();
-          if (admissionSteps[idx] && admissionSteps[idx].fixed) return;
           if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(idx, 1);
               if (selectedStepIndex === idx) {
@@ -961,7 +1021,6 @@
 
       async function removeSelectedStep() {
           if (selectedStepIndex === -1) return;
-          if (admissionSteps[selectedStepIndex] && admissionSteps[selectedStepIndex].fixed) return;
           if(await ntaConfirm('حذف هذه المرحلة قد يؤثر على الطلبات المرتبطة بها. هل تريد المتابعة؟', {title: 'حذف المرحلة', confirmText: 'حذف', icon: '🗑️'})) {
               admissionSteps.splice(selectedStepIndex, 1);
               selectedStepIndex = -1;
@@ -999,10 +1058,6 @@
               ? '<span class="badge badge--green">مطلوبة</span>' 
               : '<span class="badge badge--neutral">اختيارية</span>';
               
-          var fixedBadge = s.fixed
-              ? '<span class="badge badge--red">مرحلة أساسية (Fixed)</span>'
-              : '<span class="badge badge--blue">مرحلة إضافية (Custom)</span>';
-              
           var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
           
           var tPass = (s.config_json && s.config_json.transition_pass) || "next";
@@ -1025,19 +1080,17 @@
           html += '        <div class="builder-step-title">' + safeStepTitle + '</div>';
           html += '        <div class="builder-step-meta">';
           html += '          <span>'+typeLabel+'</span>';
-          html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;">' + fixedBadge + reqBadge + activeBadge + '</div>';
+          html += ' <span style="opacity:0.5">•</span> <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;">' + reqBadge + activeBadge + '</div>';
           html += '        </div>';
           html += '      </div>';
           html += '      <div style="display:flex; align-items:center; gap:0.5rem;">';
           html += '        <div style="color:var(--text-subtle);opacity:0.5;cursor:grab;" class="drag-handle" title="سحب لإعادة الترتيب"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>';
-          if (!s.fixed) {
-            html += '        <div class="ui-menu" onclick="event.stopPropagation()">';
-            html += '          <button type="button" class="ui-menu__trigger" style="padding:0.2rem 0.4rem; font-size: 1.2rem;">⋮</button>';
-            html += '          <div class="ui-menu__content" hidden>';
-            html += '            <button type="button" class="ui-menu__item is-danger" onclick="removeStepDirectly(event, '+i+')">حذف المرحلة</button>';
-            html += '          </div>';
-            html += '        </div>';
-          }
+          html += '        <div class="ui-menu" onclick="event.stopPropagation()">';
+          html += '          <button type="button" class="ui-menu__trigger" style="padding:0.2rem 0.4rem; font-size: 1.2rem;">⋮</button>';
+          html += '          <div class="ui-menu__content" hidden>';
+          html += '            <button type="button" class="ui-menu__item is-danger" onclick="removeStepDirectly(event, '+i+')">حذف المرحلة</button>';
+          html += '          </div>';
+          html += '        </div>';
           html += '      </div>';
           html += '    </div>';
           html += '    <div class="transition-logic">';
@@ -1067,17 +1120,7 @@
         if(!valBar) return;
         
         var hasErrors = false;
-        var errorMsgs = [];
         
-        var fixed_order_keys = ['electronic_registration', 'electronic_screening', 'security_clearance', 'psychometric_test', 'qualifying_exams'];
-        fixed_order_keys.forEach(function(fk) {
-          var exists = admissionSteps.some(function(s) { return s.step_key === fk; });
-          if (!exists) {
-            hasErrors = true;
-            errorMsgs.push("مرحلة أساسية مفقودة: " + (ADM_TYPE_LABELS[fk] || fk));
-          }
-        });
-
         admissionSteps.forEach(function(s) {
             if(!s.title_ar || s.title_ar.trim() === '') {
               hasErrors = true;
@@ -1086,7 +1129,6 @@
 
         if(admissionSteps.length === 0) {
             hasErrors = true;
-            errorMsgs.push("المسار فارغ");
         }
         
         if(courseStageCount) courseStageCount.textContent = admissionSteps.length + " مرحلة";
@@ -1094,7 +1136,7 @@
         if(hasErrors) {
             valBar.className = "validation-bar validation-bar--error";
             valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-            valText.innerHTML = 'غير جاهز للنشر <span>· توجد أخطاء في إعداد بعض المراحل أو مراحل مفقودة</span>';
+            valText.innerHTML = 'غير جاهز للنشر <span>· توجد أخطاء في إعداد بعض المراحل</span>';
         } else {
             valBar.className = "validation-bar validation-bar--ready";
             valIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
@@ -1203,13 +1245,24 @@
             }
           }
           
+          // Toggle Rubric Builder based on step_type
+          var rubricSection = document.getElementById("rubricBuilderSection");
+          if(rubricSection) {
+            if(stepType === "interview" || stepType === "first_interview" || stepType === "second_interview") {
+                rubricSection.style.display = "block";
+                renderRubricCriteria();
+            } else {
+                rubricSection.style.display = "none";
+            }
+          }
+          
           var reqInput = document.getElementById("settingRequired");
           reqInput.checked = !!s.is_required;
-          reqInput.disabled = !!s.fixed;
+          reqInput.disabled = false;
           
           var actInput = document.getElementById("settingActive");
           actInput.checked = cfg.is_active !== false;
-          actInput.disabled = !!s.fixed;
+          actInput.disabled = false;
       }
 
       function saveAdmissionSteps() {
@@ -1233,16 +1286,9 @@
         admissionSteps.forEach(function(s, i) { 
           s.step_order = i; 
           if(!s.config_json) s.config_json = {};
-          if(s.fixed) {
-            s.config_json.fixed = true;
-            s.config_json.is_active = true;
-            s.config_json.canDelete = false;
-            s.config_json.canDisable = false;
-          } else {
-            s.config_json.fixed = false;
-            s.config_json.canDelete = true;
-            s.config_json.canDisable = true;
-          }
+          s.config_json.fixed = false;
+          s.config_json.canDelete = true;
+          s.config_json.canDisable = true;
         });
           
         fetch("/api/courses/" + courseId + "/admission-steps", {
