@@ -59,31 +59,39 @@ def sync_course_steps(cursor, course_id, steps, path_type):
         )
 
 
+
+import datetime as _dt
+from decimal import Decimal as _Decimal
+
+
 @router.get("")
 async def list_courses(editor: dict = Depends(require_editor)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT c.*, caa.nature as course_type,
+            SELECT c.id, c.title, c.title_ar, c.short_name, c.status, c.skill_level,
+                   c.classification, c.description, c.image_url,
+                   c.duration_weeks, c.total_sessions, c.is_public,
                    (SELECT COUNT(*) FROM course_materials cm WHERE cm.course_id = c.id AND cm.status='active') AS materials_count,
                    (SELECT COUNT(*) FROM course_sessions cs WHERE cs.course_id = c.id) AS sessions_count
             FROM courses c
-            LEFT JOIN course_ai_analysis caa ON c.id = caa.course_id
             ORDER BY c.id DESC
         """)
         rows = cursor.fetchall()
+        clean = []
         for row in rows:
-            try:
-                row['stages'] = json.loads(row['stages_json']) if isinstance(row.get('stages_json'), str) else (row.get('stages_json') or [])
-            except json.JSONDecodeError:
-                row['stages'] = []
-            try:
-                row['batch_data'] = json.loads(row['batch_data_json']) if isinstance(row.get('batch_data_json'), str) else (row.get('batch_data_json') or {})
-            except json.JSONDecodeError:
-                row['batch_data'] = {}
-            row['status'] = DB_TO_STATUS.get(row.get('status'), row.get('status'))
-        return rows
+            safe = {}
+            for k, v in row.items():
+                if isinstance(v, (_dt.datetime, _dt.date)):
+                    safe[k] = v.isoformat()
+                elif isinstance(v, _Decimal):
+                    safe[k] = float(v)
+                else:
+                    safe[k] = v
+            safe['status'] = DB_TO_STATUS.get(safe.get('status'), safe.get('status'))
+            clean.append(safe)
+        return clean
     finally:
         cursor.close()
         db.close()

@@ -70,8 +70,8 @@ async def get_admin_courses(current_user: dict = Depends(get_staff_user)):
             c["id"] = str(c["id"])
         return courses
     finally:
-        cursor.close()
         db.close()
+        cursor.close()
 
 
 # Arabic month names indexed 1-12
@@ -180,8 +180,14 @@ async def get_trainees(
 
         params = []
         if role is not None:
-            query += " AND u.role = %s"
-            params.append(role)
+            if role == "applicant":
+                query += " AND (u.role = 'applicant' OR (u.role = 'trainee' AND (ps.current_stage_id < 7 OR ps.current_stage_id IS NULL)))"
+            elif role == "trainee":
+                query += " AND (u.role = 'trainee' AND ps.current_stage_id = 7 AND a.status = 'approved')"
+            else:
+                query += " AND u.role = %s"
+                params.append(role)
+
         if stage is not None:
             if stage == 7:
                 query += " AND (ps.current_stage_id = %s OR a.status = 'approved')"
@@ -356,84 +362,75 @@ async def submit_review(
                             tuple(values),
                         )
 
-        # ── Stage 4: Sync exam scores into admission_stage_4_exams ──
-        # Stage 4 exam results are written by the exam portal into
-        # trainee_exam_submissions. Here we mirror them into a dedicated
-        # admission table so the admin review has a permanent snapshot.
-        if review.stage_id == 4:
-            cursor.execute(
-                """
-                SELECT subject, score
-                FROM trainee_exam_submissions
-                WHERE trainee_id = %s
-                ORDER BY submitted_at DESC
-            """,
-                (review.trainee_id,),
-            )
-            exam_rows = cursor.fetchall()
-            # Since ordered by submitted_at DESC, loop in reverse so newer scores overwrite older
-            scores = {}
-            for row in reversed(exam_rows):
-                if row[1] is not None:
-                    scores[row[0]] = float(row[1])
+                # ── Stage 4: Sync exam scores into admission_stage_4_exams ──
+                # Stage 4 exam results are written by the exam portal into
+                # trainee_exam_submissions. Here we mirror them into a dedicated
+                # admission table so the admin review has a permanent snapshot.
+                if review.stage_id == 4:
+                    cursor.execute(
+                        """
+                        SELECT subject, score
+                        FROM trainee_exam_submissions
+                        WHERE trainee_id = %s
+                        ORDER BY submitted_at DESC
+                        """,
+                        (review.trainee_id,),
+                    )
+                    exam_rows = cursor.fetchall()
+                    # Since ordered by submitted_at DESC, loop in reverse so newer scores overwrite older
+                    scores = {}
+                    for row in reversed(exam_rows):
+                        if row[1] is not None:
+                            scores[row[0]] = float(row[1])
 
-            arabic_score = scores.get("arabic")
-            english_score = scores.get("english")
-            public_knowledge_score = scores.get("public_knowledge")
-            overall_score = None
-            available = [
-                v
-                for v in [arabic_score, english_score, public_knowledge_score]
-                if v is not None
-            ]
-            if available:
-                overall_score = round(sum(available) / len(available), 2)
+                    arabic_score = scores.get("arabic")
+                    english_score = scores.get("english")
+                    public_knowledge_score = scores.get("public_knowledge")
+                    overall_score = None
+                    available = [
+                        v
+                        for v in [arabic_score, english_score, public_knowledge_score]
+                        if v is not None
+                    ]
+                    if available:
+                        overall_score = round(sum(available) / len(available), 2)
 
-            admin_notes = review.notes or (
-                review.details.get("admin_notes") if review.details else None
-            )
+                    admin_notes = review.notes or (
+                        review.details.get("admin_notes") if review.details else None
+                    )
 
-            cursor.execute(
-                "SELECT id FROM admission_stage_4_exams WHERE trainee_id = %s",
-                (review.trainee_id,),
-            )
-            if cursor.fetchone():
-                cursor.execute(
-                    """
-                    UPDATE admission_stage_4_exams
-                    SET arabic_score = %s,
-                        english_score = %s,
-                        public_knowledge_score = %s,
-                        overall_score = %s,
-                        admin_notes = %s,
-                        reviewed_at = NOW()
-                    WHERE trainee_id = %s
-                """,
-                    (
-                        arabic_score,
-                        english_score,
-                        public_knowledge_score,
-                        overall_score,
-                        admin_notes,
-                        review.trainee_id,
-                    ),
-                )
-            else:
-                cursor.execute(
-                    """
-                    INSERT INTO admission_stage_4_exams
-                        (trainee_id, arabic_score, english_score, public_knowledge_score, overall_score, admin_notes, reviewed_at)
-                    VALUES (%s, %s, %s, %s, %s, %s, NOW())
-                """,
-                    (
-                        review.trainee_id,
-                        arabic_score,
-                        english_score,
-                        public_knowledge_score,
-                        overall_score,
-                        admin_notes,
-                    ),
-                )
+                    cursor.execute(
+                        "SELECT id FROM admission_stage_4_exams WHERE trainee_id = %s",
+                        (review.trainee_id,),
+                    )
+                    if cursor.fetchone():
+                        cursor.execute(
+                            "UPDATE admission_stage_4_exams SET arabic_score = %s, english_score = %s, public_knowledge_score = %s, overall_score = %s, admin_notes = %s, reviewed_at = NOW() WHERE trainee_id = %s",
+                            (
+                                arabic_score,
+                                english_score,
+                                public_knowledge_score,
+                                overall_score,
+                                admin_notes,
+                                review.trainee_id,
+                            ),
+                        )
+                    else:
+                        cursor.execute(
+                            """
+                            INSERT INTO admission_stage_4_exams
+                                (trainee_id, arabic_score, english_score, public_knowledge_score, overall_score, admin_notes, reviewed_at)
+                            VALUES (%s, %s, %s, %s, %s, %s, NOW())
+                            """,
+                            (
+                                review.trainee_id,
+                                arabic_score,
+                                english_score,
+                                public_knowledge_score,
+                                overall_score,
+                                admin_notes,
+                            ),
+                        )
 
         # BUG 17 FIX (belt-and-suspenders): schema validator already normalises
         # review.result to 'Active'/'Rejected', but use .lower() here so this
@@ -661,7 +658,7 @@ async def submit_review(
         db.commit()
 
         # Dispatch credential email AFTER commit — so DB is safe even if mail server is slow/down.
-        if "_pending_email" in dir():
+        if "_pending_email" in locals():
             try:
                 send_credential_email(*_pending_email)
             except Exception as mail_err:
@@ -702,6 +699,7 @@ async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
         cursor.close()
         db.close()
 
+
 @router.get("/trainees/{trainee_id}/interview-scores")
 async def get_interview_scores(trainee_id: int, staff: dict = Depends(get_staff_user)):
     """Committee interview evaluations for a trainee (read-only, admin oversight).
@@ -737,16 +735,21 @@ async def get_interview_scores(trainee_id: int, staff: dict = Depends(get_staff_
         out = []
         for sid, evals in sorted(stages.items()):
             pcts = [e["percentage"] for e in evals]
-            out.append({
-                "stage_id": sid,
-                "evaluations": evals,
-                "member_count": len(evals),
-                "average_percentage": round(sum(pcts) / len(pcts), 1) if pcts else 0,
-            })
+            out.append(
+                {
+                    "stage_id": sid,
+                    "evaluations": evals,
+                    "member_count": len(evals),
+                    "average_percentage": round(sum(pcts) / len(pcts), 1)
+                    if pcts
+                    else 0,
+                }
+            )
         return out
     finally:
         cursor.close()
         db.close()
+
 
 @router.get("/trainees/{trainee_id}")
 async def get_trainee_profile(trainee_id: int, staff: dict = Depends(get_staff_user)):
@@ -887,8 +890,8 @@ async def get_trainee_profile(trainee_id: int, staff: dict = Depends(get_staff_u
 
         return {"user": user, "application": app_data}
     finally:
-        cursor.close()
         db.close()
+        cursor.close()
 
 
 @router.get("/ai-verification/{trainee_id}")
@@ -1153,8 +1156,9 @@ async def create_security_decision(
         # admin didn't supply one, fall back to a neutral technical reason that never
         # mentions security.
         is_silent = decision_data.decision in ("silent_reject", "block_future")
-        masked = (decision_data.masked_reason or "").strip() or \
-            "تعذّر استكمال إجراءات القبول الخاصة بك في الوقت الحالي."
+        masked = (
+            decision_data.masked_reason or ""
+        ).strip() or "تعذّر استكمال إجراءات القبول الخاصة بك في الوقت الحالي."
 
         cursor.execute(
             """

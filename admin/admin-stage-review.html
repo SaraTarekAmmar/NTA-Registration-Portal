@@ -300,28 +300,9 @@
                             <label class="stage-field__label" for="s5-panel_members">أعضاء لجنة المقابلة</label>
                             <input type="text" id="s5-panel_members" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
                         </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s5-comm_skills">مهارات التواصل</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s5-comm_skills" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s5-confidence">الثقة بالنفس</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s5-confidence" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s5-appearance">المظهر العام</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s5-appearance" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
                     </div>
+
+                    <div class="interview-rubric" id="s5-interview-rubric" data-stage="5"></div>
 
                     <div id="s5-committee-scores" class="committee-eval-block" style="display:none"></div>
 
@@ -369,28 +350,9 @@
                             <label class="stage-field__label" for="s6-panel_members">أعضاء لجنة المقابلة</label>
                             <input type="text" id="s6-panel_members" class="stage-field__input" data-field="panel_members" placeholder="الأسماء...">
                         </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s6-comm_skills">مهارات التواصل</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s6-comm_skills" class="stage-field__range" data-field="comm_skills" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s6-confidence">الثقة بالنفس</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s6-confidence" class="stage-field__range" data-field="confidence" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
-                        <div class="stage-field">
-                            <label class="stage-field__label" for="s6-appearance">المظهر العام</label>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="range" id="s6-appearance" class="stage-field__range" data-field="appearance" min="1" max="5" value="3" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" oninput="this.nextElementSibling.textContent = this.value; this.setAttribute('aria-valuenow', this.value)">
-                                <span class="stage-score-display" aria-hidden="true">3</span>
-                            </div>
-                        </div>
                     </div>
+
+                    <div class="interview-rubric" id="s6-interview-rubric" data-stage="6"></div>
 
                     <div id="s6-committee-scores" class="committee-eval-block" style="display:none"></div>
 
@@ -934,22 +896,57 @@
                                 return;
                             }
                             const recAr = { accept: 'قبول', waitlist: 'قائمة انتظار', unsuitable: 'غير مناسب' };
-                            let html = '<div class="committee-eval-head">تقييمات لجنة المقابلة الرقمية <span class="committee-eval-avg">المتوسط ' + data.average_percentage + '% · ' + data.member_count + ' عضو</span></div>';
+                            let html = '<div class="committee-eval-head">تقييمات لجنة المقابلة <span class="committee-eval-avg">المتوسط ' + data.average_percentage + '% · ' + data.member_count + ' عضو</span></div>';
                             const fmtTime = v => v ? String(v).replace('T', ' ').slice(0, 16) : '';
                             data.evaluations.forEach(e => {
                                 const crit = e.criteria_json || {};
-                                const chips = Object.keys(crit).map(k => '<span class="committee-eval-chip">' + esc(k) + ': ' + crit[k] + '</span>').join('');
+                                // Build table rows
+                                let tableRows = '';
+                                Object.keys(crit).forEach((k, idx) => {
+                                    const score = parseInt(crit[k], 10);
+                                    tableRows += `
+                                        <tr>
+                                            <td style="text-align:center;">${idx + 1}</td>
+                                            <td style="text-align:left;">${esc(k)}</td>
+                                            <td style="text-align:center;">${score === 1 ? '✔️' : ''}</td>
+                                            <td style="text-align:center;">${score === 2 ? '✔️' : ''}</td>
+                                            <td style="text-align:center;">${score === 3 ? '✔️' : ''}</td>
+                                            <td style="text-align:center;">${score === 4 ? '✔️' : ''}</td>
+                                            <td style="text-align:center;">${score === 5 ? '✔️' : ''}</td>
+                                        </tr>`;
+                                });
+
+                                const matrixTable = tableRows ? `
+                                    <table class="rubric-matrix-table" style="width:100%; border-collapse:collapse; margin-top:1rem; margin-bottom:1rem; font-size:0.9rem;" border="1">
+                                        <thead>
+                                            <tr style="background:#f4f4f4;">
+                                                <th style="padding:0.5rem; text-align:center; width:5%;">م</th>
+                                                <th style="padding:0.5rem; text-align:left;">مجال التقييم / Evaluation Subject</th>
+                                                <th style="padding:0.5rem; text-align:center; width:10%;">Poor 1<br><small>ضعيف</small></th>
+                                                <th style="padding:0.5rem; text-align:center; width:10%;">Pass 2<br><small>مقبول</small></th>
+                                                <th style="padding:0.5rem; text-align:center; width:10%;">Good 3<br><small>جيد</small></th>
+                                                <th style="padding:0.5rem; text-align:center; width:10%;">Very Good 4<br><small>جيد جدا</small></th>
+                                                <th style="padding:0.5rem; text-align:center; width:10%;">Excellent 5<br><small>ممتاز</small></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>${tableRows}</tbody>
+                                    </table>` : '<div style="margin:1rem 0; color:#888;">لم يتم تسجيل تفاصيل التقييم (بدون شبكة).</div>';
+
                                 const meta = [];
                                 if (e.governorate) meta.push('المحافظة: ' + esc(e.governorate));
                                 if (e.session_start || e.session_end) meta.push('الوقت: ' + esc(fmtTime(e.session_start)) + (e.session_end ? ' – ' + esc(fmtTime(e.session_end)) : ''));
                                 if (e.still_on_duty === 1 || e.still_on_duty === 0) meta.push('على رأس العمل: ' + (e.still_on_duty === 1 ? 'نعم' : 'لا'));
-                                html += '<div class="committee-eval-card">'
-                                    + '<div class="committee-eval-row"><strong>' + esc(e.committee_member_name) + '</strong>'
-                                    + '<span class="committee-eval-score">' + e.total_score + '/' + e.total_max + ' (' + e.percentage + '%)'
-                                    + (e.recommendation ? ' · ' + (recAr[e.recommendation] || e.recommendation) : '') + '</span></div>'
-                                    + (meta.length ? '<div class="committee-eval-meta">' + meta.join(' · ') + '</div>' : '')
-                                    + '<div class="committee-eval-chips">' + chips + '</div>'
-                                    + (e.notes ? '<div class="committee-eval-notes">' + esc(e.notes) + '</div>' : '')
+                                html += '<div class="committee-eval-card" style="border:1px solid var(--border-color); border-radius:8px; padding:1.5rem; margin-bottom:1.5rem; background:var(--surface-color);">'
+                                    + '<div class="committee-eval-row" style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary-color); padding-bottom:0.5rem; margin-bottom:1rem;">'
+                                    + '  <strong style="font-size:1.1rem;">عضو اللجنة: ' + esc(e.committee_member_name) + '</strong>'
+                                    + '  <span class="committee-eval-score" style="font-weight:bold; font-size:1.1rem; color:var(--primary-color);">إجمالي الدرجات: ' + e.total_score + '/' + e.total_max + ' (' + e.percentage + '%)</span>'
+                                    + '</div>'
+                                    + (meta.length ? '<div class="committee-eval-meta" style="margin-bottom:1rem; color:var(--text-subtle);">' + meta.join(' | ') + '</div>' : '')
+                                    + matrixTable
+                                    + '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border-color);">'
+                                    + '  <div style="flex:1; margin-left:1rem;"><strong>ملاحظات:</strong><br>' + (e.notes ? esc(e.notes) : '<span style="color:#aaa;">لا توجد ملاحظات</span>') + '</div>'
+                                    + '  <div style="padding:0.5rem 1rem; border:2px dashed var(--primary-color); border-radius:6px; font-weight:bold; text-align:center;">التوصية بالقبول:<br><span style="font-size:1.2rem; color:var(--primary-color);">' + (e.recommendation ? (recAr[e.recommendation] || e.recommendation) : 'غير محدد') + '</span></div>'
+                                    + '</div>'
                                     + '</div>';
                             });
                             box.innerHTML = html;

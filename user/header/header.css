@@ -332,6 +332,7 @@ body[data-page] #ntaThemeFab {
   body[data-page] .editor-main,
   body[data-page] .mat-page,
   body[data-page] .trainee-main,
+  body[data-page] .cd-main,
   body[data-page] .main-content,
   body[data-page] .rec-wrap,
   body[data-page] .coordinator-main {
@@ -593,6 +594,7 @@ html.light-mode .nta-user__role {
   /* Avoid hamburger covering any page content in landscape */
   body[data-page] > main,
   body[data-page] .editor-main,
+  body[data-page] .cd-main,
   body[data-page] .trainee-main,
   body[data-page] .coordinator-main {
     padding-top: 4.5rem;

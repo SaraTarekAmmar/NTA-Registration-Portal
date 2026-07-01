@@ -7,7 +7,7 @@ import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from core.database import DatabaseManager
+from core.database import get_db_connection
 
 STATUS_LABELS = {
     "submitted": "تم تقديم الطلب",
@@ -54,12 +54,16 @@ def create_status_notification(
         message += f"\nملاحظة: {notes}"
 
     try:
-        with DatabaseManager() as db:
-            result = db.execute(
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute(
                 """INSERT INTO notifications (user_id, title_ar, message_ar, notification_type, is_read)
                    VALUES (%s, %s, %s, %s, %s)""",
                 (user_id, title, message, "status_change", 0),
             )
+            conn.commit()
+            result = cursor.lastrowid
             if result:
                 return {
                     "id": result,
@@ -67,6 +71,9 @@ def create_status_notification(
                     "title_ar": title,
                     "message_ar": message,
                 }
+        finally:
+            cursor.close()
+            conn.close()
     except Exception as e:
         print(f"Notification service error: {e}")
 

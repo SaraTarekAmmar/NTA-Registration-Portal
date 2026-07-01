@@ -1690,13 +1690,11 @@
           document.getElementById("loginExamSub").textContent =
             courseName + " · " + firstExam.examNum;
         } else {
+          /* No dummy data for this course — show course name but still allow
+             login so we can attempt the real /api/exams/{id} endpoint */
           document.getElementById("loginExamName").textContent = courseName;
           document.getElementById("loginExamSub").textContent =
-            "لا يوجد اختبار متاح حالياً";
-          document.getElementById("loginSubmit").disabled = true;
-          document.getElementById("loginErr").textContent =
-            "لا يوجد اختبار متاح لهذه الدورة في الوقت الحالي.";
-          document.getElementById("loginErr").classList.add("visible");
+            "سجّل دخولك للتحقق من توفر الاختبار";
         }
 
         /* ═══════════════════════════════════
