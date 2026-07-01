@@ -114,7 +114,7 @@ class GuardedStaticFiles(StaticFiles):
 
 class PrivateDataStaticFiles(StaticFiles):
     """Blocks PII / sensitive subdirectories from unauthenticated static access.
-    Protected files (trainee docs, admin photos, uploads, exams) are served only
+    Protected files (trainee docs, admin photos, uploads, exams, submissions) are served only
     through authenticated API routes, not this public mount."""
 
     _BLOCKED = {"trainees", "trainers", "admins", "admission", "uploads", "temp", "standard_exams", "log"}
@@ -123,7 +123,8 @@ class PrivateDataStaticFiles(StaticFiles):
         from starlette.responses import PlainTextResponse as _PT
         norm = path.replace("\\", "/").strip("/").lower()
         segs = [s for s in norm.split("/") if s]
-        if (segs and segs[0] in self._BLOCKED) or any(s.startswith(".") for s in segs):
+        is_private_submission = bool(segs and segs[0] == "courses" and "submissions" in segs)
+        if (segs and segs[0] in self._BLOCKED) or is_private_submission or any(s.startswith(".") for s in segs):
             return _PT("Not Found", status_code=404)
         return await super().get_response(path, scope)
 

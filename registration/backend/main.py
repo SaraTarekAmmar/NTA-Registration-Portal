@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import PlainTextResponse
 import os
 import secrets
 from dotenv import load_dotenv
@@ -26,13 +27,13 @@ app.add_middleware(
     allow_origins=[
         "https://academy.nta.eg",
         "https://reg.nta.eg",
-        "http://localhost:7770",   # front page portal
-        "http://localhost:7771",   # trainee portal
-        "http://localhost:7772",   # trainer portal
-        "http://localhost:7775",   # registration portal (self)
-        "http://localhost:8001",   # editor portal
-        "http://localhost:8002",   # admin portal
-        "http://localhost:8003",   # superadmin
+        "http://localhost:7770",
+        "http://localhost:7771",
+        "http://localhost:7772",
+        "http://localhost:7775",
+        "http://localhost:8001",
+        "http://localhost:8002",
+        "http://localhost:8003",
     ],
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|null",
     allow_credentials=True,
@@ -53,37 +54,29 @@ async def csrf_middleware(request: Request, call_next):
             key="csrf_token",
             value=token,
             samesite="lax",
-            httponly=False  # Must be readable by Javascript
+            httponly=False
         )
     return response
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    # Skip logging for static assets like css, images, js to avoid noise
     path = request.url.path
     if any(path.endswith(ext) for ext in [".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".woff", ".woff2"]):
         return await call_next(request)
 
     ip = request.client.host if request.client else "unknown"
     ua = request.headers.get("user-agent", "unknown")
-    
     response = await call_next(request)
     
-    category = "PASSIVE"
-    event_type = "PAGE_VIEW"
-    
-    if path.startswith("/api/"):
-        event_type = "API_CALL"
-    
+    event_type = "API_CALL" if path.startswith("/api/") else "PAGE_VIEW"
     log_activity(
-        category=category,
+        category="PASSIVE",
         event_type=event_type,
         ip_address=ip,
         user_agent=ua,
         request_path=path,
         status_code=response.status_code
     )
-    
     return response
 
 
@@ -93,21 +86,58 @@ app.include_router(progress.router)
 
 @app.post("/api/debug/log")
 async def debug_log(request: Request):
-    data = await request.json()
-    print("\n[FRONTEND ERROR LOG]:", data.get("error"), "\n[STACK]:", data.get("stack"), "\n")
+    if os.getenv("NTA_DEBUG") == "1":
+        data = await request.json()
+        print("[FRONTEND ERROR LOG]", data.get("error"))
     return {"status": "ok"}
 
-# Serve the centralized data folder (optional, if needed by lookups)
+
+class PrivateDataStaticFiles(StaticFiles):
+    _BLOCKED = {
+        "trainees",
+        "trainers",
+        "admins",
+        "admission",
+        "uploads",
+        "temp",
+        "standard_exams",
+        "log",
+    }
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        is_private_submission = bool(segs and segs[0] == "courses" and "submissions" in segs)
+        if (
+            (segs and segs[0] in self._BLOCKED)
+            or is_private_submission
+            or any(s.startswith(".") for s in segs)
+        ):
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
+class GuardedStaticFiles(StaticFiles):
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (
+            (segs and segs[0] in {"backend", "core", "routers", "schemas"})
+            or norm.endswith(".py")
+            or any(s.startswith(".") for s in segs)
+        ):
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
-# Serve static files (HTML, CSS, JS) from the registration directory
 static_path = Path(__file__).parent.parent
-app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    # Default to 7775 for standalone registration portal
     port = int(os.getenv("PORT", 7775))
     uvicorn.run(app, host="0.0.0.0", port=port)

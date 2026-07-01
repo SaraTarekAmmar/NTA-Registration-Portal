@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import PlainTextResponse
 import os
 import uuid
 import time
@@ -13,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import admission, ai_services
+from routers import admission, ai_services, safe_stage_review
 from fastapi import Request
 
 load_dotenv()
@@ -64,7 +65,8 @@ async def global_debugger_middleware(request: Request, call_next):
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             sid = payload.get("sid")
             role = payload.get("role")
-        except: pass
+        except Exception:
+            pass
     
     session_token = session_context.set(sid)
     
@@ -132,18 +134,64 @@ async def global_debugger_middleware(request: Request, call_next):
 from routers import tickets
 app.include_router(tickets.router, prefix="/api/tickets", tags=["Tickets"])
 app.include_router(auth.router)
+# Register the safe wrapper before the legacy admission router. Duplicate paths
+# are resolved in registration order, so rejected stage reviews are handled by
+# safe_stage_review while active decisions are delegated to the legacy handler.
+app.include_router(safe_stage_review.router)
 app.include_router(admission.router)
 app.include_router(ai_services.router)
 
-# Serve the centralized data folder
+
+class PrivateDataStaticFiles(StaticFiles):
+    """Block direct unauthenticated access to sensitive /data content."""
+
+    _BLOCKED = {
+        "trainees",
+        "trainers",
+        "admins",
+        "admission",
+        "uploads",
+        "temp",
+        "standard_exams",
+        "log",
+    }
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        is_private_submission = bool(segs and segs[0] == "courses" and "submissions" in segs)
+        if (
+            (segs and segs[0] in self._BLOCKED)
+            or is_private_submission
+            or any(s.startswith(".") for s in segs)
+        ):
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
+class GuardedStaticFiles(StaticFiles):
+    """Serve admission-center UI without exposing backend source or dotfiles."""
+
+    async def get_response(self, path, scope):
+        norm = path.replace("\\", "/").strip("/").lower()
+        segs = [s for s in norm.split("/") if s]
+        if (
+            (segs and segs[0] in {"backend", "core", "routers", "schemas"})
+            or norm.endswith(".py")
+            or any(s.startswith(".") for s in segs)
+        ):
+            return PlainTextResponse("Not Found", status_code=404)
+        return await super().get_response(path, scope)
+
+
+# Serve only public-safe centralized data paths.
 data_path = Path(__file__).parent.parent.parent / "data"
 if os.path.exists(data_path):
-    app.mount("/data", StaticFiles(directory=str(data_path)), name="data")
+    app.mount("/data", PrivateDataStaticFiles(directory=str(data_path)), name="data")
 
-# Serve static files (HTML, CSS, JS) from the admission directory
-# This allows opening http://localhost:8006/ directly
+# Serve static files (HTML, CSS, JS) from the admission directory.
 static_path = Path(__file__).parent.parent
-app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+app.mount("/", GuardedStaticFiles(directory=str(static_path), html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn

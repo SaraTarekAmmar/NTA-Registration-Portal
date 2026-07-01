@@ -8,7 +8,7 @@ editor portal with the editor's JWT.
 import csv, io, os, re, time
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, Request, Depends, UploadFile, File
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -17,8 +17,9 @@ from core.database import get_db_connection
 
 router = APIRouter(prefix="/api/front", tags=["Editor – Front Manager"])
 
-MEDIA_DIR = Path(__file__).parent.parent.parent / "front" / "uploads" / "media"
-CV_DIR    = Path(__file__).parent.parent.parent / "front" / "uploads" / "cvs"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+MEDIA_DIR = REPO_ROOT / "front" / "uploads" / "media"
+CV_DIR    = REPO_ROOT / "front" / "uploads" / "cvs"
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 CV_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -31,6 +32,19 @@ def _require_editor(current_user: dict = Depends(get_current_user)):
     if current_user.get("role") not in ("editor", "admin", "superadmin"):
         raise HTTPException(status_code=403, detail="Editor access required.")
     return current_user
+
+
+def _safe_child(root: Path, filename: str) -> Path:
+    safe_name = Path(filename or "").name
+    if not safe_name:
+        raise HTTPException(status_code=404, detail="File not found.")
+    target = (root / safe_name).resolve()
+    root_resolved = root.resolve()
+    if root_resolved not in target.parents and target != root_resolved:
+        raise HTTPException(status_code=400, detail="Invalid file path.")
+    if not target.exists() or not target.is_file():
+        raise HTTPException(status_code=404, detail="File not found.")
+    return target
 
 
 # ── CAREERS ───────────────────────────────────────────────────────────────────
@@ -143,9 +157,28 @@ async def editor_list_applications(career_id: int, user=Depends(_require_editor)
         )
         rows = cursor.fetchall()
         for r in rows:
-            r["cv_url"] = f"http://localhost:7770/uploads/cvs/{r['cv_filename']}"
+            r["cv_url"] = f"/api/front/careers/{career_id}/applications/{r['id']}/cv"
             r["submitted_at"] = str(r["submitted_at"])
         return rows
+    finally:
+        cursor.close(); db.close()
+
+
+@router.get("/careers/{career_id}/applications/{app_id}/cv")
+async def editor_download_application_cv(career_id: int, app_id: int, user=Depends(_require_editor)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            """SELECT cv_filename FROM front_career_applications
+               WHERE id = %s AND career_id = %s""",
+            (app_id, career_id)
+        )
+        row = cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Application not found.")
+        target = _safe_child(CV_DIR, row.get("cv_filename"))
+        return FileResponse(path=str(target), filename=target.name)
     finally:
         cursor.close(); db.close()
 
