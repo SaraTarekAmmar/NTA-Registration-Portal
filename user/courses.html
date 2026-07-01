@@ -1121,13 +1121,16 @@
         function openCourseDetailsModal(course) {
           if (!detailsBackdrop || !course) return;
           detailsCourse = course;
-          var hasApplied =
-            window.appliedCourseIds && window.appliedCourseIds.has(course.id);
+          var hasApplied = isApprovedCourse(course.id);
+          var isPendingApplication = isPendingCourse(course.id);
           var statusBadge;
           var badgeClass;
           if (hasApplied) {
             statusBadge = "ملتحق";
             badgeClass = "ongoing";
+          } else if (isPendingApplication) {
+            statusBadge = "قيد المراجعة";
+            badgeClass = "upcoming";
           } else if (
             course.status === "Completed" ||
             course.status === "completed" ||
@@ -1313,6 +1316,12 @@
                 "var(--gradient-success-cta)";
               detailsApplyBtn.disabled = true;
               detailsApplyBtn.style.cursor = "default";
+            } else if (isPendingApplication) {
+              detailsApplyBtn.textContent = "قيد المراجعة";
+              detailsApplyBtn.style.display = "inline-flex";
+              detailsApplyBtn.style.opacity = "0.75";
+              detailsApplyBtn.disabled = true;
+              detailsApplyBtn.style.cursor = "default";
             } else if (
               course.status === "Completed" ||
               course.status === "completed" ||
@@ -1347,7 +1356,31 @@
           detailsCourse = null;
         }
 
-        window.appliedCourseIds = new Set();
+        window.approvedCourseIds = new Set();
+        window.pendingCourseIds = new Set();
+
+        function normalizeApplicationStatus(status) {
+          return String(status || "").toLowerCase();
+        }
+
+        function isApprovedCourse(courseId) {
+          return (
+            window.approvedCourseIds &&
+            window.approvedCourseIds.has(courseId)
+          );
+        }
+
+        function isPendingCourse(courseId) {
+          return (
+            window.pendingCourseIds &&
+            window.pendingCourseIds.has(courseId)
+          );
+        }
+
+        function hasAnyApplication(courseId) {
+          return isApprovedCourse(courseId) || isPendingCourse(courseId);
+        }
+
         function fetchCourses() {
           renderSkeletons(pageSize); // Show skeletons while fetching
 
@@ -1372,8 +1405,30 @@
           ])
             .then(([courseData, profileData]) => {
               const applied = profileData.courses || [];
-              window.appliedCourseIds = new Set(
-                applied.map((a) => a.course_id),
+              window.approvedCourseIds = new Set(
+                applied
+                  .filter(function (a) {
+                    var status = normalizeApplicationStatus(a && a.status);
+                    return status === "approved" || status === "accepted";
+                  })
+                  .map(function (a) {
+                    return a.course_id;
+                  }),
+              );
+              window.pendingCourseIds = new Set(
+                applied
+                  .filter(function (a) {
+                    var status = normalizeApplicationStatus(a && a.status);
+                    return (
+                      status &&
+                      status !== "approved" &&
+                      status !== "accepted" &&
+                      status !== "rejected"
+                    );
+                  })
+                  .map(function (a) {
+                    return a.course_id;
+                  }),
               );
 
               courses = courseData.map((c) => ({
@@ -1423,11 +1478,11 @@
           var displayCourses = courses;
           if (isMyCourses) {
             displayCourses = courses.filter(function (c) {
-              return window.appliedCourseIds.has(c.id);
+              return hasAnyApplication(c.id);
             });
           } else if (!isEditor) {
             displayCourses = courses.filter(function (c) {
-              return !window.appliedCourseIds.has(c.id);
+              return !hasAnyApplication(c.id);
             });
           }
 
@@ -1465,12 +1520,15 @@
           var slice = displayCourses.slice(start, end);
 
           slice.forEach(function (c, idx) {
-            var hasApplied =
-              window.appliedCourseIds && window.appliedCourseIds.has(c.id);
+            var hasApplied = isApprovedCourse(c.id);
+            var isPendingApplication = isPendingCourse(c.id);
             var statusBadge, badgeClass;
             if (hasApplied) {
               statusBadge = "ملتحق";
               badgeClass = "ongoing";
+            } else if (isPendingApplication) {
+              statusBadge = "قيد المراجعة";
+              badgeClass = "upcoming";
             } else if (
               c.status === "Completed" ||
               c.status === "completed" ||
@@ -1575,6 +1633,9 @@
             } else if (hasApplied) {
               btnHtml =
                 '<button class="course-card__btn course-card__btn--enroll" onclick="window.location.href=\'course-details.html?id=' + c.id + '\'">ابدأ الآن</button>';
+            } else if (isPendingApplication) {
+              btnHtml =
+                '<button class="course-card__btn" style="opacity:0.75;cursor:default" disabled>قيد المراجعة</button>';
             } else if (
               c.status === "Completed" ||
               c.status === "completed" ||
@@ -1810,7 +1871,7 @@
           var courseOpen = findCourseById(cid);
           if (courseOpen) {
             // If trainee and enrolled, go to new page
-            var hasApplied = window.appliedCourseIds && window.appliedCourseIds.has(cid);
+            var hasApplied = isApprovedCourse(cid);
             if (!isEditor && hasApplied) {
               window.location.href = 'course-details.html?id=' + cid;
               return;

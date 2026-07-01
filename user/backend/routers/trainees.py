@@ -805,6 +805,21 @@ async def get_course_details(course_id: int, current_user: dict = Depends(get_cu
         if not course:
             raise HTTPException(status_code=404, detail="Course not found")
 
+        cursor.execute("""
+            SELECT status
+            FROM applications
+            WHERE user_id = %s AND course_id = %s
+            ORDER BY id DESC
+            LIMIT 1
+        """, (current_user["id"], course_id))
+        application = cursor.fetchone()
+        if not application:
+            raise HTTPException(status_code=403, detail="يجب التقديم على الدورة أولاً")
+
+        application_status = str(application.get("status") or "").lower()
+        if application_status not in ("approved", "accepted"):
+            raise HTTPException(status_code=403, detail="التقديم ما زال قيد المراجعة، وسيتم فتح محتوى الدورة بعد القبول")
+
         # 2. Fetch Sessions and Materials + Session Quizzes + User Overrides
         from datetime import timedelta
         cursor.execute("""
@@ -886,6 +901,8 @@ async def get_course_details(course_id: int, current_user: dict = Depends(get_cu
             "announcements": announcements,
             "progress": progress
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:

@@ -73,7 +73,12 @@
   async function loadCourseDetails() {
     try {
       const response = await window.authenticatedFetch(`/api/trainee/course/${courseId}/details`);
-      if (!response.ok) throw new Error('Failed to fetch course details');
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        const error = new Error(errorBody.detail || 'Failed to fetch course details');
+        error.status = response.status;
+        throw error;
+      }
       
       const data = await response.json();
       currentCourse   = data.course;
@@ -100,6 +105,11 @@
       if (window.lucide) window.lucide.createIcons();
     } catch (error) {
       console.error('Error loading course:', error);
+      if (error && error.status === 403) {
+        alert(error.message || 'التقديم ما زال قيد المراجعة.');
+        window.location.href = 'courses.html?filter=my';
+        return;
+      }
       if (courseTitleEl) courseTitleEl.textContent = 'تعذّر تحميل الدورة';
     }
   }
