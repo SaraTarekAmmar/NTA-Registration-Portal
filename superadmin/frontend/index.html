@@ -1510,17 +1510,17 @@
             }
 
             return (
-                <div className="min-h-screen bg-[var(--bg-dark)] text-[var(--text-main)] font-sans selection:bg-indigo-500/30 superadmin-app">
+                <div className="min-h-screen bg-[var(--bg-dark)] text-[var(--text-main)] font-sans selection:bg-rose-500/30 superadmin-app">
                     <div className="fixed inset-0 overflow-hidden pointer-events-none">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
-                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[var(--status-indigo-bg)] blur-[120px] rounded-full" />
                     </div>
                     <div className="superadmin-shell relative flex h-screen overflow-hidden">
                         <aside className="w-72 bg-[var(--sidebar-bg)] border-r border-[var(--card-border)] backdrop-blur-xl flex flex-col overflow-y-auto custom-scrollbar">
                             <div className="p-6">
                                 <a href="index.html" className="flex items-center gap-3 mb-8 text-[var(--text-main)] no-underline">
                                     <img src="/images/logo2.png" alt="الأكاديمية الوطنية للتدريب" className="w-10 h-10 object-contain flex-shrink-0" onError={(e) => { e.currentTarget.style.display = 'none'; const fallback = e.currentTarget.nextElementSibling; if (fallback) fallback.style.display = 'flex'; }} />
-                                    <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-[var(--text-main)] hidden">NTA</span>
+                                    <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/20 text-[var(--text-main)] hidden">NTA</span>
                                     <div className="flex-1 min-w-0">
                                         <div className="font-bold text-lg tracking-tight text-[var(--text-main)]">NTA</div>
                                         <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest">NATIONAL TRAINING ACADEMY</div>
