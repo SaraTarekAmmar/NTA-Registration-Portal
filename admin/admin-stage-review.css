@@ -684,16 +684,23 @@
         body.stage-review-view-only .stage-field__select {
             appearance: none;
             -webkit-appearance: none;
+            -moz-appearance: none;
             background: transparent;
             border: none;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+            border-bottom: 1px solid transparent;
             border-radius: 0;
             color: var(--text-main);
+            font-weight: 600;
             cursor: default;
             padding-left: 0;
             padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
             box-shadow: none;
             pointer-events: none;
+            min-height: auto;
+            line-height: 1.8;
+            caret-color: transparent;
         }
         body.stage-review-view-only .stage-review-input:disabled,
         body.stage-review-view-only .stage-review-textarea:disabled,
@@ -702,13 +709,22 @@
             opacity: 1;
             -webkit-text-fill-color: var(--text-main);
         }
+        body.stage-review-view-only .stage-review-input::placeholder,
+        body.stage-review-view-only .stage-review-textarea::placeholder,
+        body.stage-review-view-only .stage-field__input::placeholder {
+            color: transparent;
+        }
         body.stage-review-view-only .stage-review-textarea {
             min-height: auto;
             resize: none;
+            overflow: visible;
         }
         body.stage-review-view-only .stage-field__select {
             background-image: none;
             padding-inline-end: 0;
+        }
+        body.stage-review-view-only .stage-field__select::-ms-expand {
+            display: none;
         }
         body.stage-review-view-only .stage-field__range {
             pointer-events: none;
