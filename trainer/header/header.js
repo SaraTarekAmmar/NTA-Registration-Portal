@@ -1,4 +1,15 @@
 ; (function () {
+    function readTrainerSession() {
+        var raw = localStorage.getItem('ntaTrainer');
+        if (!raw) return null;
+        try {
+            var session = JSON.parse(raw);
+            if (session && typeof session === 'object') return session;
+        } catch (e) {}
+        if (raw.split('.').length === 3) return { token: raw };
+        return null;
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var container = document.getElementById('ntaHeader');
         if (!container) return;
@@ -60,7 +71,7 @@
 
     // Global helper for authenticated API calls for Trainer
     window.authenticatedFetch = function (url, options = {}) {
-        const session = JSON.parse(localStorage.getItem('ntaTrainer') || '{}');
+        const session = readTrainerSession() || {};
         const token = session.token;
 
         const headers = {

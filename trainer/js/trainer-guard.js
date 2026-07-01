@@ -1,6 +1,17 @@
 (function () {
   var TRAINER_TOKEN_KEY = "ntaTrainer";
 
+  function readTrainerSession() {
+    var raw = localStorage.getItem(TRAINER_TOKEN_KEY);
+    if (!raw) return null;
+    try {
+      var session = JSON.parse(raw);
+      if (session && typeof session === "object") return session;
+    } catch (e) {}
+    if (raw.split(".").length === 3) return { token: raw };
+    return null;
+  }
+
   function parseJwt(token) {
     try {
       var base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
@@ -13,13 +24,12 @@
   }
 
   function requireTrainer() {
-    var sessionRaw = localStorage.getItem(TRAINER_TOKEN_KEY);
-    if (!sessionRaw) {
+    var session = readTrainerSession();
+    if (!session) {
       redirectToLogin();
       return;
     }
     try {
-      var session = JSON.parse(sessionRaw);
       var token = session.token;
       if (!token) {
         redirectToLogin();

@@ -511,8 +511,6 @@
 
         function viewProfile(id) {
             const courseId = new URLSearchParams(window.location.search).get('course_id');
-            const session = JSON.parse(localStorage.getItem('ntaTrainer') || '{}');
-            
             // Open Unified Profile (which now includes Analytics) in CURRENT TAB
             window.location.href = `trainee-profile.html?trainee_id=${id}&course_id=${courseId}`;
         }

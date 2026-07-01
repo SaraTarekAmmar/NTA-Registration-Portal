@@ -4,13 +4,24 @@
 (function () {
   (function () {
     if (document.getElementById('ntaSbCss')) return;
-    if (document.querySelector('link[href*="header/header.css"]')) return;
-    var l = document.createElement('link');
-    l.id = 'ntaSbCss';
-    l.rel = 'stylesheet';
-    l.href = 'header/header.css?v=9';
-    document.head.appendChild(l);
+  if (document.querySelector('link[href*="header/header.css"]')) return;
+  var l = document.createElement('link');
+  l.id = 'ntaSbCss';
+  l.rel = 'stylesheet';
+  l.href = 'header/header.css?v=9';
+  document.head.appendChild(l);
   })();
+
+  function readTrainerSession() {
+    var raw = localStorage.getItem('ntaTrainer');
+    if (!raw) return null;
+    try {
+      var session = JSON.parse(raw);
+      if (session && typeof session === 'object') return session;
+    } catch (e) {}
+    if (raw.split('.').length === 3) return { token: raw };
+    return null;
+  }
 
   function ic(inner) {
     return '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
@@ -32,7 +43,7 @@
   function buildSidebar(activePage) {
     var userName = '';
     try {
-      var s = JSON.parse(localStorage.getItem('ntaTrainer') || '{}');
+      var s = readTrainerSession() || {};
       userName = s.name || s.full_name_ar || s.email || '';
     } catch (e) {}
     var onerr = "this.style.display='none';this.nextElementSibling.style.display='flex'";
@@ -81,8 +92,7 @@
   // Authenticated fetch helper (was previously defined in header/header.js).
   window.authenticatedFetch = function (url, options) {
     options = options || {};
-    var session = {};
-    try { session = JSON.parse(localStorage.getItem('ntaTrainer') || '{}'); } catch (e) {}
+    var session = readTrainerSession() || {};
     var headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
     if (session.token) headers['Authorization'] = 'Bearer ' + session.token;
     return fetch(url, Object.assign({}, options, { headers: headers })).then(function (res) {

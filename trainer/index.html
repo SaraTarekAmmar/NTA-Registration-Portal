@@ -220,9 +220,21 @@
       (function () {
         var TOKEN_KEY = "ntaTrainer";
 
+        function readTrainerSession() {
+          var raw = localStorage.getItem(TOKEN_KEY);
+          if (!raw) return null;
+          try {
+            var session = JSON.parse(raw);
+            if (session && typeof session === "object") return session;
+          } catch (e) {}
+          if (raw.split(".").length === 3) return { token: raw };
+          return null;
+        }
+
         // Auto-redirect if already logged in
         (function() {
-          var t = localStorage.getItem(TOKEN_KEY);
+          var session = readTrainerSession();
+          var t = session && session.token;
           if (t) {
             try {
               var p = JSON.parse(atob(t.split(".")[1]));
@@ -292,7 +304,15 @@
               if (!data.access_token || data.role !== "trainer") {
                 throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المدربين.");
               }
-              localStorage.setItem(TOKEN_KEY, data.access_token);
+              localStorage.setItem(TOKEN_KEY, JSON.stringify({
+                token: data.access_token,
+                tokenType: data.token_type || "bearer",
+                role: data.role || "trainer",
+                name: data.fullName || "",
+                fullName: data.fullName || "",
+                email: email,
+                userId: data.userId || null
+              }));
               window.location.replace("trainer-dashboard.html");
             })
             .catch(function (err) {
