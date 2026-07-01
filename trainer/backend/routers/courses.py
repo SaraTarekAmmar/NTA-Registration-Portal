@@ -6,7 +6,7 @@ import os
 from core.database import get_db_connection
 
 
-from core.auth import get_staff_user
+from core.auth import get_staff_user, get_trainer_user
 
 router = APIRouter(prefix="/api/courses", tags=["Courses"])
 
@@ -80,6 +80,51 @@ async def get_trainer_courses(national_id: str):
             WHERE ct.trainer_national_id = %s
         """
         cursor.execute(query, (national_id,))
+        return cursor.fetchall()
+    finally:
+        cursor.close()
+        db.close()
+@router.get("/trainer/me/courses", response_model=List[Course])
+async def get_my_courses(trainer: dict = Depends(get_trainer_user)):
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        # Resolve national_id from the user ID
+        cursor.execute("SELECT national_id FROM users WHERE id = %s", (trainer['id'],))
+        row = cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Trainer profile not found")
+        
+        query = """
+            SELECT c.* FROM courses c
+            JOIN course_trainers ct ON c.id = ct.course_id
+            WHERE ct.trainer_national_id = %s
+        """
+        cursor.execute(query, (row['national_id'],))
+        return cursor.fetchall()
+    finally:
+        cursor.close()
+        db.close()
+        
+@router.get("/trainer/id/{user_id}", response_model=List[Course])
+async def get_trainer_courses_by_userid(user_id: int, trainer: dict = Depends(get_trainer_user)):
+    if trainer["role"] == "trainer" and trainer["id"] != user_id:
+        raise HTTPException(status_code=403, detail="Unauthorized")
+        
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT national_id FROM users WHERE id = %s", (user_id,))
+        row = cursor.fetchone()
+        if not row:
+            return []
+            
+        query = """
+            SELECT c.* FROM courses c
+            JOIN course_trainers ct ON c.id = ct.course_id
+            WHERE ct.trainer_national_id = %s
+        """
+        cursor.execute(query, (row['national_id'],))
         return cursor.fetchall()
     finally:
         cursor.close()

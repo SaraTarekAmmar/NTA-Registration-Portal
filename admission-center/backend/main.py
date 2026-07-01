@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import admission, ai_services
+from routers import admission, ai_services, interviews
 
 load_dotenv()
 
@@ -134,6 +134,7 @@ app.include_router(tickets.router, prefix="/api/tickets", tags=["Tickets"])
 app.include_router(auth.router)
 app.include_router(admission.router)
 app.include_router(ai_services.router)
+app.include_router(interviews.router)
 
 
 @app.middleware("http")

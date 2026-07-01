@@ -50,6 +50,7 @@
       divider() +
       navLbl('الإدارة') +
       navItem('admin-courses.html',            'admin-courses',      ICONS.courses,'البرامج والدورات', page) +
+      navItem('admin-reports.html',            'reports',            ICONS.chart,  'تقارير النظام', page) +
       navItem('admin-quiz-results.html',       'quiz-results',       ICONS.chart,  'نتائج الاختبارات', page) +
       navItem('admin-tickets.html',            'tickets',            ICONS.tickets,'مركز التذاكر', page);
 

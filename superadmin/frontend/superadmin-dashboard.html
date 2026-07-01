@@ -835,10 +835,9 @@
       text-shadow: none !important;
     }
   </style>
-  <script src="/admin/js/admin-guard.js?v=2"></script>
 </head>
 
-<body class="trainee-app" data-page="admin">
+<body class="trainee-app" data-page="superadmin">
   <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
 
   <div id="ntaHeader"></div>
@@ -878,8 +877,8 @@
     </div>
 
     <!-- 5 KPI Cards -->
-    <div class="dash-kpi-row">
-      <a href="/admin/admin-trainees.html" class="dash-kpi dash-kpi--purple" style="animation-delay:0.05s">
+    <div class="dash-kpi-row" id="overviewSection">
+      <a href="#pipelineSection" class="dash-kpi dash-kpi--purple" style="animation-delay:0.05s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
@@ -887,15 +886,15 @@
         <div class="dash-kpi__lbl">إجمالي المتدربين</div>
       </a>
 
-      <a href="/admin/admin-trainees.html?status=active" class="dash-kpi dash-kpi--green" style="animation-delay:0.1s">
+      <a href="#chartsSection" class="dash-kpi dash-kpi--green" style="animation-delay:0.1s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
         <div class="dash-kpi__val" id="kpiActive"></div>
-        <div class="dash-kpi__lbl">المتدربون النشطون</div>
+        <div class="dash-kpi__lbl">تم التحقق OCR</div>
       </a>
 
-      <a href="/admin/admin-courses.html" class="dash-kpi dash-kpi--crimson" style="animation-delay:0.15s">
+      <a href="#programsSection" class="dash-kpi dash-kpi--crimson" style="animation-delay:0.15s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
@@ -903,25 +902,25 @@
         <div class="dash-kpi__lbl">إجمالي البرامج</div>
       </a>
 
-      <a href="/admin/admin-trainees.html" class="dash-kpi dash-kpi--amber" style="animation-delay:0.2s">
+      <a href="#chartsSection" class="dash-kpi dash-kpi--amber" style="animation-delay:0.2s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
         </div>
         <div class="dash-kpi__val" id="kpiEnrolled">—</div>
-        <div class="dash-kpi__lbl">المسجلون في الدورات</div>
+        <div class="dash-kpi__lbl">بانتظار التسجيل</div>
       </a>
 
-      <a href="/admin/admin-candidates.html" class="dash-kpi dash-kpi--blue" style="animation-delay:0.25s">
+      <a href="#chartsSection" class="dash-kpi dash-kpi--blue" style="animation-delay:0.25s">
         <div class="dash-kpi__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div class="dash-kpi__val" id="kpiCandidates"></div>
-        <div class="dash-kpi__lbl">المرشحون الجدد</div>
+        <div class="dash-kpi__lbl">بانتظار التحليل</div>
       </a>
     </div>
 
     <!-- 3-Column Charts Row -->
-    <div class="dash-charts-row">
+    <div class="dash-charts-row" id="chartsSection">
 
       <!-- Gender Donut -->
       <div class="dash-panel">
@@ -931,8 +930,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg>
             </div>
             <div>
-              <p class="dash-panel__title">توزيع الجنس</p>
-              <p class="dash-panel__sub">المتدربون المسجلون</p>
+              <p class="dash-panel__title">حالة التحقق OCR</p>
+              <p class="dash-panel__sub">المتدربون الذين تم التحقق منهم مقابل المعلّقين</p>
             </div>
           </div>
         </div>
@@ -946,11 +945,11 @@
         <div class="dash-donut-legend" id="genderLegend">
           <div class="dash-donut-legend__item">
             <span class="dash-donut-legend__dot" style="background:#3b82f6;"></span>
-            <span id="genderMaleLabel">ذكور</span>
+            <span id="genderMaleLabel">تم التحقق</span>
           </div>
           <div class="dash-donut-legend__item">
             <span class="dash-donut-legend__dot" style="background:#a78bfa;"></span>
-            <span id="genderFemaleLabel">إناث</span>
+            <span id="genderFemaleLabel">بانتظار OCR</span>
           </div>
         </div>
       </div>
@@ -963,13 +962,13 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
             <div>
-              <p class="dash-panel__title">أداء التسجيل</p>
-              <p class="dash-panel__sub">المتدربون الجدد شهريًا</p>
+              <p class="dash-panel__title">مؤشرات التشغيل</p>
+              <p class="dash-panel__sub">نظرة سريعة على الحمل الحالي وجودة المعالجة</p>
             </div>
           </div>
           <div class="dash-perf-tabs">
-            <button class="dash-perf-tab active" data-period="6m" type="button">6 أشهر</button>
-            <button class="dash-perf-tab" data-period="3m" type="button">3 أشهر</button>
+            <button class="dash-perf-tab active" data-period="ops" type="button">التشغيل</button>
+            <button class="dash-perf-tab" data-period="health" type="button">الجودة</button>
           </div>
         </div>
         <div id="dashChartPerf" class="dash-chart" style="height:200px;"></div>
@@ -983,8 +982,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
             </div>
             <div>
-              <p class="dash-panel__title">توزيع الحالات</p>
-              <p class="dash-panel__sub">جميع المتدربين</p>
+              <p class="dash-panel__title">مزيج المتابعة</p>
+              <p class="dash-panel__sub">أهم المؤشرات المفتوحة في النظام حالياً</p>
             </div>
           </div>
         </div>
@@ -997,20 +996,20 @@
     <div class="dash-bottom-row">
 
       <!-- Activity Feed -->
-      <div class="dash-panel">
+      <div class="dash-panel" id="pipelineSection">
         <div class="dash-panel__header">
           <div class="dash-panel__title-wrap">
             <div class="dash-panel__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <p class="dash-panel__title">توزيع مراحل خط التقديم</p>
+            <p class="dash-panel__title">قائمة المتابعة التشغيلية</p>
           </div>
         </div>
         <div class="dash-activity" id="dashPipeline"></div>
       </div>
 
       <!-- Top Programs Table -->
-      <div class="dash-panel">
+      <div class="dash-panel" id="programsSection">
         <div class="dash-panel__header">
           <div class="dash-panel__title-wrap">
             <div class="dash-panel__icon">
@@ -1018,7 +1017,7 @@
             </div>
             <p class="dash-panel__title">أعلى البرامج</p>
           </div>
-          <a href="/admin/admin-courses.html" style="font-size:0.7rem;color:#fca5a5;text-decoration:none;opacity:0.8;">عرض الكل ←</a>
+          <a href="#overviewSection" style="font-size:0.7rem;color:#fca5a5;text-decoration:none;opacity:0.8;">عودة للأعلى ←</a>
         </div>
         <div class="dash-prog-table" id="dashTopPrograms"></div>
       </div>
@@ -1069,37 +1068,37 @@
     <!-- Pipeline Funnel -->
     <p class="adm-section-title">مسار خط الفلترة</p>
     <div class="adm-pipeline">
-      <a href="/admin/admin-candidates.html?stage=1" class="adm-pipe-step" data-stage="1">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="1">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount1"></div>
         <div class="adm-pipe-step__lbl">الفرز الإلكتروني</div>
         <div class="adm-pipe-step__tag">المرحلة 1</div>
       </a>
-      <a href="/admin/admin-candidates.html?stage=2" class="adm-pipe-step" data-stage="2">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="2">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount2"></div>
         <div class="adm-pipe-step__lbl">الاستعلام الأمني</div>
         <div class="adm-pipe-step__tag">المرحلة 2</div>
       </a>
-      <a href="/admin/admin-candidates.html?stage=3" class="adm-pipe-step" data-stage="3">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="3">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount3"></div>
         <div class="adm-pipe-step__lbl">الاختبار النفسي</div>
         <div class="adm-pipe-step__tag">المرحلة 3</div>
       </a>
-      <a href="/admin/admin-candidates.html?stage=4" class="adm-pipe-step" data-stage="4">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="4">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount4"></div>
         <div class="adm-pipe-step__lbl">اختبار المعلومات</div>
         <div class="adm-pipe-step__tag">المرحلة 4</div>
       </a>
-      <a href="/admin/admin-candidates.html?stage=5" class="adm-pipe-step" data-stage="5">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="5">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount5"></div>
         <div class="adm-pipe-step__lbl">المقابلة الأولى</div>
         <div class="adm-pipe-step__tag">المرحلة 5</div>
       </a>
-      <a href="/admin/admin-candidates.html?stage=6" class="adm-pipe-step" data-stage="6">
+      <a href="#pipelineSection" class="adm-pipe-step" data-stage="6">
         <div class="adm-pipe-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
         <div class="adm-pipe-step__val" id="pipeCount6"></div>
         <div class="adm-pipe-step__lbl">المقابلة الثانية</div>
@@ -1110,25 +1109,25 @@
     <!-- Quick Actions -->
     <p class="adm-section-title">إجراءات سريعة</p>
     <div class="adm-quick-grid">
-      <a href="/admin/admin-candidates.html" class="adm-quick adm-quick--cands">
+      <a href="#pipelineSection" class="adm-quick adm-quick--cands">
         <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
-        <div class="adm-quick__body"><div class="adm-quick__title">المرشحون</div><div class="adm-quick__sub">المراحل 1–6 من خط التقديم</div></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">قائمة المتابعة</div><div class="adm-quick__sub">الحالات المفتوحة عبر OCR والتحليل والتسجيل</div></div>
         <span class="adm-quick__arrow">←</span>
       </a>
-      <a href="/admin/admin-trainees.html" class="adm-quick adm-quick--train">
+      <a href="#chartsSection" class="adm-quick adm-quick--train">
         <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <div class="adm-quick__body"><div class="adm-quick__title">المتدربون</div><div class="adm-quick__sub">المسجلون النشطون في الدورات</div></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">مؤشرات النظام</div><div class="adm-quick__sub">التحقق، التحليل، والتسجيل</div></div>
         <span class="adm-quick__arrow">←</span>
       </a>
 
-      <a href="/admin/admin-courses.html" class="adm-quick adm-quick--courses">
+      <a href="#programsSection" class="adm-quick adm-quick--courses">
         <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-        <div class="adm-quick__body"><div class="adm-quick__title">البرامج والدورات</div><div class="adm-quick__sub">إدارة كتالوج البرامج</div></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">البرامج والدورات</div><div class="adm-quick__sub">البرامج المسجلة حالياً في قاعدة البيانات</div></div>
         <span class="adm-quick__arrow">←</span>
       </a>
-      <a href="/admin/recommendations.html" class="adm-quick adm-quick--recs">
+      <a href="#overviewSection" class="adm-quick adm-quick--recs">
         <div class="adm-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="adm-quick__body"><div class="adm-quick__title">لوحة القرارات</div><div class="adm-quick__sub">القبول والرفض النهائي</div></div>
+        <div class="adm-quick__body"><div class="adm-quick__title">نظرة الإدارة</div><div class="adm-quick__sub">ملخص تنفيذي للحالة الحالية</div></div>
         <span class="adm-quick__arrow">←</span>
       </a>
     </div>
@@ -1137,18 +1136,70 @@
 
   <div id="chatWidget"></div>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-  <script src="/admin/header/header.js?v=6"></script>
   <script>
   (function () {
+    var TOKEN_KEY = "superadmin_token";
+    var NAME_KEY = "superadmin_name";
+    var LOGIN_PAGE = "index.html";
     var session = {};
-    var _adminTok = localStorage.getItem("admin_token");
-    if (_adminTok) {
-      try { var _ap = JSON.parse(atob(_adminTok.split(".")[1])); session = { token: _adminTok, role: _ap.role, userId: _ap.sub ? parseInt(_ap.sub) : null, name: _ap.name || _ap.email || "" }; } catch (e) {}
+
+    function parseJwt(token) {
+      try {
+        var base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        return JSON.parse(decodeURIComponent(atob(base64).split("").map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join("")));
+      } catch (e) {
+        return null;
+      }
     }
-        // SECURITY FIX: Removed ntaTrainee fallback. If no admin token is present,
-        // the user is not authenticated as an admin and must log in.
-        // The role check below will redirect them to admin-login.html.
-    if (session.role !== "admin") { window.location.replace("admin-login.html"); return; }
+
+    function logout() {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(NAME_KEY);
+      window.location.replace(LOGIN_PAGE);
+    }
+
+    function fetchJson(url) {
+      var token = localStorage.getItem(TOKEN_KEY);
+      if (!token) {
+        logout();
+        return Promise.reject(new Error("انتهت الجلسة"));
+      }
+
+      return fetch(url, {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }).then(function (res) {
+        if (res.status === 401 || res.status === 403) {
+          logout();
+          throw new Error("انتهت الجلسة أو لا تملك صلاحية الوصول.");
+        }
+        return res.text().then(function (text) {
+          var data = text ? JSON.parse(text) : null;
+          if (!res.ok) {
+            throw new Error((data && data.detail) || "فشل تحميل البيانات");
+          }
+          return data;
+        });
+      });
+    }
+
+    var token = localStorage.getItem(TOKEN_KEY);
+    var payload = token ? parseJwt(token) : null;
+    var now = Math.floor(Date.now() / 1000);
+    if (!payload || payload.role !== "superadmin" || (payload.exp && payload.exp < now)) {
+      logout();
+      return;
+    }
+
+    session = {
+      token: token,
+      role: payload.role,
+      userId: payload.sub ? parseInt(payload.sub, 10) : null,
+      name: localStorage.getItem(NAME_KEY) || payload.name || payload.email || "السوبر أدمن"
+    };
 
     // Top bar & hero populate
     (function () {
@@ -1160,13 +1211,43 @@
       if (elDate) elDate.textContent = dateStr;
 
       var name = session.name || "";
-      var firstName = name.split(" ")[0] || "المدير";
+      var firstName = name.split(" ")[0] || "السوبر";
       var elName = document.getElementById("topbarName");
-      if (elName) elName.textContent = name || "المدير";
+      if (elName) elName.textContent = name || "السوبر أدمن";
       var elAvatar = document.getElementById("topbarAvatar");
       if (elAvatar && firstName) elAvatar.textContent = firstName.charAt(0);
       var elBread = document.getElementById("heroBreadcrumb");
       if (elBread && firstName) elBread.textContent = firstName;
+    })();
+
+    (function bindTopbarActions() {
+      var actions = document.querySelector(".dash-topbar__actions");
+      if (!actions) return;
+
+      var themeBtn = document.createElement("button");
+      themeBtn.type = "button";
+      themeBtn.className = "dash-topbar__btn";
+      themeBtn.id = "topbarThemeToggle";
+      themeBtn.title = "تبديل المظهر";
+      themeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>';
+      themeBtn.addEventListener("click", function () {
+        if (window.NTATheme && typeof window.NTATheme.toggle === "function") {
+          window.NTATheme.toggle();
+        } else {
+          document.documentElement.classList.toggle("light-mode");
+        }
+      });
+
+      var logoutBtn = document.createElement("button");
+      logoutBtn.type = "button";
+      logoutBtn.className = "dash-topbar__btn";
+      logoutBtn.id = "topbarLogoutBtn";
+      logoutBtn.title = "تسجيل الخروج";
+      logoutBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17 16l4-4m0 0-4-4m4 4H9"/><path d="M13 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h7"/></svg>';
+      logoutBtn.addEventListener("click", logout);
+
+      actions.appendChild(themeBtn);
+      actions.appendChild(logoutBtn);
     })();
 
     function countUp(el, target) {
@@ -1189,38 +1270,40 @@
 
     var trainees = [];
     var courses = [];
+    var overview = {};
     var chGender, chPerf, chStatus;
-    var currentPeriod = "6m";
+    var currentPeriod = "ops";
 
     var STAGE_NAMES = {
-      1: "الفرز الإلكتروني",
-      2: "الاستعلام الأمني",
-      3: "الاختبار النفسي",
-      4: "اختبارات المعلومات",
-      5: "المقابلة الشخصية",
-      6: "القبول النهائي"
+      1: "إجمالي المتدربين",
+      2: "بانتظار OCR",
+      3: "تم التحقق OCR",
+      4: "بانتظار التحليل",
+      5: "بانتظار التسجيل",
+      6: "جاهزون أو مكتملون"
     };
 
-    var perfData6m = { labels: ["يناير","فبراير","مارس","أبريل","مايو","يونيو"], values: [45,62,58,78,71,89] };
-    var perfData3m = { labels: ["أبريل","مايو","يونيو"], values: [78,71,89] };
+    var perfDataOps = { labels: [], values: [] };
+    var perfDataHealth = { labels: [], values: [] };
 
     var statusConfig = [
-      { key: "active",    label: "قيد التدريب",  color: "#34d399" },
-      { key: "completed", label: "مكتمل",         color: "#60a5fa" },
-      { key: "suspended", label: "معلق",           color: "#fbbf24" },
-      { key: "review",    label: "قيد التقييم",   color: "#c084fc" },
-      { key: "rejected",  label: "منسحب",          color: "#f87171" },
+      { key: "verified_ocr",      label: "تم التحقق OCR",  color: "#34d399" },
+      { key: "pending_ocr",       label: "بانتظار OCR",    color: "#a78bfa" },
+      { key: "pending_analysis",  label: "بانتظار التحليل", color: "#fbbf24" },
+      { key: "pending_enrollment",label: "بانتظار التسجيل", color: "#f87171" },
+      { key: "ready",             label: "جاهزون",          color: "#60a5fa" }
     ];
 
     function fetchData() {
       Promise.all([
-        window.authenticatedFetch("/api/admin/trainees").then(function (r) { return r.json(); }).catch(function () { return []; }),
-        window.authenticatedFetch("/api/admin/courses").then(function (r) { return r.json(); }).catch(function () { return []; }),
-        window.authenticatedFetch("/api/admin/registration-stats?months=6").then(function (r) { return r.json(); }).catch(function () { return null; })
+        fetchJson("/api/stats/overview").catch(function () { return {}; }),
+        fetchJson("/api/stats/courses").catch(function () { return { courses: [] }; }),
+        fetchJson("/api/stats/trainees?limit=1000").catch(function () { return []; })
       ]).then(function (res) {
-        trainees = Array.isArray(res[0]) ? res[0] : [];
-        courses = Array.isArray(res[1]) ? res[1] : [];
-        applyRegistrationStats(res[2]);
+        overview = res[0] || {};
+        courses = Array.isArray(res[1] && res[1].courses) ? res[1].courses : [];
+        trainees = Array.isArray(res[2]) ? res[2] : [];
+        applyOverviewMetrics();
         updateKpis();
         renderPipeline();
         renderTopPrograms();
@@ -1228,35 +1311,62 @@
       }).catch(function (err) { console.error("Dashboard fetch error:", err); });
     }
 
-    function applyRegistrationStats(stats) {
-      if (!stats || !Array.isArray(stats.labels) || !Array.isArray(stats.values)) return;
-      perfData6m = { labels: stats.labels, values: stats.values };
-      perfData3m = {
-        labels: stats.labels.slice(-3),
-        values: stats.values.slice(-3)
+    function applyOverviewMetrics() {
+      var total = Number(overview.total_trainees || 0);
+      var pendingOcr = Number(overview.pending_ocr || 0);
+      var verifiedOcr = Math.max(total - pendingOcr, 0);
+      var pendingAnalysis = Number(overview.pending_analysis || 0);
+      var pendingEnrollment = Number(overview.pending_enrollment || 0);
+      var ready = Math.max(total - pendingOcr - pendingAnalysis - pendingEnrollment, 0);
+
+      perfDataOps = {
+        labels: ["إجمالي المتدربين", "تم التحقق OCR", "بانتظار OCR", "بانتظار التحليل", "بانتظار التسجيل"],
+        values: [total, verifiedOcr, pendingOcr, pendingAnalysis, pendingEnrollment]
+      };
+      perfDataHealth = {
+        labels: ["تغطية OCR", "نسبة التسجيل", "مزامنة النظام", "زمن الاستجابة"],
+        values: [
+          Number(overview.ocr_pct || 0),
+          Number(overview.enrollment_pct || 0),
+          Number(overview.db_sync_status || 0),
+          Number(overview.avg_latency || 0)
+        ]
       };
     }
 
     function updateKpis() {
-      var enrolled   = trainees.filter(function (t) { return t.stage === 7; });
-      var active     = enrolled.filter(function (t) { return t.status === "active"; });
-      var candidates = trainees.filter(function (t) { return t.stage > 0 && t.stage < 7; });
-      var inCourses  = trainees.filter(function (t) { return t.course_id != null; });
+      var total = Number(overview.total_trainees || 0);
+      var pendingOcr = Number(overview.pending_ocr || 0);
+      var verifiedOcr = Math.max(total - pendingOcr, 0);
 
-      countUp(document.getElementById("kpiTrainees"),   enrolled.length);
-      countUp(document.getElementById("kpiActive"),     active.length);
-      countUp(document.getElementById("kpiCandidates"), candidates.length);
+      countUp(document.getElementById("kpiTrainees"), total);
+      countUp(document.getElementById("kpiActive"), verifiedOcr);
+      countUp(document.getElementById("kpiCandidates"), Number(overview.pending_analysis || 0));
       countUp(document.getElementById("kpiPrograms"),   courses.length);
-      countUp(document.getElementById("kpiEnrolled"),   inCourses.length);
+      countUp(document.getElementById("kpiEnrolled"),   Number(overview.pending_enrollment || 0));
     }
 
     function renderPipeline() {
       var el = document.getElementById("dashPipeline");
       if (!el) return;
       var iconCls = ["green", "blue", "purple", "amber", "crimson", "green"];
+      var total = Number(overview.total_trainees || 0);
+      var pendingOcr = Number(overview.pending_ocr || 0);
+      var verifiedOcr = Math.max(total - pendingOcr, 0);
+      var pendingAnalysis = Number(overview.pending_analysis || 0);
+      var pendingEnrollment = Number(overview.pending_enrollment || 0);
+      var ready = Math.max(total - pendingOcr - pendingAnalysis - pendingEnrollment, 0);
+      var stageCounts = {
+        1: total,
+        2: pendingOcr,
+        3: verifiedOcr,
+        4: pendingAnalysis,
+        5: pendingEnrollment,
+        6: ready
+      };
       var html = "";
       for (var s = 1; s <= 6; s++) {
-        var count = trainees.filter(function (t) { return t.stage === s; }).length;
+        var count = stageCounts[s] || 0;
         html +=
           '<div class="dash-activity__item">' +
             '<div class="dash-activity__icon dash-activity__icon--' + iconCls[s - 1] + '">' +
@@ -1264,7 +1374,7 @@
             '</div>' +
             '<div class="dash-activity__body">' +
               '<div class="dash-activity__text">' + STAGE_NAMES[s] + '</div>' +
-              '<div class="dash-activity__time">' + count + ' مرشّح في هذه المرحلة</div>' +
+              '<div class="dash-activity__time">' + count + ' سجل في هذه الفئة</div>' +
             '</div>' +
           '</div>';
       }
@@ -1274,53 +1384,62 @@
     function renderTopPrograms() {
       var el = document.getElementById("dashTopPrograms");
       if (!el) return;
-      var nameById = {};
-      courses.forEach(function (c) { nameById[c.id] = c.name || c.title_ar || c.title || ("دورة #" + c.id); });
-      var countById = {};
-      trainees.forEach(function (t) {
-        if (t.course_id != null) countById[t.course_id] = (countById[t.course_id] || 0) + 1;
+      var rows = courses.map(function (course, index) {
+        return {
+          id: course.id,
+          name: course.title || course.name || course.title_ar || ("برنامج #" + course.id),
+          rank: index + 1
+        };
       });
-      var rows = Object.keys(countById).map(function (id) {
-        return { id: id, name: nameById[id] || ("دورة #" + id), count: countById[id] };
-      }).sort(function (a, b) { return b.count - a.count; });
 
       if (!rows.length) {
-        el.innerHTML = '<div class="dash-prog-row" style="justify-content:center;"><div class="dash-prog-name" style="color:var(--text-subtle);">لا يوجد متدربون مسجّلون في دورات بعد</div></div>';
+        el.innerHTML = '<div class="dash-prog-row" style="justify-content:center;"><div class="dash-prog-name" style="color:var(--text-subtle);">لا توجد برامج مسجّلة حالياً في نظام السوبر أدمن</div></div>';
         return;
       }
-      var max = rows[0].count || 1;
       el.innerHTML = rows.map(function (r) {
-        var pct = Math.round((r.count / max) * 100);
         return (
           '<div class="dash-prog-row">' +
             '<div class="dash-prog-name">' + r.name + '</div>' +
-            '<div class="dash-prog-trainees">' + r.count + ' متدرب</div>' +
-            '<div class="dash-prog-meta"><span class="dash-prog-pct">' + r.count + '</span></div>' +
-            '<div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:' + pct + '%"></div></div></div>' +
+            '<div class="dash-prog-trainees">معرّف #' + r.id + '</div>' +
+            '<div class="dash-prog-meta"><span class="dash-prog-pct">نشط</span></div>' +
+            '<div class="dash-prog-bar-wrap"><div class="dash-prog-bar-track"><div class="dash-prog-bar-fill" style="width:100%"></div></div></div>' +
           '</div>'
         );
       }).join("");
     }
 
     function buildStatusCounts() {
-      var counts = { active: 0, completed: 0, suspended: 0, review: 0, rejected: 0 };
-      trainees.forEach(function (t) {
-        if (t.stage === 7 && t.status === "active") counts.active++;
-        else if (t.status === "completed") counts.completed++;
-        else if (t.status === "suspended") counts.suspended++;
-        else if (t.stage >= 4 && t.stage <= 6) counts.review++;
-        else if (t.status === "rejected") counts.rejected++;
-      });
+      var total = Number(overview.total_trainees || 0);
+      var pendingOcr = Number(overview.pending_ocr || 0);
+      var verifiedOcr = Math.max(total - pendingOcr, 0);
+      var pendingAnalysis = Number(overview.pending_analysis || 0);
+      var pendingEnrollment = Number(overview.pending_enrollment || 0);
+      var ready = Math.max(total - pendingOcr - pendingAnalysis - pendingEnrollment, 0);
+      var counts = {
+        verified_ocr: verifiedOcr,
+        pending_ocr: pendingOcr,
+        pending_analysis: pendingAnalysis,
+        pending_enrollment: pendingEnrollment,
+        ready: ready
+      };
       return counts;
     }
 
     function buildPipelineCounts() {
-      var counts = {};
-      for (var s = 1; s <= 6; s++) counts[s] = 0;
-      trainees.forEach(function (t) {
-        if (t.stage >= 1 && t.stage <= 6 && t.status === "active") counts[t.stage]++;
-      });
-      return counts;
+      var total = Number(overview.total_trainees || 0);
+      var pendingOcr = Number(overview.pending_ocr || 0);
+      var verifiedOcr = Math.max(total - pendingOcr, 0);
+      var pendingAnalysis = Number(overview.pending_analysis || 0);
+      var pendingEnrollment = Number(overview.pending_enrollment || 0);
+      var ready = Math.max(total - pendingOcr - pendingAnalysis - pendingEnrollment, 0);
+      return {
+        1: total,
+        2: pendingOcr,
+        3: verifiedOcr,
+        4: pendingAnalysis,
+        5: pendingEnrollment,
+        6: ready
+      };
     }
 
     function sharedTooltip() {
@@ -1339,19 +1458,16 @@
       var CHART_TEXT = getThemeColor("--text-subtle","#64748b");
       var CHART_GRID = "rgba(51,65,85,0.3)";
 
-      // Gender counts
-      var gM = 0, gF = 0;
-      trainees.forEach(function (t) {
-        if (t.gender === "male") gM++;
-        else if (t.gender === "female") gF++;
-      });
-      var gTotal = gM + gF;
+      // OCR donut
+      var gTotal = Number(overview.total_trainees || 0);
+      var gPending = Number(overview.pending_ocr || 0);
+      var gVerified = Math.max(gTotal - gPending, 0);
       var elGTotal = document.getElementById("genderTotal");
       if (elGTotal) elGTotal.textContent = gTotal;
       var elGM = document.getElementById("genderMaleLabel");
-      if (elGM) elGM.textContent = "ذكور (" + gM + ")";
+      if (elGM) elGM.textContent = "تم التحقق (" + gVerified + ")";
       var elGF = document.getElementById("genderFemaleLabel");
-      if (elGF) elGF.textContent = "إناث (" + gF + ")";
+      if (elGF) elGF.textContent = "بانتظار OCR (" + gPending + ")";
 
       // ── Gender donut ──
       var elG = document.getElementById("dashChartGender");
@@ -1365,8 +1481,8 @@
             label: { show: false },
             emphasis: { label: { show: true, fontFamily:"Tajawal", color: getThemeColor("--text-main","#e2e8f0"), fontSize:12, fontWeight:700 } },
             data: [
-              { value: gM, name: "ذكور",  itemStyle: { color: "#3b82f6" } },
-              { value: gF, name: "إناث", itemStyle: { color: "#a78bfa" } }
+              { value: gVerified, name: "تم التحقق",  itemStyle: { color: "#3b82f6" } },
+              { value: gPending, name: "بانتظار OCR", itemStyle: { color: "#a78bfa" } }
             ]
           }]
         });
@@ -1427,7 +1543,7 @@
 
     function renderPerfChart() {
       if (!chPerf) return;
-      var pd = currentPeriod === "3m" ? perfData3m : perfData6m;
+      var pd = currentPeriod === "health" ? perfDataHealth : perfDataOps;
       var cAccent = getThemeColor("--accent","#b91c1c");
       var cHover  = getThemeColor("--accent-hover","#ef4444");
       var CHART_TEXT = getThemeColor("--text-subtle","#64748b");

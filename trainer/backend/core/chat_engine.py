@@ -1,8 +1,12 @@
 import os
 import random
 from typing import List, Dict
-import google.generativeai as genai
 from dotenv import load_dotenv
+
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 # Load env in case it's not loaded elsewhere
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -13,11 +17,13 @@ class ChatEngine:
         self.api_key = os.getenv("GEMINI_API_KEY")
         self.model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
         
-        if self.api_key and self.api_key != "dummy":
-            genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel(self.model_name)
-        else:
-            self.model = None
+        self.model = None
+        if self.api_key and self.api_key != "dummy" and genai is not None:
+            try:
+                genai.configure(api_key=self.api_key)
+                self.model = genai.GenerativeModel(self.model_name)
+            except Exception as e:
+                print(f"Gemini model init failed: {e}")
 
         self.system_prompts = {
             "trainee_guest": (

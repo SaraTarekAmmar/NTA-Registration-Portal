@@ -1,0 +1,22 @@
+# Automated Deep Bug Hunt Report
+
+- [Admin] Network Error: http://localhost:8002/data/trainees/Karim_Essam_El-Din_Fahmy_29109141000018/karim_front_photo.png - 404
+- [Admin] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admin] Network Error: http://localhost:8002/data/trainees/Lobna_Hussein_El-Shinawi_29403071000017/lobna_front_photo.png - 404
+- [Admin] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admin] Network Error: http://localhost:8002/data/trainees/Bassem_Mohamed_El-Ghazaly_29008171000016/bassem_front_photo.png - 404
+- [Admin] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admin] Network Error: http://localhost:8002/admin-reports.html - 404
+- [Admin] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admission Center] Network Error: http://localhost:7776/null - 404
+- [Admission Center] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admission Center] Network Error: http://localhost:7776/null - 404
+- [Admission Center] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Admission Center] Network Error: http://localhost:7776/interviews.html - 404
+- [Admission Center] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Trainer] Network Error: http://localhost:8006/trainer-courses.html - 404
+- [Trainer] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Trainer] Network Error: http://localhost:8006/trainer-attendance.html - 404
+- [Trainer] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- [Trainee] Network Error: http://localhost:7771/dashboard.html - 404
+- [Trainee] Console error: Failed to load resource: the server responded with a status of 404 (Not Found)

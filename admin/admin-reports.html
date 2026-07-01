@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="/common/js/theme.js"></script>
+  <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>التقارير | لوحة التحكم</title>
+  <link rel="stylesheet" href="trainee.css" />
+  <link rel="stylesheet" href="header/header.css?v=8" />
+  <link rel="stylesheet" href="admin.css?v=4">
+  <link rel="stylesheet" href="admin-portal.css" />
+  <link rel="stylesheet" href="admin-theme.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/admin-guard.js"></script>
+</head>
+<body data-page="reports">
+  <a href="#main-content" class="skip-to-main">انتقل إلى المحتوى الرئيسي</a>
+  <div id="ntaHeader"></div>
+  <main id="main-content" class="trainee-main admin-main">
+    <div class="admin-hero" style="margin-bottom: 1.5rem">
+      <div class="admin-hero__title-block">
+        <h1>تقارير النظام</h1>
+        <p class="admin-hero__subtitle">عرض إحصائيات النظام الشاملة</p>
+      </div>
+    </div>
+    <div class="admin-section">
+      <div id="reportsDiv">جاري التحميل...</div>
+    </div>
+  </main>
+  <script src="header/header.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        authenticatedFetch("/api/admin/reports/")
+            .then(r => r.json())
+            .then(data => {
+                if (!data || data.detail) {
+                    document.getElementById('reportsDiv').innerHTML = 'خطأ في التحميل: ' + (data && data.detail ? data.detail : '');
+                    return;
+                }
+                const trans = {
+                    "applied": "متقدم",
+                    "screening": "الفرز",
+                    "interview": "مقابلة",
+                    "final review": "المراجعة النهائية",
+                    "accepted": "مقبول",
+                    "rejected": "مرفوض",
+                    "strongly recommend": "نوصي به بشدة",
+                    "recommend": "نوصي به",
+                    "do not recommend": "لا نوصي به",
+                    "upcoming": "قادم",
+                    "ongoing": "جاري",
+                    "completed": "مكتمل",
+                    "active": "نشط",
+                    "suspended": "معلق",
+                    "null": "غير محدد"
+                };
+                const t = (val) => {
+                    if (val === null || val === undefined) return trans["null"];
+                    const lower = String(val).toLowerCase();
+                    return trans[lower] || String(val);
+                };
+
+                let html = '<h2>حالة المرشحين في مسار القبول</h2><table class="nta-table"><thead><tr><th>الحالة</th><th>العدد</th></tr></thead><tbody>';
+                if (data.pipeline_status) {
+                    data.pipeline_status.forEach(row => {
+                        html += `<tr><td>${t(row.pipeline_status)}</td><td>${row.count}</td></tr>`;
+                    });
+                }
+                html += '</tbody></table>';
+
+                html += '<h2>توصيات المقابلات</h2><table class="nta-table"><thead><tr><th>التوصية</th><th>العدد</th></tr></thead><tbody>';
+                if (data.interviews) {
+                    data.interviews.forEach(row => {
+                        html += `<tr><td>${t(row.recommendation)}</td><td>${row.count}</td></tr>`;
+                    });
+                }
+                html += '</tbody></table>';
+
+                html += '<h2>حالة الكورسات</h2><table class="nta-table"><thead><tr><th>الحالة</th><th>العدد</th></tr></thead><tbody>';
+                if (data.courses) {
+                    data.courses.forEach(row => {
+                        html += `<tr><td>${t(row.status)}</td><td>${row.count}</td></tr>`;
+                    });
+                }
+                html += '</tbody></table>';
+                
+                document.getElementById('reportsDiv').innerHTML = html;
+            })
+            .catch(e => {
+                document.getElementById('reportsDiv').innerHTML = 'خطأ في التحميل';
+            });
+    });
+  </script>
+</body>
+</html>

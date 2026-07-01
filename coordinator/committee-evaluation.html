@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>تقييم المقابلة - عضو اللجنة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Tajawal', sans-serif; background: #080c20; color: #fff; margin:0; padding:20px; }
+      .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; }
+      .header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px; }
+      .crit-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .crit-title { flex: 1; }
+      .crit-scores { display: flex; gap: 5px; }
+      .score-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; }
+      .score-btn.active { background: #b01a2e; border-color: #b01a2e; }
+      .btn-submit { background: #b01a2e; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 20px; font-weight: bold; }
+      .form-group { margin-top: 15px; }
+      .form-group label { display: block; margin-bottom: 5px; color: #aaa; }
+      textarea, select { width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>نموذج تقييم عضو اللجنة</h2>
+        <p id="applicantInfo">جاري التحميل...</p>
+      </div>
+      
+      <div id="criteriaList">
+        <!-- Generated via JS -->
+      </div>
+      
+      <div class="form-group">
+        <label>التوصية</label>
+        <select id="recommendation">
+          <option value="Accepted">مقبول</option>
+          <option value="Waitlist">قائمة انتظار</option>
+          <option value="Unsuitable">غير مناسب</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>ملاحظات إضافية</label>
+        <textarea id="notes" rows="4"></textarea>
+      </div>
+      
+      <button class="btn-submit" onclick="submitEvaluation()">حفظ التقييم</button>
+    </div>
+    
+    <script>
+      let scores = {};
+      // In a real flow, these would come from URL params or a previous API call
+      let appId = new URLSearchParams(window.location.search).get('appId') || 1;
+      let stepId = new URLSearchParams(window.location.search).get('stepId') || 1;
+      let configCriteria = JSON.parse(localStorage.getItem('currentInterviewCriteria') || '[]');
+      
+      function renderCriteria() {
+        const list = document.getElementById('criteriaList');
+        if (configCriteria.length === 0) {
+           list.innerHTML = "<p>لم يتم العثور على معايير مسجلة لهذه المقابلة.</p>";
+           return;
+        }
+        
+        configCriteria.forEach(c => {
+          let row = document.createElement('div');
+          row.className = 'crit-row';
+          
+          let max = c.scale_max || 5;
+          let btns = '';
+          for (let i=1; i<=max; i++) {
+             btns += `<button class="score-btn" onclick="setScore('${c.key}', ${i}, this)">${i}</button>`;
+          }
+          
+          row.innerHTML = `
+            <div class="crit-title">${c.title_ar} <br><small style="color:#aaa;">${c.title_en}</small></div>
+            <div class="crit-scores" id="scores-${c.key}">${btns}</div>
+          `;
+          list.appendChild(row);
+        });
+      }
+      
+      function setScore(key, val, el) {
+        scores[key] = val;
+        let parent = el.parentElement;
+        Array.from(parent.children).forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+      }
+      
+      function submitEvaluation() {
+        if(Object.keys(scores).length < configCriteria.length) {
+            alert('يرجى تقييم جميع المعايير.');
+            return;
+        }
+        
+        const payload = {
+          application_id: parseInt(appId),
+          step_id: parseInt(stepId),
+          criteria_scores_json: scores,
+          recommendation: document.getElementById('recommendation').value,
+          notes: document.getElementById('notes').value
+        };
+        
+        fetch('/api/interviews/committee/submit-score', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('coord_token')
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(r => r.json().then(data => ({ok: r.ok, data})))
+        .then(res => {
+          if(!res.ok) alert(res.data.detail || 'حدث خطأ');
+          else {
+            alert('تم حفظ التقييم بنجاح. المجموع: ' + res.data.total);
+            window.location.href = 'coordinator-interviews.html';
+          }
+        })
+        .catch(err => alert(err));
+      }
+      
+      renderCriteria();
+    </script>
+  </body>
+</html>

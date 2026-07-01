@@ -2125,7 +2125,11 @@
           var stageBlock = document.querySelector(".admin-profile-stage");
           if (pip) pip.style.display = "none";
           if (ana) ana.style.display = "";
-          if (stageBlock) stageBlock.style.display = "none";
+          if (stageBlock) {
+             var _f = new URLSearchParams(window.location.search).get('from');
+             if (_f !== 'applicants') stageBlock.style.display = "none";
+             else stageBlock.style.display = "flex";
+          }
         }
 
           /* ── buildAnalysisSection: now also handles display-switch for auto-detected courses ── */
@@ -2136,7 +2140,11 @@
             var stg2 = document.querySelector('.admin-profile-stage');
             if (pip2) pip2.style.display = 'none';
             if (ana2) ana2.style.display = '';
-            if (stg2) stg2.style.display = 'none';
+            if (stg2) {
+               var _f2 = new URLSearchParams(window.location.search).get('from');
+               if (_f2 !== 'applicants') stg2.style.display = 'none';
+               else stg2.style.display = 'flex';
+            }
             /* Show course label badge */
             var lbl2 = document.getElementById('metricsCourseLabel');
             if (lbl2) { lbl2.textContent = courseName || 'البرنامج التدريبي'; lbl2.style.display = 'inline-flex'; }

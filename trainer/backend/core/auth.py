@@ -86,6 +86,11 @@ def get_staff_user(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمشرفين والمحررين فقط")
     return current_user
 
+def get_trainer_user(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["trainer", "admin", "superadmin"]:
+        raise HTTPException(status_code=403, detail="تبلغ الصلاحيات غير كافية - للمدربين فقط")
+    return current_user
+
 MAX_FAILED_ATTEMPTS = 5
 BLOCK_WINDOW_MINUTES = 15
 

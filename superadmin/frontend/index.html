@@ -149,59 +149,44 @@
     <div class="login-card" id="loginCard">
       <div class="logo-container">
         <img src="images/logo2.png" alt="الأكاديمية الوطنية للتدريب" class="login-logo" onerror="this.style.display='none'" />
-        <div class="logo-subtitle">بوابة الإدارة</div>
+        <div class="logo-subtitle">بوابة السوبر أدمن</div>
       </div>
 
       <h1>تسجيل دخول السوبر أدمن</h1>
-      <p class="subtitle">بوابة إدارة المرشحين والمراحل</p>
+      <p class="subtitle">تسجيل الدخول إلى لوحة المتابعة والإشراف المركزي</p>
 
 
-      <form id="adminLoginForm" novalidate>
+      <form id="superadminLoginForm" novalidate>
         <div class="form-group">
-          <label for="adminEmail">البريد الإلكتروني</label>
+          <label for="superadminEmail">البريد الإلكتروني</label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 6h16v12H4V6Z"/><path d="m4 7 8 6 8-6"/>
               </svg>
             </span>
-            <input type="email" id="adminEmail" name="email" required autocomplete="email" placeholder="admin@example.com"
-              aria-describedby="adminEmailError" />
+            <input type="email" id="superadminEmail" name="email" required autocomplete="email" placeholder="superadmin@nta.edu.eg"
+              aria-describedby="superadminEmailError" />
           </div>
-          <p id="adminEmailError" class="field-error" style="display:none;" aria-live="polite">البريد الإلكتروني مطلوب.</p>
+          <p id="superadminEmailError" class="field-error" style="display:none;" aria-live="polite">البريد الإلكتروني مطلوب.</p>
         </div>
 
         <div class="form-group">
-          <label for="adminNationalId">الرقم القومي</label>
-          <div class="login-input-wrap">
-            <span class="login-input-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z"/>
-              </svg>
-            </span>
-            <input type="text" id="adminNationalId" name="nationalId" required autocomplete="off"
-              placeholder="14 رقماً" maxlength="14" inputmode="numeric" pattern="[0-9]{14}"
-              aria-describedby="adminNationalIdError" />
-          </div>
-          <p id="adminNationalIdError" class="field-error" style="display:none;" aria-live="polite">الرقم القومي مطلوب (14 رقماً).</p>
-        </div>
-
-        <div class="form-group">
-          <label for="adminPassword">كلمة المرور</label>
+          <label for="superadminPassword">كلمة المرور</label>
           <div class="login-input-wrap">
             <span class="login-input-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 11V8a5 5 0 0 1 10 0v3"/><path d="M6 11h12v10H6V11Z"/><path d="M12 15v2"/>
               </svg>
             </span>
-            <input type="password" id="adminPassword" name="password" required autocomplete="current-password"
-              placeholder="أدخل كلمة المرور" aria-describedby="adminPasswordError" />
+            <input type="password" id="superadminPassword" name="password" required autocomplete="current-password"
+              placeholder="أدخل كلمة المرور" aria-describedby="superadminPasswordError" />
           </div>
-          <p id="adminPasswordError" class="field-error" style="display:none;" aria-live="polite">كلمة المرور مطلوبة.</p>
+          <p id="superadminPasswordError" class="field-error" style="display:none;" aria-live="polite">كلمة المرور مطلوبة.</p>
         </div>
 
-        <button type="submit" class="login-btn" id="adminLoginBtn">
-          <span class="login-btn-text">دخول لوحة المشرف</span>
+        <button type="submit" class="login-btn" id="superadminLoginBtn">
+          <span class="login-btn-text">دخول لوحة السوبر أدمن</span>
           <span class="arrow-icon">←</span>
           <span class="login-btn-loader" aria-hidden="true"></span>
         </button>
@@ -212,14 +197,15 @@
 
     <script>
       (function () {
-        var ADMIN_TOKEN_KEY = "admin_token";
-        var ADMIN_LOGIN_ENDPOINT = "/api/admin/auth/login";
-        var ADMIN_API_PORTS = [8002, 8001];
+        var SUPERADMIN_TOKEN_KEY = "superadmin_token";
+        var SUPERADMIN_NAME_KEY = "superadmin_name";
+        var SUPERADMIN_LOGIN_ENDPOINT = "/api/auth/login";
+        var SUPERADMIN_API_PORTS = [8003];
 
         // Always show the login form (no auto-skip): a fresh visit must log in.
 
-        var form = document.getElementById("adminLoginForm");
-        var btn = document.getElementById("adminLoginBtn");
+        var form = document.getElementById("superadminLoginForm");
+        var btn = document.getElementById("superadminLoginBtn");
         var errorBox = document.getElementById("loginError");
 
         function isLocalDev() {
@@ -321,46 +307,40 @@
         }
         function clearErrors() {
           errorBox.style.display = "none";
-          hideFieldError("adminEmailError");
-          hideFieldError("adminNationalIdError");
-          hideFieldError("adminPasswordError");
+          hideFieldError("superadminEmailError");
+          hideFieldError("superadminPasswordError");
         }
 
         form.addEventListener("submit", function (e) {
           e.preventDefault();
           clearErrors();
 
-          var email = document.getElementById("adminEmail").value.trim();
-          var nationalId = document.getElementById("adminNationalId").value.trim();
-          var password = document.getElementById("adminPassword").value;
+          var email = document.getElementById("superadminEmail").value.trim();
+          var password = document.getElementById("superadminPassword").value;
           var valid = true;
 
-          if (!email) { showFieldError("adminEmailError", "البريد الإلكتروني مطلوب."); valid = false; }
-          if (!nationalId || !/^\d{14}$/.test(nationalId)) { showFieldError("adminNationalIdError", "الرقم القومي مطلوب (14 رقماً)."); valid = false; }
-          if (!password) { showFieldError("adminPasswordError", "كلمة المرور مطلوبة."); valid = false; }
+          if (!email) { showFieldError("superadminEmailError", "البريد الإلكتروني مطلوب."); valid = false; }
+          if (!password) { showFieldError("superadminPasswordError", "كلمة المرور مطلوبة."); valid = false; }
           if (!valid) return;
 
           btn.classList.add("loading");
           btn.disabled = true;
 
-          postJsonWithFallback(ADMIN_LOGIN_ENDPOINT, {
+          postJsonWithFallback(SUPERADMIN_LOGIN_ENDPOINT, {
             email: email,
-            nationalId: nationalId,
-            password: password,
-            role: "admin"
-          }, ADMIN_API_PORTS)
+            password: password
+          }, SUPERADMIN_API_PORTS)
             .then(function (result) {
               var data = result.data;
               if (!data.access_token) {
-                // No token returned — wrong service on this port or a server error,
-                // NOT an authorization problem. Don't blame the account.
-                throw new Error("تعذّر تسجيل الدخول. تأكّد من تشغيل خادم المشرف على المنفذ الصحيح (8002).");
+                throw new Error("تعذّر تسجيل الدخول. تأكّد من تشغيل خادم السوبر أدمن على المنفذ 8003.");
               }
-              if (!["admin", "superadmin"].includes(data.role)) {
-                throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
+              if (data.role !== "superadmin") {
+                throw new Error("هذا الحساب غير مصرح له بالوصول إلى بوابة السوبر أدمن.");
               }
-              localStorage.setItem(ADMIN_TOKEN_KEY, data.access_token);
-              var dashboardUrl = result.base ? result.base + "/admin-dashboard.html" : "admin-dashboard.html";
+              localStorage.setItem(SUPERADMIN_TOKEN_KEY, data.access_token);
+              localStorage.setItem(SUPERADMIN_NAME_KEY, data.fullName || data.email || "");
+              var dashboardUrl = result.base ? result.base + "/superadmin-dashboard.html" : "superadmin-dashboard.html";
               window.location.replace(dashboardUrl);
             })
             .catch(function (err) {
@@ -368,7 +348,7 @@
               btn.disabled = false;
               var msg = err.message || "خطأ في تسجيل الدخول";
               if (msg.toLowerCase().includes("not allowed") || msg.toLowerCase().includes("غير مصرح")) {
-                showError("هذا الحساب غير مصرح له بالوصول إلى بوابة المشرف.");
+                showError("هذا الحساب غير مصرح له بالوصول إلى بوابة السوبر أدمن.");
               } else if (msg.includes("Invalid") || msg.includes("غير صحيحة") || msg.includes("401")) {
                 showError("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
               } else {

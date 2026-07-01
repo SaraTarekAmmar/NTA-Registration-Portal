@@ -137,6 +137,21 @@ async def get_trainees(stage: Optional[int] = Query(None), role: Optional[str] =
             stage_num = max(1, min(stage_num, 7))
             row['progress_percentage'] = int((stage_num / 7) * 100)
             
+            # Validate image exists
+            img = row.get("image_url")
+            if img:
+                img_str = str(img).strip()
+                if img_str.lower() in ["null", "undefined", ""]:
+                    row["image_url"] = None
+                else:
+                    try:
+                        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+                        clean_path = img_str.split("/data/")[-1] if "/data/" in img_str else img_str.lstrip("/")
+                        if not os.path.exists(os.path.join(project_root, "data", clean_path)) and not os.path.exists(os.path.join(project_root, clean_path)):
+                            row["image_url"] = None
+                    except:
+                        row["image_url"] = None
+            
         return results
     finally:
         cursor.close()

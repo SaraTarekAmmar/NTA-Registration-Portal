@@ -289,6 +289,150 @@
         border-top: 1px dashed rgba(255,255,255,0.05);
         font-size: 0.75rem;
       }
+      .interview-criteria-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .interview-criteria-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .interview-metric {
+        min-width: 110px;
+        padding: 0.7rem 0.85rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+      }
+      .interview-metric strong {
+        display: block;
+        font-size: 1.05rem;
+        color: var(--text-main);
+      }
+      .interview-metric span {
+        display: block;
+        margin-top: 0.2rem;
+        font-size: 0.72rem;
+        color: var(--text-subtle);
+      }
+      .interview-criteria-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .interview-mini-btn {
+        padding: 0.6rem 0.9rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.04);
+        color: var(--text-main);
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .interview-mini-btn:hover {
+        border-color: rgba(59,130,246,0.55);
+        background: rgba(59,130,246,0.12);
+      }
+      .interview-mini-btn--danger:hover {
+        border-color: rgba(239,68,68,0.55);
+        background: rgba(239,68,68,0.12);
+      }
+      .interview-criteria-note {
+        margin: 0 0 1rem;
+        color: var(--text-subtle);
+        font-size: 0.8rem;
+      }
+      .interview-criteria-list {
+        display: grid;
+        gap: 0.85rem;
+      }
+      .interview-criterion-card {
+        padding: 0.9rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      }
+      .interview-criterion-card.is-selected {
+        border-color: rgba(59,130,246,0.45);
+        background: linear-gradient(180deg, rgba(59,130,246,0.14), rgba(255,255,255,0.03));
+      }
+      .interview-criterion-card.is-inactive {
+        opacity: 0.74;
+      }
+      .interview-criterion-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.85rem;
+        margin-bottom: 0.9rem;
+      }
+      .interview-criterion-toggle {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        flex: 1;
+      }
+      .interview-criterion-toggle input[type="checkbox"] {
+        margin-top: 0.2rem;
+        inline-size: 1rem;
+        block-size: 1rem;
+        accent-color: #3b82f6;
+      }
+      .interview-criterion-title {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .interview-criterion-title strong {
+        color: var(--text-main);
+        font-size: 0.95rem;
+      }
+      .interview-criterion-title span,
+      .interview-criterion-meta {
+        color: var(--text-subtle);
+        font-size: 0.76rem;
+      }
+      .interview-criterion-badges {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.45rem;
+      }
+      .interview-criterion-badge {
+        padding: 0.2rem 0.5rem;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        color: var(--text-main);
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+      .interview-criterion-fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+      }
+      .interview-criterion-field label {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--text-subtle);
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+      .interview-criteria-empty {
+        padding: 1rem;
+        border: 1px dashed rgba(255,255,255,0.12);
+        border-radius: 14px;
+        color: var(--text-subtle);
+        font-size: 0.85rem;
+        text-align: center;
+      }
       
       /* ══ Light-mode overrides ══ */
       html.light-mode .builder-settings-panel,
@@ -311,6 +455,26 @@
         background: #f8fafc !important;
         color: #64748b;
         border-color: #cbd5e1 !important;
+      }
+      html.light-mode .interview-metric,
+      html.light-mode .interview-criterion-card {
+        background: #f8fafc;
+        border-color: rgba(148,163,184,0.28);
+      }
+      html.light-mode .interview-criterion-card.is-selected {
+        background: linear-gradient(180deg, rgba(59,130,246,0.08), #f8fafc);
+        border-color: rgba(59,130,246,0.35);
+      }
+      html.light-mode .interview-mini-btn {
+        background: #fff;
+        border-color: rgba(148,163,184,0.4);
+      }
+      html.light-mode .interview-criterion-badge {
+        background: rgba(148,163,184,0.16);
+      }
+      html.light-mode .interview-criteria-empty {
+        border-color: rgba(148,163,184,0.35);
+        background: #fff;
       }
     </style>
   </head>
@@ -430,6 +594,48 @@
                 <textarea class="editor-textarea" rows="2" id="settingDesc" oninput="updateSelectedStep('description_ar', this.value)"></textarea>
               </div>
             </div>
+
+            <div class="settings-section" id="interviewSettingsSection" style="display:none;">
+              <h4>معايير التقييم</h4>
+              <div class="builder-settings-group">
+                <label>قالب المعايير</label>
+                <div class="ui-select" id="interviewTemplateSelectContainer">
+                  <input type="hidden" id="interviewTemplateSelect" onchange="onInterviewTemplateChange(this.value)">
+                  <button type="button" class="ui-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="ui-select__value is-placeholder">اختاري قالب المعايير</span>
+                    <span class="ui-select__chevron">▼</span>
+                  </button>
+                  <div class="ui-select__menu" role="listbox" hidden></div>
+                </div>
+              </div>
+              <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;margin-bottom:1rem;">
+                <input type="checkbox" id="settingEnforceMandatory" onchange="updateInterviewEnforceMandatory(this.checked)" />
+                <span style="font-size:0.9rem;font-weight:600;color:var(--text-main);">إلزام المعايير الأساسية الخمسة</span>
+              </label>
+              <div class="interview-criteria-toolbar">
+                <div class="interview-criteria-summary">
+                  <div class="interview-metric">
+                    <strong id="interviewCriteriaCount">0</strong>
+                    <span>معايير مختارة</span>
+                  </div>
+                  <div class="interview-metric">
+                    <strong id="interviewCriteriaAvailableCount">0</strong>
+                    <span>إجمالي المعايير</span>
+                  </div>
+                  <div class="interview-metric">
+                    <strong id="interviewTotalScore">0</strong>
+                    <span>الإجمالي الأقصى</span>
+                  </div>
+                </div>
+                <div class="interview-criteria-actions">
+                  <button type="button" class="interview-mini-btn" onclick="selectAllInterviewCriteria(true)">تحديد الكل</button>
+                  <button type="button" class="interview-mini-btn" onclick="selectAllInterviewCriteria(false)">إلغاء التحديد</button>
+                  <button type="button" class="interview-mini-btn" onclick="addCustomCriterion()">إضافة معيار</button>
+                </div>
+              </div>
+              <p class="interview-criteria-note">اختاري المعايير المناسبة لكل مرحلة، ويمكنك تعديل الاسم والوزن والدرجة أو حذف أي معيار غير مطلوب.</p>
+              <div id="interviewCriteriaContainer" class="interview-criteria-list"></div>
+            </div>
             
             <div class="settings-section">
               <h4>الحالة والظهور</h4>
@@ -514,6 +720,7 @@
     <div id="editorToastContainer" class="editor-toast-container"></div>
     <script src="js/editor-layout.js?v=8"></script>
     <script src="js/icons.js"></script>
+    <script src="js/admission-scenario-templates.js?v=1"></script>
     <script>document.getElementById('_stateIcon').innerHTML = NTAIcons('exams', 36);</script>
     <script>document.getElementById('_loadIcon').innerHTML = NTAIcons('sparkles', 36);</script>
     <script>
@@ -571,6 +778,307 @@
 
       function notify(msg, type) {
         if (window.showEditorToast) window.showEditorToast(msg, type || "success");
+      }
+
+      function escapeInterviewText(value) {
+        var text = value == null ? "" : String(value);
+        return window.ntaEscapeHTML ? window.ntaEscapeHTML(text) : text;
+      }
+
+      function clonePlain(value) {
+        if (value == null) return value;
+        return JSON.parse(JSON.stringify(value));
+      }
+
+      function createCriterionKey(prefix) {
+        return (prefix || "criterion") + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+      }
+
+      var INTERVIEW_MANDATORY_KEYS = [
+        "appearance",
+        "motivation_enthusiasm",
+        "self_confidence",
+        "initiative",
+        "communication_skills"
+      ];
+
+      function isInterviewStepType(stepType) {
+        return ["interview", "first_interview", "second_interview", "committee_review"].indexOf(stepType || "") !== -1;
+      }
+
+      function shouldShowInterviewSettings(step) {
+        if (!step) return false;
+        var cfg = step.config_json || {};
+        return isInterviewStepType(step.step_type) ||
+          Array.isArray(cfg.criteria) ||
+          !!(cfg.interview_form && Array.isArray(cfg.interview_form.criteria));
+      }
+
+      function normalizeInterviewCriterion(raw, fallbackIndex, selectedDefault, sourceDefault) {
+        raw = raw || {};
+        var scaleMin = parseInt(raw.scale_min, 10);
+        if (!Number.isFinite(scaleMin) || scaleMin < 1) scaleMin = 1;
+        var scaleMax = parseInt(raw.scale_max, 10);
+        if (!Number.isFinite(scaleMax) || scaleMax < scaleMin) scaleMax = Math.max(5, scaleMin);
+        var weight = parseInt(raw.weight, 10);
+        if (!Number.isFinite(weight) || weight < 1) weight = 1;
+
+        return {
+          key: String(raw.key || createCriterionKey("criterion_" + (fallbackIndex || 0))),
+          title_ar: raw.title_ar || raw.title || "معيار جديد",
+          title_en: raw.title_en || "",
+          weight: weight,
+          scale_min: scaleMin,
+          scale_max: scaleMax,
+          required: !!raw.required,
+          selected: typeof raw.selected === "boolean" ? raw.selected : !!selectedDefault,
+          source: raw.source || sourceDefault || "custom"
+        };
+      }
+
+      function toStoredInterviewCriterion(criterion) {
+        var normalized = normalizeInterviewCriterion(criterion, 0, !!(criterion && criterion.selected), criterion && criterion.source);
+        return {
+          key: normalized.key,
+          title_ar: normalized.title_ar,
+          title_en: normalized.title_en,
+          weight: normalized.weight,
+          scale_min: normalized.scale_min,
+          scale_max: normalized.scale_max,
+          required: !!normalized.required
+        };
+      }
+
+      function getInterviewCriteriaFromStep(step) {
+        if (!step) return [];
+        var cfg = step.config_json || {};
+        if (Array.isArray(cfg.criteria) && cfg.criteria.length) return cfg.criteria;
+        if (cfg.interview_form && Array.isArray(cfg.interview_form.criteria) && cfg.interview_form.criteria.length) {
+          return cfg.interview_form.criteria;
+        }
+        return [];
+      }
+
+      function getInterviewLibraryCriteria() {
+        var templates = window.NTAAdmissionScenarioTemplates || {};
+        var groups = ["commonFive", "adultTen", "executiveFifteen", "youthTen"];
+        var criteria = [];
+        var seen = {};
+
+        groups.forEach(function(groupName) {
+          var group = templates[groupName];
+          if (!Array.isArray(group)) return;
+          group.forEach(function(item, idx) {
+            var normalized = normalizeInterviewCriterion(item, criteria.length + idx, false, "library");
+            if (seen[normalized.key]) return;
+            seen[normalized.key] = true;
+            normalized.selected = false;
+            criteria.push(normalized);
+          });
+        });
+
+        return criteria;
+      }
+
+      function buildInterviewCriteriaPool(baseCriteria, selectedCriteria, extraCriteria) {
+        var orderedKeys = [];
+        var byKey = {};
+
+        function merge(list, opts) {
+          opts = opts || {};
+          if (!Array.isArray(list)) return;
+
+          list.forEach(function(item, idx) {
+            var normalized = normalizeInterviewCriterion(item, orderedKeys.length + idx, opts.selectedDefault, opts.sourceDefault);
+            var existing = byKey[normalized.key];
+
+            if (!existing) {
+              existing = normalized;
+              byKey[normalized.key] = existing;
+              orderedKeys.push(normalized.key);
+            } else {
+              existing.title_ar = normalized.title_ar || existing.title_ar;
+              existing.title_en = normalized.title_en || existing.title_en;
+              existing.weight = normalized.weight;
+              existing.scale_min = normalized.scale_min;
+              existing.scale_max = normalized.scale_max;
+              existing.required = existing.required || normalized.required;
+              if (normalized.source && (existing.source === "library" || existing.source === "selected" || !existing.source)) {
+                existing.source = normalized.source;
+              }
+            }
+
+            if (typeof item.selected === "boolean") existing.selected = item.selected;
+            if (opts.selectedDefault === true) existing.selected = true;
+            if (opts.sourceDefault && (!existing.source || existing.source === "selected")) existing.source = opts.sourceDefault;
+          });
+        }
+
+        merge(baseCriteria, { selectedDefault: false, sourceDefault: "library" });
+        merge(extraCriteria, { sourceDefault: "custom" });
+        merge(selectedCriteria, { selectedDefault: true, sourceDefault: "selected" });
+
+        return orderedKeys.map(function(key) {
+          var item = byKey[key];
+          item.selected = item.selected === true;
+          return item;
+        });
+      }
+
+      function ensureInterviewFormConfig(step) {
+        if (!step) return null;
+        if (!step.config_json) step.config_json = {};
+        var cfg = step.config_json;
+        if (!cfg.interview_form) cfg.interview_form = {};
+        if (!cfg.interview_form.score_scale) {
+          cfg.interview_form.score_scale = { min: 1, max: 5, labels: ["ضعيف", "مقبول", "جيد", "جيد جداً", "ممتاز"] };
+        }
+        if (!Array.isArray(cfg.interview_form.final_recommendations)) {
+          cfg.interview_form.final_recommendations = ["accept", "waitlist", "unsuitable"];
+        }
+        if (typeof cfg.interview_form.require_committee_members !== "boolean") {
+          cfg.interview_form.require_committee_members = true;
+        }
+        if (typeof cfg.interview_form.require_notes !== "boolean") {
+          cfg.interview_form.require_notes = true;
+        }
+        cfg.interview_form.enabled = cfg.interview_form.enabled !== false;
+        cfg.interview_form.version = cfg.interview_form.version || 1;
+        cfg.interview_form.fixed_criteria_keys = INTERVIEW_MANDATORY_KEYS.slice();
+        return cfg.interview_form;
+      }
+
+      function syncInterviewCriteriaSelection(step) {
+        if (!step) return [];
+        if (!step.config_json) step.config_json = {};
+        var cfg = step.config_json;
+        var pool = Array.isArray(step._interviewCriteriaPool) ? step._interviewCriteriaPool : [];
+
+        if (cfg.enforce_mandatory) {
+          pool.forEach(function(item) {
+            if (INTERVIEW_MANDATORY_KEYS.indexOf(item.key) !== -1) {
+              item.selected = true;
+              item.required = true;
+            }
+          });
+        }
+
+        var selected = pool
+          .filter(function(item) { return item.selected; })
+          .map(function(item) { return toStoredInterviewCriterion(item); });
+
+        cfg.criteria = selected;
+
+        if (isInterviewStepType(step.step_type) || cfg.interview_form) {
+          var form = ensureInterviewFormConfig(step);
+          form.criteria = clonePlain(selected);
+          form.total_max = selected.reduce(function(sum, item) {
+            return sum + ((item.scale_max || 0) * (item.weight || 1));
+          }, 0);
+          if (!form.pass_threshold || form.pass_threshold > form.total_max) {
+            form.pass_threshold = form.total_max ? Math.ceil(form.total_max * 0.6) : 0;
+          }
+        }
+
+        return selected;
+      }
+
+      function ensureInterviewCriteriaPool(step, selectedCriteriaOverride) {
+        if (!step) return [];
+        var currentPool = Array.isArray(step._interviewCriteriaPool) ? step._interviewCriteriaPool : null;
+        if (currentPool && currentPool.length) {
+          syncInterviewCriteriaSelection(step);
+          return currentPool;
+        }
+
+        var selectedCriteria = Array.isArray(selectedCriteriaOverride) ? selectedCriteriaOverride : getInterviewCriteriaFromStep(step);
+        step._interviewCriteriaPool = buildInterviewCriteriaPool(
+          getInterviewLibraryCriteria(),
+          selectedCriteria,
+          selectedCriteria
+        );
+        syncInterviewCriteriaSelection(step);
+        return step._interviewCriteriaPool;
+      }
+
+      function getBuiltinInterviewTemplates() {
+        var lib = window.NTAAdmissionScenarioTemplates || {};
+        var options = [
+          { id: "builtin:commonFive", name: "الخمسة الأساسية", criteria_json: lib.commonFive },
+          { id: "builtin:adultTen", name: "مقابلة 10 معايير", criteria_json: lib.adultTen },
+          { id: "builtin:executiveFifteen", name: "مقابلة 15 معياراً", criteria_json: lib.executiveFifteen },
+          { id: "builtin:youthTen", name: "مقابلة الشباب 10 معايير", criteria_json: lib.youthTen }
+        ];
+
+        return options
+          .filter(function(item) { return Array.isArray(item.criteria_json) && item.criteria_json.length; })
+          .map(function(item) {
+            return {
+              id: item.id,
+              name: item.name,
+              criteria_json: clonePlain(item.criteria_json),
+              is_builtin: true
+            };
+          });
+      }
+
+      function getAllInterviewTemplates() {
+        return getBuiltinInterviewTemplates().concat(Array.isArray(interviewTemplates) ? interviewTemplates : []);
+      }
+
+      function renderInterviewTemplateOptions() {
+        var menu = document.querySelector("#interviewTemplateSelectContainer .ui-select__menu");
+        if (!menu) return;
+
+        var html = '<button type="button" class="ui-select__option" data-value="custom" role="option"><span>مخصص</span><span class="ui-select__check">✓</span></button>';
+        getAllInterviewTemplates().forEach(function(template) {
+          html += '<button type="button" class="ui-select__option" data-value="' + escapeInterviewText(String(template.id)) + '" role="option"><span>' + escapeInterviewText(template.name || "قالب") + '</span><span class="ui-select__check">✓</span></button>';
+        });
+        menu.innerHTML = html;
+
+        if (window.initUISelects) window.initUISelects(document.getElementById("interviewTemplateSelectContainer"));
+      }
+
+      function setInterviewTemplateSelectValue(value) {
+        var container = document.getElementById("interviewTemplateSelectContainer");
+        var input = document.getElementById("interviewTemplateSelect");
+        if (!container || !input) return;
+
+        var targetValue = value == null || value === "" ? "custom" : String(value);
+        input.value = targetValue;
+
+        var option = container.querySelector('.ui-select__option[data-value="' + targetValue + '"]') ||
+          container.querySelector('.ui-select__option[data-value="custom"]');
+        var valueEl = container.querySelector(".ui-select__value");
+
+        container.querySelectorAll(".ui-select__option").forEach(function(item) {
+          item.classList.remove("is-selected");
+          item.removeAttribute("aria-selected");
+        });
+
+        if (option) {
+          option.classList.add("is-selected");
+          option.setAttribute("aria-selected", "true");
+          if (valueEl) {
+            var labelNode = option.querySelector("span:not(.ui-select__check)") || option;
+            valueEl.textContent = labelNode.textContent.trim();
+            valueEl.classList.toggle("is-placeholder", targetValue === "");
+          }
+        }
+      }
+
+      function markInterviewTemplateAsCustom(step) {
+        if (!step) return;
+        if (!step.config_json) step.config_json = {};
+        step.config_json.interview_template_id = null;
+        step.config_json.interview_template_key = "custom";
+        setInterviewTemplateSelectValue("custom");
+      }
+
+      function getCriterionSourceLabel(criterion) {
+        if (criterion.source === "library") return "من المكتبة";
+        if (criterion.source === "selected") return "من قالب";
+        return "مخصص";
       }
 
       // Load courses
@@ -930,10 +1438,16 @@
           if (selectedStepIndex === -1) return;
           admissionSteps[selectedStepIndex][field] = value;
           markUnsaved();
-          renderStepsListOnly();
           if (field === 'title_ar') {
+            renderStepsListOnly();
             document.getElementById('panelStageTitle').textContent = "إعدادات المرحلة: " + (value || "بدون عنوان");
+            return;
           }
+          if (field === 'step_type') {
+            renderAdmSteps();
+            return;
+          }
+          renderStepsListOnly();
       }
       
       function updateSelectedConfig(field, value) {
@@ -1212,7 +1726,236 @@
           var actInput = document.getElementById("settingActive");
           actInput.checked = cfg.is_active !== false;
           actInput.disabled = !!s.fixed;
+
+          if (shouldShowInterviewSettings(s)) {
+            document.getElementById("interviewSettingsSection").style.display = "block";
+            ensureInterviewCriteriaPool(s);
+            renderInterviewTemplateOptions();
+            setInterviewTemplateSelectValue(cfg.interview_template_id || cfg.interview_template_key || "custom");
+            document.getElementById("settingEnforceMandatory").checked = !!cfg.enforce_mandatory;
+            renderInterviewCriteria();
+          } else {
+            document.getElementById("interviewSettingsSection").style.display = "none";
+          }
+
       }
+
+      
+      var interviewTemplates = [];
+      
+      function loadInterviewTemplates() {
+        authFetch("/api/interview-templates")
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(function(data) {
+            interviewTemplates = Array.isArray(data) ? data : [];
+            renderInterviewTemplateOptions();
+            if (selectedStepIndex !== -1 && shouldShowInterviewSettings(admissionSteps[selectedStepIndex])) {
+              renderStepSettings();
+            }
+          })
+          .catch(function() {
+            interviewTemplates = [];
+            renderInterviewTemplateOptions();
+          });
+      }
+
+      function onInterviewTemplateChange(val) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        if (!s.config_json) s.config_json = {};
+
+        if (val === "custom" || !val) {
+          markInterviewTemplateAsCustom(s);
+          ensureInterviewCriteriaPool(s);
+          syncInterviewCriteriaSelection(s);
+          markUnsaved();
+          renderInterviewCriteria();
+          return;
+        }
+
+        var selectedTemplate = getAllInterviewTemplates().find(function(item) {
+          return String(item.id) === String(val);
+        });
+        if (!selectedTemplate) return;
+
+        s.config_json.interview_template_id = selectedTemplate.id;
+        s.config_json.interview_template_key = selectedTemplate.is_builtin ? String(selectedTemplate.id) : null;
+        s._interviewCriteriaPool = buildInterviewCriteriaPool(
+          getInterviewLibraryCriteria(),
+          selectedTemplate.criteria_json || [],
+          selectedTemplate.criteria_json || []
+        );
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function isLockedInterviewCriterion(step, criterion) {
+        return !!(step && step.config_json && step.config_json.enforce_mandatory && INTERVIEW_MANDATORY_KEYS.indexOf(criterion.key) !== -1);
+      }
+
+      function renderInterviewCriteria() {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        var container = document.getElementById("interviewCriteriaContainer");
+        var countEl = document.getElementById("interviewCriteriaCount");
+        var availableEl = document.getElementById("interviewCriteriaAvailableCount");
+        var totalEl = document.getElementById("interviewTotalScore");
+
+        syncInterviewCriteriaSelection(s);
+
+        if (!pool.length) {
+          container.innerHTML = '<div class="interview-criteria-empty">لا توجد معايير بعد. أضيفي معياراً جديداً أو اختاري قالباً جاهزاً.</div>';
+          countEl.textContent = "0";
+          availableEl.textContent = "0";
+          totalEl.textContent = "0";
+          return;
+        }
+
+        var selectedCount = 0;
+        var total = 0;
+        var html = "";
+
+        pool.forEach(function(c, idx) {
+          var locked = isLockedInterviewCriterion(s, c);
+          var selected = !!c.selected;
+          if (selected) {
+            selectedCount += 1;
+            total += (c.scale_max || 0) * (c.weight || 1);
+          }
+
+          html += '<div class="interview-criterion-card ' + (selected ? 'is-selected' : 'is-inactive') + '">';
+          html += '  <div class="interview-criterion-head">';
+          html += '    <label class="interview-criterion-toggle">';
+          html += '      <input type="checkbox" ' + (selected ? 'checked ' : '') + (locked ? 'disabled ' : '') + 'onchange="toggleInterviewCriterion(' + idx + ', this.checked)">';
+          html += '      <div class="interview-criterion-title">';
+          html += '        <strong>' + escapeInterviewText(c.title_ar || "معيار") + '</strong>';
+          html += '        <span>' + escapeInterviewText(c.title_en || "No English label") + '</span>';
+          html += '        <div class="interview-criterion-meta">' + escapeInterviewText(getCriterionSourceLabel(c)) + '</div>';
+          html += '      </div>';
+          html += '    </label>';
+          html += '    <div class="interview-criterion-badges">';
+          if (c.required) html += '      <span class="interview-criterion-badge">أساسي</span>';
+          if (locked) html += '      <span class="interview-criterion-badge">إجباري</span>';
+          if (!locked) html += '      <button type="button" class="interview-mini-btn interview-mini-btn--danger" onclick="removeInterviewCriterion(' + idx + ')">حذف</button>';
+          html += '    </div>';
+          html += '  </div>';
+          html += '  <div class="interview-criterion-fields">';
+          html += '    <div class="interview-criterion-field"><label>الاسم بالعربية</label><input type="text" class="editor-input" value="' + escapeInterviewText(c.title_ar) + '" oninput="updateInterviewCriterion(' + idx + ', \'title_ar\', this.value)"></div>';
+          html += '    <div class="interview-criterion-field"><label>الاسم بالإنجليزية</label><input type="text" class="editor-input" value="' + escapeInterviewText(c.title_en) + '" oninput="updateInterviewCriterion(' + idx + ', \'title_en\', this.value)"></div>';
+          html += '    <div class="interview-criterion-field"><label>الوزن</label><input type="number" min="1" class="editor-input" value="' + escapeInterviewText(c.weight || 1) + '" onchange="updateInterviewCriterion(' + idx + ', \'weight\', this.value)"></div>';
+          html += '    <div class="interview-criterion-field"><label>الحد الأدنى</label><input type="number" min="1" class="editor-input" value="' + escapeInterviewText(c.scale_min || 1) + '" onchange="updateInterviewCriterion(' + idx + ', \'scale_min\', this.value)"></div>';
+          html += '    <div class="interview-criterion-field"><label>الحد الأقصى</label><input type="number" min="1" class="editor-input" value="' + escapeInterviewText(c.scale_max || 5) + '" onchange="updateInterviewCriterion(' + idx + ', \'scale_max\', this.value)"></div>';
+          html += '  </div>';
+          html += '</div>';
+        });
+
+        container.innerHTML = html;
+        countEl.textContent = String(selectedCount);
+        availableEl.textContent = String(pool.length);
+        totalEl.textContent = String(total);
+      }
+
+      function addCustomCriterion() {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        pool.push(normalizeInterviewCriterion({
+          key: createCriterionKey("custom"),
+          title_ar: "معيار جديد",
+          title_en: "New Criterion",
+          weight: 1,
+          scale_min: 1,
+          scale_max: 5,
+          required: false,
+          selected: true,
+          source: "custom"
+        }, pool.length, true, "custom"));
+        markInterviewTemplateAsCustom(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function toggleInterviewCriterion(idx, isSelected) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        var criterion = pool[idx];
+        if (!criterion) return;
+        if (isLockedInterviewCriterion(s, criterion) && !isSelected) return;
+        criterion.selected = !!isSelected;
+        markInterviewTemplateAsCustom(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function updateInterviewCriterion(idx, field, value) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        var criterion = pool[idx];
+        if (!criterion) return;
+
+        if (field === "weight" || field === "scale_min" || field === "scale_max") {
+          value = parseInt(value, 10);
+          if (!Number.isFinite(value) || value < 1) value = 1;
+        }
+
+        criterion[field] = value;
+        if (field === "scale_max" && criterion.scale_max < criterion.scale_min) {
+          criterion.scale_max = criterion.scale_min;
+        }
+        if (field === "scale_min" && criterion.scale_min > criterion.scale_max) {
+          criterion.scale_max = criterion.scale_min;
+        }
+
+        markInterviewTemplateAsCustom(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function removeInterviewCriterion(idx) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        var criterion = pool[idx];
+        if (!criterion || isLockedInterviewCriterion(s, criterion)) return;
+        pool.splice(idx, 1);
+        markInterviewTemplateAsCustom(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function selectAllInterviewCriteria(isSelected) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        var pool = ensureInterviewCriteriaPool(s);
+        pool.forEach(function(criterion) {
+          criterion.selected = !!isSelected || isLockedInterviewCriterion(s, criterion);
+        });
+        markInterviewTemplateAsCustom(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      function updateInterviewEnforceMandatory(isChecked) {
+        if (selectedStepIndex === -1) return;
+        var s = admissionSteps[selectedStepIndex];
+        if (!s.config_json) s.config_json = {};
+        s.config_json.enforce_mandatory = !!isChecked;
+        ensureInterviewCriteriaPool(s);
+        syncInterviewCriteriaSelection(s);
+        markUnsaved();
+        renderInterviewCriteria();
+      }
+
+      loadInterviewTemplates();
 
       function saveAdmissionSteps() {
         var courseId = document.getElementById("courseSelect").value;
@@ -1231,11 +1974,14 @@
             return;
         }
 
-        // Re-assign step_order and ensure config_json properties are strict
+        // Re-assign step_order and keep only the stored criteria, not the editor-side pool.
         admissionSteps.forEach(function(s, i) { 
           s.step_order = i; 
           if(!s.config_json) s.config_json = {};
           s.config_json.description_ar = s.description_ar || "";
+          if (Array.isArray(s._interviewCriteriaPool)) {
+            syncInterviewCriteriaSelection(s);
+          }
           if(s.fixed) {
             s.config_json.fixed = true;
             s.config_json.is_active = true;
@@ -1247,11 +1993,21 @@
             s.config_json.canDisable = true;
           }
         });
+
+        var payloadSteps = admissionSteps.map(function(step) {
+          var copy = clonePlain(step);
+          delete copy._isNew;
+          delete copy._interviewCriteriaPool;
+          if (copy.config_json && copy.config_json.interview_template_key === "custom") {
+            copy.config_json.interview_template_id = null;
+          }
+          return copy;
+        });
           
         fetch("/api/courses/" + courseId + "/admission-steps", {
           method: "PUT",
           headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem(EDITOR_TOKEN_KEY) },
-          body: JSON.stringify(admissionSteps)
+          body: JSON.stringify(payloadSteps)
         })
           .then(function(r) { if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail||"فشل الحفظ"); }); return r.json(); })
           .then(function() {

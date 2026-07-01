@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>التقارير | Superadmin</title>
+  <link rel="stylesheet" href="../common/css/common.css">
+  <style>
+    body { font-family: 'Tajawal', sans-serif; padding: 2rem; background: #111; color: #fff; }
+    .report-card { background: #222; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #333; cursor: pointer; transition: all 0.2s;}
+    .report-card:hover { border-color: #f8c146; }
+    .result-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem;}
+    .result-table th, .result-table td { border: 1px solid #444; padding: 0.5rem; text-align: right; }
+    .result-table th { background: #333; color: #f8c146; }
+  </style>
+</head>
+<body>
+  <h1>تقارير النظام (Superadmin)</h1>
+  <div id="presetsDiv">جاري تحميل التقارير...</div>
+  <div id="resultDiv"></div>
+  <script>
+    var token = localStorage.getItem("superadmin_token");
+    if(!token) window.location.href = "index.html";
+
+    function superadminFetch(url, options = {}) {
+      options.headers = options.headers || {};
+      options.headers["Authorization"] = "Bearer " + token;
+      return fetch(url, options);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        superadminFetch("/api/superadmin/reports/targets")
+            .then(r => r.json())
+            .then(data => {
+                let html = '<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">';
+                for (const key in data.presets) {
+                    html += `<div class="report-card" onclick="loadReport('${key}')">
+                        <h3>${data.presets[key].label}</h3>
+                    </div>`;
+                }
+                html += '</div>';
+                document.getElementById('presetsDiv').innerHTML = html;
+            });
+    });
+
+    function loadReport(preset) {
+        document.getElementById('resultDiv').innerHTML = 'جاري التحميل...';
+        superadminFetch("/api/superadmin/reports/generate", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ preset: preset })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if(!res.data || res.data.length === 0) {
+                document.getElementById('resultDiv').innerHTML = '<p>لا توجد بيانات.</p>';
+                return;
+            }
+            let keys = Object.keys(res.data[0]);
+            let html = `<h2>نتائج التقرير: ${res.report_name}</h2><table class="result-table"><thead><tr>`;
+            keys.forEach(k => { html += `<th>${k}</th>`; });
+            html += '</tr></thead><tbody>';
+            res.data.forEach(row => {
+                html += '<tr>';
+                keys.forEach(k => { html += `<td>${row[k] !== null ? row[k] : ''}</td>`; });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            document.getElementById('resultDiv').innerHTML = html;
+        });
+    }
+  </script>
+</body>
+</html>

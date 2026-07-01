@@ -246,100 +246,100 @@
 
     <script src="js/trainer-layout.js"></script>
     <script>
-      // Date
-      document.getElementById("heroDate").textContent = new Date().toLocaleDateString("ar-EG", {
-        weekday: "long", year: "numeric", month: "long", day: "numeric"
-      });
-
-      // Greeting name from session/token
-      (function() {
-        try {
-          var raw = localStorage.getItem("ntaTrainer");
-          if (!raw) return;
-          var session = raw.startsWith("{") ? JSON.parse(raw) : {};
-          var token = session.token || raw;
-          var p = {};
-          try { p = JSON.parse(atob(token.split(".")[1])); } catch(e) {}
-          var name = session.name || session.fullName || p.name || p.full_name_ar || "المدرب";
-          document.getElementById("heroGreeting").textContent = "مرحباً، " + name;
-        } catch(e) {}
-      })();
-
-      // Auth helper
-      function trainerFetch(url, opts) {
-        try {
-          var raw = localStorage.getItem("ntaTrainer");
-          if (!raw) return fetch(url, opts);
-          var token = raw.startsWith("{") ? JSON.parse(raw).token : raw;
-          opts = opts || {};
-          opts.headers = Object.assign({}, opts.headers, { "Authorization": "Bearer " + token });
-        } catch(e) {}
-        return fetch(url, opts);
-      }
-
-      // KPI cards
-      function renderKPIs(courses) {
-        var total = courses.length;
-        var totalTrainees = courses.reduce(function(s,c){ return s + (c.enrolled_count || 0); }, 0);
-        var ongoing = courses.filter(function(c){ return (c.status||"").toLowerCase() === "ongoing"; }).length;
-        var kpis = [
-          { val: total,         lbl: "كورساتي",     variant: "ed-kpi--blue",   icon: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' },
-          { val: ongoing,       lbl: "جارية الآن",   variant: "ed-kpi--green",  icon: '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
-          { val: totalTrainees, lbl: "متدرب مسجل",   variant: "ed-kpi--yellow", icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>' },
-          { val: total - ongoing, lbl: "كورسات أخرى", variant: "ed-kpi--slate",  icon: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>' }
-        ];
-        var html = "";
-        kpis.forEach(function(k,i) {
-          html += '<div class="ed-kpi ' + k.variant + '" style="animation-delay:' + (0.05 + i*0.05) + 's">'
-            + '<div class="ed-kpi__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + k.icon + '</svg></div>'
-            + '<div class="ed-kpi__val">' + k.val + '</div>'
-            + '<div class="ed-kpi__lbl">' + k.lbl + '</div></div>';
-        });
-        document.getElementById("kpiRow").innerHTML = html;
-      }
-
-      // Course rows
-      function renderCourses(courses) {
-        if (!courses || !courses.length) {
-          document.getElementById("coursesList").innerHTML = '<p style="text-align:center;color:var(--text-subtle);padding:2rem;font-size:0.9rem;">لا توجد كورسات مسندة حالياً</p>';
-          return;
-        }
-        var html = "";
-        courses.forEach(function(c) {
-          var statusMap = { Ongoing: "جارية", Upcoming: "قادمة", Completed: "منتهية" };
-          html += '<a href="view trainees/view-trainees.html?courseId=' + (c.id||"") + '" class="course-row">'
-            + '<div class="course-row__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>'
-            + '<div class="course-row__body">'
-            + '<p class="course-row__name">' + (c.title || c.name || "كورس") + '</p>'
-            + '<p class="course-row__meta">' + (statusMap[c.status] || c.status || "") + ' · ' + (c.enrolled_count || 0) + ' متدرب</p>'
-            + '</div><div class="course-row__arrow">←</div></a>';
-        });
-        document.getElementById("coursesList").innerHTML = html;
-      }
-
-      // Load data
-      (function() {
-        try {
-          var raw = localStorage.getItem("ntaTrainer");
-          var token = raw ? (raw.startsWith("{") ? JSON.parse(raw).token : raw) : null;
-          var p = token ? JSON.parse(atob(token.split(".")[1])) : null;
-          var trainerId = p ? (p.sub || p.user_id) : null;
-          if (!trainerId) throw new Error("no id");
-          trainerFetch("/api/courses/trainer/me/courses")
-            .then(function(r){ return r.ok ? r.json() : []; })
-            .then(function(courses) {
-              renderKPIs(courses);
-              renderCourses(courses);
-            })
-            .catch(function() {
-              renderKPIs([]);
-              renderCourses([]);
+    var trainerToken = localStorage.getItem("trainer_token");
+    if (!trainerToken) window.location.href = "login.html";
+    function trainerFetch(url, options = {}) {
+      options.headers = options.headers || {};
+      options.headers["Authorization"] = "Bearer " + trainerToken;
+      return fetch(url, options);
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        // Load courses
+        var p = trainerToken ? JSON.parse(atob(trainerToken.split(".")[1])) : null;
+        var trainerId = p ? (p.sub || p.user_id) : null;
+        if (!trainerId) return;
+        
+        trainerFetch("/api/courses/trainer/me/courses")
+            .then(r => r.json())
+            .then(courses => {
+                let html = '<select id="courseSelect" onchange="loadSessions()"><option value="">اختر الكورس</option>';
+                courses.forEach(c => {
+                    html += `<option value="${c.id}">${c.title}</option>`;
+                });
+                html += '</select><div id="sessionsDiv"></div><div id="attendanceDiv"></div>';
+                document.getElementById('ntaMainContent').innerHTML = html;
             });
-        } catch(e) {
-          renderKPIs([]);
-          renderCourses([]);
-        }
-      })();
-    </script>
-  </body>
+    });
+
+    function loadSessions() {
+        var cid = document.getElementById("courseSelect").value;
+        if(!cid) { document.getElementById("sessionsDiv").innerHTML = ""; return; }
+        
+        trainerFetch("/api/courses/" + cid + "/sessions")
+            .then(r => r.json())
+            .then(sessions => {
+                let html = '<select id="sessionSelect" onchange="loadAttendance()"><option value="">اختر الجلسة</option>';
+                sessions.forEach(s => {
+                    html += `<option value="${s.id}">${s.topic}</option>`;
+                });
+                html += '</select>';
+                document.getElementById('sessionsDiv').innerHTML = html;
+                document.getElementById('attendanceDiv').innerHTML = "";
+            });
+    }
+
+    function loadAttendance() {
+        var sid = document.getElementById("sessionSelect").value;
+        if(!sid) { document.getElementById("attendanceDiv").innerHTML = ""; return; }
+        
+        trainerFetch("/api/attendance/session/" + sid)
+            .then(r => r.json())
+            .then(data => {
+                let att = data.attendance;
+                let html = '<table class="nta-table"><thead><tr><th>الاسم</th><th>الرقم القومي</th><th>الحالة</th></tr></thead><tbody>';
+                att.forEach(t => {
+                    html += `<tr>
+                        <td>${t.name}</td>
+                        <td>${t.national_id}</td>
+                        <td>
+                            <select id="status_${t.national_id}">
+                                <option value="pending" ${t.status==='pending'?'selected':''}>-</option>
+                                <option value="present" ${t.status==='present'?'selected':''}>حاضر</option>
+                                <option value="absent" ${t.status==='absent'?'selected':''}>غائب</option>
+                                <option value="excused" ${t.status==='excused'?'selected':''}>معتذر</option>
+                            </select>
+                        </td>
+                    </tr>`;
+                });
+                html += '</tbody></table><br><button class="nta-btn" onclick="saveAttendance()">حفظ الحضور</button>';
+                document.getElementById('attendanceDiv').innerHTML = html;
+            });
+    }
+
+    function saveAttendance() {
+        var sid = document.getElementById("sessionSelect").value;
+        var selects = document.querySelectorAll("select[id^='status_']");
+        var records = [];
+        selects.forEach(sel => {
+            records.push({
+                national_id: sel.id.replace("status_", ""),
+                status: sel.value
+            });
+        });
+        
+        trainerFetch("/api/attendance/session/" + sid, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(records)
+        }).then(r => {
+            if(r.ok) {
+                alert("تم الحفظ بنجاح");
+            } else {
+                alert("حدث خطأ أثناء الحفظ");
+            }
+        });
+    }
+</script>
+</body>
 </html>

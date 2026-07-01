@@ -536,6 +536,16 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
             else:
                 cfg = {}
             cfg['description_ar'] = step.get('description_ar', cfg.get('description_ar', ''))
+
+            if step_type == 'interview':
+                if cfg.get('enforce_mandatory', False):
+                    mandatory_keys = ['appearance', 'motivation_enthusiasm', 'self_confidence', 'initiative', 'communication_skills']
+                    criteria = cfg.get('criteria', [])
+                    existing_keys = [c.get('key') for c in criteria if c.get('key')]
+                    for mk in mandatory_keys:
+                        if mk not in existing_keys:
+                            raise HTTPException(status_code=400, detail=f"المعيار الإلزامي مفقود في المقابلة: {mk}")
+
             
             cursor.execute(
                 """INSERT INTO course_steps 
