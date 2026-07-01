@@ -258,6 +258,53 @@ class TestAdmissionSteps(unittest.TestCase):
         self.assertEqual(inserted_cfg["description_ar"], "Custom editor-managed description")
 
     @patch("routers.courses.get_db_connection")
+    def test_put_admission_steps_first_interview_allows_dynamic_criteria(self, mock_get_db):
+        mock_conn = MagicMock()
+        mock_cursor = MagicMock()
+        mock_get_db.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+
+        payload = self._fixed_payload() + [
+            {
+                "step_key": "first_interview_custom",
+                "step_type": "first_interview",
+                "title_ar": "First Interview",
+                "is_required": False,
+                "config_json": {
+                    "enforce_mandatory": True,
+                    "criteria": [
+                        {"key": "appearance", "title_ar": "Appearance", "weight": 1, "scale_min": 1, "scale_max": 5},
+                        {"key": "motivation_enthusiasm", "title_ar": "Motivation", "weight": 1, "scale_min": 1, "scale_max": 5},
+                        {"key": "self_confidence", "title_ar": "Self Confidence", "weight": 1, "scale_min": 1, "scale_max": 5},
+                        {"key": "initiative", "title_ar": "Initiative", "weight": 1, "scale_min": 1, "scale_max": 5},
+                        {"key": "communication_skills", "title_ar": "Communication", "weight": 1, "scale_min": 1, "scale_max": 5},
+                    ],
+                },
+            }
+        ]
+
+        response = self.client.put("/api/courses/1/admission-steps", json=payload)
+
+        self.assertEqual(response.status_code, 200)
+        interview_insert = next(
+            call
+            for call in mock_cursor.execute.call_args_list
+            if len(call.args) > 1 and len(call.args[1]) > 2 and call.args[1][2] == "first_interview"
+        )
+        inserted_cfg = json.loads(interview_insert.args[1][-1])
+        self.assertTrue(inserted_cfg["enforce_mandatory"])
+        self.assertEqual(
+            [item["key"] for item in inserted_cfg["criteria"]],
+            [
+                "appearance",
+                "motivation_enthusiasm",
+                "self_confidence",
+                "initiative",
+                "communication_skills",
+            ],
+        )
+
+    @patch("routers.courses.get_db_connection")
     def test_put_admission_steps_out_of_order(self, mock_get_db):
         payload = self._fixed_payload()
         payload[1], payload[2] = payload[2], payload[1]

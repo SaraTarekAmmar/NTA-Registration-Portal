@@ -265,6 +265,13 @@ VALID_ADMISSION_TYPES = {
     'admin_review', 'acceptance_decision'
 }
 
+INTERVIEW_STEP_TYPES = {
+    'interview',
+    'first_interview',
+    'second_interview',
+    'committee_review',
+}
+
 @router.get("/{course_id}/admission-steps")
 async def get_admission_steps(course_id: int, editor: dict = Depends(require_editor)):
     db = get_db_connection()
@@ -537,7 +544,7 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
                 cfg = {}
             cfg['description_ar'] = step.get('description_ar', cfg.get('description_ar', ''))
 
-            if step_type == 'interview':
+            if step_type in INTERVIEW_STEP_TYPES:
                 if cfg.get('enforce_mandatory', False):
                     mandatory_keys = ['appearance', 'motivation_enthusiasm', 'self_confidence', 'initiative', 'communication_skills']
                     criteria = cfg.get('criteria', [])
