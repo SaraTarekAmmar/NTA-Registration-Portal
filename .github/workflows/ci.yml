@@ -61,9 +61,17 @@ jobs:
       - name: Check standalone JavaScript syntax
         shell: bash
         run: |
-          # Exclude Babel/JSX frontends and generated bundles that are not intended
-          # to be parsed directly by node --check.
-          find admin editor user trainer coordinator superadmin common front registration admission-center \
+          roots=()
+          for dir in admin editor user trainer coordinator superadmin common front registration admission-center; do
+            if [ -d "$dir" ]; then
+              roots+=("$dir")
+            fi
+          done
+          if [ ${#roots[@]} -eq 0 ]; then
+            echo "No JavaScript roots found"
+            exit 0
+          fi
+          find "${roots[@]}" \
             -type f -name '*.js' \
             -not -path '*/venv/*' -not -path '*/.venv/*' -not -path '*/node_modules/*' \
             -not -path '*/frontend/*' -not -path '*/assets/*' \
