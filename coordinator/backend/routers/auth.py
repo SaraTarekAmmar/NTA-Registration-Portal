@@ -35,7 +35,7 @@ async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
 
         cursor.execute(
             "SELECT id, full_name_ar, email, role, national_id, password_hash "
-            "FROM users WHERE email = %s AND role = 'coordinator'",
+            "FROM users WHERE email = %s AND role IN ('coordinator', 'committee_member')",
             (email,),
         )
         user = cursor.fetchone()
@@ -45,8 +45,10 @@ async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
             db.commit()
             raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
 
+        user_role = user["role"]
+
         if user.get("national_id") != national_id:
-            record_login_attempt(cursor, client_ip, email, "coordinator", False)
+            record_login_attempt(cursor, client_ip, email, user_role, False)
             db.commit()
             raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
 
@@ -55,11 +57,11 @@ async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
             or not user.get("password_hash")
             or not verify_password(password, user["password_hash"])
         ):
-            record_login_attempt(cursor, client_ip, email, "coordinator", False)
+            record_login_attempt(cursor, client_ip, email, user_role, False)
             db.commit()
             raise HTTPException(status_code=401, detail="بيانات الدخول غير صحيحة")
 
-        record_login_attempt(cursor, client_ip, email, "coordinator", True)
+        record_login_attempt(cursor, client_ip, email, user_role, True)
 
         session_id = None
         try:
@@ -77,7 +79,7 @@ async def coordinator_login(req: Request, request: CoordinatorLoginRequest):
             event_type="LOGIN_SUCCESS",
             user_id=user["id"],
             national_id=user["national_id"],
-            role="coordinator",
+            role=user_role,
             ip_address=client_ip,
             user_agent=req.headers.get("user-agent"),
             request_path=req.url.path,

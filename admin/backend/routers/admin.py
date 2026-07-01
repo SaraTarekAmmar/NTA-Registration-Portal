@@ -697,6 +697,51 @@ async def get_reviews(trainee_id: int, admin: dict = Depends(get_staff_user)):
         cursor.close()
         db.close()
 
+@router.get("/trainees/{trainee_id}/interview-scores")
+async def get_interview_scores(trainee_id: int, staff: dict = Depends(get_staff_user)):
+    """Committee interview evaluations for a trainee (read-only, admin oversight).
+
+    Returns each committee member's per-criterion scores plus the cross-member
+    average percentage per interview stage. Data is captured by coordinators in
+    admission_interview_scores; admins see all of it here."""
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True, buffered=True)
+    try:
+        cursor.execute(
+            """SELECT id, stage_id, committee_id, committee_member_name,
+                      criteria_json, total_score, total_max, recommendation, notes,
+                      session_start, session_end, governorate, still_on_duty, updated_at
+               FROM admission_interview_scores
+               WHERE trainee_id = %s
+               ORDER BY stage_id, committee_member_name""",
+            (trainee_id,),
+        )
+        rows = cursor.fetchall()
+        stages = {}
+        for r in rows:
+            if isinstance(r.get("criteria_json"), str):
+                try:
+                    r["criteria_json"] = json.loads(r["criteria_json"])
+                except (json.JSONDecodeError, ValueError):
+                    r["criteria_json"] = {}
+            tm = float(r["total_max"] or 0)
+            r["percentage"] = round(float(r["total_score"]) / tm * 100, 1) if tm else 0
+            r["total_score"] = float(r["total_score"])
+            r["total_max"] = float(r["total_max"])
+            stages.setdefault(r["stage_id"], []).append(r)
+        out = []
+        for sid, evals in sorted(stages.items()):
+            pcts = [e["percentage"] for e in evals]
+            out.append({
+                "stage_id": sid,
+                "evaluations": evals,
+                "member_count": len(evals),
+                "average_percentage": round(sum(pcts) / len(pcts), 1) if pcts else 0,
+            })
+        return out
+    finally:
+        cursor.close()
+        db.close()
 
 @router.get("/trainees/{trainee_id}")
 async def get_trainee_profile(trainee_id: int, staff: dict = Depends(get_staff_user)):
@@ -1098,40 +1143,62 @@ async def create_security_decision(
         if not u_data:
             raise HTTPException(status_code=404, detail="Trainee not found")
 
+        # Silent rejection: the REAL reason (internal_reason) is security and stays
+        # admin-only. The applicant only ever sees a masked technical reason. If the
+        # admin didn't supply one, fall back to a neutral technical reason that never
+        # mentions security.
+        is_silent = decision_data.decision in ("silent_reject", "block_future")
+        masked = (decision_data.masked_reason or "").strip() or \
+            "تعذّر استكمال إجراءات القبول الخاصة بك في الوقت الحالي."
+
         cursor.execute(
             """
             INSERT INTO admission_security_decisions
-                (applicant_user_id, national_id, passport_number, course_id, decision, internal_reason, decided_by, decided_at, created_at)
+                (applicant_user_id, national_id, course_id, decision, internal_reason, masked_reason, decided_by, decided_at, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
         """,
             (
                 u_data["id"],
                 u_data["national_id"],
-                u_data["passport_number"],
                 decision_data.course_id,
                 decision_data.decision,
                 decision_data.internal_reason,
+                masked,
                 admin["id"],
             ),
         )
         decision_id = cursor.lastrowid
+
+        # Silently halt the pipeline: mark the applicant rejected but write ONLY the
+        # masked (technical) reason into the public rejection_note. The security
+        # reason is never written to pipeline_state, so it can never leak to the
+        # applicant. The security stage result itself is never announced separately —
+        # the applicant just sees a generic technical block.
+        if is_silent:
+            cursor.execute(
+                "UPDATE pipeline_state SET status = 'rejected', rejection_note = %s, updated_at = NOW() "
+                "WHERE trainee_id = %s",
+                (masked, trainee_id),
+            )
         db.commit()
 
         log_activity(
             category="SECURITY_DECISION",
-            event_type="NON_DESTRUCTIVE_DECISION",
+            event_type="SILENT_REJECTION" if is_silent else "NON_DESTRUCTIVE_DECISION",
             user_id=admin["id"],
             role=admin["role"],
             details={
                 "trainee_id": trainee_id,
                 "decision": decision_data.decision,
                 "decision_id": decision_id,
+                "silent": is_silent,
             },
         )
 
         return {
             "message": "Security decision recorded successfully",
             "decision_id": decision_id,
+            "silent": is_silent,
         }
     except HTTPException:
         db.rollback()
@@ -1153,7 +1220,7 @@ async def get_security_decisions(
     try:
         cursor.execute(
             """
-            SELECT id, decision, internal_reason, course_id, decided_by, decided_at
+            SELECT id, decision, internal_reason, masked_reason, course_id, decided_by, decided_at
             FROM admission_security_decisions
             WHERE applicant_user_id = %s
             ORDER BY decided_at DESC

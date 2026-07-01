@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تقرير تقييمات المقابلات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      :root { --ink:#0f172a; --muted:#475569; --line:#cbd5e1; --accent:#1d4ed8; }
+      * { box-sizing:border-box; }
+      body { font-family:'Tajawal',sans-serif; margin:0; background:#e2e8f0; color:var(--ink); }
+      .toolbar { position:sticky; top:0; background:#fff; border-bottom:1px solid var(--line); padding:.8rem 1.2rem; display:flex; gap:.8rem; align-items:center; justify-content:space-between; }
+      .toolbar h1 { font-size:1rem; margin:0; }
+      .toolbar .btns { display:flex; gap:.6rem; }
+      .btn { padding:.55rem 1.2rem; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; font-family:inherit; font-weight:700; cursor:pointer; font-size:.85rem; text-decoration:none; }
+      .btn--ghost { background:#fff; color:var(--accent); }
+      .page { max-width:900px; margin:1.5rem auto; background:#fff; padding:2.2rem 2.4rem; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+      .doc-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid var(--accent); padding-bottom:1rem; margin-bottom:1.4rem; }
+      .doc-head h2 { margin:0; font-size:1.4rem; }
+      .doc-head .sub { color:var(--muted); font-size:.85rem; margin-top:.3rem; }
+      .doc-head .logo { font-weight:800; color:var(--accent); font-size:1.3rem; text-align:left; }
+      .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:.8rem; margin-bottom:1.6rem; }
+      .kpi { border:1px solid var(--line); border-radius:10px; padding:.8rem; text-align:center; }
+      .kpi b { display:block; font-size:1.5rem; color:var(--accent); }
+      .kpi span { font-size:.74rem; color:var(--muted); }
+      h3.section { font-size:1rem; border-right:4px solid var(--accent); padding-right:.6rem; margin:1.6rem 0 .8rem; }
+      table { width:100%; border-collapse:collapse; font-size:.8rem; }
+      th, td { border:1px solid var(--line); padding:.5rem .6rem; text-align:right; }
+      th { background:#f1f5f9; color:var(--muted); font-size:.74rem; }
+      .tag { display:inline-block; border-radius:999px; padding:.1rem .5rem; font-size:.72rem; font-weight:700; }
+      .tag--accept { background:#dcfce7; color:#166534; }
+      .tag--waitlist { background:#fef9c3; color:#854d0e; }
+      .tag--unsuitable { background:#fee2e2; color:#991b1b; }
+      .crit-cols { display:grid; grid-template-columns:1fr 1fr; gap:.4rem 2rem; }
+      .crit-row { display:flex; justify-content:space-between; border-bottom:1px dotted var(--line); padding:.2rem 0; font-size:.82rem; }
+      .muted { color:var(--muted); }
+      @media print {
+        body { background:#fff; }
+        .toolbar { display:none; }
+        .page { box-shadow:none; margin:0; max-width:none; padding:0; }
+        thead { display:table-header-group; }
+        tr { break-inside:avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <h1>تقرير تقييمات المقابلات</h1>
+      <div class="btns">
+        <a class="btn btn--ghost" href="coordinator-interviews.html">رجوع</a>
+        <button class="btn" onclick="window.print()">طباعة / حفظ PDF</button>
+      </div>
+    </div>
+
+    <div class="page" id="page">
+      <div class="doc-head">
+        <div>
+          <h2>تقرير تقييمات المقابلات الشخصية</h2>
+          <div class="sub" id="genDate">—</div>
+        </div>
+        <div class="logo">NTA<br><span style="font-size:.7rem;font-weight:600">الأكاديمية الوطنية للتدريب</span></div>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <h3 class="section">تحليل المحاور</h3>
+      <div class="crit-cols" id="critCols"><span class="muted">—</span></div>
+
+      <h3 class="section">تفاصيل التقييمات</h3>
+      <table>
+        <thead>
+          <tr><th>المتقدم</th><th>المرحلة</th><th>عضو اللجنة</th><th>المحافظة</th><th>الإجمالي</th><th>النسبة</th><th>التوصية</th></tr>
+        </thead>
+        <tbody id="rows"><tr><td colspan="7" class="muted">جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+
+    <script>
+      function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      var auth = window.coordinatorAuth;
+      var stageAr = {5:'المقابلة الأولى',6:'المقابلة الثانية'};
+      var recAr = {accept:['قبول','accept'],waitlist:['قائمة انتظار','waitlist'],unsuitable:['غير مناسب','unsuitable']};
+
+      try { document.getElementById('genDate').textContent = 'تاريخ الإصدار: ' + new Date().toLocaleDateString('ar-EG') + ' — أُصدر بواسطة: ' + ((auth.payload && (auth.payload.name||auth.payload.email)) || 'المنسّق'); } catch(e){}
+
+      Promise.all([
+        auth.fetch('/api/coordinator/interviews/decisions-summary').then(function(r){return r.json();}),
+        auth.fetch('/api/coordinator/interviews/criteria-analysis').then(function(r){return r.json();}),
+        auth.fetch('/api/coordinator/interviews/evaluations').then(function(r){return r.json();})
+      ]).then(function(res){
+        var dec=res[0], crit=res[1], evals=res[2]||[];
+        var rec=dec.recommendations||{};
+        document.getElementById('kpis').innerHTML =
+          kpi(dec.average_interview_percentage+'%','متوسط النسبة') +
+          kpi(dec.evaluation_completion_rate+'%','اكتمال التقييم') +
+          kpi((rec.accept||0),'مقبول') +
+          kpi((rec.waitlist||0)+' / '+(rec.unsuitable||0),'انتظار / غير مناسب');
+
+        if(crit.criteria && crit.criteria.length){
+          document.getElementById('critCols').innerHTML = crit.criteria.slice().sort(function(a,b){return b.average-a.average;})
+            .map(function(c){return '<div class="crit-row"><span>'+esc(c.key)+'</span><strong>'+c.average+'/5</strong></div>';}).join('');
+        } else { document.getElementById('critCols').innerHTML = '<span class="muted">لا توجد تقييمات.</span>'; }
+
+        var body=document.getElementById('rows');
+        if(!evals.length){ body.innerHTML='<tr><td colspan="7" class="muted">لا توجد تقييمات.</td></tr>'; return; }
+        body.innerHTML = evals.map(function(e){
+          var r = recAr[e.recommendation];
+          var tag = r ? '<span class="tag tag--'+r[1]+'">'+r[0]+'</span>' : '—';
+          return '<tr><td>'+esc(e.applicant||e.trainee_id)+'</td><td>'+esc(stageAr[e.stage_id]||e.stage_id)+'</td><td>'+esc(e.committee_member_name)+'</td><td>'+esc(e.governorate||'—')+'</td><td>'+e.total_score+'/'+e.total_max+'</td><td>'+e.percentage+'%</td><td>'+tag+'</td></tr>';
+        }).join('');
+      }).catch(function(){ document.getElementById('rows').innerHTML='<tr><td colspan="7" class="muted">تعذّر تحميل التقرير.</td></tr>'; });
+
+      function kpi(val,lbl){ return '<div class="kpi"><b>'+val+'</b><span>'+lbl+'</span></div>'; }
+    </script>
+  </body>
+</html>

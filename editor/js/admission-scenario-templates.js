@@ -149,11 +149,31 @@
   }
 
   var templates = {
-    individual_default: { label_ar: "متقدم فردي - مسار كامل", description_ar: "مناسب للبرامج العامة: مستندات، استعلام أمني، اختبارات، مقابلتان، قرار نهائي.", build: buildIndividual },
-    plp_jplp: { label_ar: "PLP / JPLP - مقابلة 10 محاور", description_ar: "سيناريو مختصر يستخدم نموذج مقابلة من 10 محاور مع التوصية النهائية.", build: buildPlpJplp },
-    executive: { label_ar: "تنفيذي / مصريون بالخارج - 15 محوراً", description_ar: "سيناريو يستخدم نموذج مقابلة مفصل من 15 محوراً وتقييم قبلي.", build: buildExecutive },
-    youth: { label_ar: "برامج الشباب - 10 محاور", description_ar: "سيناريو مقابلة موجه للشباب مع محاور السلوك والتعاون والتعبير.", build: buildYouth },
-    nominee: { label_ar: "ترشيحات رسمية - بدون مقابلات", description_ar: "للمرشحين من جهة رسمية: مطابقة الترشيح، مستندات، استعلام، قرار نهائي.", build: buildNominee }
+    individual_default: {
+      label_ar: "متقدم فردي - مسار كامل",
+      description_ar: "مناسب للبرامج العامة: مستندات، استعلام أمني، اختبارات، مقابلتان، قرار نهائي.",
+      build: buildIndividual
+    },
+    plp_jplp: {
+      label_ar: "PLP / JPLP - مقابلة 10 محاور",
+      description_ar: "سيناريو مختصر يستخدم نموذج مقابلة من 10 محاور مع التوصية النهائية.",
+      build: buildPlpJplp
+    },
+    executive: {
+      label_ar: "تنفيذي / مصريون بالخارج - 15 محوراً",
+      description_ar: "سيناريو يستخدم نموذج مقابلة مفصل من 15 محوراً وتقييم قبلي.",
+      build: buildExecutive
+    },
+    youth: {
+      label_ar: "برامج الشباب - 10 محاور",
+      description_ar: "سيناريو مقابلة موجه للشباب مع محاور السلوك والتعاون والتعبير.",
+      build: buildYouth
+    },
+    nominee: {
+      label_ar: "ترشيحات رسمية - بدون مقابلات",
+      description_ar: "للمرشحين من جهة رسمية: مطابقة الترشيح، مستندات، استعلام، قرار نهائي.",
+      build: buildNominee
+    }
   };
 
   window.NTAAdmissionScenarioTemplates = {
@@ -162,7 +182,10 @@
     executiveFifteen: executiveFifteen,
     youthTen: youthTen,
     templates: templates,
-    build: function (key) { return (templates[key] || templates.individual_default).build(); },
+    build: function (key) {
+      var template = templates[key] || templates.individual_default;
+      return template.build();
+    },
     getTemplateOptions: function () {
       return Object.keys(templates).map(function (key) {
         return { key: key, label_ar: templates[key].label_ar, description_ar: templates[key].description_ar };
