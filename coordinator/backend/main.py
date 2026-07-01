@@ -41,6 +41,7 @@ async def _sanitize_http_exception(request, exc):
         detail = "Internal server error"
     return _JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=getattr(exc, "headers", None))
 
+# ── Routers ──────────────────────────────────────────────────────────
 from routers import auth, attendance, permissions, interviews, tickets
 
 app.include_router(auth.router)
@@ -111,7 +112,6 @@ class GuardedStaticFiles(StaticFiles):
         if (segs and segs[0] == "backend") or norm.endswith(".py") or any(s.startswith(".") for s in segs):
             return _PlainTextResponse("Not Found", status_code=404)
         return await super().get_response(path, scope)
-
 
 @app.get("/api/health")
 async def health():

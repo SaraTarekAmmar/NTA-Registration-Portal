@@ -7,26 +7,107 @@
     <link rel="stylesheet" href="coordinator.css?v=3" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>طابور المقابلات | المنسق</title>
+    <title>طابور المقابلات | المنسّق</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/coordinator-guard.js"></script>
-    <style>.coord-table-wrap{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;overflow:auto}.coord-table{width:100%;border-collapse:collapse;min-width:850px}.coord-table th,.coord-table td{padding:.9rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;color:var(--text-main)}.coord-table th{color:var(--text-subtle);font-size:.78rem}.coord-badge{display:inline-flex;border-radius:999px;padding:.25rem .65rem;font-size:.75rem;font-weight:700}.coord-badge--ok{background:rgba(34,197,94,.12);color:#86efac}.coord-badge--wait{background:rgba(251,191,36,.12);color:#fde68a}.coord-badge--stage{background:rgba(239,68,68,.12);color:#fecaca}</style>
+    <style>
+      .coord-table-wrap{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;overflow:auto}.coord-table{width:100%;border-collapse:collapse;min-width:850px}.coord-table th,.coord-table td{padding:.9rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;color:var(--text-main)}.coord-table th{color:var(--text-subtle);font-size:.78rem}.coord-badge{display:inline-flex;border-radius:999px;padding:.25rem .65rem;font-size:.75rem;font-weight:700}.coord-badge--ok{background:rgba(34,197,94,.12);color:#86efac}.coord-badge--wait{background:rgba(251,191,36,.12);color:#fde68a}.coord-badge--stage{background:rgba(239,68,68,.12);color:#fecaca}.coord-actions-grid{margin-bottom:1.25rem}.coord-state{grid-column:1/-1}
+    </style>
   </head>
   <body data-page="interviews">
     <div id="coordinatorSidebar"></div>
     <main class="coordinator-main">
-      <header class="coord-page-header"><h1 class="coord-page-header__title">طابور المقابلات</h1><p class="coord-page-header__sub">متابعة المتقدمين الموجودين في مراحل المقابلة الأولى والثانية.</p></header>
-      <div class="coord-kpi-row" id="interviewKpis"><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div></div>
-      <section class="coord-table-wrap"><table class="coord-table"><thead><tr><th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th></tr></thead><tbody id="queueBody"><tr><td colspan="6">جاري التحميل...</td></tr></tbody></table></section>
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">طابور المقابلات</h1>
+        <p class="coord-page-header__sub">متابعة المتقدمين الموجودين في مراحل المقابلة الأولى والثانية.</p>
+      </header>
+
+      <div class="coord-kpi-row" id="interviewKpis">
+        <div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div><div class="coord-skeleton"></div>
+      </div>
+
+      <section class="coord-table-wrap">
+        <table class="coord-table">
+          <thead>
+            <tr>
+              <th>المتقدم</th><th>البريد</th><th>الدورة</th><th>المرحلة</th><th>حالة التقييم</th><th>آخر مراجعة</th><th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="queueBody"><tr><td colspan="7">جاري التحميل...</td></tr></tbody>
+        </table>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:1.5rem">
+        <div class="coord-table-wrap">
+          <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">تحليل المحاور</h3>
+          <p style="margin:0 0 1rem;color:var(--text-subtle);font-size:.8rem">متوسط الدرجة لكل محور عبر جميع التقييمات.</p>
+          <div id="critAnalysis"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
+        </div>
+        <div class="coord-table-wrap">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;flex-wrap:wrap">
+            <h3 style="margin:0 0 .25rem;color:var(--text-main);font-size:1rem">القرارات ومعدّل الإنجاز</h3>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+              <a href="coordinator-interview-report.html" style="text-decoration:none;background:rgba(59,130,246,.12);color:#93c5fd;border-radius:999px;padding:.3rem .8rem;font-size:.78rem;font-weight:700">🖨 تقرير PDF</a>
+              <button id="exportBtn" style="border:none;cursor:pointer;font-family:inherit;background:rgba(34,197,94,.12);color:#86efac;border-radius:999px;padding:.3rem .8rem;font-size:.78rem;font-weight:700">⬇ تصدير CSV</button>
+            </div>
+          </div>
+          <p style="margin:0 0 1rem;color:var(--text-subtle);font-size:.8rem">توزيع التوصيات ونسبة اكتمال التقييم.</p>
+          <div id="decSummary"><span style="color:var(--text-subtle)">جاري التحميل...</span></div>
+        </div>
+      </section>
     </main>
     <script src="js/coordinator-layout.js"></script>
     <script>
       function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
       function stageLabel(id){return Number(id)===6?'المقابلة الثانية':'المقابلة الأولى';}
-      function renderKPIs(d){var items=[{val:d.waiting_interviews||0,lbl:'في طابور المقابلات',cls:'coord-kpi--blue'},{val:d.missing_evaluations||0,lbl:'تقييمات ناقصة',cls:'coord-kpi--yellow'},{val:d.completed_today||0,lbl:'مكتملة اليوم',cls:'coord-kpi--green'},{val:d.rejected_today||0,lbl:'مرفوضة اليوم',cls:'coord-kpi--red'}];document.getElementById('interviewKpis').innerHTML=items.map(function(k){return '<div class="coord-kpi '+k.cls+'"><div class="coord-kpi__body"><div class="coord-kpi__val">'+k.val+'</div><div class="coord-kpi__lbl">'+k.lbl+'</div></div></div>';}).join('');}
-      function renderQueue(rows){var body=document.getElementById('queueBody');if(!rows.length){body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';return;}body.innerHTML=rows.map(function(r){var done=!!r.review_id;return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td></tr>';}).join('');}
+      function renderKPIs(d){
+        var items=[
+          {val:d.waiting_interviews||0,lbl:'في طابور المقابلات',cls:'coord-kpi--blue'},
+          {val:d.missing_evaluations||0,lbl:'تقييمات ناقصة',cls:'coord-kpi--yellow'},
+          {val:d.completed_today||0,lbl:'مكتملة اليوم',cls:'coord-kpi--green'},
+          {val:d.rejected_today||0,lbl:'مرفوضة اليوم',cls:'coord-kpi--red'}
+        ];
+        document.getElementById('interviewKpis').innerHTML=items.map(function(k){return '<div class="coord-kpi '+k.cls+'"><div class="coord-kpi__body"><div class="coord-kpi__val">'+k.val+'</div><div class="coord-kpi__lbl">'+k.lbl+'</div></div></div>';}).join('');
+      }
+      function renderQueue(rows){
+        var body=document.getElementById('queueBody');
+        if(!rows.length){body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:2rem">لا يوجد متقدمون في طابور المقابلات حالياً.</td></tr>';return;}
+        body.innerHTML=rows.map(function(r){
+          var done=!!r.review_id;
+          return '<tr><td><strong>'+esc(r.name)+'</strong><br><span style="color:var(--text-subtle);font-size:.78rem">'+esc(r.national_id)+'</span></td><td>'+esc(r.email)+'</td><td>'+esc(r.course_title_ar||r.course_title||'—')+'</td><td><span class="coord-badge coord-badge--stage">'+stageLabel(r.stage_id)+'</span></td><td><span class="coord-badge '+(done?'coord-badge--ok':'coord-badge--wait')+'">'+(done?'تم التقييم':'بانتظار التقييم')+'</span></td><td>'+esc(r.reviewed_at||'—')+'</td><td><a href="coordinator-interview-evaluate.html?trainee_id='+r.id+'" class="coord-badge coord-badge--ok" style="text-decoration:none">تقييم</a></td></tr>';
+        }).join('');
+      }
       window.coordinatorAuth.fetch('/api/coordinator/interviews/summary').then(function(r){return r.json();}).then(renderKPIs).catch(function(){document.getElementById('interviewKpis').innerHTML='<div class="coord-state">فشل تحميل الإحصائيات</div>';});
-      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="6">فشل تحميل الطابور</td></tr>';});
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(renderQueue).catch(function(){document.getElementById('queueBody').innerHTML='<tr><td colspan="7">فشل تحميل الطابور</td></tr>';});
+
+      function bar(label,avg){
+        var pct=Math.round(avg/5*100);
+        return '<div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.2rem"><span>'+esc(label)+'</span><span style="color:var(--text-subtle)">'+avg+'/5</span></div><div style="height:7px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div></div>';
+      }
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/criteria-analysis').then(function(r){return r.json();}).then(function(d){
+        var el=document.getElementById('critAnalysis');
+        if(!d.criteria||!d.criteria.length){el.innerHTML='<span style="color:var(--text-subtle)">لا توجد تقييمات بعد.</span>';return;}
+        var html='<div style="margin-bottom:.75rem"><strong style="color:#86efac;font-size:.82rem">الأقوى:</strong> '+d.strongest.map(function(c){return esc(c.key)+' ('+c.average+')';}).join('، ')+'</div>';
+        html+='<div style="margin-bottom:1rem"><strong style="color:#fca5a5;font-size:.82rem">الأضعف:</strong> '+d.weakest.map(function(c){return esc(c.key)+' ('+c.average+')';}).join('، ')+'</div>';
+        html+=d.criteria.slice().sort(function(a,b){return b.average-a.average;}).map(function(c){return bar(c.key,c.average);}).join('');
+        el.innerHTML=html;
+      }).catch(function(){document.getElementById('critAnalysis').innerHTML='<span style="color:var(--text-subtle)">تعذّر التحميل</span>';});
+      window.coordinatorAuth.fetch('/api/coordinator/interviews/decisions-summary').then(function(r){return r.json();}).then(function(d){
+        var rec=d.recommendations||{};
+        var items=[['قبول',rec.accept||0,'#86efac'],['قائمة انتظار',rec.waitlist||0,'#fde68a'],['غير مناسب',rec.unsuitable||0,'#fca5a5'],['بانتظار التوصية',rec.pending||0,'#94a3b8']];
+        var html=items.map(function(i){return '<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.85rem"><span style="color:'+i[2]+'">'+i[0]+'</span><strong>'+i[1]+'</strong></div>';}).join('');
+        html+='<div class="ev-total" style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap"><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.average_interview_percentage+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">متوسط النسبة</span></div><div><strong style="color:#60a5fa;font-size:1.3rem">'+d.evaluation_completion_rate+'%</strong><br><span style="color:var(--text-subtle);font-size:.78rem">اكتمال التقييم</span></div></div>';
+        document.getElementById('decSummary').innerHTML=html;
+      }).catch(function(){document.getElementById('decSummary').innerHTML='<span style="color:var(--text-subtle)">تعذّر التحميل</span>';});
+
+      document.getElementById('exportBtn').addEventListener('click', function(){
+        var btn=this, old=btn.textContent; btn.textContent='...جاري التصدير'; btn.disabled=true;
+        window.coordinatorAuth.fetch('/api/coordinator/interviews/export').then(function(r){ if(!r.ok) throw 0; return r.blob(); }).then(function(blob){
+          var url=URL.createObjectURL(blob), a=document.createElement('a');
+          a.href=url; a.download='NTA_Interview_Evaluations.csv'; document.body.appendChild(a); a.click();
+          a.remove(); URL.revokeObjectURL(url); btn.textContent=old; btn.disabled=false;
+        }).catch(function(){ btn.textContent='تعذّر التصدير'; setTimeout(function(){btn.textContent=old;btn.disabled=false;},1500); });
+      });
     </script>
   </body>
 </html>

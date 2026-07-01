@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <link rel="stylesheet" href="/admin/header/header.css?v=8" />
+    <link rel="stylesheet" href="coordinator.css?v=3" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لجان المقابلات | المنسّق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="js/coordinator-guard.js"></script>
+    <style>
+      .cm-card{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.25rem;margin-bottom:1.25rem}
+      .cm-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
+      .cm-field{display:flex;flex-direction:column;gap:.35rem;flex:1 1 180px;min-width:0}
+      .cm-field label{font-size:.8rem;color:var(--text-subtle)}
+      .cm-field input,.cm-field select{padding:.6rem .75rem;border-radius:9px;background:var(--bg-input,#0d1222);border:1px solid rgba(255,255,255,.12);color:var(--text-main);font-family:inherit;font-size:.9rem}
+      .cm-btn{padding:.7rem 1.4rem;border-radius:10px;border:1px solid transparent;font-weight:700;font-family:inherit;cursor:pointer;font-size:.9rem;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
+      .cm-table{width:100%;border-collapse:collapse;min-width:600px}
+      .cm-table th,.cm-table td{padding:.8rem;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;color:var(--text-main);font-size:.86rem}
+      .cm-table th{color:var(--text-subtle);font-size:.74rem}
+      .cm-badge{display:inline-flex;border-radius:999px;padding:.2rem .6rem;font-size:.74rem;font-weight:700;background:rgba(59,130,246,.12);color:#93c5fd}
+      .cm-msg{padding:.7rem 1rem;border-radius:10px;margin-top:1rem;display:none}
+      .cm-msg.ok{background:rgba(34,197,94,.12);color:#86efac;display:block}
+      .cm-msg.err{background:rgba(239,68,68,.12);color:#fecaca;display:block}
+      .cm-multi{min-height:110px}
+    </style>
+  </head>
+  <body data-page="committees">
+    <div id="coordinatorSidebar"></div>
+    <main class="coordinator-main">
+      <header class="coord-page-header">
+        <h1 class="coord-page-header__title">لجان المقابلات</h1>
+        <p class="coord-page-header__sub">إنشاء لجان المقابلات وتعيين أعضائها والمتقدمين إليها.</p>
+      </header>
+
+      <div class="cm-card">
+        <h3 style="margin:0 0 1rem;color:var(--text-main);font-size:1rem">إنشاء لجنة جديدة</h3>
+        <div class="cm-row">
+          <div class="cm-field"><label>رقم اللجنة *</label><input id="cNum" placeholder="مثال: لجنة 1" /></div>
+          <div class="cm-field"><label>المحافظة</label><input id="cGov" placeholder="القاهرة" /></div>
+          <div class="cm-field" style="flex:0 0 170px"><label>تاريخ المقابلة</label><input id="cDate" type="date" /></div>
+        </div>
+        <div class="cm-row" style="margin-top:1rem">
+          <div class="cm-field"><label>أعضاء اللجنة (افصل بينهم بفاصلة)</label><input id="cMembers" placeholder="أحمد محمد، سارة علي" /></div>
+          <button id="cCreate" class="cm-btn">إنشاء اللجنة</button>
+        </div>
+        <div class="cm-msg" id="createMsg"></div>
+      </div>
+
+      <div class="cm-card">
+        <h3 style="margin:0 0 1rem;color:var(--text-main);font-size:1rem">تعيين متقدمين إلى لجنة</h3>
+        <div class="cm-row">
+          <div class="cm-field" style="flex:0 0 220px"><label>اللجنة</label><select id="aCommittee"></select></div>
+          <div class="cm-field"><label>المتقدمون (اختيار متعدد)</label><select id="aApplicants" multiple class="cm-multi"></select></div>
+          <button id="aAssign" class="cm-btn">تعيين</button>
+        </div>
+        <div class="cm-msg" id="assignMsg"></div>
+      </div>
+
+      <div class="cm-card" style="overflow:auto">
+        <h3 style="margin:0 0 1rem;color:var(--text-main);font-size:1rem">اللجان الحالية</h3>
+        <table class="cm-table">
+          <thead><tr><th>رقم اللجنة</th><th>الدورة</th><th>المحافظة</th><th>التاريخ</th><th>الأعضاء</th><th>المتقدمون</th></tr></thead>
+          <tbody id="cmBody"><tr><td colspan="6">جاري التحميل...</td></tr></tbody>
+        </table>
+      </div>
+    </main>
+    <script src="js/coordinator-layout.js"></script>
+    <script>
+      function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      var auth = window.coordinatorAuth;
+      function loadCommittees(){
+        auth.fetch('/api/coordinator/interviews/committees').then(function(r){return r.json();}).then(function(rows){
+          var body=document.getElementById('cmBody'), sel=document.getElementById('aCommittee');
+          if(!rows.length){ body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-subtle);padding:1.5rem">لا توجد لجان بعد.</td></tr>'; sel.innerHTML='<option value="">— لا توجد لجان —</option>'; return; }
+          body.innerHTML=rows.map(function(r){return '<tr><td><strong>'+esc(r.committee_number)+'</strong></td><td>'+esc(r.course_title_ar||'—')+'</td><td>'+esc(r.governorate||'—')+'</td><td>'+esc(r.interview_date||'—')+'</td><td><span class="cm-badge">'+(r.member_count||0)+'</span></td><td><span class="cm-badge">'+(r.applicant_count||0)+'</span></td></tr>';}).join('');
+          sel.innerHTML=rows.map(function(r){return '<option value="'+r.id+'">'+esc(r.committee_number)+'</option>';}).join('');
+        }).catch(function(){document.getElementById('cmBody').innerHTML='<tr><td colspan="6">تعذّر التحميل</td></tr>';});
+      }
+      function loadApplicants(){
+        auth.fetch('/api/coordinator/interviews/queue').then(function(r){return r.json();}).then(function(rows){
+          var sel=document.getElementById('aApplicants');
+          sel.innerHTML=rows.map(function(r){return '<option value="'+r.id+'">'+esc(r.name)+' ('+esc(r.national_id||'')+')</option>';}).join('') || '<option disabled>لا يوجد متقدمون في طابور المقابلات</option>';
+        });
+      }
+      document.getElementById('cCreate').addEventListener('click', function(){
+        var msg=document.getElementById('createMsg'); msg.className='cm-msg';
+        var num=document.getElementById('cNum').value.trim();
+        if(!num){ msg.className='cm-msg err'; msg.textContent='رقم اللجنة مطلوب'; return; }
+        var members=document.getElementById('cMembers').value.split(/[،,]/).map(function(s){return s.trim();}).filter(Boolean).map(function(n){return {member_name:n};});
+        auth.fetch('/api/coordinator/interviews/committees',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          committee_number:num, governorate:document.getElementById('cGov').value.trim()||null,
+          interview_date:document.getElementById('cDate').value||null, members:members
+        })}).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});}).then(function(res){
+          if(res.ok){ msg.className='cm-msg ok'; msg.textContent='تم إنشاء اللجنة بنجاح.'; document.getElementById('cNum').value=''; document.getElementById('cMembers').value=''; loadCommittees(); }
+          else { msg.className='cm-msg err'; msg.textContent=(res.d&&res.d.detail)||'تعذّر الإنشاء'; }
+        }).catch(function(){ msg.className='cm-msg err'; msg.textContent='خطأ في الاتصال'; });
+      });
+      document.getElementById('aAssign').addEventListener('click', function(){
+        var msg=document.getElementById('assignMsg'); msg.className='cm-msg';
+        var cid=document.getElementById('aCommittee').value;
+        var ids=[].slice.call(document.getElementById('aApplicants').selectedOptions).map(function(o){return parseInt(o.value,10);}).filter(Boolean);
+        if(!cid||!ids.length){ msg.className='cm-msg err'; msg.textContent='اختر لجنة ومتقدماً واحداً على الأقل'; return; }
+        auth.fetch('/api/coordinator/interviews/committees/'+cid+'/applicants',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({applicant_ids:ids,stage_id:5})})
+          .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});}).then(function(res){
+            if(res.ok){ msg.className='cm-msg ok'; msg.textContent='تم تعيين '+res.d.assigned+' متقدم(ين) إلى اللجنة.'; loadCommittees(); }
+            else { msg.className='cm-msg err'; msg.textContent=(res.d&&res.d.detail)||'تعذّر التعيين'; }
+          }).catch(function(){ msg.className='cm-msg err'; msg.textContent='خطأ في الاتصال'; });
+      });
+      loadCommittees(); loadApplicants();
+    </script>
+  </body>
+</html>

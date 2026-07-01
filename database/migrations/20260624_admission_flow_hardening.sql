@@ -1,12 +1,15 @@
 -- Admission flow hardening
 -- Apply manually before enabling security/silent rejection production workflows.
 
+-- 1) Preserve rejected applicant audit rows after a user is removed or anonymized.
+-- If your constraint name differs, inspect SHOW CREATE TABLE stage_reviews first.
 ALTER TABLE stage_reviews DROP FOREIGN KEY stage_reviews_ibfk_1;
 ALTER TABLE stage_reviews MODIFY trainee_id INT NULL;
 ALTER TABLE stage_reviews
   ADD CONSTRAINT stage_reviews_ibfk_1
   FOREIGN KEY (trainee_id) REFERENCES users(id) ON DELETE SET NULL;
 
+-- 2) Internal-only security decision ledger. Do not expose these notes to applicants.
 CREATE TABLE IF NOT EXISTS admission_security_decisions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   applicant_user_id INT NULL,
@@ -26,6 +29,7 @@ CREATE TABLE IF NOT EXISTS admission_security_decisions (
   CONSTRAINT fk_security_decider FOREIGN KEY (decided_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- 3) Optional normalized committee scoring table for the 10/15-axis interview forms.
 CREATE TABLE IF NOT EXISTS admission_interview_scores (
   id INT AUTO_INCREMENT PRIMARY KEY,
   trainee_id INT NULL,

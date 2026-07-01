@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="js/editor-guard.js?v=2"></script>
     <style>
-      .scenario-grid{display:grid;grid-template-columns:320px 1fr;gap:1.5rem;align-items:start}.scenario-card{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.2rem;box-shadow:0 18px 40px -28px rgba(0,0,0,.7)}.scenario-list{display:flex;flex-direction:column;gap:.75rem}.scenario-option{border:1px solid rgba(255,255,255,.08);background:#111827;border-radius:12px;padding:1rem;text-align:right;cursor:pointer;color:var(--text-main);font-family:inherit}.scenario-option:hover,.scenario-option.is-active{border-color:#ef4444;background:rgba(239,68,68,.08)}.scenario-option h3{margin:0 0 .35rem;font-size:.95rem}.scenario-option p{margin:0;color:var(--text-subtle);font-size:.78rem;line-height:1.6}.step-preview{display:flex;flex-direction:column;gap:.8rem}.step-preview__item{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem;background:rgba(15,23,42,.72)}.step-preview__top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.step-preview__title{font-weight:800;color:var(--text-main)}.step-preview__meta{font-size:.75rem;color:var(--text-subtle)}.criteria-wrap{margin-top:.8rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.5rem}.criteria-chip{font-size:.74rem;color:#fecaca;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);border-radius:999px;padding:.35rem .6rem}.scenario-toolbar{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:1rem}.editor-select{width:100%}.scenario-note{padding:.9rem 1rem;border-radius:12px;border:1px solid rgba(251,191,36,.25);background:rgba(251,191,36,.08);color:#fde68a;font-size:.85rem;line-height:1.7;margin-top:1rem}@media(max-width:900px){.scenario-grid{grid-template-columns:1fr}.scenario-toolbar{align-items:stretch}.scenario-toolbar .btn{width:100%}}
+      .scenario-grid{display:grid;grid-template-columns:320px 1fr;gap:1.5rem;align-items:start}.scenario-card{background:rgba(8,12,32,.48);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.2rem;box-shadow:0 18px 40px -28px rgba(0,0,0,.7)}.scenario-list{display:flex;flex-direction:column;gap:.75rem}.scenario-option{border:1px solid rgba(255,255,255,.08);background:#111827;border-radius:12px;padding:1rem;text-align:right;cursor:pointer;color:var(--text-main);font-family:inherit}.scenario-option:hover,.scenario-option.is-active{border-color:#ef4444;background:rgba(239,68,68,.08)}.scenario-option h3{margin:0 0 .35rem;font-size:.95rem}.scenario-option p{margin:0;color:var(--text-subtle);font-size:.78rem;line-height:1.6}.step-preview{display:flex;flex-direction:column;gap:.8rem}.step-preview__item{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem;background:rgba(15,23,42,.72)}.step-preview__top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.step-preview__title{font-weight:800;color:var(--text-main)}.step-preview__meta{font-size:.75rem;color:var(--text-subtle)}.criteria-wrap{margin-top:.8rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.5rem}.criteria-chip{font-size:.74rem;color:#fecaca;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);border-radius:999px;padding:.35rem .6rem}.scenario-toolbar{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:1rem}.editor-select,.editor-input{width:100%}.scenario-note{padding:.9rem 1rem;border-radius:12px;border:1px solid rgba(251,191,36,.25);background:rgba(251,191,36,.08);color:#fde68a;font-size:.85rem;line-height:1.7;margin-top:1rem}@media(max-width:900px){.scenario-grid{grid-template-columns:1fr}.scenario-toolbar{align-items:stretch}.scenario-toolbar .btn{width:100%}}
     </style>
   </head>
   <body data-page="admission-scenarios">
@@ -50,12 +50,14 @@
     </main>
 
     <div id="editorToastContainer" class="editor-toast-container"></div>
-    <script src="js/editor-layout.js?v=9"></script>
+    <script src="js/editor-layout.js?v=8"></script>
     <script src="js/icons.js"></script>
     <script src="js/admission-scenario-templates.js?v=1"></script>
     <script>
       var EDITOR_TOKEN_KEY = "editor_token";
       var selectedScenario = "individual_default";
+      var courses = [];
+
       function authFetch(url, opts) {
         opts = opts || {};
         var token = localStorage.getItem(EDITOR_TOKEN_KEY);
@@ -63,15 +65,35 @@
         if (token) headers.Authorization = "Bearer " + token;
         return fetch(url, Object.assign({}, opts, { headers: headers }));
       }
-      function notify(msg, type) { if (window.showEditorToast) window.showEditorToast(msg, type || "success"); else alert(msg); }
-      function escapeHtml(v) { return String(v == null ? "" : v).replace(/[&<>'"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[ch]; }); }
+
+      function notify(msg, type) {
+        if (window.showEditorToast) window.showEditorToast(msg, type || "success");
+        else alert(msg);
+      }
+
+      function escapeHtml(v) {
+        return String(v == null ? "" : v).replace(/[&<>'"]/g, function (ch) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[ch];
+        });
+      }
+
       function renderScenarioList() {
         var list = document.getElementById("scenarioList");
         list.innerHTML = window.NTAAdmissionScenarioTemplates.getTemplateOptions().map(function (t) {
-          return '<button type="button" class="scenario-option ' + (t.key === selectedScenario ? 'is-active' : '') + '" data-key="' + t.key + '"><h3>' + escapeHtml(t.label_ar) + '</h3><p>' + escapeHtml(t.description_ar) + '</p></button>';
+          return '<button type="button" class="scenario-option ' + (t.key === selectedScenario ? 'is-active' : '') + '" data-key="' + t.key + '">' +
+            '<h3>' + escapeHtml(t.label_ar) + '</h3>' +
+            '<p>' + escapeHtml(t.description_ar) + '</p>' +
+          '</button>';
         }).join("");
-        list.querySelectorAll(".scenario-option").forEach(function (btn) { btn.addEventListener("click", function () { selectedScenario = btn.getAttribute("data-key"); renderScenarioList(); renderPreview(); }); });
+        list.querySelectorAll(".scenario-option").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            selectedScenario = btn.getAttribute("data-key");
+            renderScenarioList();
+            renderPreview();
+          });
+        });
       }
+
       function renderPreview() {
         var meta = window.NTAAdmissionScenarioTemplates.templates[selectedScenario];
         var steps = window.NTAAdmissionScenarioTemplates.build(selectedScenario);
@@ -80,30 +102,56 @@
         document.getElementById("preview").innerHTML = steps.map(function (s, idx) {
           var form = s.config_json && s.config_json.interview_form;
           var criteria = form && form.criteria ? form.criteria : [];
-          return '<article class="step-preview__item"><div class="step-preview__top"><div><div class="step-preview__title">' + (idx + 1) + '. ' + escapeHtml(s.title_ar) + '</div><div class="step-preview__meta">' + escapeHtml(s.step_type) + ' · ' + escapeHtml(s.description_ar || '') + '</div></div>' + (form ? '<strong class="criteria-chip">الإجمالي /' + form.total_max + '</strong>' : '') + '</div>' + (criteria.length ? '<div class="criteria-wrap">' + criteria.map(function (c) { return '<span class="criteria-chip">' + escapeHtml(c.title_ar) + '</span>'; }).join('') + '</div>' : '') + '</article>';
+          return '<article class="step-preview__item">' +
+            '<div class="step-preview__top">' +
+              '<div><div class="step-preview__title">' + (idx + 1) + '. ' + escapeHtml(s.title_ar) + '</div>' +
+              '<div class="step-preview__meta">' + escapeHtml(s.step_type) + ' · ' + escapeHtml(s.description_ar || '') + '</div></div>' +
+              (form ? '<strong class="criteria-chip">الإجمالي /' + form.total_max + '</strong>' : '') +
+            '</div>' +
+            (criteria.length ? '<div class="criteria-wrap">' + criteria.map(function (c) { return '<span class="criteria-chip">' + escapeHtml(c.title_ar) + '</span>'; }).join('') + '</div>' : '') +
+          '</article>';
         }).join("");
       }
+
       function loadCourses() {
         var sel = document.getElementById("courseSelect");
         sel.innerHTML = '<option value="">جاري تحميل الدورات...</option>';
-        authFetch("/api/courses").then(function (r) { if (!r.ok) throw new Error("courses"); return r.json(); }).then(function (data) {
-          var courses = Array.isArray(data) ? data : [];
-          sel.innerHTML = '<option value="">— اختاري دورة —</option>' + courses.map(function (c) { return '<option value="' + c.id + '">' + escapeHtml(c.title_ar || c.title || ('دورة #' + c.id)) + '</option>'; }).join("");
-        }).catch(function () { sel.innerHTML = '<option value="">تعذر تحميل الدورات</option>'; notify("تعذر تحميل الدورات", "error"); });
+        authFetch("/api/courses")
+          .then(function (r) { if (!r.ok) throw new Error("courses"); return r.json(); })
+          .then(function (data) {
+            courses = Array.isArray(data) ? data : [];
+            sel.innerHTML = '<option value="">— اختاري دورة —</option>' + courses.map(function (c) {
+              return '<option value="' + c.id + '">' + escapeHtml(c.title_ar || c.title || ('دورة #' + c.id)) + '</option>';
+            }).join("");
+          })
+          .catch(function () {
+            sel.innerHTML = '<option value="">تعذر تحميل الدورات</option>';
+            notify("تعذر تحميل الدورات", "error");
+          });
       }
+
       function saveScenario() {
         var courseId = document.getElementById("courseSelect").value;
-        if (!courseId) { notify("اختاري الدورة أولاً", "error"); return; }
+        if (!courseId) {
+          notify("اختاري الدورة أولاً", "error");
+          return;
+        }
         var steps = window.NTAAdmissionScenarioTemplates.build(selectedScenario);
         document.getElementById("saveBtn").disabled = true;
-        authFetch("/api/courses/" + courseId + "/admission-steps", { method: "PUT", body: JSON.stringify(steps) })
+        authFetch("/api/courses/" + courseId + "/admission-steps", {
+          method: "PUT",
+          body: JSON.stringify(steps)
+        })
           .then(function (r) { if (!r.ok) return r.json().then(function (e) { throw new Error(e.detail || "فشل الحفظ"); }); return r.json(); })
           .then(function () { notify("تم حفظ سيناريو القبول للدورة بنجاح"); })
           .catch(function (e) { notify(e.message || "فشل حفظ السيناريو", "error"); })
           .finally(function () { document.getElementById("saveBtn").disabled = false; });
       }
+
       document.getElementById("saveBtn").addEventListener("click", saveScenario);
-      renderScenarioList(); renderPreview(); loadCourses();
+      renderScenarioList();
+      renderPreview();
+      loadCourses();
     </script>
   </body>
 </html>

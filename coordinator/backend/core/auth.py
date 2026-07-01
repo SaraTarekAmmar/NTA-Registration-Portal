@@ -70,6 +70,16 @@ def require_coordinator(current_user: dict = Depends(get_current_user)):
     return current_user
 
 
+def require_coordinator_or_member(current_user: dict = Depends(get_current_user)):
+    """Allows either coordinator or committee_member roles."""
+    if current_user["role"] not in ("coordinator", "committee_member"):
+        raise HTTPException(
+            status_code=403,
+            detail="صلاحيات غير كافية — للمنسقين وأعضاء اللجنة فقط",
+        )
+    return current_user
+
+
 # Rate limiting — same pattern as admin/editor
 MAX_FAILED_ATTEMPTS = 5
 BLOCK_WINDOW_MINUTES = 15

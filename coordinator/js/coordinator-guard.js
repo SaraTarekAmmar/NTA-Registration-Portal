@@ -36,7 +36,8 @@
     var token = getToken();
     if (!token) { redirectToLogin(); return null; }
     var payload = parseJwt(token);
-    if (!payload || payload.role !== "coordinator") {
+    var allowedRoles = ["coordinator", "committee_member"];
+    if (!payload || !allowedRoles.includes(payload.role)) {
       localStorage.removeItem(TOKEN_KEY);
       redirectToLogin();
       return null;
@@ -47,6 +48,21 @@
       redirectToLogin();
       return null;
     }
+    
+    // Scoping for coordinator-only pages
+    if (payload.role === "committee_member") {
+      var path = location.pathname.toLowerCase();
+      var isCoordOnly = [
+        "coordinator-committees.html",
+        "coordinator-attendance.html",
+        "coordinator-permissions.html"
+      ].some(function (p) { return path.indexOf(p) !== -1; });
+      if (isCoordOnly) {
+        location.href = "coordinator-dashboard.html";
+        return null;
+      }
+    }
+    
     return payload;
   }
 
