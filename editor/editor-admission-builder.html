@@ -688,12 +688,13 @@
             s.config_json.canDelete = false;
             s.config_json.canDisable = false;
             
-            // Sync with default values to be robust
+            // Keep core identity stable without wiping editor changes.
             var matchingDefault = fixed_defaults.find(function(fd) { return fd.step_key === key || fd.step_type === type; });
             if (matchingDefault) {
               s.step_key = matchingDefault.step_key;
               s.step_type = matchingDefault.step_type;
-              s.title_ar = matchingDefault.title_ar;
+              s.title_ar = s.title_ar || matchingDefault.title_ar;
+              s.description_ar = s.description_ar || s.config_json.description_ar || matchingDefault.description_ar || '';
             }
           } else {
             s.fixed = false;
@@ -702,6 +703,7 @@
             s.config_json.fixed = false;
             s.config_json.canDelete = true;
             s.config_json.canDisable = true;
+            s.description_ar = s.description_ar || s.config_json.description_ar || '';
           }
         });
 
@@ -1000,7 +1002,7 @@
               : '<span class="badge badge--neutral">اختيارية</span>';
               
           var fixedBadge = s.fixed
-              ? '<span class="badge badge--red">مرحلة أساسية (Fixed)</span>'
+              ? '<span class="badge badge--red">مرحلة أساسية</span>'
               : '<span class="badge badge--blue">مرحلة إضافية (Custom)</span>';
               
           var typeLabel = ADM_TYPE_LABELS[s.step_type] || s.step_type;
@@ -1152,7 +1154,7 @@
           
           var titleInput = document.getElementById("settingTitle");
           titleInput.value = s.title_ar || "";
-          titleInput.readOnly = !!s.fixed;
+          titleInput.readOnly = false;
           
           var stepType = s.step_type || "";
           var typeInput = document.getElementById("settingType");
@@ -1179,7 +1181,7 @@
           keyInput.value = s.step_key || "";
           keyInput.readOnly = !!s.fixed;
           
-          document.getElementById("settingDesc").value = s.description_ar || "";
+          document.getElementById("settingDesc").value = s.description_ar || cfg.description_ar || "";
           
           var tp = cfg.transition_pass || "next";
           var tpInput = document.getElementById("settingTransitionPass");
@@ -1233,6 +1235,7 @@
         admissionSteps.forEach(function(s, i) { 
           s.step_order = i; 
           if(!s.config_json) s.config_json = {};
+          s.config_json.description_ar = s.description_ar || "";
           if(s.fixed) {
             s.config_json.fixed = true;
             s.config_json.is_active = true;

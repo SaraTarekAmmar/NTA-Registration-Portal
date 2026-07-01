@@ -353,12 +353,13 @@ async def get_admission_steps(course_id: int, editor: dict = Depends(require_edi
             if matching_def:
                 s['step_key'] = matching_def['step_key']
                 s['step_type'] = matching_def['step_type']
-                s['title_ar'] = matching_def['title_ar'] # Fixed title label from business document
-                s['is_required'] = 1
+                s['title_ar'] = s.get('title_ar') or matching_def['title_ar']
+                s['description_ar'] = s.get('description_ar') or s['config_json'].get('description_ar') or matching_def.get('description_ar', '')
+                s['is_required'] = int(s.get('is_required', 1))
                 if not isinstance(s.get('config_json'), dict):
                     s['config_json'] = {}
                 s['config_json'].update({
-                    'is_active': True,
+                    'is_active': s['config_json'].get('is_active', True),
                     'fixed': True,
                     'canDelete': False,
                     'canDisable': False
@@ -368,6 +369,7 @@ async def get_admission_steps(course_id: int, editor: dict = Depends(require_edi
             else:
                 if not isinstance(s.get('config_json'), dict):
                     s['config_json'] = {}
+                s['description_ar'] = s.get('description_ar') or s['config_json'].get('description_ar') or ''
                 s['config_json'].update({
                     'fixed': False,
                     'canDelete': True,
@@ -477,7 +479,7 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
         if step.get('step_type') != fk:
             raise HTTPException(status_code=400, detail=f"نوع الخطوة الإجبارية {fk} غير صحيح")
             
-        if step.get('title_ar') != expected_titles[fk]:
+        if False and step.get('title_ar') != expected_titles[fk]:
             raise HTTPException(status_code=400, detail=f"عنوان الخطوة الإجبارية {fk} غير صحيح أو تم تعديله")
             
         if not step.get('is_required'):
@@ -533,6 +535,7 @@ async def update_admission_steps(course_id: int, steps: List[dict] = Body(...), 
                 pass
             else:
                 cfg = {}
+            cfg['description_ar'] = step.get('description_ar', cfg.get('description_ar', ''))
             
             cursor.execute(
                 """INSERT INTO course_steps 
