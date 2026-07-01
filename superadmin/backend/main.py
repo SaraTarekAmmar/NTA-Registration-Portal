@@ -155,6 +155,16 @@ async def root():
 
 # Static Files - Frontend
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+project_root = Path(__file__).parent.parent.parent
+
+common_path = project_root / "common"
+if os.path.exists(common_path):
+    app.mount("/common", StaticFiles(directory=str(common_path)), name="common")
+
+images_path = project_root / "admin" / "images"
+if os.path.exists(images_path):
+    app.mount("/images", StaticFiles(directory=str(images_path)), name="images")
+
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 if __name__ == "__main__":

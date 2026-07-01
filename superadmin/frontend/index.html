@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTA AI Control Center - Super Admin</title>
+    <script src="/common/js/theme.js"></script>
+    <link rel="stylesheet" href="/common/css/theme.css?v=4" />
+    <title>لوحة المشرف الأعلى - الأكاديمية الوطنية للتدريب</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- React & ReactDOM CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -271,7 +273,7 @@
                 const legacy = localStorage.getItem('sa_theme');
                 return legacy === 'light' || legacy === 'dark' ? legacy : 'dark';
             });
-            const [lang, setLang] = useState(localStorage.getItem('sa_lang') || 'en');
+            const [lang, setLang] = useState(localStorage.getItem('sa_lang') || 'ar');
 
             useEffect(() => {
                 document.documentElement.setAttribute('data-theme', theme);
@@ -1411,8 +1413,9 @@
                         </div>
                         <div className="login-card w-full max-w-md panel-glass backdrop-blur-2xl rounded-[2.5rem] p-10 relative z-10 shadow-2xl">
                             <div className="flex flex-col items-center mb-10">
-                                <div className="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-6">
-                                    <Icon name="brain-circuit" size={40} className="text-[var(--text-main)]" />
+                                <div className="logo-container">
+                                    <img src="/images/logo2.png" alt="الأكاديمية الوطنية للتدريب" className="login-logo" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                    <div className="logo-subtitle">{t('loginSubtitle')}</div>
                                 </div>
                                 <h1 className="text-3xl font-black text-[var(--text-main)] tracking-tight">{t('loginTitle')}</h1>
                                 <p className="text-[var(--text-muted)] text-[10px] mt-2 uppercase tracking-[0.2em] font-bold">{t('loginSubtitle')}</p>
