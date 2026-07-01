@@ -32,7 +32,7 @@
         <div class="admin-hero admin-hero--compact admin-stage-hero">
             <div class="admin-hero__title-block">
                 <h1 id="stageReviewName">مراجعة مراحل المتقدم</h1>
-                <p class="admin-hero__subtitle" id="stageReviewSubtitle">اختر مرحلة لعرض تفاصيل تقييم المتقدم.</p>
+                <p class="admin-hero__subtitle" id="stageReviewSubtitle">هذه النسخة للعرض فقط. التعديل يتم من مركز القبول أو المنسق.</p>
                 <div class="stage-progress-container">
                     <div class="stage-progress-info">
                         <span>إجمالي التقدم في الخط</span>
@@ -486,6 +486,26 @@
                 return '<span class="' + cls + '">' + score + '% Match</span>';
             }
 
+            var stageReviewReadOnly = true;
+
+            function applyStageReviewReadOnlyMode() {
+                if (!stageReviewReadOnly) return;
+
+                document.querySelectorAll('.admin-stage-panel input, .admin-stage-panel textarea, .admin-stage-panel select').forEach(function (field) {
+                    field.disabled = true;
+                });
+
+                document.querySelectorAll('.admin-stage-panel .stage-upload-input').forEach(function (input) {
+                    input.disabled = true;
+                });
+
+                document.querySelectorAll('.admin-stage-panel .stage-upload-btn, .admin-stage-panel .stage-status-btn, .admin-stage-panel .s1-ai-btn, .admin-stage-panel #runAIBtn, .admin-stage-panel #reRunAIBtn, .admin-stage-panel #s2-silent-reject-btn').forEach(function (btn) {
+                    btn.disabled = true;
+                    btn.style.display = 'none';
+                    btn.setAttribute('aria-hidden', 'true');
+                });
+            }
+
             // -- Unified Dropdown Notification System (Toast) --
             window.showDropdownMessage = function (msg, isError = true) {
                 let toastContainer = document.getElementById('globalToastContainer');
@@ -842,6 +862,8 @@
                         }
                     }
                 });
+
+                applyStageReviewReadOnlyMode();
             }
 
             // wire upload buttons for all stages
@@ -850,6 +872,13 @@
                 const input = box.querySelector('.stage-upload-input');
                 const text = box.querySelector('.stage-upload-text');
                 if (!btn || !input || !text) return;
+
+                if (stageReviewReadOnly) {
+                    btn.disabled = true;
+                    input.disabled = true;
+                    btn.style.display = 'none';
+                    return;
+                }
 
                 btn.addEventListener('click', () => {
                     input.click();
@@ -890,6 +919,12 @@
 
             // wire accept/reject buttons
             document.querySelectorAll('.stage-status-btn').forEach(btn => {
+                if (stageReviewReadOnly) {
+                    btn.disabled = true;
+                    btn.style.display = 'none';
+                    return;
+                }
+
                 btn.addEventListener('click', function () {
                     const panel = btn.closest('.admin-stage-panel');
                     const stageId = parseInt(panel.getAttribute('data-stage-panel'));
@@ -1193,6 +1228,7 @@
             });
 
             renderInterviewRubrics();
+            applyStageReviewReadOnlyMode();
             fetchTraineeData();
             fetchReviews();
             activateStage(currentStageId);
@@ -1201,6 +1237,11 @@
             (function () {
                 var btn = document.getElementById('s2-silent-reject-btn');
                 if (!btn) return;
+                if (stageReviewReadOnly) {
+                    btn.disabled = true;
+                    btn.style.display = 'none';
+                    return;
+                }
                 btn.addEventListener('click', function () {
                     var internal = (document.getElementById('s2-internal-reason') || {}).value || '';
                     var masked = (document.getElementById('s2-masked-reason') || {}).value || '';
@@ -1258,7 +1299,12 @@
                         <button class="s1-ai-btn" id="runAIBtn">بدء الفرز الإلكتروني (4 مراحل)</button>
                     </div>
                 `;
+                if (stageReviewReadOnly) {
+                    applyStageReviewReadOnlyMode();
+                    return;
+                }
                 document.getElementById('runAIBtn').onclick = triggerStage1AI;
+                applyStageReviewReadOnlyMode();
             }
 
             function getScoreBadge(score) {
@@ -1353,10 +1399,16 @@
                         </div>
                     </div>
                 `;
+                if (stageReviewReadOnly) {
+                    applyStageReviewReadOnlyMode();
+                    return;
+                }
                 document.getElementById('reRunAIBtn').onclick = triggerStage1AI;
+                applyStageReviewReadOnlyMode();
             }
 
             function triggerStage1AI() {
+                if (stageReviewReadOnly) return;
                 // Show Processing Modal
                 const modal = document.createElement('div');
                 modal.className = 's1-process-modal';
