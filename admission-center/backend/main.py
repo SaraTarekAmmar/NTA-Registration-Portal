@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from core import auth
 from core.logger_util import log_activity
-from routers import admission, ai_services
+from routers import admission, ai_services, safe_stage_review
 from fastapi import Request
 
 load_dotenv()
@@ -134,6 +134,10 @@ async def global_debugger_middleware(request: Request, call_next):
 from routers import tickets
 app.include_router(tickets.router, prefix="/api/tickets", tags=["Tickets"])
 app.include_router(auth.router)
+# Register the safe wrapper before the legacy admission router. Duplicate paths
+# are resolved in registration order, so rejected stage reviews are handled by
+# safe_stage_review while active decisions are delegated to the legacy handler.
+app.include_router(safe_stage_review.router)
 app.include_router(admission.router)
 app.include_router(ai_services.router)
 
