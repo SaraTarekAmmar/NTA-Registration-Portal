@@ -26,7 +26,23 @@ jobs:
           import sys
           from pathlib import Path
 
-          roots = [Path(p) for p in ["admin", "editor", "user", "superadmin", "deploy", "tools"] if Path(p).exists()]
+          roots = [
+              Path(p)
+              for p in [
+                  "admin",
+                  "editor",
+                  "user",
+                  "trainer",
+                  "coordinator",
+                  "superadmin",
+                  "front",
+                  "registration",
+                  "admission-center",
+                  "deploy",
+                  "tools",
+              ]
+              if Path(p).exists()
+          ]
           ignored = {"venv", ".venv", "__pycache__", "node_modules"}
           failures = []
           for root in roots:
@@ -45,11 +61,12 @@ jobs:
       - name: Check standalone JavaScript syntax
         shell: bash
         run: |
-          # Exclude Babel/JSX frontends (e.g. superadmin/frontend) — they are
-          # transpiled in-browser and are not valid standalone JS for node --check.
-          find admin editor user superadmin common -type f -name '*.js' \
+          # Exclude Babel/JSX frontends and generated bundles that are not intended
+          # to be parsed directly by node --check.
+          find admin editor user trainer coordinator superadmin common front registration admission-center \
+            -type f -name '*.js' \
             -not -path '*/venv/*' -not -path '*/.venv/*' -not -path '*/node_modules/*' \
-            -not -path '*/frontend/*' \
+            -not -path '*/frontend/*' -not -path '*/assets/*' \
             -print0 | xargs -0 -r -n 1 node --check
       - name: Check inline HTML scripts
         run: python tools/check_inline_scripts.py .
