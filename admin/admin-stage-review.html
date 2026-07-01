@@ -61,6 +61,14 @@
             </div>
         </div>
 
+        <div class="stage-review-mode-banner" aria-live="polite">
+            <span class="stage-review-mode-banner__pill">عرض فقط</span>
+            <div class="stage-review-mode-banner__text">
+                <strong>المحتوى هنا للقراءة والمراجعة فقط.</strong>
+                <span>أي تعديل أو اعتماد يتم من مركز القبول أو المنسق.</span>
+            </div>
+        </div>
+
         <section class="admin-section admin-stage-review">
             <div class="admin-stage-tabs" id="stageTabs">
                 <button type="button" class="admin-stage-tab admin-stage-tab--active" data-stage="1">
@@ -487,6 +495,9 @@
             }
 
             var stageReviewReadOnly = true;
+            if (stageReviewReadOnly) {
+                document.body.classList.add('stage-review-view-only');
+            }
 
             function applyStageReviewReadOnlyMode() {
                 if (!stageReviewReadOnly) return;
