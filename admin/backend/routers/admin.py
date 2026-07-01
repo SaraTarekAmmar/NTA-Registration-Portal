@@ -367,8 +367,6 @@ async def submit_review(
                 # trainee_exam_submissions. Here we mirror them into a dedicated
                 # admission table so the admin review has a permanent snapshot.
                 if review.stage_id == 4:
-                    cursor.execute(
-                        """
                     query = "SELECT subject, score FROM trainee_exam_submissions WHERE trainee_id = %s ORDER BY submitted_at DESC"
                     cursor.execute(query, (review.trainee_id,))
                     exam_rows = cursor.fetchall()
