@@ -22,6 +22,7 @@ def require_trainer_or_staff(current: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Not authorized")
     return current
 
+
 def get_course_folder(cursor, course_id: int) -> str:
     """Returns the correctly formatted course folder name: {title_slug}_{id}"""
     import re
@@ -34,6 +35,7 @@ def get_course_folder(cursor, course_id: int) -> str:
     # Slugify title
     slug = re.sub(r'[^a-zA-Z0-9]', '_', title).strip('_')
     return f"{slug}_{course_id}"
+
 
 # --- Trainer Endpoints ---
 
@@ -108,6 +110,7 @@ async def create_assignment(
         cursor.close()
         db.close()
 
+
 @router.get("/course/{course_id}", response_model=List[Assignment])
 async def get_assignments(course_id: int, current: dict = Depends(get_current_user)):
     db = get_db_connection()
@@ -118,6 +121,7 @@ async def get_assignments(course_id: int, current: dict = Depends(get_current_us
     finally:
         cursor.close()
         db.close()
+
 
 @router.get("/{assignment_id}/submissions", response_model=List[dict])
 async def get_assignment_submissions(assignment_id: int, current: dict = Depends(require_trainer_or_staff)):
@@ -136,6 +140,7 @@ async def get_assignment_submissions(assignment_id: int, current: dict = Depends
         cursor.close()
         db.close()
 
+
 @router.patch("/submissions/{submission_id}/grade")
 async def grade_submission(submission_id: int, grade: float = Form(...), feedback: str = Form(None), current: dict = Depends(require_trainer_or_staff)):
     db = get_db_connection()
@@ -153,6 +158,7 @@ async def grade_submission(submission_id: int, grade: float = Form(...), feedbac
     finally:
         cursor.close()
         db.close()
+
 
 # --- Trainee Endpoints ---
 
@@ -174,7 +180,8 @@ async def submit_assignment(
         course_id = course_row[0]
         course_folder = get_course_folder(cursor, course_id)
 
-        # Define target directory: data/courses/{course_folder}/submissions/
+        # Store submissions under data/uploads, which is blocked by the public
+        # /data static mount and should be served only by authenticated APIs.
         import time
         import re
         timestamp = int(time.time())
@@ -182,17 +189,17 @@ async def submit_assignment(
         clean_original = re.sub(r'[^a-zA-Z0-9_]', '', Path(file.filename).stem)
         unique_filename = f"submission_{trainee_id}_{timestamp}_{clean_original}{file_extension}"
         
-        target_dir = PROJECT_ROOT / "data" / "courses" / course_folder / "submissions"
+        target_dir = PROJECT_ROOT / "data" / "uploads" / "assignment_submissions" / course_folder
         os.makedirs(target_dir, exist_ok=True)
         
         file_path_full = target_dir / unique_filename
         
-        # Save file manually to ensure it goes to the right place
+        # Save file manually to ensure it goes to a private path
         with open(file_path_full, "wb") as buffer:
             while chunk := await file.read(8192):
                 buffer.write(chunk)
         
-        file_path = f"data/courses/{course_folder}/submissions/{unique_filename}"
+        file_path = f"data/uploads/assignment_submissions/{course_folder}/{unique_filename}"
 
         # Check if already submitted (Unique constraint will handle it, but better to check)
         cursor.execute("SELECT id FROM assignment_submissions WHERE assignment_id = %s AND trainee_id = %s", (assignment_id, trainee_id))
@@ -228,6 +235,7 @@ async def submit_assignment(
     finally:
         cursor.close()
         db.close()
+
 
 @router.get("/my-submission/{assignment_id}/{trainee_id}", response_model=Optional[Submission])
 async def get_my_submission(assignment_id: int, trainee_id: int, current: dict = Depends(get_current_user)):
